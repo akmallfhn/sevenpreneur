@@ -40,7 +40,7 @@ export default function TicketCard({ variant }) {
     const rounded = Math.round(discountPercent)
 
     return(
-        <div className="root py-3 pr-3">
+        <div className="root py-3 pr-3 z-50">
             <div className="ticket-container relative flex">
                 <Image
                 className="background max-w-[220px] overflow-hidden"
@@ -51,7 +51,7 @@ export default function TicketCard({ variant }) {
 
                 <div className="container absolute flex flex-col top-4 left-1/2 -translate-x-1/2 gap-2 z-20">
                     {/* Tiket Metadata */}
-                    <div className="metadata-ticket flex flex-col items-center">
+                    <div className="metadata-ticket text-black flex flex-col items-center">
                         <div className="type-ticket flex items-center gap-1.5">
                             <h3 className="font-brand font-bold text-2xl">
                                 {type}
@@ -77,7 +77,7 @@ export default function TicketCard({ variant }) {
                     </div>
 
                     {/* Pricing */}
-                    <div className="pricing flex flex-col gap-1 items-center font-bodycopy">
+                    <div className="pricing flex flex-col gap-1 items-center font-bodycopy text-black">
                         {basePrice !== 0 && (
                             <div className="discount flex items-center gap-2">
                                 <p className="bg-secondary font-bold text-white text-[10px] px-1 py-0.5 rounded-sm">
@@ -105,7 +105,7 @@ export default function TicketCard({ variant }) {
                     </div>
 
                     {/* Benefit */}
-                    <div className="benefit flex flex-col pl-6 font-bodycopy text-xs gap-1">
+                    <div className="benefit flex flex-col pl-6 font-bodycopy text-xs text-black     gap-1">
                         <p className="font-bold">
                             What You’ll Enjoy
                         </p>
@@ -125,7 +125,7 @@ export default function TicketCard({ variant }) {
                     <ButtonRestart25
                     variant={"two liner"}
                     buttonTitle={"Unlock Access"}
-                    buttonAltTitle={`before – ${expired}`}
+                    buttonAltTitle={`before it's gone – ${expired}`}
                     Icon={LockOpen}/>
                 </div>
             </div>

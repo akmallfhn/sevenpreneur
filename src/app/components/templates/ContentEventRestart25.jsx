@@ -78,7 +78,7 @@ export default function ContentEventRestart25({ id }) {
             {/* Background */}
             <div className="absolute flex flex-col -top-40">
                 <Image
-                className="background flex opacity-40 object-cover h-[720px]"
+                className="background flex opacity-22 object-cover h-[720px]"
                 src={"https://static.wixstatic.com/media/02a5b1_96ca791fac7348acb572e5d9bd38c550~mv2.webp"}
                 alt="Background Hero"
                 width={2440}
