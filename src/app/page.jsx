@@ -57,7 +57,7 @@ export default function HomePage() {
       <ContentEventRestart25 id={"contentEvent"}/>
       <TopicsRunningText/>
       <TicketCarouselRestart25/>
-      <div className="container-faq flex items-center justify-center px-8 pb-8">
+      <div className="container-faq flex items-center justify-center px-8 pb-8 test">
         <FAQEventRestart25/>
       </div>
       <div className="container-banner flex items-center justify-center px-8 pb-20">
