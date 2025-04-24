@@ -7,6 +7,11 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "static.wixstatic.com",
                 port: "",
+            },
+            {
+                protocol: "https",
+                hostname: "yt3.googleusercontent.com",
+                port: "",
             }
         ]
     }
