@@ -4,10 +4,12 @@ import ButtonRestart25 from "../elements/ButtonRestart25"
 import SectionTitleRestart25 from "../elements/SectionTitleRestart25"
 import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25"
 import { Ticket, TicketPlus } from "lucide-react"
+import Link from "next/link"
 
-export default function ContentEventRestart25({ id }) {
+export default function ContentEventRestart25() {
     return(
-        <div className="root relative bg-black flex justify-center overflow-hidden" id={id}>
+        <section id="content-event">
+        <div className="content-event-root relative bg-black flex justify-center overflow-hidden">
             <div className="container flex flex-col py-8 px-8 gap-9 items-center z-20">
                 {/* Event Title */}
                 <div className="title-event flex flex-col items-center gap-5">
@@ -20,15 +22,15 @@ export default function ContentEventRestart25({ id }) {
                     />
                     <div className="flex flex-col text-white items-center">
                         <p className="font-brand text-lg font-semibold">
-                            July 27, 2025
+                            July 26, 2025
                         </p>
                         <p className="font-bodycopy">
-                            Lippo Grand Ballroom Kuningan, Jakarta
+                            Kuningan City Ballroom, Jakarta
                         </p>
                     </div>
-                    <ButtonRestart25
-                    buttonTitle={"Get Your Ticket Now"}
-                    Icon={TicketPlus}/>
+                    <Link href={"https://vesta.halofans.id/event/v2/re-start"} target="_blank" rel="noopener noreferrer">
+                        <ButtonRestart25 buttonTitle={"Get Your Ticket Now"} Icon={TicketPlus}/>
+                    </Link>
                 </div>
 
                 {/* Embed Youtube */}
@@ -91,5 +93,6 @@ export default function ContentEventRestart25({ id }) {
                 height={2440}/>
             </div>
         </div>
+        </section>
     )
 }

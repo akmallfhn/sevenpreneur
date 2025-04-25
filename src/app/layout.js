@@ -14,7 +14,7 @@ const monaSans = Mona_Sans({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body className={`${monaSans.variable} ${plusJakartaSans.variable} antialiased`}>
         <TopNavbar/>
         {children}

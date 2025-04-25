@@ -6,6 +6,7 @@ import TicketCarouselRestart25 from "./components/templates/TicketCarouselRestar
 import BannerEventRestart25 from "./components/templates/BannerEventRestart25";
 import FAQEventRestart25 from "./components/templates/FAQEventRestart25";
 import TopicsRunningText from "./components/templates/TopicsRunningText";
+import Link from "next/link";
 
 export const metadata = {
   title: "RE:START Conference 2025 | powered by Sevenpreneur",
@@ -60,9 +61,9 @@ export default function HomePage() {
       <div className="container-faq flex items-center justify-center px-8 pb-8 test">
         <FAQEventRestart25/>
       </div>
-      <div className="container-banner flex items-center justify-center px-8 pb-20">
+      <Link href={"https://sevenpreneur.com"} className="container-banner flex items-center justify-center px-8 pb-20">
         <BannerEventRestart25/>
-      </div>
+      </Link>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 "use client"
 
-export default function ButtonRestart25({ onClick, buttonTitle, Icon, buttonAltTitle, variant = "one liner" }) {
+export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, variant = "one liner" }) {
     return(
-        <div className="button flex bg-primary z-50 w-fit items-center gap-1.5 px-4 py-2 transition transform rounded-full active:scale-95 hover:cursor-pointer" onClick={onClick}>
+        <div className="button flex bg-primary w-fit items-center gap-1.5 px-4 py-2 transition transform rounded-full active:scale-95 active:bg-primary-strong hover:cursor-pointer">
             
             {variant === "one liner" && (
                 <p className="text-white font-bodycopy font-bold text-sm">

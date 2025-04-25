@@ -1,5 +1,5 @@
 "use client"
-import TicketCard from "../elements/TicketCard"
+import TicketCardRestart25 from "../elements/TicketCardRestart25"
 import SectionTitleRestart25 from "../elements/SectionTitleRestart25"
 
 export default function TicketCarouselRestart25() {
@@ -10,9 +10,9 @@ export default function TicketCarouselRestart25() {
             </div>
             <div className="px-8 w-full overflow-x-auto">
                 <div className="group-ticket flex items-start lg:justify-center">
-                    <TicketCard variant={"earlyBird"}/>
-                    <TicketCard variant={"regular"}/>
-                    <TicketCard variant={"vip"}/>
+                    <TicketCardRestart25 variant={"earlyBird"}/>
+                    <TicketCardRestart25 variant={"regular"}/>
+                    <TicketCardRestart25 variant={"vip"}/>
                 </div>
             </div>
         </div>

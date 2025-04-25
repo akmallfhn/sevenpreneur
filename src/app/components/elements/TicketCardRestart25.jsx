@@ -2,15 +2,16 @@
 import { ArrowUpRight, Check, LockOpen } from "lucide-react"
 import Image from "next/image"
 import ButtonRestart25 from "./ButtonRestart25"
+import Link from "next/link"
 
 const variantStyles = {
     earlyBird: {
         type: "Early Bird",
-        tagline: "Start smart. Pay less.",
+        tagline: "YES Conference Edition",
         basePrice: 400000,
         discountPrice: 150000,
         benefit: ["Main stage access", "Workshop & experience zone"],
-        expired: "30 May 25"
+        expired: "27 Apr 25"
     },
     regular: {
         type: "Regular",
@@ -30,7 +31,7 @@ const variantStyles = {
     }
 }
 
-export default function TicketCard({ variant }) {
+export default function TicketCardRestart25({ variant }) {
 
     // Mengatur variants
     const { type, tagline, basePrice, discountPrice, benefit, expired } = variantStyles[variant]
@@ -121,13 +122,9 @@ export default function TicketCard({ variant }) {
                 </div>
 
                 {/* CTA */}
-                <div className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2">
-                    <ButtonRestart25
-                    variant={"two liner"}
-                    buttonTitle={"Unlock Access"}
-                    buttonAltTitle={`before it's gone – ${expired}`}
-                    Icon={LockOpen}/>
-                </div>
+                <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2" target="_blank" rel="noopener noreferrer">
+                    <ButtonRestart25 variant={"two liner"} buttonTitle={"Unlock Access"} buttonAltTitle={`before it's gone – ${expired}`} Icon={LockOpen}/>
+                </Link>
             </div>
         </div>
     )

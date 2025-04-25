@@ -2,6 +2,7 @@
 import Image from "next/image"
 import ButtonRestart25 from "../elements/ButtonRestart25"
 import { Handshake, LayoutList } from "lucide-react"
+import Link from "next/link"
 
 export default function BannerEventRestart25() {
     return(
@@ -17,9 +18,9 @@ export default function BannerEventRestart25() {
                             Interested in joining RE:START 2025 as a sponsor or media partner? Our team would love to connect with you.
                         </p>
                     </div>
-                    <ButtonRestart25
-                    buttonTitle={"Partnership Form"}
-                    Icon={LayoutList}/>
+                    <Link href={"https://sevenpreneur.com"}>
+                        <ButtonRestart25 buttonTitle={"Partnership Form"} Icon={LayoutList}/>
+                    </Link>
                 </div>
                 
                 {/* Ornamen */}
