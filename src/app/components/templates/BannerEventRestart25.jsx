@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import ButtonRestart25 from "../elements/ButtonRestart25"
-import { Handshake, LayoutList } from "lucide-react"
+import { HeartHandshake } from "lucide-react"
 import Link from "next/link"
 
 export default function BannerEventRestart25() {
@@ -17,8 +17,8 @@ export default function BannerEventRestart25() {
                         Interested in joining RE:START 2025 as a sponsor or media <br className="hidden lg:block" /> partner? Our team would love to connect with you.
                     </p>
                 </div>
-                <Link href={"https://sevenpreneur.com"} className="z-20">
-                    <ButtonRestart25 buttonTitle={"Partnership Form"} Icon={LayoutList}/>
+                <Link href={"https://wa.me/6285353533844?text=I%27d%20love%20to%20explore%20partnership%20opportunities%20with%20you.%20Please%20share%20more%20details.%20Looking%20forward%20to%20collaborating%21"} className="z-20">
+                    <ButtonRestart25 buttonTitle={"Let's Collaborate"} Icon={HeartHandshake}/>
                 </Link>
                 
                 {/* Ornamen */}

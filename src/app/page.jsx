@@ -20,7 +20,7 @@ export const metadata = {
   },
   openGraph: {
       title: "RE:START Conference 2025 | powered by Sevenpreneur",
-      description: "Discover Maha Karya Group, an Indonesian leader in commodity and multisector industries. Explore our diverse business lines, including agro, mining, real estate, energy, investments, and trading.",
+      description: "",
       url: "https://sevenpreneur.com",
       siteName: "Sevenpreneur",
       images: [
