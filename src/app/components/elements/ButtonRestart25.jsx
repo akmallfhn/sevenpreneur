@@ -5,7 +5,7 @@ export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, var
         <div className="button flex bg-primary w-fit items-center gap-1.5 px-4 py-2 transition transform rounded-full active:scale-95 active:bg-primary-strong hover:cursor-pointer">
             
             {variant === "one liner" && (
-                <p className="text-white font-bodycopy font-bold text-sm">
+                <p className="text-white font-bodycopy font-bold text-sm lg:text-lg lg:mx-3 lg:my-1">
                     {buttonTitle}
                 </p>
             )}            
@@ -24,9 +24,9 @@ export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, var
             { Icon && (
                 <div className="bg-secondary rounded-full">
                     <Icon
-                    className="p-1 size-5"
+                    className="p-1 size-5 lg:size-8"
                     color="#ffffff"
-                    strokeWidth={3}/>
+                    strokeWidth={2}/>
                 </div>
             )}
         </div>

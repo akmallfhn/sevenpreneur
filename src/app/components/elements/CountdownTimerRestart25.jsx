@@ -52,14 +52,14 @@ export default function CountdownTimerRestart25() {
     ]
 
     return(
-        <div className="flex text-white items-center gap-2">
+        <div className="flex text-white items-center gap-2 lg:gap-4">
             {countdownData.map((post, index) => (
                 <React.Fragment key={index}>                    
                     <CountdownValueWrapper
                     value={post.value}
                     dimensions={post.dimensions}
                     />
-                    {index < countdownData.length - 1 && <p className="font-bodycopy text-sm">/</p>}
+                    {index < countdownData.length - 1 && <p className="font-bodycopy text-sm lg:text-xl">/</p>}
                 </React.Fragment>
             ))}
 

@@ -9,32 +9,58 @@ export default function FAQEventRestart25() {
             "answer": "The RE:START Conference 2025 will be held inside Mall Kota Kasablanka, Jakarta Pusat. The distance between the building and the airport is only 34 km. There are also several hotels within a radius of 0,4 km - 2 km that you can stay in, such as Wyndham Casablanca Jakarta, The Westin Jakarta, Manhattan Hotel Jakarta, JW Marriott Hotel Jakarta, HARRIS Hotel Tebet Jakarta, Le Meridien Jakarta and many more."
         },
         {
-            "question": "Will the conference conducted in Bahasa or English?",
-            "answer": "The Finfolkcon 2023 will be held inside Mall Kota Kasablanka, Jakarta Pusat. The distance between the building and the airport is only 34 km. There are also several hotels within a radius of 0,4 km - 2 km that you can stay in, such as Wyndham Casablanca Jakarta, The Westin Jakarta, Manhattan Hotel Jakarta, JW Marriott Hotel Jakarta, HARRIS Hotel Tebet Jakarta, Le Meridien Jakarta and many more."
+            "question": "What language will the conference be conducted in?",
+            "answer": "Most sessions will be conducted in Bahasa Indonesia, but some parts may also be delivered in English depending on the speaker."
         },
         {
-            "question": "Can I bring my food inside?",
-            "answer": "The Finfolkcon 2023 will be held inside Mall Kota Kasablanka, Jakarta Pusat. The distance between the building and the airport is only 34 km. There are also several hotels within a radius of 0,4 km - 2 km that you can stay in, such as Wyndham Casablanca Jakarta, The Westin Jakarta, Manhattan Hotel Jakarta, JW Marriott Hotel Jakarta, HARRIS Hotel Tebet Jakarta, Le Meridien Jakarta and many more."
+            "question": "Who can attend RE:START Conference 2025?",
+            "answer": "The conference is open to professionals, business owners, students, and anyone passionate about innovation, leadership, and entrepreneurship."
         },
         {
-            "question": "I’m from another city, how do I get to the RE:START Conference 2025",
-            "answer": "The Finfolkcon 2023 will be held inside Mall Kota Kasablanka, Jakarta Pusat. The distance between the building and the airport is only 34 km. There are also several hotels within a radius of 0,4 km - 2 km that you can stay in, such as Wyndham Casablanca Jakarta, The Westin Jakarta, Manhattan Hotel Jakarta, JW Marriott Hotel Jakarta, HARRIS Hotel Tebet Jakarta, Le Meridien Jakarta and many more."
+            "question": "Will meals be provided during the conference?",
+            "answer": "Meals are not included in the ticket. However, there will be scheduled breaks, and attendees can visit nearby restaurants and cafés during those times."
         },
         {
-            "question": "Can I buy ticket on the spot at venue?",
-            "answer": "The Finfolkcon 2023 will be held inside Mall Kota Kasablanka, Jakarta Pusat. The distance between the building and the airport is only 34 km. There are also several hotels within a radius of 0,4 km - 2 km that you can stay in, such as Wyndham Casablanca Jakarta, The Westin Jakarta, Manhattan Hotel Jakarta, JW Marriott Hotel Jakarta, HARRIS Hotel Tebet Jakarta, Le Meridien Jakarta and many more."
-        }
+            "question": "I’m traveling from another city. How do I get to RE:START Conference 2025?",
+            "answer": "You can reach Kuningan City Grand Ballroom via taxi, ride-hailing apps, LRT, or TransJakarta buses. It’s conveniently located in South Jakarta and easily accessible from most areas."
+        },
+        {
+            "question": "Can I buy a ticket at the venue?",
+            "answer": "No, tickets are only available for purchase online. We encourage you to book your ticket early through our official website to secure your spot."
+        },
+        {
+            "question": "Will the conference sessions be recorded?",
+            "answer": "Yes, selected sessions will be recorded. Attendees will be notified if recordings are made available after the event."
+        },
+        {
+            "question": "How can I stay updated with conference announcements?",
+            "answer": "Follow us on our official social media channels or subscribe to our newsletter for the latest updates and information."
+        },
+        {
+            "question": "Can I refund or transfer my ticket if I can’t attend?",
+            "answer": "Tickets are non-refundable, but you may transfer your ticket to another person. Please contact our support team at [email] for assistance."
+        },
+        {
+            "question": "Is there a dress code for the event?",
+            "answer": "We recommend business casual attire. You might want to bring a light jacket as the ballroom can be chilly."
+        },
+        {
+            "question": "Is there parking available at the venue?",
+            "answer": "Yes, Kuningan City Mall provides indoor paid parking facilities. Motorcycles can park at UG–L1 levels, while cars can park from P1 to P6 levels."
+        },
     ]
 
     return(
-        <div className="faq flex flex-col gap-3 items-center">
+        <div className="faq flex flex-col gap-3 items-center lg:gap-5">
             <SectionTitleRestart25 sectionTitle="Frequently Asked Questions"/>
-            {FAQData.map((post, index) => (
-                <FAQButton key={index}
-                questions={post.question}
-                answer={post.answer}
-                />
-            ))}
+            <div className="faq-items flex flex-col gap-3 items-center">
+                {FAQData.map((post, index) => (
+                    <FAQButton key={index}
+                    questions={post.question}
+                    answer={post.answer}
+                    />
+                ))}
+            </div>
         </div>
     )
 }

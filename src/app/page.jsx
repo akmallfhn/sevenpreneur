@@ -58,12 +58,12 @@ export default function HomePage() {
       <ContentEventRestart25 id={"contentEvent"}/>
       <TopicsRunningText/>
       <TicketCarouselRestart25/>
-      <div className="container-faq flex items-center justify-center px-8 pb-8 test">
+      <div className="container-faq flex items-center justify-center px-8 pb-8 lg:pb-[60px]">
         <FAQEventRestart25/>
       </div>
-      <Link href={"https://sevenpreneur.com"} className="container-banner flex items-center justify-center px-8 pb-20">
+      <div className="container-banner flex items-center justify-center px-8 pb-20">
         <BannerEventRestart25/>
-      </Link>
+      </div>
     </div>
   );
 }
