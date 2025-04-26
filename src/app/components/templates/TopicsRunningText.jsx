@@ -42,6 +42,7 @@ export default function TopicsRunningText() {
     const loopedTopics = Array(4).fill(topicsData).flat()
 
     return(
+        <section id="topics">
         <div className="topics-running-text pb-8 flex flex-col gap-3 items-center lg:pb-[60px]">
             <div className="flex flex-col items-center lg:gap-5">
                 <SectionTitleRestart25 sectionTitle="Topics Highlight"/>
@@ -107,5 +108,6 @@ export default function TopicsRunningText() {
                 }
             `}</style>
         </div>
+        </section>
     )
 }

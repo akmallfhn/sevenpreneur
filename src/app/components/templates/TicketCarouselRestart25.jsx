@@ -4,6 +4,7 @@ import SectionTitleRestart25 from "../elements/SectionTitleRestart25"
 
 export default function TicketCarouselRestart25() {
     return(
+        <section id="ticket-id">
         <div className="ticket-carousel pb-8 flex flex-col items-center lg:pb-[60px]">
             <div className="flex flex-col items-center">
                 <SectionTitleRestart25 sectionTitle="Get Your Ticket"/>
@@ -16,5 +17,6 @@ export default function TicketCarouselRestart25() {
                 </div>
             </div>
         </div>
+        </section>
     )
 }

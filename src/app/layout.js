@@ -12,6 +12,15 @@ const monaSans = Mona_Sans({
   subsets: ["latin"],
 });
 
+export function generateMetadata() {
+  const BASE_URL = "https://www.sevenpreneur.com"
+  return{
+    metadataBase: BASE_URL,
+    alternates: {
+        canonical: '/',
+    },
+}}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">

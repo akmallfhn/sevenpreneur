@@ -3,6 +3,7 @@ import Image from "next/image"
 
 export default function VisionQuotesRestart25() {
     return(
+        <section id="vision">
         <div className="vision-quotes relative flex bg-primary justify-center overflow-hidden">
             {/* Content */}
             <div className="content flex flex-col gap-5 items-center py-10 z-20 max-w-[420px] lg:max-w-[960px]">
@@ -50,5 +51,6 @@ export default function VisionQuotesRestart25() {
             width={2440}
             height={2440}/>
         </div>
+        </section>
     )
 }

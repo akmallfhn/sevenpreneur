@@ -1,4 +1,3 @@
-import Image from "next/image";
 import HeroEventRestart2025 from "./components/templates/HeroEventRestart25";
 import VisionQuotesRestart25 from "./components/templates/VisionQuotesRestart25";
 import ContentEventRestart25 from "./components/templates/ContentEventRestart25";
@@ -6,12 +5,11 @@ import TicketCarouselRestart25 from "./components/templates/TicketCarouselRestar
 import BannerEventRestart25 from "./components/templates/BannerEventRestart25";
 import FAQEventRestart25 from "./components/templates/FAQEventRestart25";
 import TopicsRunningText from "./components/templates/TopicsRunningText";
-import Link from "next/link";
 
 export const metadata = {
-  title: "RE:START Conference 2025 | powered by Sevenpreneur",
-  description: "",
-  keywords: "",
+  title: "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
+  description: "Ikuti RE:START, konferensi bisnis dari Sevenpreneur dan Raymond Chin untuk generasi Millennial dan Gen Z Indonesia. Jelajahi tren, teknologi, strategi, dan mindset yang membentuk masa depan bisnis. Saatnya Anda menjadi entrepreneur global berikutnya.",
+  keywords: "konferensi bisnis untuk millennial Indonesia, event bisnis generasi Z Indonesia, RESTART, Sevenpreneur, Raymond Chin, konferensi entrepreneur muda Indonesia, tren bisnis masa depan Indonesia, acara startup Indonesia 2025, Sevenpreneur business conference, event inovasi dan teknologi bisnis Indonesia",
   authors: [{name: "Sevenpreneur"}],
   publisher: "Sevenpreneur",
   referrer: 'origin-when-cross-origin',
@@ -19,13 +17,13 @@ export const metadata = {
       canonical: "/"
   },
   openGraph: {
-      title: "RE:START Conference 2025 | powered by Sevenpreneur",
-      description: "",
-      url: "https://sevenpreneur.com",
+      title: "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
+      description: "Ikuti RE:START, konferensi bisnis dari Sevenpreneur dan Raymond Chin untuk generasi Millennial dan Gen Z Indonesia. Jelajahi tren, teknologi, strategi, dan mindset yang membentuk masa depan bisnis. Saatnya Anda menjadi entrepreneur global berikutnya.",
+      url: "https://www.sevenpreneur.com",
       siteName: "Sevenpreneur",
       images: [
           {
-            url: "",
+            url: "https://static.wixstatic.com/media/02a5b1_4dee8855abba4f6a84df1cf36c3ee523~mv2.webp",
             width: 800,
             height: 600,
           }
@@ -33,9 +31,9 @@ export const metadata = {
   },
   twitter: {
       card: 'summary_large_image',
-      title: "RE:START Conference 2025 | powered by Sevenpreneur",
-      description: "",
-      images: "",
+      title: "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
+      description: "Ikuti RE:START, konferensi bisnis dari Sevenpreneur dan Raymond Chin untuk generasi Millennial dan Gen Z Indonesia. Jelajahi tren, teknologi, strategi, dan mindset yang membentuk masa depan bisnis. Saatnya Anda menjadi entrepreneur global berikutnya.",
+      images: "https://static.wixstatic.com/media/02a5b1_4dee8855abba4f6a84df1cf36c3ee523~mv2.webp",
     },
   robots: {
       index: true,

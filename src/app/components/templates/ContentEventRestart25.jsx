@@ -34,6 +34,7 @@ export default function ContentEventRestart25() {
                 </div>
 
                 {/* Embed Youtube */}
+                <section id="teaser">
                 <div className="p-[1px] rounded-md bg-gradient-to-r from-0% from-[#727272] via-50% via-[#333333] to-100% to-[#727272]">
                     <div className="bg-black p-3 rounded-md lg:hidden">
                         <iframe 
@@ -60,6 +61,7 @@ export default function ContentEventRestart25() {
                         </iframe>
                     </div>
                 </div>
+                </section>
 
                 {/* Countdown */}
                 <div className="about-event flex flex-col gap-3 items-center lg:gap-5">

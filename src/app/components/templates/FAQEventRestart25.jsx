@@ -47,7 +47,8 @@ export default function FAQEventRestart25() {
     ]
 
     return(
-        <div className="faq flex flex-col gap-3 items-center lg:gap-5">
+        <section id="faq">
+        <div className="faq-container flex flex-col gap-3 items-center lg:gap-5">
             <SectionTitleRestart25 sectionTitle="Frequently Asked Questions"/>
             <div className="faq-items flex flex-col gap-3 items-center">
                 {FAQData.map((post, index) => (
@@ -58,5 +59,6 @@ export default function FAQEventRestart25() {
                 ))}
             </div>
         </div>
+        </section>
     )
 }

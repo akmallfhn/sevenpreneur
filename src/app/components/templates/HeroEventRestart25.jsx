@@ -6,11 +6,11 @@ import Link from "next/link"
 
 export default function HeroEventRestart2025() {
     return(
-        <div className="relative pb-10 pt-64 gap-5 flex flex-col items-center w-full bg-[#061E71] overflow-hidden lg:pt-[472px]">
+        <div className="relative pb-10 pt-64 gap-5 flex flex-col items-center w-full bg-[#061E71] overflow-hidden lg:pt-[542px]">
             {/* Welcoming Back */}
-            <div className="absolute flex flex-col items-center gap-4 top-9 left-1/2 -translate-x-1/2 z-20">
+            <div className="absolute flex flex-col items-center gap-4 top-9 left-1/2 -translate-x-1/2 z-20 lg:top-20">
                 <Image
-                className="flex max-w-40 lg:max-w-80"
+                className="flex max-w-40 lg:max-w-72"
                 src={"https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"}
                 alt="Logo Sevenpreneur"
                 width={500}
@@ -30,7 +30,7 @@ export default function HeroEventRestart2025() {
 
             {/* Brand Representative */}
             <Image
-            className="brand-representative absolute flex max-w-[420px] top-[108px] left-1/2 -translate-x-1/2 z-30 lg:max-w-[924px]"
+            className="brand-representative absolute flex max-w-[420px] top-[108px] left-1/2 -translate-x-1/2 z-30 lg:max-w-[924px] lg:top-[186px]"
             src={"https://static.wixstatic.com/media/02a5b1_2889b7138d23455982c569c68701940f~mv2.webp"}
             alt="Sevenpreneur Brand Representative"
             width={2440}
