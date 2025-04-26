@@ -5,10 +5,6 @@ import FAQButton from "../elements/FAQButton"
 export default function FAQEventRestart25() {
     const FAQData = [
         {
-            "question": "What is RE:START Conference 2025?",
-            "answer": "The RE:START Conference 2025 will be held inside Mall Kota Kasablanka, Jakarta Pusat. The distance between the building and the airport is only 34 km. There are also several hotels within a radius of 0,4 km - 2 km that you can stay in, such as Wyndham Casablanca Jakarta, The Westin Jakarta, Manhattan Hotel Jakarta, JW Marriott Hotel Jakarta, HARRIS Hotel Tebet Jakarta, Le Meridien Jakarta and many more."
-        },
-        {
             "question": "What language will the conference be conducted in?",
             "answer": "Most sessions will be conducted in Bahasa Indonesia, but some parts may also be delivered in English depending on the speaker."
         },
