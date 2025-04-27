@@ -13,7 +13,7 @@ const variantStyles = {
         discountPrice: 70000,
         benefit: ["Main stage access", "Workshop", "Experience zone"],
         startDate: "2025-04-27T11:00:00+07:00",
-        expiredDate: "2025-04-27T23:59:00+07:00"
+        expiredDate: "2025-04-27T22:00:00+07:00"
     },
     earlyBird: {
         type: "Early Bird",
@@ -38,7 +38,7 @@ const variantStyles = {
         tagline: "Full experience. Half price",
         basePrice: 5400000,
         discountPrice: 2700000,
-        benefit: ["Main stage access", "Workshop & experience zone", "Front row seating", "Dinner & after party invite", "Community membership", "Exclusive merch set"],
+        benefit: ["Everything in Regular Ticket", "Front row seating", "Dinner & after party invite", "Community membership", "Exclusive merch set"],
         startDate: "2025-04-27T11:00:00+07:00",
         expiredDate: "2025-07-25T23:59:00+07:00"
     }
