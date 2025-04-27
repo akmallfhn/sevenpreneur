@@ -18,7 +18,7 @@ export default function BannerEventRestart25() {
                     </p>
                 </div>
                 <Link href={"https://wa.me/6285353533844?text=I%27d%20love%20to%20explore%20partnership%20opportunities%20with%20you.%20Please%20share%20more%20details.%20Looking%20forward%20to%20collaborating%21"} className="z-20">
-                    <ButtonRestart25 buttonTitle={"Let's Collaborate"} Icon={HeartHandshake}/>
+                    <ButtonRestart25 buttonTitle={"Let's Collaborate"} Icon={HeartHandshake} addCSS={`lg:mx-3 lg:my-1`} addCSSIcon={`lg:size-8`}/>
                 </Link>
                 
                 {/* Ornamen */}

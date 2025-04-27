@@ -1,8 +1,9 @@
 "use client"
-import { ArrowUpRight, Check, LockOpen } from "lucide-react"
+import { Check, LockOpen } from "lucide-react"
 import Image from "next/image"
 import ButtonRestart25 from "./ButtonRestart25"
 import Link from "next/link"
+import dayjs from "dayjs"
 
 const variantStyles = {
     earlyBirdYes: {
@@ -10,16 +11,18 @@ const variantStyles = {
         tagline: "YES Conference Edition",
         basePrice: 270000,
         discountPrice: 70000,
-        benefit: ["Main stage access", "Workshop & experience zone"],
-        expired: "27 Apr 25"
+        benefit: ["Main stage access", "Workshop", "Experience zone"],
+        startDate: "2025-04-27T11:00:00+07:00",
+        expiredDate: "2025-04-27T23:59:00+07:00"
     },
     earlyBird: {
         type: "Early Bird",
         tagline: "Start smart. Pay less!",
         basePrice: 270000,
         discountPrice: 170000,
-        benefit: ["Main stage access", "Workshop & experience zone"],
-        expired: "28 May 25"
+        benefit: ["Main stage access","Workshop", "Experience zone" ],
+        startDate: "2025-04-28T00:00:00+07:00",
+        expiredDate: "2025-05-28T23:59:00+07:00"
     },
     regular: {
         type: "Regular",
@@ -27,7 +30,8 @@ const variantStyles = {
         basePrice: 0,
         discountPrice: 270000,
         benefit: ["Main stage access", "Workshop & experience zone"],
-        expired: "30 May 25"
+        startDate: "2025-04-27T11:00:00+07:00",
+        expiredDate: "2025-05-28T23:59:00+07:00"
     },
     vip: {
         type: "VIP",
@@ -35,18 +39,39 @@ const variantStyles = {
         basePrice: 5400000,
         discountPrice: 2700000,
         benefit: ["Main stage access", "Workshop & experience zone", "Front row seating", "Dinner & after party invite", "Community membership", "Exclusive merch set"],
-        expired: "25 Jul 25"
+        startDate: "2025-04-27T11:00:00+07:00",
+        expiredDate: "2025-07-25T23:59:00+07:00"
     }
 }
 
 export default function TicketCardRestart25({ variant }) {
 
     // Mengatur variants
-    const { type, tagline, basePrice, discountPrice, benefit, expired } = variantStyles[variant]
+    const { type, tagline, basePrice, discountPrice, benefit, startDate, expiredDate } = variantStyles[variant]
 
     // Membuat persentase diskon
     const discountPercent = 100 - (discountPrice / basePrice) * 100
     const rounded = Math.round(discountPercent)
+
+    // Membuat fungsi untuk menentukan status tiket
+    const getStatus = () => {
+        const now = dayjs()
+        const start = dayjs(startDate)
+        const expired = dayjs(expiredDate)
+
+        if (now.isBefore(start)) {
+            return "upcoming"
+        } else if (now.isAfter(expired)) {
+            return "sold"
+        } else {
+            return "sctive"
+        }
+    }
+
+    const status = getStatus()
+
+    // Button akan disabled jika status Upcoming atau Sold
+    const isDisabled = status === "upcoming" || status === "sold"
 
     return(
         <div className="root py-3 pr-3 z-50 lg:pr-0">
@@ -130,8 +155,14 @@ export default function TicketCardRestart25({ variant }) {
                 </div>
 
                 {/* CTA */}
-                <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2" target="_blank" rel="noopener noreferrer">
-                    <ButtonRestart25 variant={"two liner"} buttonTitle={"Unlock Access"} buttonAltTitle={`before it's gone – ${expired}`} Icon={LockOpen}/>
+                <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-5" target="_blank" rel="noopener noreferrer">
+                    <ButtonRestart25 
+                    disabled={isDisabled}
+                    variant={status === "sold" ? "one liner" : "two liner"} 
+                    buttonTitle={status === "upcoming" ? "Coming Soon" : status === "sold" ? "Sold Out" : "Unlock Access"} 
+                    buttonAltTitle={status === "upcoming" ? `will open at - ${dayjs(startDate).format("D MMM")}` : status === "sold" ? "" : `before it's gone - ${dayjs(expiredDate).format("D MMM")}`} 
+                    Icon={LockOpen}
+                    addCSSIcon={"lg:size-6"}/>
                 </Link>
             </div>
         </div>

@@ -29,7 +29,7 @@ export default function ContentEventRestart25() {
                         </p>
                     </div>
                     <Link href={"https://vesta.halofans.id/event/v2/re-start"} target="_blank" rel="noopener noreferrer">
-                        <ButtonRestart25 buttonTitle={"Get Your Ticket Now"} Icon={TicketPlus}/>
+                        <ButtonRestart25 buttonTitle={"Get Your Ticket Now"} Icon={TicketPlus} addCSS={`lg:mx-3 lg:my-1`} addCSSIcon={`lg:size-8`}/>
                     </Link>
                 </div>
 
