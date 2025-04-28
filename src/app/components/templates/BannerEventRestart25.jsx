@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import ButtonRestart25 from "../elements/ButtonRestart25"
-import { HeartHandshake } from "lucide-react"
+import { HeartHandshake, MessageCircleQuestion } from "lucide-react"
 import Link from "next/link"
 
 export default function BannerEventRestart25() {
@@ -11,14 +11,14 @@ export default function BannerEventRestart25() {
                 {/* Content */}                
                 <div className="flex flex-col text-white gap-1 z-20">
                     <h3 className="font-bold font-brand text-xl lg:text-2xl">
-                        Become Our Partner
+                        Having trouble??
                     </h3>
-                    <p className="font-bodycopy text-sm lg:text-lg">
-                        Interested in joining RE:START 2025 as a sponsor or media <br className="hidden lg:block" /> partner? Our team would love to connect with you.
+                    <p className="font-bodycopy text-sm lg:text-xl">
+                        No worries — if you hit a snag while booking, we're here to help!
                     </p>
                 </div>
                 <Link href={"https://wa.me/6285353533844?text=I%27d%20love%20to%20explore%20partnership%20opportunities%20with%20you.%20Please%20share%20more%20details.%20Looking%20forward%20to%20collaborating%21"} className="z-20">
-                    <ButtonRestart25 buttonTitle={"Let's Collaborate"} Icon={HeartHandshake} addCSS={`lg:mx-3 lg:my-1`} addCSSIcon={`lg:size-8`}/>
+                    <ButtonRestart25 buttonTitle={"Contact Us"} Icon={MessageCircleQuestion} addCSS={`lg:mx-3 lg:my-1`} addCSSIcon={`lg:size-8`}/>
                 </Link>
                 
                 {/* Ornamen */}
