@@ -40,7 +40,7 @@ export default function ContentEventRestart25() {
                         <iframe 
                         width="315" 
                         height="180" 
-                        src="https://www.youtube.com/embed/baNN1sdeHEM?si=ZbE9-QlYKrqnFBG6&amp;controls=0"
+                        src="https://www.youtube.com/embed/GsLjwsu9Jus?si=j2bVzojiiYmE0ltu&amp;controls=0"
                         title="YouTube video player" 
                         frameBorder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -52,7 +52,7 @@ export default function ContentEventRestart25() {
                         <iframe 
                         width="780" 
                         height="478" 
-                        src="https://www.youtube.com/embed/baNN1sdeHEM?si=ZbE9-QlYKrqnFBG6&amp;controls=0"
+                        src="https://www.youtube.com/embed/GsLjwsu9Jus?si=j2bVzojiiYmE0ltu&amp;controls=0"
                         title="YouTube video player" 
                         frameBorder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
