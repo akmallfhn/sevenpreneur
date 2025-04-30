@@ -5,72 +5,7 @@ import ButtonRestart25 from "./ButtonRestart25"
 import Link from "next/link"
 import dayjs from "dayjs"
 
-const variantStyles = {
-    earlyBirdYes: {
-        type: "Early Bird",
-        tagline: "YES Conference Edition",
-        basePrice: 270000,
-        discountPrice: 70000,
-        benefit: ["Main stage access", "Workshop", "Experience zone"],
-        startDate: "2025-04-27T11:00:00+07:00",
-        expiredDate: "2025-04-27T22:00:00+07:00"
-    },
-    earlyBird: {
-        type: "Early Bird",
-        tagline: "Start smart. Pay less!",
-        basePrice: 270000,
-        discountPrice: 170000,
-        benefit: ["Main stage access","Workshop", "Experience zone" ],
-        startDate: "2025-04-28T00:00:00+07:00",
-        expiredDate: "2025-05-28T23:59:00+07:00"
-    },
-    regular: {
-        type: "Regular",
-        tagline: "A ticket to insight",
-        basePrice: 0,
-        discountPrice: 270000,
-        benefit: ["Main stage access", "Workshop & experience zone"],
-        startDate: "2025-04-27T11:00:00+07:00",
-        expiredDate: "2025-05-28T23:59:00+07:00"
-    },
-    vip: {
-        type: "VIP",
-        tagline: "Full experience. Half price",
-        basePrice: 5400000,
-        discountPrice: 2700000,
-        benefit: ["Everything in Regular Ticket", "Front row seating", "Dinner & after party invite", "Community membership", "Exclusive merch set"],
-        startDate: "2025-04-27T11:00:00+07:00",
-        expiredDate: "2025-07-25T23:59:00+07:00"
-    }
-}
-
 export default function TicketCardRestart25({ ticketListItem }) {
-
-    // Mengatur variants
-    // const { type, tagline, basePrice, discountPrice, benefit, startDate, expiredDate } = variantStyles[variant]
-
-    // Membuat fungsi untuk menentukan status tiket
-    // const getStatus = () => {
-    //     const now = dayjs()
-    //     const start = dayjs(startDate)
-    //     const expired = dayjs(expiredDate)
-
-    //     if (now.isBefore(start)) {
-    //         return "upcoming"
-    //     } else if (now.isAfter(expired)) {
-    //         return "sold"
-    //     } else {
-    //         return "active"
-    //     }
-    // }
-
-    // const status = getStatus()
-
-    // Button akan disabled jika status Upcoming atau Sold
-    // const isDisabled = status === "upcoming" || status === "sold"
-
-    const Now = dayjs()
-
     return(
         <div className="group-ticket flex items-start lg:justify-center lg:gap-5">
             {ticketListItem.map((post, index) => {

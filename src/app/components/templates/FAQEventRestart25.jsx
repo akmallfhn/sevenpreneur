@@ -34,7 +34,7 @@ export default function FAQEventRestart25() {
         },
         {
             "question": "Can I refund or transfer my ticket if I can’t attend?",
-            "answer": "Tickets are non-refundable, but you may transfer your ticket to another person. Please contact our support team at [email] for assistance."
+            "answer": "Tickets are non-refundable, but you may transfer your ticket to another person. Please contact our support team at +62853-5353-3844 (Radha) for assistance."
         },
         {
             "question": "Is there a dress code for the event?",
