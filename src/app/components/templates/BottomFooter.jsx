@@ -2,6 +2,7 @@
 import Image from "next/image"
 import SocialMediaButtonRestart25 from "../elements/SocialMediaButtonRestart25"
 import Link from "next/link"
+import { faFacebookF, faInstagram, faLinkedinIn, faThreads } from "@fortawesome/free-brands-svg-icons"
 
 export default function BottomFooter() {
 
@@ -9,22 +10,22 @@ export default function BottomFooter() {
         {
             "name": "Linkedin",
             "url": "https://www.linkedin.com/company/sevenpreneur/",
-            "icon": "https://static.wixstatic.com/shapes/02a5b1_9230cf57155442aa877488ab12c01bfe.svg",
+            "icon": faLinkedinIn,
         },
         {
             "name": "Facebook",
             "url": "https://web.facebook.com/sevenpreneur/",
-            "icon": "https://static.wixstatic.com/shapes/02a5b1_f7489cd32bad48d9a162184cb886155a.svg",
+            "icon": faFacebookF,
         },
         {
             "name": "Instagram",
             "url": "https://www.instagram.com/7preneur/",
-            "icon": "https://static.wixstatic.com/shapes/02a5b1_fb8c60cbea9b4cdd94f81e0df88aabca.svg",
+            "icon": faInstagram,
         },
         {
             "name": "Threads",
             "url": "https://www.threads.com/@7preneur",
-            "icon": "https://static.wixstatic.com/shapes/02a5b1_509c9e8a31d94df997de3bdfaaf79916.svg",
+            "icon": faThreads,
         },
     ]
 
@@ -63,8 +64,7 @@ export default function BottomFooter() {
                             {socialMediaData.map((post, index) => (
                                 <Link href={post.url} key={index} target="_blank" rel="noopener noreferrer">
                                     <SocialMediaButtonRestart25 
-                                    altTitle={post.name}
-                                    imageButton={post.icon}/>
+                                    iconButton={post.icon}/>
                                 </Link>
                             ))}
                         </div>
