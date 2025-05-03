@@ -1,10 +1,11 @@
 "use client"
 
-export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, onClick, variant = "one liner", disabled, addCSS, addCSSIcon }) {
+export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, buttonId, onClick, variant = "one liner", disabled, addCSS, addCSSIcon }) {
     return(
         <button 
         disabled={disabled}
         onClick={onClick}
+        id={buttonId}
         className={`button flex px-4 py-2 transition transform rounded-full ${disabled ? "bg-gray-400 cursor-not-allowed" : "hover:cursor-pointer bg-primary active:scale-95 active:bg-primary-strong"}`}>
             
             <div className={`flex items-center gap-1.5 w-fit lg:gap-3 ${addCSS}`}>
