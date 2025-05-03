@@ -6,6 +6,18 @@ import Link from "next/link"
 import dayjs from "dayjs"
 
 export default function TicketCardRestart25({ ticketListItem }) {
+
+    const handleClick = () => {
+        if (typeof window !== 'undefined') {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: "click",
+            feature_name: "pay_ticket_click",
+            feature_location: "ticket_section"
+          });
+        }
+    }
+
     return(
         <div className="group-ticket flex items-start lg:justify-center lg:gap-5">
             {ticketListItem.map((post, index) => {
@@ -109,6 +121,7 @@ export default function TicketCardRestart25({ ticketListItem }) {
                             {/* CTA */}
                             <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-5" target="_blank" rel="noopener noreferrer">
                                 <ButtonRestart25 
+                                onClick={handleClick}
                                 disabled={isDisabled}
                                 variant={"two liner"} 
                                 buttonTitle={status === "upcoming" ? "Coming Soon" : "Unlock Access"} 
