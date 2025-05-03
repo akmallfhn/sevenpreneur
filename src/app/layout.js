@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import TopNavbar from "./components/templates/TopNavbarRestart25";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import BottomFooter from "./components/templates/BottomFooter";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -37,6 +37,7 @@ export function generateMetadata() {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <GoogleTagManager gtmId="GTM-MZJSK4G3"/>
       <body className={`${monaSans.variable} ${plusJakartaSans.variable} antialiased`}>
         <TopNavbar/>
         {children}
