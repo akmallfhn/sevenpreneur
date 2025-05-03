@@ -6,7 +6,7 @@ import Link from "next/link"
 import dayjs from "dayjs"
 import { sendGTMEvent } from "@next/third-parties/google"
 
-export default function TicketCardRestart25({ ticketListItem, buttonId }) {
+export default function TicketCardRestart25({ ticketListItem }) {
     return(
         <div className="group-ticket flex items-start lg:justify-center lg:gap-5">
             {ticketListItem.map((post, index) => {
@@ -111,7 +111,7 @@ export default function TicketCardRestart25({ ticketListItem, buttonId }) {
                             <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-5" target="_blank" rel="noopener noreferrer">
                                 <ButtonRestart25 
                                 buttonId={"testId"}
-                                onClick={() => sendGTMEvent({ event: "testClick", feature_name: "test123", value: "test123"})}
+                                onClick={() => sendGTMEvent({ event: "testClick", feature_name: "testName123", value: "testValue123", clickId: "testId123"})}
                                 disabled={isDisabled}
                                 variant={"two liner"} 
                                 buttonTitle={status === "upcoming" ? "Coming Soon" : "Unlock Access"} 
