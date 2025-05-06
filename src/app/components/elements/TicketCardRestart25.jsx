@@ -109,7 +109,8 @@ export default function TicketCardRestart25({ ticketListItem }) {
                             {/* CTA */}
                             <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-5" target="_blank" rel="noopener noreferrer">
                                 <ButtonRestart25 
-                                id={"testId123"}
+                                id={post.id}
+                                position={index + 1}
                                 disabled={isDisabled}
                                 variant={"two liner"} 
                                 buttonTitle={status === "upcoming" ? "Coming Soon" : "Unlock Access"} 

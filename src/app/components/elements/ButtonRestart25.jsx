@@ -1,13 +1,14 @@
 "use client"
-import { sendGTMEvent } from "@next/third-parties/google"
 
-export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, id, variant = "one liner", disabled, addCSS, addCSSIcon }) {
+export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, id, position, variant = "one liner", disabled, addCSS, addCSSIcon }) {
 
     const handleClick = () => {
-        sendGTMEvent({
-          event: 'testClick',
-          clickId: id,
-        })
+        window.dataLayer.push({
+            event: 'click',
+            feature_name: 'ticket_click',
+            feature_id: id,
+            feature_position: position
+        });
     }
     
     return(
