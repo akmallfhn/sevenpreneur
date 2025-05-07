@@ -23,7 +23,7 @@ export const metadata = {
       siteName: "Sevenpreneur",
       images: [
           {
-            url: "https://static.wixstatic.com/media/02a5b1_4dee8855abba4f6a84df1cf36c3ee523~mv2.webp",
+            url: "https://static.wixstatic.com/media/02a5b1_75a55654d4b445da8c4500b84f0cb7a2~mv2.webp",
             width: 800,
             height: 600,
           }
@@ -33,7 +33,7 @@ export const metadata = {
       card: 'summary_large_image',
       title: "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
       description: "Ikuti RE:START, konferensi bisnis dari Sevenpreneur dan Raymond Chin untuk generasi Millennial dan Gen Z Indonesia. Jelajahi tren, teknologi, strategi, dan mindset yang membentuk masa depan bisnis. Saatnya Anda menjadi entrepreneur global berikutnya.",
-      images: "https://static.wixstatic.com/media/02a5b1_4dee8855abba4f6a84df1cf36c3ee523~mv2.webp",
+      images: "https://static.wixstatic.com/media/02a5b1_75a55654d4b445da8c4500b84f0cb7a2~mv2.webp",
     },
   robots: {
       index: true,

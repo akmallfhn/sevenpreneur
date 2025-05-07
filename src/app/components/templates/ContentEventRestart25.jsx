@@ -14,8 +14,8 @@ export default function ContentEventRestart25() {
                 {/* Event Title */}
                 <div className="title-event flex flex-col items-center gap-5 lg:gap-10">
                     <Image
-                    className="w-full max-w-[360px] lg:max-w-[740px]"
-                    src={"https://static.wixstatic.com/media/02a5b1_c45cd196524846059819c0be61221b34~mv2.webp"}
+                    className="w-full max-w-[320px] lg:max-w-[720px]"
+                    src={"https://static.wixstatic.com/media/02a5b1_d927500efc3d47c0b8cf75a4435214be~mv2.webp"}
                     alt="Logo RE:START Conference 2025"
                     width={2440}
                     height={2440}
