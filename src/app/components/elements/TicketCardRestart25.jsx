@@ -1,4 +1,5 @@
 "use client"
+import { useRef, useEffect } from "react"
 import { Check, LockOpen } from "lucide-react"
 import Image from "next/image"
 import ButtonRestart25 from "./ButtonRestart25"
@@ -6,6 +7,9 @@ import Link from "next/link"
 import dayjs from "dayjs"
 
 export default function TicketCardRestart25({ ticketListItem }) {
+    const ref = useRef(null)
+    const viewedTickets = new Set() // Supaya event "view" tidak dikirim dua kali untuk tiket yang sama
+
     return(
         <div className="group-ticket flex items-start lg:justify-center lg:gap-5">
             {ticketListItem.map((post, index) => {
@@ -25,8 +29,35 @@ export default function TicketCardRestart25({ ticketListItem }) {
                 // Button akan disabled jika status Upcoming atau Sold
                 const isDisabled = status === "upcoming"
 
+                // Tracking View Ticket
+                useEffect(() => {
+                    // Membuat "mata pengintai" yang memantau apakah elemen sudah muncul
+                    const observer = new IntersectionObserver( 
+                        (entries) => {
+                            entries.forEach((entry) => { // Looping semua elemen yang dipantau
+                                if (entry.isIntersecting && !viewedTickets.has(post.id)) { // elemen sedang terlihat di layar dan mengecek apakah tiket ini sudah pernah dilihat.
+                                    window.dataLayer.push({
+                                        event: "view",
+                                        feature_name: "ticket_view",
+                                        feature_id: post.id,
+                                        feature_position: index + 1
+                                    })
+                                    viewedTickets.add(post.id) // Tandai tiket ini sebagai sudah dilihat
+                                }
+                            })
+                        },
+                        {threshold: 0.5}
+                    )
+                    // Mulai memantau elemen yang ditandai dengan ref.
+                    if (ref.current) observer.observe(ref.current)
+                    // Saat komponen dibuang dari layar (unmount), kita hentikan pengawasan supaya tidak membuang resource.
+                    return () => {
+                        if (ref.current) observer.unobserve(ref.current)
+                    }
+                }, [post.id])
+
                 return(
-                    <div className="root py-3 pr-3 z-50 lg:pr-0" key={index}>
+                    <div className="root py-3 pr-3 z-50 lg:pr-0" key={index} ref={ref}>
                         <div className="ticket-container relative flex">
                             <Image
                             className="background max-w-[220px] overflow-hidden lg:max-w-[252px]"
