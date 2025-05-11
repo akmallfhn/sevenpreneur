@@ -1,13 +1,12 @@
 "use client"
 
-export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, id, position, variant = "one liner", disabled, addCSS, addCSSIcon }) {
+export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, variant = "one liner", disabled, addCSS, addCSSIcon, feature_name, feature_position }) {
 
     const handleClick = () => {
         window.dataLayer.push({
-            event: 'click',
-            feature_name: 'ticket_click',
-            feature_id: id,
-            feature_position: position
+            event: "click",
+            feature_name: feature_name,
+            feature_position: feature_position
         });
     }
     
@@ -15,7 +14,6 @@ export default function ButtonRestart25({ buttonTitle, Icon, buttonAltTitle, id,
         <button 
         disabled={disabled}
         onClick={handleClick}
-        id={id}
         className={`button flex px-4 py-2 transition transform rounded-full ${disabled ? "bg-gray-400 cursor-not-allowed" : "hover:cursor-pointer bg-primary active:scale-95 active:bg-primary-strong"}`}>
             
             <div className={`flex items-center gap-1.5 w-fit lg:gap-3 ${addCSS}`}>

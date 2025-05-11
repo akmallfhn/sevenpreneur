@@ -5,7 +5,7 @@ import dayjs from "dayjs"
 
 const data = [
     {
-        "id": "ticket-early-bird-yes",
+        "id": "early_bird_yes",
         "type": "Early Bird",
         "tagline": "YES Conference Edition",
         "basePrice": 270000,
@@ -17,7 +17,7 @@ const data = [
         "isActive": true
     },
     {
-        "id": "ticket-early-bird",
+        "id": "early_bird",
         "type": "Early Bird",
         "tagline": "Start smart. Pay less!",
         "basePrice": 270000,
@@ -29,7 +29,7 @@ const data = [
         "isActive": true
     },
     {
-        "id": "ticket-regular",
+        "id": "regular",
         "type": "Regular",
         "tagline": "A ticket to insight",
         "basePrice": 0,
@@ -41,7 +41,7 @@ const data = [
         "isActive": false
     },
     {
-        "id": "ticket-vip",
+        "id": "vip",
         "type": "VIP",
         "tagline": "Full experience. Half price",
         "basePrice": 5400000,

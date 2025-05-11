@@ -38,8 +38,7 @@ export default function TicketCardRestart25({ ticketListItem }) {
                                 if (entry.isIntersecting && !viewedTickets.has(post.id)) { // elemen sedang terlihat di layar dan mengecek apakah tiket ini sudah pernah dilihat.
                                     window.dataLayer.push({
                                         event: "view",
-                                        feature_name: "ticket_view",
-                                        feature_id: post.id,
+                                        feature_name: (`ticket_checkout_${post.id}_view`),
                                         feature_position: index + 1
                                     })
                                     viewedTickets.add(post.id) // Tandai tiket ini sebagai sudah dilihat
@@ -140,8 +139,8 @@ export default function TicketCardRestart25({ ticketListItem }) {
                             {/* CTA */}
                             <Link href={"https://vesta.halofans.id/event/v2/re-start"} className="cta-button absolute bottom-4 left-1/2 -translate-x-1/2 lg:bottom-5" target="_blank" rel="noopener noreferrer">
                                 <ButtonRestart25 
-                                id={post.id}
-                                position={index + 1}
+                                feature_name={`ticket_checkout_${post.id}`}
+                                feature_position={index + 1}
                                 disabled={isDisabled}
                                 variant={"two liner"} 
                                 buttonTitle={status === "upcoming" ? "Coming Soon" : "Unlock Access"} 

@@ -1,4 +1,5 @@
 "use client"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import ButtonRestart25 from "../elements/ButtonRestart25"
 import SectionTitleRestart25 from "../elements/SectionTitleRestart25"
@@ -7,6 +8,35 @@ import { Ticket, TicketPlus } from "lucide-react"
 import Link from "next/link"
 
 export default function ContentEventRestart25() {
+    const ref = useRef(null)
+    const viewedTickets = new Set() 
+    const [hasBeenViewed, setHasBeenViewed] = useState(false)
+
+    // Tracking View Ticket
+    useEffect(() => {
+        // Membuat "mata pengintai" yang memantau apakah elemen sudah muncul
+        const observer = new IntersectionObserver( 
+            (entries) => {
+                entries.forEach((entry) => { // Looping semua elemen yang dipantau
+                    if (entry.isIntersecting && !hasBeenViewed) { // elemen sedang terlihat di layar dan mengecek apakah tiket ini sudah pernah dilihat.
+                        window.dataLayer.push({
+                            event: "view",
+                            feature_name: "ticket_checkout_view",
+                        })
+                        setHasBeenViewed(true) // Tandai tiket ini sebagai sudah dilihat
+                    }
+                })
+            },
+            {threshold: 0.5}
+        )
+        // Mulai memantau elemen yang ditandai dengan ref.
+        if (ref.current) observer.observe(ref.current)
+        // Saat komponen dibuang dari layar (unmount), kita hentikan pengawasan supaya tidak membuang resource.
+        return () => {
+            if (ref.current) observer.unobserve(ref.current)
+        }
+    }, [hasBeenViewed])
+    
     return(
         <section id="content-event">
         <div className="content-event-root relative bg-black flex justify-center overflow-hidden">
@@ -28,8 +58,13 @@ export default function ContentEventRestart25() {
                             Kuningan City Ballroom, Jakarta
                         </p>
                     </div>
-                    <Link href={"https://vesta.halofans.id/event/v2/re-start"} target="_blank" rel="noopener noreferrer">
-                        <ButtonRestart25 buttonTitle={"Get Your Ticket Now"} Icon={TicketPlus} addCSS={`lg:mx-3 lg:my-1`} addCSSIcon={`lg:size-8`}/>
+                    <Link ref={ref} href={"https://vesta.halofans.id/event/v2/re-start"} target="_blank" rel="noopener noreferrer">
+                        <ButtonRestart25 
+                        buttonTitle={"Get Your Ticket Now"} 
+                        Icon={TicketPlus} 
+                        addCSS={`lg:mx-3 lg:my-1`} 
+                        addCSSIcon={`lg:size-8`}
+                        feature_name={"ticket_checkout"}/>
                     </Link>
                 </div>
 

@@ -77,7 +77,11 @@ export default function HeroEventRestart2025() {
 
             {/* CTA */}
             <Link href={"#content-event"} className="z-60">
-                <ButtonRestart25 buttonTitle={"Join RE:START Conference 2025"} Icon={ArrowDown} addCSS={`lg:mx-3 lg:my-1`} addCSSIcon={`lg:size-8`}/>
+                <ButtonRestart25 
+                buttonTitle={"Join RE:START Conference 2025"} 
+                Icon={ArrowDown} addCSS={`lg:mx-3 lg:my-1`} 
+                addCSSIcon={`lg:size-8`}
+                feature_name={"join_restart"}/>
             </Link>
         </div>
     )
