@@ -24,7 +24,7 @@ const data = [
         "discountPrice": 170000,
         "benefit": ["Main stage access","Workshop", "Experience zone" ],
         "startDate": "2025-04-28T00:00:00+07:00",
-        "expiredDate": "2025-05-28T23:59:00+07:00",
+        "expiredDate": "2025-05-27T23:59:00+07:00",
         "isPremium": false,
         "isActive": true
     },
