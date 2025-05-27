@@ -14,7 +14,7 @@ const data = [
         "startDate": "2025-04-27T11:00:00+07:00",
         "expiredDate": "2025-04-27T22:00:00+07:00",
         "isPremium": false,
-        "isActive": true
+        "isActive": false
     },
     {
         "id": "early_bird",
