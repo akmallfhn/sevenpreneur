@@ -1,6 +1,6 @@
 "use client"
 import SectionTitleRestart25 from "../elements/SectionTitleRestart25"
-import FAQButton from "../elements/FAQButton"
+import FAQButtonRestart25 from "../elements/FAQButtonRestart25"
 
 export default function FAQEventRestart25() {
     const FAQData = [
@@ -52,7 +52,7 @@ export default function FAQEventRestart25() {
             <SectionTitleRestart25 sectionTitle="Frequently Asked Questions"/>
             <div className="faq-items flex flex-col gap-3 items-center">
                 {FAQData.map((post, index) => (
-                    <FAQButton key={index}
+                    <FAQButtonRestart25 key={index}
                     questions={post.question}
                     answer={post.answer}
                     />
