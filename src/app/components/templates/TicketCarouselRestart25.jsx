@@ -45,9 +45,21 @@ const data = [
         "type": "VIP",
         "tagline": "Full experience. Half price",
         "basePrice": 5400000,
-        "discountPrice": 3000000,
+        "discountPrice": 2700000,
         "benefit": ["Everything in Regular Ticket", "Front row seating", "Dinner & after party invite", "Community membership", "Exclusive merch set"],
         "startDate": "2025-04-27T11:00:00+07:00",
+        "expiredDate": "2025-05-27T23:59:00+07:00",
+        "isPremium": true,
+        "isActive": true
+    },
+    {
+        "id": "vip",
+        "type": "VIP",
+        "tagline": "Full experience. Half price",
+        "basePrice": 5400000,
+        "discountPrice": 3000000,
+        "benefit": ["Everything in Regular Ticket", "Front row seating", "Dinner & after party invite", "Community membership", "Exclusive merch set"],
+        "startDate": "2025-05-28T00:00:00+07:00",
         "expiredDate": "2025-07-25T23:59:00+07:00",
         "isPremium": true,
         "isActive": true
