@@ -77,7 +77,7 @@ export default function TicketCarouselRestart25() {
             <div className="flex flex-col items-center">
                 <SectionTitleRestart25 sectionTitle="Get Your Ticket"/>
             </div>
-            <div className="ticket px-8 w-full overflow-x-auto lg:overflow-x-hidden">
+            <div className="px-8 w-full overflow-x-auto lg:overflow-x-hidden">
                 <TicketCardRestart25 ticketListItem={ticketData}/>
             </div>
         </div>
