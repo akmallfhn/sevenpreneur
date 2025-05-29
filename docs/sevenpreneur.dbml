@@ -1,0 +1,97 @@
+Project sevenpreneur {
+  database_type: 'PostgreSQL'
+  note: 'Database for Sevenpreneur'
+}
+
+/////////////////
+// Enumeration //
+/////////////////
+
+enum status_enum {
+  active
+  inactive
+}
+
+enum u_stage_enum {
+  ideation
+  feasibility_analysis
+  business_planning
+  execution
+  growth
+}
+
+enum u_industry_enum {
+  agriculture
+  automotive
+  biotechnology
+  chemicals
+  construction
+  consulting
+  consumer_goods
+  education
+  energy
+  engineering
+  entertainment
+  environmental_services
+  fashion
+  financial_services
+  food_and_beverage
+  government
+  healthcare
+  hospitality
+  human_resources
+  information_technology
+  insurance
+  legal
+  logistics_and_transportation
+  manufacturing
+  media
+  mining
+  non_profit
+  pharmaceuticals
+  public_relations
+  real_estate
+  retail
+  telecommunications
+  textiles
+  tourism
+  utilities
+}
+
+////////////
+// Tables //
+////////////
+
+Table users {
+  id                  uuid             [primary key]
+  full_name           varchar          [note: 'e.g. Budi Sadikin']
+  email               varchar          [note: 'unique, e.g. budisadikin@gmail.com']
+  avatar              varchar
+  role_id             smallint         [ref: > roles.id]
+  status              status_enum
+  date_of_birth       date
+  learning_goal       varchar
+  entrepreneur_stage  u_stage_enum
+  business_name       varchar
+  industry            u_industry_enum
+  created_at          timestamptz
+  updated_at          timestamptz
+  last_login          timestamptz
+  deleted_at          timestamptz
+}
+
+Table tokens {
+  id          integer      [primary key]
+  user_id     uuid         [ref: > users.id]
+  is_active   boolean
+  token       text         [note: 'unique']
+  created_at  timestamptz
+}
+
+Table roles {
+  id          smallint     [primary key]
+  name        varchar      [note: 'e.g. Administrator']
+  permission  smallint
+  created_at  timestamptz
+  updated_at  timestamptz
+}
