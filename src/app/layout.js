@@ -46,9 +46,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth">
       <GoogleTagManager gtmId="GTM-MZJSK4G3"/>
       <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
-        {/* <TopNavbar/> */}
+        <TopNavbar/>
         {children}
-        {/* <BottomFooter/> */}
+        <BottomFooter/>
         <GoogleAnalytics gaId="G-J8V0HJXTSM"/>
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
