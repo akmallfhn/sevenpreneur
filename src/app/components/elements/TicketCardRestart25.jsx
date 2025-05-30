@@ -1,11 +1,6 @@
 "use client"
-import { useRef, useEffect } from "react"
-import { Check, LockOpen } from "lucide-react"
-import Image from "next/image"
-import ButtonRestart25 from "./ButtonRestart25"
-import Link from "next/link"
 import dayjs from "dayjs"
-import TicketCardItemRestart25 from "./TicketCardItemRestart"
+import TicketCardItemRestart25 from "./TicketCardItemRestart25"
 
 export default function TicketCardRestart25({ ticketListItem }) {
     const viewedTickets = new Set() // Supaya event "view" tidak dikirim dua kali untuk tiket yang sama

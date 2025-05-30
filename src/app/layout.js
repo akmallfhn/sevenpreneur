@@ -2,6 +2,7 @@ import "./globals.css";
 import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
+import localFont from "next/font/local"
 import TopNavbar from "./components/templates/TopNavbarRestart25";
 import BottomFooter from "./components/templates/BottomFooter";
 
@@ -14,6 +15,11 @@ const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
   subsets: ["latin"],
 });
+
+const openSauceOne = localFont({
+  src: "./fonts/OpenSauceOne-Regular.ttf",
+  variable: "--font-open-sauce-one",
+})
 
 export function generateMetadata() {
   const BASE_URL = "https://www.sevenpreneur.com"
@@ -32,17 +38,17 @@ export function generateMetadata() {
         { url: '/apple-touch-icon.png' },
       ],
     }
-    
-}}
+  }
+}
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <GoogleTagManager gtmId="GTM-MZJSK4G3"/>
-      <body className={`${monaSans.variable} ${plusJakartaSans.variable} antialiased`}>
-        <TopNavbar/>
+      <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
+        {/* <TopNavbar/> */}
         {children}
-        <BottomFooter/>
+        {/* <BottomFooter/> */}
         <GoogleAnalytics gaId="G-J8V0HJXTSM"/>
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
