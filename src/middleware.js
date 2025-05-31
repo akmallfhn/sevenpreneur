@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(req) {
-  const host = req.headers.get("host");
   const url = req.nextUrl.clone();
+  const host = req.headers.get("host");
+  const hostname = host.split(':')[0];
 
   // Ignore accesses to assets
   if (
@@ -14,20 +15,30 @@ export function middleware(req) {
   }
 
   // Map subdomains to its corresponding paths
-  const subdomains = {
+  const subdomainList = {
     'www': '/www',
     'agora': '/agora',
     'admin': '/admin',
     'api': '/api',
   };
 
-  // Separate the host string into parts by dot (.) and also remove port (if exists)
-  const hostParts = host.split(':')[0].split('.');
+  var subdomain = "";
+  // Local development environment
+  if (hostname.endsWith("localhost")) {
+    subdomain = hostname.substring(0, hostname.length - 10);
+  }
+  // Production environment
+  if (hostname.endsWith("sevenpreneur.com")) {
+    subdomain = hostname.substring(0, hostname.length - 17);
+  }
+  // Staging environment
+  if (hostname.endsWith("staging.sevenpreneur.com")) {
+    subdomain = hostname.substring(0, hostname.length - 25);
+  }
 
-  if (hostParts.length >= 2) {
-    const sub = hostParts[0];
-    if (subdomains.hasOwnProperty(sub)) {
-      const basePath = subdomains[sub];
+  if (subdomain.length > 0) {
+    if (subdomainList.hasOwnProperty(subdomain)) {
+      const basePath = subdomainList[subdomain];
       // Disallow 'agora.sevenpreneur.com/agora'
       if (url.pathname.startsWith(basePath)) {
         url.pathname += '-not-found';
@@ -41,7 +52,7 @@ export function middleware(req) {
   }
 
   // Prevent direct access to the main paths, e.g. sevenpreneur.com/agora
-  if (host && Object.values(subdomains).some((path) => url.pathname.startsWith(path))) {
+  if (host && Object.values(subdomainList).some((path) => url.pathname.startsWith(path))) {
     url.pathname += '-not-found';
     return NextResponse.rewrite(url);
   }
