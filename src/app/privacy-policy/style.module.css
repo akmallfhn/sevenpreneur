@@ -1,0 +1,12 @@
+
+.privacy_policy {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    max-width: 320px;
+    justify-content: center;
+    align-items: center;
+}
+
+.privacy_policy p {
+    color: brown;
+}
