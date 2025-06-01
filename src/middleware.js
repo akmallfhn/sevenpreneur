@@ -16,8 +16,8 @@ export function middleware(req) {
 
   const prodDomain = "sevenpreneur.com";
   const stagingDomain = "staging.sevenpreneur.com";
-  const isLocal = hostname.endsWith("localhost");
-  const isStaging = hostname.includes(".staging.");
+  const isLocal = hostname.endsWith('localhost');
+  const isStaging = hostParts[0] === 'staging';
   const isProd = hostname.endsWith(prodDomain) && !isStaging;
 
   let subdomain = "";
@@ -25,8 +25,13 @@ export function middleware(req) {
   // --- Extract subdomain
   if (isLocal && hostParts.length === 2) {
     subdomain = hostParts[0];
-  } else if (isStaging && hostParts.length >= 4){
-    subdomain = hostParts[1]
+  } else if (isStaging){
+    if (hostParts.length === 3) {
+      subdomain = "www";
+    } else if (hostParts.length >= 4) {
+      // staging.agora.sevenpreneur.com → subdomain = agora
+      subdomain = hostParts[1];
+    }
   } else if (isProd && hostParts.length >= 3){
     subdomain = hostname.replace(`.${prodDomain}`, '');
   }
@@ -38,19 +43,19 @@ export function middleware(req) {
   }
 
   // --- Basic Auth for staging env
-  if (isStaging) {
-    const basicAuth = req.headers.get("authorization");
-    const expectedAuth = 'Basic ' + Buffer.from("admin:captainMarvel1995").toString('base64');
+  // if (isStaging) {
+  //   const basicAuth = req.headers.get("authorization");
+  //   const expectedAuth = 'Basic ' + Buffer.from("admin:captainMarvel1995").toString('base64');
 
-    if (basicAuth !== expectedAuth) {
-      return new Response('Authentication Required', {
-        status: 401,
-        headers: {
-          'WWW-Authenticate': 'Basic realm="Secure Area"',
-        },
-      });
-    }
-  }
+  //   if (basicAuth !== expectedAuth) {
+  //     return new Response('Authentication Required', {
+  //       status: 401,
+  //       headers: {
+  //         'WWW-Authenticate': 'Basic realm="Secure Area"',
+  //       },
+  //     });
+  //   }
+  // }
 
   // --- Ignore accesses to assets
   if (
