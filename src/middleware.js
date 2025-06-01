@@ -15,8 +15,9 @@ export function middleware(req) {
   };
 
   const prodDomain = "sevenpreneur.com";
+  const stagingDomain = "staging.sevenpreneur.com"
   const isLocal = hostname.endsWith('localhost');
-  const isStaging = hostParts[0] === 'staging';
+  const isStaging = hostname.endsWith(stagingDomain);
   const isProd = hostname.endsWith(prodDomain) && !isStaging;
 
   let subdomain = "";
@@ -28,7 +29,7 @@ export function middleware(req) {
     if (hostParts.length === 3) {
       subdomain = "www";
     } else if (hostParts.length >= 4) {      
-      subdomain = hostParts[1];
+      subdomain = hostParts[0];
     }
   } else if (isProd && hostParts.length >= 3){
     subdomain = hostParts[0];
