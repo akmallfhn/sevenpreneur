@@ -19,7 +19,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-brand: var(--font-mona-sans);
-  --font-bodycopy: var(--font-plus-jakarta-sans)
+  --font-bodycopy: var(--font-plus-jakarta-sans);
+  --font-ui: var(--font-open-sauce-one);
 }
 
 @media (prefers-color-scheme: dark) {
