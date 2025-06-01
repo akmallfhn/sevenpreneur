@@ -16,8 +16,8 @@ export function middleware(req) {
 
   const prodDomain = "sevenpreneur.com";
   const stagingDomain = "staging.sevenpreneur.com";
-  const isLocal = hostname.endsWith('localhost');
-  const isStaging = hostname.endsWith(stagingDomain);
+  const isLocal = hostname.endsWith("localhost");
+  const isStaging = hostname.includes(".staging.");
   const isProd = hostname.endsWith(prodDomain) && !isStaging;
 
   let subdomain = "";
