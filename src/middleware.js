@@ -15,7 +15,6 @@ export function middleware(req) {
   };
 
   const prodDomain = "sevenpreneur.com";
-  const stagingDomain = "staging.sevenpreneur.com";
   const isLocal = hostname.endsWith('localhost');
   const isStaging = hostParts[0] === 'staging';
   const isProd = hostname.endsWith(prodDomain) && !isStaging;
@@ -28,12 +27,11 @@ export function middleware(req) {
   } else if (isStaging){
     if (hostParts.length === 3) {
       subdomain = "www";
-    } else if (hostParts.length >= 4) {
-      // staging.agora.sevenpreneur.com → subdomain = agora
+    } else if (hostParts.length >= 4) {      
       subdomain = hostParts[1];
     }
   } else if (isProd && hostParts.length >= 3){
-    subdomain = hostname.replace(`.${prodDomain}`, '');
+    subdomain = hostParts[0];
   }
 
   // --- Block unknown subdomains
