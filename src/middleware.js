@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 export function middleware(req) {
   const url = req.nextUrl.clone();
   const host = req.headers.get("host");
-  const hostname = host.split(':')[0]; // strip port (localhost:3000 -> localhost)
+  const hostname = host.split(':')[0]; // strip port
+  const hostParts = hostname.split('.');
 
   // --- Map subdomains to its corresponding paths
   const subdomainList = {
@@ -22,12 +23,18 @@ export function middleware(req) {
   let subdomain = "";
   
   // --- Extract subdomain
-  if (isLocal) {
-    subdomain = hostname.replace('.localhost', '');
-  } else if (isStaging){
-    subdomain = hostname.replace(`.staging.${prodDomain}`, '');
-  } else if (isProd){
+  if (isLocal && hostParts.length === 2) {
+    subdomain = hostParts[0];
+  } else if (isStaging && hostParts.length >= 4){
+    subdomain = hostParts[1]
+  } else if (isProd && hostParts.length >= 3){
     subdomain = hostname.replace(`.${prodDomain}`, '');
+  }
+
+  // --- Block unknown subdomains
+  if (subdomain && !subdomainList[subdomain]) {
+    url.pathname += '-not-found';
+    return NextResponse.rewrite(url);
   }
 
   // --- Basic Auth for staging env
