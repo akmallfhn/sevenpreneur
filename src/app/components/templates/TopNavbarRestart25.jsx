@@ -1,15 +1,20 @@
 "use client"
-import { AlignRight, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { AlignRight, X } from "lucide-react";
 
 export default function TopNavbar() {
+    const pathname = usePathname()
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Menyimpan state membuka toggle
     const [showNavbar, setShowNavbar] = useState(false); // Menyimpan state navbar muncul setelah scroll
 
     const toggleMenu = () => {setIsMenuOpen(!isMenuOpen)};
     const closeMenu = () => {setIsMenuOpen(false)};
+
+    // Path yang tidak mau menampilkan Navbar & Footer
+    const isAuthPage = pathname.startsWith('/auth');
 
     // Muncul setelah scroll 30px
     useEffect(() => {
@@ -74,87 +79,90 @@ export default function TopNavbar() {
 
     return(
         <React.Fragment>
-        <div className={`navbar fixed flex w-full justify-between px-7 py-3 items-center bg-black/40 backdrop-blur-sm z-[99] transition-all duration-500 ease-in-out ${showNavbar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} lg:px-36 lg:py-4`}>
-            <Link href="/" className="logo max-w-44">
-                <Image
-                src={"https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"}
-                alt="Logo Sevenpreneur"
-                width={1200}
-                height={1200}
-                className="w-full"
-                />
-            </Link>
-            {/* Mobile Toggle Button */}
-            <div className="flex text-white cursor-pointer text-neutral-black lg:hidden">
-                <AlignRight
-                onClick={toggleMenu}
-                className="w-8 h-8"
-                />
-            </div>
-            {/* Desktop Navbar List */}
-            <div className="hidden text-[#CDCDCD] font-medium font-brand text-lg items-center text-center lg:flex lg:gap-2 xl:gap-5">
-                {navigationMenu.filter((post) => post.is_desktop).map((post, index) => (
-                    <Link href={post.url} key={index} className="flex truncate transition transform duration-500 hover:font-semibold hover:text-white hover:cursor-pointer"
-                    // Offset scroll +150px
-                    onClick={
-                        (e) => {
-                            if (post.url.startsWith("#")) {
-                                e.preventDefault();
-                                const targetId = post.url.replace("#", "");
-                                const element = document.getElementById(targetId);
-                                if (element) {
-                                    const yOffset = -150;
-                                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                                    window.scrollTo({ top: y, behavior: 'smooth' });
-                                }
-                                closeMenu();
-                            } else {
-                                closeMenu();
-                            }
-                        }
-                    }>
-                        {post.menu_name}
+            {!isAuthPage && (
+                <div className={`navbar fixed flex w-full justify-between px-7 py-3 items-center bg-black/40 backdrop-blur-sm z-[99] transition-all duration-500 ease-in-out ${showNavbar ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'} lg:px-36 lg:py-4`}>
+                    <Link href="/" className="logo max-w-44">
+                        <Image
+                        src={"https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"}
+                        alt="Logo Sevenpreneur"
+                        width={1200}
+                        height={1200}
+                        className="w-full"
+                        />
                     </Link>
-                ))}
-            </div>
-        </div>
-        {isMenuOpen && (
-            <div className={`toggle-menu fixed top-0 right-0 h-full w-full bg-primary-dark shadow-lg z-[999] transform transition-all duration-500 ease-in-out
-                ${isMenuOpen ? 'translate-x-0 opacity-100' : 'opacity-0 translate-x-full'}`}>
-                <X
-                className="absolute top-8 right-8 size-8 text-lg font-bold cursor-pointer text-white/70"
-                onClick={toggleMenu}
-                />
-                <div className="mt-44 flex flex-col items-center gap-4 text-white font-brand">
-                    {navigationMenu.map((post, index) => (
-                        <Link 
-                        className="text-2xl font-ui font-semibold hover:underline"
-                        href={post.url} 
-                        key={index} 
-                        // Offset scroll +150px
-                        onClick={
-                            (e) => {
-                                if (post.url.startsWith("#")) {
-                                    e.preventDefault();
-                                    const targetId = post.url.replace("#", "");
-                                    const element = document.getElementById(targetId);
-                                    if (element) {
-                                        const yOffset = -150;
-                                        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    {/* Mobile Toggle Button */}
+                    <div className="flex text-white cursor-pointer text-neutral-black lg:hidden">
+                        <AlignRight
+                        onClick={toggleMenu}
+                        className="w-8 h-8"
+                        />
+                    </div>
+                    {/* Desktop Navbar List */}
+                    <div className="hidden text-[#CDCDCD] font-medium font-brand text-lg items-center text-center lg:flex lg:gap-2 xl:gap-5">
+                        {navigationMenu.filter((post) => post.is_desktop).map((post, index) => (
+                            <Link href={post.url} key={index} className="flex truncate transition transform duration-500 hover:font-semibold hover:text-white hover:cursor-pointer"
+                            // Offset scroll +150px
+                            onClick={
+                                (e) => {
+                                    if (post.url.startsWith("#")) {
+                                        e.preventDefault();
+                                        const targetId = post.url.replace("#", "");
+                                        const element = document.getElementById(targetId);
+                                        if (element) {
+                                            const yOffset = -150;
+                                            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                            window.scrollTo({ top: y, behavior: 'smooth' });
+                                        }
+                                        closeMenu();
+                                    } else {
+                                        closeMenu();
                                     }
-                                    closeMenu();
-                                } else {
-                                    closeMenu();
                                 }
-                            }
-                        }>
-                            {post.menu_name}
-                        </Link>
-                    ))}
+                            }>
+                                {post.menu_name}
+                            </Link>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        )}
+            )}
+        
+            {isMenuOpen && (
+                <div className={`toggle-menu fixed top-0 right-0 h-full w-full bg-primary-dark shadow-lg z-[999] transform transition-all duration-500 ease-in-out
+                    ${isMenuOpen ? 'translate-x-0 opacity-100' : 'opacity-0 translate-x-full'}`}>
+                    <X
+                    className="absolute top-8 right-8 size-8 text-lg font-bold cursor-pointer text-white/70"
+                    onClick={toggleMenu}
+                    />
+                    <div className="mt-44 flex flex-col items-center gap-4 text-white font-brand">
+                        {navigationMenu.map((post, index) => (
+                            <Link 
+                            className="text-2xl font-ui font-semibold hover:underline"
+                            href={post.url} 
+                            key={index} 
+                            // Offset scroll +150px
+                            onClick={
+                                (e) => {
+                                    if (post.url.startsWith("#")) {
+                                        e.preventDefault();
+                                        const targetId = post.url.replace("#", "");
+                                        const element = document.getElementById(targetId);
+                                        if (element) {
+                                            const yOffset = -150;
+                                            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                            window.scrollTo({ top: y, behavior: 'smooth' });
+                                        }
+                                        closeMenu();
+                                    } else {
+                                        closeMenu();
+                                    }
+                                }
+                            }>
+                                {post.menu_name}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
         </React.Fragment>
     )
 }
