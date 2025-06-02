@@ -17,7 +17,7 @@ export const metadata = {
       siteName: "Sevenpreneur",
       images: [
         {
-          url: "https://sevenpreneur.com/assets/og-image-privacy.png",
+          url: "https://static.wixstatic.com/media/02a5b1_d0f0ef7195ce4fa0ada080a1bd432f17~mv2.webp",
           width: 1200,
           height: 630,
         }
@@ -27,7 +27,7 @@ export const metadata = {
       card: "summary_large_image",
       title: "Terms & Conditions | Sevenpreneur",
       description: "Baca peraturan resmi penggunaan platform Sevenpreneur. Ketentuan berlaku untuk pengguna akun, konten, pembayaran, dan kebijakan hukum.",
-      images: "https://sevenpreneur.com/assets/og-image-privacy.png",
+      images: "https://static.wixstatic.com/media/02a5b1_d0f0ef7195ce4fa0ada080a1bd432f17~mv2.webp",
     },
     robots: {
       index: false,

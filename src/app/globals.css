@@ -12,7 +12,8 @@
   --color-primary-strong: #0041C2;
   --color-primary-dark: #003399;
   --color-primary-deep: #001659; 
-  --color-secondary: #E74D79; 
+  --color-secondary: #E74D79;
+  --color-alternative: #949494; 
 }
 
 @theme inline {
