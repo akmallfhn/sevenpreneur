@@ -7,11 +7,11 @@ export default function SpeakersLineUpRestart25() {
     const speakerData = [
         {
             "name" : "Raymond Chin",
-            "title": "Founder & President Director Sevenpreneur",
+            "title": "Founder Sevenpreneur",
             "image" : "https://static.wixstatic.com/media/02a5b1_dad1b41047da42bd92dd2eba42418c37~mv2.webp",
         },
         {
-            "name" : "Irzan Aditya",
+            "name" : "Irzan Raditya",
             "title": "CEO & Co-Founder Kata.ai",
             "image" : "https://static.wixstatic.com/media/02a5b1_2ecea6c5c5b34534bd47f20a62f2c7b8~mv2.webp",
         },

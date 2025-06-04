@@ -4,7 +4,7 @@ import ContentEventRestart25 from "../../components/templates/ContentEventRestar
 import TicketCarouselRestart25 from "../../components/templates/TicketCarouselRestart25";
 import BannerEventRestart25 from "../../components/templates/BannerEventRestart25";
 import FAQEventRestart25 from "../../components/templates/FAQEventRestart25";
-import TopicsRunningText from "../../components/templates/TopicsRunningText";
+import TopicsRunningText from "../../components/templates/TopicsRunningTextRestart25";
 import SpeakersLineUpRestart25 from "@/app/components/templates/SpeakersLineUpRestart25";
 
 export const metadata = {
