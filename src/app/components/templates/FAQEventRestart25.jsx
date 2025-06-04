@@ -48,15 +48,17 @@ export default function FAQEventRestart25() {
 
     return(
         <section id="faq">
-        <div className="faq-container flex flex-col gap-3 items-center lg:gap-5">
-            <SectionTitleRestart25 sectionTitle="Frequently Asked Questions"/>
-            <div className="faq-items flex flex-col gap-3 items-center">
-                {FAQData.map((post, index) => (
-                    <FAQButtonRestart25 key={index}
-                    questions={post.question}
-                    answer={post.answer}
-                    />
-                ))}
+        <div className="container-faq flex items-center justify-center px-8 pb-8 lg:pb-[60px]">
+            <div className="faq-container flex flex-col gap-3 items-center lg:gap-5">
+                <SectionTitleRestart25 sectionTitle="Frequently Asked Questions"/>
+                <div className="faq-items flex flex-col gap-3 items-center">
+                    {FAQData.map((post, index) => (
+                        <FAQButtonRestart25 key={index}
+                        questions={post.question}
+                        answer={post.answer}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
         </section>
