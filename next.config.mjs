@@ -12,6 +12,16 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "yt3.googleusercontent.com",
                 port: "",
+            },
+            {
+                protocol: "https",
+                hostname: "media.licdn.com",
+                port: "",
+            },
+            {
+                protocol: "https",
+                hostname: "thumbor.prod.vidiocdn.com",
+                port: "",
             }
         ]
     }

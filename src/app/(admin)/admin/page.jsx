@@ -1,5 +1,7 @@
 export default function AdminHomePage() {
   return (
-    <p>Hello from Admin page!</p>
+    <div className="">
+      <p>Hello from Admin page!</p>
+    </div>
   );
 }
