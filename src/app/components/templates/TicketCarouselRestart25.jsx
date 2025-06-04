@@ -1,6 +1,6 @@
 "use client"
-import TicketCardRestart25 from "../elements/TicketCardRestart25"
 import SectionTitleRestart25 from "../elements/SectionTitleRestart25"
+import TicketCardItemRestart25 from "../elements/TicketCardItemRestart25"
 import dayjs from "dayjs"
 
 const data = [
@@ -69,7 +69,15 @@ const data = [
 export default function TicketCarouselRestart25() {
 
     const Now = dayjs()
-    const ticketData = data.filter(ticket => dayjs(ticket.expiredDate).isAfter(Now) && ticket.isActive)
+    const ticketListItem = data.filter(ticket => dayjs(ticket.expiredDate).isAfter(Now) && ticket.isActive)
+
+    const viewedTickets = new Set() // --- Supaya event "view" tidak dikirim dua kali untuk tiket yang sama
+    
+    const filteredTickets = ticketListItem.filter(post => {
+        const now = dayjs()
+        const start = dayjs(post.startDate)
+        return post.isActive === true && !start.isAfter(now)
+    })
 
     return(
         <section id="ticket-id">
@@ -77,8 +85,12 @@ export default function TicketCarouselRestart25() {
             <div className="section-name flex flex-col items-center">
                 <SectionTitleRestart25 sectionTitle="Get Your Ticket"/>
             </div>
-            <div className="ticket px-8 w-full overflow-x-auto lg:overflow-x-hidden">
-                <TicketCardRestart25 ticketListItem={ticketData}/>
+            <div className="ticket-container px-8 w-full overflow-x-auto lg:overflow-x-hidden">
+                <div className="group-ticket flex items-start lg:justify-center lg:gap-5">
+                    {filteredTickets.map((post, index) => (
+                        <TicketCardItemRestart25 key={index} post={post} index={index} viewedTickets={viewedTickets}/>         
+                    ))}
+                </div>
             </div>
         </div>
         </section>
