@@ -3,7 +3,7 @@ import React from "react"
 import { useState, useEffect } from "react"
 import dayjs from "dayjs"
 import duration from "dayjs/plugin/duration"
-import CountdownValueWrapper from "./CountdownValueWrapper"
+import CountdownValueWrapperRestart25 from "./CountdownValueWrapperRestart25"
 
 dayjs.extend(duration)
 
@@ -55,7 +55,7 @@ export default function CountdownTimerRestart25() {
         <div className="flex text-white items-center gap-2 lg:gap-4">
             {countdownData.map((post, index) => (
                 <React.Fragment key={index}>                    
-                    <CountdownValueWrapper
+                    <CountdownValueWrapperRestart25
                     value={post.value}
                     dimensions={post.dimensions}
                     />

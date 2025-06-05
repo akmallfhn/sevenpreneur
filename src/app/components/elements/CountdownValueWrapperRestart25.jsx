@@ -1,6 +1,6 @@
 "use client"
 
-export default function CountdownValueWrapper({ value, dimensions }) {
+export default function CountdownValueWrapperRestart25({ value, dimensions }) {
     return(
         <div className="container flex flex-col items-center gap-2">
             <div className="border-countdown p-[1px] rounded-lg bg-gradient-to-r from-0% from-[#727272] via-50% via-[#333333] to-100% to-[#727272]">

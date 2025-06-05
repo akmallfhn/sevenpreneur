@@ -35,7 +35,7 @@ export default function LoginContainer() {
                     </p>
 
                     {/* Google Login */}
-                    <AppButton>
+                    <AppButton variant="outline">
                         <Image
                         className="flex size-6"
                         src={"https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw"}
@@ -43,7 +43,7 @@ export default function LoginContainer() {
                         width={100}
                         height={100}/>
 
-                        <p className="font-bold text-black">
+                        <p className="font-bold">
                             Login with Google
                         </p>
                     </AppButton>
