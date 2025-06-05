@@ -61,8 +61,13 @@ export default function TopNavbar() {
             "is_desktop": false
         },
         {
-            "menu_name": "Topic Highlights",
+            "menu_name": "Topics",
             "url": "#topics",
+            "is_desktop": true
+        },
+        {
+            "menu_name": "Speakers",
+            "url": "#speakers-lineup",
             "is_desktop": true
         },
         {
@@ -90,14 +95,14 @@ export default function TopNavbar() {
                         className="w-full"
                         />
                     </Link>
-                    {/* Mobile Toggle Button */}
+                    {/* --- Mobile Toggle Button */}
                     <div className="flex text-white cursor-pointer text-neutral-black lg:hidden">
                         <AlignRight
                         onClick={toggleMenu}
                         className="w-8 h-8"
                         />
                     </div>
-                    {/* Desktop Navbar List */}
+                    {/* --- Desktop Navbar List */}
                     <div className="hidden text-[#CDCDCD] font-medium font-brand text-lg items-center text-center lg:flex lg:gap-2 xl:gap-5">
                         {navigationMenu.filter((post) => post.is_desktop).map((post, index) => (
                             <Link href={post.url} key={index} className="flex truncate transition transform duration-500 hover:font-semibold hover:text-white hover:cursor-pointer"
@@ -126,6 +131,7 @@ export default function TopNavbar() {
                 </div>
             )}
         
+            {/* --- Toggle Menu */}
             {isMenuOpen && (
                 <div className={`toggle-menu fixed top-0 right-0 h-full w-full bg-primary-dark shadow-lg z-[999] transform transition-all duration-500 ease-in-out
                     ${isMenuOpen ? 'translate-x-0 opacity-100' : 'opacity-0 translate-x-full'}`}>
@@ -139,7 +145,7 @@ export default function TopNavbar() {
                             className="text-2xl font-ui font-semibold hover:underline"
                             href={post.url} 
                             key={index} 
-                            // Offset scroll +150px
+                            // --- Offset scroll +150px
                             onClick={
                                 (e) => {
                                     if (post.url.startsWith("#")) {

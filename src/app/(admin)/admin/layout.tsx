@@ -1,3 +1,4 @@
+import { TRPCProvider } from "../../../trpc/client";
 import "../../globals.css"
 import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import localFont from "next/font/local"
@@ -55,13 +56,16 @@ const openSauceOne = localFont({
   ]
 })
 
-export default function AdminLayout({ children }) {
+
+export default function RootLayout({ children }: any) {
   return (
-    <html lang="en">
-      <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
-        <SidebarCMS/>
-        {children}
-      </body>
-    </html>
+    <TRPCProvider>
+      <html lang="en">
+        <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
+          <SidebarCMS/>
+          {children}
+        </body>
+      </html>
+    </TRPCProvider>
   );
 }

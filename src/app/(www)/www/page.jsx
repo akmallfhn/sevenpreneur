@@ -4,7 +4,8 @@ import ContentEventRestart25 from "../../components/templates/ContentEventRestar
 import TicketCarouselRestart25 from "../../components/templates/TicketCarouselRestart25";
 import BannerEventRestart25 from "../../components/templates/BannerEventRestart25";
 import FAQEventRestart25 from "../../components/templates/FAQEventRestart25";
-import TopicsRunningText from "../../components/templates/TopicsRunningText";
+import TopicsRunningText from "../../components/templates/TopicsRunningTextRestart25";
+import SpeakersLineUpRestart25 from "../../components/templates/SpeakersLineUpRestart25";
 
 export const metadata = {
   title: "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
@@ -55,13 +56,10 @@ export default function HomePage() {
       <VisionQuotesRestart25/>
       <ContentEventRestart25 id={"contentEvent"}/>
       <TopicsRunningText/>
+      <SpeakersLineUpRestart25/>
       <TicketCarouselRestart25/>
-      <div className="container-faq flex items-center justify-center px-8 pb-8 lg:pb-[60px]">
-        <FAQEventRestart25/>
-      </div>
-      <div className="container-banner flex items-center justify-center px-8 pb-20">
-        <BannerEventRestart25/>
-      </div>
+      <FAQEventRestart25/>
+      <BannerEventRestart25/>
     </div>
   );
 }
