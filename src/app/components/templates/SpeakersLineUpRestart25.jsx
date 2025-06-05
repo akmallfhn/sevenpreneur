@@ -11,14 +11,24 @@ export default function SpeakersLineUpRestart25() {
             "image" : "https://static.wixstatic.com/media/02a5b1_dad1b41047da42bd92dd2eba42418c37~mv2.webp",
         },
         {
-            "name" : "Irzan Raditya",
-            "title": "CEO & Co-Founder Kata.ai",
-            "image" : "https://static.wixstatic.com/media/02a5b1_2ecea6c5c5b34534bd47f20a62f2c7b8~mv2.webp",
+            "name" : "Basuki Tjahaja Purnama (Ahok)",
+            "title": "Former President Commissioner of Pertamina 2019 - 2024",
+            "image" : "https://static.wixstatic.com/media/02a5b1_fc4bf58de6ad4a26a4fd0866a5548003~mv2.webp",
         },
         {
             "name" : "Denny Santoso",
             "title": "Founder & CEO BrainBoost",
             "image" : "https://static.wixstatic.com/media/02a5b1_e9e8d63f9e6d423ea7dab593d6009207~mv2.webp",
+        },
+        {
+            "name" : "Irzan Raditya",
+            "title": "CEO & Co-Founder Kata.ai",
+            "image" : "https://static.wixstatic.com/media/02a5b1_2ecea6c5c5b34534bd47f20a62f2c7b8~mv2.webp",
+        },
+        {
+            "name" : "Bhima Yudhistira",
+            "title": "Executive Director CELIOS",
+            "image" : "https://static.wixstatic.com/media/02a5b1_a015ebc361e5456a9cc5c72f569106da~mv2.webp",
         },
         {
             "name" : "And more speakers",
