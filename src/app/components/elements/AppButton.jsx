@@ -1,9 +1,28 @@
 "use client"
 
-export default function AppButton({ onClick, disabled, children }) {
+export default function AppButton({ onClick, children, variant = "primary", size = "default", disabled = false, }) {
+    const baseClasses = "app-button flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50" 
+
+    const variantClasses = {
+        primary: "bg-primary text-white font-ui active:bg-[#0759D3]",
+        outline: "bg-white text-black border border-[#E3E3E3] font-ui active:bg-[#F5F5F5]",
+        cmsPrimary: "bg-cms-primary text-white font-brand active:bg-[#032E82]",
+    };
+
+    const sizeClasses = {
+        default: "py-2 px-3.5 h-10 text-sm rounded-lg",
+        small: "py-1 px-2 h-8 text-xs rounded-md",
+        icon: "size-9 rounded-md"
+    }
+
+    const finalClasses = [
+        baseClasses,
+        variantClasses[variant],
+        sizeClasses[size],
+    ].join(" ");
+
     return(
-        <button disabled={disabled} onClick={onClick}
-        className={`app-button flex py-2 px-3.5 gap-4 transition transform rounded-xl items-center justify-center border border-[#E3E3E3] ${disabled ? "bg-gray-400 cursor-not-allowed" : "hover:cursor-pointer bg-white active:scale-95 active:bg-[#F5F5F5]"}`}>
+        <button disabled={disabled} onClick={onClick} className={finalClasses}>
             {children}
         </button>
     )

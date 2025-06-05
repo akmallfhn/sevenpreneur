@@ -30,8 +30,8 @@ export default function SidebarCMS() {
                 </div>
 
                 {/* --- User & Roles */}
-                <Link href={"/"} className="user-roles-container flex w-full p-2 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg">
-                    <div className="avatar size-9 rounded-md overflow-hidden">
+                <Link href={"/"} className="user-roles-container flex w-full p-2 px-3 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg">
+                    <div className="avatar size-9 rounded-full overflow-hidden">
                         <Image
                         className="object-cover w-full h-full"
                         src={"https://media.licdn.com/dms/image/v2/D5603AQHWg6uUtVHxBg/profile-displayphoto-shrink_800_800/B56ZRRstItGQAc-/0/1736537464736?e=1754524800&v=beta&t=zSxAGjzqpwRhAB69Fck4CiLLcyPmFqC2oFHBLJw2Ynk"}
