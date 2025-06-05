@@ -30,7 +30,7 @@ const data = [
       "email": "regina.martinez@example.com",
       "phone": "393.830.8001",
       "avatar": "https://i.pravatar.cc/150?img=35",
-      "role": "Mentor",
+      "role": "Educator",
       "created_at": "2024-06-18T09:24:36",
       "last_login": "2025-03-10T06:54:23",
       "status": "inactive"
@@ -40,7 +40,7 @@ const data = [
       "email": "tonya.ward@example.com",
       "phone": "+1-932-556-3223x9991",
       "avatar": "https://i.pravatar.cc/150?img=51",
-      "role": "Mentor",
+      "role": "Educator",
       "created_at": "2023-07-31T16:56:31",
       "last_login": "2025-02-24T09:29:41",
       "status": "active"
@@ -60,7 +60,7 @@ const data = [
       "email": "michael.pena@example.com",
       "phone": "+1-856-193-2696",
       "avatar": "https://i.pravatar.cc/150?img=31",
-      "role": "Mentor",
+      "role": "Educator",
       "created_at": "2023-12-11T22:50:22",
       "last_login": "2025-04-12T13:55:12",
       "status": "active"
@@ -70,7 +70,7 @@ const data = [
       "email": "latoya.terry@example.com",
       "phone": "256-184-9252x9355",
       "avatar": "https://i.pravatar.cc/150?img=38",
-      "role": "Mentor",
+      "role": "Educator",
       "created_at": "2022-03-20T00:30:48",
       "last_login": "2025-05-17T04:07:09",
       "status": "active"
@@ -116,20 +116,6 @@ export default function UserListPage() {
         <div className="index-article w-[1040px] flex flex-col gap-4">
             {/* --- PAGE HEADER */}
             <div className="page-header flex flex-col gap-3">
-                {/* <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href={`/dashboard/${publisherIdInt}`}>
-                                <House className="size-4"/>
-                                Dashboard
-                            </BreadcrumbLink>                                
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator/>
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Article</BreadcrumbPage>                              
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb> */}
                 <div className="page-title-actions flex justify-between items-center">
                     {/* --- Page Title */}
                     <TitleRevealCMS
@@ -149,15 +135,19 @@ export default function UserListPage() {
 
             {/* --- TABLE  */}
             <div className="flex flex-col gap-7 bg-white pb-7 rounded-md shadow-md overflow-hidden">
-                {/* --- Column Table */}
-                <div className="flex font-bodycopy font-semibold text-black text-sm bg-[#f5f5f5] gap-5 px-7 p-4 items-center border-b border-[#e3e3e3]">
-                    <div className="w-44">Preview</div>
-                    <div className="w-[469px]">Metadata</div>
-                    <div className="w-[140px]">Author</div>
-                    <div>Action</div>
+                {/* --- Column Name */}
+                <div className="column-name flex px-7 p-4 items-center font-bodycopy font-semibold text-alternative text-sm bg-[#f5f5f5] border-b border-[#e3e3e3]">
+                    <div className="max-w-[380px] w-full shrink-0">USER</div>
+                    <div className="flex items-center gap-7">
+                      <div className="max-w-[120px] w-full shrink-0">ROLE</div>
+                      <div className="max-w-[102px] w-full shrink-0">CREATED AT</div>
+                      <div className="max-w-[102px] w-full shrink-0">LAST LOGIN</div>
+                      <div className="max-w-[102px] w-full shrink-0">STATUS</div>
+                      <div className="max-w-[102px] w-full shrink-0">ACTIONS</div>
+                    </div>
                 </div>
 
-                {/* --- User List */}
+                {/* --- Table */}
                 <div className="flex flex-col gap-7 px-7">
                     {userData.map((post, index) => (
                         <UserItemListCMS key={index}
@@ -170,15 +160,7 @@ export default function UserListPage() {
                         lastLogin={post.last_login}/>
                     ))}
                 </div>
-
-                {/* Pagination */}
-                {/* <div>
-                    <NumberPagination 
-                    currentPage={pageInt}
-                    totalPages={totalPages}/>
-                </div> */}
             </div>
-
         </div>
       </div>
     );

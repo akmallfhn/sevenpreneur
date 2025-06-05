@@ -14,13 +14,16 @@ const variantStyles = {
 }
 
 export default function StatusLabelCMS({ labelName, variants = "active" }) {
-
+    // --- Variant declarations
     const { backgroundColor, labelColor, signColor } = variantStyles[variants] || variantStyles.main;
 
+    // --- Change value to capital
+    const capitalizeName = (text) => text.replace(/\b\w/g, (char) => char.toUpperCase());
+
     return(
-        <div className={`label-container flex py-[2px] px-[10px] rounded-full items-center justify-center gap-1 text-xs font-medium font-bodycopy ${backgroundColor} ${labelColor}`} style={{backgroundImage: backgroundColor}}>
+        <div className={`label-container inline-flex py-[2px] px-[10px] w-fit rounded-full items-center justify-center gap-1 text-xs font-medium font-bodycopy ${backgroundColor} ${labelColor}`} style={{backgroundImage: backgroundColor}}>
             <div className={`flex size-2 rounded-full ${signColor}`}/>
-            {labelName}
+            {capitalizeName(labelName)}
         </div>
     )
 }
