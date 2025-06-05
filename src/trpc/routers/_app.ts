@@ -8,9 +8,17 @@ export const appRouter = createTRPCRouter({
         text: z.string(),
       }),
     )
-    .query((opts) => {
+    .query(async (opts) => {
+      const helloString = `Hello, ${opts.input.text}!`
+      const result = await opts.ctx.prisma.$queryRaw<{hello: string}[]>`SELECT ${helloString} AS hello`;
+
+      let greeting: string = `${helloString} (cannot get data from database)`;
+      if (result.length > 0) {
+        greeting = result[0]["hello"];
+      }
+
       return {
-        greeting: `Hello, ${opts.input.text}!`,
+        greeting,
       };
     }),
 });
