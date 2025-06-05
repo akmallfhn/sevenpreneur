@@ -12,8 +12,8 @@ export default function SpeakersLineUpRestart25() {
         },
         {
             "name" : "Basuki Tjahaja Purnama (Ahok)",
-            "title": "Former President Commissioner of Pertamina 2019 - 2024",
-            "image" : "https://static.wixstatic.com/media/02a5b1_fc4bf58de6ad4a26a4fd0866a5548003~mv2.webp",
+            "title": "Former Governor of Jakarta 2014 - 2017",
+            "image" : "https://static.wixstatic.com/media/02a5b1_7933f447a8d443359f3c9d07c6a40a08~mv2.webp",
         },
         {
             "name" : "Denny Santoso",
