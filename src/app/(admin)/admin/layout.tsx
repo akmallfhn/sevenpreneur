@@ -57,9 +57,9 @@ const openSauceOne = localFont({
 })
 
 // Pass the base URL to the client
-let baseURL = "";
-if (process.env.VERCEL_URL) baseURL = `https://api.${process.env.VERCEL_URL}/trpc`;
-if (process.env.BASE_URL) baseURL = `http://api.${process.env.BASE_URL}/trpc`;
+let baseURL = "https://api.sevenpreneur.com/trpc";
+if (process.env.DOMAIN_MODE === 'staging') baseURL = "https://api.staging.sevenpreneur.com/trpc";
+if (process.env.DOMAIN_MODE === 'local' && process.env.BASE_URL) baseURL = `http://api.${process.env.BASE_URL}/trpc`;
 
 export default function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
   return (
