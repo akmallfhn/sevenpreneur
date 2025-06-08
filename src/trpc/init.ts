@@ -5,7 +5,7 @@ import { cache } from 'react';
 const prisma = new PrismaClient();
 
 export const createTRPCContext = cache(async () => {
-  return { prisma }
+  return { prisma };
 });
 
 export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
