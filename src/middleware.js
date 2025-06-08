@@ -4,7 +4,6 @@ export function middleware(req) {
   const url = req.nextUrl.clone();
   const host = req.headers.get("host");
   const hostname = host.split(':')[0]; // strip port
-  const hostParts = hostname.split('.');
 
   // --- Map subdomains to its corresponding paths
   const subdomainList = {
@@ -14,26 +13,24 @@ export function middleware(req) {
     'api': '/api',
   };
 
-  const prodDomain = "sevenpreneur.com";
+  const localDomain = process.env.BASE_URL;
   const stagingDomain = "staging.sevenpreneur.com"
-  const isLocal = hostname.endsWith('localhost');
-  const isStaging = hostname.endsWith(stagingDomain);
-  const isProd = hostname.endsWith(prodDomain) && !isStaging;
+  const productionDomain = "sevenpreneur.com";
 
-  let subdomain = "";
-  
+  const isLocal = process.env.DOMAIN_MODE === "local";
+  const isStaging = hostname.endsWith(stagingDomain);
+  const isProduction = hostname.endsWith(productionDomain) && !isStaging;
+
   // --- Extract subdomain
-  if (isLocal && hostParts.length === 2) {
-    subdomain = hostParts[0];
-  } else if (isStaging){
-    if (hostParts.length === 3) {
-      subdomain = "www";
-    } else if (hostParts.length >= 4) {      
-      subdomain = hostParts[0];
-    }
-  } else if (isProd && hostParts.length >= 3){
-    subdomain = hostParts[0];
+  let endPos = 0;
+  if (isLocal) {
+    endPos = host.indexOf(localDomain) - 1;
+  } else if (isStaging) {
+    endPos = host.indexOf(stagingDomain) - 1;
+  } else if (isProduction) {
+    endPos = host.indexOf(productionDomain) - 1;
   }
+  const subdomain = host.substring(0, endPos);
 
   // --- Block unknown subdomains
   if (subdomain && !subdomainList[subdomain]) {
