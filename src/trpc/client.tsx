@@ -20,19 +20,10 @@ function getQueryClient() {
   return (clientQueryClientSingleton ??= makeQueryClient());
 }
 
-function getUrl() {
-  const base = (() => {
-    // TODO: Adapt for local and development environment
-    // if (typeof window !== 'undefined') return '';
-    if (process.env.VERCEL_URL) return `https://api.${process.env.VERCEL_URL}`;
-    return 'http://api.localhost:3000';
-  })();
-  return `${base}/trpc`;
-}
-
 export function TRPCProvider(
   props: Readonly<{
     children: React.ReactNode;
+    baseURL: string;
   }>,
 ) {
   const queryClient = getQueryClient();
@@ -40,7 +31,7 @@ export function TRPCProvider(
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: getUrl(),
+          url: props.baseURL,
         }),
       ],
     }),
