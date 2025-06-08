@@ -34,7 +34,7 @@ export function TRPCProvider(
           url: props.baseURL,
         }),
       ],
-    }),
+    })
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

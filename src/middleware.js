@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export function middleware(req) {
   const url = req.nextUrl.clone();
-  const host = req.headers.get("host");
+  const host = req.headers.get('host');
   const hostname = host.split(':')[0]; // strip port
 
   // --- Map subdomains to its corresponding paths
@@ -14,10 +14,10 @@ export function middleware(req) {
   };
 
   const localDomain = process.env.BASE_URL;
-  const stagingDomain = "staging.sevenpreneur.com"
-  const productionDomain = "sevenpreneur.com";
+  const stagingDomain = 'staging.sevenpreneur.com';
+  const productionDomain = 'sevenpreneur.com';
 
-  const isLocal = process.env.DOMAIN_MODE === "local";
+  const isLocal = process.env.DOMAIN_MODE === 'local';
   const isStaging = hostname.endsWith(stagingDomain);
   const isProduction = hostname.endsWith(productionDomain) && !isStaging;
 
@@ -40,8 +40,8 @@ export function middleware(req) {
 
   // --- Basic Auth for staging env
   // if (isStaging) {
-  //   const basicAuth = req.headers.get("authorization");
-  //   const expectedAuth = 'Basic ' + Buffer.from("admin:captainMarvel1995").toString('base64');
+  //   const basicAuth = req.headers.get('Authorization');
+  //   const expectedAuth = 'Basic ' + Buffer.from('admin:captainMarvel1995').toString('base64');
 
   //   if (basicAuth !== expectedAuth) {
   //     return new Response('Authentication Required', {
@@ -65,7 +65,7 @@ export function middleware(req) {
   // --- Rewrite based on valid subdomain
   if (subdomain && subdomainList[subdomain]) {
     const basePath = subdomainList[subdomain];
-    // --- Disallow double paths like "agora.sevenpreneur.com/agora"
+    // --- Disallow double paths, e.g. agora.sevenpreneur.com/agora
     if (url.pathname.startsWith(basePath)) {
       url.pathname += '-not-found';
     } else {

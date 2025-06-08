@@ -1,4 +1,4 @@
-import { HydrateClient, trpc } from "../../../trpc/server";
+import { HydrateClient, trpc } from "@/trpc/server";
 import { ClientGreeting } from "./client-greeting";
 
 export default async function AdminHomePage() {

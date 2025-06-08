@@ -1,7 +1,7 @@
+import { createTRPCContext } from '@/trpc/init';
+import { appRouter } from '@/trpc/routers/_app';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { NextRequest, NextResponse } from 'next/server';
-import { createTRPCContext } from '../../../../../trpc/init';
-import { appRouter } from '../../../../../trpc/routers/_app';
 
 // Separate function for OPTIONS method (first connect from client)
 export async function OPTIONS(req: NextRequest) {

@@ -1,8 +1,8 @@
-import { TRPCProvider } from "../../../trpc/client";
-import "../../globals.css"
-import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
-import localFont from "next/font/local"
 import SidebarCMS from "@/app/components/templates/SidebarCMS";
+import "@/app/globals.css";
+import { TRPCProvider } from "@/trpc/client";
+import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -66,7 +66,7 @@ export default function RootLayout(props: Readonly<{ children: React.ReactNode }
     <TRPCProvider baseURL={baseURL}>
       <html lang="en">
         <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
-          <SidebarCMS/>
+          <SidebarCMS />
           {props.children}
         </body>
       </html>
