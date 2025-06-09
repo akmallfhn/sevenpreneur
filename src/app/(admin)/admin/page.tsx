@@ -8,8 +8,12 @@ export default async function AdminHomePage() {
   });
 
   return (
-    <HydrateClient>
-      <p><ClientGreeting /> Welcome to Admin page!</p>
-    </HydrateClient>
+    <div className="pl-72">
+      <HydrateClient>
+        <p>
+          <ClientGreeting /> Welcome to Admin page!
+        </p>
+      </HydrateClient>
+    </div>
   );
 }

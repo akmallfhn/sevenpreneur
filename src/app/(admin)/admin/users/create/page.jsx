@@ -1,5 +1,3 @@
 export default function CreateUserPage() {
-    return (
-      <p>Hello from Create User page!</p>
-    );
-  }
+  return <div className="relative pl-64">Hello from Create User page!</div>;
+}
