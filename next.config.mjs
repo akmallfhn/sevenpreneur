@@ -24,6 +24,14 @@ const nextConfig = {
                 port: "",
             }
         ]
+    },
+    experimental: {
+      serverActions: {
+        allowedOrigins: [
+          // TODO: Add local/production URL automatically
+          'www.example.com:3000'
+        ]
+      }
     }
 };
 

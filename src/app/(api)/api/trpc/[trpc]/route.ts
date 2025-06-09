@@ -9,11 +9,9 @@ const isOriginAllowed = (origin: string | null) => {
   }
 
   const domainMode = process.env.DOMAIN_MODE;
-  let scheme = 'https';
   let baseURL = 'sevenpreneur.com';
   if (domainMode === 'local') {
     if (process.env.BASE_URL) {
-      scheme = 'http';
       baseURL = process.env.BASE_URL;
     }
   } else if (domainMode === 'staging') {
@@ -21,11 +19,11 @@ const isOriginAllowed = (origin: string | null) => {
   }
 
   const allowedOrigins = [
-    `${scheme}://admin.${baseURL}`,
-    `${scheme}://agora.${baseURL}`,
-    `${scheme}://api.${baseURL}`,
-    `${scheme}://www.${baseURL}`,
-    `${scheme}://${baseURL}`,
+    `https://admin.${baseURL}`,
+    `https://agora.${baseURL}`,
+    `https://api.${baseURL}`,
+    `https://www.${baseURL}`,
+    `https://${baseURL}`,
   ];
   if (allowedOrigins.includes(origin)) {
     return origin;
