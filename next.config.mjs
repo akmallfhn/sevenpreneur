@@ -27,7 +27,10 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["www.example.com:3000"],
+      allowedOrigins: [
+        "www.sevenpreneur.com",
+        "www.example.com:3000",
+      ],
     },
   },
 };

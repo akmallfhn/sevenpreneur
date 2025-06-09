@@ -1,5 +1,5 @@
 import { baseProcedure, createTRPCRouter } from '@/trpc/init';
-import { GoogleOAuthVerifier } from '@/trpc/utils/google_oauth';
+import { GoogleTokenVerifier } from '@/trpc/utils/google_verifier';
 import { stringNotBlank } from '@/trpc/utils/validation';
 import { StatusEnum } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
@@ -10,12 +10,12 @@ export const authRouter = createTRPCRouter({
   login: baseProcedure
     .input(
       z.object({
-        credential: stringNotBlank(),
+        accessToken: stringNotBlank(),
       }),
     )
     .mutation(async (opts) => {
-      const credUser = await GoogleOAuthVerifier(opts.input.credential);
-      if (!credUser) {
+      const userInfo = await GoogleTokenVerifier(opts.input.accessToken);
+      if (!userInfo) {
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'The given credential is not valid.',
@@ -24,7 +24,7 @@ export const authRouter = createTRPCRouter({
 
       const findUser = await opts.ctx.prisma.user.findUnique({
         where: {
-          email: credUser.email,
+          email: userInfo.email,
         },
       });
       let registeredUser = findUser;
@@ -32,9 +32,9 @@ export const authRouter = createTRPCRouter({
       if (!findUser) {
         const createdUser = await opts.ctx.prisma.user.create({
           data: {
-            full_name: credUser.name,
-            email: credUser.email,
-            avatar: credUser.picture,
+            full_name: userInfo.name,
+            email: userInfo.email,
+            avatar: userInfo.picture,
           },
         });
         registeredUser = createdUser;
@@ -44,8 +44,18 @@ export const authRouter = createTRPCRouter({
           message: 'Your account has been inactivated.',
         });
       } else {
-        const updatedLogin: number = await opts.ctx.prisma.$executeRaw
-          `UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = ${credUser.email};`;
+        if (!findUser.avatar && userInfo.picture) {
+          // $executeRaw is used for counting updated avatars.
+          const updatedAvatar: number = await opts.ctx.prisma
+            .$executeRaw`UPDATE users SET avatar = ${userInfo.picture} WHERE email = ${userInfo.email};`;
+          if (updatedAvatar > 1) {
+            console.error('auth.login: More-than-one users have its avatar updated at once.');
+          }
+        }
+
+        // $executeRaw is used for counting updated last_logins.
+        const updatedLogin: number = await opts.ctx.prisma
+          .$executeRaw`UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = ${userInfo.email};`;
         if (updatedLogin > 1) {
           console.error('auth.login: More-than-one users have its last_login updated at once.');
         }
@@ -62,11 +72,12 @@ export const authRouter = createTRPCRouter({
       });
 
       return {
-        message: "Success",
+        message: 'Success',
         token: createdToken,
         registered_user: registeredUser,
       };
     }),
+
   logout: baseProcedure
     .input(
       z.object({
@@ -84,7 +95,7 @@ export const authRouter = createTRPCRouter({
       }
 
       return {
-        message: "Success",
+        message: 'Success',
       };
     }),
 });
