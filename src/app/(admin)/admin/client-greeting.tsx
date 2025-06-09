@@ -3,7 +3,7 @@
 import { trpc } from "@/trpc/client";
 
 export function ClientGreeting() {
-  const greeting = trpc.getHello.useQuery({
+  const greeting = trpc.hello.getHello.useQuery({
     text: "brothers and sisters",
   });
   if (!greeting.data) return <>...</>;
