@@ -8,3 +8,74 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+/////////////////
+// Enumeration //
+/////////////////
+
+enum StatusEnum {
+  ACTIVE   @map("active")
+  INACTIVE @map("inactive")
+
+  @@map("status_enum")
+}
+
+////////////
+// Models //
+////////////
+
+model Industry {
+  id            Int      @id @default(autoincrement()) @db.SmallInt
+  industry_name String   @unique @db.VarChar()
+  created_at    DateTime @default(now()) @db.Timestamptz()
+
+  @@map("industries")
+}
+
+model EntrepreneurStage {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  stage_name String   @unique @db.VarChar()
+  created_at DateTime @default(now()) @db.Timestamptz()
+
+  @@map("entrepreneur_stages")
+}
+
+model Role {
+  id         Int      @id @default(autoincrement()) @db.SmallInt
+  name       String   @unique @db.VarChar()
+  permission Int      @db.SmallInt
+  created_at DateTime @default(now()) @db.Timestamptz()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("roles")
+}
+
+model User {
+  id                 String     @id @default(uuid()) @db.Uuid
+  full_name          String     @db.VarChar()
+  email              String     @unique @db.VarChar()
+  avatar             String?    @db.VarChar()
+  role_id            Int        @default(3) @db.SmallInt // General User
+  status             StatusEnum @default(ACTIVE)
+  date_of_birth      DateTime?  @db.Date
+  learning_goal      String?    @db.VarChar()
+  entrepreneur_stage Int?       @db.SmallInt
+  business_name      String?    @db.VarChar()
+  industry_id        Int?       @db.SmallInt
+  created_at         DateTime   @default(now()) @db.Timestamptz()
+  updated_at         DateTime   @default(now()) @updatedAt @db.Timestamptz()
+  last_login         DateTime   @default(now()) @updatedAt @db.Timestamptz()
+  deleted_at         DateTime?  @db.Timestamptz()
+
+  @@map("users")
+}
+
+model Token {
+  id         Int      @id @default(autoincrement()) @db.Integer
+  user_id    String   @db.Uuid
+  is_active  Boolean  @default(false) @db.Boolean
+  token      String   @unique @db.Text
+  created_at DateTime @default(now()) @db.Timestamptz()
+
+  @@map("tokens")
+}
