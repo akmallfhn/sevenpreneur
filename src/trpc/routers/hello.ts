@@ -1,11 +1,12 @@
 import { baseProcedure, createTRPCRouter } from '@/trpc/init';
+import { stringNotBlank } from '@/trpc/utils/validation';
 import { z } from 'zod';
 
 export const helloRouter = createTRPCRouter({
   getHello: baseProcedure
     .input(
       z.object({
-        text: z.string(),
+        text: stringNotBlank(),
       }),
     )
     .query(async (opts) => {
