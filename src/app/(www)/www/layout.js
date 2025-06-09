@@ -1,15 +1,16 @@
-import "../../globals.css"
+import "../../globals.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
-import localFont from "next/font/local"
+import localFont from "next/font/local";
 import TopNavbar from "../../components/templates/TopNavbarRestart25";
 import BottomFooter from "../../components/templates/BottomFooter";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
-  subsets: ["latin"]
-})
+  subsets: ["latin"],
+});
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -55,46 +56,49 @@ const openSauceOne = localFont({
       weight: "900",
       style: "normal",
     },
-  ]
-})
+  ],
+});
 
 export function generateMetadata() {
-  const BASE_URL = "https://www.sevenpreneur.com"
-  return{
+  const BASE_URL = "https://www.sevenpreneur.com";
+  return {
     metadataBase: BASE_URL,
     alternates: {
-      canonical: '/',
+      canonical: "/",
     },
     icons: {
       icon: [
         { url: "/favicon.ico" },
-        { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-        { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       ],
-      apple: [
-        { url: '/apple-touch-icon.png' },
-      ],
-    }
-    
-}}
+      apple: [{ url: "/apple-touch-icon.png" }],
+    },
+  };
+}
 
 export default function RootLayout({ children }) {
-
-  const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID
-  const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID
+  const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID;
+  const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
+  const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
 
   return (
     <html lang="en" className="scroll-smooth">
       {/* --- Google Tag Manager */}
-      <GoogleTagManager gtmId={googleTagManagerId}/>
+      <GoogleTagManager gtmId={googleTagManagerId} />
 
-      <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
-        <TopNavbar/>
-        {children}
-        <BottomFooter/>
+      <body
+        className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
+      >
+        {/* --- Google Oauth Login */}
+        <GoogleOAuthProvider clientId={googleOauthId}>
+          <TopNavbar />
+          {children}
+          <BottomFooter />
+        </GoogleOAuthProvider>
 
         {/* --- Google Analytics */}
-        <GoogleAnalytics gaId={googleAnalyticsId}/>
+        <GoogleAnalytics gaId={googleAnalyticsId} />
 
         {/* --- Tiktok Pixel */}
         <Script id="tiktok-pixel" strategy="afterInteractive">
@@ -161,7 +165,6 @@ export default function RootLayout({ children }) {
             alt=""
           />
         </noscript>
-
       </body>
     </html>
   );
