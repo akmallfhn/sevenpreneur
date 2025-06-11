@@ -2,28 +2,54 @@ import { trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const GoogleOAuthCallbackReceiver = async (req: NextRequest) => {
-  try {
-    const payload = await req.formData();
-    const credential = payload.get("credential")?.toString() || "";
+export async function POST(request: Request) {
+  // --- Receive access token from Google
+  const body = await request.json();
+  const accessToken = body.tokenResponse.access_token;
 
-    const loggedIn = await trpc.auth.login({ credential });
-    const token = loggedIn.token.token;
+  // --- Return user info
+  // const userInfoResponse = await fetch(
+  //   "https://www.googleapis.com/oauth2/v3/userinfo",
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   }
+  // );
 
-    // TODO: Set cookie and redirect
-    return NextResponse.json(
-      { message: "Success", token: token },
-      { status: 200 }
-    );
-  } catch (error: any) {
-    return NextResponse.json(
-      { message: "Error processing request", error: error.message },
-      { status: 500 }
-    );
+  // if (!userInfoResponse.ok) {
+  //   throw new Error("Failed to fetch user info");
+  // }
+
+  // const userInfo = await userInfoResponse.json();
+
+  // --- TRPC
+  const loggedIn = await trpc.auth.login({ credential: accessToken });
+  const token = loggedIn.token.token;
+
+  console.log("token:", token);
+
+  // --- Save session token to cookie
+  if (token) {
+    const cookieStore = await cookies();
+    cookieStore.set("session_token", accessToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 21600,
+    });
+
+    // --- Send Response Success
+    return NextResponse.json({
+      status: 200,
+      message: "success",
+      user_info: token,
+    });
   }
-};
 
-export {
-  GoogleOAuthCallbackReceiver as GET,
-  GoogleOAuthCallbackReceiver as POST,
-};
+  // --- Send Response Fail
+  return NextResponse.json({
+    status: 500,
+    message: "failed",
+    user_info: token,
+  });
+}

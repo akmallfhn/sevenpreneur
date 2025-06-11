@@ -15,7 +15,7 @@ export default function LoginContainer() {
       try {
         // --- Sent request to route handler
         const response = await fetch(
-          `https://www.example.com:3000/api/auth/login`,
+          `https://www.example.com:3000/api/auth/callback/google`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

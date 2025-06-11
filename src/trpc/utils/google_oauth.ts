@@ -1,39 +1,50 @@
-import { OAuth2Client } from 'google-auth-library';
+// --- Defining type result
+export type GoogleOAuthVerificationResult =
+  | {
+      name: string;
+      email: string;
+      picture: string;
+    }
+  | false;
 
-export type GoogleOAuthVerificationResult = {
-  name: string,
-  email: string,
-  picture: string,
-} | false;
-
-export async function GoogleOAuthVerifier(credential: string): Promise<GoogleOAuthVerificationResult> {
-  let user = {
-    name: '',
-    email: '',
-    picture: '',
-  };
-
+export async function GoogleOAuthVerifier(
+  accessToken: string
+): Promise<GoogleOAuthVerificationResult> {
+  // --- Request verification to Google
   try {
-    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-    const ticket = await client.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    const payload = ticket.getPayload() || user;
-    user.name = payload.name || '';
-    user.email = payload.email || '';
-    user.picture = payload.picture || '';
-  } catch (e: any) {
+    const userInfoResponse = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (!userInfoResponse.ok) {
+      throw new Error("Failed to fetch user info");
+    }
+    const userInfo = await userInfoResponse.json();
+
+    // --- Return user info
+    const { name, email, picture } = userInfo;
+
+    // --- Validate data
+    if (
+      typeof name !== "string" ||
+      name.trim() === "" ||
+      typeof email !== "string" ||
+      email.trim() === "" ||
+      typeof picture !== "string" ||
+      picture.trim() === ""
+    ) {
+      return false;
+    }
+
+    // Return data if valid
+    return { name, email, picture };
+  } catch (error: any) {
+    console.error("GoogleOAuthVerifier error:", error);
     return false;
   }
-
-  if (
-    user.name.trim().length === 0 ||
-    user.email.trim().length === 0 ||
-    user.picture.trim().length === 0
-  ) {
-    return false;
-  }
-
-  return user;
 }
