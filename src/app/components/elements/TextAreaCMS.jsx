@@ -1,12 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-export default function InputCMS({
-  inputId,
-  inputName,
-  inputType,
-  inputIcon,
-  inputPlaceholder,
+export default function TextAreaCMS({
+  textAreaId,
+  textAreaName,
+  textAreaHeight,
+  textAreaPlaceholder,
   characterLength,
   errorMessage,
   onInputChange,
@@ -43,24 +42,20 @@ export default function InputCMS({
     <div className="input-group-component flex flex-col gap-1">
       {/* --- Label */}
       <label
-        htmlFor={inputId}
+        htmlFor={textAreaId}
         className="flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
       >
-        {inputName}
+        {textAreaName}
         {required && <span className="text-red-700">*</span>}
       </label>
 
       {/* --- Input Placeholder */}
-      <div className="input-container relative ">
-        <div className="absolute left-0 flex items-center p-[9px] pl-3 pointer-events-none text-alternative">
-          {inputIcon}
-        </div>
-        <input
-          id={inputId}
-          type={inputType}
-          placeholder={inputPlaceholder}
+      <div className="input-container relative">
+        <textarea
+          id={textAreaId}
+          placeholder={textAreaPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 pl-10 bg-white font-medium font-bodycopy text-sm rounded-lg placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
+          className={`flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-lg resize-none placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
             error ? "border-red-700 border" : "border border-outline"
           } `}
           value={value}

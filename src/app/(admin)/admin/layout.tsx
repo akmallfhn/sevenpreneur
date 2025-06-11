@@ -6,8 +6,8 @@ import localFont from "next/font/local";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
-  subsets: ["latin"]
-})
+  subsets: ["latin"],
+});
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -53,19 +53,25 @@ const openSauceOne = localFont({
       weight: "900",
       style: "normal",
     },
-  ]
-})
+  ],
+});
 
 // Pass the base URL to the client
 let baseURL = "https://api.sevenpreneur.com/trpc";
-if (process.env.DOMAIN_MODE === 'staging') baseURL = "https://api.staging.sevenpreneur.com/trpc";
-if (process.env.DOMAIN_MODE === 'local' && process.env.BASE_URL) baseURL = `http://api.${process.env.BASE_URL}/trpc`;
+if (process.env.DOMAIN_MODE === "staging")
+  baseURL = "https://api.staging.sevenpreneur.com/trpc";
+if (process.env.DOMAIN_MODE === "local" && process.env.BASE_URL)
+  baseURL = `http://api.${process.env.BASE_URL}/trpc`;
 
-export default function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
+export default function AdminLayout(
+  props: Readonly<{ children: React.ReactNode }>
+) {
   return (
     <TRPCProvider baseURL={baseURL}>
       <html lang="en">
-        <body className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}>
+        <body
+          className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
+        >
           <SidebarCMS />
           {props.children}
         </body>
