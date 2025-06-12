@@ -28,6 +28,7 @@ model Industry {
   id            Int      @id @default(autoincrement()) @db.SmallInt
   industry_name String   @unique @db.VarChar()
   created_at    DateTime @default(now()) @db.Timestamptz()
+  users         User[]
 
   @@map("industries")
 }
@@ -36,6 +37,7 @@ model EntrepreneurStage {
   id         Int      @id @default(autoincrement()) @db.SmallInt
   stage_name String   @unique @db.VarChar()
   created_at DateTime @default(now()) @db.Timestamptz()
+  User       User[]
 
   @@map("entrepreneur_stages")
 }
@@ -46,32 +48,38 @@ model Role {
   permission Int      @db.SmallInt
   created_at DateTime @default(now()) @db.Timestamptz()
   updated_at DateTime @default(now()) @updatedAt @db.Timestamptz()
+  users      User[]
 
   @@map("roles")
 }
 
 model User {
-  id                 String     @id @default(uuid()) @db.Uuid
-  full_name          String     @db.VarChar()
-  email              String     @unique @db.VarChar()
-  avatar             String?    @db.VarChar()
-  role_id            Int        @default(3) @db.SmallInt // General User
-  status             StatusEnum @default(ACTIVE)
-  date_of_birth      DateTime?  @db.Date
-  learning_goal      String?    @db.VarChar()
-  entrepreneur_stage Int?       @db.SmallInt
-  business_name      String?    @db.VarChar()
-  industry_id        Int?       @db.SmallInt
-  created_at         DateTime   @default(now()) @db.Timestamptz()
-  updated_at         DateTime   @default(now()) @updatedAt @db.Timestamptz()
-  last_login         DateTime   @default(now()) @updatedAt @db.Timestamptz()
-  deleted_at         DateTime?  @db.Timestamptz()
+  id                    String             @id @default(uuid()) @db.Uuid
+  full_name             String             @db.VarChar()
+  email                 String             @unique @db.VarChar()
+  avatar                String?            @db.VarChar()
+  role                  Role               @relation(fields: [role_id], references: [id])
+  role_id               Int                @default(3) @db.SmallInt // General User
+  status                StatusEnum         @default(ACTIVE)
+  date_of_birth         DateTime?          @db.Date
+  learning_goal         String?            @db.VarChar()
+  entrepreneur_stage    EntrepreneurStage? @relation(fields: [entrepreneur_stage_id], references: [id])
+  entrepreneur_stage_id Int?               @map("entrepreneur_stage") @db.SmallInt
+  business_name         String?            @db.VarChar()
+  industry              Industry?          @relation(fields: [industry_id], references: [id])
+  industry_id           Int?               @db.SmallInt
+  created_at            DateTime           @default(now()) @db.Timestamptz()
+  updated_at            DateTime           @default(now()) @updatedAt @db.Timestamptz()
+  last_login            DateTime           @default(now()) @updatedAt @db.Timestamptz()
+  deleted_at            DateTime?          @db.Timestamptz()
+  tokens                Token[]
 
   @@map("users")
 }
 
 model Token {
   id         Int      @id @default(autoincrement()) @db.Integer
+  user       User     @relation(fields: [user_id], references: [id])
   user_id    String   @db.Uuid
   is_active  Boolean  @default(false) @db.Boolean
   token      String   @unique @db.Text
