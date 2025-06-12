@@ -13,7 +13,7 @@ export function middleware(req) {
     api: "/api",
   };
 
-  const localDomain = process.env.BASE_URL;
+  const localDomain = "example.com:3000";
   const stagingDomain = "staging.sevenpreneur.com";
   const productionDomain = "sevenpreneur.com";
 

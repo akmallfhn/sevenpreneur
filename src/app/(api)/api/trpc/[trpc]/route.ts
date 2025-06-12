@@ -11,9 +11,7 @@ const isOriginAllowed = (origin: string | null) => {
   const domainMode = process.env.DOMAIN_MODE;
   let baseURL = "sevenpreneur.com";
   if (domainMode === "local") {
-    if (process.env.BASE_URL) {
-      baseURL = process.env.BASE_URL;
-    }
+    baseURL = "example.com:3000";
   } else if (domainMode === "staging") {
     baseURL = "staging.sevenpreneur.com";
   }
