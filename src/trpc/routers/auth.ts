@@ -1,4 +1,8 @@
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import {
+  baseProcedure,
+  createTRPCRouter,
+  loggedInProcedure,
+} from "@/trpc/init";
 import { GoogleTokenVerifier } from "@/trpc/utils/google_verifier";
 import { stringNotBlank } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
@@ -81,6 +85,22 @@ export const authRouter = createTRPCRouter({
         registered_user: registeredUser,
       };
     }),
+
+  checkSession: loggedInProcedure.query((opts) => {
+    const theUser = opts.ctx.user;
+    return {
+      message: "Success",
+      user: {
+        id: theUser.id,
+        full_name: theUser.full_name,
+        email: theUser.email,
+        avatar: theUser.avatar,
+        role_id: theUser.role_id,
+        role_name: theUser.role.name,
+        status: theUser.status,
+      },
+    };
+  }),
 
   logout: baseProcedure
     .input(
