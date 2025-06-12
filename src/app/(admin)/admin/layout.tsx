@@ -56,12 +56,18 @@ const openSauceOne = localFont({
   ],
 });
 
-// Pass the base URL to the client
+// --- Pass the base URL to the client
 let baseURL = "https://api.sevenpreneur.com/trpc";
 if (process.env.DOMAIN_MODE === "staging")
   baseURL = "https://api.staging.sevenpreneur.com/trpc";
 if (process.env.DOMAIN_MODE === "local")
   baseURL = "https://api.example.com:3000/trpc";
+
+// --- Current Domain
+let domain = "sevenpreneur.com";
+if (process.env.DOMAIN_MODE === "local") {
+  domain = "example.com:3000";
+}
 
 export default function RootLayout(
   props: Readonly<{ children: React.ReactNode }>
@@ -72,7 +78,7 @@ export default function RootLayout(
         <body
           className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
         >
-          <SidebarCMS />
+          <SidebarCMS currentDomain={domain} />
           {props.children}
         </body>
       </html>

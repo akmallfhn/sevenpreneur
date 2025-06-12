@@ -1,16 +1,35 @@
 "use client";
-import SidebarMenuItemCMS from "../elements/SidebarMenuItemCMS";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { DeleteSession } from "@/lib/actions";
+import SidebarMenuItemCMS from "../elements/SidebarMenuItemCMS";
 import {
   CircleHelp,
   CircleUserIcon,
   DoorOpen,
   GraduationCap,
   HouseIcon,
+  Loader2,
 } from "lucide-react";
 
-export default function SidebarCMS() {
+export default function SidebarCMS({ currentDomain }) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoading(true);
+    const result = await DeleteSession();
+    console.log("result logout:", result);
+    if (result?.status === 200) {
+      router.push(`https://www.${currentDomain}/auth/login`);
+    } else {
+      console.error("Logout failed");
+    }
+    setIsLoading(false);
+  };
+
   return (
     <div className="sidebar-cms-root hidden lg:flex lg:flex-col lg:fixed lg:justify-between lg:pt-5 lg:pb-8 lg:max-w-64 lg:w-full lg:left-0 lg:h-full lg:bg-[#F7F7F7] lg:z-50">
       {/* --- TOP AREA */}
@@ -94,9 +113,14 @@ export default function SidebarCMS() {
       {/* --- BOTTOM AREA */}
       <div className="sidebar-cms-bottom flex flex-col max-w-[224px] mx-auto w-full">
         {/* --- Logout Button */}
-        <div className="logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-[15px] font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95">
+        <div
+          className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-[15px] font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleLogout}
+        >
           <div className="flex size-5 items-center justify-center">
-            <DoorOpen />
+            {isLoading ? <Loader2 className="animate-spin" /> : <DoorOpen />}
           </div>
           Logout
         </div>
