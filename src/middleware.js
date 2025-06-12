@@ -1,23 +1,23 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export function middleware(req) {
   const url = req.nextUrl.clone();
-  const host = req.headers.get('host');
-  const hostname = host.split(':')[0]; // strip port
+  const host = req.headers.get("host");
+  const hostname = host.split(":")[0]; // strip port
 
   // --- Map subdomains to its corresponding paths
   const subdomainList = {
-    'www': '/www',
-    'agora': '/agora',
-    'admin': '/admin',
-    'api': '/api',
+    www: "/www",
+    agora: "/agora",
+    admin: "/admin",
+    api: "/api",
   };
 
   const localDomain = process.env.BASE_URL;
-  const stagingDomain = 'staging.sevenpreneur.com';
-  const productionDomain = 'sevenpreneur.com';
+  const stagingDomain = "staging.sevenpreneur.com";
+  const productionDomain = "sevenpreneur.com";
 
-  const isLocal = process.env.DOMAIN_MODE === 'local';
+  const isLocal = process.env.DOMAIN_MODE === "local";
   const isStaging = hostname.endsWith(stagingDomain);
   const isProduction = hostname.endsWith(productionDomain) && !isStaging;
 
@@ -34,30 +34,15 @@ export function middleware(req) {
 
   // --- Block unknown subdomains
   if (subdomain && !subdomainList[subdomain]) {
-    url.pathname += '-not-found';
+    url.pathname += "-not-found";
     return NextResponse.rewrite(url);
   }
 
-  // --- Basic Auth for staging env
-  // if (isStaging) {
-  //   const basicAuth = req.headers.get('Authorization');
-  //   const expectedAuth = 'Basic ' + Buffer.from('admin:captainMarvel1995').toString('base64');
-
-  //   if (basicAuth !== expectedAuth) {
-  //     return new Response('Authentication Required', {
-  //       status: 401,
-  //       headers: {
-  //         'WWW-Authenticate': 'Basic realm="Secure Area"',
-  //       },
-  //     });
-  //   }
-  // }
-
   // --- Ignore accesses to assets
   if (
-    url.pathname.startsWith('/_next') ||
-    url.pathname.startsWith('/favicon.ico') ||
-    url.pathname.startsWith('/public')
+    url.pathname.startsWith("/_next") ||
+    url.pathname.startsWith("/favicon.ico") ||
+    url.pathname.startsWith("/public")
   ) {
     return NextResponse.next();
   }
@@ -67,7 +52,7 @@ export function middleware(req) {
     const basePath = subdomainList[subdomain];
     // --- Disallow double paths, e.g. agora.sevenpreneur.com/agora
     if (url.pathname.startsWith(basePath)) {
-      url.pathname += '-not-found';
+      url.pathname += "-not-found";
     } else {
       url.pathname = `${basePath}${url.pathname}`;
     }
@@ -75,8 +60,10 @@ export function middleware(req) {
   }
 
   // --- Prevent direct access to the main paths, e.g. sevenpreneur.com/agora
-  if (Object.values(subdomainList).some((path) => url.pathname.startsWith(path))) {
-    url.pathname += '-not-found';
+  if (
+    Object.values(subdomainList).some((path) => url.pathname.startsWith(path))
+  ) {
+    url.pathname += "-not-found";
     return NextResponse.rewrite(url);
   }
 
