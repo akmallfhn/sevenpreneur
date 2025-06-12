@@ -14,23 +14,45 @@ export function middleware(req) {
   };
 
   const localDomain = "example.com:3000";
-  const stagingDomain = "staging.sevenpreneur.com";
   const productionDomain = "sevenpreneur.com";
 
   const isLocal = process.env.DOMAIN_MODE === "local";
-  const isStaging = hostname.endsWith(stagingDomain);
   const isProduction = hostname.endsWith(productionDomain) && !isStaging;
 
   // --- Extract subdomain
   let endPos = 0;
   if (isLocal) {
     endPos = host.indexOf(localDomain) - 1;
-  } else if (isStaging) {
-    endPos = host.indexOf(stagingDomain) - 1;
   } else if (isProduction) {
     endPos = host.indexOf(productionDomain) - 1;
   }
   const subdomain = host.substring(0, endPos);
+  const sessionToken = req.cookies.get("session_token")?.value;
+  const pathname = req.nextUrl.pathname;
+  const loginRoute = ["/auth"];
+
+  // --- Redirect if accessing admin subdomain without session token
+  if (subdomain === "admin" && !sessionToken) {
+    return NextResponse.redirect(
+      new URL(`https://www.${localDomain}/auth/login`, req.url)
+    );
+  }
+
+  // --- Redirect if accessing agora subdomain without session token
+  if (subdomain === "agora" && !sessionToken) {
+    return NextResponse.redirect(
+      new URL(`https://www.${localDomain}/auth/login`, req.url)
+    );
+  }
+
+  // --- Redirect if accessing /auth on www subdomain with active session
+  if (subdomain === "www" && sessionToken) {
+    if (loginRoute.some((route) => pathname.startsWith(route))) {
+      return NextResponse.redirect(
+        new URL(`https://www.${localDomain}`, req.url)
+      );
+    }
+  }
 
   // --- Block unknown subdomains
   if (subdomain && !subdomainList[subdomain]) {
