@@ -5,21 +5,17 @@ import Image from "next/image";
 import AppButton from "../elements/AppButton";
 import Link from "next/link";
 
-export default function LoginContainer() {
+export default function LoginContainer({ currentDomain }) {
   const router = useRouter();
 
   // --- Return token from Google
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("gresp:", tokenResponse);
+      // console.log("gresp:", tokenResponse);
       try {
-        let domain = "sevenpreneur.com";
-        if (process.env.DOMAIN_MODE === "local") {
-          domain = "example.com:3000";
-        }
         // --- Sent request to route handler
         const response = await fetch(
-          `https://www.${domain}/api/auth/callback/google`,
+          `https://www.${currentDomain}/api/auth/callback/google`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -37,7 +33,7 @@ export default function LoginContainer() {
 
         // --- Redirect and status message
         if (result.status === 200) {
-          router.push(`https://admin.${domain}`);
+          router.push(`https://admin.${currentDomain}`);
         } else {
         }
       } catch (error) {
