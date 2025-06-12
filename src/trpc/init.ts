@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
-import { initTRPC } from '@trpc/server';
-import { cache } from 'react';
+import { PrismaClient } from "@prisma/client";
+import { initTRPC } from "@trpc/server";
+import { cache } from "react";
 
 const prisma = new PrismaClient();
 

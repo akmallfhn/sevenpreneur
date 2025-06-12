@@ -1,24 +1,24 @@
-import { baseProcedure, createTRPCRouter } from '@/trpc/init';
-import { GoogleTokenVerifier } from '@/trpc/utils/google_verifier';
-import { stringNotBlank } from '@/trpc/utils/validation';
-import { StatusEnum } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
-import { randomBytes } from 'crypto';
-import { z } from 'zod';
+import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { GoogleTokenVerifier } from "@/trpc/utils/google_verifier";
+import { stringNotBlank } from "@/trpc/utils/validation";
+import { StatusEnum } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { randomBytes } from "crypto";
+import { z } from "zod";
 
 export const authRouter = createTRPCRouter({
   login: baseProcedure
     .input(
       z.object({
         accessToken: stringNotBlank(),
-      }),
+      })
     )
     .mutation(async (opts) => {
       const userInfo = await GoogleTokenVerifier(opts.input.accessToken);
       if (!userInfo) {
         throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'The given credential is not valid.',
+          code: "BAD_REQUEST",
+          message: "The given credential is not valid.",
         });
       }
 
@@ -40,8 +40,8 @@ export const authRouter = createTRPCRouter({
         registeredUser = createdUser;
       } else if (findUser.status === StatusEnum.INACTIVE) {
         throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'Your account has been inactivated.',
+          code: "FORBIDDEN",
+          message: "Your account has been inactivated.",
         });
       } else {
         if (!findUser.avatar && userInfo.picture) {
@@ -49,7 +49,9 @@ export const authRouter = createTRPCRouter({
           const updatedAvatar: number = await opts.ctx.prisma
             .$executeRaw`UPDATE users SET avatar = ${userInfo.picture} WHERE email = ${userInfo.email};`;
           if (updatedAvatar > 1) {
-            console.error('auth.login: More-than-one users have its avatar updated at once.');
+            console.error(
+              "auth.login: More-than-one users have its avatar updated at once."
+            );
           }
         }
 
@@ -57,12 +59,14 @@ export const authRouter = createTRPCRouter({
         const updatedLogin: number = await opts.ctx.prisma
           .$executeRaw`UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = ${userInfo.email};`;
         if (updatedLogin > 1) {
-          console.error('auth.login: More-than-one users have its last_login updated at once.');
+          console.error(
+            "auth.login: More-than-one users have its last_login updated at once."
+          );
         }
       }
       // registeredUser should be not null
 
-      const generatedToken = randomBytes(64).toString('hex');
+      const generatedToken = randomBytes(64).toString("hex");
       const createdToken = await opts.ctx.prisma.token.create({
         data: {
           user_id: registeredUser!.id,
@@ -72,7 +76,7 @@ export const authRouter = createTRPCRouter({
       });
 
       return {
-        message: 'Success',
+        message: "Success",
         token: createdToken,
         registered_user: registeredUser,
       };
@@ -82,7 +86,7 @@ export const authRouter = createTRPCRouter({
     .input(
       z.object({
         token: stringNotBlank(),
-      }),
+      })
     )
     .mutation(async (opts) => {
       const deletedTokens = await opts.ctx.prisma.token.deleteMany({
@@ -91,11 +95,11 @@ export const authRouter = createTRPCRouter({
         },
       });
       if (deletedTokens.count > 1) {
-        console.error('auth.logout: More-than-one tokens are removed at once.');
+        console.error("auth.logout: More-than-one tokens are removed at once.");
       }
 
       return {
-        message: 'Success',
+        message: "Success",
       };
     }),
 });

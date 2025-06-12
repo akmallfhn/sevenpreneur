@@ -9,14 +9,14 @@
   --aspect-mobile-banner: 3.4/2;
   --aspect-desktop-banner: 4/1;
   --aspect-frame-speaker-restart: 0.89/1;
-  --color-primary: #0165FC;
-  --color-primary-strong: #0041C2;
+  --color-primary: #0165fc;
+  --color-primary-strong: #0041c2;
   --color-primary-dark: #003399;
-  --color-primary-deep: #001659; 
-  --color-secondary: #E74D79;
-  --color-alternative: #949494; 
+  --color-primary-deep: #001659;
+  --color-secondary: #e74d79;
+  --color-alternative: #949494;
   --color-cms-primary: #013393;
-  --color-cms-secondary: #65D6CA;
+  --color-cms-secondary: #65d6ca;
 }
 
 @theme inline {

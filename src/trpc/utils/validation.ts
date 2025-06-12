@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export function stringNotBlank(): z.ZodString {
   // https://github.com/colinhacks/zod/issues/63#issuecomment-1429974422
