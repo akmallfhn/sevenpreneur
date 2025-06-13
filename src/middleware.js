@@ -17,7 +17,7 @@ export function middleware(req) {
   const productionDomain = "sevenpreneur.com";
 
   const isLocal = process.env.DOMAIN_MODE === "local";
-  const isProduction = hostname.endsWith(productionDomain) && !isStaging;
+  const isProduction = hostname.endsWith(productionDomain);
 
   // --- Extract subdomain
   let endPos = 0;
