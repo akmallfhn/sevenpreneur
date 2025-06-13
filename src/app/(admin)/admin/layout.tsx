@@ -1,8 +1,13 @@
-import SidebarCMS from "@/app/components/templates/SidebarCMS";
 import "@/app/globals.css";
+import { cookies, headers } from "next/headers";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { TRPCProvider } from "@/trpc/client";
+import { trpc } from "@/trpc/server";
 import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
+import SidebarCMS from "@/app/components/templates/SidebarCMS";
 import localFont from "next/font/local";
+import { createCallerFactory, createTRPCContext } from "@/trpc/init";
+import { authRouter } from "@/trpc/routers/auth";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -69,17 +74,37 @@ if (process.env.DOMAIN_MODE === "local") {
   domain = "example.com:3000";
 }
 
-export default function RootLayout(
+export default async function AdminLayout(
   props: Readonly<{ children: React.ReactNode }>
 ) {
+  // --- Define Google Oauth
+  const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
+  if (!googleOauthId) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_GOOGLE_OAUTH_ID in environment variables"
+    );
+  }
+
+  // --- Get Cookie
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+  console.log("session_token", sessionToken);
+
   return (
     <TRPCProvider baseURL={baseURL}>
       <html lang="en">
         <body
           className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
         >
-          <SidebarCMS currentDomain={domain} />
-          {props.children}
+          <GoogleOAuthProvider clientId={googleOauthId}>
+            <SidebarCMS
+              userAvatar={""}
+              userName={"Akmal Luthfiansyah Bin Zayed"}
+              userRoles={"striker timnas"}
+              currentDomain={domain}
+            />
+            {props.children}
+          </GoogleOAuthProvider>
         </body>
       </html>
     </TRPCProvider>
