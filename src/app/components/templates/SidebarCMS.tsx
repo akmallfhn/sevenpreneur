@@ -1,16 +1,48 @@
 "use client";
-import SidebarMenuItemCMS from "../elements/SidebarMenuItemCMS";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { DeleteSession } from "@/lib/actions";
+import SidebarMenuItemCMS from "../elements/SidebarMenuItemCMS";
 import {
   CircleHelp,
   CircleUserIcon,
   DoorOpen,
   GraduationCap,
   HouseIcon,
+  Loader2,
 } from "lucide-react";
+import { setSessionToken, trpc } from "@/trpc/client";
+import UserBadgeCMS from "../elements/UserBadgeCMS";
 
-export default function SidebarCMS() {
+interface SidebarCMSProps {
+  currentDomain: string;
+  sessionToken: string;
+}
+
+export default function SidebarCMS({
+  currentDomain,
+  sessionToken,
+}: SidebarCMSProps) {
+  // --- Defining React Hook
+  const router = useRouter();
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  // --- Logout function
+  const handleLogout = async () => {
+    setIsLoadingButton(true);
+    const result = await DeleteSession();
+    console.log("result logout:", result);
+    // -- Redirect to login page
+    if (result.code === "SUCCESS") {
+      router.push(`https://www.${currentDomain}/auth/login`);
+    } else {
+      console.error("Logout failed");
+    }
+    setIsLoadingButton(false);
+  };
+
   return (
     <div className="sidebar-cms-root hidden lg:flex lg:flex-col lg:fixed lg:justify-between lg:pt-5 lg:pb-8 lg:max-w-64 lg:w-full lg:left-0 lg:h-full lg:bg-[#F7F7F7] lg:z-50">
       {/* --- TOP AREA */}
@@ -35,28 +67,7 @@ export default function SidebarCMS() {
         </div>
 
         {/* --- User & Roles */}
-        <Link
-          href={"/"}
-          className="user-roles-container flex w-full p-2 px-3 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg"
-        >
-          <div className="avatar size-9 rounded-full overflow-hidden">
-            <Image
-              className="object-cover w-full h-full"
-              src={
-                "https://media.licdn.com/dms/image/v2/D5603AQHWg6uUtVHxBg/profile-displayphoto-shrink_800_800/B56ZRRstItGQAc-/0/1736537464736?e=1754524800&v=beta&t=zSxAGjzqpwRhAB69Fck4CiLLcyPmFqC2oFHBLJw2Ynk"
-              }
-              alt="avatar-user"
-              width={200}
-              height={200}
-            />
-          </div>
-          <div className="user-roles flex flex-col font-brand gap-0">
-            <p className="user text-sm font-semibold">Aulia Askha</p>
-            <p className="roles text-xs font-medium text-alternative">
-              EDUCATOR
-            </p>
-          </div>
-        </Link>
+        <UserBadgeCMS sessionToken={sessionToken} />
 
         {/* --- Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">
@@ -94,9 +105,18 @@ export default function SidebarCMS() {
       {/* --- BOTTOM AREA */}
       <div className="sidebar-cms-bottom flex flex-col max-w-[224px] mx-auto w-full">
         {/* --- Logout Button */}
-        <div className="logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-[15px] font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95">
+        <div
+          className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-[15px] font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
+            isLoadingButton ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          onClick={handleLogout}
+        >
           <div className="flex size-5 items-center justify-center">
-            <DoorOpen />
+            {isLoadingButton ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <DoorOpen />
+            )}
           </div>
           Logout
         </div>

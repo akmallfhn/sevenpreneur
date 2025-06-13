@@ -4,18 +4,35 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AppButton from "../elements/AppButton";
 import Link from "next/link";
+<<<<<<< HEAD
 
 export default function LoginContainer() {
   const router = useRouter();
+=======
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
+
+export default function LoginContainer({ currentDomain }) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+>>>>>>> main
 
   // --- Return token from Google
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+<<<<<<< HEAD
       console.log("gresp:", tokenResponse);
       try {
         // --- Sent request to route handler
         const response = await fetch(
           `https://www.example.com:3000/api/auth/callback/google`,
+=======
+      try {
+        setIsLoading(true);
+        // --- Sent request to route handler
+        const response = await fetch(
+          `https://www.${currentDomain}/api/auth/callback/google`,
+>>>>>>> main
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -33,6 +50,7 @@ export default function LoginContainer() {
 
         // --- Redirect and status message
         if (result.status === 200) {
+<<<<<<< HEAD
           router.push("/");
         } else {
           //   toast({
@@ -40,6 +58,11 @@ export default function LoginContainer() {
           //     description: "Contact the admin to create one.",
           //     variant: "destructive",
           //   });
+=======
+          setIsLoading(false);
+          router.push(`https://www.${currentDomain}`);
+        } else {
+>>>>>>> main
         }
       } catch (error) {
         console.error("Login failed:", error);
@@ -82,6 +105,7 @@ export default function LoginContainer() {
           </p>
 
           {/* Google Login */}
+<<<<<<< HEAD
           <AppButton variant="outline" onClick={() => login()}>
             <Image
               className="flex size-6"
@@ -92,6 +116,26 @@ export default function LoginContainer() {
               width={100}
               height={100}
             />
+=======
+          <AppButton
+            variant="outline"
+            onClick={() => login()}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="size-5 animate-spin text-alternative" />
+            ) : (
+              <Image
+                className="flex size-6"
+                src={
+                  "https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw"
+                }
+                alt="Logo Google"
+                width={100}
+                height={100}
+              />
+            )}
+>>>>>>> main
 
             <p className="font-bold">Login with Google</p>
           </AppButton>

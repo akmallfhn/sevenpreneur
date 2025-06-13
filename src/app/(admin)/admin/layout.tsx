@@ -1,8 +1,13 @@
-import SidebarCMS from "@/app/components/templates/SidebarCMS";
 import "@/app/globals.css";
+import { cookies, headers } from "next/headers";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { TRPCProvider } from "@/trpc/client";
+import { trpc } from "@/trpc/server";
 import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
+import SidebarCMS from "@/app/components/templates/SidebarCMS";
 import localFont from "next/font/local";
+import { createCallerFactory, createTRPCContext } from "@/trpc/init";
+import { authRouter } from "@/trpc/routers/auth";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -56,24 +61,46 @@ const openSauceOne = localFont({
   ],
 });
 
-// Pass the base URL to the client
+// --- Pass the base URL to the client
 let baseURL = "https://api.sevenpreneur.com/trpc";
 if (process.env.DOMAIN_MODE === "staging")
   baseURL = "https://api.staging.sevenpreneur.com/trpc";
-if (process.env.DOMAIN_MODE === "local" && process.env.BASE_URL)
-  baseURL = `http://api.${process.env.BASE_URL}/trpc`;
+if (process.env.DOMAIN_MODE === "local")
+  baseURL = "https://api.example.com:3000/trpc";
 
-export default function AdminLayout(
+// --- Current Domain
+let domain = "sevenpreneur.com";
+if (process.env.DOMAIN_MODE === "local") {
+  domain = "example.com:3000";
+}
+
+export default async function AdminLayout(
   props: Readonly<{ children: React.ReactNode }>
 ) {
+  // --- Define Google Oauth
+  const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
+  if (!googleOauthId) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_GOOGLE_OAUTH_ID in environment variables"
+    );
+  }
+
+  // --- Get Cookie
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  if (!sessionToken) return null;
+
   return (
     <TRPCProvider baseURL={baseURL}>
       <html lang="en">
         <body
           className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
         >
-          <SidebarCMS />
-          {props.children}
+          <GoogleOAuthProvider clientId={googleOauthId}>
+            <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
+            {props.children}
+          </GoogleOAuthProvider>
         </body>
       </html>
     </TRPCProvider>

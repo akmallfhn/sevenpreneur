@@ -1,21 +1,27 @@
 import { trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   // --- Receive access token from Google
   const body = await request.json();
   const accessToken = body.tokenResponse.access_token;
 
-  // --- Backend
+  // --- Backend Process
   const loggedIn = await trpc.auth.login({ accessToken });
   const sessionToken = loggedIn.token.token;
   const user = loggedIn.registered_user;
 
   // --- Save session token to cookie
   if (sessionToken) {
+    let domain = "sevenpreneur.com";
+    if (process.env.DOMAIN_MODE === "local") {
+      domain = "example.com";
+    }
+
     const cookieStore = await cookies();
     cookieStore.set("session_token", sessionToken, {
+      domain: domain,
       httpOnly: true,
       secure: true,
       maxAge: 21600,
