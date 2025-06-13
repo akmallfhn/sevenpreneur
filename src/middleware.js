@@ -34,14 +34,14 @@ export function middleware(req) {
   // --- Redirect if accessing admin subdomain without session token
   if (subdomain === "admin" && !sessionToken) {
     return NextResponse.redirect(
-      new URL(`https://www.${localDomain}/auth/login`, req.url)
+      new URL(`https://www.${productionDomain}/auth/login`, req.url)
     );
   }
 
   // --- Redirect if accessing agora subdomain without session token
   if (subdomain === "agora" && !sessionToken) {
     return NextResponse.redirect(
-      new URL(`https://www.${localDomain}/auth/login`, req.url)
+      new URL(`https://www.${productionDomain}/auth/login`, req.url)
     );
   }
 
@@ -49,7 +49,7 @@ export function middleware(req) {
   if (subdomain === "www" && sessionToken) {
     if (loginRoute.some((route) => pathname.startsWith(route))) {
       return NextResponse.redirect(
-        new URL(`https://www.${localDomain}`, req.url)
+        new URL(`https://www.${productionDomain}`, req.url)
       );
     }
   }
