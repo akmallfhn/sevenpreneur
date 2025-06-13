@@ -20,6 +20,12 @@ function getQueryClient() {
   return (clientQueryClientSingleton ??= makeQueryClient());
 }
 
+let sessionToken: string = "";
+
+export function setSessionToken(newToken: string) {
+  sessionToken = newToken;
+}
+
 export function TRPCProvider(
   props: Readonly<{
     children: React.ReactNode;
@@ -32,6 +38,14 @@ export function TRPCProvider(
       links: [
         httpBatchLink({
           url: props.baseURL,
+          headers() {
+            if (sessionToken.trim().length > 0) {
+              return {
+                Authorization: `Bearer ${sessionToken}`,
+              };
+            }
+            return {};
+          },
         }),
       ],
     })
