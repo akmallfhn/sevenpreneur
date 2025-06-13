@@ -34,7 +34,7 @@ export default async function UserListPage() {
         </div>
 
         {/* --- TABLE  */}
-        <div className="flex flex-col gap-7 bg-white pb-7 rounded-md shadow-md overflow-hidden">
+        <div className="flex flex-col gap-7 bg-white pb-7 rounded-md shadow-md">
           {/* --- Column Name */}
           <div className="column-name flex px-7 p-4 items-center font-bodycopy font-semibold text-alternative text-sm bg-[#f5f5f5] border-b border-[#e3e3e3]">
             <div className="max-w-[380px] w-full shrink-0 text-xs">USER</div>
