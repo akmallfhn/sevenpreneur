@@ -34,7 +34,7 @@ export default async function withAuth(req) {
   const loginRoute = ["/auth"];
 
   // --- Recondition domain
-  let domain = isProduction;
+  let domain = productionDomain;
   if (isLocal) {
     domain = localDomain;
   }
