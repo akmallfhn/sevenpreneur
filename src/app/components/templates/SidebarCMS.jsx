@@ -14,7 +14,12 @@ import {
   Loader2,
 } from "lucide-react";
 
-export default function SidebarCMS({ currentDomain }) {
+export default function SidebarCMS({
+  currentDomain,
+  userAvatar,
+  userName,
+  userRoles,
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,11 +63,12 @@ export default function SidebarCMS({ currentDomain }) {
           href={"/"}
           className="user-roles-container flex w-full p-2 px-3 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg"
         >
-          <div className="avatar size-9 rounded-full overflow-hidden">
+          <div className="avatar aspect-square w-12 rounded-full overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src={
-                "https://media.licdn.com/dms/image/v2/D5603AQHWg6uUtVHxBg/profile-displayphoto-shrink_800_800/B56ZRRstItGQAc-/0/1736537464736?e=1754524800&v=beta&t=zSxAGjzqpwRhAB69Fck4CiLLcyPmFqC2oFHBLJw2Ynk"
+                userAvatar ||
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
               }
               alt="avatar-user"
               width={200}
@@ -70,9 +76,11 @@ export default function SidebarCMS({ currentDomain }) {
             />
           </div>
           <div className="user-roles flex flex-col font-brand gap-0">
-            <p className="user text-sm font-semibold">Aulia Askha</p>
+            <p className="user text-sm font-semibold line-clamp-1">
+              {userName}
+            </p>
             <p className="roles text-xs font-medium text-alternative">
-              EDUCATOR
+              {userRoles.toUpperCase()}
             </p>
           </div>
         </Link>

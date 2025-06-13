@@ -37,7 +37,7 @@ export default function LoginContainer({ currentDomain }) {
         // --- Redirect and status message
         if (result.status === 200) {
           setIsLoading(false);
-          router.push(`https://admin.${currentDomain}`);
+          router.push(`https://www.${currentDomain}`);
         } else {
         }
       } catch (error) {
