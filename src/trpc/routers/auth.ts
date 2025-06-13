@@ -119,7 +119,7 @@ export const authRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "SUCCESS",
         message: "Successfully logout",
       };
     }),

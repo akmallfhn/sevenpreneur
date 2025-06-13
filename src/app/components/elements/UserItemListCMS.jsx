@@ -17,6 +17,7 @@ dayjs.extend(timezone);
 dayjs.extend(utc);
 
 export default function UserItemListCMS({
+  userId,
   userName,
   userAvatar,
   userEmail,
@@ -67,7 +68,7 @@ export default function UserItemListCMS({
         </div>
         {/* --- User Name & Email */}
         <div className="user-name-email flex flex-col">
-          <Link href={"/users/f1d27a50-00f1-48c0-9265-c516ae1f532a"}>
+          <Link href={`/users/${userId}`}>
             <h2 className="user-name font-bold font-bodycopy line-clamp-1">
               {userName}
             </h2>
