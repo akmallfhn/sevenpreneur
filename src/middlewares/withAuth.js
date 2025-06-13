@@ -43,15 +43,14 @@ export default async function withAuth(req) {
   if (subdomain === "admin") {
     // --- If not login
     if (!sessionToken) {
-      // if (!sessionToken && currentUser.message !== 200) {
+      //   // if (!sessionToken && currentUser.message !== 200) {
       return NextResponse.redirect(
         new URL(`https://www.${domain}/auth/login`, req.url)
       );
     }
-
-    // if (currentUser.user.role === "General User" && currentUser.user.status === "inactive") {
+    // if (data.user.role_id === 0 && data.user.status === "INACTIVE") {
     //   return NextResponse.redirect(
-    //     new new URL(`https://www.${domain}/403`, req.url)()
+    //     new new URL(`https://www.${domain}/`, req.url)()
     //   );
     // }
   }

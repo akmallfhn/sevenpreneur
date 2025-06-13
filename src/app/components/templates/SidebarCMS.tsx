@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,26 +13,34 @@ import {
   HouseIcon,
   Loader2,
 } from "lucide-react";
+import { setSessionToken, trpc } from "@/trpc/client";
+import UserBadgeCMS from "../elements/UserBadgeCMS";
+
+interface SidebarCMSProps {
+  currentDomain: string;
+  sessionToken: string;
+}
 
 export default function SidebarCMS({
   currentDomain,
-  userAvatar,
-  userName,
-  userRoles,
-}) {
+  sessionToken,
+}: SidebarCMSProps) {
+  // --- Defining React Hook
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
 
+  // --- Logout function
   const handleLogout = async () => {
-    setIsLoading(true);
+    setIsLoadingButton(true);
     const result = await DeleteSession();
     console.log("result logout:", result);
-    if (result?.status === 200) {
+    // -- Redirect to login page
+    if (result.code === "SUCCESS") {
       router.push(`https://www.${currentDomain}/auth/login`);
     } else {
       console.error("Logout failed");
     }
-    setIsLoading(false);
+    setIsLoadingButton(false);
   };
 
   return (
@@ -59,31 +67,7 @@ export default function SidebarCMS({
         </div>
 
         {/* --- User & Roles */}
-        <Link
-          href={"/"}
-          className="user-roles-container flex w-full p-2 px-3 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg"
-        >
-          <div className="avatar aspect-square w-12 rounded-full overflow-hidden">
-            <Image
-              className="object-cover w-full h-full"
-              src={
-                userAvatar ||
-                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-              }
-              alt="avatar-user"
-              width={200}
-              height={200}
-            />
-          </div>
-          <div className="user-roles flex flex-col font-brand gap-0">
-            <p className="user text-sm font-semibold line-clamp-1">
-              {userName}
-            </p>
-            <p className="roles text-xs font-medium text-alternative">
-              {userRoles.toUpperCase()}
-            </p>
-          </div>
-        </Link>
+        <UserBadgeCMS sessionToken={sessionToken} />
 
         {/* --- Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">
@@ -123,12 +107,16 @@ export default function SidebarCMS({
         {/* --- Logout Button */}
         <div
           className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-[15px] font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
-            isLoading ? "opacity-50 cursor-not-allowed" : ""
+            isLoadingButton ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onClick={handleLogout}
         >
           <div className="flex size-5 items-center justify-center">
-            {isLoading ? <Loader2 className="animate-spin" /> : <DoorOpen />}
+            {isLoadingButton ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <DoorOpen />
+            )}
           </div>
           Logout
         </div>

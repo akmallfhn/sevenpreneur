@@ -88,7 +88,8 @@ export default async function AdminLayout(
   // --- Get Cookie
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  console.log("session_token", sessionToken);
+
+  if (!sessionToken) return null;
 
   return (
     <TRPCProvider baseURL={baseURL}>
@@ -97,12 +98,7 @@ export default async function AdminLayout(
           className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
         >
           <GoogleOAuthProvider clientId={googleOauthId}>
-            <SidebarCMS
-              userAvatar={""}
-              userName={"Akmal Luthfiansyah Bin Zayed"}
-              userRoles={"striker timnas"}
-              currentDomain={domain}
-            />
+            <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
             {props.children}
           </GoogleOAuthProvider>
         </body>
