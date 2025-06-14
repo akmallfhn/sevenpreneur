@@ -41,10 +41,40 @@ export default function UserProfileDetailCMS({
   }, [sessionToken]);
 
   // --- Return Data from TRPC
-  const { data, isLoading } = trpc.read.user.useQuery(
+  const {
+    data: userDetailData,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = trpc.read.user.useQuery(
     { id: userId },
-    { enabled: !!userId }
+    {
+      enabled: !!sessionToken,
+    }
   );
+
+  const {
+    data: rolesData,
+    isLoading: isLoadingRoles,
+    isError: isErrorRoles,
+  } = trpc.list.roles.useQuery(undefined, { enabled: !!sessionToken });
+
+  const {
+    data: industriesData,
+    isLoading: isLoadingIndustries,
+    isError: isErrorIndustries,
+  } = trpc.list.industries.useQuery(undefined, { enabled: !!sessionToken });
+
+  const {
+    data: stagesData,
+    isLoading: isLoadingStages,
+    isError: isErrorStages,
+  } = trpc.list.entrepreneurStages.useQuery(undefined, {
+    enabled: !!sessionToken,
+  });
+
+  // Extract variable
+  const isLoading = isLoadingRoles || isLoadingIndustries || isLoadingStages;
+  const isError = isErrorRoles || isErrorIndustries || isErrorStages;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -52,7 +82,7 @@ export default function UserProfileDetailCMS({
       </div>
     );
   }
-  if (!data) {
+  if (isError) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
         No Data
@@ -81,7 +111,10 @@ export default function UserProfileDetailCMS({
             <div className="user-avatar max-w-24 border-4 border-white aspect-square rounded-4xl overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
-                src={data.user.avatar || "https://i.pravatar.cc/150?img=3"}
+                src={
+                  userDetailData?.user.avatar ||
+                  "https://i.pravatar.cc/150?img=3"
+                }
                 alt="Foto Profile"
                 width={500}
                 height={500}
@@ -89,16 +122,16 @@ export default function UserProfileDetailCMS({
             </div>
             <div className="user-name-login flex flex-col gap-1">
               <h2 className="user-name font-brand text-lg font-bold">
-                {data.user.full_name}
+                {userDetailData?.user.full_name}
               </h2>
               <p className="last-login font-bodycopy font-medium text-alternative text-sm">
-                Last login {dayjs(data.user.last_login).fromNow()}
+                Last login {dayjs(userDetailData?.user.last_login).fromNow()}
               </p>
             </div>
             <div className="user-id-container flex font-bodycopy font-medium items-center gap-2">
               <p className="user-id p-1 px-2 bg-white  border border-[#E3E3E3] rounded-full text-sm">
                 <span className="font-bold text-black">User ID:</span>{" "}
-                {data.user.id}
+                {userDetailData?.user.id}
               </p>
             </div>
           </div>
@@ -115,7 +148,7 @@ export default function UserProfileDetailCMS({
               inputName={"Full Name"}
               inputType={"text"}
               inputIcon={<User2 className="size-5" />}
-              value={data.user.full_name || ""}
+              value={userDetailData?.user.full_name || ""}
               disabled={true}
               required={true}
             />
@@ -124,7 +157,7 @@ export default function UserProfileDetailCMS({
               inputName={"Email"}
               inputType={"email"}
               inputIcon={<AtSign className="size-5" />}
-              value={data.user.email || ""}
+              value={userDetailData?.user.email || ""}
               disabled={true}
               required={true}
             />
@@ -133,13 +166,13 @@ export default function UserProfileDetailCMS({
               selectName={"Role"}
               selectIcon={<KeyRound className="size-5" />}
               selectPlaceholder="Select Role"
-              value={"admin"}
+              value={1}
               disabled={true}
               required={true}
-              options={[
-                { value: "admin", label: "Administrator" },
-                { value: "class manager", label: "Class Manager" },
-              ]}
+              options={rolesData?.list?.map((post) => ({
+                label: post.name,
+                value: post.id,
+              }))}
             />
 
             <div className="select-group-component flex flex-col gap-1">
@@ -151,8 +184,8 @@ export default function UserProfileDetailCMS({
                 Status <span className="text-red-700">*</span>
               </label>
               <StatusLabelCMS
-                labelName={data.user.status.toLowerCase()}
-                variants={data.user.status.toLowerCase()}
+                labelName={userDetailData?.user.status.toLowerCase()}
+                variants={userDetailData?.user.status.toLowerCase()}
               />
             </div>
           </div>
@@ -169,7 +202,7 @@ export default function UserProfileDetailCMS({
             textAreaName={"Learning Goal"}
             textAreaPlaceholder={"None"}
             textAreaHeight={"h-[120px]"}
-            value={data.user.learning_goal || ""}
+            value={userDetailData?.user.learning_goal || ""}
             disabled={true}
           />
         </div>
@@ -186,7 +219,7 @@ export default function UserProfileDetailCMS({
               inputType={"text"}
               inputPlaceholder={"None"}
               inputIcon={<Building2 className="size-5" />}
-              value={data.user.business_name || ""}
+              value={userDetailData?.user.business_name || ""}
               disabled={true}
             />
             <SelectCMS
@@ -194,24 +227,26 @@ export default function UserProfileDetailCMS({
               selectName={"Entrepreneur Stage"}
               selectIcon={<Sprout className="size-5" />}
               selectPlaceholder="None"
-              value={data.user.entrepreneur_stage_id}
+              value={userDetailData?.user.entrepreneur_stage_id}
               disabled={true}
-              options={[
-                { value: 1, label: "Aspiring Entrepreneur" },
-                { value: 2, label: "Growth" },
-              ]}
+              options={stagesData?.list?.map((post) => ({
+                label: post.name,
+                value: post.id,
+              }))}
             />
             <SelectCMS
               selectId={"industry"}
               selectName={"Business Industry"}
               selectIcon={<Flag className="size-5" />}
               selectPlaceholder="None"
-              value={data.user.industry_id}
+              value={userDetailData?.user.industry_id}
               disabled={true}
-              options={[
-                { value: 36, label: "Technology" },
-                { value: 2, label: "Education" },
-              ]}
+              options={
+                industriesData?.list?.map((post) => ({
+                  label: post.name,
+                  value: post.id,
+                })) || []
+              }
             />
           </div>
         </div>

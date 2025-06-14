@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import UserItemListCMS from "./UserItemListCMS";
+import UserItemListCMS from "../elements/UserItemListCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 

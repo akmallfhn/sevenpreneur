@@ -39,7 +39,7 @@ export default function UserBadgeCMS({ sessionToken }: UserBadgeCMSProps) {
       href={"/"}
       className="user-roles-container flex w-full p-2 px-3 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg"
     >
-      <div className="avatar aspect-square w-10 rounded-full overflow-hidden">
+      <div className="avatar aspect-square w-9 rounded-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"
           src={
