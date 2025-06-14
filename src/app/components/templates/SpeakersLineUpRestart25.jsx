@@ -17,6 +17,12 @@ export default function SpeakersLineUpRestart25() {
         "https://static.wixstatic.com/media/02a5b1_7933f447a8d443359f3c9d07c6a40a08~mv2.webp",
     },
     {
+      name: "Sigit Djokosoetono",
+      title: "Deputy CEO Blue Bird Group",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//sigit-djokosoetono.webp",
+    },
+    {
       name: "Denny Santoso",
       title: "Founder & CEO BrainBoost",
       image:
@@ -27,6 +33,12 @@ export default function SpeakersLineUpRestart25() {
       title: "General Practitioner & Creativepreneur",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//dr-tirta.webp",
+    },
+    {
+      name: "Zaky Muhammad Syah",
+      title: "CEO dibimbing and Cakrawala University",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//zack.webp",
     },
     {
       name: "Bhima Yudhistira",

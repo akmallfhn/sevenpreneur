@@ -36,8 +36,8 @@ export default function HeroEventRestart2025() {
 
       {/* --- Brand Representative */}
       <Image
-        className="brand-representative absolute flex max-w-[420px] top-[108px] left-1/2 -translate-x-1/2 z-30 lg:max-w-[860px] lg:top-[186px]"
-        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//brand-representative-7p.webp"
+        className="brand-representative absolute flex max-w-[380px] top-[108px] left-1/2 -translate-x-1/2 z-30 lg:max-w-[904px] lg:top-[186px]"
+        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//restart-representative.webp"
         alt="Sevenpreneur Brand Representative"
         width={2440}
         height={2440}
