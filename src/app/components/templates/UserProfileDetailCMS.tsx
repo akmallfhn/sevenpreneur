@@ -166,7 +166,7 @@ export default function UserProfileDetailCMS({
               selectName={"Role"}
               selectIcon={<KeyRound className="size-5" />}
               selectPlaceholder="Select Role"
-              value={1}
+              value={userDetailData?.user.role.id}
               disabled={true}
               required={true}
               options={rolesData?.list?.map((post) => ({
