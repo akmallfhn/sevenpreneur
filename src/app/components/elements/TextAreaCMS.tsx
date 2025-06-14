@@ -29,7 +29,7 @@ export default function TextAreaCMS({
   // --- Declaration state
   const [value, setValue] = useState(propValue);
   const [error, setError] = useState("");
-  const maxLength = characterLength ?? 128;
+  const maxLength = characterLength ?? 520;
   const errMsg = errorMessage ?? "Oops, you’ve reached the character limit.";
 
   // --- Character Limitation on Input

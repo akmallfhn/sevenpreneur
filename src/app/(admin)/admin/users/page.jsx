@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import AppButton from "@/app/components/elements/AppButton";
 import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
 import { PlusCircle } from "lucide-react";
-import UserListCMS from "@/app/components/elements/UserListCMS";
+import UserListCMS from "@/app/components/templates/UserListCMS";
 
 export default async function UserListPage() {
   const cookieStore = await cookies();
