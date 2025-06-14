@@ -82,6 +82,11 @@ export const readRouter = createTRPCRouter({
     )
     .query(async (opts) => {
       const theUser = await opts.ctx.prisma.user.findFirst({
+        include: {
+          role: true,
+          entrepreneur_stage: true,
+          industry: true,
+        },
         where: { id: opts.input.id },
       });
       if (!theUser) {
