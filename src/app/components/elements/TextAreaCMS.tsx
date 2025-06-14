@@ -1,6 +1,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
+interface TextAreaCMSProps {
+  textAreaId: string;
+  textAreaName: string;
+  textAreaHeight?: string;
+  textAreaPlaceholder?: string;
+  characterLength?: number;
+  errorMessage?: string;
+  onInputChange?: (value: string) => void;
+  value: string;
+  disabled?: boolean;
+  required?: boolean;
+}
+
 export default function TextAreaCMS({
   textAreaId,
   textAreaName,
@@ -12,17 +25,18 @@ export default function TextAreaCMS({
   value: propValue,
   disabled,
   required,
-}) {
+}: TextAreaCMSProps) {
   // --- Declaration state
   const [value, setValue] = useState(propValue);
   const [error, setError] = useState("");
-  const maxLength = characterLength;
+  const maxLength = characterLength ?? 128;
+  const errMsg = errorMessage ?? "Oops, you’ve reached the character limit.";
 
   // --- Character Limitation on Input
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = event.target.value;
     if (newValue.length > maxLength) {
-      setError(errorMessage);
+      setError(errMsg);
       setValue(newValue.slice(0, maxLength));
       if (onInputChange) onInputChange(newValue.slice(0, maxLength));
       return;

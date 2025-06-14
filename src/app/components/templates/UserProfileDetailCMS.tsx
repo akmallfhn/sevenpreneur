@@ -24,7 +24,15 @@ import {
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
-export default function UserProfileDetailCMS({ sessionToken, userId }) {
+interface UserProfileDetailCMSProps {
+  sessionToken: string;
+  userId: string;
+}
+
+export default function UserProfileDetailCMS({
+  sessionToken,
+  userId,
+}: UserProfileDetailCMSProps) {
   // --- Set Session Token to Header
   useEffect(() => {
     if (sessionToken) {
@@ -97,7 +105,7 @@ export default function UserProfileDetailCMS({ sessionToken, userId }) {
         </div>
 
         {/* --- Personal Information */}
-        <div className="personal-information-container flex flex-col w-full h-fit bg-[#FAFAFA] gap-2 p-5 rounded-xl overflow-hidden">
+        <div className="personal-information-container flex flex-col w-full h-fit bg-[#FAFAFA] gap-5 p-5 rounded-xl">
           <h2 className="label-name font-brand font-bold">
             Personal Information
           </h2>
@@ -124,12 +132,16 @@ export default function UserProfileDetailCMS({ sessionToken, userId }) {
               selectId={"role"}
               selectName={"Role"}
               selectIcon={<KeyRound className="size-5" />}
+              selectPlaceholder="Select Role"
+              value={"admin"}
               disabled={true}
               required={true}
-            >
-              <option value={"test"}>Administrator</option>
-              <option value={"test"}>Class Manager</option>
-            </SelectCMS>
+              options={[
+                { value: "admin", label: "Administrator" },
+                { value: "class manager", label: "Class Manager" },
+              ]}
+            />
+
             <div className="select-group-component flex flex-col gap-1">
               {/* --- Label */}
               <label
@@ -179,22 +191,28 @@ export default function UserProfileDetailCMS({ sessionToken, userId }) {
             />
             <SelectCMS
               selectId={"entrepreneur-stage"}
-              selectName={"Stage"}
+              selectName={"Entrepreneur Stage"}
               selectIcon={<Sprout className="size-5" />}
+              selectPlaceholder="None"
+              value={data.user.entrepreneur_stage_id}
               disabled={true}
-            >
-              <option value={"test"}>Growth Stage</option>
-              <option value={"test"}>Aspiring</option>
-            </SelectCMS>
+              options={[
+                { value: 1, label: "Aspiring Entrepreneur" },
+                { value: 2, label: "Growth" },
+              ]}
+            />
             <SelectCMS
-              selectId={"Industry"}
+              selectId={"industry"}
               selectName={"Business Industry"}
               selectIcon={<Flag className="size-5" />}
+              selectPlaceholder="None"
+              value={data.user.industry_id}
               disabled={true}
-            >
-              <option value={"test"}>Media & News</option>
-              <option value={"test"}>Agrotechno</option>
-            </SelectCMS>
+              options={[
+                { value: 36, label: "Technology" },
+                { value: 2, label: "Education" },
+              ]}
+            />
           </div>
         </div>
       </div>

@@ -131,6 +131,9 @@ export default function CreateUserPage() {
                   selectId={"role"}
                   selectName={"Role"}
                   selectIcon={<KeyRound className="size-5" />}
+                  selectPlaceholder="Select Role..."
+                  value={formData.roleId}
+                  onChange={(e) => handleInputChange("roleId")(e.target.value)}
                   required={true}
                   options={[
                     { label: "Admin", value: "admin" },
