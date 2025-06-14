@@ -25,12 +25,17 @@ dayjs.extend(relativeTime);
 
 export default function UserProfileDetailCMS({ sessionToken, userId }) {
   // --- Set Session Token to Header
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  useEffect(() => {
+    if (sessionToken) {
+      setSessionToken(sessionToken);
+    }
+  }, [sessionToken]);
 
   // --- Return Data from TRPC
-  const { data, isLoading } = trpc.read.user.useQuery({ id: userId });
+  const { data, isLoading } = trpc.read.user.useQuery(
+    { id: userId },
+    { enabled: !!userId }
+  );
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
