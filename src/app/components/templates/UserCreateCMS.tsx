@@ -49,18 +49,17 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     console.log("Submitted data:", formData);
   };
 
+  // --- Return data from tRPC
   const {
     data: rolesData,
     isLoading: isLoadingRoles,
     isError: isErrorRoles,
   } = trpc.list.roles.useQuery(undefined, { enabled: !!sessionToken });
-
   const {
     data: industriesData,
     isLoading: isLoadingIndustries,
     isError: isErrorIndustries,
   } = trpc.list.industries.useQuery(undefined, { enabled: !!sessionToken });
-
   const {
     data: stagesData,
     isLoading: isLoadingStages,
@@ -115,9 +114,9 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
             >
               Avatar
             </label>
-            {/* <AppButton variant="outline" size="small">
+            <AppButton variant="outline" size="small">
               Add Photo
-            </AppButton> */}
+            </AppButton>
           </div>
         </div>
 

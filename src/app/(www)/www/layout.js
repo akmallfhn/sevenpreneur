@@ -5,7 +5,7 @@ import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
 import localFont from "next/font/local";
 import TopNavbar from "../../components/templates/TopNavbarRestart25";
-import BottomFooter from "../../components/templates/BottomFooter";
+import AppBottomFooter from "../../components/templates/AppBottomFooter";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -94,7 +94,7 @@ export default function RootLayout({ children }) {
         <GoogleOAuthProvider clientId={googleOauthId}>
           <TopNavbar />
           {children}
-          <BottomFooter />
+          <AppBottomFooter />
         </GoogleOAuthProvider>
 
         {/* --- Google Analytics */}
