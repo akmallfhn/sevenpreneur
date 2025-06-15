@@ -47,6 +47,11 @@ export const authRouter = createTRPCRouter({
           code: "FORBIDDEN",
           message: "Your account has been inactivated.",
         });
+      } else if (findUser.deleted_at !== null) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: `Your account has been deleted (${findUser.deleted_at}).`,
+        });
       } else {
         if (!findUser.avatar && userInfo.picture) {
           // $executeRaw is used for counting updated avatars.

@@ -56,6 +56,7 @@ export const listRouter = createTRPCRouter({
     const userList = await opts.ctx.prisma.user.findMany({
       include: { role: true },
       orderBy: [{ role_id: "asc" }, { full_name: "asc" }],
+      where: { deleted_at: null },
     });
     const returnedList = userList.map((entry) => {
       return {

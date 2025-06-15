@@ -39,7 +39,10 @@ export const updateRouter = createTRPCRouter({
           business_name: opts.input.business_name,
           industry_id: opts.input.industry_id,
         },
-        where: { id: opts.input.id },
+        where: {
+          id: opts.input.id,
+          deleted_at: null,
+        },
       });
       if (updatedUser.length < 1) {
         throw new TRPCError({

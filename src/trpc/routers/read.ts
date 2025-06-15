@@ -87,7 +87,10 @@ export const readRouter = createTRPCRouter({
           entrepreneur_stage: true,
           industry: true,
         },
-        where: { id: opts.input.id },
+        where: {
+          id: opts.input.id,
+          deleted_at: null,
+        },
       });
       if (!theUser) {
         throw new TRPCError({
