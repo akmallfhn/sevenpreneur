@@ -60,7 +60,7 @@ export default function SidebarCMS({
               height={200}
             />
           </div>
-          <div className="platform max-w-[132px]">
+          <div className="platform max-w-[132px] text-black">
             <p className="font-brand font-bold">Sevenpreneur</p>
             <p className="font-brand text-xs">Content Management System</p>
           </div>

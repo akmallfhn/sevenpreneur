@@ -61,7 +61,7 @@ export default function SelectCMS({
       {/* --- Label */}
       <label
         htmlFor={selectId}
-        className="flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
+        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {selectName}
         {required && <span className="text-red-700">*</span>}

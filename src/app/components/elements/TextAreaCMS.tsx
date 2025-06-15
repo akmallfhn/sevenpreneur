@@ -57,7 +57,7 @@ export default function TextAreaCMS({
       {/* --- Label */}
       <label
         htmlFor={textAreaId}
-        className="flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
+        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {textAreaName}
         {required && <span className="text-red-700">*</span>}

@@ -69,7 +69,7 @@ export default function UserItemListCMS({
         {/* --- User Name & Email */}
         <div className="user-name-email flex flex-col">
           <Link href={`/users/${userId}`}>
-            <h2 className="user-name font-bold font-bodycopy line-clamp-1">
+            <h2 className="user-name font-bold font-bodycopy text-black line-clamp-1">
               {userName}
             </h2>
           </Link>
