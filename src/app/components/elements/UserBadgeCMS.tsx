@@ -52,7 +52,7 @@ export default function UserBadgeCMS({ sessionToken }: UserBadgeCMSProps) {
         />
       </div>
       <div className="user-roles flex flex-col gap-0">
-        <p className="user text-sm font-brand font-semibold line-clamp-1">
+        <p className="user text-sm font-brand font-semibold text-black line-clamp-1">
           {data.user.full_name}
         </p>
         <p className="roles text-xs font-bodycopy font-semibold text-alternative">

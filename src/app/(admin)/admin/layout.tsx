@@ -93,7 +93,7 @@ export default async function AdminLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <html lang="en">
+      <html lang="en" className="bg-white">
         <body
           className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
         >

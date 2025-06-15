@@ -59,7 +59,7 @@ export default function InputCMS({
       {/* --- Label */}
       <label
         htmlFor={inputId}
-        className="flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
+        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {inputName}
         {required && <span className="text-red-700">*</span>}

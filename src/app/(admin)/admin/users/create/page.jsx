@@ -10,7 +10,7 @@ export default async function CreateUserPage() {
   const sessionToken = cookieStore.get("session_token")?.value;
 
   return (
-    <div className="root flex w-full h-full justify-center bg-main-root py-8 overflow-y-auto lg:pl-64">
+    <div className="root flex w-full h-full bg-white justify-center bg-main-root py-8 overflow-y-auto lg:pl-64">
       <div className="index-article w-[1040px] flex flex-col gap-4">
         {/* --- PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
