@@ -4,6 +4,7 @@ import { createRouter } from "./create";
 import { helloRouter } from "./hello";
 import { listRouter } from "./list";
 import { readRouter } from "./read";
+import { updateRouter } from "./update";
 
 export const appRouter = createTRPCRouter({
   hello: helloRouter,
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   list: listRouter,
   create: createRouter,
   read: readRouter,
+  update: updateRouter,
 });
 
 export type AppRouter = typeof appRouter;
