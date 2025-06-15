@@ -1,6 +1,6 @@
 "use client";
 import { ChevronDown } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface OptionType {
   label: string;
@@ -13,7 +13,7 @@ interface SelectCMSProps {
   selectIcon: React.ReactNode;
   selectPlaceholder: string;
   value: any;
-  onChange?: (e: { target: { value: string } }) => void;
+  onChange?: (value: any) => void;
   disabled?: boolean;
   required?: boolean;
   options?: OptionType[];
@@ -106,7 +106,7 @@ export default function SelectCMS({
                   key={opt.value}
                   onClick={(e) => {
                     e.stopPropagation();
-                    onChange?.({ target: { value: opt.value } });
+                    onChange?.(opt.value);
                     setOpen(false);
                   }}
                   className={`px-4 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-cms-primary ${
