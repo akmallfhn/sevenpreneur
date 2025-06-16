@@ -6,17 +6,34 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import StatusLabelCMS from "./StatusLabelCMS";
+import StatusLabelCMS, { Variant } from "./StatusLabelCMS";
 import AppButton from "./AppButton";
 import AttributeLabelCMS from "./AttributeLabelCMS";
 import DropdownMenuCMS from "./DropdownMenuCMS";
 import { EllipsisVertical, Eye, Settings2, Trash2 } from "lucide-react";
+import { trpc } from "@/trpc/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(timezone);
 dayjs.extend(utc);
 
+interface UserItemListCMSProps {
+  sessionToken: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  userEmail: string;
+  userRole: string;
+  userStatus: string;
+  createdAt: string;
+  lastLogin: string;
+  onDeleteSuccess?: () => void;
+}
+
 export default function UserItemListCMS({
+  sessionToken,
   userId,
   userName,
   userAvatar,
@@ -25,21 +42,29 @@ export default function UserItemListCMS({
   userStatus,
   createdAt,
   lastLogin,
-}) {
+  onDeleteSuccess,
+}: UserItemListCMSProps) {
+  const router = useRouter();
+
   // --- State untuk menyimpan status dropdown
   const [isActionsOpened, setIsActionsOpened] = useState(false);
-  const wrapperRef = useRef(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // --- Fungsi untuk membuka dan menutup share dropdown
-  const handleActionsDropdown = (e) => {
+  // --- Open and close dropdown
+  const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Fungsi untuk menutup share dropdown di luar toggle
+  // --- Close dropdown outside toggle
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+    const handleClickOutside = (
+      event: MouseEvent | (MouseEvent & { target: Node })
+    ) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsActionsOpened(false);
       }
     };
@@ -50,8 +75,27 @@ export default function UserItemListCMS({
   }, []);
 
   // --- Insert Role Data to Variant
-  const equalizingRoleVariant = (role) =>
+  const equalizingRoleVariant = (role: string) =>
     role.toLowerCase().replace(/\s+/g, "_");
+
+  // --- Function to delete user
+  const deleteUser = trpc.delete.user.useMutation();
+  const handleDelete = () => {
+    deleteUser.mutate(
+      { id: userId },
+      {
+        onSuccess: () => {
+          toast.success("Delete success");
+          onDeleteSuccess?.();
+        },
+        onError: (err) => {
+          toast.error("Failed to delete user", {
+            description: `${err}`,
+          });
+        },
+      }
+    );
+  };
 
   return (
     <div className="user-item flex items-center">
@@ -104,8 +148,8 @@ export default function UserItemListCMS({
         {/* --- Status */}
         <div className="status max-w-[102px] w-full shrink-0 text-left">
           <StatusLabelCMS
-            labelName={userStatus.toUpperCase()}
-            variants={userStatus.toUpperCase()}
+            labelName={userStatus}
+            variants={userStatus as Variant}
           />
         </div>
 
@@ -123,7 +167,7 @@ export default function UserItemListCMS({
             isOpen={isActionsOpened}
             onClose={() => setIsActionsOpened(false)}
           >
-            {/* --- View */}
+            {/* -- View */}
             <Link
               href={`/users/${userId}`}
               className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
@@ -132,7 +176,7 @@ export default function UserItemListCMS({
               View
             </Link>
 
-            {/* --- Edit */}
+            {/* -- Edit */}
             <Link
               href={`/users/${userId}/edit`}
               className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
@@ -141,8 +185,11 @@ export default function UserItemListCMS({
               Edit
             </Link>
 
-            {/* --- Delete */}
-            <div className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-[#E62314] hover:bg-[#FFCDC9] hover:cursor-pointer">
+            {/* -- Delete */}
+            <div
+              onClick={handleDelete}
+              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-[#E62314] hover:bg-[#FFCDC9] hover:cursor-pointer"
+            >
               <Trash2 className="size-4" />
               Delete
             </div>

@@ -16,6 +16,9 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
     }
   }, [sessionToken]);
 
+  // --- Trigger to refetch component
+  const utils = trpc.useUtils();
+
   // --- Return data from tRPC
   const { data, isLoading, isError } = trpc.list.users.useQuery(undefined, {
     enabled: !!sessionToken,
@@ -40,14 +43,16 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
       {data?.list.map((post, index) => (
         <UserItemListCMS
           key={index}
+          sessionToken={sessionToken}
           userId={post.id}
           userName={post.full_name}
           userEmail={post.email}
-          userAvatar={post.avatar}
+          userAvatar={post.avatar ?? undefined}
           userRole={post.role_name}
-          userStatus={post.status.toLowerCase()}
+          userStatus={post.status}
           createdAt={post.created_at}
           lastLogin={post.last_login}
+          onDeleteSuccess={() => utils.list.users.invalidate()}
         />
       ))}
     </div>

@@ -43,10 +43,10 @@ export default function StatusLabelCMS({
 
   return (
     <div
-      className={`label-container inline-flex py-[2px] px-[10px] w-fit rounded-full items-center justify-center gap-1 text-xs font-medium font-bodycopy ${backgroundColor} ${labelColor}`}
+      className={`label-container inline-flex py-[2px] px-[10px] w-fit rounded-full items-center justify-center gap-1 text-xs font-semibold font-bodycopy ${backgroundColor} ${labelColor}`}
     >
       <div className={`flex size-2 rounded-full ${signColor}`} />
-      {formattedLabel}
+      {labelName}
     </div>
   );
 }
