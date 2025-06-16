@@ -4,15 +4,25 @@ import Link from "next/link";
 import Image from "next/image";
 import AppButton from "@/app/components/elements/AppButton";
 import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
-import { CalendarRange, Loader2, PlusCircle, Save } from "lucide-react";
 import InputCMS from "@/app/components/elements/InputCMS";
 import SelectCMS from "@/app/components/elements/SelectCMS";
 import StatusLabelCMS from "@/app/components/elements/StatusLabelCMS";
 import TextAreaCMS from "@/app/components/elements/TextAreaCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { User2, AtSign, KeyRound, Building2, Sprout, Flag } from "lucide-react";
+import {
+  User2,
+  AtSign,
+  KeyRound,
+  Building2,
+  Sprout,
+  Flag,
+  CalendarRange,
+  Loader2,
+  Save,
+} from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import dayjs from "dayjs";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -144,16 +154,24 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
           email: formData.email,
           role_id: Number(formData.roleId),
           status: formData.status,
-          date_of_birth: formData.dateOfBirth
-            ? new Date(formData.dateOfBirth)
+          // date_of_birth: formData.dateOfBirth.trim()
+          //   ? formData.dateOfBirth
+          //   : undefined,
+          learning_goal: formData.learningGoal.trim()
+            ? formData.learningGoal
             : undefined,
-          learning_goal: formData.learningGoal,
-          entrepreneur_stage_id: Number(formData.entrepreneurStage),
-          business_name: formData.businessName,
-          industry_id: Number(formData.industry),
+          entrepreneur_stage_id: formData.entrepreneurStage
+            ? Number(formData.entrepreneurStage)
+            : undefined,
+          business_name: formData.businessName.trim()
+            ? formData.businessName
+            : undefined,
+          industry_id: formData.industry
+            ? Number(formData.industry)
+            : undefined,
         },
         {
-          onSuccess: (data) => {
+          onSuccess: () => {
             toast.success("New user created");
             setFormData({
               fullName: "",
