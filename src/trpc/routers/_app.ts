@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { authRouter } from "./auth";
 import { createRouter } from "./create";
+import { deleteRouter } from "./delete";
 import { helloRouter } from "./hello";
 import { listRouter } from "./list";
 import { readRouter } from "./read";
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   create: createRouter,
   read: readRouter,
   update: updateRouter,
+  delete: deleteRouter,
 });
 
 export type AppRouter = typeof appRouter;
