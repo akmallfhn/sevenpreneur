@@ -100,7 +100,10 @@ export default function UserItemListCMS({
 
         {/* --- Status */}
         <div className="status max-w-[102px] w-full shrink-0 text-left">
-          <StatusLabelCMS labelName={userStatus} variants={userStatus} />
+          <StatusLabelCMS
+            labelName={userStatus.toUpperCase()}
+            variants={userStatus.toUpperCase()}
+          />
         </div>
 
         {/* --- Actions */}
