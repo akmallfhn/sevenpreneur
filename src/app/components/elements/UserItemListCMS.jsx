@@ -60,7 +60,10 @@ export default function UserItemListCMS({
         <div className="flex size-10 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={userAvatar}
+            src={
+              userAvatar ||
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+            }
             alt={`Image ${userName}`}
             width={300}
             height={300}
