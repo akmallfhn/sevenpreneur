@@ -1,6 +1,7 @@
 import { administratorProcedure, createTRPCRouter } from "@/trpc/init";
 import {
   numberIsID,
+  numberIsRoleID,
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -16,9 +17,9 @@ export const updateRouter = createTRPCRouter({
         full_name: stringNotBlank().optional(),
         email: stringNotBlank().optional(),
         avatar: stringNotBlank().optional(),
-        role_id: numberIsID().optional(),
+        role_id: numberIsRoleID().optional(),
         status: z.nativeEnum(StatusEnum).optional(),
-        date_of_birth: z.date().optional(),
+        date_of_birth: z.string().date().optional(),
         learning_goal: stringNotBlank().optional(),
         entrepreneur_stage_id: numberIsID().optional(),
         business_name: stringNotBlank().optional(),
