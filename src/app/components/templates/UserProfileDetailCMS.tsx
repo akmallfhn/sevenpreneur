@@ -201,15 +201,12 @@ export default function UserProfileDetailCMS({
                   htmlFor={"status"}
                   className="flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
                 >
-                  Status <span className="text-red-700">*</span>
+                  Status <span className="text-red-700">*</span>{" "}
                 </label>
                 <StatusLabelCMS
-                  labelName={
-                    userDetailData?.user.status.toUpperCase() ?? "INACTIVE"
-                  }
+                  labelName={userDetailData?.user.status ?? "INACTIVE"}
                   variants={
-                    (userDetailData?.user.status.toUpperCase() ??
-                      "INACTIVE") as Variant
+                    (userDetailData?.user.status ?? "INACTIVE") as Variant
                   }
                 />
               </div>

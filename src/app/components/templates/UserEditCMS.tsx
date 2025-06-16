@@ -84,7 +84,9 @@ export default function EditUserForm({
     email: initialData?.user.email || "",
     roleId: initialData?.user.role.id ?? "",
     status: initialData?.user.status || "ACTIVE",
-    dateOfBirth: initialData?.user.date_of_birth || "",
+    dateOfBirth: initialData?.user.date_of_birth
+      ? new Date(initialData?.user.date_of_birth).toISOString().split("T")[0]
+      : "",
     learningGoal: initialData?.user.learning_goal || "",
     businessName: initialData?.user.business_name || "",
     industry: initialData?.user.industry_id || "",
@@ -99,7 +101,11 @@ export default function EditUserForm({
         email: initialData.user.email || "",
         roleId: initialData.user.role.id ?? "",
         status: initialData.user.status || "ACTIVE",
-        dateOfBirth: initialData.user.date_of_birth || "",
+        dateOfBirth: initialData?.user.date_of_birth
+          ? new Date(initialData?.user.date_of_birth)
+              .toISOString()
+              .split("T")[0]
+          : "",
         learningGoal: initialData.user.learning_goal || "",
         businessName: initialData.user.business_name || "",
         industry: initialData.user.industry_id || "",
@@ -206,6 +212,7 @@ export default function EditUserForm({
         {
           onSuccess: () => {
             toast.success("Edited Succesfully");
+            router.push(`/users/${userId}`);
           },
           onError: (err) => {
             toast.error("Failed to update", {

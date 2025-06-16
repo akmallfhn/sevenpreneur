@@ -185,6 +185,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
               industry: "",
               entrepreneurStage: "",
             });
+            router.push("/users");
           },
           onError: (err) => {
             toast.error("Failed to create user", {

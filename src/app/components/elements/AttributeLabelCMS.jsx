@@ -1,7 +1,6 @@
 "use client";
 import {
   faBuildingUser,
-  faChalkboardTeacher,
   faChalkboardUser,
   faPenNib,
   faUser,
