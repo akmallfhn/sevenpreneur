@@ -1,8 +1,4 @@
 import { cookies } from "next/headers";
-import Link from "next/link";
-import AppButton from "@/app/components/elements/AppButton";
-import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
-import { Save } from "lucide-react";
 import CreateUserForm from "@/app/components/templates/UserCreateCMS";
 
 export default async function CreateUserPage() {

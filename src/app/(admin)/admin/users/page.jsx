@@ -10,7 +10,7 @@ export default async function UserListPage() {
   const sessionToken = cookieStore.get("session_token")?.value;
 
   return (
-    <div className="root flex w-full h-full bg-white justify-center bg-main-root py-8 overflow-y-auto lg:pl-64">
+    <div className="root flex w-full h-full bg-white justify-center bg-main-root py-8 pb-24 overflow-y-auto lg:pl-64">
       <div className="index-article w-[1040px] flex flex-col gap-4">
         {/* --- PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
@@ -36,7 +36,7 @@ export default async function UserListPage() {
         {/* --- TABLE  */}
         <div className="flex flex-col gap-7 bg-white pb-7 rounded-md shadow-md">
           {/* --- Column Name */}
-          <div className="column-name flex px-7 p-4 items-center font-bodycopy font-semibold text-alternative text-sm bg-[#f5f5f5] border-b border-[#e3e3e3]">
+          <div className="column-name flex px-7 p-4 items-center font-bodycopy font-semibold text-alternative text-sm bg-[#f5f5f5] border-b border-[#e3e3e3] rounded-t-md">
             <div className="max-w-[380px] w-full shrink-0 text-xs">USER</div>
             <div className="flex items-center gap-7 text-xs">
               <div className="max-w-[120px] w-full shrink-0">ROLE</div>
