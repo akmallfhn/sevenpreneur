@@ -8,6 +8,7 @@ import SidebarCMS from "@/app/components/templates/SidebarCMS";
 import localFont from "next/font/local";
 import { createCallerFactory, createTRPCContext } from "@/trpc/init";
 import { authRouter } from "@/trpc/routers/auth";
+import { Toaster } from "sonner";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -100,6 +101,7 @@ export default async function AdminLayout(
           <GoogleOAuthProvider clientId={googleOauthId}>
             <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
             {props.children}
+            <Toaster richColors />
           </GoogleOAuthProvider>
         </body>
       </html>

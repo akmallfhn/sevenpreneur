@@ -5,7 +5,7 @@ import InputCMS from "../elements/InputCMS";
 import SelectCMS from "../elements/SelectCMS";
 import AppButton from "../elements/AppButton";
 import TextAreaCMS from "../elements/TextAreaCMS";
-import StatusLabelCMS from "../elements/StatusLabelCMS";
+import StatusLabelCMS, { Variant } from "../elements/StatusLabelCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -184,8 +184,13 @@ export default function UserProfileDetailCMS({
                 Status <span className="text-red-700">*</span>
               </label>
               <StatusLabelCMS
-                labelName={userDetailData?.user.status.toLowerCase()}
-                variants={userDetailData?.user.status.toLowerCase()}
+                labelName={
+                  userDetailData?.user.status.toUpperCase() ?? "INACTIVE"
+                }
+                variants={
+                  (userDetailData?.user.status.toUpperCase() ??
+                    "INACTIVE") as Variant
+                }
               />
             </div>
           </div>

@@ -11,20 +11,33 @@ import StatusLabelCMS from "@/app/components/elements/StatusLabelCMS";
 import TextAreaCMS from "@/app/components/elements/TextAreaCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { User2, AtSign, KeyRound, Building2, Sprout, Flag } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
 
 interface CreateUserFormProps {
   sessionToken: string;
 }
 
 export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
+  const createUser = trpc.create.user.useMutation();
+
   // --- Beginning State
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState("");
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    fullName: string;
+    email: string;
+    roleId: string;
+    status: "ACTIVE" | "INACTIVE";
+    dateOfBirth: string;
+    learningGoal: string;
+    businessName: string;
+    industry: string;
+    entrepreneurStage: string;
+  }>({
     fullName: "",
     email: "",
     roleId: "",
-    status: "",
+    status: "ACTIVE",
     dateOfBirth: "",
     learningGoal: "",
     businessName: "",
@@ -102,57 +115,101 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
 
     // -- Required field checking
     if (!formData.fullName) {
-      setStatus("Need fill fullname field");
+      toast.error("Oops! Something's missing.", {
+        description: "Please complete user full name before submitting.",
+      });
       setIsSubmitting(false);
       return;
     }
     if (!formData.email) {
-      setStatus("Need email field");
+      toast.error("Oops! Something's missing.", {
+        description: "Please complete user email before submitting.",
+      });
       setIsSubmitting(false);
       return;
     }
     if (formData.roleId === "") {
-      setStatus("Need role field");
+      toast.error("Oops! Something's missing.", {
+        description: "Please complete user role before submitting.",
+      });
       setIsSubmitting(false);
       return;
     }
 
     // -- POST to Database
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          access_key: "f8d001c0-baaa-4215-9a6d-3555466f16cc",
-          fullName: formData.fullName,
+      createUser.mutate(
+        {
+          full_name: formData.fullName,
           email: formData.email,
-          roleId: formData.roleId,
+          role_id: Number(formData.roleId),
           status: formData.status,
-          dateOfBirth: formData.dateOfBirth,
-          learningGoal: formData.learningGoal,
-          businessName: formData.businessName,
-          industry: formData.industry,
-          entrepreneurStage: formData.entrepreneurStage,
-        }),
-      });
-      if (response.ok) {
-        setStatus("Your message has been sent successfully!");
-        setFormData({
-          fullName: "",
-          email: "",
-          roleId: "",
-          status: "",
-          dateOfBirth: "",
-          learningGoal: "",
-          businessName: "",
-          industry: "",
-          entrepreneurStage: "",
-        });
-      } else {
-        setStatus("Failed to send your message. Please try again later.");
-      }
+          date_of_birth: formData.dateOfBirth
+            ? new Date(formData.dateOfBirth)
+            : undefined,
+          learning_goal: formData.learningGoal,
+          entrepreneur_stage_id: Number(formData.entrepreneurStage),
+          business_name: formData.businessName,
+          industry_id: Number(formData.industry),
+        },
+        {
+          onSuccess: (data) => {
+            toast.success("New user created");
+            setFormData({
+              fullName: "",
+              email: "",
+              roleId: "",
+              status: "ACTIVE",
+              dateOfBirth: "",
+              learningGoal: "",
+              businessName: "",
+              industry: "",
+              entrepreneurStage: "",
+            });
+          },
+          onError: (err) => {
+            toast.error("Failed to create user", {
+              description: err.message,
+            });
+          },
+        }
+      );
+      // const response = await fetch("https://api.web3forms.com/submit", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     access_key: "f8d001c0-baaa-4215-9a6d-3555466f16cc",
+      //     fullName: formData.fullName,
+      //     email: formData.email,
+      //     roleId: formData.roleId,
+      //     status: formData.status,
+      //     dateOfBirth: formData.dateOfBirth,
+      //     learningGoal: formData.learningGoal,
+      //     businessName: formData.businessName,
+      //     industry: formData.industry,
+      //     entrepreneurStage: formData.entrepreneurStage,
+      //   }),
+      // });
+      // if (response.ok) {
+      //   toast.success("New user created");
+      //   setFormData({
+      //     fullName: "",
+      //     email: "",
+      //     roleId: "",
+      //     status: "ACTIVE",
+      //     dateOfBirth: "",
+      //     learningGoal: "",
+      //     businessName: "",
+      //     industry: "",
+      //     entrepreneurStage: "",
+      //   });
+      // } else {
+      //   toast.error("Failed to create user", {
+      //     description: "Error while connecting to server.",
+      //   });
+      // }
     } catch (error) {
       console.error(error);
     } finally {
@@ -189,14 +246,13 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
               {isSubmitting ? (
                 <Loader2 className="animate-spin size-5" />
               ) : (
-                <PlusCircle className="size-5" />
+                <Save className="size-5" />
               )}
-              Add New User
+              Save User
             </AppButton>
           </div>
         </div>
       </div>
-      {status && <p className="text-black mt-4">{status}</p>}
       <div className="flex flex-col w-full gap-8 pb-20">
         {/* --- Personal Information */}
         <div className="personal-information-container flex flex-col w-full gap-5">
@@ -280,7 +336,21 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                 >
                   Status <span className="text-red-700">*</span>
                 </label>
-                <StatusLabelCMS labelName={"active"} />
+                <div className="switch-button flex pl-1 gap-2">
+                  <Switch
+                    className="data-[state=checked]:bg-cms-primary"
+                    checked={formData.status === "ACTIVE"}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("status")(
+                        checked ? "ACTIVE" : "INACTIVE"
+                      )
+                    }
+                  />
+                  <StatusLabelCMS
+                    labelName={formData.status}
+                    variants={formData.status as "ACTIVE" | "INACTIVE"}
+                  />
+                </div>
               </div>
             </div>
 
