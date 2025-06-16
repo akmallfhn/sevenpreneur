@@ -1,5 +1,9 @@
 import { administratorProcedure, createTRPCRouter } from "@/trpc/init";
-import { numberIsID, stringNotBlank } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  numberIsRoleID,
+  stringNotBlank,
+} from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -11,7 +15,7 @@ export const createRouter = createTRPCRouter({
         full_name: stringNotBlank(),
         email: stringNotBlank(),
         avatar: stringNotBlank().optional(),
-        role_id: numberIsID(),
+        role_id: numberIsRoleID(),
         status: z.nativeEnum(StatusEnum),
         date_of_birth: z.date().optional(),
         learning_goal: stringNotBlank().optional(),
