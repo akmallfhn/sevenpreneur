@@ -17,7 +17,7 @@ export const createRouter = createTRPCRouter({
         avatar: stringNotBlank().optional(),
         role_id: numberIsRoleID(),
         status: z.nativeEnum(StatusEnum),
-        date_of_birth: z.date().optional(),
+        date_of_birth: z.string().date().optional(),
         learning_goal: stringNotBlank().optional(),
         entrepreneur_stage_id: numberIsID().optional(),
         business_name: stringNotBlank().optional(),
@@ -25,6 +25,10 @@ export const createRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      const dateOfBirth =
+        typeof opts.input.date_of_birth !== "undefined"
+          ? new Date(opts.input.date_of_birth)
+          : undefined;
       const createdUser = await opts.ctx.prisma.user.create({
         data: {
           full_name: opts.input.full_name,
@@ -32,7 +36,7 @@ export const createRouter = createTRPCRouter({
           avatar: opts.input.avatar,
           role_id: opts.input.role_id,
           status: opts.input.status,
-          date_of_birth: opts.input.date_of_birth,
+          date_of_birth: dateOfBirth,
           learning_goal: opts.input.learning_goal,
           entrepreneur_stage_id: opts.input.entrepreneur_stage_id,
           business_name: opts.input.business_name,
