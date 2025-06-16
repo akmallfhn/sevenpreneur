@@ -24,12 +24,16 @@ import {
   Save,
 } from "lucide-react";
 
-interface CreateUserFormProps {
+interface EditUserFormProps {
   sessionToken: string;
+  userId: string;
 }
 
-export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
-  const createUser = trpc.create.user.useMutation();
+export default function EditUserForm({
+  sessionToken,
+  userId,
+}: EditUserFormProps) {
+  const editUser = trpc.update.user.useMutation();
   const router = useRouter();
 
   // --- Set session token to client
@@ -39,7 +43,12 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     }
   }, [sessionToken]);
 
-  // --- Return data from tRPC
+  // --- Return initial data
+  const {
+    data: initialData,
+    isLoading: isLoadingInitial,
+    isError: isErrorInitial,
+  } = trpc.read.user.useQuery({ id: userId }, { enabled: !!sessionToken });
   const {
     data: rolesData,
     isLoading: isLoadingRoles,
@@ -71,16 +80,33 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     industry: string | number;
     entrepreneurStage: string | number;
   }>({
-    fullName: "",
-    email: "",
-    roleId: "",
-    status: "ACTIVE",
-    dateOfBirth: "",
-    learningGoal: "",
-    businessName: "",
-    industry: "",
-    entrepreneurStage: "",
+    fullName: initialData?.user.full_name || "",
+    email: initialData?.user.email || "",
+    roleId: initialData?.user.role.id ?? "",
+    status: initialData?.user.status || "ACTIVE",
+    dateOfBirth: initialData?.user.date_of_birth || "",
+    learningGoal: initialData?.user.learning_goal || "",
+    businessName: initialData?.user.business_name || "",
+    industry: initialData?.user.industry_id || "",
+    entrepreneurStage: initialData?.user.entrepreneur_stage_id || "",
   });
+
+  // --- Iterate initial data (so it doesn't get lost)
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        fullName: initialData.user.full_name || "",
+        email: initialData.user.email || "",
+        roleId: initialData.user.role.id ?? "",
+        status: initialData.user.status || "ACTIVE",
+        dateOfBirth: initialData.user.date_of_birth || "",
+        learningGoal: initialData.user.learning_goal || "",
+        businessName: initialData.user.business_name || "",
+        industry: initialData.user.industry_id || "",
+        entrepreneurStage: initialData.user.entrepreneur_stage_id || "",
+      });
+    }
+  }, [initialData]);
 
   // --- Add event listener to prevent page refresh
   useEffect(() => {
@@ -94,8 +120,13 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   }, []);
 
   // --- Extract variable
-  const isLoading = isLoadingRoles || isLoadingIndustries || isLoadingStages;
-  const isError = isErrorRoles || isErrorIndustries || isErrorStages;
+  const isLoading =
+    isLoadingInitial ||
+    isLoadingRoles ||
+    isLoadingIndustries ||
+    isLoadingStages;
+  const isError =
+    isErrorInitial || isErrorRoles || isErrorIndustries || isErrorStages;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -149,8 +180,9 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
 
     // -- POST to Database
     try {
-      createUser.mutate(
+      editUser.mutate(
         {
+          id: userId,
           full_name: formData.fullName,
           email: formData.email,
           role_id: Number(formData.roleId),
@@ -173,21 +205,10 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
         },
         {
           onSuccess: () => {
-            toast.success("New user created");
-            setFormData({
-              fullName: "",
-              email: "",
-              roleId: "",
-              status: "ACTIVE",
-              dateOfBirth: "",
-              learningGoal: "",
-              businessName: "",
-              industry: "",
-              entrepreneurStage: "",
-            });
+            toast.success("Edited Succesfully");
           },
           onError: (err) => {
-            toast.error("Failed to create user", {
+            toast.error("Failed to update", {
               description: err.message,
             });
           },
@@ -210,7 +231,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
         <div className="page-title-actions flex justify-between items-center">
           {/* --- Page Title */}
           <TitleRevealCMS
-            titlePage={"Add New User"}
+            titlePage={"Edit User"}
             descPage={
               "Manage your published content easily. Click on an article to view or edit its details."
             }
@@ -237,7 +258,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
               ) : (
                 <Save className="size-5" />
               )}
-              Save User
+              Save Changes
             </AppButton>
           </div>
         </div>

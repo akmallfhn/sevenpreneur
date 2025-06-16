@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { EllipsisVertical } from "lucide-react";
+import Link from "next/link";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import timezone from "dayjs/plugin/timezone";
@@ -9,8 +9,8 @@ import utc from "dayjs/plugin/utc";
 import StatusLabelCMS from "./StatusLabelCMS";
 import AppButton from "./AppButton";
 import AttributeLabelCMS from "./AttributeLabelCMS";
-import Link from "next/link";
 import DropdownMenuCMS from "./DropdownMenuCMS";
+import { EllipsisVertical, Eye, Settings2, Trash2 } from "lucide-react";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(timezone);
@@ -122,7 +122,31 @@ export default function UserItemListCMS({
           <DropdownMenuCMS
             isOpen={isActionsOpened}
             onClose={() => setIsActionsOpened(false)}
-          />
+          >
+            {/* --- View */}
+            <Link
+              href={`/users/${userId}`}
+              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
+            >
+              <Eye className="size-4" />
+              View
+            </Link>
+
+            {/* --- Edit */}
+            <Link
+              href={`/users/${userId}/edit`}
+              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
+            >
+              <Settings2 className="size-4" />
+              Edit
+            </Link>
+
+            {/* --- Delete */}
+            <div className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-[#E62314] hover:bg-[#FFCDC9] hover:cursor-pointer">
+              <Trash2 className="size-4" />
+              Delete
+            </div>
+          </DropdownMenuCMS>
         </div>
       </div>
     </div>
