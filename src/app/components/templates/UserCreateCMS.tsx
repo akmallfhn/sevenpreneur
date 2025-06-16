@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import dayjs from "dayjs";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -154,9 +153,9 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
           email: formData.email,
           role_id: Number(formData.roleId),
           status: formData.status,
-          // date_of_birth: formData.dateOfBirth.trim()
-          //   ? formData.dateOfBirth
-          //   : undefined,
+          date_of_birth: formData.dateOfBirth.trim()
+            ? formData.dateOfBirth
+            : undefined,
           learning_goal: formData.learningGoal.trim()
             ? formData.learningGoal
             : undefined,
