@@ -23,6 +23,8 @@ import {
   Loader2,
   Save,
 } from "lucide-react";
+import UploadImageCMS from "../elements/UploadAvatarUserCMS";
+import UploadAvatarUserCMS from "../elements/UploadAvatarUserCMS";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -63,6 +65,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   const [formData, setFormData] = useState<{
     fullName: string;
     email: string;
+    avatar: string;
     roleId: string | number;
     status: "ACTIVE" | "INACTIVE";
     dateOfBirth: string;
@@ -73,6 +76,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   }>({
     fullName: "",
     email: "",
+    avatar: "",
     roleId: "",
     status: "ACTIVE",
     dateOfBirth: "",
@@ -118,6 +122,12 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
       [fieldName]: value,
     }));
   };
+  const handleImageForm = (url: string | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      avatar: url ?? "",
+    }));
+  };
 
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
@@ -153,6 +163,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
         {
           full_name: formData.fullName,
           email: formData.email,
+          avatar: formData.avatar?.trim() ? formData.avatar : undefined,
           role_id: Number(formData.roleId),
           status: formData.status,
           date_of_birth: formData.dateOfBirth.trim()
@@ -177,6 +188,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
             setFormData({
               fullName: "",
               email: "",
+              avatar: "",
               roleId: "",
               status: "ACTIVE",
               dateOfBirth: "",
@@ -251,30 +263,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
           </h2>
 
           {/* --- Upload Avatar */}
-          <div className="flex items-center gap-5">
-            <div className="size-32 border border-outline aspect-square rounded-full overflow-hidden">
-              <Image
-                className="object-cover"
-                src={
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                }
-                alt="Avatar"
-                width={400}
-                height={400}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor={"status"}
-                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-              >
-                Avatar
-              </label>
-              <AppButton variant="outline" size="small" type="button">
-                Add Photo
-              </AppButton>
-            </div>
-          </div>
+          <UploadAvatarUserCMS onUpload={handleImageForm} />
 
           {/* Personal Information Data */}
           <div className="personal-information-data flex gap-5">

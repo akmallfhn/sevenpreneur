@@ -23,6 +23,7 @@ import {
   Loader2,
   Save,
 } from "lucide-react";
+import UploadAvatarUserCMS from "../elements/UploadAvatarUserCMS";
 
 interface EditUserFormProps {
   sessionToken: string;
@@ -33,6 +34,7 @@ export default function EditUserForm({
   sessionToken,
   userId,
 }: EditUserFormProps) {
+  const utils = trpc.useUtils();
   const editUser = trpc.update.user.useMutation();
   const router = useRouter();
 
@@ -72,6 +74,7 @@ export default function EditUserForm({
   const [formData, setFormData] = useState<{
     fullName: string;
     email: string;
+    avatar: string;
     roleId: string | number;
     status: "ACTIVE" | "INACTIVE";
     dateOfBirth: string;
@@ -82,6 +85,7 @@ export default function EditUserForm({
   }>({
     fullName: initialData?.user.full_name || "",
     email: initialData?.user.email || "",
+    avatar: initialData?.user.avatar || "",
     roleId: initialData?.user.role.id ?? "",
     status: initialData?.user.status || "ACTIVE",
     dateOfBirth: initialData?.user.date_of_birth
@@ -99,6 +103,7 @@ export default function EditUserForm({
       setFormData({
         fullName: initialData.user.full_name || "",
         email: initialData.user.email || "",
+        avatar: initialData.user.avatar || "",
         roleId: initialData.user.role.id ?? "",
         status: initialData.user.status || "ACTIVE",
         dateOfBirth: initialData?.user.date_of_birth
@@ -155,6 +160,12 @@ export default function EditUserForm({
       [fieldName]: value,
     }));
   };
+  const handleImageForm = (url: string | null) => {
+    setFormData((prev) => ({
+      ...prev,
+      avatar: url ?? "",
+    }));
+  };
 
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
@@ -190,6 +201,7 @@ export default function EditUserForm({
         {
           id: userId,
           full_name: formData.fullName,
+          avatar: formData.avatar.trim() ? formData.avatar : undefined,
           email: formData.email,
           role_id: Number(formData.roleId),
           status: formData.status,
@@ -212,6 +224,8 @@ export default function EditUserForm({
         {
           onSuccess: () => {
             toast.success("Edited Succesfully");
+            utils.read.user.invalidate({ id: userId });
+            utils.list.users.invalidate();
             router.push(`/users/${userId}`);
           },
           onError: (err) => {
@@ -278,30 +292,10 @@ export default function EditUserForm({
           </h2>
 
           {/* --- Upload Avatar */}
-          <div className="flex items-center gap-5">
-            <div className="size-32 border border-outline aspect-square rounded-full overflow-hidden">
-              <Image
-                className="object-cover"
-                src={
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                }
-                alt="Avatar"
-                width={400}
-                height={400}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor={"status"}
-                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-              >
-                Avatar
-              </label>
-              <AppButton variant="outline" size="small" type="button">
-                Add Photo
-              </AppButton>
-            </div>
-          </div>
+          <UploadAvatarUserCMS
+            onUpload={handleImageForm}
+            value={formData.avatar}
+          />
 
           {/* Personal Information Data */}
           <div className="personal-information-data flex gap-5">

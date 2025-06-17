@@ -46,8 +46,8 @@ export default function UserProfileDetailCMS({
   // --- Return Data from TRPC
   const {
     data: userDetailData,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
+    isLoading: isLoadingUserDetail,
+    isError: isErrorUserDetail,
   } = trpc.read.user.useQuery(
     { id: userId },
     {
@@ -73,8 +73,13 @@ export default function UserProfileDetailCMS({
   });
 
   // Extract variable
-  const isLoading = isLoadingRoles || isLoadingIndustries || isLoadingStages;
-  const isError = isErrorRoles || isErrorIndustries || isErrorStages;
+  const isLoading =
+    isLoadingUserDetail ||
+    isLoadingRoles ||
+    isLoadingIndustries ||
+    isLoadingStages;
+  const isError =
+    isErrorUserDetail || isErrorRoles || isErrorIndustries || isErrorStages;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
