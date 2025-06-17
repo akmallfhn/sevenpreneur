@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-export default function LoginContainer({ currentDomain }) {
+export default function AppLoginContainer({ currentDomain }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
