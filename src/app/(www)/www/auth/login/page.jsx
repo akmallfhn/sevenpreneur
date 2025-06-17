@@ -1,5 +1,5 @@
 import Image from "next/image";
-import LoginContainer from "../../../../components/templates/LoginContainer";
+import AppLoginContainer from "../../../../components/templates/AppLoginContainer";
 
 export const metadata = {
   title: "Login | Sevenpreneur",
@@ -57,7 +57,7 @@ export default function AuthPage() {
       <div className="relative flex w-full h-full bg-white justify-center items-center lg:flex-row-reverse">
         {/* Container Login & Right Side Desktop */}
         <div className="flex bg-white lg:flex-1/2 lg:items-center lg:justify-center">
-          <LoginContainer currentDomain={domain} />
+          <AppLoginContainer currentDomain={domain} />
         </div>
         {/* Background Mobile & Left Side Desktop */}
         <div className="absolute flex inset-0 lg:relative lg:flex-1/2">
