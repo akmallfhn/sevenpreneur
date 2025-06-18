@@ -22,8 +22,11 @@ import {
   CalendarRange,
   Loader2,
   Save,
+  ChevronRight,
 } from "lucide-react";
 import UploadAvatarUserCMS from "../elements/UploadAvatarUserCMS";
+import AppBreadcrumb from "../elements/AppBreadcrumb";
+import AppBreadcrumbItem from "../elements/AppBreadcrumbItem";
 
 interface EditUserFormProps {
   sessionToken: string;
@@ -249,6 +252,18 @@ export default function EditUserForm({
     >
       {/* --- PAGE HEADER */}
       <div className="page-header flex flex-col gap-3">
+        <AppBreadcrumb>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href={`/users/${userId}`}>
+            Profile
+          </AppBreadcrumbItem>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href={`/users/${userId}/edit`} isCurrentPage>
+            Edit
+          </AppBreadcrumbItem>
+        </AppBreadcrumb>
         <div className="page-title-actions flex justify-between items-center">
           {/* --- Page Title */}
           <TitleRevealCMS
