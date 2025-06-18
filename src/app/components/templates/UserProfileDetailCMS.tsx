@@ -22,7 +22,10 @@ import {
   Flag,
   Loader2,
   Settings2,
+  ChevronRight,
 } from "lucide-react";
+import AppBreadcrumb from "../elements/AppBreadcrumb";
+import AppBreadcrumbItem from "../elements/AppBreadcrumbItem";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -99,6 +102,14 @@ export default function UserProfileDetailCMS({
     <div className="index-article max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
       {/* --- PAGE HEADER */}
       <div className="page-header flex flex-col gap-3">
+        <AppBreadcrumb>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href={`/users/${userId}`} isCurrentPage>
+            Profile
+          </AppBreadcrumbItem>
+        </AppBreadcrumb>
         <div className="page-title-actions flex justify-between items-center">
           {/* --- Page Title */}
           <TitleRevealCMS

@@ -2,8 +2,12 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import AppButton from "@/app/components/elements/AppButton";
 import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
-import { PlusCircle } from "lucide-react";
+import { ChevronRight, PlusCircle } from "lucide-react";
 import UserListCMS from "@/app/components/templates/UserListCMS";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome } from "@fortawesome/free-solid-svg-icons";
+import AppBreadcrumb from "@/app/components/elements/AppBreadcrumb";
+import AppBreadcrumbItem from "@/app/components/elements/AppBreadcrumbItem";
 
 export default async function UserListPage() {
   const cookieStore = await cookies();
@@ -14,6 +18,12 @@ export default async function UserListPage() {
       <div className="index-article max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         {/* --- PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
+          <AppBreadcrumb>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem href="/users" isCurrentPage>
+              Users
+            </AppBreadcrumbItem>
+          </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
             {/* --- Page Title */}
             <TitleRevealCMS
@@ -33,24 +43,10 @@ export default async function UserListPage() {
           </div>
         </div>
 
-        {/* --- TABLE  */}
-        <div className="table-container bg-white rounded-md shadow-md overflow-x-auto">
-          <div className="table-content w-full flex flex-col">
-            {/* --- Column Name */}
-            <div className="column-name p-7 items-center font-bodycopy font-semibold text-alternative text-xs bg-[#f5f5f5] border-b border-[#e3e3e3] rounded-t-md">
-              {/* <div className="">USER</div>
-              <div className="flex items-center gap-7 ">
-                <div className="">ROLE</div>
-                <div className="">CREATED AT</div>
-                <div className="">LAST LOGIN</div>
-                <div className="">STATUS</div>
-                <div className="">ACTIONS</div>
-              </div> */}
-            </div>
-
-            {/* --- Row List */}
-            <UserListCMS sessionToken={sessionToken} />
-          </div>
+        {/* Table */}
+        <div className="flex flex-col">
+          <div className="flex w-full bg-[#f5f5f5] h-8 rounded-t-md"></div>
+          <UserListCMS sessionToken={sessionToken} />
         </div>
       </div>
     </div>

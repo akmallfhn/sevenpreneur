@@ -22,9 +22,12 @@ import {
   CalendarRange,
   Loader2,
   Save,
+  ChevronRight,
 } from "lucide-react";
 import UploadImageCMS from "../elements/UploadAvatarUserCMS";
 import UploadAvatarUserCMS from "../elements/UploadAvatarUserCMS";
+import AppBreadcrumb from "../elements/AppBreadcrumb";
+import AppBreadcrumbItem from "../elements/AppBreadcrumbItem";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -220,6 +223,14 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     >
       {/* --- PAGE HEADER */}
       <div className="page-header flex flex-col gap-3">
+        <AppBreadcrumb>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
+          <ChevronRight className="size-3.5" />
+          <AppBreadcrumbItem href="/users/create" isCurrentPage>
+            Create
+          </AppBreadcrumbItem>
+        </AppBreadcrumb>
         <div className="page-title-actions flex justify-between items-center">
           {/* --- Page Title */}
           <TitleRevealCMS
