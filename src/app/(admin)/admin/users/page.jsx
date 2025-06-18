@@ -11,7 +11,7 @@ export default async function UserListPage() {
 
   return (
     <div className="root flex w-full h-full bg-white justify-center bg-main-root py-8 pb-24 overflow-y-auto lg:pl-64">
-      <div className="index-article w-[1040px] flex flex-col gap-4">
+      <div className="index-article max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         {/* --- PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <div className="page-title-actions flex justify-between items-center">
@@ -34,21 +34,23 @@ export default async function UserListPage() {
         </div>
 
         {/* --- TABLE  */}
-        <div className="flex flex-col gap-7 bg-white pb-7 rounded-md shadow-md">
-          {/* --- Column Name */}
-          <div className="column-name flex px-7 p-4 items-center font-bodycopy font-semibold text-alternative text-sm bg-[#f5f5f5] border-b border-[#e3e3e3] rounded-t-md">
-            <div className="max-w-[380px] w-full shrink-0 text-xs">USER</div>
-            <div className="flex items-center gap-7 text-xs">
-              <div className="max-w-[120px] w-full shrink-0">ROLE</div>
-              <div className="max-w-[102px] w-full shrink-0">CREATED AT</div>
-              <div className="max-w-[102px] w-full shrink-0">LAST LOGIN</div>
-              <div className="max-w-[102px] w-full shrink-0">STATUS</div>
-              <div className="max-w-[102px] w-full shrink-0">ACTIONS</div>
+        <div className="table-container bg-white rounded-md shadow-md overflow-x-auto">
+          <div className="table-content w-full flex flex-col">
+            {/* --- Column Name */}
+            <div className="column-name p-7 items-center font-bodycopy font-semibold text-alternative text-xs bg-[#f5f5f5] border-b border-[#e3e3e3] rounded-t-md">
+              {/* <div className="">USER</div>
+              <div className="flex items-center gap-7 ">
+                <div className="">ROLE</div>
+                <div className="">CREATED AT</div>
+                <div className="">LAST LOGIN</div>
+                <div className="">STATUS</div>
+                <div className="">ACTIONS</div>
+              </div> */}
             </div>
-          </div>
 
-          {/* --- Row List */}
-          <UserListCMS sessionToken={sessionToken} />
+            {/* --- Row List */}
+            <UserListCMS sessionToken={sessionToken} />
+          </div>
         </div>
       </div>
     </div>

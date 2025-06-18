@@ -215,7 +215,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
 
   return (
     <form
-      className="index-article w-[1040px] flex flex-col gap-4"
+      className="index-article max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
       onSubmit={handleSubmit}
     >
       {/* --- PAGE HEADER */}
