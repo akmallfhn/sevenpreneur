@@ -69,7 +69,6 @@ const handler = (req: Request) => {
         },
       };
     },
-    allowBatching: false,
   });
 };
 
