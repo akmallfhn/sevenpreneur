@@ -59,6 +59,16 @@ CREATE TABLE tokens (
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+----------------
+-- References --
+----------------
+
+ALTER TABLE users
+  ADD FOREIGN KEY (role_id) REFERENCES roles (id);
+
+ALTER TABLE tokens
+  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
 ---------------
 -- Functions --
 ---------------
