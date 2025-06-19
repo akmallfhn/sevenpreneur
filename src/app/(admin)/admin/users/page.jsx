@@ -4,8 +4,6 @@ import AppButton from "@/app/components/elements/AppButton";
 import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
 import { ChevronRight, PlusCircle } from "lucide-react";
 import UserListCMS from "@/app/components/templates/UserListCMS";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
 import AppBreadcrumb from "@/app/components/elements/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/elements/AppBreadcrumbItem";
 
@@ -29,7 +27,7 @@ export default async function UserListPage() {
             <TitleRevealCMS
               titlePage={"List User"}
               descPage={
-                "Manage your published content easily. Click on an article to view or edit its details."
+                "View and manage all registered users in one place, with quick access to actions like edit or delete."
               }
             />
 

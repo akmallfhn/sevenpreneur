@@ -247,7 +247,7 @@ export default function EditUserForm({
 
   return (
     <form
-      className="index-article max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
+      className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
       onSubmit={handleSubmit}
     >
       {/* --- PAGE HEADER */}
@@ -269,7 +269,7 @@ export default function EditUserForm({
           <TitleRevealCMS
             titlePage={"Edit User"}
             descPage={
-              "Manage your published content easily. Click on an article to view or edit its details."
+              "Update user details, adjust roles or permissions, and manage account status easily."
             }
           />
 

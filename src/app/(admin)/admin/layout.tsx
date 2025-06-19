@@ -2,13 +2,11 @@ import "@/app/globals.css";
 import { cookies, headers } from "next/headers";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { TRPCProvider } from "@/trpc/client";
-import { trpc } from "@/trpc/server";
 import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import SidebarCMS from "@/app/components/templates/SidebarCMS";
 import localFont from "next/font/local";
-import { createCallerFactory, createTRPCContext } from "@/trpc/init";
-import { authRouter } from "@/trpc/routers/auth";
 import { Toaster } from "sonner";
+import { Metadata } from "next";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -61,6 +59,16 @@ const openSauceOne = localFont({
     },
   ],
 });
+
+// --- Metadat
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Admin Sevenpreneur",
+    default: "Admin Sevenpreneur",
+  },
+  description:
+    "Central hub to manage all operations of the Sevenpreneur ecosystem",
+};
 
 // --- Pass the base URL to the client
 let baseURL = "https://api.sevenpreneur.com/trpc";

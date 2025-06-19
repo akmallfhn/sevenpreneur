@@ -99,7 +99,7 @@ export default function UserProfileDetailCMS({
   }
 
   return (
-    <div className="index-article max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+    <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
       {/* --- PAGE HEADER */}
       <div className="page-header flex flex-col gap-3">
         <AppBreadcrumb>
@@ -115,7 +115,7 @@ export default function UserProfileDetailCMS({
           <TitleRevealCMS
             titlePage={"Detail Profile"}
             descPage={
-              "Everything you need to know about your users — all in one centralized, easy-to-manage screen."
+              "View detailed user information, activity logs, and account status in a read-only profile view."
             }
           />
           {/* --- Page Actions */}
