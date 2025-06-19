@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       domain: domain,
       httpOnly: true,
       secure: true,
-      maxAge: 21600,
+      maxAge: 60 * 60 * 24 * 365 * 10,
     });
 
     // --- Send Response Success

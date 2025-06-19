@@ -100,8 +100,8 @@ export default function UserItemListCMS({
 
   return (
     <React.Fragment>
-      <div className="user-item flex items-center">
-        <div className="user-item-id flex items-center gap-4 max-w-[380px] w-full shrink-0">
+      <div className="user-list-item flex items-center">
+        <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
           {/* --- Avatar */}
           <div className="flex size-10 rounded-full overflow-hidden">
             <Image
@@ -139,12 +139,12 @@ export default function UserItemListCMS({
 
           {/* --- Created at */}
           <p className="created-at flex text-sm font-bodycopy font-medium text-[#333333] max-w-[102px] w-full shrink-0 text-left">
-            {dayjs(createdAt).locale("id").tz("Asia/Jakarta").format("ll")}
+            {dayjs(createdAt).locale("id").tz("Asia/Jakarta").format("lll")}
           </p>
 
           {/* --- Last login */}
           <p className="last-login flex text-sm font-bodycopy font-medium text-[#333333] max-w-[102px] w-full shrink-0 text-left">
-            {dayjs(lastLogin).locale("id").tz("Asia/Jakarta").format("ll")}
+            {dayjs(lastLogin).locale("id").tz("Asia/Jakarta").format("lll")}
           </p>
 
           {/* --- Status */}

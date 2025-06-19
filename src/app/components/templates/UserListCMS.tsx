@@ -39,7 +39,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   }
 
   return (
-    <div className="flex flex-col gap-7 p-7">
+    <div className="table-container flex flex-col flex-wrap gap-7 p-7 w-full bg-white rounded-b-md">
       {data?.list.map((post, index) => (
         <UserItemListCMS
           key={index}
