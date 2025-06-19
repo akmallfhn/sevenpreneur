@@ -17,28 +17,40 @@ export default function SpeakersLineUpRestart25() {
         "https://static.wixstatic.com/media/02a5b1_7933f447a8d443359f3c9d07c6a40a08~mv2.webp",
     },
     {
-      name: "Sigit Djokosoetono",
-      title: "Deputy CEO Blue Bird Group",
-      image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//sigit-djokosoetono.webp",
-    },
-    {
-      name: "Denny Santoso",
-      title: "Founder & CEO BrainBoost",
-      image:
-        "https://static.wixstatic.com/media/02a5b1_e9e8d63f9e6d423ea7dab593d6009207~mv2.webp",
-    },
-    {
       name: "dr.Tirta",
       title: "General Practitioner & Creativepreneur",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//dr-tirta.webp",
     },
     {
+      name: "Sigit Djokosoetono",
+      title: "Deputy CEO Blue Bird Group",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//sigit-djokosoetono.webp",
+    },
+    {
+      name: "Suwandi Soh",
+      title: "CEO Mekari",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//suwandi-soh.webp",
+    },
+    {
+      name: "Lilis Mulyawati",
+      title: "President Director of Watsons Indonesia",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//lilis-mulyawati.webp",
+    },
+    {
       name: "Zaky Muhammad Syah",
       title: "CEO dibimbing and Cakrawala University",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//zack.webp",
+    },
+    {
+      name: "Fadly Hasan",
+      title: "Direktur Bisnis dan Pemanfaatan Aset Transjakarta",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//fadly-hasan.webp",
     },
     {
       name: "Bhima Yudhistira",
@@ -51,6 +63,12 @@ export default function SpeakersLineUpRestart25() {
       title: "CEO & Co-Founder Kata.ai",
       image:
         "https://static.wixstatic.com/media/02a5b1_2ecea6c5c5b34534bd47f20a62f2c7b8~mv2.webp",
+    },
+    {
+      name: "Denny Santoso",
+      title: "Founder & CEO BrainBoost",
+      image:
+        "https://static.wixstatic.com/media/02a5b1_e9e8d63f9e6d423ea7dab593d6009207~mv2.webp",
     },
     {
       name: "And more speakers",
