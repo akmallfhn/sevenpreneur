@@ -59,6 +59,78 @@ CREATE TABLE tokens (
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE cohorts (
+  id            SERIAL       PRIMARY KEY,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR      NOT NULL,
+  image         VARCHAR      NOT NULL,
+  status        status_enum  NOT NULL,
+  slug_url      VARCHAR      NOT NULL,
+  start_date    TIMESTAMPTZ  NOT NULL,
+  end_date      TIMESTAMPTZ  NOT NULL,
+  published_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  deleted_at    TIMESTAMPTZ      NULL,
+  deleted_by    UUID             NULL
+);
+
+CREATE TABLE cohort_prices (
+  id          SERIAL          PRIMARY KEY,
+  cohort_id   INTEGER         NOT NULL,
+  name        VARCHAR         NOT NULL,
+  amount      DECIMAL(12, 2)  NOT NULL,
+  status      status_enum     NOT NULL,
+  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE modules (
+  id            SERIAL       PRIMARY KEY,
+  cohort_id     INTEGER      NOT NULL,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR      NOT NULL,
+  document_url  VARCHAR      NOT NULL,
+  status        status_enum  NOT NULL,
+  created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE lessons (
+  id             SERIAL       PRIMARY KEY,
+  cohort_id      INTEGER      NOT NULL,
+  name           VARCHAR      NOT NULL,
+  description    VARCHAR      NOT NULL,
+  meeting_date   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  meeting_url    VARCHAR      NOT NULL,
+  speaker_id     UUID         NOT NULL,
+  recording_url  VARCHAR      NOT NULL,
+  status         status_enum  NOT NULL,
+  created_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE materials (
+  id            SERIAL       PRIMARY KEY,
+  lesson_id     INTEGER      NOT NULL,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR      NOT NULL,
+  document_url  VARCHAR      NOT NULL,
+  status        status_enum  NOT NULL,
+  created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE projects (
+  id            SERIAL       PRIMARY KEY,
+  cohort_id     INTEGER      NOT NULL,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR      NOT NULL,
+  document_url  VARCHAR      NOT NULL,
+  deadline_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  status        status_enum  NOT NULL,
+  created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 ----------------
 -- References --
 ----------------
@@ -68,6 +140,25 @@ ALTER TABLE users
 
 ALTER TABLE tokens
   ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE cohorts
+  ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
+
+ALTER TABLE cohort_prices
+  ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+
+ALTER TABLE modules
+  ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+
+ALTER TABLE lessons
+  ADD FOREIGN KEY (cohort_id)  REFERENCES cohorts (id),
+  ADD FOREIGN KEY (speaker_id) REFERENCES users (id);
+
+ALTER TABLE materials
+  ADD FOREIGN KEY (lesson_id) REFERENCES lessons (id);
+
+ALTER TABLE projects
+  ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
 
 ---------------
 -- Functions --
@@ -92,5 +183,30 @@ CREATE TRIGGER update_roles_updated_at_trigger
 
 CREATE TRIGGER update_users_updated_at_trigger
   BEFORE UPDATE ON users
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_cohorts_updated_at_trigger
+  BEFORE UPDATE ON cohorts
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_modules_updated_at_trigger
+  BEFORE UPDATE ON modules
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_lessons_updated_at_trigger
+  BEFORE UPDATE ON lessons
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_materials_updated_at_trigger
+  BEFORE UPDATE ON materials
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_projects_updated_at_trigger
+  BEFORE UPDATE ON projects
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();

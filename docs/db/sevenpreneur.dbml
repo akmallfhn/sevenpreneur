@@ -61,3 +61,75 @@ Table tokens {
   token       text         [note: 'unique']
   created_at  timestamptz
 }
+
+Table cohorts {
+  id             integer      [primary key]
+  name           varchar
+  description    varchar
+  image          varchar
+  status         status_enum
+  slug_url       varchar
+  start_date     timestamptz
+  end_date       timestamptz
+  published_at   timestamptz
+  updated_at     timestamptz
+  deleted_at     timestamptz
+  deleted_by     uuid         [ref: > users.id]
+}
+
+Table cohort_prices {
+  id          integer         [primary key]
+  cohort_id   integer         [ref: > cohorts.id]
+  name        varchar
+  amount      decimal(12, 2)
+  status      status_enum
+  created_at  timestamptz
+}
+
+Table modules {
+  id            integer      [primary key]
+  cohort_id     integer      [ref: > cohorts.id]
+  name          varchar
+  description   varchar
+  document_url  varchar
+  status        status_enum
+  created_at    timestamptz
+  updated_at    timestamptz
+}
+
+Table lessons {
+  id             integer      [primary key]
+  cohort_id      integer      [ref: > cohorts.id]
+  name           varchar
+  description    varchar
+  meeting_date   timestamptz
+  meeting_url    varchar
+  speaker_id     uuid         [ref: > users.id]
+  recording_url  varchar
+  status         status_enum
+  created_at     timestamptz
+  updated_at     timestamptz
+}
+
+Table materials {
+  id            integer      [primary key]
+  lesson_id     integer      [ref: > lessons.id]
+  name          varchar
+  description   varchar
+  document_url  varchar
+  status        status_enum
+  created_at    timestamptz
+  updated_at    timestamptz
+}
+
+Table projects {
+  id            integer      [primary key]
+  cohort_id     integer      [ref: > cohorts.id]
+  name          varchar
+  description   varchar
+  document_url  varchar
+  deadline_at   timestamptz
+  status        status_enum
+  created_at    timestamptz
+  updated_at    timestamptz
+}
