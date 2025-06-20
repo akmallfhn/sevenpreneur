@@ -38,7 +38,7 @@ export default function AppSheet({ isOpen, onClose, children }: AppSheetProps) {
             Make changes to your profile here. Click save when youre done.
           </p>
           <X
-            className="absolute text-alternative size-5 top-0 right-2 cursor-pointer"
+            className="absolute text-alternative size-5 top-2 right-2 cursor-pointer"
             onClick={onClose}
           />
         </div>
