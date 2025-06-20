@@ -9,7 +9,7 @@ export default function SpeakerItemRestart25({
 }) {
   return (
     <div className="speaker-container flex flex-col items-center max-w-[160px] gap-2 px-1 lg:max-w-[212px] lg:gap-3">
-      <div className="flex aspect-frame-speaker-restart w-full overflow-hidden">
+      <div className="flex relative aspect-frame-speaker-restart w-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"
           src={speakerImage}
