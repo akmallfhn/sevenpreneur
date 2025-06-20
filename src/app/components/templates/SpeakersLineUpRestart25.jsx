@@ -64,7 +64,7 @@ export default function SpeakersLineUpRestart25() {
       name: "Bhima Yudhistira",
       title: "Executive Director CELIOS",
       image:
-        "https://static.wixstatic.com/media/02a5b1_a015ebc361e5456a9cc5c72f569106da~mv2.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//bhima-yudhistira%20(1).webp",
       on_confirmation: false,
     },
     {
@@ -93,9 +93,7 @@ export default function SpeakersLineUpRestart25() {
   return (
     <section id="speakers-lineup">
       <div className="speakers-lineup pb-8 flex flex-col items-center gap-3 lg:gap-5 lg:pb-[60px]">
-        <div className="section-name flex flex-col items-center">
-          <SectionTitleRestart25 sectionTitle="Speakers Lineup" />
-        </div>
+        <SectionTitleRestart25 sectionTitle="Speakers Lineup" />
         <div className="flex flex-wrap max-w-[920px] items-start justify-center gap-4 lg:gap-6">
           {speakerData.map((post, index) => (
             <SpeakerItemRestart25
