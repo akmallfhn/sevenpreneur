@@ -5,7 +5,7 @@ interface InputCMSProps {
   inputId: string;
   inputName: string;
   inputType: string;
-  inputIcon: React.ReactNode;
+  inputIcon?: React.ReactNode;
   inputPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
@@ -67,17 +67,19 @@ export default function InputCMS({
 
       {/* --- Input Placeholder */}
       <div className="input-container relative ">
-        <div className="absolute left-0 flex items-center p-[9px] pl-3 pointer-events-none text-alternative">
-          {inputIcon}
-        </div>
+        {inputIcon && (
+          <div className="absolute left-0 flex items-center p-[9px] pl-3 pointer-events-none text-alternative">
+            {inputIcon}
+          </div>
+        )}
         <input
           id={inputId}
           type={inputType}
           placeholder={inputPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 pl-10 bg-white font-medium font-bodycopy text-sm rounded-lg placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
+          className={`flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
             error ? "border-red-700 border" : "border border-outline"
-          } `}
+          } ${inputIcon ? "pl-10" : ""} `}
           value={value}
           onChange={handleInputChange}
         />

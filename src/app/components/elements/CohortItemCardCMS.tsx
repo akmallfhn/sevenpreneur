@@ -26,7 +26,7 @@ export default function CohortItemCardCMS() {
       </div>
       {/* --- Metadata */}
       <div className="metadata relative flex flex-col p-3 gap-2">
-        <h3 className="cohort-title text-lg font-bodycopy font-bold line-clamp-2">
+        <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2">
           Kelas Memancing Ikan Pada Hari Jumat Sabtu Minggu Negara
         </h3>
         <div className="cohort-participant flex gap-2 items-center text-alternative">

@@ -28,6 +28,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       size = "default",
       font = "bodycopy",
       disabled = false,
+      className,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
@@ -63,6 +64,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       variantClasses[variant],
       sizeClasses[size],
       fontClasses[font],
+      className,
     ].join(" ");
 
     return (

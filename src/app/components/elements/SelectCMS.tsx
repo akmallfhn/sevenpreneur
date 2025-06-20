@@ -69,7 +69,7 @@ export default function SelectCMS({
 
       {/* --- Select Placeholder */}
       <div
-        className={`select relative flex w-full p-2 pl-10 bg-white font-bodycopy font-medium text-sm rounded-lg border border-outline ${
+        className={`select relative flex w-full p-2 pl-10 bg-white font-bodycopy font-medium text-sm rounded-md border border-outline ${
           open ? "border-cms-primary" : "border-outline"
         } ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         onClick={() => {

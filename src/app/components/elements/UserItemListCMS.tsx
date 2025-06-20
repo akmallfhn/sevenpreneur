@@ -57,7 +57,7 @@ export default function UserItemListCMS({
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Close dropdown outside toggle
+  // --- Close dropdown outside
   useEffect(() => {
     const handleClickOutside = (
       event: MouseEvent | (MouseEvent & { target: Node })

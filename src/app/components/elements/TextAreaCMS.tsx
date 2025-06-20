@@ -69,7 +69,7 @@ export default function TextAreaCMS({
           id={textAreaId}
           placeholder={textAreaPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-lg resize-none placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
+          className={`flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md resize-none placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
             error ? "border-red-700 border" : "border border-outline"
           } `}
           value={value}
