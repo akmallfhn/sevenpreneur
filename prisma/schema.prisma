@@ -73,6 +73,8 @@ model User {
   last_login            DateTime           @default(now()) @updatedAt @db.Timestamptz()
   deleted_at            DateTime?          @db.Timestamptz()
   tokens                Token[]
+  cohorts               Cohort[]
+  lessons               Lesson[]
 
   @@map("users")
 }
@@ -86,4 +88,100 @@ model Token {
   created_at DateTime @default(now()) @db.Timestamptz()
 
   @@map("tokens")
+}
+
+model Cohort {
+  id            Int           @id @default(autoincrement()) @db.Integer
+  name          String        @db.VarChar()
+  description   String        @db.VarChar()
+  image         String        @db.VarChar()
+  status        StatusEnum
+  slug_url      String        @db.VarChar()
+  start_date    DateTime      @db.Timestamptz()
+  end_date      DateTime      @db.Timestamptz()
+  published_at  DateTime      @default(now()) @db.Timestamptz()
+  updated_at    DateTime      @default(now()) @updatedAt @db.Timestamptz()
+  deleted_at    DateTime?     @db.Timestamptz()
+  deleted_by    User?         @relation(fields: [deleted_by_id], references: [id])
+  deleted_by_id String?       @map("deleted_by") @db.Uuid
+  cohort_prices CohortPrice[]
+  modules       Module[]
+  lessons       Lesson[]
+  projects      Project[]
+
+  @@map("cohorts")
+}
+
+model CohortPrice {
+  id         Int        @id @default(autoincrement()) @db.Integer
+  cohort     Cohort     @relation(fields: [cohort_id], references: [id])
+  cohort_id  Int        @db.Integer
+  name       String     @db.VarChar()
+  amount     Decimal    @db.Decimal(12, 2)
+  status     StatusEnum
+  created_at DateTime   @default(now()) @db.Timestamptz()
+
+  @@map("cohort_prices")
+}
+
+model Module {
+  id           Int        @id @default(autoincrement()) @db.Integer
+  cohort       Cohort     @relation(fields: [cohort_id], references: [id])
+  cohort_id    Int        @db.Integer
+  name         String     @db.VarChar()
+  description  String     @db.VarChar()
+  document_url String     @db.VarChar()
+  status       StatusEnum
+  created_at   DateTime   @default(now()) @db.Timestamptz()
+  updated_at   DateTime   @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("modules")
+}
+
+model Lesson {
+  id            Int        @id @default(autoincrement()) @db.Integer
+  cohort        Cohort     @relation(fields: [cohort_id], references: [id])
+  cohort_id     Int        @db.Integer
+  name          String     @db.VarChar()
+  description   String     @db.VarChar()
+  meeting_date  DateTime   @default(now()) @db.Timestamptz()
+  meeting_url   String     @db.VarChar()
+  speaker       User       @relation(fields: [speaker_id], references: [id])
+  speaker_id    String     @db.Uuid
+  recording_url String     @db.VarChar()
+  status        StatusEnum
+  created_at    DateTime   @default(now()) @db.Timestamptz()
+  updated_at    DateTime   @default(now()) @updatedAt @db.Timestamptz()
+  materials     Material[]
+
+  @@map("lessons")
+}
+
+model Material {
+  id           Int        @id @default(autoincrement()) @db.Integer
+  lesson       Lesson     @relation(fields: [lesson_id], references: [id])
+  lesson_id    Int        @db.Integer
+  name         String     @db.VarChar()
+  description  String     @db.VarChar()
+  document_url String     @db.VarChar()
+  status       StatusEnum
+  created_at   DateTime   @default(now()) @db.Timestamptz()
+  updated_at   DateTime   @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("materials")
+}
+
+model Project {
+  id           Int        @id @default(autoincrement()) @db.Integer
+  cohort       Cohort     @relation(fields: [cohort_id], references: [id])
+  cohort_id    Int        @db.Integer
+  name         String     @db.VarChar()
+  description  String     @db.VarChar()
+  document_url String     @db.VarChar()
+  deadline_at  DateTime   @default(now()) @db.Timestamptz()
+  status       StatusEnum
+  created_at   DateTime   @default(now()) @db.Timestamptz()
+  updated_at   DateTime   @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("projects")
 }
