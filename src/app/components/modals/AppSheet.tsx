@@ -3,12 +3,20 @@ import { X } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 
 interface AppSheetProps {
+  sheetName: string;
+  sheetDescription?: string;
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
 }
 
-export default function AppSheet({ isOpen, onClose, children }: AppSheetProps) {
+export default function AppSheet({
+  sheetName,
+  sheetDescription,
+  isOpen,
+  onClose,
+  children,
+}: AppSheetProps) {
   // --- Blocked scroll behind
   useEffect(() => {
     if (isOpen) {
@@ -27,15 +35,15 @@ export default function AppSheet({ isOpen, onClose, children }: AppSheetProps) {
       onClick={onClose}
     >
       <div
-        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 gap-4 bg-white  transition transform ease-in-out sm:max-w-sm`}
+        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 gap-4 bg-white  transition transform ease-in-out sm:max-w-md`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="sheet-header relative flex flex-col gap-1.5 p-4">
+        <div className="sheet-header relative flex flex-col gap-1 p-4 px-6">
           <h2 className="text-black text-lg font-brand font-bold">
-            Create Cohort
+            {sheetName}
           </h2>
           <p className="text-alternative text-sm font-bodycopy font-medium">
-            Make changes to your profile here. Click save when youre done.
+            {sheetDescription}
           </p>
           <X
             className="absolute text-alternative size-5 top-2 right-2 cursor-pointer"
