@@ -16,21 +16,22 @@ export const updateRouter = createTRPCRouter({
         id: stringIsUUID(),
         full_name: stringNotBlank().optional(),
         email: stringNotBlank().optional(),
-        avatar: stringNotBlank().optional().nullable(),
+        avatar: stringNotBlank().nullable().optional(),
         role_id: numberIsRoleID().optional(),
         status: z.nativeEnum(StatusEnum).optional(),
-        date_of_birth: z.string().date().optional().nullable(),
-        learning_goal: stringNotBlank().optional().nullable(),
-        entrepreneur_stage_id: numberIsID().optional().nullable(),
-        business_name: stringNotBlank().optional().nullable(),
-        industry_id: numberIsID().optional().nullable(),
+        date_of_birth: z.string().date().nullable().optional(),
+        learning_goal: stringNotBlank().nullable().optional(),
+        entrepreneur_stage_id: numberIsID().nullable().optional(),
+        business_name: stringNotBlank().nullable().optional(),
+        industry_id: numberIsID().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
       const dateOfBirth =
-        typeof opts.input.date_of_birth !== "undefined" &&
-        opts.input.date_of_birth !== null
-          ? new Date(opts.input.date_of_birth)
+        typeof opts.input.date_of_birth !== "undefined"
+          ? opts.input.date_of_birth !== null
+            ? new Date(opts.input.date_of_birth)
+            : null
           : undefined;
       const updatedUser = await opts.ctx.prisma.user.updateManyAndReturn({
         data: {

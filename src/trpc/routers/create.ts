@@ -14,20 +14,22 @@ export const createRouter = createTRPCRouter({
       z.object({
         full_name: stringNotBlank(),
         email: stringNotBlank(),
-        avatar: stringNotBlank().optional(),
+        avatar: stringNotBlank().nullable().optional(),
         role_id: numberIsRoleID(),
         status: z.nativeEnum(StatusEnum),
-        date_of_birth: z.string().date().optional(),
-        learning_goal: stringNotBlank().optional(),
-        entrepreneur_stage_id: numberIsID().optional(),
-        business_name: stringNotBlank().optional(),
-        industry_id: numberIsID().optional(),
+        date_of_birth: z.string().date().nullable().optional(),
+        learning_goal: stringNotBlank().nullable().optional(),
+        entrepreneur_stage_id: numberIsID().nullable().optional(),
+        business_name: stringNotBlank().nullable().optional(),
+        industry_id: numberIsID().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
       const dateOfBirth =
         typeof opts.input.date_of_birth !== "undefined"
-          ? new Date(opts.input.date_of_birth)
+          ? opts.input.date_of_birth !== null
+            ? new Date(opts.input.date_of_birth)
+            : null
           : undefined;
       const createdUser = await opts.ctx.prisma.user.create({
         data: {
