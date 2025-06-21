@@ -40,7 +40,7 @@ export default function EventExperienceCardItemRestart25({
         <h2 className="font-brand font-bold leading-[1] text-lg lg:text-xl">
           {experienceName}
         </h2>
-        <p className="font-bodycopy text-sm lg:text-base">
+        <p className="font-bodycopy font-medium text-white/65 text-sm lg:text-base">
           {experienceDescription}
         </p>
       </div>

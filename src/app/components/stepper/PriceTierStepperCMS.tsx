@@ -67,6 +67,7 @@ export default function PriceTierStepperCMS() {
             {tiers.length > 1 && (
               <button
                 className="remove-tier absolute -top-2 -right-2 p-1 bg-black/10 cursor-pointer rounded-full"
+                type="button"
                 onClick={() => handleRemoveTier(index)}
               >
                 <X className="size-3 text-black" />
