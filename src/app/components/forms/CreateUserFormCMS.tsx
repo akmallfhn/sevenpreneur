@@ -261,7 +261,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
               ) : (
                 <Save className="size-5" />
               )}
-              Save User
+              Create Account
             </AppButton>
           </div>
         </div>

@@ -18,6 +18,7 @@
   --color-semi-destructive: #ffcdc9;
   --color-cms-primary: #013393;
   --color-cms-secondary: #65d6ca;
+  --color-cms-primary-light: #cde2ff;
 }
 
 @theme inline {

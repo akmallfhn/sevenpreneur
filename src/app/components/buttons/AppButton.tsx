@@ -7,7 +7,8 @@ type VariantType =
   | "outline"
   | "ghost"
   | "semiDestructive"
-  | "cmsPrimary";
+  | "cmsPrimary"
+  | "cmsPrimaryLight";
 type SizeType = "default" | "medium" | "small" | "icon";
 type FontType = "brand" | "bodycopy" | "ui";
 
@@ -44,6 +45,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       semiDestructive: "bg-semi-destructive text-destructive",
       cmsPrimary:
         "bg-cms-primary text-white hover:bg-[#032E82] active:bg-[#032E82]",
+      cmsPrimaryLight:
+        "bg-cms-primary-light text-cms-primary hover:bg-[#C1DAFF] active:bg-[#0C1DAFF]",
     };
 
     const sizeClasses: Record<SizeType, string> = {
