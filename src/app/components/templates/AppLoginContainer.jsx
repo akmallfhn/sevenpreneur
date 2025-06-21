@@ -2,7 +2,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import AppButton from "../elements/AppButton";
+import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";

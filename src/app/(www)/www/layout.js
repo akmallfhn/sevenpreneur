@@ -4,8 +4,8 @@ import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
 import localFont from "next/font/local";
-import TopNavbar from "../../components/templates/TopNavbarRestart25";
-import AppBottomFooter from "../../components/templates/AppBottomFooter";
+import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
+import AppBottomFooter from "@/app/components/navigations/AppBottomFooter";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",

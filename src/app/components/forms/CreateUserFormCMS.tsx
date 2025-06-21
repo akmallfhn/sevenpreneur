@@ -4,12 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { setSessionToken, trpc } from "@/trpc/client";
-import AppButton from "@/app/components/elements/AppButton";
-import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
-import InputCMS from "@/app/components/elements/InputCMS";
-import SelectCMS from "@/app/components/elements/SelectCMS";
-import StatusLabelCMS from "@/app/components/elements/StatusLabelCMS";
-import TextAreaCMS from "@/app/components/elements/TextAreaCMS";
+import AppButton from "@/app/components/buttons/AppButton";
+import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import InputCMS from "@/app/components/fields/InputCMS";
+import SelectCMS from "@/app/components/fields/SelectCMS";
+import StatusLabelCMS from "@/app/components/labels/StatusLabelCMS";
+import TextAreaCMS from "@/app/components/fields/TextAreaCMS";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
@@ -24,21 +24,17 @@ import {
   Save,
   ChevronRight,
 } from "lucide-react";
-import UploadAvatarUserCMS from "../elements/UploadAvatarUserCMS";
-import AppBreadcrumb from "../elements/AppBreadcrumb";
-import AppBreadcrumbItem from "../elements/AppBreadcrumbItem";
+import UploadImageCMS from "../fields/UploadAvatarUserCMS";
+import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
-interface EditUserFormProps {
+interface CreateUserFormProps {
   sessionToken: string;
-  userId: string;
 }
 
-export default function EditUserForm({
-  sessionToken,
-  userId,
-}: EditUserFormProps) {
-  const utils = trpc.useUtils();
-  const editUser = trpc.update.user.useMutation();
+export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
+  const createUser = trpc.create.user.useMutation();
   const router = useRouter();
 
   // --- Set session token to client
@@ -48,12 +44,7 @@ export default function EditUserForm({
     }
   }, [sessionToken]);
 
-  // --- Return initial data
-  const {
-    data: initialData,
-    isLoading: isLoadingInitial,
-    isError: isErrorInitial,
-  } = trpc.read.user.useQuery({ id: userId }, { enabled: !!sessionToken });
+  // --- Return data from tRPC
   const {
     data: rolesData,
     isLoading: isLoadingRoles,
@@ -86,41 +77,17 @@ export default function EditUserForm({
     industry: string | number;
     entrepreneurStage: string | number;
   }>({
-    fullName: initialData?.user.full_name || "",
-    email: initialData?.user.email || "",
-    avatar: initialData?.user.avatar || "",
-    roleId: initialData?.user.role.id ?? "",
-    status: initialData?.user.status || "ACTIVE",
-    dateOfBirth: initialData?.user.date_of_birth
-      ? new Date(initialData?.user.date_of_birth).toISOString().split("T")[0]
-      : "",
-    learningGoal: initialData?.user.learning_goal || "",
-    businessName: initialData?.user.business_name || "",
-    industry: initialData?.user.industry_id || "",
-    entrepreneurStage: initialData?.user.entrepreneur_stage_id || "",
+    fullName: "",
+    email: "",
+    avatar: "",
+    roleId: "",
+    status: "ACTIVE",
+    dateOfBirth: "",
+    learningGoal: "",
+    businessName: "",
+    industry: "",
+    entrepreneurStage: "",
   });
-
-  // --- Iterate initial data (so it doesn't get lost)
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        fullName: initialData.user.full_name || "",
-        email: initialData.user.email || "",
-        avatar: initialData.user.avatar || "",
-        roleId: initialData.user.role.id ?? "",
-        status: initialData.user.status || "ACTIVE",
-        dateOfBirth: initialData?.user.date_of_birth
-          ? new Date(initialData?.user.date_of_birth)
-              .toISOString()
-              .split("T")[0]
-          : "",
-        learningGoal: initialData.user.learning_goal || "",
-        businessName: initialData.user.business_name || "",
-        industry: initialData.user.industry_id || "",
-        entrepreneurStage: initialData.user.entrepreneur_stage_id || "",
-      });
-    }
-  }, [initialData]);
 
   // --- Add event listener to prevent page refresh
   useEffect(() => {
@@ -134,13 +101,8 @@ export default function EditUserForm({
   }, []);
 
   // --- Extract variable
-  const isLoading =
-    isLoadingInitial ||
-    isLoadingRoles ||
-    isLoadingIndustries ||
-    isLoadingStages;
-  const isError =
-    isErrorInitial || isErrorRoles || isErrorIndustries || isErrorStages;
+  const isLoading = isLoadingRoles || isLoadingIndustries || isLoadingStages;
+  const isError = isErrorRoles || isErrorIndustries || isErrorStages;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -200,12 +162,11 @@ export default function EditUserForm({
 
     // -- POST to Database
     try {
-      editUser.mutate(
+      createUser.mutate(
         {
-          id: userId,
           full_name: formData.fullName,
-          avatar: formData.avatar.trim() ? formData.avatar : undefined,
           email: formData.email,
+          avatar: formData.avatar?.trim() ? formData.avatar : undefined,
           role_id: Number(formData.roleId),
           status: formData.status,
           date_of_birth: formData.dateOfBirth.trim()
@@ -226,13 +187,23 @@ export default function EditUserForm({
         },
         {
           onSuccess: () => {
-            toast.success("Edited Succesfully");
-            utils.read.user.invalidate({ id: userId });
-            utils.list.users.invalidate();
-            router.push(`/users/${userId}`);
+            toast.success("New user created");
+            setFormData({
+              fullName: "",
+              email: "",
+              avatar: "",
+              roleId: "",
+              status: "ACTIVE",
+              dateOfBirth: "",
+              learningGoal: "",
+              businessName: "",
+              industry: "",
+              entrepreneurStage: "",
+            });
+            router.push("/users");
           },
           onError: (err) => {
-            toast.error("Failed to update", {
+            toast.error("Failed to create user", {
               description: err.message,
             });
           },
@@ -256,20 +227,16 @@ export default function EditUserForm({
           <ChevronRight className="size-3.5" />
           <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
           <ChevronRight className="size-3.5" />
-          <AppBreadcrumbItem href={`/users/${userId}`}>
-            Profile
-          </AppBreadcrumbItem>
-          <ChevronRight className="size-3.5" />
-          <AppBreadcrumbItem href={`/users/${userId}/edit`} isCurrentPage>
-            Edit
+          <AppBreadcrumbItem href="/users/create" isCurrentPage>
+            Create
           </AppBreadcrumbItem>
         </AppBreadcrumb>
         <div className="page-title-actions flex justify-between items-center">
           {/* --- Page Title */}
           <TitleRevealCMS
-            titlePage={"Edit User"}
+            titlePage={"Add New User"}
             descPage={
-              "Update user details, adjust roles or permissions, and manage account status easily."
+              "Fill out the form to add a new user to the system, including basic profile information."
             }
           />
 
@@ -294,7 +261,7 @@ export default function EditUserForm({
               ) : (
                 <Save className="size-5" />
               )}
-              Save Changes
+              Save User
             </AppButton>
           </div>
         </div>
@@ -307,10 +274,7 @@ export default function EditUserForm({
           </h2>
 
           {/* --- Upload Avatar */}
-          <UploadAvatarUserCMS
-            onUpload={handleImageForm}
-            value={formData.avatar}
-          />
+          <UploadAvatarUserCMS onUpload={handleImageForm} />
 
           {/* Personal Information Data */}
           <div className="personal-information-data flex gap-5">

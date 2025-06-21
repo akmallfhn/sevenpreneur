@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { DeleteSession } from "@/lib/actions";
-import SidebarMenuItemCMS from "../elements/SidebarMenuItemCMS";
+import SidebarMenuItemCMS from "@/app/components/navigations/SidebarMenuItemCMS";
+import UserBadgeCMS from "@/app/components/buttons/UserBadgeCMS";
 import {
   CircleHelp,
   CircleUserIcon,
@@ -13,8 +13,6 @@ import {
   HouseIcon,
   Loader2,
 } from "lucide-react";
-import { setSessionToken, trpc } from "@/trpc/client";
-import UserBadgeCMS from "../elements/UserBadgeCMS";
 
 interface SidebarCMSProps {
   currentDomain: string;

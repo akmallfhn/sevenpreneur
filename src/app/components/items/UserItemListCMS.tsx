@@ -6,15 +6,17 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import StatusLabelCMS, { Variant } from "./StatusLabelCMS";
-import AppButton from "./AppButton";
-import AttributeLabelCMS from "./AttributeLabelCMS";
-import DropdownMenuCMS from "./DropdownMenuCMS";
+import AppAlertDialog from "@/app/components/modals/AppAlertDialog";
+import AppButton from "@/app/components/buttons/AppButton";
+import AttributeLabelCMS from "@/app/components/labels/AttributeLabelCMS";
+import DropdownMenuCMS from "@/app/components/elements/DropdownMenuCMS";
+import StatusLabelCMS, {
+  Variant,
+} from "@/app/components/labels/StatusLabelCMS";
 import { EllipsisVertical, Eye, Settings2, Trash2 } from "lucide-react";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import AppAlertDialogBox from "./AppDialogBox";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(timezone);
@@ -200,7 +202,7 @@ export default function UserItemListCMS({
         </div>
       </div>
       {isOpenDeleteConfirmation && (
-        <AppAlertDialogBox
+        <AppAlertDialog
           alertDialogHeader="Permanently delete this item?"
           alertDialogMessage={`Are you sure you want to delete ${userName}? This action cannot be undone.`}
           isOpen={isOpenDeleteConfirmation}

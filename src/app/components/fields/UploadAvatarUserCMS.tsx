@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import AppButton from "./AppButton";
+import AppButton from "../buttons/AppButton";
 import { supabase } from "@/lib/supabase";
 import { ImagePlusIcon, Loader2 } from "lucide-react";
 import { toast } from "sonner";

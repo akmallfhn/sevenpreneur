@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SocialMediaButtonRestart25 from "../elements/SocialMediaButtonRestart25";
+import SocialMediaButtonRestart25 from "../buttons/SocialMediaButtonRestart25";
 import {
   faFacebookF,
   faInstagram,
