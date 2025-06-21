@@ -204,25 +204,23 @@ export default function EditUserForm({
         {
           id: userId,
           full_name: formData.fullName,
-          avatar: formData.avatar.trim() ? formData.avatar : undefined,
+          avatar: formData.avatar.trim() ? formData.avatar : null,
           email: formData.email,
           role_id: Number(formData.roleId),
           status: formData.status,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
-            : undefined,
+            : null,
           learning_goal: formData.learningGoal.trim()
             ? formData.learningGoal
-            : undefined,
+            : null,
           entrepreneur_stage_id: formData.entrepreneurStage
             ? Number(formData.entrepreneurStage)
-            : undefined,
+            : null,
           business_name: formData.businessName.trim()
             ? formData.businessName
-            : undefined,
-          industry_id: formData.industry
-            ? Number(formData.industry)
-            : undefined,
+            : null,
+          industry_id: formData.industry ? Number(formData.industry) : null,
         },
         {
           onSuccess: () => {

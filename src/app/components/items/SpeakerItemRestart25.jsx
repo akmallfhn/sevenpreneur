@@ -25,7 +25,7 @@ export default function SpeakerItemRestart25({
             <span className="text-red-500 font-bodycopy">*</span>
           )}
         </p>
-        <p className="speaker-title font-bodycopy text-sm lg:text-base">
+        <p className="speaker-title font-bodycopy font-medium text-white/65 text-sm lg:text-base">
           {speakerTitle}
         </p>
         {onConfirmation && (
