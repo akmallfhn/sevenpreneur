@@ -55,8 +55,8 @@ export default function UploadThumbnailCohortCMS({
     // -- File validation
     if (!file) return;
     if (file?.size < 1) return;
-    if (file?.size > 1024 * 1024) {
-      toast.error("Image must be smaller than 1MB");
+    if (file?.size > 1024 * 1024 * 2) {
+      toast.error("Image must be smaller than 2MB");
       return;
     }
     if (!allowedFormat.includes(file.type)) {
