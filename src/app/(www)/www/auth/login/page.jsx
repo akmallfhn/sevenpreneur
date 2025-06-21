@@ -54,9 +54,9 @@ export default function AuthPage() {
     <div
       className={`root fixed top-0 left-0 w-screen h-screen justify-center z-50 transition-all duration-700 ease-in-out`}
     >
-      <div className="relative flex w-full h-full bg-white justify-center items-center lg:flex-row-reverse">
+      <div className="relative flex w-full h-full bg-white justify-center items-start sm:items-center lg:flex-row-reverse">
         {/* Container Login & Right Side Desktop */}
-        <div className="flex bg-white lg:flex-1/2 lg:items-center lg:justify-center">
+        <div className="flex bg-white pt-24 sm:pt-0 lg:flex-1/2 lg:justify-center">
           <AppLoginContainer currentDomain={domain} />
         </div>
         {/* Background Mobile & Left Side Desktop */}
