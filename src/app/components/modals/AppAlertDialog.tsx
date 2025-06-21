@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import AppButton from "./AppButton";
+import AppButton from "../buttons/AppButton";
 
 interface AppAlertDialogBoxProps {
   isOpen: boolean;
@@ -10,7 +10,7 @@ interface AppAlertDialogBoxProps {
   onConfirm: () => void;
 }
 
-export default function AppAlertDialogBox({
+export default function AppAlertDialog({
   isOpen,
   alertDialogHeader,
   alertDialogMessage,

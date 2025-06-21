@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
-import AppButton from "@/app/components/elements/AppButton";
-import TitleRevealCMS from "@/app/components/elements/TitleRevealCMS";
+import AppButton from "@/app/components/buttons/AppButton";
+import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import { ChevronRight, PlusCircle } from "lucide-react";
 import UserListCMS from "@/app/components/templates/UserListCMS";
-import AppBreadcrumb from "@/app/components/elements/AppBreadcrumb";
-import AppBreadcrumbItem from "@/app/components/elements/AppBreadcrumbItem";
+import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 
 export default async function UserListPage() {
   const cookieStore = await cookies();

@@ -7,7 +7,7 @@ import FAQEventRestart25 from "../../components/templates/FAQEventRestart25";
 import TopicsRunningText from "../../components/templates/TopicsRunningTextRestart25";
 import SpeakersLineUpRestart25 from "../../components/templates/SpeakersLineUpRestart25";
 import EventExperienceRestart25 from "@/app/components/templates/EventExperienceRestart25";
-import CustomFloatingRestart25 from "@/app/components/elements/CustomFloatingRestart25";
+import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
 
 export const metadata = {
   title:

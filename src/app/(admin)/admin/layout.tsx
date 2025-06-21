@@ -3,7 +3,7 @@ import { cookies, headers } from "next/headers";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { TRPCProvider } from "@/trpc/client";
 import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
-import SidebarCMS from "@/app/components/templates/SidebarCMS";
+import SidebarCMS from "@/app/components/navigations/SidebarCMS";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import { Metadata } from "next";

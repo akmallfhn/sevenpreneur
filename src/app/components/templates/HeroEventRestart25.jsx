@@ -1,6 +1,6 @@
 "use client";
 import { ArrowDown, ArrowUpIcon } from "lucide-react";
-import ButtonRestart25 from "../elements/ButtonRestart25";
+import ButtonRestart25 from "../buttons/ButtonRestart25";
 import Image from "next/image";
 import Link from "next/link";
 

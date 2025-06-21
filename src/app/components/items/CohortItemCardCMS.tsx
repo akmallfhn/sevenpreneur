@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import StatusLabelCMS from "./StatusLabelCMS";
-import AppButton from "./AppButton";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppButton from "../buttons/AppButton";
 import { EllipsisVertical } from "lucide-react";
 
 export default function CohortItemCardCMS() {

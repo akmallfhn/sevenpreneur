@@ -2,12 +2,12 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import TitleRevealCMS from "../elements/TitleRevealCMS";
-import InputCMS from "../elements/InputCMS";
-import SelectCMS from "../elements/SelectCMS";
-import AppButton from "../elements/AppButton";
-import TextAreaCMS from "../elements/TextAreaCMS";
-import StatusLabelCMS, { Variant } from "../elements/StatusLabelCMS";
+import TitleRevealCMS from "../titles/TitleRevealCMS";
+import InputCMS from "../fields/InputCMS";
+import SelectCMS from "../fields/SelectCMS";
+import AppButton from "../buttons/AppButton";
+import TextAreaCMS from "../fields/TextAreaCMS";
+import StatusLabelCMS, { Variant } from "../labels/StatusLabelCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -24,8 +24,8 @@ import {
   Settings2,
   ChevronRight,
 } from "lucide-react";
-import AppBreadcrumb from "../elements/AppBreadcrumb";
-import AppBreadcrumbItem from "../elements/AppBreadcrumbItem";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);

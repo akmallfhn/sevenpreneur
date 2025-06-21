@@ -11,7 +11,7 @@ import {
   Toilet,
   Waypoints,
 } from "lucide-react";
-import SectionTitleRestart25 from "../elements/SectionTitleRestart25";
+import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
 
 export default function TopicsRunningText() {
   const topicsData = [

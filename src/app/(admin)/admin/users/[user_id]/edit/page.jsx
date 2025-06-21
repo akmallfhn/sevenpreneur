@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import EditUserForm from "@/app/components/templates/UserEditCMS";
+import EditUserForm from "@/app/components/forms/EditUserFormCMS";
 
 export default async function EditUserPage({ params }) {
   const { user_id } = await params;
