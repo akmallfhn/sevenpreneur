@@ -47,7 +47,7 @@ export default function AppLoginContainer({ currentDomain }) {
   });
 
   return (
-    <div className="container flex z-30 py-14 px-6 max-w-[336px] items-center bg-white/30 rounded-[20px] backdrop-blur-xl lg:max-w-[420px]">
+    <div className="container flex z-30 py-14 px-4 max-w-[320px] w-fit items-center bg-white/30 rounded-[20px] backdrop-blur-xl lg:max-w-[420px]">
       <div className="login-component flex flex-col mx-auto gap-8 text-white items-center text-center lg:text-black">
         <Image
           className="flex max-w-[90px] lg:hidden"
