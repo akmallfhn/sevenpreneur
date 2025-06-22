@@ -60,7 +60,7 @@ export default function TextAreaCMS({
         className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {textAreaName}
-        {required && <span className="text-red-700">*</span>}
+        {required && <span className="text-destructive">*</span>}
       </label>
 
       {/* --- Input Placeholder */}
@@ -69,8 +69,10 @@ export default function TextAreaCMS({
           id={textAreaId}
           placeholder={textAreaPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md resize-none placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
-            error ? "border-red-700 border" : "border border-outline"
+          className={`flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md border resize-none transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
+            error
+              ? "border-destructive focus:outline-semi-destructive"
+              : "border-outline focus:outline-primary/15 focus:border-cms-primary"
           } `}
           value={value}
           onChange={handleInputChange}

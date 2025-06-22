@@ -62,7 +62,7 @@ export default function InputCMS({
         className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {inputName}
-        {required && <span className="text-red-700">*</span>}
+        {required && <span className="text-destructive">*</span>}
       </label>
 
       {/* --- Input Placeholder */}
@@ -77,8 +77,10 @@ export default function InputCMS({
           type={inputType}
           placeholder={inputPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md placeholder:text-alternative placeholder:font-medium placeholder:text-sm ${
-            error ? "border-red-700 border" : "border border-outline"
+          className={`flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
+            error
+              ? "border-destructive focus:outline-semi-destructive"
+              : "border-outline focus:outline-primary/15 focus:border-cms-primary"
           } ${inputIcon ? "pl-10" : ""} `}
           value={value}
           onChange={handleInputChange}
