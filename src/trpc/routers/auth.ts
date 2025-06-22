@@ -54,17 +54,22 @@ export const authRouter = createTRPCRouter({
         });
       } else {
         if (!findUser.avatar && userInfo.picture) {
-          // $executeRaw is used for counting updated avatars.
-          const updatedAvatar: number = await opts.ctx.prisma
-            .$executeRaw`UPDATE users SET avatar = ${userInfo.picture} WHERE email = ${userInfo.email};`;
-          if (updatedAvatar > 1) {
+          const updatedAvatar = await opts.ctx.prisma.user.updateManyAndReturn({
+            data: {
+              avatar: userInfo.picture,
+            },
+            where: {
+              email: userInfo.email,
+            },
+          });
+          if (updatedAvatar.length > 1) {
             console.error(
               "auth.login: More-than-one users have its avatar updated at once."
             );
           }
         }
 
-        // $executeRaw is used for counting updated last_logins.
+        // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
         const updatedLogin: number = await opts.ctx.prisma
           .$executeRaw`UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = ${userInfo.email};`;
         if (updatedLogin > 1) {
