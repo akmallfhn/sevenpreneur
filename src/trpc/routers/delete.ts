@@ -1,5 +1,5 @@
 import { administratorProcedure, createTRPCRouter } from "@/trpc/init";
-import { stringIsUUID } from "@/trpc/utils/validation";
+import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
 import { z } from "zod";
 
 export const deleteRouter = createTRPCRouter({
@@ -14,6 +14,26 @@ export const deleteRouter = createTRPCRouter({
         .$executeRaw`UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ${opts.input.id}::uuid;`;
       if (deletedUser > 1) {
         console.error("delete.user: More-than-one users are deleted at once.");
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
+
+  cohort: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedCohort: number = await opts.ctx.prisma
+        .$executeRaw`UPDATE cohorts SET deleted_at = CURRENT_TIMESTAMP WHERE id = ${opts.input.id};`;
+      if (deletedCohort > 1) {
+        console.error(
+          "delete.cohort: More-than-one cohorts are deleted at once."
+        );
       }
       return {
         status: 200,
