@@ -10,6 +10,7 @@ export const deleteRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedUser: number = await opts.ctx.prisma
         .$executeRaw`UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ${opts.input.id}::uuid;`;
       if (deletedUser > 1) {
@@ -28,6 +29,7 @@ export const deleteRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedCohort: number = await opts.ctx.prisma
         .$executeRaw`UPDATE cohorts SET deleted_at = CURRENT_TIMESTAMP WHERE id = ${opts.input.id};`;
       if (deletedCohort > 1) {
