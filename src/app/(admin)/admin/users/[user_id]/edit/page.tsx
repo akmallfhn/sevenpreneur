@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import EditUserForm from "@/app/components/forms/EditUserFormCMS";
 
 interface EditUserPageProps {
-  params: { user_id: string };
+  params: Promise<{ user_id: string }>;
 }
 
 export default async function EditUserPage({ params }: EditUserPageProps) {
