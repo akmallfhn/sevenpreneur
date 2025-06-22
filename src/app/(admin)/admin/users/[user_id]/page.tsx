@@ -2,7 +2,7 @@ import UserProfileDetailCMS from "@/app/components/templates/UserProfileDetailCM
 import { cookies } from "next/headers";
 
 interface UserDetailPageProps {
-  params: { user_id: string };
+  params: Promise<{ user_id: string }>;
 }
 
 export default async function UserDetailPage({ params }: UserDetailPageProps) {
