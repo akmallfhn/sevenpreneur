@@ -1,4 +1,5 @@
 import { administratorProcedure, createTRPCRouter } from "@/trpc/init";
+import { stringToDate } from "@/trpc/utils/string_date";
 import {
   numberIsID,
   numberIsRoleID,
@@ -28,12 +29,7 @@ export const updateRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      const dateOfBirth =
-        typeof opts.input.date_of_birth !== "undefined"
-          ? opts.input.date_of_birth !== null
-            ? new Date(opts.input.date_of_birth)
-            : null
-          : undefined;
+      const dateOfBirth = stringToDate(opts.input.date_of_birth);
       const updatedUser = await opts.ctx.prisma.user.updateManyAndReturn({
         data: {
           full_name: opts.input.full_name,
