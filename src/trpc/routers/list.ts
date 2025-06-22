@@ -77,4 +77,31 @@ export const listRouter = createTRPCRouter({
       list: returnedList,
     };
   }),
+
+  cohorts: loggedInProcedure.query(async (opts) => {
+    const cohortList = await opts.ctx.prisma.cohort.findMany({
+      orderBy: [
+        { end_date: "desc" },
+        { start_date: "desc" },
+        { published_at: "desc" },
+      ],
+      where: { deleted_at: null },
+    });
+    const returnedList = cohortList.map((entry) => {
+      return {
+        id: entry.id,
+        name: entry.name,
+        image: entry.image,
+        status: entry.status,
+        slug_url: entry.slug_url,
+        start_date: entry.start_date,
+        end_date: entry.end_date,
+      };
+    });
+    return {
+      status: 200,
+      message: "Success",
+      list: returnedList,
+    };
+  }),
 });

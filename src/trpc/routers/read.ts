@@ -1,5 +1,5 @@
 import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
-import { stringIsUUID } from "@/trpc/utils/validation";
+import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -102,6 +102,38 @@ export const readRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         user: theUser,
+      };
+    }),
+
+  cohort: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theCohort = await opts.ctx.prisma.cohort.findFirst({
+        include: {
+          cohort_prices: true,
+          modules: true,
+          lessons: true,
+          projects: true,
+        },
+        where: {
+          id: opts.input.id,
+          deleted_at: null,
+        },
+      });
+      if (!theCohort) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The cohort with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        cohort: theCohort,
       };
     }),
 });
