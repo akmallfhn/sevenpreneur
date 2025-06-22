@@ -43,6 +43,7 @@ export default function PriceTierStepperCMS() {
               inputId="price-name"
               inputName="Tier Name"
               inputType="text"
+              inputPlaceholder="What’s this price called?"
               value={post.name}
               onInputChange={(value: string) =>
                 handleChange(index, "name", value)

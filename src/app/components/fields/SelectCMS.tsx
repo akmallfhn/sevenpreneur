@@ -31,7 +31,7 @@ export default function SelectCMS({
   options = [],
 }: SelectCMSProps) {
   // --- State for Select
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // --- Handle click outside container
@@ -41,7 +41,7 @@ export default function SelectCMS({
         containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
-        setOpen(false);
+        setIsOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -64,16 +64,18 @@ export default function SelectCMS({
         className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {selectName}
-        {required && <span className="text-red-700">*</span>}
+        {required && <span className="text-destructive">*</span>}
       </label>
 
       {/* --- Select Placeholder */}
       <div
-        className={`select relative flex w-full p-2 pl-10 bg-white font-bodycopy font-medium text-sm rounded-md border border-outline ${
-          open ? "border-cms-primary" : "border-outline"
+        className={`select relative flex w-full p-2 pl-10 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
+          isOpen
+            ? "border-cms-primary outline-4 outline-primary/15"
+            : "border-outline"
         } ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         onClick={() => {
-          if (!disabled) setOpen((prev) => !prev);
+          if (!disabled) setIsOpen((prev) => !prev);
         }}
       >
         {/* -- Icon Select */}
@@ -98,7 +100,7 @@ export default function SelectCMS({
         )}
 
         {/* --- Dropdown options */}
-        {open && !disabled && (
+        {isOpen && !disabled && (
           <div className="absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md">
             <ul className="flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt) => (
@@ -107,7 +109,7 @@ export default function SelectCMS({
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange?.(opt.value);
-                    setOpen(false);
+                    setIsOpen(false);
                   }}
                   className={`px-4 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-cms-primary ${
                     value === opt.value ? "bg-[#E1EDFF] text-cms-primary" : ""
