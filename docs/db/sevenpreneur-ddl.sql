@@ -94,7 +94,7 @@ CREATE TABLE modules (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE lessons (
+CREATE TABLE learnings (
   id             SERIAL       PRIMARY KEY,
   cohort_id      INTEGER      NOT NULL,
   name           VARCHAR      NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE lessons (
 
 CREATE TABLE materials (
   id            SERIAL       PRIMARY KEY,
-  lesson_id     INTEGER      NOT NULL,
+  learning_id   INTEGER      NOT NULL,
   name          VARCHAR      NOT NULL,
   description   VARCHAR      NOT NULL,
   document_url  VARCHAR      NOT NULL,
@@ -150,12 +150,12 @@ ALTER TABLE cohort_prices
 ALTER TABLE modules
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
 
-ALTER TABLE lessons
+ALTER TABLE learnings
   ADD FOREIGN KEY (cohort_id)  REFERENCES cohorts (id),
   ADD FOREIGN KEY (speaker_id) REFERENCES users (id);
 
 ALTER TABLE materials
-  ADD FOREIGN KEY (lesson_id) REFERENCES lessons (id);
+  ADD FOREIGN KEY (learning_id) REFERENCES learnings (id);
 
 ALTER TABLE projects
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
@@ -196,8 +196,8 @@ CREATE TRIGGER update_modules_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
-CREATE TRIGGER update_lessons_updated_at_trigger
-  BEFORE UPDATE ON lessons
+CREATE TRIGGER update_learnings_updated_at_trigger
+  BEFORE UPDATE ON learnings
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 

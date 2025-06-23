@@ -74,7 +74,7 @@ model User {
   deleted_at            DateTime?          @db.Timestamptz()
   tokens                Token[]
   cohorts               Cohort[]
-  lessons               Lesson[]
+  learnings             Learning[]
 
   @@map("users")
 }
@@ -106,7 +106,7 @@ model Cohort {
   deleted_by_id String?       @map("deleted_by") @db.Uuid
   cohort_prices CohortPrice[]
   modules       Module[]
-  lessons       Lesson[]
+  learnings     Learning[]
   projects      Project[]
 
   @@map("cohorts")
@@ -138,7 +138,7 @@ model Module {
   @@map("modules")
 }
 
-model Lesson {
+model Learning {
   id            Int        @id @default(autoincrement()) @db.Integer
   cohort        Cohort     @relation(fields: [cohort_id], references: [id])
   cohort_id     Int        @db.Integer
@@ -154,13 +154,13 @@ model Lesson {
   updated_at    DateTime   @default(now()) @updatedAt @db.Timestamptz()
   materials     Material[]
 
-  @@map("lessons")
+  @@map("learnings")
 }
 
 model Material {
   id           Int        @id @default(autoincrement()) @db.Integer
-  lesson       Lesson     @relation(fields: [lesson_id], references: [id])
-  lesson_id    Int        @db.Integer
+  learning     Learning   @relation(fields: [learning_id], references: [id])
+  learning_id  Int        @db.Integer
   name         String     @db.VarChar()
   description  String     @db.VarChar()
   document_url String     @db.VarChar()
