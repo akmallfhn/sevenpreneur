@@ -37,7 +37,7 @@ export default function SpeakersLineUpRestart25() {
       title: "CEO Mekari",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//suwandi-soh.webp",
-      on_confirmation: true,
+      on_confirmation: false,
     },
     {
       name: "Lilis Mulyawati",
