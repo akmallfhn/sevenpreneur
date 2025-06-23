@@ -65,7 +65,7 @@ CREATE TABLE cohorts (
   description   VARCHAR      NOT NULL,
   image         VARCHAR      NOT NULL,
   status        status_enum  NOT NULL,
-  slug_url      VARCHAR      NOT NULL,
+  slug_url      VARCHAR      NOT NULL  UNIQUE,
   start_date    TIMESTAMPTZ  NOT NULL,
   end_date      TIMESTAMPTZ  NOT NULL,
   published_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
