@@ -9,7 +9,7 @@ export default function EventExperienceRestart25() {
       description:
         "Conversations that challenge, inspire, and move business forward.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//main-stage.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/main-stage.webp",
       isVIP: false,
     },
     {
@@ -17,7 +17,7 @@ export default function EventExperienceRestart25() {
       description:
         "Learn hands-on skills from experts in short, power-packed sessions.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//mini-workshop.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/mini-workshop%20(1).webp",
       isVIP: false,
     },
 
@@ -26,7 +26,7 @@ export default function EventExperienceRestart25() {
       description:
         "Watch top finalists pitch game-changing ideas in an electrifying finale.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//business-challenge.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/business-challenge.webp",
       isVIP: false,
     },
     {
@@ -34,7 +34,7 @@ export default function EventExperienceRestart25() {
       description:
         "Capture your moment in beautifully curated, Instagram-worthy spaces.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//photo-spot.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/aesthetic-photo-spot.webp",
       isVIP: false,
     },
     {
@@ -42,7 +42,7 @@ export default function EventExperienceRestart25() {
       description:
         "An exclusive space for premium comfort, networking, and perks.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//vip-lounge.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/vip-lounge.webp",
       isVIP: true,
     },
     {
@@ -50,7 +50,7 @@ export default function EventExperienceRestart25() {
       description:
         "A fusion of live art and DJ vibes to elevate your senses and energy.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//art-performance.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/entertainment-show.webp",
       isVIP: true,
     },
     {
@@ -58,7 +58,7 @@ export default function EventExperienceRestart25() {
       description:
         "An intimate dinner to connect deeply with visionary speakers.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//art-performance.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/dinner-dialogue.webp",
       isVIP: true,
     },
     {
@@ -66,7 +66,7 @@ export default function EventExperienceRestart25() {
       description:
         "An open-floor night to meet future partners, clients, or co-founders.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//art-performance.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/networking-night.webp",
       isVIP: true,
     },
   ];

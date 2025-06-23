@@ -67,7 +67,7 @@ export default function HomePage() {
       <ContentEventRestart25 />
       <TopicsRunningText />
       <SpeakersLineUpRestart25 />
-      {/* <EventExperienceRestart25 /> */}
+      <EventExperienceRestart25 />
       <TicketCarouselRestart25 />
       <FAQEventRestart25 />
       <BannerEventRestart25 />
