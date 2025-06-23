@@ -116,7 +116,7 @@ export const readRouter = createTRPCRouter({
         include: {
           cohort_prices: true,
           modules: true,
-          lessons: true,
+          learnings: true,
           projects: true,
         },
         where: {
