@@ -126,7 +126,7 @@ export default function UploadThumbnailCohortCMS({
               Upload Thumbnail Image <span className="text-destructive">*</span>
             </p>
             <p className="text-sm font-medium text-black/50">
-              Upload a 1200x800 px image and keep it under 2 MB
+              Upload a 1280x720 px image and keep it under 2 MB
             </p>
           </div>
         </div>

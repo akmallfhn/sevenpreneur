@@ -27,7 +27,7 @@ export default function CustomFloatingRestart25() {
         <Image
           className="object-cover w-full h-full"
           src={
-            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//button-buy.svg"
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//button-buy-v2.webp"
           }
           alt="Actions Button"
           width={500}
