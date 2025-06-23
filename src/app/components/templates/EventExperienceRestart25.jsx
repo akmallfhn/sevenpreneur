@@ -22,9 +22,9 @@ export default function EventExperienceRestart25() {
     },
 
     {
-      name: "Business Challenge Finale",
+      name: "The Grand Pitch & Awarding",
       description:
-        "Watch top finalists pitch game-changing ideas in an electrifying finale.",
+        "A singular pitch for the winner of RE:START Business Challenge",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/business-challenge.webp",
       isVIP: false,
