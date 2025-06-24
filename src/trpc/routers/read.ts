@@ -115,9 +115,6 @@ export const readRouter = createTRPCRouter({
       const theCohort = await opts.ctx.prisma.cohort.findFirst({
         include: {
           cohort_prices: true,
-          modules: true,
-          learnings: true,
-          projects: true,
         },
         where: {
           id: opts.input.id,
