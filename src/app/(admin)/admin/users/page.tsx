@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import UserListCMS from "@/app/components/templates/UserListCMS";
+import UserListCMS from "@/app/components/indexes/UserListCMS";
 
 export default async function UserListPage() {
   const cookieStore = await cookies();
