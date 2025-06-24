@@ -127,4 +127,41 @@ export const createRouter = createTRPCRouter({
         cohort: theCohort,
       };
     }),
+
+  cohortPrice: administratorProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+        name: stringNotBlank(),
+        amount: z.number(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdCohortPrice = await opts.ctx.prisma.cohortPrice.create({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          amount: opts.input.amount,
+          status: opts.input.status,
+        },
+      });
+      const theCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
+        where: {
+          id: createdCohortPrice.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theCohortPrice) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new cohort price.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        cohortPrice: theCohortPrice,
+      };
+    }),
 });

@@ -110,4 +110,45 @@ export const updateRouter = createTRPCRouter({
         cohort: updatedCohort[0],
       };
     }),
+
+  cohortPrice: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        cohort_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        amount: z.number().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedCohortPrice =
+        await opts.ctx.prisma.cohortPrice.updateManyAndReturn({
+          data: {
+            cohort_id: opts.input.cohort_id,
+            name: opts.input.name,
+            amount: opts.input.amount,
+            status: opts.input.status,
+          },
+          where: {
+            id: opts.input.id,
+            // deleted_at: null,
+          },
+        });
+      if (updatedCohortPrice.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected cohort price is not found.",
+        });
+      } else if (updatedCohortPrice.length > 1) {
+        console.error(
+          "update.cohortPrice: More-than-one cohort prices are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        cohort: updatedCohortPrice[0],
+      };
+    }),
 });

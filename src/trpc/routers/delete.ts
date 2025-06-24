@@ -42,4 +42,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  cohortPrice: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedCohortPrice = await opts.ctx.prisma.cohortPrice.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedCohortPrice.count > 1) {
+        console.error(
+          "delete.cohortPrice: More-than-one cohort prices are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });
