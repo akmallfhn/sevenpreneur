@@ -6,8 +6,22 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactNode } from "react";
 
-const variantStyles = {
+export type rolesVariant =
+  | "administrator"
+  | "educator"
+  | "classManager"
+  | "generalUser";
+
+const variantStyles: Record<
+  rolesVariant,
+  {
+    backgroundColor: string;
+    labelColor: string;
+    labelIcon: ReactNode;
+  }
+> = {
   administrator: {
     backgroundColor: "bg-[#EFEDF9]",
     labelColor: "text-[#42359B]",
@@ -18,19 +32,27 @@ const variantStyles = {
     labelColor: "text-[#164EA6]",
     labelIcon: <FontAwesomeIcon icon={faChalkboardUser} />,
   },
-  class_manager: {
+  classManager: {
     backgroundColor: "bg-[#ECFDF3]",
     labelColor: "text-[#0A4F2D]",
     labelIcon: <FontAwesomeIcon icon={faPenNib} />,
   },
-  general_user: {
+  generalUser: {
     backgroundColor: "bg-[#F3F5F9]",
     labelColor: "text-[#41474E]",
     labelIcon: <FontAwesomeIcon icon={faUser} />,
   },
 };
 
-export default function AttributeLabelCMS({ labelName, variants }) {
+interface RolesLabelCMSProps {
+  labelName: string;
+  variants: rolesVariant;
+}
+
+export default function RolesLabelCMS({
+  labelName,
+  variants,
+}: RolesLabelCMSProps) {
   // --- Variant declaration
   const { backgroundColor, labelColor, labelIcon } = variantStyles[variants];
 

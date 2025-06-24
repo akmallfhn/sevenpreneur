@@ -8,15 +8,18 @@ import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import AppAlertDialog from "@/app/components/modals/AppAlertDialog";
 import AppButton from "@/app/components/buttons/AppButton";
-import AttributeLabelCMS from "@/app/components/labels/AttributeLabelCMS";
 import DropdownMenuCMS from "@/app/components/elements/DropdownMenuCMS";
 import StatusLabelCMS, {
   Variant,
 } from "@/app/components/labels/StatusLabelCMS";
+import RolesLabelCMS, {
+  rolesVariant,
+} from "@/app/components/labels/RolesLabelCMS";
 import { EllipsisVertical, Eye, Settings2, Trash2 } from "lucide-react";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { toCamelCase } from "@/lib/camel-case";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(timezone);
@@ -133,9 +136,9 @@ export default function UserItemListCMS({
         <div className="flex gap-7 items-center">
           {/* --- Role */}
           <div className="user-role max-w-[120px] w-full shrink-0 text-left">
-            <AttributeLabelCMS
+            <RolesLabelCMS
               labelName={userRole}
-              variants={equalizingRoleVariant(userRole)}
+              variants={toCamelCase(userRole) as rolesVariant}
             />
           </div>
 
