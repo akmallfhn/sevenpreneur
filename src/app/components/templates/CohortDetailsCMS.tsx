@@ -27,6 +27,7 @@ import {
   faMoneyBill1Wave,
 } from "@fortawesome/free-solid-svg-icons";
 import FileItemCMS from "../items/FileItemCMS";
+import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -80,7 +81,7 @@ export default function CohortDetailsCMS({
           <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
           <ChevronRight className="size-3.5" />
           <AppBreadcrumbItem href={`/cohorts/${cohortId}`} isCurrentPage>
-            Profile
+            Details
           </AppBreadcrumbItem>
         </AppBreadcrumb>
       </div>
@@ -88,21 +89,19 @@ export default function CohortDetailsCMS({
       {/* --- PAGE BODY */}
       <div className="body-container flex gap-5">
         {/* -- Main */}
-        <main className="flex flex-col flex-[2] w-full gap-2">
-          <div className="flex flex-col gap-3">
-            {/* - Metadata */}
-            <div className="image-thumbnail relative flex aspect-thumbnail rounded-md overflow-hidden">
+        <main className="flex flex-col flex-[2] w-full gap-5">
+          {/* Cohort Detail */}
+          <div className="flex flex-col bg-white border border-outline rounded-md overflow-hidden">
+            <div className="image-thumbnail relative flex aspect-thumbnail">
               <Image
                 className="object-cover w-full h-full"
-                src={
-                  "https://cdn1-production-images-kly.akamaized.net/524y4XzzpNF0uNXuIvIQe65vv_0=/1200x675/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/5135681/original/030234100_1739782560-rundown-kapanlagi-buka-bareng-bri-festi-263294.jpg"
-                }
+                src={cohortDetailsData?.cohort.image || ""}
                 alt={cohortDetailsData?.cohort.name || "Cohort Sevenpreneur"}
                 width={1200}
                 height={1200}
               />
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 p-4">
               <h1 className="cohort-title font-brand font-bold text-xl">
                 {cohortDetailsData?.cohort.name}
               </h1>
@@ -122,6 +121,65 @@ export default function CohortDetailsCMS({
                 {cohortDetailsData?.cohort.description}
               </p>
             </div>
+          </div>
+
+          {/* Learnings */}
+          <div className="flex flex-col gap-3 p-3 bg-section-background rounded-md">
+            <div className="section-name flex justify-between items-center">
+              <h2 className="label-name font-brand font-bold">Learnings</h2>
+              <AppButton variant="outline" size="small">
+                <Plus className="size-4" />
+                Add sessions
+              </AppButton>
+            </div>
+            <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
+              LIVE NOW
+            </h3>
+            <div className="learning-list flex flex-col gap-2">
+              <LearningSessionItemCMS
+                sessionName="Day 4 - Finance, Tax, Standard Accounting Procedure"
+                sessionMentor="Felicia Putri Tjiasaka"
+                mentorAvatar="https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+              />
+            </div>
+            <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
+              UPCOMING
+            </h3>
+            <div className="learning-list flex flex-col gap-2">
+              <LearningSessionItemCMS
+                sessionName="Day 7 - Idealisme Bernegara Pada Kaki Manusia"
+                sessionMentor="Alm Tan Malaka"
+                mentorAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU007Bi7Smlx3rX422NJsG5NKxQhLVEwyvmg&s"
+              />
+              <LearningSessionItemCMS
+                sessionName="Day 6 - Menata Kota Jakarta"
+                sessionMentor="Bang Doel"
+                mentorAvatar="https://img2.beritasatu.com/cache/investor/480x310-3/2024/09/1727592754-1190x669.webp"
+              />
+            </div>
+            <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
+              COMPLETED
+            </h3>
+            <div className="learning-list flex flex-col gap-2">
+              <LearningSessionItemCMS
+                sessionName="Day 1 - Menemukan Tim Terbaik seperti One Piece"
+                sessionMentor="Rafi Ahmad"
+                mentorAvatar="https://foto.kontan.co.id/StXCKE_cdjxl3ync1Wq9iTMX4zg=/smart/2023/03/09/1036754397p.jpg"
+              />
+              <LearningSessionItemCMS
+                sessionName="Day 2 - Membentuk Ide dan Mindset Logika"
+                sessionMentor="Tijjani Reinders"
+                mentorAvatar="https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/80/2025/04/04/Screenshot_20250404_212706_Gallery-3123441984.jpg"
+              />
+              <LearningSessionItemCMS
+                sessionName="Day 3 - Research by Yourself"
+                sessionMentor="Lamine Yamal"
+                mentorAvatar="https://akcdn.detik.net.id/community/media/visual/2025/06/06/2218118646-1749193061423_169.jpeg?w=600&q=90"
+              />
+            </div>
+            <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
+              Load more
+            </p>
           </div>
         </main>
 
@@ -160,7 +218,7 @@ export default function CohortDetailsCMS({
                 <p className="font-brand font-bold text-xl">45</p>
               </div>
             </div>
-            <div className="stat-item flex items-center bg-[#F6D7E0] gap-3 p-3 rounded-md">
+            <div className="stat-item flex items-center bg-[#FFE6EE] gap-3 p-3 rounded-md">
               <div className="icon aspect-square flex size-12 p-3 justify-center items-center bg-secondary text-white rounded-full">
                 <FontAwesomeIcon icon={faMoneyBill1Wave} className="size-7" />
               </div>
@@ -197,6 +255,91 @@ export default function CohortDetailsCMS({
                 fileType="PDF"
                 fileIcon="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//pdf-icon.webp"
               />
+            </div>
+            <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
+              Load more
+            </p>
+          </div>
+
+          {/* Enrolled user */}
+          <div className="enrolled-user flex flex-col gap-3 p-3 bg-section-background rounded-md">
+            <h2 className="label-name font-brand font-bold">Enrolled users</h2>
+            <div className="user-list flex flex-col gap-4 bg-white rounded-md p-4">
+              <div className="session-educator flex gap-2 items-center">
+                <div className="size-[29px] rounded-full overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                    }
+                    alt="Avatar User"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
+                  <p className="mentor-name text-black font-semibold">
+                    Akmal Luthfiansyah
+                  </p>
+                </div>
+              </div>
+
+              <div className="session-educator flex gap-2 items-center">
+                <div className="size-[29px] rounded-full overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                    }
+                    alt="Avatar User"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
+                  <p className="mentor-name text-black font-semibold">
+                    Akmal Luthfiansyah
+                  </p>
+                </div>
+              </div>
+
+              <div className="session-educator flex gap-2 items-center">
+                <div className="size-[29px] rounded-full overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                    }
+                    alt="Avatar User"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
+                  <p className="mentor-name text-black font-semibold">
+                    Akmal Luthfiansyah
+                  </p>
+                </div>
+              </div>
+
+              <div className="session-educator flex gap-2 items-center">
+                <div className="size-[29px] rounded-full overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                    }
+                    alt="Avatar User"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
+                  <p className="mentor-name text-black font-semibold">
+                    Akmal Luthfiansyah
+                  </p>
+                </div>
+              </div>
             </div>
             <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
               Load more

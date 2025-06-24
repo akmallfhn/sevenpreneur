@@ -16,11 +16,11 @@ export default function FileItemCMS({ fileIcon, fileType }: FileItemCMSProps) {
           <Image src={fileIcon} alt="File" width={200} height={200} />
         </div>
         <div className="attribute-data flex flex-col">
-          <h3 className="font-bodycopy font-semibold line-clamp-1">
+          <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
             Cara Membaca Apakah Pebisnis Fraud atau Tidak Setelah Data Berbicara
             Kopling
           </h3>
-          <p className="font-brand font-medium text-alternative text-sm">
+          <p className="font-bodycopy font-medium text-alternative text-sm">
             {fileType}
           </p>
         </div>
