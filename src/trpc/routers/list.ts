@@ -1,4 +1,6 @@
 import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
+import { numberIsID } from "@/trpc/utils/validation";
+import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
   industries: loggedInProcedure.query(async (opts) => {
@@ -104,4 +106,32 @@ export const listRouter = createTRPCRouter({
       list: returnedList,
     };
   }),
+
+  cohortPrices: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const cohortPricesList = await opts.ctx.prisma.cohortPrice.findMany({
+        where: {
+          cohort_id: opts.input.id,
+        },
+        orderBy: [{ amount: "asc" }, { created_at: "asc" }],
+      });
+      const returnedList = cohortPricesList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          amount: entry.amount,
+          status: entry.status,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
 });
