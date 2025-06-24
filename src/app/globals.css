@@ -19,6 +19,7 @@
   --color-cms-primary: #013393;
   --color-cms-secondary: #65d6ca;
   --color-cms-primary-light: #cde2ff;
+  --color-section-background: #f5f7fb;
 }
 
 @theme inline {

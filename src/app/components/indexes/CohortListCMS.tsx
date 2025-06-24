@@ -81,7 +81,7 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
 
         {/* --- List Cohort */}
         <div className="w-full flex flex-col gap-8">
-          <div className="flex flex-col gap-4 p-5 border border-outline rounded-lg">
+          <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
             <h2 className="font-bold font-brand text-xl text-black">
               On Going Programs
             </h2>
@@ -101,7 +101,7 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 p-5 border border-outline rounded-lg">
+          <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
             <h2 className="font-bold font-brand text-xl text-black">
               Finished Programs
             </h2>

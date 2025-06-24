@@ -127,11 +127,13 @@ export default function UserProfileDetailCMS({
           </Link>
         </div>
       </div>
+
+      {/* --- PAGE BODY */}
       <div className="flex w-full gap-6">
         {/* --- LEFT SIDE */}
         <div className="left-side flex flex-col flex-1/2 gap-4">
           {/* --- Profile Container */}
-          <div className="profile-container relative flex w-full bg-[#FAFAFA] p-5 rounded-xl overflow-hidden">
+          <div className="profile-container relative flex w-full bg-section-background p-5 rounded-xl overflow-hidden">
             <div className="background-image absolute flex top-0 left-0 w-full h-20 z-0">
               <Image
                 className="object-cover w-full h-full"
@@ -174,7 +176,7 @@ export default function UserProfileDetailCMS({
           </div>
 
           {/* --- Personal Information */}
-          <div className="personal-information-container flex flex-col w-full h-fit bg-[#FAFAFA] gap-5 p-5 rounded-xl">
+          <div className="personal-information-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl">
             <h2 className="label-name font-brand font-bold">
               Personal Information
             </h2>
@@ -233,7 +235,7 @@ export default function UserProfileDetailCMS({
         {/* --- RIGHT SIDE */}
         <div className="right-side flex flex-col flex-1/2 gap-4">
           {/* --- Learning Goals */}
-          <div className="learning-goals-container flex flex-col w-full h-fit bg-[#FAFAFA] gap-5 p-5 rounded-xl overflow-hidden">
+          <div className="learning-goals-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl overflow-hidden">
             <h2 className="label-name font-brand font-bold">Learning Goals</h2>
             <TextAreaCMS
               textAreaId={"learning-goal"}
@@ -246,7 +248,7 @@ export default function UserProfileDetailCMS({
           </div>
 
           {/* --- Business Information */}
-          <div className="business-information-container flex flex-col w-full h-fit bg-[#FAFAFA] gap-5 p-5 rounded-xl overflow-hidden">
+          <div className="business-information-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl overflow-hidden">
             <h2 className="label-name font-brand font-bold">
               Business Information
             </h2>

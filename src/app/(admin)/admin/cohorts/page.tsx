@@ -1,4 +1,4 @@
-import CohortListCMS from "@/app/components/templates/CohortListCMS";
+import CohortListCMS from "@/app/components/indexes/CohortListCMS";
 import { cookies } from "next/headers";
 
 export default async function CohortListPage() {

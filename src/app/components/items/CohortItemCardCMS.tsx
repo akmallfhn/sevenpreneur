@@ -69,7 +69,7 @@ export default function CohortItemCardCMS({
             </p>
           </div>
           <div className="cohort-timeline flex gap-2 items-center text-alternative">
-            <FontAwesomeIcon icon={faCalendar} className="size-3  " />
+            <FontAwesomeIcon icon={faCalendar} className="size-3" />
             <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
               <span>{dayjs(cohortStartDate).format("ll")}</span> -{" "}
               <span>{dayjs(cohortEndDate).format("ll")}</span>

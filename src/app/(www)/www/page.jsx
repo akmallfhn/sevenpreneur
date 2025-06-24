@@ -1,12 +1,12 @@
 import HeroEventRestart2025 from "../../components/templates/HeroEventRestart25";
 import VisionQuotesRestart25 from "../../components/templates/VisionQuotesRestart25";
 import ContentEventRestart25 from "../../components/templates/ContentEventRestart25";
-import TicketCarouselRestart25 from "../../components/templates/TicketCarouselRestart25";
+import TicketCarouselRestart25 from "../../components/indexes/TicketCarouselRestart25";
 import BannerEventRestart25 from "../../components/templates/BannerEventRestart25";
-import FAQEventRestart25 from "../../components/templates/FAQEventRestart25";
-import TopicsRunningText from "../../components/templates/TopicsRunningTextRestart25";
-import SpeakersLineUpRestart25 from "../../components/templates/SpeakersLineUpRestart25";
-import EventExperienceRestart25 from "@/app/components/templates/EventExperienceRestart25";
+import FAQEventRestart25 from "../../components/indexes/FAQEventRestart25";
+import TopicsRunningText from "../../components/indexes/TopicsRunningTextRestart25";
+import SpeakersLineUpRestart25 from "../../components/indexes/SpeakersLineUpRestart25";
+import EventExperienceRestart25 from "@/app/components/indexes/EventExperienceRestart25";
 import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
 
 export const metadata = {
