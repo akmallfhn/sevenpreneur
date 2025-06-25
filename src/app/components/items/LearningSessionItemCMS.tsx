@@ -13,26 +13,32 @@ import LearningMethodLabelCMS, {
   learningMethodVariant,
 } from "../labels/LearningMethodLabelCMS";
 import Image from "next/image";
+import LearningSessionIconLabelCMS, {
+  learningSessionVariant,
+} from "../labels/LearningSessionIconLabelCMS";
+import { toCamelCase } from "@/lib/camel-case";
 
 dayjs.extend(localizedFormat);
 
 interface LearningSessionItemCMSProps {
   sessionName: string;
-  sessionMentor: string;
-  mentorAvatar: string;
+  sessionEducatorName: string;
+  sessionEducatorAvatar: string;
+  sessionMethod: string;
 }
 
 export default function LearningSessionItemCMS({
   sessionName,
-  sessionMentor,
-  mentorAvatar,
+  sessionEducatorName,
+  sessionEducatorAvatar,
+  sessionMethod,
 }: LearningSessionItemCMSProps) {
   return (
     <div className="session-item flex items-center justify-between bg-white gap-2 p-3 rounded-md">
       <div className="flex w-[calc(87%)] gap-3 items-center">
-        <div className="icon aspect-square flex size-14 p-3 items-center justify-center bg-cms-primary-light text-cms-primary rounded-md">
-          <Video className="size-7" />
-        </div>
+        <LearningSessionIconLabelCMS
+          variants={toCamelCase(sessionMethod) as learningSessionVariant}
+        />
         <div className="attribute-data flex flex-col gap-2.5">
           <div className="flex flex-col gap-0.5">
             <h3 className="session-name font-bodycopy font-bold line-clamp-1 ">
@@ -40,11 +46,11 @@ export default function LearningSessionItemCMS({
             </h3>
             <div className="flex gap-3 items-center">
               <div className="session-educator flex gap-2 items-center">
-                <div className="size-[29px] rounded-full overflow-hidden">
+                <div className="avatar size-[29px] rounded-full overflow-hidden">
                   <Image
                     className="object-cover w-full h-full"
                     src={
-                      mentorAvatar ||
+                      sessionEducatorAvatar ||
                       "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
                     }
                     alt="Avatar User"
@@ -52,22 +58,24 @@ export default function LearningSessionItemCMS({
                     height={80}
                   />
                 </div>
-                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
-                  <p className="mentor-name">
+                <div className="flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-black/50">
+                  <p className="educator-name">
                     by{" "}
                     <span className="text-black font-semibold">
-                      {sessionMentor}
+                      {sessionEducatorName}
                     </span>
                   </p>
-                  <p className="session-date-time">
+                  <p className="date-time">
                     {dayjs("2025-06-02 02:00:00+00").format("llll")}
                   </p>
                 </div>
               </div>
-              <AppButton variant="outline" size="small">
-                <Video className="size-4" />
-                Launch meeting
-              </AppButton>
+              {sessionMethod !== "on site" && (
+                <AppButton variant="outline" size="small">
+                  <Video className="size-4" />
+                  Launch meeting
+                </AppButton>
+              )}
             </div>
           </div>
         </div>

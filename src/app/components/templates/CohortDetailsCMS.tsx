@@ -28,6 +28,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import FileItemCMS from "../items/FileItemCMS";
 import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
+import UserItemSimpleCMS from "../items/UserItemSimpleCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -138,8 +139,9 @@ export default function CohortDetailsCMS({
             <div className="learning-list flex flex-col gap-2">
               <LearningSessionItemCMS
                 sessionName="Day 4 - Finance, Tax, Standard Accounting Procedure"
-                sessionMentor="Felicia Putri Tjiasaka"
-                mentorAvatar="https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                sessionEducatorName="Felicia Putri Tjiasaka"
+                sessionEducatorAvatar="https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                sessionMethod="online"
               />
             </div>
             <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
@@ -148,13 +150,15 @@ export default function CohortDetailsCMS({
             <div className="learning-list flex flex-col gap-2">
               <LearningSessionItemCMS
                 sessionName="Day 7 - Idealisme Bernegara Pada Kaki Manusia"
-                sessionMentor="Alm Tan Malaka"
-                mentorAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU007Bi7Smlx3rX422NJsG5NKxQhLVEwyvmg&s"
+                sessionEducatorName="Alm Tan Malaka"
+                sessionEducatorAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU007Bi7Smlx3rX422NJsG5NKxQhLVEwyvmg&s"
+                sessionMethod="online"
               />
               <LearningSessionItemCMS
                 sessionName="Day 6 - Menata Kota Jakarta"
-                sessionMentor="Bang Doel"
-                mentorAvatar="https://img2.beritasatu.com/cache/investor/480x310-3/2024/09/1727592754-1190x669.webp"
+                sessionEducatorName="Bang Doel"
+                sessionEducatorAvatar="https://img2.beritasatu.com/cache/investor/480x310-3/2024/09/1727592754-1190x669.webp"
+                sessionMethod="hybrid"
               />
             </div>
             <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
@@ -163,18 +167,21 @@ export default function CohortDetailsCMS({
             <div className="learning-list flex flex-col gap-2">
               <LearningSessionItemCMS
                 sessionName="Day 1 - Menemukan Tim Terbaik seperti One Piece"
-                sessionMentor="Rafi Ahmad"
-                mentorAvatar="https://foto.kontan.co.id/StXCKE_cdjxl3ync1Wq9iTMX4zg=/smart/2023/03/09/1036754397p.jpg"
+                sessionEducatorName="Rafi Ahmad"
+                sessionEducatorAvatar="https://foto.kontan.co.id/StXCKE_cdjxl3ync1Wq9iTMX4zg=/smart/2023/03/09/1036754397p.jpg"
+                sessionMethod="online"
               />
               <LearningSessionItemCMS
                 sessionName="Day 2 - Membentuk Ide dan Mindset Logika"
-                sessionMentor="Tijjani Reinders"
-                mentorAvatar="https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/80/2025/04/04/Screenshot_20250404_212706_Gallery-3123441984.jpg"
+                sessionEducatorName="Tijjani Reinders"
+                sessionEducatorAvatar="https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/80/2025/04/04/Screenshot_20250404_212706_Gallery-3123441984.jpg"
+                sessionMethod="on site"
               />
               <LearningSessionItemCMS
                 sessionName="Day 3 - Research by Yourself"
-                sessionMentor="Lamine Yamal"
-                mentorAvatar="https://akcdn.detik.net.id/community/media/visual/2025/06/06/2218118646-1749193061423_169.jpeg?w=600&q=90"
+                sessionEducatorName="Lamine Yamal"
+                sessionEducatorAvatar="https://akcdn.detik.net.id/community/media/visual/2025/06/06/2218118646-1749193061423_169.jpeg?w=600&q=90"
+                sessionMethod="online"
               />
             </div>
             <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
@@ -265,81 +272,30 @@ export default function CohortDetailsCMS({
           <div className="enrolled-user flex flex-col gap-3 p-3 bg-section-background rounded-md">
             <h2 className="label-name font-brand font-bold">Enrolled users</h2>
             <div className="user-list flex flex-col gap-4 bg-white rounded-md p-4">
-              <div className="session-educator flex gap-2 items-center">
-                <div className="size-[29px] rounded-full overflow-hidden">
-                  <Image
-                    className="object-cover w-full h-full"
-                    src={
-                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
-                    }
-                    alt="Avatar User"
-                    width={80}
-                    height={80}
-                  />
-                </div>
-                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
-                  <p className="mentor-name text-black font-semibold">
-                    Akmal Luthfiansyah
-                  </p>
-                </div>
-              </div>
-
-              <div className="session-educator flex gap-2 items-center">
-                <div className="size-[29px] rounded-full overflow-hidden">
-                  <Image
-                    className="object-cover w-full h-full"
-                    src={
-                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
-                    }
-                    alt="Avatar User"
-                    width={80}
-                    height={80}
-                  />
-                </div>
-                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
-                  <p className="mentor-name text-black font-semibold">
-                    Akmal Luthfiansyah
-                  </p>
-                </div>
-              </div>
-
-              <div className="session-educator flex gap-2 items-center">
-                <div className="size-[29px] rounded-full overflow-hidden">
-                  <Image
-                    className="object-cover w-full h-full"
-                    src={
-                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
-                    }
-                    alt="Avatar User"
-                    width={80}
-                    height={80}
-                  />
-                </div>
-                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
-                  <p className="mentor-name text-black font-semibold">
-                    Akmal Luthfiansyah
-                  </p>
-                </div>
-              </div>
-
-              <div className="session-educator flex gap-2 items-center">
-                <div className="size-[29px] rounded-full overflow-hidden">
-                  <Image
-                    className="object-cover w-full h-full"
-                    src={
-                      "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
-                    }
-                    alt="Avatar User"
-                    width={80}
-                    height={80}
-                  />
-                </div>
-                <div className="name-date flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-alternative">
-                  <p className="mentor-name text-black font-semibold">
-                    Akmal Luthfiansyah
-                  </p>
-                </div>
-              </div>
+              <UserItemSimpleCMS
+                userName="Iqtironia Khamlia"
+                userAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3iAhb7CJ27cQ11hydy_2L-BJsRb4x0uKGrA&s"
+              />
+              <UserItemSimpleCMS
+                userName="Nailal Hana"
+                userAvatar="https://media.licdn.com/dms/image/v2/D5603AQEJ-7Q-sU8nLQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1702721727717?e=2147483647&v=beta&t=I87OG4TaALe5F_z5NInHsbWI7u6ZNHUEX0Z1lEFnFFc"
+              />
+              <UserItemSimpleCMS
+                userName="Rima Amaliana"
+                userAvatar="https://media.licdn.com/dms/image/v2/D5603AQEVVMDvyQpyfQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697969357081?e=2147483647&v=beta&t=2JxjAOsv03JaAWmwkxUh3FBGD0MjbKFDQihFr1jraVo"
+              />
+              <UserItemSimpleCMS
+                userName="Cica Susilo"
+                userAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaOwYZfpEVR8WVzJ7SGXOXYISRhtIBp9EY2w&s"
+              />
+              <UserItemSimpleCMS
+                userName="Ridha Hitalala"
+                userAvatar="https://media.licdn.com/dms/image/v2/D5603AQHOSKgX8TsdvQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1715315136213?e=2147483647&v=beta&t=LqS7XLqwrYSoxQvArIPBLl01NNVysbGlfdsdqaZ_qkM"
+              />
+              <UserItemSimpleCMS
+                userName="Hesti Giri Pertiwi Suci"
+                userAvatar="https://media.licdn.com/dms/image/v2/C4E03AQHL-XEm2q_oCw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1646964896995?e=2147483647&v=beta&t=_UmA6XbAdnvuw6KWBYEKQiEmmNREwChb_FElX14MjTk"
+              />
             </div>
             <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
               Load more
