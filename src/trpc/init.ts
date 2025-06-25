@@ -4,15 +4,24 @@ import { headers } from "next/headers";
 
 const prisma = new PrismaClient();
 
-export async function createTRPCContext() {
-  async function getUserFromHeader() {
+export type createTRPCContextOptions = {
+  sessionToken: string;
+};
+
+export async function createTRPCContext(
+  opts: createTRPCContextOptions | undefined
+) {
+  async function getSessionTokenFromHeader() {
     const heads = await headers();
     const authHeader = heads.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return null;
     }
 
-    const sessionToken = authHeader.substring(7);
+    return authHeader.substring(7);
+  }
+
+  async function getUserFromSessionToken(sessionToken: string) {
     const tokenObj = await prisma.token.findUnique({
       include: {
         user: {
@@ -31,7 +40,14 @@ export async function createTRPCContext() {
 
     return tokenObj.user;
   }
-  const user = await getUserFromHeader();
+
+  const sessionToken =
+    opts?.sessionToken || (await getSessionTokenFromHeader());
+  if (sessionToken === null) {
+    return { prisma };
+  }
+
+  const user = await getUserFromSessionToken(sessionToken);
 
   return { prisma, user };
 }

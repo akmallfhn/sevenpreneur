@@ -61,7 +61,7 @@ const handler = (req: Request) => {
     endpoint: "/trpc",
     req,
     router: appRouter,
-    createContext: createTRPCContext,
+    createContext: () => createTRPCContext(undefined),
     responseMeta({}) {
       return {
         headers: {
