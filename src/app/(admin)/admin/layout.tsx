@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 import { cookies, headers } from "next/headers";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { setSessionToken } from "@/trpc/server";
 import { TRPCProvider } from "@/trpc/client";
 import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import SidebarCMS from "@/app/components/navigations/SidebarCMS";
@@ -99,6 +100,8 @@ export default async function AdminLayout(
   const sessionToken = cookieStore.get("session_token")?.value;
 
   if (!sessionToken) return null;
+
+  setSessionToken(sessionToken);
 
   return (
     <TRPCProvider baseURL={baseURL}>

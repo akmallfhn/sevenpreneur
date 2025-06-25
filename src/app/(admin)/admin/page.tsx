@@ -3,9 +3,7 @@ import { ClientGreeting } from "./client-greeting";
 
 export default async function AdminHomePage() {
   // This is for server-side rendering (on first page load)
-  await trpc.hello.getHello.prefetch({
-    text: "brothers and sisters",
-  });
+  await trpc.hello.getHello.prefetch();
 
   return (
     <div className="pl-72">
