@@ -29,6 +29,7 @@ import {
 import FileItemCMS from "../items/FileItemCMS";
 import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
 import UserItemSimpleCMS from "../items/UserItemSimpleCMS";
+import ProjectItemCMS from "../items/ProjectItemCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -138,6 +139,7 @@ export default function CohortDetailsCMS({
             </h3>
             <div className="learning-list flex flex-col gap-2">
               <LearningSessionItemCMS
+                cohortId={cohortId}
                 sessionName="Day 4 - Finance, Tax, Standard Accounting Procedure"
                 sessionEducatorName="Felicia Putri Tjiasaka"
                 sessionEducatorAvatar="https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
@@ -149,12 +151,14 @@ export default function CohortDetailsCMS({
             </h3>
             <div className="learning-list flex flex-col gap-2">
               <LearningSessionItemCMS
+                cohortId={cohortId}
                 sessionName="Day 7 - Idealisme Bernegara Pada Kaki Manusia"
                 sessionEducatorName="Alm Tan Malaka"
                 sessionEducatorAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU007Bi7Smlx3rX422NJsG5NKxQhLVEwyvmg&s"
                 sessionMethod="online"
               />
               <LearningSessionItemCMS
+                cohortId={cohortId}
                 sessionName="Day 6 - Menata Kota Jakarta"
                 sessionEducatorName="Bang Doel"
                 sessionEducatorAvatar="https://img2.beritasatu.com/cache/investor/480x310-3/2024/09/1727592754-1190x669.webp"
@@ -166,18 +170,21 @@ export default function CohortDetailsCMS({
             </h3>
             <div className="learning-list flex flex-col gap-2">
               <LearningSessionItemCMS
+                cohortId={cohortId}
                 sessionName="Day 1 - Menemukan Tim Terbaik seperti One Piece"
                 sessionEducatorName="Rafi Ahmad"
                 sessionEducatorAvatar="https://foto.kontan.co.id/StXCKE_cdjxl3ync1Wq9iTMX4zg=/smart/2023/03/09/1036754397p.jpg"
                 sessionMethod="online"
               />
               <LearningSessionItemCMS
+                cohortId={cohortId}
                 sessionName="Day 2 - Membentuk Ide dan Mindset Logika"
                 sessionEducatorName="Tijjani Reinders"
                 sessionEducatorAvatar="https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/80/2025/04/04/Screenshot_20250404_212706_Gallery-3123441984.jpg"
                 sessionMethod="on site"
               />
               <LearningSessionItemCMS
+                cohortId={cohortId}
                 sessionName="Day 3 - Research by Yourself"
                 sessionEducatorName="Lamine Yamal"
                 sessionEducatorAvatar="https://akcdn.detik.net.id/community/media/visual/2025/06/06/2218118646-1749193061423_169.jpeg?w=600&q=90"
@@ -247,18 +254,22 @@ export default function CohortDetailsCMS({
             </div>
             <div className="module-list flex flex-col gap-2">
               <FileItemCMS
+                fileName="Metriks OKR dalam Pemecahan Masalah"
                 fileType="PPTX"
                 fileIcon="https://www.gstatic.com/images/branding/product/2x/slides_2020q4_48dp.png"
               />
               <FileItemCMS
+                fileName="Modul Framework Terlengkap SBBP"
                 fileType="DOCX"
                 fileIcon="https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png"
               />
               <FileItemCMS
+                fileName="Financial Template"
                 fileType="XLSX"
                 fileIcon="https://www.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png"
               />
               <FileItemCMS
+                fileName="Silabus Pembelajaran"
                 fileType="PDF"
                 fileIcon="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//pdf-icon.webp"
               />
@@ -270,7 +281,7 @@ export default function CohortDetailsCMS({
 
           {/* Enrolled user */}
           <div className="enrolled-user flex flex-col gap-3 p-3 bg-section-background rounded-md">
-            <h2 className="label-name font-brand font-bold">Enrolled users</h2>
+            <h2 className="label-name font-brand font-bold">Enrolled Users</h2>
             <div className="user-list flex flex-col gap-4 bg-white rounded-md p-4">
               <UserItemSimpleCMS
                 userName="Iqtironia Khamlia"
@@ -300,6 +311,27 @@ export default function CohortDetailsCMS({
             <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
               Load more
             </p>
+          </div>
+
+          {/* Projects */}
+          <div className="projects flex flex-col gap-3 p-3 bg-section-background rounded-md">
+            <div className="section-name flex justify-between items-center">
+              <h2 className="label-name font-brand font-bold">Projects</h2>
+              <AppButton variant="outline" size="small">
+                <Plus className="size-4" />
+                Add projects
+              </AppButton>
+            </div>
+            <div className="project-list flex flex-col gap-2">
+              <ProjectItemCMS
+                projectName="Business Model Canvas 3.0"
+                lastSubmission="2025-06-02 02:00:00+00"
+              />
+              <ProjectItemCMS
+                projectName="Business Model Canvas 3.0"
+                lastSubmission="2025-06-02 02:00:00+00"
+              />
+            </div>
           </div>
         </aside>
       </div>

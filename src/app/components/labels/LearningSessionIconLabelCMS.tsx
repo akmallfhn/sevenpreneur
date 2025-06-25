@@ -22,7 +22,7 @@ const variantStyles: Record<
     iconLabel: <MapPinned className="size-5" />,
   },
   hybrid: {
-    iconColor: "bg-[#ECFDF3] text-[#0A4F2D]",
+    iconColor: "bg-[#DBF2F0] text-[#00A694]",
     iconLabel: <GalleryHorizontalEnd className="size-5" />,
   },
 };
