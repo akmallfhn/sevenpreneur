@@ -24,9 +24,14 @@ export default function UserItemSimpleCMS({
             height={80}
           />
         </div>
-        <p className="user-name text-black font-semibold text-sm font-bodycopy line-clamp-1">
-          {userName}
-        </p>
+        <div className="flex flex-col text-sm font-bodycopy leading-snug">
+          <p className="user-name text-black font-semibold line-clamp-1">
+            {userName}
+          </p>
+          <p className="user-email text-alternative font-medium">
+            akmalluthfiansyah@gmail.com
+          </p>
+        </div>
       </div>
       <AppButton variant="ghost" size="small">
         <EllipsisVertical className="size-4" />
