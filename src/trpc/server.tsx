@@ -6,8 +6,18 @@ import { createCallerFactory, createTRPCContext } from "./init";
 import { makeQueryClient } from "./query-client";
 import { appRouter } from "./routers/_app";
 
+let sessionToken: string = "";
+
+export function setSessionToken(newToken: string) {
+  sessionToken = newToken;
+}
+
 export const getQueryClient = cache(makeQueryClient);
-const caller = createCallerFactory(appRouter)(createTRPCContext);
+const caller = createCallerFactory(appRouter)(() =>
+  createTRPCContext({
+    sessionToken: sessionToken,
+  })
+);
 
 export const { trpc, HydrateClient } = createHydrationHelpers<typeof appRouter>(
   caller,
