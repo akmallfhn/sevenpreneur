@@ -224,13 +224,13 @@ export default function EditUserForm({
         },
         {
           onSuccess: () => {
-            toast.success("Edited Succesfully");
+            toast.success("User profile updated successfully.");
             utils.read.user.invalidate({ id: userId });
             utils.list.users.invalidate();
             router.push(`/users/${userId}`);
           },
           onError: (err) => {
-            toast.error("Failed to update", {
+            toast.error("Failed to update user", {
               description: err.message,
             });
           },

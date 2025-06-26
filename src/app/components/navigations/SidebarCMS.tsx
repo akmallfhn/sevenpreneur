@@ -9,9 +9,9 @@ import {
   CircleHelp,
   CircleUserIcon,
   DoorOpen,
-  GraduationCap,
   HouseIcon,
   Loader2,
+  Presentation,
 } from "lucide-react";
 
 interface SidebarCMSProps {
@@ -26,6 +26,27 @@ export default function SidebarCMS({
   // --- Defining React Hook
   const router = useRouter();
   const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  const menuItemData = [
+    {
+      title: "Dashboard",
+      url: "/",
+      icon: <HouseIcon />,
+      exact: true,
+    },
+    {
+      title: "Cohort Programs",
+      url: "/cohorts",
+      icon: <Presentation />,
+      exact: false,
+    },
+    {
+      title: "Users",
+      url: "/users",
+      icon: <CircleUserIcon />,
+      exact: false,
+    },
+  ];
 
   // --- Logout function
   const handleLogout = async () => {
@@ -69,34 +90,15 @@ export default function SidebarCMS({
 
         {/* --- Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">
-          {/* --- Dashboard */}
-          <SidebarMenuItemCMS
-            exact
-            url={`/`}
-            menuTitle={`Dashboard`}
-            icon={<HouseIcon />}
-          />
-
-          {/* --- User Management */}
-          <SidebarMenuItemCMS
-            url={`/users`}
-            menuTitle={`Users`}
-            icon={<CircleUserIcon />}
-          />
-
-          {/* --- Cohort Management */}
-          <SidebarMenuItemCMS
-            url={`/cohorts`}
-            menuTitle={`Cohorts`}
-            icon={<GraduationCap />}
-          />
-
-          {/* --- Help Management */}
-          <SidebarMenuItemCMS
-            url={`/help`}
-            menuTitle={`Help`}
-            icon={<CircleHelp />}
-          />
+          {menuItemData.map((post, index) => (
+            <SidebarMenuItemCMS
+              key={index}
+              exact={post.exact}
+              url={post.url}
+              menuTitle={post.title}
+              icon={post.icon}
+            />
+          ))}
         </div>
       </div>
 
@@ -104,7 +106,7 @@ export default function SidebarCMS({
       <div className="sidebar-cms-bottom flex flex-col max-w-[224px] mx-auto w-full">
         {/* --- Logout Button */}
         <div
-          className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-[15px] font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
+          className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-sm font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
             isLoadingButton ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onClick={handleLogout}
