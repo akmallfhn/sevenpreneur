@@ -1,14 +1,18 @@
 "use client";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppButton from "../buttons/AppButton";
-import { EllipsisVertical, MoveRight } from "lucide-react";
+import { EllipsisVertical, MoveRight, Trash2 } from "lucide-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import Link from "next/link";
+import { trpc } from "@/trpc/client";
+import { toast } from "sonner";
+import DropdownMenuCMS from "../elements/DropdownMenuCMS";
+import AppAlertDialog from "../modals/AppAlertDialog";
 
 dayjs.extend(localizedFormat);
 
@@ -18,6 +22,7 @@ interface CohortItemCardCMSProps {
   cohortImage: string;
   cohortStartDate: string;
   cohortEndDate: string;
+  onDeleteSuccess?: () => void;
 }
 
 export default function CohortItemCardCMS({
@@ -26,57 +31,134 @@ export default function CohortItemCardCMS({
   cohortImage,
   cohortStartDate,
   cohortEndDate,
+  onDeleteSuccess,
 }: CohortItemCardCMSProps) {
-  // --- Generate schedule status
-  const dateNow = dayjs();
-  let scheduleStatus = "Live Now";
-  if (dateNow.isBefore(dayjs(cohortStartDate))) {
-    scheduleStatus = "Upcoming Schedule";
-  } else if (dateNow.isAfter(dayjs(cohortEndDate))) {
-    scheduleStatus = "Completed";
-  }
+  const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // --- Open and close dropdown
+  const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsActionsOpened((prev) => !prev);
+  };
+
+  // --- Close dropdown outside
+  useEffect(() => {
+    const handleClickOutside = (
+      event: MouseEvent | (MouseEvent & { target: Node })
+    ) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsActionsOpened(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // --- Function to delete user
+  const deleteUser = trpc.delete.cohort.useMutation();
+  const handleDelete = () => {
+    deleteUser.mutate(
+      { id: cohortId },
+      {
+        onSuccess: () => {
+          toast.success("Delete success");
+          onDeleteSuccess?.();
+        },
+        onError: (err) => {
+          toast.error("Failed to delete cohort", {
+            description: `${err}`,
+          });
+        },
+      }
+    );
+  };
 
   return (
-    <Link href={`/cohorts/${cohortId}`}>
-      <div className="based flex flex-col max-w-[252px] bg-white shadow-md rounded-md overflow-hidden">
-        {/* --- Thumbnail */}
-        <div className="image-thumbnail relative aspect-thumbnail overflow-hidden">
-          <Image
-            className="object-cover w-full h-full"
-            src={cohortImage}
-            alt="thumbnail"
-            width={500}
-            height={500}
-          />
-          {/* <div className="absolute top-2 left-2">
-            <StatusLabelCMS labelName={scheduleStatus} variants="ACTIVE" />
-          </div> */}
-          <div className="absolute top-2 right-2">
-            <AppButton variant="ghost" size="small">
+    <React.Fragment>
+      <div className="card-container relative">
+        <Link
+          href={`/cohorts/${cohortId}`}
+          className="flex flex-col max-w-[252px] bg-white shadow-md rounded-md overflow-hidden"
+        >
+          {/* --- Thumbnail */}
+          <div className="image-thumbnail aspect-thumbnail overflow-hidden">
+            <Image
+              className="object-cover w-full h-full"
+              src={cohortImage}
+              alt="thumbnail"
+              width={500}
+              height={500}
+            />
+          </div>
+          {/* --- Metadata */}
+          <div className="metadata relative flex flex-col p-3 gap-2 h-[132px]">
+            <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2">
+              {cohortName}
+            </h3>
+            <div className="cohort-participant flex gap-2 items-center text-alternative">
+              <FontAwesomeIcon icon={faUser} className="size-3" />
+              <p className="font-bodycopy font-medium text-sm">
+                1,934 students joined
+              </p>
+            </div>
+            <div className="cohort-timeline flex gap-2 items-center text-alternative">
+              <FontAwesomeIcon icon={faCalendar} className="size-3" />
+              <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
+                <span>{dayjs(cohortStartDate).format("ll")}</span> -{" "}
+                <span>{dayjs(cohortEndDate).format("ll")}</span>
+              </div>
+            </div>
+          </div>
+        </Link>
+        {/* --- Actions Button */}
+        <div className="absolute top-2 right-2">
+          <div className="actions-button flex relative" ref={wrapperRef}>
+            <AppButton
+              variant="ghost"
+              size="small"
+              type="button"
+              onClick={handleActionsDropdown}
+            >
               <EllipsisVertical className="size-4" />
             </AppButton>
-          </div>
-        </div>
-        {/* --- Metadata */}
-        <div className="metadata relative flex flex-col p-3 gap-2 h-[132px]">
-          <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2">
-            {cohortName}
-          </h3>
-          <div className="cohort-participant flex gap-2 items-center text-alternative">
-            <FontAwesomeIcon icon={faUser} className="size-3" />
-            <p className="font-bodycopy font-medium text-sm">
-              1,934 students joined
-            </p>
-          </div>
-          <div className="cohort-timeline flex gap-2 items-center text-alternative">
-            <FontAwesomeIcon icon={faCalendar} className="size-3" />
-            <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
-              <span>{dayjs(cohortStartDate).format("ll")}</span> -{" "}
-              <span>{dayjs(cohortEndDate).format("ll")}</span>
-            </div>
+
+            <DropdownMenuCMS
+              isOpen={isActionsOpened}
+              onClose={() => setIsActionsOpened(false)}
+            >
+              <div
+                className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-destructive hover:bg-[#FFCDC9] hover:cursor-pointer"
+                onClick={() => setIsOpenDeleteConfirmation(true)}
+              >
+                <Trash2 className="size-4" />
+                Delete
+              </div>
+            </DropdownMenuCMS>
           </div>
         </div>
       </div>
-    </Link>
+
+      {/* --- Delete Confirmation */}
+      {isOpenDeleteConfirmation && (
+        <AppAlertDialog
+          alertDialogHeader="Permanently delete this item?"
+          alertDialogMessage={`Are you sure you want to delete ${cohortName}? This action cannot be undone.`}
+          isOpen={isOpenDeleteConfirmation}
+          onClose={() => setIsOpenDeleteConfirmation(false)}
+          onConfirm={() => {
+            handleDelete();
+            setIsOpenDeleteConfirmation(false);
+          }}
+        />
+      )}
+    </React.Fragment>
   );
 }
