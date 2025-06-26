@@ -1,27 +1,32 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
-import AppSheet from "../modals/AppSheet";
+import { Loader2 } from "lucide-react";
+import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
 import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
+import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, { PriceTier } from "../stepper/PriceTierStepperCMS";
-import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
+import { FormEvent, useEffect, useState } from "react";
+import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { Loader2 } from "lucide-react";
 
-interface CohortCreateCMSProps {
+interface EditCohortFormCMSProps {
+  cohortId: number;
+  initialData: any;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function CreateCohortFormCMS({
+export default function EditCohortFormCMS({
+  cohortId,
+  initialData,
   isOpen,
   onClose,
-}: CohortCreateCMSProps) {
+}: EditCohortFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const createCohort = trpc.create.cohort.useMutation();
+  const editCohort = trpc.update.cohort.useMutation();
+  const editCohortPrices = trpc.update.cohortPrice.useMutation();
   const utils = trpc.useUtils();
 
   // --- Beginning State
@@ -33,17 +38,21 @@ export default function CreateCohortFormCMS({
     cohortEndDate: string;
     cohortPriceTiers: PriceTier[];
   }>({
-    cohortName: "",
-    cohortImage: "",
-    cohortDescription: "",
-    cohortStartDate: "",
-    cohortEndDate: "",
-    cohortPriceTiers: [
-      {
-        name: "",
-        amount: "",
-      },
-    ],
+    cohortName: initialData.name || "",
+    cohortImage: initialData.image || "",
+    cohortDescription: initialData.description || "",
+    cohortStartDate: initialData.start_date
+      ? dayjs(initialData.start_date).format("YYYY-MM-DDTHH:mm")
+      : "",
+    cohortEndDate: initialData.end_date
+      ? dayjs(initialData.end_date).format("YYYY-MM-DDTHH:mm")
+      : "",
+    cohortPriceTiers: initialData.cohort_prices.map(
+      (post: { name: string; amount: number }) => ({
+        name: post.name,
+        amount: post.amount,
+      })
+    ),
   });
 
   // --- Add event listener to prevent page refresh
@@ -120,29 +129,26 @@ export default function CreateCohortFormCMS({
 
     // -- POST to Database
     try {
-      createCohort.mutate(
+      editCohort.mutate(
         {
+          id: cohortId,
           name: formData.cohortName.trim(),
           description: formData.cohortDescription.trim(),
           status: "ACTIVE",
           image: formData.cohortImage,
           start_date: new Date(formData.cohortStartDate).toISOString(),
           end_date: new Date(formData.cohortEndDate).toISOString(),
-          cohort_prices: formData.cohortPriceTiers.map((tier: PriceTier) => ({
-            name: tier.name.trim(),
-            amount: Number(tier.amount),
-            status: "ACTIVE",
-          })),
         },
         {
           onSuccess: () => {
-            toast.success("All set! Your cohort is now live and ready to grow");
+            toast.success("Cohort updated successfully");
             setIsSubmitting(false);
+            utils.read.cohort.invalidate();
             utils.list.cohorts.invalidate();
             onClose();
           },
           onError: (err) => {
-            toast.error("Failed to create cohort", {
+            toast.error("Failed to update cohort", {
               description: err.message,
             });
             setIsSubmitting(false);
@@ -156,8 +162,8 @@ export default function CreateCohortFormCMS({
 
   return (
     <AppSheet
-      sheetName="Create Cohort Program"
-      sheetDescription="Define your program and launch a new cohort now"
+      sheetName="Edit Cohort"
+      sheetDescription="Update your cohort's details to keep everything current and aligned."
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -167,7 +173,10 @@ export default function CreateCohortFormCMS({
       >
         <div className="form-container flex flex-col px-6 pb-68 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
-            <UploadThumbnailCohortCMS onUpload={handleImageForm} />
+            <UploadThumbnailCohortCMS
+              onUpload={handleImageForm}
+              value={formData.cohortImage}
+            />
             <InputCMS
               inputId="cohort-name"
               inputName="Program Name"
@@ -224,7 +233,7 @@ export default function CreateCohortFormCMS({
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Create Cohort
+            Edit Cohort
           </AppButton>
         </div>
       </form>
