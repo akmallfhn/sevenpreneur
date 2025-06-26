@@ -4,15 +4,28 @@ import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import { DollarSign, PlusIcon, X } from "lucide-react";
 
-export default function PriceTierStepperCMS() {
-  const [tiers, setTiers] = useState([{ name: "", amount: "" }]);
+export interface PriceTier {
+  name: string;
+  amount: string;
+}
 
+interface PriceTierStepperCMSProps {
+  tiers: PriceTier[];
+  setTiers: (tiers: PriceTier[]) => void;
+}
+
+export default function PriceTierStepperCMS({
+  tiers,
+  setTiers,
+}: PriceTierStepperCMSProps) {
+  // --- Add price tier
   const handleAddTier = () => {
     if (tiers.length < 5) {
       setTiers([...tiers, { name: "", amount: "" }]);
     }
   };
 
+  // --- Remove price tier
   const handleRemoveTier = (indexToRemove: number) => {
     if (tiers.length > 1) {
       const updated = tiers.filter((_, i) => i !== indexToRemove);
@@ -20,19 +33,25 @@ export default function PriceTierStepperCMS() {
     }
   };
 
+  // ---
   const handleChange = (
     index: number,
     field: "name" | "amount",
     value: string
   ) => {
-    const updatedTiers = [...tiers];
-    updatedTiers[index][field] = value;
-    setTiers(updatedTiers);
+    const updatedTiers = [...tiers]; // 1. Create copy for tiers
+    updatedTiers[index][field] = value; // 2. Update value
+    setTiers(updatedTiers); // 3. Update state with in Array
   };
 
   return (
     <div className="group-input flex flex-col gap-4">
-      <h3 className="font-bold font-brand">Pricing</h3>
+      <div className="flex flex-col">
+        <h3 className="font-bold font-brand">Pricing</h3>
+        <p className="font-bodycopy font-medium text-sm text-alternative">
+          Max. 5 pricing tiers allowed per cohort.
+        </p>
+      </div>
       {tiers.map((post, index) => (
         <div
           key={index}

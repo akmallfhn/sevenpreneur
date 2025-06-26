@@ -109,7 +109,7 @@ export default async function AdminLayout(
           <GoogleOAuthProvider clientId={googleOauthId}>
             <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
             {props.children}
-            <Toaster richColors />
+            <Toaster richColors position="top-center" />
           </GoogleOAuthProvider>
         </body>
       </html>
