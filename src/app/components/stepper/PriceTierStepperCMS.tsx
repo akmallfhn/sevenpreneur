@@ -5,6 +5,7 @@ import InputCMS from "../fields/InputCMS";
 import { DollarSign, PlusIcon, X } from "lucide-react";
 
 export interface PriceTier {
+  id?: number;
   name: string;
   amount: string;
 }
