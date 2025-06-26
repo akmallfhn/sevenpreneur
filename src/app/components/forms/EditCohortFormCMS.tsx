@@ -27,6 +27,8 @@ export default function EditCohortFormCMS({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editCohort = trpc.update.cohort.useMutation();
   const editCohortPrices = trpc.update.cohortPrice.useMutation();
+  const createCohortPrices = trpc.create.cohortPrice.useMutation();
+  const deleteCohortPrices = trpc.delete.cohortPrice.useMutation();
   const utils = trpc.useUtils();
 
   // --- Beginning State
@@ -48,7 +50,8 @@ export default function EditCohortFormCMS({
       ? dayjs(initialData.end_date).format("YYYY-MM-DDTHH:mm")
       : "",
     cohortPriceTiers: initialData.cohort_prices.map(
-      (post: { name: string; amount: number }) => ({
+      (post: { id: number; name: string; amount: number }) => ({
+        id: post.id,
         name: post.name,
         amount: post.amount,
       })
@@ -129,34 +132,68 @@ export default function EditCohortFormCMS({
 
     // -- POST to Database
     try {
-      editCohort.mutate(
-        {
-          id: cohortId,
-          name: formData.cohortName.trim(),
-          description: formData.cohortDescription.trim(),
-          status: "ACTIVE",
-          image: formData.cohortImage,
-          start_date: new Date(formData.cohortStartDate).toISOString(),
-          end_date: new Date(formData.cohortEndDate).toISOString(),
-        },
-        {
-          onSuccess: () => {
-            toast.success("Cohort updated successfully");
-            setIsSubmitting(false);
-            utils.read.cohort.invalidate();
-            utils.list.cohorts.invalidate();
-            onClose();
-          },
-          onError: (err) => {
-            toast.error("Failed to update cohort", {
-              description: err.message,
-            });
-            setIsSubmitting(false);
-          },
-        }
+      // Update Cohort
+      await editCohort.mutateAsync({
+        id: cohortId,
+        name: formData.cohortName.trim(),
+        description: formData.cohortDescription.trim(),
+        status: "ACTIVE",
+        image: formData.cohortImage,
+        start_date: new Date(formData.cohortStartDate).toISOString(),
+        end_date: new Date(formData.cohortEndDate).toISOString(),
+      });
+      // Use id to mapping initial Cohort Price data
+      const initialPricesMap = initialData.cohort_prices.map(
+        (post: any) => post.id
       );
-    } catch (error) {
-      console.error(error);
+      // Update & Create Cohort Prices
+      await Promise.all(
+        formData.cohortPriceTiers.map(async (tier) => {
+          // existing → update
+          // If the tier has an id → it means this is old data, so do an update.
+          if (tier.id) {
+            await editCohortPrices.mutateAsync({
+              cohort_id: cohortId,
+              id: tier.id,
+              name: tier.name.trim(),
+              amount: Number(tier.amount),
+              status: "ACTIVE",
+            });
+          } else {
+            // new → create
+            // If the id doesn't exist → it means this is new data, so create it.
+            await createCohortPrices.mutateAsync({
+              cohort_id: cohortId,
+              name: tier.name.trim(),
+              amount: Number(tier.amount),
+              status: "ACTIVE",
+            });
+          }
+        })
+      );
+      // Get all id of tier that are on change in current form → This is the list that should remain in the database.
+      const currentIds = formData.cohortPriceTiers
+        .filter((tier) => tier.id)
+        .map((tier) => tier.id);
+      // Compare with initialPricesMap. If there is an id that is not in the form now, So, save it as deletedIds.
+      const deletedIds = initialPricesMap.filter(
+        (id: number) => !currentIds.includes(id)
+      );
+      // Delete all tiers listed in deletedIds.
+      await Promise.all(
+        deletedIds.map((id: number) => deleteCohortPrices.mutateAsync({ id }))
+      );
+      toast.success("Cohort updated successfully");
+      await utils.read.cohort.invalidate();
+      await utils.list.cohorts.invalidate();
+      onClose();
+    } catch (error: any) {
+      toast.error("Failed to update cohort", {
+        description: error,
+      });
+      setIsSubmitting(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

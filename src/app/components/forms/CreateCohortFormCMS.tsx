@@ -145,12 +145,13 @@ export default function CreateCohortFormCMS({
             toast.error("Failed to create cohort", {
               description: err.message,
             });
-            setIsSubmitting(false);
           },
         }
       );
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
