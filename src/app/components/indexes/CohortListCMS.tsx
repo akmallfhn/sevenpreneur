@@ -16,6 +16,7 @@ interface CohortListCMSProps {
 
 export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
   const [createCohort, setCreateCohort] = useState(false);
+  const utils = trpc.useUtils();
 
   // --- Set token for API
   useEffect(() => {
@@ -64,10 +65,9 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
             <TitleRevealCMS
               titlePage={"Cohort Programs"}
               descPage={
-                "Manage your published content easily. Click on an article to view or edit its details."
+                "View and manage all your existing cohort programs in one place"
               }
             />
-
             {/* --- Page Actions */}
             <AppButton
               onClick={() => setCreateCohort(true)}
@@ -96,11 +96,11 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
                     cohortImage={post.image}
                     cohortStartDate={post.start_date}
                     cohortEndDate={post.end_date}
+                    onDeleteSuccess={() => utils.list.cohorts.invalidate()}
                   />
                 ))}
             </div>
           </div>
-
           <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
             <h2 className="font-bold font-brand text-xl text-black">
               Finished Programs
@@ -116,6 +116,7 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
                     cohortImage={post.image}
                     cohortStartDate={post.start_date}
                     cohortEndDate={post.end_date}
+                    onDeleteSuccess={() => utils.list.cohorts.invalidate()}
                   />
                 ))}
             </div>
@@ -123,6 +124,7 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
         </div>
       </div>
 
+      {/* --- Form Create Cohort */}
       {createCohort && (
         <CreateCohortFormCMS
           isOpen={createCohort}

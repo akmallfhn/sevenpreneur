@@ -80,10 +80,6 @@ export default function UserItemListCMS({
     };
   }, []);
 
-  // --- Insert Role Data to Variant
-  const equalizingRoleVariant = (role: string) =>
-    role.toLowerCase().replace(/\s+/g, "_");
-
   // --- Function to delete user
   const deleteUser = trpc.delete.user.useMutation();
   const handleDelete = () => {
