@@ -115,6 +115,17 @@ const nextConfig = {
           ],
           destination: "/www/:path*",
         },
+        {
+          source: "/:path*",
+          has: [
+            {
+              type: "header",
+              key: "host",
+              value: "sevenpreneur(-[^.]+).vercel.app.*",
+            },
+          ],
+          destination: "/www/:path*",
+        },
       ],
     };
   },
