@@ -1,5 +1,5 @@
 import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
-import { numberIsID } from "@/trpc/utils/validation";
+import { numberIsID, numberIsRoleID } from "@/trpc/utils/validation";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -54,31 +54,36 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
-  users: loggedInProcedure.query(async (opts) => {
-    const userList = await opts.ctx.prisma.user.findMany({
-      include: { role: true },
-      orderBy: [{ role_id: "asc" }, { full_name: "asc" }],
-      where: { deleted_at: null },
-    });
-    const returnedList = userList.map((entry) => {
+  users: loggedInProcedure
+    .input(z.object({ role_id: numberIsRoleID().optional() }).optional())
+    .query(async (opts) => {
+      const userList = await opts.ctx.prisma.user.findMany({
+        include: { role: true },
+        orderBy: [{ role_id: "asc" }, { full_name: "asc" }],
+        where: {
+          role_id: opts.input?.role_id,
+          deleted_at: null,
+        },
+      });
+      const returnedList = userList.map((entry) => {
+        return {
+          id: entry.id,
+          full_name: entry.full_name,
+          email: entry.email,
+          avatar: entry.avatar,
+          role_id: entry.role_id,
+          role_name: entry.role.name,
+          status: entry.status,
+          created_at: entry.created_at,
+          last_login: entry.last_login,
+        };
+      });
       return {
-        id: entry.id,
-        full_name: entry.full_name,
-        email: entry.email,
-        avatar: entry.avatar,
-        role_id: entry.role_id,
-        role_name: entry.role.name,
-        status: entry.status,
-        created_at: entry.created_at,
-        last_login: entry.last_login,
+        status: 200,
+        message: "Success",
+        list: returnedList,
       };
-    });
-    return {
-      status: 200,
-      message: "Success",
-      list: returnedList,
-    };
-  }),
+    }),
 
   cohorts: loggedInProcedure.query(async (opts) => {
     const cohortList = await opts.ctx.prisma.cohort.findMany({
