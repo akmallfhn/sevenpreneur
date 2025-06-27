@@ -9,6 +9,12 @@ CREATE TYPE status_enum AS ENUM (
   'inactive'
 );
 
+CREATE TYPE learning_method_enum AS ENUM (
+  'online',
+  'onsite',
+  'hybrid'
+);
+
 ------------
 -- Tables --
 ------------
@@ -95,17 +101,19 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE learnings (
-  id             SERIAL       PRIMARY KEY,
-  cohort_id      INTEGER      NOT NULL,
-  name           VARCHAR      NOT NULL,
-  description    VARCHAR      NOT NULL,
-  meeting_date   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  meeting_url    VARCHAR      NOT NULL,
-  speaker_id     UUID         NOT NULL,
-  recording_url  VARCHAR      NOT NULL,
-  status         status_enum  NOT NULL,
-  created_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  id                SERIAL                PRIMARY KEY,
+  cohort_id         INTEGER               NOT NULL,
+  name              VARCHAR               NOT NULL,
+  description       VARCHAR               NOT NULL,
+  method            learning_method_enum  NOT NULL,
+  meeting_date      TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  meeting_url       VARCHAR                   NULL,
+  meeting_location  VARCHAR                   NULL,
+  speaker_id        UUID                      NULL,
+  recording_url     VARCHAR                   NULL,
+  status            status_enum           NOT NULL,
+  created_at        TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at        TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE materials (

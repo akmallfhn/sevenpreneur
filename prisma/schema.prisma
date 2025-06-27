@@ -20,6 +20,14 @@ enum StatusEnum {
   @@map("status_enum")
 }
 
+enum LearningMethodEnum {
+  ONLINE @map("online")
+  ONSITE @map("onsite")
+  HYBRID @map("hybrid")
+
+  @@map("learning_method_enum")
+}
+
 ////////////
 // Models //
 ////////////
@@ -139,20 +147,22 @@ model Module {
 }
 
 model Learning {
-  id            Int        @id @default(autoincrement()) @db.Integer
-  cohort        Cohort     @relation(fields: [cohort_id], references: [id])
-  cohort_id     Int        @db.Integer
-  name          String     @db.VarChar()
-  description   String     @db.VarChar()
-  meeting_date  DateTime   @default(now()) @db.Timestamptz()
-  meeting_url   String     @db.VarChar()
-  speaker       User       @relation(fields: [speaker_id], references: [id])
-  speaker_id    String     @db.Uuid
-  recording_url String     @db.VarChar()
-  status        StatusEnum
-  created_at    DateTime   @default(now()) @db.Timestamptz()
-  updated_at    DateTime   @default(now()) @updatedAt @db.Timestamptz()
-  materials     Material[]
+  id               Int                @id @default(autoincrement()) @db.Integer
+  cohort           Cohort             @relation(fields: [cohort_id], references: [id])
+  cohort_id        Int                @db.Integer
+  name             String             @db.VarChar()
+  description      String             @db.VarChar()
+  method           LearningMethodEnum
+  meeting_date     DateTime           @default(now()) @db.Timestamptz()
+  meeting_url      String?            @db.VarChar()
+  meeting_location String?            @db.VarChar()
+  speaker          User?              @relation(fields: [speaker_id], references: [id])
+  speaker_id       String?            @db.Uuid
+  recording_url    String?            @db.VarChar()
+  status           StatusEnum
+  created_at       DateTime           @default(now()) @db.Timestamptz()
+  updated_at       DateTime           @default(now()) @updatedAt @db.Timestamptz()
+  materials        Material[]
 
   @@map("learnings")
 }
