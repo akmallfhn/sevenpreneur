@@ -1,11 +1,11 @@
-import "../../globals.css";
+import "@/app/globals.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
 import localFont from "next/font/local";
-import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
-import AppBottomFooter from "@/app/components/navigations/AppBottomFooter";
+import { ReactNode } from "react";
+import { Metadata } from "next";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -22,62 +22,59 @@ const openSauceOne = localFont({
   display: "swap",
   src: [
     {
-      path: "../../fonts/OpenSauceOne-Light.ttf",
+      path: "././fonts/OpenSauceOne-Light.ttf",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../../fonts/OpenSauceOne-Regular.ttf",
+      path: "././fonts/OpenSauceOne-Regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../fonts/OpenSauceOne-Medium.ttf",
+      path: "././fonts/OpenSauceOne-Medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../../fonts/OpenSauceOne-SemiBold.ttf",
+      path: "././fonts/OpenSauceOne-SemiBold.ttf",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../../fonts/OpenSauceOne-Bold.ttf",
+      path: "././fonts/OpenSauceOne-Bold.ttf",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../../fonts/OpenSauceOne-ExtraBold.ttf",
+      path: "././fonts/OpenSauceOne-ExtraBold.ttf",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../../fonts/OpenSauceOne-Black.ttf",
+      path: "././fonts/OpenSauceOne-Black.ttf",
       weight: "900",
       style: "normal",
     },
   ],
 });
 
-export function generateMetadata() {
-  const BASE_URL = "https://www.sevenpreneur.com";
-  return {
-    metadataBase: BASE_URL,
-    alternates: {
-      canonical: "/",
-    },
-    icons: {
-      icon: [
-        { url: "/favicon.ico" },
-        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      ],
-      apple: [{ url: "/apple-touch-icon.png" }],
-    },
-  };
+export const metadata: Metadata = {
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png" }],
+  },
+};
+
+interface RootLayoutProps {
+  children: ReactNode;
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: RootLayoutProps) {
   const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID;
   const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
   const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
@@ -85,20 +82,18 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       {/* --- Google Tag Manager */}
-      <GoogleTagManager gtmId={googleTagManagerId} />
+      <GoogleTagManager gtmId={googleTagManagerId!} />
 
       <body
         className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
       >
         {/* --- Google Oauth Login */}
-        <GoogleOAuthProvider clientId={googleOauthId}>
-          <TopNavbar />
+        <GoogleOAuthProvider clientId={googleOauthId!}>
           {children}
-          <AppBottomFooter />
         </GoogleOAuthProvider>
 
         {/* --- Google Analytics */}
-        <GoogleAnalytics gaId={googleAnalyticsId} />
+        <GoogleAnalytics gaId={googleAnalyticsId!} />
 
         {/* --- Tiktok Pixel */}
         <Script id="tiktok-pixel" strategy="afterInteractive">

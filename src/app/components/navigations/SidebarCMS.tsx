@@ -63,7 +63,7 @@ export default function SidebarCMS({
   };
 
   return (
-    <div className="sidebar-cms-root hidden lg:flex lg:flex-col lg:fixed lg:justify-between lg:pt-5 lg:pb-8 lg:max-w-64 lg:w-full lg:left-0 lg:h-full lg:bg-[#F7F7F7] lg:z-50">
+    <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">
       {/* --- TOP AREA */}
       <div className="sidebar-cms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
         {/* --- Logo & Platform */}

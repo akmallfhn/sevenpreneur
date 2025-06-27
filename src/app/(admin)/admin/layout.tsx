@@ -1,67 +1,13 @@
 import "@/app/globals.css";
 import { cookies } from "next/headers";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { TRPCProvider } from "@/trpc/client";
-import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import SidebarCMS from "@/app/components/navigations/SidebarCMS";
-import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import { Metadata } from "next";
+import DisallowedMobile from "@/app/components/state/DisallowedMobile";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
-  subsets: ["latin"],
-});
-
-const monaSans = Mona_Sans({
-  variable: "--font-mona-sans",
-  subsets: ["latin"],
-});
-
-const openSauceOne = localFont({
-  variable: "--font-open-sauce-one",
-  display: "swap",
-  src: [
-    {
-      path: "../../fonts/OpenSauceOne-Light.ttf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../fonts/OpenSauceOne-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../fonts/OpenSauceOne-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../fonts/OpenSauceOne-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../fonts/OpenSauceOne-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../../fonts/OpenSauceOne-ExtraBold.ttf",
-      weight: "800",
-      style: "normal",
-    },
-    {
-      path: "../../fonts/OpenSauceOne-Black.ttf",
-      weight: "900",
-      style: "normal",
-    },
-  ],
-});
-
-// --- Metadat
+// --- Metadata
 export const metadata: Metadata = {
   title: {
     template: "%s | Admin Sevenpreneur",
@@ -69,6 +15,19 @@ export const metadata: Metadata = {
   },
   description:
     "Central hub to manage all operations of the Sevenpreneur ecosystem",
+  metadataBase: new URL("https://admin.sevenpreneur.com"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    images: [
+      {
+        url: "https://static.wixstatic.com/media/02a5b1_75a55654d4b445da8c4500b84f0cb7a2~mv2.webp",
+        width: 800,
+        height: 600,
+      },
+    ],
+  },
 };
 
 // --- Pass the base URL to the client
@@ -105,17 +64,12 @@ export default async function AdminLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <html lang="en" className="bg-white">
-        <body
-          className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
-        >
-          <GoogleOAuthProvider clientId={googleOauthId}>
-            <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
-            {props.children}
-            <Toaster richColors position="top-center" />
-          </GoogleOAuthProvider>
-        </body>
-      </html>
+      <div>
+        <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
+        {props.children}
+        <DisallowedMobile />
+        <Toaster richColors position="top-center" />
+      </div>
     </TRPCProvider>
   );
 }

@@ -14,7 +14,7 @@ export default async function CohortDetailPage({
   const cohortId = parseInt(cohort_id);
 
   return (
-    <div className="root flex w-full h-full bg-white justify-center bg-main-root py-8 pb-24 overflow-y-auto lg:pl-64">
+    <div className="root hidden w-full h-full justify-center bg-white py-8 overflow-y-auto lg:flex lg:pl-64">
       <CohortDetailsCMS sessionToken={sessionToken} cohortId={cohortId} />
     </div>
   );
