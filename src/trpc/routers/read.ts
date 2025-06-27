@@ -159,4 +159,30 @@ export const readRouter = createTRPCRouter({
         cohortPrice: theCohortPrice,
       };
     }),
+
+  learning: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theLearning = await opts.ctx.prisma.learning.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theLearning) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The learning with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        learning: theLearning,
+      };
+    }),
 });
