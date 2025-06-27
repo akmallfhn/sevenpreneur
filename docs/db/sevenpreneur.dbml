@@ -63,18 +63,18 @@ Table tokens {
 }
 
 Table cohorts {
-  id             integer      [primary key]
-  name           varchar
-  description    varchar
-  image          varchar
-  status         status_enum
-  slug_url       varchar
-  start_date     timestamptz
-  end_date       timestamptz
-  published_at   timestamptz
-  updated_at     timestamptz
-  deleted_at     timestamptz
-  deleted_by     uuid         [ref: > users.id]
+  id            integer      [primary key]
+  name          varchar
+  description   varchar
+  image         varchar
+  status        status_enum
+  slug_url      varchar
+  start_date    timestamptz
+  end_date      timestamptz
+  published_at  timestamptz
+  updated_at    timestamptz
+  deleted_at    timestamptz
+  deleted_by    uuid         [ref: > users.id]
 }
 
 Table cohort_prices {
@@ -97,7 +97,7 @@ Table modules {
   updated_at    timestamptz
 }
 
-Table lessons {
+Table learnings {
   id             integer      [primary key]
   cohort_id      integer      [ref: > cohorts.id]
   name           varchar
@@ -113,7 +113,7 @@ Table lessons {
 
 Table materials {
   id            integer      [primary key]
-  lesson_id     integer      [ref: > lessons.id]
+  learning_id   integer      [ref: > learnings.id]
   name          varchar
   description   varchar
   document_url  varchar
