@@ -110,14 +110,12 @@ export const listRouter = createTRPCRouter({
   cohortPrices: loggedInProcedure
     .input(
       z.object({
-        id: numberIsID(),
+        cohort_id: numberIsID(),
       })
     )
     .query(async (opts) => {
       const cohortPricesList = await opts.ctx.prisma.cohortPrice.findMany({
-        where: {
-          cohort_id: opts.input.id,
-        },
+        where: { cohort_id: opts.input.cohort_id },
         orderBy: [{ amount: "asc" }, { created_at: "asc" }],
       });
       const returnedList = cohortPricesList.map((entry) => {
