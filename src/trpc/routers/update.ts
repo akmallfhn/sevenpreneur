@@ -7,7 +7,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -149,6 +149,59 @@ export const updateRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         cohort: updatedCohortPrice[0],
+      };
+    }),
+
+  learning: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        cohort_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        method: z.nativeEnum(LearningMethodEnum).optional(),
+        meeting_date: stringIsTimestampTz().optional(),
+        meeting_url: stringNotBlank().nullable().optional(),
+        meeting_location: stringNotBlank().nullable().optional(),
+        speaker_id: stringNotBlank().nullable().optional(),
+        recording_url: stringNotBlank().nullable().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedLearning =
+        await opts.ctx.prisma.learning.updateManyAndReturn({
+          data: {
+            cohort_id: opts.input.cohort_id,
+            name: opts.input.name,
+            description: opts.input.description,
+            method: opts.input.method,
+            meeting_date: opts.input.meeting_date,
+            meeting_url: opts.input.meeting_url,
+            meeting_location: opts.input.meeting_location,
+            speaker_id: opts.input.speaker_id,
+            recording_url: opts.input.recording_url,
+            status: opts.input.status,
+          },
+          where: {
+            id: opts.input.id,
+            // deleted_at: null,
+          },
+        });
+      if (updatedLearning.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected learning is not found.",
+        });
+      } else if (updatedLearning.length > 1) {
+        console.error(
+          "update.learning: More-than-one learnings are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        learning: updatedLearning[0],
       };
     }),
 });

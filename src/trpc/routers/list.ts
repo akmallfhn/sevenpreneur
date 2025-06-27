@@ -132,4 +132,36 @@ export const listRouter = createTRPCRouter({
         list: returnedList,
       };
     }),
+
+  learnings: loggedInProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const learningsList = await opts.ctx.prisma.learning.findMany({
+        include: { speaker: true },
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
+      });
+      const returnedList = learningsList.map((entry) => {
+        return {
+          id: entry.id,
+          cohort_id: entry.cohort_id,
+          name: entry.name,
+          method: entry.method,
+          meeting_date: entry.meeting_date,
+          meeting_url: entry.meeting_url,
+          meeting_location: entry.meeting_location,
+          speaker: entry.speaker,
+          status: entry.status,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
 });

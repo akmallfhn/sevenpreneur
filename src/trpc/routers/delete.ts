@@ -65,4 +65,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  learning: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedLearning = await opts.ctx.prisma.learning.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedLearning.count > 1) {
+        console.error(
+          "delete.learning: More-than-one learnings are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });

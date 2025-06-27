@@ -7,7 +7,7 @@ import {
   stringIsTimestampTz,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -162,6 +162,55 @@ export const createRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         cohortPrice: theCohortPrice,
+      };
+    }),
+
+  learning: administratorProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        method: z.nativeEnum(LearningMethodEnum),
+        meeting_date: stringIsTimestampTz(),
+        meeting_url: stringNotBlank().nullable().optional(),
+        meeting_location: stringNotBlank().nullable().optional(),
+        speaker_id: stringNotBlank().nullable().optional(),
+        recording_url: stringNotBlank().nullable().optional(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdLearning = await opts.ctx.prisma.learning.create({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          method: opts.input.method,
+          meeting_date: opts.input.meeting_date,
+          meeting_url: opts.input.meeting_url,
+          meeting_location: opts.input.meeting_location,
+          speaker_id: opts.input.speaker_id,
+          recording_url: opts.input.recording_url,
+          status: opts.input.status,
+        },
+      });
+      const theLearning = await opts.ctx.prisma.learning.findFirst({
+        where: {
+          id: createdLearning.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theLearning) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new learning.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        learning: theLearning,
       };
     }),
 });
