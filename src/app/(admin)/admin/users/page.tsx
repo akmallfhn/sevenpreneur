@@ -6,7 +6,7 @@ export default async function UserListPage() {
   const sessionToken = cookieStore.get("session_token")?.value ?? "";
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 overflow-y-auto lg:flex lg:pl-64">
+    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
       <UserListCMS sessionToken={sessionToken} />
     </div>
   );
