@@ -15,23 +15,27 @@ dayjs.extend(localizedFormat);
 
 interface LearningSessionItemCMSProps {
   cohortId: number;
+  sessionLearningId: number;
   sessionName: string;
   sessionEducatorName?: string;
   sessionEducatorAvatar?: string | null;
   sessionMethod: string;
   sessionDate: string;
+  sessionMeetingURL?: string | null;
 }
 
 export default function LearningSessionItemCMS({
   cohortId,
+  sessionLearningId,
   sessionName,
   sessionEducatorName,
   sessionEducatorAvatar,
   sessionMethod,
   sessionDate,
+  sessionMeetingURL,
 }: LearningSessionItemCMSProps) {
   return (
-    <Link href={`/cohorts/${cohortId}/learnings/23432`}>
+    <Link href={`/cohorts/${cohortId}/learnings/${sessionLearningId}`}>
       <div className="session-item flex items-center justify-between bg-white gap-2 p-3 rounded-md">
         <div className="flex w-[calc(87%)] gap-3 items-center">
           <LearningSessionIconLabelCMS
@@ -68,12 +72,19 @@ export default function LearningSessionItemCMS({
                     </p>
                   </div>
                 </div>
-                {/* {sessionMethod !== "on site" && (
-                  <AppButton variant="outline" size="small" type="button">
-                    <Video className="size-4" />
-                    Launch meeting
-                  </AppButton>
-                )} */}
+                {sessionMethod !== "ONSITE" && sessionMeetingURL && (
+                  <a
+                    href={sessionMeetingURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <AppButton variant="outline" size="small" type="button">
+                      <Video className="size-4" />
+                      Launch meeting
+                    </AppButton>
+                  </a>
+                )}
               </div>
             </div>
           </div>

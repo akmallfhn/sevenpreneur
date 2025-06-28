@@ -73,11 +73,13 @@ export default function LearningListCMS({
                 <LearningSessionItemCMS
                   key={index}
                   cohortId={cohortId}
+                  sessionLearningId={post.id}
                   sessionName={post.name}
                   sessionEducatorName={post.speaker?.full_name}
                   sessionEducatorAvatar={post.speaker?.avatar}
                   sessionMethod={post.method}
                   sessionDate={post.meeting_date}
+                  sessionMeetingURL={post.meeting_url}
                 />
               ))}
           </div>
@@ -100,11 +102,13 @@ export default function LearningListCMS({
                 <LearningSessionItemCMS
                   key={index}
                   cohortId={cohortId}
+                  sessionLearningId={post.id}
                   sessionName={post.name}
                   sessionEducatorName={post.speaker?.full_name}
                   sessionEducatorAvatar={post.speaker?.avatar}
                   sessionMethod={post.method}
                   sessionDate={post.meeting_date}
+                  sessionMeetingURL={post.meeting_url}
                 />
               ))}
           </div>
@@ -112,7 +116,7 @@ export default function LearningListCMS({
       )}
       {/* --- COMPLETED */}
       {learningListData?.list.some((post) =>
-        dayjs().isSame(dayjs(post.meeting_date), "day")
+        dayjs().isAfter(dayjs(post.meeting_date), "day")
       ) && (
         <div className="flex flex-col gap-3">
           <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
@@ -128,11 +132,13 @@ export default function LearningListCMS({
                 <LearningSessionItemCMS
                   key={index}
                   cohortId={cohortId}
+                  sessionLearningId={post.id}
                   sessionName={post.name}
                   sessionEducatorName={post.speaker?.full_name}
                   sessionEducatorAvatar={post.speaker?.avatar}
                   sessionMethod={post.method}
                   sessionDate={post.meeting_date}
+                  sessionMeetingURL={post.meeting_url}
                 />
               ))}
           </div>
