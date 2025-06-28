@@ -16,9 +16,10 @@ dayjs.extend(localizedFormat);
 interface LearningSessionItemCMSProps {
   cohortId: number;
   sessionName: string;
-  sessionEducatorName: string;
-  sessionEducatorAvatar: string;
+  sessionEducatorName?: string;
+  sessionEducatorAvatar?: string | null;
   sessionMethod: string;
+  sessionDate: string;
 }
 
 export default function LearningSessionItemCMS({
@@ -27,13 +28,14 @@ export default function LearningSessionItemCMS({
   sessionEducatorName,
   sessionEducatorAvatar,
   sessionMethod,
+  sessionDate,
 }: LearningSessionItemCMSProps) {
   return (
     <Link href={`/cohorts/${cohortId}/learnings/23432`}>
       <div className="session-item flex items-center justify-between bg-white gap-2 p-3 rounded-md">
         <div className="flex w-[calc(87%)] gap-3 items-center">
           <LearningSessionIconLabelCMS
-            variants={toCamelCase(sessionMethod) as learningSessionVariant}
+            variants={sessionMethod as learningSessionVariant}
           />
           <div className="attribute-data flex flex-col gap-2.5">
             <div className="flex flex-col gap-0.5">
@@ -46,8 +48,8 @@ export default function LearningSessionItemCMS({
                     <Image
                       className="object-cover w-full h-full"
                       src={
-                        sessionEducatorAvatar ||
-                        "https://cdn1-production-images-kly.akamaized.net/VMOMJZI5ThAIIVjSIk7B3CxYkYQ=/500x500/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3918744/original/035101900_1643478653-WhatsApp_Image_2022-01-27_at_16.46.27__1_.jpeg"
+                        sessionEducatorAvatar ??
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
                       }
                       alt="Avatar User"
                       width={80}
@@ -58,20 +60,20 @@ export default function LearningSessionItemCMS({
                     <p className="educator-name">
                       by{" "}
                       <span className="text-black font-semibold">
-                        {sessionEducatorName}
+                        {sessionEducatorName || "Sevenpreneur Team"}
                       </span>
                     </p>
                     <p className="date-time">
-                      {dayjs("2025-06-02 02:00:00+00").format("llll")}
+                      {dayjs(sessionDate).format("llll")}
                     </p>
                   </div>
                 </div>
-                {sessionMethod !== "on site" && (
+                {/* {sessionMethod !== "on site" && (
                   <AppButton variant="outline" size="small" type="button">
                     <Video className="size-4" />
                     Launch meeting
                   </AppButton>
-                )}
+                )} */}
               </div>
             </div>
           </div>

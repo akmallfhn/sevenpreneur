@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppButton from "../buttons/AppButton";
-import {
-  ChevronRight,
-  EllipsisVertical,
-  Loader2,
-  PenTool,
-  Plus,
-  PlusCircle,
-} from "lucide-react";
+import { ChevronRight, Loader2, PenTool } from "lucide-react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -18,20 +11,17 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
 import {
-  faBookBookmark,
   faCalendar,
-  faChalkboard,
-  faChalkboardTeacher,
   faChalkboardUser,
   faLaptop,
   faLinesLeaning,
   faMoneyBill1Wave,
 } from "@fortawesome/free-solid-svg-icons";
-import FileItemCMS from "../items/FileItemCMS";
-import UserItemSimpleCMS from "../items/UserItemSimpleCMS";
-import ProjectItemCMS from "../items/ProjectItemCMS";
 import LearningListCMS from "../indexes/LearningListCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
+import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
+import ModuleListCMS from "../indexes/ModuleListCMS";
+import ProjectListCMS from "../indexes/ProjectListCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -141,7 +131,7 @@ export default function CohortDetailsCMS({
             </div>
 
             {/* Learnings */}
-            <LearningListCMS cohortId={cohortId} />
+            <LearningListCMS sessionToken={sessionToken} cohortId={cohortId} />
           </main>
 
           {/* -- Aside */}
@@ -194,98 +184,9 @@ export default function CohortDetailsCMS({
               </div>
             </div>
 
-            {/* Modules */}
-            <div className="modules flex flex-col gap-3 p-3 bg-section-background rounded-md">
-              <div className="section-name flex justify-between items-center">
-                <h2 className="label-name font-brand font-bold">Modules</h2>
-                <AppButton variant="outline" size="small">
-                  <Plus className="size-4" />
-                  Add file
-                </AppButton>
-              </div>
-              <div className="module-list flex flex-col gap-2">
-                <FileItemCMS
-                  fileName="Metriks OKR dalam Pemecahan Masalah"
-                  fileType="PPTX"
-                  fileIcon="https://www.gstatic.com/images/branding/product/2x/slides_2020q4_48dp.png"
-                />
-                <FileItemCMS
-                  fileName="Modul Framework Terlengkap SBBP"
-                  fileType="DOCX"
-                  fileIcon="https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png"
-                />
-                <FileItemCMS
-                  fileName="Financial Template"
-                  fileType="XLSX"
-                  fileIcon="https://www.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png"
-                />
-                <FileItemCMS
-                  fileName="Silabus Pembelajaran"
-                  fileType="PDF"
-                  fileIcon="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//pdf-icon.webp"
-                />
-              </div>
-              <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
-                Load more
-              </p>
-            </div>
-
-            {/* Enrolled user */}
-            <div className="enrolled-user flex flex-col gap-3 p-3 bg-section-background rounded-md">
-              <h2 className="label-name font-brand font-bold">
-                Enrolled Users
-              </h2>
-              <div className="user-list flex flex-col gap-4 bg-white rounded-md p-4">
-                <UserItemSimpleCMS
-                  userName="Iqtironia Khamlia"
-                  userAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3iAhb7CJ27cQ11hydy_2L-BJsRb4x0uKGrA&s"
-                />
-                <UserItemSimpleCMS
-                  userName="Nailal Hana"
-                  userAvatar="https://media.licdn.com/dms/image/v2/D5603AQEJ-7Q-sU8nLQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1702721727717?e=2147483647&v=beta&t=I87OG4TaALe5F_z5NInHsbWI7u6ZNHUEX0Z1lEFnFFc"
-                />
-                <UserItemSimpleCMS
-                  userName="Rima Amaliana"
-                  userAvatar="https://media.licdn.com/dms/image/v2/D5603AQEVVMDvyQpyfQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697969357081?e=2147483647&v=beta&t=2JxjAOsv03JaAWmwkxUh3FBGD0MjbKFDQihFr1jraVo"
-                />
-                <UserItemSimpleCMS
-                  userName="Cica Susilo"
-                  userAvatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaOwYZfpEVR8WVzJ7SGXOXYISRhtIBp9EY2w&s"
-                />
-                <UserItemSimpleCMS
-                  userName="Ridha Hitalala"
-                  userAvatar="https://media.licdn.com/dms/image/v2/D5603AQHOSKgX8TsdvQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1715315136213?e=2147483647&v=beta&t=LqS7XLqwrYSoxQvArIPBLl01NNVysbGlfdsdqaZ_qkM"
-                />
-                <UserItemSimpleCMS
-                  userName="Hesti Giri Pertiwi Suci"
-                  userAvatar="https://media.licdn.com/dms/image/v2/C4E03AQHL-XEm2q_oCw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1646964896995?e=2147483647&v=beta&t=_UmA6XbAdnvuw6KWBYEKQiEmmNREwChb_FElX14MjTk"
-                />
-              </div>
-              <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
-                Load more
-              </p>
-            </div>
-
-            {/* Projects */}
-            <div className="projects flex flex-col gap-3 p-3 bg-section-background rounded-md">
-              <div className="section-name flex justify-between items-center">
-                <h2 className="label-name font-brand font-bold">Projects</h2>
-                <AppButton variant="outline" size="small">
-                  <Plus className="size-4" />
-                  Add projects
-                </AppButton>
-              </div>
-              <div className="project-list flex flex-col gap-2">
-                <ProjectItemCMS
-                  projectName="Business Model Canvas 3.0"
-                  lastSubmission="2025-06-02 02:00:00+00"
-                />
-                <ProjectItemCMS
-                  projectName="Business Model Canvas 3.0"
-                  lastSubmission="2025-06-02 02:00:00+00"
-                />
-              </div>
-            </div>
+            <ModuleListCMS />
+            <EnrolledUserListCMS />
+            <ProjectListCMS />
           </aside>
         </div>
       </div>
