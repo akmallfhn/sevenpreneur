@@ -3,25 +3,24 @@
 import { GalleryHorizontalEnd, MapPinned, Video } from "lucide-react";
 import { ReactNode } from "react";
 
-export type learningSessionVariant = "online" | "onSite" | "hybrid";
+export type learningSessionVariant = "ONLINE" | "ONSITE" | "HYBRID";
 
 const variantStyles: Record<
   learningSessionVariant,
   {
     iconColor: string;
-
     iconLabel: ReactNode;
   }
 > = {
-  online: {
+  ONLINE: {
     iconColor: "bg-cms-primary-light text-cms-primary",
     iconLabel: <Video className="size-5" />,
   },
-  onSite: {
+  ONSITE: {
     iconColor: "bg-[#EFEDF9] text-[#42359B]",
     iconLabel: <MapPinned className="size-5" />,
   },
-  hybrid: {
+  HYBRID: {
     iconColor: "bg-[#DBF2F0] text-[#00A694]",
     iconLabel: <GalleryHorizontalEnd className="size-5" />,
   },
