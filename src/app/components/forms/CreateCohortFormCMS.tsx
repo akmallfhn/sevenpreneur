@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 
-interface CohortCreateCMSProps {
+interface CreateCohortFormCMSProps {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -19,7 +19,7 @@ interface CohortCreateCMSProps {
 export default function CreateCohortFormCMS({
   isOpen,
   onClose,
-}: CohortCreateCMSProps) {
+}: CreateCohortFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createCohort = trpc.create.cohort.useMutation();
   const utils = trpc.useUtils();

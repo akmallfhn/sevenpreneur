@@ -1,7 +1,5 @@
-import DisallowedMobile from "@/app/components/state/DisallowedMobile";
 import UserProfileDetailCMS from "@/app/components/templates/UserProfileDetailCMS";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import React from "react";
 
 interface UserDetailPageProps {
@@ -14,7 +12,7 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
   const sessionToken = cookieStore.get("session_token")?.value ?? "";
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 overflow-y-auto lg:flex lg:pl-64">
+    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
       <UserProfileDetailCMS sessionToken={sessionToken} userId={user_id} />
     </div>
   );

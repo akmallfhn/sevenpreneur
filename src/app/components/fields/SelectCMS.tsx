@@ -10,7 +10,7 @@ interface OptionType {
 interface SelectCMSProps {
   selectId: string;
   selectName: string;
-  selectIcon: React.ReactNode;
+  selectIcon?: React.ReactNode;
   selectPlaceholder: string;
   value: any;
   onChange?: (value: any) => void;
@@ -69,19 +69,23 @@ export default function SelectCMS({
 
       {/* --- Select Placeholder */}
       <div
-        className={`select relative flex w-full p-2 pl-10 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
+        className={`select relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
           isOpen
             ? "border-cms-primary outline-4 outline-primary/15"
             : "border-outline"
-        } ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+        } ${selectIcon ? "pl-10" : ""} ${
+          disabled ? "cursor-not-allowed" : "cursor-pointer"
+        }`}
         onClick={() => {
           if (!disabled) setIsOpen((prev) => !prev);
         }}
       >
         {/* -- Icon Select */}
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-alternative">
-          {selectIcon}
-        </div>
+        {selectIcon && (
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-alternative">
+            {selectIcon}
+          </div>
+        )}
 
         {/* -- Label Value */}
         <span
