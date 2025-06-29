@@ -185,4 +185,30 @@ export const readRouter = createTRPCRouter({
         learning: theLearning,
       };
     }),
+
+  material: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theMaterial = await opts.ctx.prisma.material.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theMaterial) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The material with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        material: theMaterial,
+      };
+    }),
 });

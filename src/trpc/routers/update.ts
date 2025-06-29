@@ -204,4 +204,47 @@ export const updateRouter = createTRPCRouter({
         learning: updatedLearning[0],
       };
     }),
+
+  material: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        learning_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        document_url: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedMaterial =
+        await opts.ctx.prisma.material.updateManyAndReturn({
+          data: {
+            learning_id: opts.input.learning_id,
+            name: opts.input.name,
+            description: opts.input.description,
+            document_url: opts.input.document_url,
+            status: opts.input.status,
+          },
+          where: {
+            id: opts.input.id,
+            // deleted_at: null,
+          },
+        });
+      if (updatedMaterial.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected material is not found.",
+        });
+      } else if (updatedMaterial.length > 1) {
+        console.error(
+          "update.material: More-than-one materials are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        material: updatedMaterial[0],
+      };
+    }),
 });

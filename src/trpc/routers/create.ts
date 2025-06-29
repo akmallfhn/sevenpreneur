@@ -213,4 +213,43 @@ export const createRouter = createTRPCRouter({
         learning: theLearning,
       };
     }),
+
+  material: administratorProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        document_url: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdMaterial = await opts.ctx.prisma.material.create({
+        data: {
+          learning_id: opts.input.learning_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          status: opts.input.status,
+        },
+      });
+      const theMaterial = await opts.ctx.prisma.material.findFirst({
+        where: {
+          id: createdMaterial.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theMaterial) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new material.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        material: theMaterial,
+      };
+    }),
 });

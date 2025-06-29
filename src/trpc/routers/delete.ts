@@ -88,4 +88,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  material: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedMaterial = await opts.ctx.prisma.material.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedMaterial.count > 1) {
+        console.error(
+          "delete.material: More-than-one materials are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });
