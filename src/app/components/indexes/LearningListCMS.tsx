@@ -17,6 +17,8 @@ export default function LearningListCMS({
   sessionToken,
 }: LearningListCMSProps) {
   const [createLearning, setCreateLearning] = useState(false);
+  const utils = trpc.useUtils();
+
   // --- Call data from tRPC
   const {
     data: learningListData,
@@ -92,6 +94,7 @@ export default function LearningListCMS({
                     sessionMethod={post.method}
                     sessionDate={post.meeting_date}
                     sessionMeetingURL={post.meeting_url}
+                    onDeleteSuccess={() => utils.list.learnings.invalidate()}
                   />
                 ))}
             </div>
@@ -124,6 +127,7 @@ export default function LearningListCMS({
                     sessionMethod={post.method}
                     sessionDate={post.meeting_date}
                     sessionMeetingURL={post.meeting_url}
+                    onDeleteSuccess={() => utils.list.learnings.invalidate()}
                   />
                 ))}
             </div>
@@ -156,6 +160,7 @@ export default function LearningListCMS({
                     sessionMethod={post.method}
                     sessionDate={post.meeting_date}
                     sessionMeetingURL={post.meeting_url}
+                    onDeleteSuccess={() => utils.list.learnings.invalidate()}
                   />
                 ))}
             </div>

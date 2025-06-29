@@ -78,7 +78,7 @@ export default function CohortDetailsCMS({
             <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
             <ChevronRight className="size-3.5" />
             <AppBreadcrumbItem href={`/cohorts/${cohortId}`} isCurrentPage>
-              Details
+              {cohortDetailsData?.cohort.name}
             </AppBreadcrumbItem>
           </AppBreadcrumb>
         </div>
