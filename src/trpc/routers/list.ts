@@ -169,4 +169,31 @@ export const listRouter = createTRPCRouter({
         list: returnedList,
       };
     }),
+
+  materials: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const materialsList = await opts.ctx.prisma.material.findMany({
+        where: { learning_id: opts.input.learning_id },
+        orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
+      });
+      const returnedList = materialsList.map((entry) => {
+        return {
+          id: entry.id,
+          learning_id: entry.learning_id,
+          name: entry.name,
+          document_url: entry.document_url,
+          status: entry.status,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
 });
