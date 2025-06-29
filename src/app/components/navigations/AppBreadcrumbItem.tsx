@@ -17,7 +17,7 @@ export default function AppBreadcrumbItem({
   return (
     <Link
       href={href}
-      className={`flex items-center font-bodycopy text-sm ${
+      className={`items-center font-bodycopy text-sm max-w-52 line-clamp-1 ${
         isCurrentPage ? "text-black font-medium" : ""
       }`}
     >
