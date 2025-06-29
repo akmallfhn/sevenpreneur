@@ -164,11 +164,14 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     try {
       createUser.mutate(
         {
+          // Mandatory fields:
           full_name: formData.fullName,
           email: formData.email,
-          avatar: formData.avatar?.trim() ? formData.avatar : undefined,
           role_id: Number(formData.roleId),
           status: formData.status,
+
+          // Optional fields
+          avatar: formData.avatar?.trim() ? formData.avatar : undefined,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
             : undefined,

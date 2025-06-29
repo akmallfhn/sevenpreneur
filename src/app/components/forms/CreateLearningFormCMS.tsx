@@ -62,6 +62,29 @@ export default function CreateLearningFormCMS({
     }));
   };
 
+  // --- Reset fields based on learning method change
+  useEffect(() => {
+    if (formData.learningMethod === "ONSITE") {
+      setFormData((prev) => ({
+        ...prev,
+        learningURL: "",
+      }));
+    }
+    if (formData.learningMethod === "ONLINE") {
+      setFormData((prev) => ({
+        ...prev,
+        learningLocation: "",
+      }));
+    }
+    if (formData.learningMethod === "") {
+      setFormData((prev) => ({
+        ...prev,
+        learningURL: "",
+        learningLocation: "",
+      }));
+    }
+  }, [formData.learningMethod]);
+
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -132,8 +155,12 @@ export default function CreateLearningFormCMS({
           method: formData.learningMethod as learningSessionVariant,
 
           // Optional fields:
-          meeting_url: formData.learningURL.trim(),
-          meeting_location: formData.learningLocation.trim(),
+          meeting_url: formData.learningURL.trim()
+            ? formData.learningURL
+            : null,
+          meeting_location: formData.learningLocation.trim()
+            ? formData.learningLocation
+            : null,
         },
         {
           onSuccess: () => {
@@ -219,30 +246,29 @@ export default function CreateLearningFormCMS({
                 },
               ]}
             />
-            {formData.learningMethod === "" ||
-              (formData.learningMethod !== "ONSITE" && (
-                <InputCMS
-                  inputId="learning-url"
-                  inputName="Meeting Link"
-                  inputType="url"
-                  inputPlaceholder="e.g. meet.google.com/vjd-wovj-xfe"
-                  value={formData.learningURL}
-                  onInputChange={handleInputChange("learningURL")}
-                  required
-                />
-              ))}
-            {formData.learningMethod === "" ||
-              (formData.learningMethod !== "ONLINE" && (
-                <InputCMS
-                  inputId="learning-location"
-                  inputName="Meeting Venue"
-                  inputType="url"
-                  inputPlaceholder="e.g. https://maps.app.goo.gl/3UxudP"
-                  value={formData.learningLocation}
-                  onInputChange={handleInputChange("learningLocation")}
-                  required
-                />
-              ))}
+            {["ONLINE", "HYBRID"].includes(formData.learningMethod) && (
+              <InputCMS
+                inputId="learning-url"
+                inputName="Meeting Link"
+                inputType="url"
+                inputPlaceholder="e.g. meet.google.com/vjd-wovj-xfe"
+                value={formData.learningURL}
+                onInputChange={handleInputChange("learningURL")}
+                characterLength={300}
+                required
+              />
+            )}
+            {["ONSITE", "HYBRID"].includes(formData.learningMethod) && (
+              <InputCMS
+                inputId="learning-location"
+                inputName="Meeting Venue"
+                inputType="url"
+                inputPlaceholder="e.g. https://maps.app.goo.gl/3UxudP"
+                value={formData.learningLocation}
+                onInputChange={handleInputChange("learningLocation")}
+                required
+              />
+            )}
           </div>
         </div>
         <div className="sticky bottom-0 w-full p-4 bg-white z-10">
