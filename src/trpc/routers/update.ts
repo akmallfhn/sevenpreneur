@@ -247,4 +247,46 @@ export const updateRouter = createTRPCRouter({
         material: updatedMaterial[0],
       };
     }),
+
+  module: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        cohort_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        document_url: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedModule = await opts.ctx.prisma.module.updateManyAndReturn({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          status: opts.input.status,
+        },
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (updatedModule.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected module is not found.",
+        });
+      } else if (updatedModule.length > 1) {
+        console.error(
+          "update.module: More-than-one modules are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        module: updatedModule[0],
+      };
+    }),
 });

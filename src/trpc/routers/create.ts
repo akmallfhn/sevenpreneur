@@ -252,4 +252,43 @@ export const createRouter = createTRPCRouter({
         material: theMaterial,
       };
     }),
+
+  module: administratorProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        document_url: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdModule = await opts.ctx.prisma.module.create({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          status: opts.input.status,
+        },
+      });
+      const theModule = await opts.ctx.prisma.module.findFirst({
+        where: {
+          id: createdModule.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theModule) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new module.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        module: theModule,
+      };
+    }),
 });
