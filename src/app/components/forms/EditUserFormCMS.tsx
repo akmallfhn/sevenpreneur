@@ -202,12 +202,15 @@ export default function EditUserForm({
     try {
       editUser.mutate(
         {
+          // Mandatory fields:
           id: userId,
           full_name: formData.fullName,
-          avatar: formData.avatar.trim() ? formData.avatar : null,
           email: formData.email,
           role_id: Number(formData.roleId),
           status: formData.status,
+
+          // Optional fields:
+          avatar: formData.avatar.trim() ? formData.avatar : null,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
             : null,
