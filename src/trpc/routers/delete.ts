@@ -111,4 +111,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  module: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedModule = await opts.ctx.prisma.module.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedModule.count > 1) {
+        console.error(
+          "delete.module: More-than-one modules are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });
