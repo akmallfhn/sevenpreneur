@@ -51,7 +51,7 @@ export default function LearningListCMS({
     <React.Fragment>
       <div className="flex flex-col gap-3 p-3 bg-section-background rounded-md">
         <div className="section-name flex justify-between items-center">
-          <h2 className="label-name font-brand font-bold">Learnings</h2>
+          <h2 className="label-name font-brand font-bold">Learning Sessions</h2>
           <AppButton
             variant="outline"
             size="small"

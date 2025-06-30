@@ -71,9 +71,9 @@ export default function LearningSessionItemCMS({
   }, []);
 
   // --- Function to delete learning
-  const deleteUser = trpc.delete.learning.useMutation();
+  const deleteLearning = trpc.delete.learning.useMutation();
   const handleDelete = () => {
-    deleteUser.mutate(
+    deleteLearning.mutate(
       { id: sessionLearningId },
       {
         onSuccess: () => {
@@ -174,7 +174,7 @@ export default function LearningSessionItemCMS({
         </div>
       </div>
 
-      {/* --- Button redirect link meeting */}
+      {/* --- Redirect link meeting */}
       <a
         href={sessionMeetingURL!}
         ref={externalLinkRef}
