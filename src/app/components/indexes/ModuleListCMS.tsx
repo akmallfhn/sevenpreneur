@@ -70,6 +70,8 @@ export default function ModuleListCMS({
             {moduleListData?.list.map((post, index) => (
               <FileItemCMS
                 key={index}
+                sessionToken={sessionToken}
+                cohortId={cohortId}
                 fileId={post.id}
                 fileName={post.name}
                 fileURL={post.document_url}

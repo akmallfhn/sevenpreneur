@@ -41,7 +41,7 @@ export default function FileResultUploadingCMS({
   uploadProgress,
 }: FileResultUploadingCMSProps) {
   // --- Variant declarations
-  const { fileIcon, fileType } = variantStyles[variants];
+  const { fileIcon } = variantStyles[variants] ?? variantStyles.UNKNOWN;
 
   return (
     <React.Fragment>
