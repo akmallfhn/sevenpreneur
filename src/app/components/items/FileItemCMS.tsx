@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
-import { EllipsisVertical, Trash2 } from "lucide-react";
+import { EllipsisVertical, Settings2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import DropdownMenuCMS from "../elements/DropdownMenuCMS";
 import AppAlertDialog from "../modals/AppAlertDialog";
+import EditModuleFormCMS from "../forms/EditModuleFormCMS";
 
 export type fileVariant =
   | "DOCX"
@@ -69,6 +70,8 @@ const variantStyles: Record<
 };
 
 interface FileItemCMSProps {
+  sessionToken: string;
+  cohortId: number;
   fileId: number;
   fileName: string;
   fileURL: string;
@@ -77,6 +80,8 @@ interface FileItemCMSProps {
 }
 
 export default function FileItemCMS({
+  sessionToken,
+  cohortId,
   fileId,
   fileName,
   fileURL,
@@ -85,6 +90,9 @@ export default function FileItemCMS({
 }: FileItemCMSProps) {
   // --- Variant declarations
   const { fileIcon, fileType } = variantStyles[variants];
+
+  // --- State
+  const [editFile, setEditFile] = useState(false);
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
@@ -175,6 +183,14 @@ export default function FileItemCMS({
             isOpen={isActionsOpened}
             onClose={() => setIsActionsOpened(false)}
           >
+            {/* -- Edit */}
+            <div
+              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
+              onClick={() => setEditFile(true)}
+            >
+              <Settings2 className="size-4" />
+              Edit
+            </div>
             <div
               className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-destructive hover:bg-[#FFCDC9] hover:cursor-pointer"
               onClick={() => setIsOpenDeleteConfirmation(true)}
@@ -185,6 +201,7 @@ export default function FileItemCMS({
           </DropdownMenuCMS>
         </div>
       </div>
+
       {/* --- Delete Confirmation */}
       {isOpenDeleteConfirmation && (
         <AppAlertDialog
@@ -196,6 +213,16 @@ export default function FileItemCMS({
             handleDelete();
             setIsOpenDeleteConfirmation(false);
           }}
+        />
+      )}
+
+      {editFile && (
+        <EditModuleFormCMS
+          sessionToken={sessionToken}
+          cohortId={cohortId}
+          moduleId={fileId}
+          isOpen={editFile}
+          onClose={() => setEditFile(false)}
         />
       )}
     </React.Fragment>

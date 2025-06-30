@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, useRef } from "react";
 import AppSheet from "../modals/AppSheet";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
@@ -10,21 +10,35 @@ import { Loader2 } from "lucide-react";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
 
-interface CreateModuleFormCMSProps {
+interface EditModuleFormCMSProps {
+  sessionToken: string;
   cohortId: number;
+  moduleId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function CreateModuleFormCMS({
+export default function EditModuleFormCMS({
+  sessionToken,
   cohortId,
+  moduleId,
   isOpen,
   onClose,
-}: CreateModuleFormCMSProps) {
+}: EditModuleFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedUploadMethod, setSelectedUploadMethod] = useState("");
-  const createModule = trpc.create.module.useMutation();
+  const [hasInitializedUploadMethod, setHasInitializedUploadMethod] =
+    useState(false);
+  const prevUploadMethod = useRef("");
+  const editModule = trpc.update.module.useMutation();
   const utils = trpc.useUtils();
+
+  // --- Return initial data
+  const {
+    data: initialDataModule,
+    isLoading,
+    isError,
+  } = trpc.read.module.useQuery({ id: moduleId }, { enabled: !!sessionToken });
 
   // --- Beginning State
   const [formData, setFormData] = useState<{
@@ -32,18 +46,45 @@ export default function CreateModuleFormCMS({
     moduleDescription: string;
     moduleURL: string;
   }>({
-    moduleName: "",
-    moduleDescription: "",
-    moduleURL: "",
+    moduleName: initialDataModule?.module.name || "",
+    moduleDescription: initialDataModule?.module.description || "",
+    moduleURL: initialDataModule?.module.document_url || "",
   });
 
-  // --- Reset moduleURL every time upload method is changed
+  // --- Iterate initial data (so it doesn't get lost)
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      moduleURL: "",
-    }));
-  }, [selectedUploadMethod]);
+    if (!initialDataModule) return;
+    const url = initialDataModule.module.document_url || "";
+    const isSupabaseFile = url.includes("supabase.co");
+
+    // Set form data (including URL, which was getting cleared before)
+    setFormData({
+      moduleName: initialDataModule.module.name || "",
+      moduleDescription: initialDataModule.module.description || "",
+      moduleURL: url,
+    });
+
+    // Set upload method (auto-select radio)
+    setSelectedUploadMethod(isSupabaseFile ? "upload" : "attach");
+    setHasInitializedUploadMethod(true);
+  }, [initialDataModule]);
+
+  // --- Reset only if user switched method manually (not first load)
+  useEffect(() => {
+    if (!hasInitializedUploadMethod) return;
+    // Checking previously have method?
+    // Checking the method has change now?
+    if (
+      prevUploadMethod.current &&
+      prevUploadMethod.current !== selectedUploadMethod
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        moduleURL: "",
+      }));
+    }
+    prevUploadMethod.current = selectedUploadMethod;
+  }, [selectedUploadMethod, hasInitializedUploadMethod]);
 
   // --- Add event listener to prevent page refresh
   useEffect(() => {
@@ -64,6 +105,22 @@ export default function CreateModuleFormCMS({
     }));
   };
 
+  // --- Data State Rendering
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative">
+        <Loader2 className="animate-spin size-5 " />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+        No Data
+      </div>
+    );
+  }
+
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -83,10 +140,11 @@ export default function CreateModuleFormCMS({
 
     // -- POST to Database
     try {
-      createModule.mutate(
+      editModule.mutate(
         {
           // Mandatory fields:
           cohort_id: cohortId,
+          id: moduleId,
           name: formData.moduleName.trim(),
           status: "ACTIVE",
           document_url: formData.moduleURL,
@@ -96,14 +154,14 @@ export default function CreateModuleFormCMS({
         },
         {
           onSuccess: () => {
-            toast.success("File uploaded successfully");
+            toast.success("File updated successfully");
             setIsSubmitting(false);
             utils.list.modules.invalidate();
             onClose();
           },
           onError: (err) => {
             toast.error(
-              "Something went wrong during upload. Please try again.",
+              "Something went wrong during upload. Please try again!",
               {
                 description: err.message,
               }
@@ -120,8 +178,8 @@ export default function CreateModuleFormCMS({
 
   return (
     <AppSheet
-      sheetName="Add Learning Kit"
-      sheetDescription="Upload essential learning documents to support this cohort"
+      sheetName="Edit File"
+      sheetDescription="Update the document's title, description, or access link to keep your cohort resources up to date."
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -200,7 +258,7 @@ export default function CreateModuleFormCMS({
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Add File
+            Save Changes
           </AppButton>
         </div>
       </form>
