@@ -8,7 +8,7 @@ import "dayjs/locale/en";
 import { ChevronRight, EllipsisVertical, Trash2, Video } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import LearningSessionIconLabelCMS, {
-  learningSessionVariant,
+  LearningSessionVariant,
 } from "../labels/LearningSessionIconLabelCMS";
 import DropdownMenuCMS from "../elements/DropdownMenuCMS";
 import AppAlertDialog from "../modals/AppAlertDialog";
@@ -96,7 +96,7 @@ export default function LearningSessionItemCMS({
           className="flex w-[calc(87%)] gap-3 items-center"
         >
           <LearningSessionIconLabelCMS
-            variants={sessionMethod as learningSessionVariant}
+            variants={sessionMethod as LearningSessionVariant}
           />
           <div className="attribute-data flex flex-col gap-2.5">
             <div className="flex flex-col gap-0.5">

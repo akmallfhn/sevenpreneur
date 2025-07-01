@@ -8,14 +8,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 
-export type rolesVariant =
+export type RolesVariant =
   | "administrator"
   | "educator"
   | "classManager"
   | "generalUser";
 
 const variantStyles: Record<
-  rolesVariant,
+  RolesVariant,
   {
     backgroundColor: string;
     labelColor: string;
@@ -46,7 +46,7 @@ const variantStyles: Record<
 
 interface RolesLabelCMSProps {
   labelName: string;
-  variants: rolesVariant;
+  variants: RolesVariant;
 }
 
 export default function RolesLabelCMS({

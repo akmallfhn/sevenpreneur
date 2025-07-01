@@ -10,10 +10,10 @@ import AppAlertDialog from "@/app/components/modals/AppAlertDialog";
 import AppButton from "@/app/components/buttons/AppButton";
 import DropdownMenuCMS from "@/app/components/elements/DropdownMenuCMS";
 import StatusLabelCMS, {
-  Variant,
+  StatusVariant,
 } from "@/app/components/labels/StatusLabelCMS";
 import RolesLabelCMS, {
-  rolesVariant,
+  RolesVariant,
 } from "@/app/components/labels/RolesLabelCMS";
 import { EllipsisVertical, Eye, Settings2, Trash2 } from "lucide-react";
 import { trpc } from "@/trpc/client";
@@ -134,7 +134,7 @@ export default function UserItemListCMS({
           <div className="user-role max-w-[120px] w-full shrink-0 text-left">
             <RolesLabelCMS
               labelName={userRole}
-              variants={toCamelCase(userRole) as rolesVariant}
+              variants={toCamelCase(userRole) as RolesVariant}
             />
           </div>
 
@@ -152,7 +152,7 @@ export default function UserItemListCMS({
           <div className="status max-w-[102px] w-full shrink-0 text-left">
             <StatusLabelCMS
               labelName={userStatus}
-              variants={userStatus as Variant}
+              variants={userStatus as StatusVariant}
             />
           </div>
 
