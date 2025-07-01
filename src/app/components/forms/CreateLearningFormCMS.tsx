@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
-import { learningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
+import { LearningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
 
 interface CreateLearningFormCMSProps {
   cohortId: number;
@@ -152,7 +152,7 @@ export default function CreateLearningFormCMS({
           status: "ACTIVE",
           description: formData.learningDescription.trim(),
           meeting_date: new Date(formData.learningDate).toISOString(),
-          method: formData.learningMethod as learningSessionVariant,
+          method: formData.learningMethod as LearningSessionVariant,
 
           // Optional fields:
           meeting_url: formData.learningURL.trim()
