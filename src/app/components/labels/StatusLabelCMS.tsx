@@ -1,9 +1,9 @@
 "use client";
 
-export type Variant = "ACTIVE" | "INACTIVE";
+export type StatusVariant = "ACTIVE" | "INACTIVE";
 
 const variantStyles: Record<
-  Variant,
+  StatusVariant,
   {
     backgroundColor: string;
     labelColor: string;
@@ -24,7 +24,7 @@ const variantStyles: Record<
 
 interface StatusLabelCMSProps {
   labelName: string;
-  variants: Variant;
+  variants: StatusVariant;
 }
 
 export default function StatusLabelCMS({

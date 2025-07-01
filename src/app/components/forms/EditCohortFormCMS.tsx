@@ -270,7 +270,7 @@ export default function EditCohortFormCMS({
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Edit Cohort
+            Save Changes
           </AppButton>
         </div>
       </form>

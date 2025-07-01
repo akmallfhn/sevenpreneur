@@ -3,10 +3,10 @@
 import { GalleryHorizontalEnd, MapPinned, Video } from "lucide-react";
 import { ReactNode } from "react";
 
-export type learningSessionVariant = "ONLINE" | "ONSITE" | "HYBRID";
+export type LearningSessionVariant = "ONLINE" | "ONSITE" | "HYBRID";
 
 const variantStyles: Record<
-  learningSessionVariant,
+  LearningSessionVariant,
   {
     iconColor: string;
     iconLabel: ReactNode;
@@ -27,7 +27,7 @@ const variantStyles: Record<
 };
 
 interface LearningSessionIconLabelCMSProps {
-  variants: learningSessionVariant;
+  variants: LearningSessionVariant;
 }
 
 export default function LearningSessionIconLabelCMS({

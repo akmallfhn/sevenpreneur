@@ -1,9 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppButton from "../buttons/AppButton";
-import { ChevronRight, Loader2, PenTool } from "lucide-react";
+import {
+  Calendar,
+  CalendarFoldIcon,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+  Loader2,
+  PenTool,
+} from "lucide-react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -22,6 +30,11 @@ import EditCohortFormCMS from "../forms/EditCohortFormCMS";
 import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
+import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
+import StatItemCMS from "../items/StatItemCMS";
+import { RupiahCurrency } from "@/lib/rupiah-currency";
+import { notFound } from "next/navigation";
+import PriceItemCardCMS from "../items/PriceItemCardCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -35,6 +48,9 @@ export default function CohortDetailsCMS({
   sessionToken,
 }: CohortDetailsCMSProps) {
   const [editCohort, setEditCohort] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const paragraphRef = useRef<HTMLParagraphElement | null>(null);
 
   // --- Set token for API
   useEffect(() => {
@@ -49,6 +65,15 @@ export default function CohortDetailsCMS({
     isLoading: isLoadingDetailsData,
     isError: isErrorDetailsData,
   } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
+
+  // --- Checking height content description
+  useEffect(() => {
+    if (paragraphRef.current && cohortDetailsData?.cohort.description) {
+      const el = paragraphRef.current;
+      const isOverflow = el.scrollHeight > el.clientHeight;
+      setIsOverflowing(isOverflow);
+    }
+  }, [cohortDetailsData?.cohort.description]);
 
   // --- Extract variable
   const isLoading = isLoadingDetailsData;
@@ -66,6 +91,9 @@ export default function CohortDetailsCMS({
         No Data
       </div>
     );
+  }
+  if (!cohortDetailsData?.cohort) {
+    return notFound();
   }
 
   return (
@@ -86,7 +114,7 @@ export default function CohortDetailsCMS({
         {/* --- PAGE BODY */}
         <div className="body-container flex gap-5">
           {/* -- Main */}
-          <main className="flex flex-col flex-[2] w-full gap-5">
+          <main className="flex flex-col flex-[2] w-0 min-w-0 gap-5">
             {/* Cohort Detail */}
             <div className="flex flex-col bg-white border border-outline rounded-md overflow-hidden">
               <div className="image-thumbnail relative flex aspect-thumbnail overflow-hidden">
@@ -97,7 +125,22 @@ export default function CohortDetailsCMS({
                   width={1200}
                   height={1200}
                 />
-                <div className="absolute top-4 right-4">
+                {/* Overlay */}
+                <div
+                  className={`overlay absolute inset-0 z-10 bg-linear-to-b from-0% from-black to-30% to-black/20`}
+                />
+                <div
+                  className={`overlay absolute inset-0 z-10 bg-linear-to-t from-0% from-black/50 to-20% to-black/0`}
+                />
+                {/* Status */}
+                <div className="absolute top-4 left-4 z-20">
+                  <StatusLabelCMS
+                    labelName={cohortDetailsData?.cohort.status || ""}
+                    variants={cohortDetailsData?.cohort.status as StatusVariant}
+                  />
+                </div>
+                {/* Button Edit */}
+                <div className="absolute top-4 right-4 z-20">
                   <AppButton
                     variant="outline"
                     size="small"
@@ -108,29 +151,85 @@ export default function CohortDetailsCMS({
                   </AppButton>
                 </div>
               </div>
-              <div className="flex flex-col gap-1 p-4">
-                <h1 className="cohort-title font-brand font-bold text-xl">
+              <div className="relative flex flex-col mt-[-20px] gap-3 p-4 bg-white text-black z-20 rounded-md">
+                {/* Title */}
+                <h1 className="cohort-title font-brand font-bold text-2xl line-clamp-2">
                   {cohortDetailsData?.cohort.name}
                 </h1>
-                <div className="cohort-timeline flex gap-2 items-center text-alternative">
-                  <FontAwesomeIcon icon={faCalendar} className="size-3" />
-                  <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
-                    <span>
+                {/* Learning Period */}
+                <div className="cohort-timeline flex w-fit gap-4 items-center bg-white rounded-md p-2 px-3.5 border border-outline">
+                  <CalendarFoldIcon className="size-6 text-alternative" />
+                  <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
+                    <p className="text-black font-semibold">
+                      Program Kickoff Date
+                    </p>
+                    <p>
                       {dayjs(cohortDetailsData?.cohort.start_date).format("ll")}
-                    </span>{" "}
-                    -{" "}
-                    <span>
+                    </p>
+                  </div>
+                  <div className="w-[1px] h-full bg-outline" />
+                  <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
+                    <p className="text-black font-semibold">
+                      Program Wrap-up Date
+                    </p>
+                    <p>
                       {dayjs(cohortDetailsData?.cohort.end_date).format("ll")}
-                    </span>
+                    </p>
                   </div>
                 </div>
-                <p className="font-bodycopy font-medium">
-                  {cohortDetailsData?.cohort.description}
-                </p>
+                {/* Description */}
+                <div className="description relative flex flex-col">
+                  <p
+                    className={`font-bodycopy font-medium transition-all ${
+                      !isExpanded && "line-clamp-3"
+                    }`}
+                    ref={paragraphRef}
+                  >
+                    {cohortDetailsData?.cohort.description}
+                  </p>
+                  {!isExpanded && isOverflowing && (
+                    <div className="overlay absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                  )}
+                </div>
+                {isOverflowing && (
+                  <div className="flex justify-center transition-all transform">
+                    <AppButton
+                      variant="cmsLink"
+                      size="small"
+                      onClick={() => setIsExpanded((prev) => !prev)}
+                    >
+                      {isExpanded ? (
+                        <>
+                          <p>Show Less</p>
+                          <ChevronUp className="size-4" />
+                        </>
+                      ) : (
+                        <>
+                          <p>Show more</p>
+                          <ChevronDown className="size-4" />
+                        </>
+                      )}
+                    </AppButton>
+                  </div>
+                )}
               </div>
             </div>
-
-            {/* Learnings */}
+            {/* Price Tiers */}
+            <div className="flex flex-col gap-3">
+              <h2 className="label-name font-brand font-bold">Price Tiers</h2>
+              <div className="w-full overflow-x-auto scroll-smooth">
+                <div className="price-tiers flex gap-4 w-fit max-w-full pb-4 snap-x snap-mandatory">
+                  {cohortDetailsData.cohort.cohort_prices.map((post, index) => (
+                    <PriceItemCardCMS
+                      key={index}
+                      priceIndex={index + 1}
+                      priceName={post.name}
+                      priceAmount={Number(post.amount)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
             <LearningListCMS sessionToken={sessionToken} cohortId={cohortId} />
           </main>
 
@@ -138,52 +237,31 @@ export default function CohortDetailsCMS({
           <aside className="flex flex-col flex-[1] w-full gap-5">
             {/* Stats */}
             <div className="stats flex flex-col gap-3">
-              <div className="stat-item flex items-center bg-cms-primary-light gap-3 p-3 rounded-md">
-                <div className="icon aspect-square flex size-12 p-3 justify-center items-center bg-cms-primary text-white rounded-full">
-                  <FontAwesomeIcon icon={faChalkboardUser} className="size-7" />
-                </div>
-                <div className="attribute-data flex flex-col">
-                  <h3 className="font-bodycopy font-semibold">
-                    Total Enrolled User
-                  </h3>
-                  <p className="font-brand font-bold text-xl">345</p>
-                </div>
-              </div>
-              <div className="stat-item flex items-center bg-[#FDEDDC] gap-3 p-3 rounded-md">
-                <div className="icon aspect-square flex size-12 p-3 justify-center items-center bg-[#FFA524] text-white rounded-full">
-                  <FontAwesomeIcon icon={faLaptop} className="size-7" />
-                </div>
-                <div className="attribute-data flex flex-col">
-                  <h3 className="font-bodycopy font-semibold">
-                    Total Learning Sessions
-                  </h3>
-                  <p className="font-brand font-bold text-xl">8</p>
-                </div>
-              </div>
-              <div className="stat-item flex items-center bg-[#DBF2F0] gap-3 p-3 rounded-md">
-                <div className="icon aspect-square flex size-12 p-3 justify-center items-center bg-cms-secondary text-white rounded-full">
-                  <FontAwesomeIcon icon={faLinesLeaning} className="size-7" />
-                </div>
-                <div className="attribute-data flex flex-col">
-                  <h3 className="font-bodycopy font-semibold">
-                    Total Materials
-                  </h3>
-                  <p className="font-brand font-bold text-xl">45</p>
-                </div>
-              </div>
-              <div className="stat-item flex items-center bg-[#FFE6EE] gap-3 p-3 rounded-md">
-                <div className="icon aspect-square flex size-12 p-3 justify-center items-center bg-secondary text-white rounded-full">
-                  <FontAwesomeIcon icon={faMoneyBill1Wave} className="size-7" />
-                </div>
-                <div className="attribute-data flex flex-col">
-                  <h3 className="font-bodycopy font-semibold">Total Revenue</h3>
-                  <p className="font-brand font-bold text-xl">
-                    Rp 3,453,000,000
-                  </p>
-                </div>
-              </div>
+              <StatItemCMS
+                statsIcon={faChalkboardUser}
+                statsIconBg="bg-cms-primary"
+                statsName="Total Enrolled User"
+                statsValue={345}
+              />
+              <StatItemCMS
+                statsIcon={faLaptop}
+                statsIconBg="bg-[#FFA524]"
+                statsName="Total Learning Sessions"
+                statsValue={8}
+              />
+              <StatItemCMS
+                statsIcon={faLinesLeaning}
+                statsIconBg="bg-cms-secondary"
+                statsName="Total Materials"
+                statsValue={45}
+              />
+              <StatItemCMS
+                statsIcon={faMoneyBill1Wave}
+                statsIconBg="bg-secondary"
+                statsName="Total Revenue"
+                statsValue={RupiahCurrency(3453000000)}
+              />
             </div>
-
             <ModuleListCMS sessionToken={sessionToken} cohortId={cohortId} />
             <EnrolledUserListCMS />
             <ProjectListCMS />
