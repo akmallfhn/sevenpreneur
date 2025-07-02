@@ -291,4 +291,45 @@ export const createRouter = createTRPCRouter({
         module: theModule,
       };
     }),
+
+  project: administratorProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        document_url: stringNotBlank().nullable().optional(),
+        deadline_at: stringIsTimestampTz(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdProject = await opts.ctx.prisma.project.create({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          deadline_at: opts.input.deadline_at,
+          status: opts.input.status,
+        },
+      });
+      const theProject = await opts.ctx.prisma.project.findFirst({
+        where: {
+          id: createdProject.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theProject) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new project.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        project: theProject,
+      };
+    }),
 });

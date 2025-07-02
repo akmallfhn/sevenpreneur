@@ -134,4 +134,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  project: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedProject = await opts.ctx.prisma.project.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedProject.count > 1) {
+        console.error(
+          "delete.project: More-than-one projects are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });

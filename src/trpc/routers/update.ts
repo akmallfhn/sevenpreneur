@@ -289,4 +289,48 @@ export const updateRouter = createTRPCRouter({
         module: updatedModule[0],
       };
     }),
+
+  project: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        cohort_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        document_url: stringNotBlank().nullable().optional(),
+        deadline_at: stringIsTimestampTz().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedProject = await opts.ctx.prisma.project.updateManyAndReturn({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          deadline_at: opts.input.deadline_at,
+          status: opts.input.status,
+        },
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (updatedProject.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected project is not found.",
+        });
+      } else if (updatedProject.length > 1) {
+        console.error(
+          "update.project: More-than-one projects are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        project: updatedProject[0],
+      };
+    }),
 });
