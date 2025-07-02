@@ -127,10 +127,31 @@ export const readRouter = createTRPCRouter({
           message: "The cohort with the given ID is not found.",
         });
       }
+      const learningsCount = await opts.ctx.prisma.learning.count({
+        where: {
+          cohort_id: opts.input.id,
+        },
+      });
+      const modulesCount = await opts.ctx.prisma.module.count({
+        where: {
+          cohort_id: opts.input.id,
+        },
+      });
+      const materialsCount = await opts.ctx.prisma.material.count({
+        where: {
+          learning: {
+            cohort_id: opts.input.id,
+          },
+        },
+      });
+      const theCohortWithCounts = Object.assign(theCohort, {
+        total_learning_session: learningsCount,
+        total_materials: modulesCount + materialsCount,
+      });
       return {
         status: 200,
         message: "Success",
-        cohort: theCohort,
+        cohort: theCohortWithCounts,
       };
     }),
 
