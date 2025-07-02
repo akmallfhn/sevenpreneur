@@ -223,4 +223,32 @@ export const listRouter = createTRPCRouter({
         list: returnedList,
       };
     }),
+
+  projects: loggedInProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const projectsList = await opts.ctx.prisma.project.findMany({
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
+      });
+      const returnedList = projectsList.map((entry) => {
+        return {
+          id: entry.id,
+          cohort_id: entry.cohort_id,
+          name: entry.name,
+          deadline_at: entry.deadline_at,
+          status: entry.status,
+          submission_percentage: Math.round(Math.random() * 100), // TODO: Use the actual data
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
 });

@@ -258,4 +258,30 @@ export const readRouter = createTRPCRouter({
         module: theModule,
       };
     }),
+
+  project: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theProject = await opts.ctx.prisma.project.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theProject) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The project with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        project: theProject,
+      };
+    }),
 });
