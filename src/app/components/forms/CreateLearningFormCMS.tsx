@@ -158,7 +158,7 @@ export default function CreateLearningFormCMS({
           meeting_url: formData.learningURL.trim()
             ? formData.learningURL
             : null,
-          meeting_location: formData.learningLocation.trim()
+          location_name: formData.learningLocation.trim()
             ? formData.learningLocation
             : null,
         },
