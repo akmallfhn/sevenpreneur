@@ -211,7 +211,7 @@ export const updateRouter = createTRPCRouter({
         id: numberIsID(),
         learning_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
-        description: stringNotBlank().optional(),
+        description: stringNotBlank().nullable().optional(),
         document_url: stringNotBlank().optional(),
         status: z.nativeEnum(StatusEnum).optional(),
       })
@@ -254,7 +254,7 @@ export const updateRouter = createTRPCRouter({
         id: numberIsID(),
         cohort_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
-        description: stringNotBlank().optional(),
+        description: stringNotBlank().nullable().optional(),
         document_url: stringNotBlank().optional(),
         status: z.nativeEnum(StatusEnum).optional(),
       })

@@ -219,7 +219,7 @@ export const createRouter = createTRPCRouter({
       z.object({
         learning_id: numberIsID(),
         name: stringNotBlank(),
-        description: stringNotBlank(),
+        description: stringNotBlank().nullable().optional(),
         document_url: stringNotBlank(),
         status: z.nativeEnum(StatusEnum),
       })
@@ -258,7 +258,7 @@ export const createRouter = createTRPCRouter({
       z.object({
         cohort_id: numberIsID(),
         name: stringNotBlank(),
-        description: stringNotBlank(),
+        description: stringNotBlank().nullable().optional(),
         document_url: stringNotBlank(),
         status: z.nativeEnum(StatusEnum),
       })
