@@ -209,11 +209,11 @@ export const updateRouter = createTRPCRouter({
     .input(
       z.object({
         id: numberIsID(),
-        learning_id: numberIsID(),
-        name: stringNotBlank(),
-        description: stringNotBlank(),
-        document_url: stringNotBlank(),
-        status: z.nativeEnum(StatusEnum),
+        learning_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        document_url: stringNotBlank().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -252,11 +252,11 @@ export const updateRouter = createTRPCRouter({
     .input(
       z.object({
         id: numberIsID(),
-        cohort_id: numberIsID(),
-        name: stringNotBlank(),
-        description: stringNotBlank(),
-        document_url: stringNotBlank(),
-        status: z.nativeEnum(StatusEnum),
+        cohort_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        document_url: stringNotBlank().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
