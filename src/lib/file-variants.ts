@@ -1,6 +1,6 @@
-import { fileVariant } from "@/app/components/items/FileItemCMS";
+import { FileVariant } from "@/app/components/items/FileItemCMS";
 
-export function getFileVariantFromURL(url: string): fileVariant {
+export function getFileVariantFromURL(url: string): FileVariant {
   if (url.includes("docs.google.com/document")) return "DOCX";
   if (url.includes("docs.google.com/spreadsheet")) return "XLSX";
   if (url.includes("docs.google.com/presentation")) return "PPTX";

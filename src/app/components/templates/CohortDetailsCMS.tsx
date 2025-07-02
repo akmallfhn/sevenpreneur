@@ -62,8 +62,8 @@ export default function CohortDetailsCMS({
   // --- Call data from tRPC
   const {
     data: cohortDetailsData,
-    isLoading: isLoadingDetailsData,
-    isError: isErrorDetailsData,
+    isLoading: isLoadingCohortDetails,
+    isError: isErrorCohortDetails,
   } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
 
   // --- Checking height content description
@@ -76,8 +76,8 @@ export default function CohortDetailsCMS({
   }, [cohortDetailsData?.cohort.description]);
 
   // --- Extract variable
-  const isLoading = isLoadingDetailsData;
-  const isError = isErrorDetailsData;
+  const isLoading = isLoadingCohortDetails;
+  const isError = isErrorCohortDetails;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -111,7 +111,7 @@ export default function CohortDetailsCMS({
           </AppBreadcrumb>
         </div>
 
-        {/* --- PAGE BODY */}
+        {/* --- DETAILS */}
         <div className="body-container flex gap-5">
           {/* -- Main */}
           <main className="flex flex-col flex-[2] w-0 min-w-0 gap-5">
@@ -180,7 +180,7 @@ export default function CohortDetailsCMS({
                 {/* Description */}
                 <div className="description relative flex flex-col">
                   <p
-                    className={`font-bodycopy font-medium transition-all ${
+                    className={`font-bodycopy font-medium text-sm text-black/50 transition-all ${
                       !isExpanded && "line-clamp-3"
                     }`}
                     ref={paragraphRef}

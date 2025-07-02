@@ -9,6 +9,9 @@ import CohortItemCardCMS from "@/app/components/items/CohortItemCardCMS";
 import CreateCohortFormCMS from "@/app/components/forms/CreateCohortFormCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+
+dayjs.extend(isBetween);
 
 interface CohortListCMSProps {
   sessionToken: string;
@@ -81,46 +84,90 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
 
         {/* --- List Cohort */}
         <div className="w-full flex flex-col gap-8">
-          <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
-            <h2 className="font-bold font-brand text-black">
-              On Going Programs
-            </h2>
-            <div className="flex flex-wrap gap-4">
-              {cohortListData?.list
-                .filter((post) => dayjs().isBefore(dayjs(post.end_date)))
-                .map((post, index) => (
-                  <CohortItemCardCMS
-                    key={index}
-                    cohortId={post.id}
-                    cohortName={post.name}
-                    cohortImage={post.image}
-                    cohortStartDate={post.start_date}
-                    cohortEndDate={post.end_date}
-                    onDeleteSuccess={() => utils.list.cohorts.invalidate()}
-                  />
-                ))}
+          {cohortListData?.list.some((post) =>
+            dayjs().isBetween(
+              dayjs(post.start_date),
+              dayjs(post.end_date),
+              "day",
+              "[]"
+            )
+          ) && (
+            <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
+              <h2 className="font-bold font-brand text-black">
+                On Going Programs
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                {cohortListData?.list
+                  .filter((post) =>
+                    dayjs().isBetween(
+                      dayjs(post.start_date),
+                      dayjs(post.end_date),
+                      "day",
+                      "[]"
+                    )
+                  )
+                  .map((post, index) => (
+                    <CohortItemCardCMS
+                      key={index}
+                      cohortId={post.id}
+                      cohortName={post.name}
+                      cohortImage={post.image}
+                      cohortStartDate={post.start_date}
+                      cohortEndDate={post.end_date}
+                      onDeleteSuccess={() => utils.list.cohorts.invalidate()}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
-            <h2 className="font-bold font-brand text-black">
-              Finished Programs
-            </h2>
-            <div className="flex flex-wrap gap-4">
-              {cohortListData?.list
-                .filter((post) => dayjs().isAfter(dayjs(post.end_date)))
-                .map((post, index) => (
-                  <CohortItemCardCMS
-                    key={index}
-                    cohortId={post.id}
-                    cohortName={post.name}
-                    cohortImage={post.image}
-                    cohortStartDate={post.start_date}
-                    cohortEndDate={post.end_date}
-                    onDeleteSuccess={() => utils.list.cohorts.invalidate()}
-                  />
-                ))}
+          )}
+          {cohortListData?.list.some((post) =>
+            dayjs().isBefore(dayjs(post.start_date))
+          ) && (
+            <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
+              <h2 className="font-bold font-brand text-black">
+                Upcoming Programs
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                {cohortListData?.list
+                  .filter((post) => dayjs().isBefore(dayjs(post.start_date)))
+                  .map((post, index) => (
+                    <CohortItemCardCMS
+                      key={index}
+                      cohortId={post.id}
+                      cohortName={post.name}
+                      cohortImage={post.image}
+                      cohortStartDate={post.start_date}
+                      cohortEndDate={post.end_date}
+                      onDeleteSuccess={() => utils.list.cohorts.invalidate()}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
+          {cohortListData?.list.some((post) =>
+            dayjs().isAfter(dayjs(post.end_date))
+          ) && (
+            <div className="flex flex-col gap-4 p-5 bg-section-background rounded-lg">
+              <h2 className="font-bold font-brand text-black">
+                Finished Programs
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                {cohortListData?.list
+                  .filter((post) => dayjs().isAfter(dayjs(post.end_date)))
+                  .map((post, index) => (
+                    <CohortItemCardCMS
+                      key={index}
+                      cohortId={post.id}
+                      cohortName={post.name}
+                      cohortImage={post.image}
+                      cohortStartDate={post.start_date}
+                      cohortEndDate={post.end_date}
+                      onDeleteSuccess={() => utils.list.cohorts.invalidate()}
+                    />
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -10,7 +10,7 @@ import DropdownMenuCMS from "../elements/DropdownMenuCMS";
 import AppAlertDialog from "../modals/AppAlertDialog";
 import EditModuleFormCMS from "../forms/EditModuleFormCMS";
 
-export type fileVariant =
+export type FileVariant =
   | "DOCX"
   | "XLSX"
   | "PPTX"
@@ -21,7 +21,7 @@ export type fileVariant =
   | "UNKNOWN";
 
 const variantStyles: Record<
-  fileVariant,
+  FileVariant,
   {
     fileIcon: string;
     fileType: string;
@@ -75,7 +75,7 @@ interface FileItemCMSProps {
   fileId: number;
   fileName: string;
   fileURL: string;
-  variants: fileVariant;
+  variants: FileVariant;
   onDeleteSuccess?: () => void;
 }
 
