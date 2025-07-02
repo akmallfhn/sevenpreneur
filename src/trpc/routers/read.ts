@@ -189,6 +189,9 @@ export const readRouter = createTRPCRouter({
     )
     .query(async (opts) => {
       const theLearning = await opts.ctx.prisma.learning.findFirst({
+        include: {
+          speaker: true,
+        },
         where: {
           id: opts.input.id,
           // deleted_at: null,
