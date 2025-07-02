@@ -132,7 +132,7 @@ CREATE TABLE projects (
   cohort_id     INTEGER      NOT NULL,
   name          VARCHAR      NOT NULL,
   description   VARCHAR      NOT NULL,
-  document_url  VARCHAR      NOT NULL,
+  document_url  VARCHAR          NULL,
   deadline_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   status        status_enum  NOT NULL,
   created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,

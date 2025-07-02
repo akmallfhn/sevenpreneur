@@ -187,7 +187,7 @@ model Project {
   cohort_id    Int        @db.Integer
   name         String     @db.VarChar()
   description  String     @db.VarChar()
-  document_url String     @db.VarChar()
+  document_url String?    @db.VarChar()
   deadline_at  DateTime   @default(now()) @db.Timestamptz()
   status       StatusEnum
   created_at   DateTime   @default(now()) @db.Timestamptz()
