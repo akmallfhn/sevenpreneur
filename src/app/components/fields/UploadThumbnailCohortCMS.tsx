@@ -10,7 +10,7 @@ import AppButton from "../buttons/AppButton";
 
 interface UploadThumbnailCohortCMSProps {
   onUpload: (url: string | null) => void;
-  value?: string;
+  value: string;
 }
 
 export default function UploadThumbnailCohortCMS({
@@ -19,24 +19,12 @@ export default function UploadThumbnailCohortCMS({
 }: UploadThumbnailCohortCMSProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false); // -- State upload to Supabase
-  const [isImageLoaded, setIsImageLoaded] = useState(false); // -- State render image
-  const defaultThumbnail =
-    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//business-pattern.webp";
-  const [imageUrl, setImageUrl] = useState(value || defaultThumbnail);
+  const [loaded, setLoaded] = useState(false); // -- State rendering in browser
 
-  // --- Image Iteration when changed
+  // --- Iteration render
   useEffect(() => {
-    if (value) {
-      setImageUrl(value);
-    } else {
-      setImageUrl(defaultThumbnail);
-    }
+    setLoaded(false);
   }, [value]);
-
-  // --- Iteration for render image
-  useEffect(() => {
-    setIsImageLoaded(false);
-  }, [imageUrl]);
 
   // --- Trigger input via button
   const handleUploadClick = () => {
@@ -92,7 +80,6 @@ export default function UploadThumbnailCohortCMS({
         .from("sevenpreneur")
         .getPublicUrl(filePath);
       if (publicUrlData?.publicUrl) {
-        setImageUrl(publicUrlData.publicUrl);
         onUpload(publicUrlData.publicUrl);
       }
     } catch (error) {
@@ -104,66 +91,81 @@ export default function UploadThumbnailCohortCMS({
 
   // --- Remove image
   const handleRemoveImage = () => {
-    setImageUrl(defaultThumbnail);
     onUpload(null);
   };
 
   return (
-    <div
-      className="upload-photo-container flex relative aspect-thumbnail w-full h-full border border-outline cursor-pointer rounded-md overflow-hidden"
-      onClick={handleUploadClick}
-    >
-      {/* --- Upload message */}
-      {imageUrl === defaultThumbnail && (
-        <div className="upload-helper flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">
-          <FontAwesomeIcon
-            icon={faImage}
-            size="2x"
-            className="text-alternative w-20"
-          />
-          <div className="flex flex-col max-w-[300px]">
-            <p className="text-sm font-bold">
-              Upload Thumbnail Image <span className="text-destructive">*</span>
-            </p>
-            <p className="text-sm font-medium text-black/50">
-              Upload a 1280x720 px image and keep it under 2 MB
-            </p>
+    <div className="upload-file-container flex flex-col gap-1">
+      <div
+        className="upload-photo-container flex relative aspect-thumbnail bg-white w-full h-full border border-dashed border-outline cursor-pointer rounded-md overflow-hidden"
+        onClick={handleUploadClick}
+      >
+        {/* --- Upload message */}
+        {!value && (
+          <div className="upload-helper flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">
+            <div className="flex max-w-[86px] aspect-square">
+              <Image
+                className="object-cover w-full h-full"
+                src={
+                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//upload-image-icon.svg"
+                }
+                alt="Upload File"
+                width={200}
+                height={200}
+              />
+            </div>
+            <div className="flex flex-col max-w-[300px]">
+              <p className="text-sm font-bold">
+                Upload Thumbnail Image{" "}
+                <span className="text-destructive">*</span>
+              </p>
+              <p className="text-sm font-medium text-black/50">
+                Upload a 1280x720 px image and keep it under 2 MB
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* --- Display image */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          className="object-cover w-full h-full"
-          src={imageUrl}
-          alt="Avatar"
-          width={400}
-          height={400}
-          onLoadingComplete={() => setIsImageLoaded(true)}
+        {/* --- Display image */}
+        {value && (
+          <div className="absolute inset-0 z-0">
+            <Image
+              className={`object-cover w-full h-full transition-opacity duration-300 ${
+                loaded ? "opacity-100" : "opacity-0"
+              }`}
+              src={value}
+              alt="Avatar"
+              width={400}
+              height={400}
+              onLoadingComplete={() => setLoaded(true)}
+            />
+          </div>
+        )}
+
+        {/* --- Remove photo button */}
+        {value && !isUploading && (
+          <div
+            className="remove-photo absolute right-2 top-2 p-1 bg-semi-destructive rounded-full cursor-pointer z-20"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveImage();
+            }}
+          >
+            <X className="size-4 text-destructive" />
+          </div>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".jpg,.jpeg,.png,.webp,.avif"
+          className="hidden"
+          onChange={handleUploadFiles}
         />
       </div>
-
-      {/* --- Remove photo button */}
-      {imageUrl !== defaultThumbnail && isImageLoaded && !isUploading && (
-        <div
-          className="remove-photo absolute right-2 top-2 p-1 bg-semi-destructive rounded-full cursor-pointer z-20"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleRemoveImage();
-          }}
-        >
-          <X className="size-4 text-destructive" />
-        </div>
-      )}
-
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept=".jpg,.jpeg,.png,.webp,.avif"
-        className="hidden"
-        onChange={handleUploadFiles}
-      />
+      <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-alternative">
+        <p>Supported Formats: JPG, JPEG, PNG, WEBP, AVIF</p>
+      </div>
     </div>
   );
 }

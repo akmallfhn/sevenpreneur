@@ -168,7 +168,10 @@ export default function CreateCohortFormCMS({
       >
         <div className="form-container flex flex-col px-6 pb-68 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
-            <UploadThumbnailCohortCMS onUpload={handleImageForm} />
+            <UploadThumbnailCohortCMS
+              value={formData.cohortImage}
+              onUpload={handleImageForm}
+            />
             <InputCMS
               inputId="cohort-name"
               inputName="Program Name"
