@@ -158,7 +158,8 @@ export const listRouter = createTRPCRouter({
           method: entry.method,
           meeting_date: entry.meeting_date,
           meeting_url: entry.meeting_url,
-          meeting_location: entry.meeting_location,
+          location_name: entry.location_name,
+          location_url: entry.location_url,
           speaker: entry.speaker,
           status: entry.status,
         };
