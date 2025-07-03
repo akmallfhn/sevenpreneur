@@ -29,42 +29,42 @@ const variantStyles: Record<
 > = {
   DOCX: {
     fileIcon:
-      "https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/docx-icon.webp",
     fileType: "DOCX",
   },
   XLSX: {
     fileIcon:
-      "https://www.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/xlsx-icon.webp",
     fileType: "XLSX",
   },
   PPTX: {
     fileIcon:
-      "https://www.gstatic.com/images/branding/product/2x/slides_2020q4_48dp.png",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pptx-icon.webp",
     fileType: "PPTX",
   },
   PDF: {
     fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//pdf-icon.webp",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pdf-icon.webp",
     fileType: "PDF",
   },
   FILE: {
     fileIcon:
-      "https://ssl.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/drive-icon.webp",
     fileType: "DRIVE FILE",
   },
   FIGMADESIGN: {
     fileIcon:
-      "https://www.figma.com/community/resource/e892b10a-dc9e-498b-9830-8fc0485ac820/thumbnail",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
     fileType: "FIGMA DESIGN",
   },
   FIGJAM: {
     fileIcon:
-      "https://www.figma.com/community/resource/e892b10a-dc9e-498b-9830-8fc0485ac820/thumbnail",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
     fileType: "FIGMA JAM",
   },
   UNKNOWN: {
     fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//unknown-icon%20(1).webp",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/unknown-file-icon.webp",
     fileType: "UNKNOWN FORMAT",
   },
 };
@@ -151,7 +151,7 @@ export default function FileItemCMS({
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="icon aspect-square flex size-14 p-3 items-center">
+          <div className="icon aspect-square flex size-14 p-1 items-center">
             <Image
               className="object-cover w-full h-full"
               src={fileIcon}
