@@ -1,14 +1,17 @@
 "use client";
+import React, { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 import { EllipsisVertical, Settings2, Trash2 } from "lucide-react";
-import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import DropdownMenuCMS from "../elements/DropdownMenuCMS";
 import AppAlertDialog from "../modals/AppAlertDialog";
 import EditModuleFormCMS from "../forms/EditModuleFormCMS";
+import { error } from "console";
+import EditMaterialFormCMS from "../forms/EditMaterialFormCMS";
 
 export type FileVariant =
   | "DOCX"
@@ -72,6 +75,7 @@ const variantStyles: Record<
 interface FileItemCMSProps {
   sessionToken: string;
   cohortId?: number;
+  learningId?: number;
   fileId: number;
   fileName: string;
   fileURL: string;
@@ -82,6 +86,7 @@ interface FileItemCMSProps {
 export default function FileItemCMS({
   sessionToken,
   cohortId,
+  learningId,
   fileId,
   fileName,
   fileURL,
@@ -97,6 +102,8 @@ export default function FileItemCMS({
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const isLearningDetailsPage = pathname.includes("/learnings/");
 
   // --- Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,20 +133,37 @@ export default function FileItemCMS({
   const deleteModule = trpc.delete.module.useMutation();
   const deleteMaterial = trpc.delete.material.useMutation();
   const handleDelete = () => {
-    deleteModule.mutate(
-      { id: fileId },
-      {
-        onSuccess: () => {
-          toast.success("Delete success");
-          onDeleteSuccess?.();
-        },
-        onError: (err) => {
-          toast.error("Failed to delete cohort", {
-            description: `${err}`,
-          });
-        },
-      }
-    );
+    if (isLearningDetailsPage) {
+      deleteMaterial.mutate(
+        { id: fileId },
+        {
+          onSuccess: () => {
+            toast.success("Learning material has been successfully removed");
+            onDeleteSuccess?.();
+          },
+          onError: (error) => {
+            toast.error("Failed to delete the learning material.", {
+              description: `${error}`,
+            });
+          },
+        }
+      );
+    } else {
+      deleteModule.mutate(
+        { id: fileId },
+        {
+          onSuccess: () => {
+            toast.success("File has been successfully deleted");
+            onDeleteSuccess?.();
+          },
+          onError: (err) => {
+            toast.error("Unable to delete this file.", {
+              description: `${err}`,
+            });
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -216,15 +240,25 @@ export default function FileItemCMS({
         />
       )}
 
-      {editFile && (
-        <EditModuleFormCMS
-          sessionToken={sessionToken}
-          cohortId={cohortId!}
-          moduleId={fileId}
-          isOpen={editFile}
-          onClose={() => setEditFile(false)}
-        />
-      )}
+      {/* Edit File */}
+      {editFile &&
+        (isLearningDetailsPage ? (
+          <EditMaterialFormCMS
+            sessionToken={sessionToken}
+            learningId={learningId!}
+            materialId={fileId}
+            isOpen={editFile}
+            onClose={() => setEditFile(false)}
+          />
+        ) : (
+          <EditModuleFormCMS
+            sessionToken={sessionToken}
+            cohortId={cohortId!}
+            moduleId={fileId}
+            isOpen={editFile}
+            onClose={() => setEditFile(false)}
+          />
+        ))}
     </React.Fragment>
   );
 }

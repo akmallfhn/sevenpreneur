@@ -1,10 +1,11 @@
+"use client";
 import { Loader2, Plus } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import FileItemCMS from "../items/FileItemCMS";
 import { trpc } from "@/trpc/client";
 import { getFileVariantFromURL } from "@/lib/file-variants";
 import React, { useState } from "react";
-import CreateModuleFormCMS from "../forms/CreateModuleFormCMS";
+import CreateMaterialFormCMS from "../forms/CreateMaterialFormCMS";
 
 interface MaterialListCMSProps {
   sessionToken: string;
@@ -68,16 +69,17 @@ export default function MaterialListCMS({
           </div>
         )}
         {materialListData?.list.some((post) => post.id) && (
-          <div className="module-list flex flex-col gap-2">
+          <div className="material-list flex flex-col gap-2">
             {materialListData?.list.map((post, index) => (
               <FileItemCMS
                 key={index}
                 sessionToken={sessionToken}
+                learningId={learningId}
                 fileId={post.id}
                 fileName={post.name}
                 fileURL={post.document_url}
                 variants={getFileVariantFromURL(post.document_url)}
-                onDeleteSuccess={() => utils.list.modules.invalidate()}
+                onDeleteSuccess={() => utils.list.materials.invalidate()}
               />
             ))}
           </div>
@@ -87,14 +89,14 @@ export default function MaterialListCMS({
       </p> */}
       </div>
 
-      {/* --- Form Create Module */}
-      {/* {createModule && (
-        <CreateModuleFormCMS
-          cohortId={cohortId}
-          isOpen={createModule}
-          onClose={() => setCreateModule(false)}
+      {/* --- Form Create Material */}
+      {createMaterial && (
+        <CreateMaterialFormCMS
+          learningId={learningId}
+          isOpen={createMaterial}
+          onClose={() => setCreateMaterial(false)}
         />
-      )} */}
+      )}
     </React.Fragment>
   );
 }
