@@ -13,6 +13,7 @@ import {
   Loader2,
   Presentation,
 } from "lucide-react";
+import { setSessionToken, trpc } from "@/trpc/client";
 
 interface SidebarCMSProps {
   currentDomain: string;
@@ -26,6 +27,33 @@ export default function SidebarCMS({
   // --- Defining React Hook
   const router = useRouter();
   const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  // --- Header Session Token
+  useEffect(() => {
+    if (sessionToken) {
+      setSessionToken(sessionToken);
+    }
+  }, [sessionToken]);
+
+  // --- Call data from tRPC
+  const { data, isLoading, isError } = trpc.auth.checkSession.useQuery(
+    undefined,
+    { enabled: !!sessionToken }
+  );
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative">
+        <Loader2 className="animate-spin size-5 " />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+        No Data
+      </div>
+    );
+  }
 
   const menuItemData = [
     {
@@ -86,7 +114,14 @@ export default function SidebarCMS({
         </div>
 
         {/* --- User & Roles */}
-        <UserBadgeCMS sessionToken={sessionToken} />
+        <UserBadgeCMS
+          userName={data?.user.full_name || ""}
+          userRole={data?.user.role_name.toUpperCase() || ""}
+          userAvatar={
+            data?.user.avatar ||
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+          }
+        />
 
         {/* --- Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">

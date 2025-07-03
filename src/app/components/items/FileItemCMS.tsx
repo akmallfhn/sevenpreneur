@@ -71,7 +71,7 @@ const variantStyles: Record<
 
 interface FileItemCMSProps {
   sessionToken: string;
-  cohortId: number;
+  cohortId?: number;
   fileId: number;
   fileName: string;
   fileURL: string;
@@ -219,7 +219,7 @@ export default function FileItemCMS({
       {editFile && (
         <EditModuleFormCMS
           sessionToken={sessionToken}
-          cohortId={cohortId}
+          cohortId={cohortId!}
           moduleId={fileId}
           isOpen={editFile}
           onClose={() => setEditFile(false)}

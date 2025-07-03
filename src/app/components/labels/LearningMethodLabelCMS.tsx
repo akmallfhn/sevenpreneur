@@ -1,31 +1,26 @@
 "use client";
-
-export type learningMethodVariant = "online" | "onSite" | "hybrid";
+import { LearningSessionVariant } from "./LearningSessionIconLabelCMS";
 
 const variantStyles: Record<
-  learningMethodVariant,
+  LearningSessionVariant,
   {
-    backgroundColor: string;
-    labelColor: string;
+    themeColor: string;
   }
 > = {
-  online: {
-    backgroundColor: "bg-[#EFEDF9]",
-    labelColor: "text-[#42359B]",
+  ONLINE: {
+    themeColor: "bg-cms-primary-light text-cms-primary",
   },
-  onSite: {
-    backgroundColor: "bg-[#E2F0FF]",
-    labelColor: "text-[#164EA6]",
+  ONSITE: {
+    themeColor: "bg-[#EFEDF9] text-[#42359B]",
   },
-  hybrid: {
-    backgroundColor: "bg-[#ECFDF3]",
-    labelColor: "text-[#0A4F2D]",
+  HYBRID: {
+    themeColor: "bg-[#DBF2F0] text-[#00A694]",
   },
 };
 
 interface LearningMethodCMSProps {
   labelName: string;
-  variants: learningMethodVariant;
+  variants: LearningSessionVariant;
 }
 
 export default function LearningMethodLabelCMS({
@@ -33,11 +28,11 @@ export default function LearningMethodLabelCMS({
   variants,
 }: LearningMethodCMSProps) {
   // --- Variant declaration
-  const { backgroundColor, labelColor } = variantStyles[variants];
+  const { themeColor } = variantStyles[variants];
 
   return (
     <div
-      className={`label-container inline-flex py-1 px-1.5 rounded-sm items-center justify-center text-center gap-1 text-xs font-bold font-bodycopy truncate ${labelColor} ${backgroundColor}`}
+      className={`label-container inline-flex py-1.5 px-3 rounded-sm items-center justify-center text-center gap-1 text-xs font-bold font-bodycopy truncate ${themeColor}`}
     >
       {labelName}
     </div>
