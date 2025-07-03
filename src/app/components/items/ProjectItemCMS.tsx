@@ -26,7 +26,7 @@ export default function ProjectItemCMS({
           <Gauge width={200} height={200} value={(30 / 48) * 100} />
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-xs font-bold text-black bg-white font-bodycopy">
-              {((30 / 48) * 100).toFixed(0)}%
+              {((70 / 100) * 100).toFixed(0)}%
             </span>
           </div>
         </div>
@@ -35,7 +35,7 @@ export default function ProjectItemCMS({
             {projectName}
           </h3>
           <p className="font-bodycopy font-medium text-alternative text-[13px]">
-            Last submission: {dayjs(lastSubmission).format("llll")}
+            Last submission: {dayjs(lastSubmission).format("D MMM YYYY HH.mm")}
           </p>
         </div>
       </div>
