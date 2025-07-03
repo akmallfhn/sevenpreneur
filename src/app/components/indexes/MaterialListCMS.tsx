@@ -62,18 +62,17 @@ export default function MaterialListCMS({
             Add file
           </AppButton>
         </div>
-        {/* {(!materialListData?.list || materialListData.list.length === 0) && (
+        {(!materialListData?.list || materialListData.list.length === 0) && (
           <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
             No Data
           </div>
-        )} */}
-        {/* {materialListData?.list.some((post) => post.id) && (
+        )}
+        {materialListData?.list.some((post) => post.id) && (
           <div className="module-list flex flex-col gap-2">
-            {moduleListData?.list.map((post, index) => (
+            {materialListData?.list.map((post, index) => (
               <FileItemCMS
                 key={index}
                 sessionToken={sessionToken}
-                cohortId={cohortId}
                 fileId={post.id}
                 fileName={post.name}
                 fileURL={post.document_url}
@@ -82,7 +81,7 @@ export default function MaterialListCMS({
               />
             ))}
           </div>
-        )} */}
+        )}
         {/* <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
         Load more
       </p> */}

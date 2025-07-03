@@ -15,6 +15,9 @@ import MeetingPlatformOptionItemCMS, {
 import { getMeetingPlatformVariantFromURL } from "@/lib/meeting-platform-variants";
 import LearningListCMS from "../indexes/LearningListCMS";
 import MaterialListCMS from "../indexes/MaterialListCMS";
+import UserBadgeCMS from "../buttons/UserBadgeCMS";
+import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
+import { LearningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -79,7 +82,7 @@ export default function LearningDetailsCMS({
             href={`/cohorts/${cohortId}/learnings/${learningId}`}
             isCurrentPage
           >
-            Day 1: Mengenal Founder Dalam Diri
+            {learningDetailsData?.learning.name}
           </AppBreadcrumbItem>
         </AppBreadcrumb>
 
@@ -89,10 +92,19 @@ export default function LearningDetailsCMS({
           <div className="container-leaderboard-learning relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
             {/* Metadata */}
             <div className="metadata-leaderboard-learning flex flex-col max-w-[528px] pl-8 gap-4 z-10 ">
+              <div className="flex w-fit">
+                <LearningMethodLabelCMS
+                  labelName={learningDetailsData?.learning.method || ""}
+                  variants={
+                    learningDetailsData?.learning
+                      .method as LearningSessionVariant
+                  }
+                />
+              </div>
               <h1 className="font-brand font-bold text-2xl text-white">
                 {learningDetailsData?.learning.name}
               </h1>
-              <div className="date flex w-fit gap-2 items-center bg-white text-black rounded-md p-2 border border-outline">
+              <div className="date flex w-fit gap-2 items-center bg-black/15 text-white rounded-md p-2">
                 <CalendarFold className="size-5" />
                 <p className="flex font-bodycopy font-medium text-sm">
                   {dayjs(learningDetailsData?.learning.meeting_date).format(
@@ -141,7 +153,19 @@ export default function LearningDetailsCMS({
             {/* ASIDE */}
             <aside className="flex flex-col flex-[1] w-full gap-5">
               {/* Speakers */}
-
+              <div className="description flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                <h2 className="font-brand font-bold text-black">
+                  Facilitated by
+                </h2>
+                <UserBadgeCMS
+                  userName="Radha Wulandari"
+                  userRole="EDUCATOR"
+                  userAvatar={
+                    learningDetailsData?.learning.speaker_id ||
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                  }
+                />
+              </div>
               {/* Meeting Link */}
               {learningDetailsData?.learning.meeting_url && (
                 <MeetingPlatformOptionItemCMS
@@ -153,6 +177,7 @@ export default function LearningDetailsCMS({
                   }
                 />
               )}
+              {/* Location */}
             </aside>
           </div>
         </div>
