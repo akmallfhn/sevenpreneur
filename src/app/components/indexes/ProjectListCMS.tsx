@@ -1,9 +1,46 @@
 "use client";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import ProjectItemCMS from "../items/ProjectItemCMS";
+import { trpc } from "@/trpc/client";
 
-export default function ProjectListCMS() {
+interface ProjectListCMSProps {
+  sessionToken: string;
+  cohortId: number;
+}
+
+export default function ProjectListCMS({
+  sessionToken,
+  cohortId,
+}: ProjectListCMSProps) {
+  // --- Call data from tRPC
+  const {
+    data: projectListData,
+    isError: isErrorProjectList,
+    isLoading: isLoadingProjectList,
+  } = trpc.list.projects.useQuery(
+    { cohort_id: cohortId },
+    { enabled: !!sessionToken }
+  );
+
+  // --- Extract variable
+  const isLoading = isLoadingProjectList;
+  const isError = isErrorProjectList;
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative">
+        <Loader2 className="animate-spin size-5 " />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+        No Data
+      </div>
+    );
+  }
+
   return (
     <div className="projects flex flex-col gap-3 p-3 bg-section-background rounded-md">
       <div className="section-name flex justify-between items-center">
@@ -13,16 +50,22 @@ export default function ProjectListCMS() {
           Add projects
         </AppButton>
       </div>
-      <div className="project-list flex flex-col gap-2">
-        <ProjectItemCMS
-          projectName="Business Model Canvas 3.0"
-          lastSubmission="2025-06-02 02:00:00+00"
-        />
-        <ProjectItemCMS
-          projectName="Business Model Canvas 3.0"
-          lastSubmission="2025-06-02 02:00:00+00"
-        />
-      </div>
+      {(!projectListData?.list || projectListData.list.length === 0) && (
+        <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
+          No Data
+        </div>
+      )}
+      {projectListData?.list.some((post) => post.id) && (
+        <div className="project-list flex flex-col gap-2">
+          {projectListData?.list.map((post, index) => (
+            <ProjectItemCMS
+              key={index}
+              projectName={post.name}
+              lastSubmission={post.deadline_at}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
