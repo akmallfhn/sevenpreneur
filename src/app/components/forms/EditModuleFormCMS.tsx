@@ -150,13 +150,16 @@ export default function EditModuleFormCMS({
           document_url: formData.moduleURL,
 
           // Optional fields:
-          description: formData.moduleDescription.trim(),
+          description: formData.moduleDescription.trim()
+            ? formData.moduleDescription
+            : null,
         },
         {
           onSuccess: () => {
             toast.success("File updated successfully");
             setIsSubmitting(false);
             utils.list.modules.invalidate();
+            utils.read.module.invalidate();
             onClose();
           },
           onError: (err) => {
