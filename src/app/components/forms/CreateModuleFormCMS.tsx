@@ -92,7 +92,9 @@ export default function CreateModuleFormCMS({
           document_url: formData.moduleURL,
 
           // Optional fields:
-          description: formData.moduleDescription.trim(),
+          description: formData.moduleDescription.trim()
+            ? formData.moduleDescription
+            : null,
         },
         {
           onSuccess: () => {
