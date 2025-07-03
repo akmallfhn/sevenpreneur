@@ -34,6 +34,7 @@ export default function CreateLearningFormCMS({
     learningMethod: string;
     learningURL: string;
     learningLocation: string;
+    learningLocationURL: string;
   }>({
     learningName: "",
     learningDescription: "",
@@ -41,6 +42,7 @@ export default function CreateLearningFormCMS({
     learningMethod: "",
     learningURL: "",
     learningLocation: "",
+    learningLocationURL: "",
   });
 
   // --- Add event listener to prevent page refresh
@@ -74,6 +76,7 @@ export default function CreateLearningFormCMS({
       setFormData((prev) => ({
         ...prev,
         learningLocation: "",
+        learningLocationURL: "",
       }));
     }
     if (formData.learningMethod === "") {
@@ -81,6 +84,7 @@ export default function CreateLearningFormCMS({
         ...prev,
         learningURL: "",
         learningLocation: "",
+        learningLocationURL: "",
       }));
     }
   }, [formData.learningMethod]);
@@ -98,7 +102,7 @@ export default function CreateLearningFormCMS({
     }
     if (!formData.learningDescription) {
       toast.error(
-        "A brief description helps set expectations — don’t skip it."
+        "A brief description helps set expectations — don't skip it."
       );
       setIsSubmitting(false);
       return;
@@ -115,7 +119,14 @@ export default function CreateLearningFormCMS({
     }
     if (formData.learningMethod === "HYBRID") {
       if (!formData.learningLocation) {
-        toast.error("Please provide the venue or location for this session.");
+        toast.error("Oops! A proper venue name helps everyone find it.");
+        setIsSubmitting(false);
+        return;
+      }
+      if (!formData.learningLocationURL) {
+        toast.error(
+          "Missing location link. A GMaps URL makes navigation easier."
+        );
         setIsSubmitting(false);
         return;
       }
@@ -128,7 +139,14 @@ export default function CreateLearningFormCMS({
       }
     } else if (formData.learningMethod === "ONSITE") {
       if (!formData.learningLocation) {
-        toast.error("Please provide the venue or location for this session.");
+        toast.error("Oops! A proper venue name helps everyone find it.");
+        setIsSubmitting(false);
+        return;
+      }
+      if (!formData.learningLocationURL) {
+        toast.error(
+          "Missing location link. A GMaps URL makes navigation easier."
+        );
         setIsSubmitting(false);
         return;
       }
@@ -160,6 +178,9 @@ export default function CreateLearningFormCMS({
             : null,
           location_name: formData.learningLocation.trim()
             ? formData.learningLocation
+            : null,
+          location_url: formData.learningLocationURL.trim()
+            ? formData.learningLocationURL
             : null,
         },
         {
@@ -251,7 +272,7 @@ export default function CreateLearningFormCMS({
                 inputId="learning-url"
                 inputName="Meeting Link"
                 inputType="url"
-                inputPlaceholder="e.g. meet.google.com/vjd-wovj-xfe"
+                inputPlaceholder="e.g. https://meet.google.com/vjd-wovj-xfe"
                 value={formData.learningURL}
                 onInputChange={handleInputChange("learningURL")}
                 characterLength={300}
@@ -259,15 +280,26 @@ export default function CreateLearningFormCMS({
               />
             )}
             {["ONSITE", "HYBRID"].includes(formData.learningMethod) && (
-              <InputCMS
-                inputId="learning-location"
-                inputName="Meeting Venue"
-                inputType="url"
-                inputPlaceholder="e.g. https://maps.app.goo.gl/3UxudP"
-                value={formData.learningLocation}
-                onInputChange={handleInputChange("learningLocation")}
-                required
-              />
+              <>
+                <InputCMS
+                  inputId="learning-location"
+                  inputName="Venue Name"
+                  inputType="text"
+                  inputPlaceholder="e.g. The Ritz-Carlton Jakarta"
+                  value={formData.learningLocation}
+                  onInputChange={handleInputChange("learningLocation")}
+                  required
+                />
+                <InputCMS
+                  inputId="learning-location-url"
+                  inputName="Google Maps Link"
+                  inputType="url"
+                  inputPlaceholder="e.g. https://maps.app.goo.gl/3UxudP"
+                  value={formData.learningLocationURL}
+                  onInputChange={handleInputChange("learningLocationURL")}
+                  required
+                />
+              </>
             )}
           </div>
         </div>
