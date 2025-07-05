@@ -43,41 +43,6 @@ export default function ContentEventRestart25() {
     <section id="content-event">
       <div className="content-event-root relative bg-black flex justify-center overflow-hidden">
         <div className="container flex flex-col py-8 px-8 gap-9 items-center z-20 lg:pt-24 lg:pb-[60px] lg:gap-[60px]">
-          {/* Event Title */}
-          <div className="title-event flex flex-col items-center gap-5 lg:gap-10">
-            <Image
-              className="w-full max-w-[320px] lg:max-w-[720px]"
-              src={
-                "https://static.wixstatic.com/media/02a5b1_d927500efc3d47c0b8cf75a4435214be~mv2.webp"
-              }
-              alt="Logo RE:START Conference 2025"
-              width={2440}
-              height={2440}
-            />
-            <div className="flex flex-col text-white items-center gap-1">
-              <p className="font-brand text-lg font-semibold lg:text-2xl">
-                July 26, 2025
-              </p>
-              <p className="font-bodycopy lg:text-2xl">
-                Kuningan City Ballroom, Jakarta
-              </p>
-            </div>
-            <Link
-              ref={ref}
-              href={"https://vesta.halofans.id/event/v2/re-start"}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ButtonRestart25
-                buttonTitle={"Get Your Ticket Now"}
-                Icon={TicketPlus}
-                addCSS={`lg:mx-3 lg:my-1`}
-                addCSSIcon={`lg:size-8`}
-                feature_name={"ticket_checkout"}
-              />
-            </Link>
-          </div>
-
           {/* Embed Youtube */}
           <section id="teaser">
             <div className="p-[1px] rounded-md bg-gradient-to-r from-0% from-[#727272] via-50% via-[#333333] to-100% to-[#727272]">
@@ -108,12 +73,6 @@ export default function ContentEventRestart25() {
             </div>
           </section>
 
-          {/* Countdown */}
-          <div className="about-event flex flex-col gap-3 items-center lg:gap-5">
-            <SectionTitleRestart25 sectionTitle="RE:START on" />
-            <CountdownTimerRestart25 />
-          </div>
-
           {/* About Event */}
           <div className="about-event flex flex-col gap-3 items-center lg:gap-5">
             <SectionTitleRestart25 sectionTitle="Main Topic" />
@@ -139,15 +98,6 @@ export default function ContentEventRestart25() {
             className="background flex opacity-22 object-cover h-[720px]"
             src={
               "https://static.wixstatic.com/media/02a5b1_96ca791fac7348acb572e5d9bd38c550~mv2.webp"
-            }
-            alt="Background Hero"
-            width={2440}
-            height={2440}
-          />
-          <Image
-            className="background flex opacity-70 object-cover h-[500px] lg:hidden"
-            src={
-              "https://static.wixstatic.com/media/02a5b1_40fba35c7e7f4271862138c4b509ac54~mv2.webp"
             }
             alt="Background Hero"
             width={2440}
