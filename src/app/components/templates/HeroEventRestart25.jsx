@@ -9,7 +9,7 @@ export default function HeroEventRestart2025() {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
       {/* --- Hero Content */}
-      <div className="hero-content flex flex-col py-20 pb-12 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px]">
+      <div className="hero-content flex flex-col pt-10 pb-10 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px]">
         {/* Top Group Component */}
         <div className="flex flex-col gap-3 items-center lg:items-start lg:gap-5">
           {/* Logo RE:START */}
@@ -68,7 +68,7 @@ export default function HeroEventRestart2025() {
 
       {/* --- Overlay */}
       <div
-        className={`overlay absolute left-1/2 -translate-x-1/2 bottom-0 w-full h-[288px] z-40 bg-gradient-to-t from-0% from-black via-60% via-[#202020] to-100% to-[#202020]/0 lg:h-[254px] lg:from-black/80 lg:via-[#202020]/[0.42]`}
+        className={`overlay absolute left-1/2 -translate-x-1/2 bottom-0 w-full h-[288px] z-40 bg-gradient-to-t from-0% from-[#202020] via-60% via-[#202020] to-100% to-[#202020]/0 lg:h-[254px] lg:from-black/80 lg:via-[#202020]/[0.42]`}
       />
       {/* --- All Speakers */}
       <Image
