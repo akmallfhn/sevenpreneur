@@ -116,25 +116,15 @@ export default function ContentEventRestart25() {
 
           {/* About Event */}
           <div className="about-event flex flex-col gap-3 items-center lg:gap-5">
-            <SectionTitleRestart25 sectionTitle="It’s Time to Lead!" />
-            <p className="quotes font-bodycopy text-sm text-left text-white max-w-[500px] lg:text-xl lg:max-w-[760px]">
-              The global economy faces mounting pressure as geopolitical
-              tensions reshape markets and disrupt stability — and we are not
-              immune.
-              <br />
-              <br />
-              As emerging economies like ours feel the impact, we recognize that
-              this is more than a crisis; it is a call to reimagine the system
-              we've inherited.
-              <br />
-              <br />
-              We are not here to preserve the status quo.
-              <br />
-              <br />
-              We are here to challenge it — to build a new economy that reflects
-              our values, our agility, and our readiness to lead.{" "}
-              <b>RE:START 2025</b> is where we come together — not just to adapt
-              to change, but to drive it.
+            <SectionTitleRestart25 sectionTitle="Main Topic" />
+            <p className="quotes font-bodycopy font-medium text-sm text-center text-white/90 max-w-[500px] lg:text-xl lg:max-w-[760px]">
+              <span className="font-bold">“RE:START”</span> represents founders
+              who don’t just chase trends, but architect businesses that thrive
+              in the age of AI, automation, and constant disruption. While many
+              jump on the latest buzzwords, few truly understand how to adapt
+              their mindset, models, and methods for what’s coming next. This
+              track is about building not just a business — but an operating
+              system for the future.
             </p>
           </div>
         </div>
