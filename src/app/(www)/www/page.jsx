@@ -63,12 +63,11 @@ export default function HomePage() {
   return (
     <div className="root relative bg-black items-center">
       <HeroEventRestart2025 />
-      <VisionQuotesRestart25 />
       <ContentEventRestart25 />
       <TopicsRunningText />
       <SpeakersLineUpRestart25 />
-      <EventExperienceRestart25 />
       <TicketCarouselRestart25 />
+      <EventExperienceRestart25 />
       <FAQEventRestart25 />
       <BannerEventRestart25 />
       <CustomFloatingRestart25 />
