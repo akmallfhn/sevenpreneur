@@ -6,6 +6,7 @@ import SidebarCMS from "@/app/components/navigations/SidebarCMS";
 import { Toaster } from "sonner";
 import { Metadata } from "next";
 import DisallowedMobile from "@/app/components/state/DisallowedMobile";
+import ForbiddenComponent from "@/app/components/state/403Forbidden";
 
 // --- Metadata
 export const metadata: Metadata = {
@@ -46,21 +47,17 @@ if (process.env.DOMAIN_MODE === "local") {
 export default async function AdminLayout(
   props: Readonly<{ children: React.ReactNode }>
 ) {
-  // --- Define Google Oauth
-  const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
-  if (!googleOauthId) {
-    throw new Error(
-      "Missing NEXT_PUBLIC_GOOGLE_OAUTH_ID in environment variables"
-    );
-  }
-
   // --- Get Cookie
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
 
-  // --- Set Session Token
+  // --- Checking Access
   setSessionToken(sessionToken);
+  const checkUser = (await trpc.auth.checkSession()).user;
+  if (!checkUser || checkUser.role_id === 3) {
+    return <ForbiddenComponent />;
+  }
 
   return (
     <TRPCProvider baseURL={baseURL}>
