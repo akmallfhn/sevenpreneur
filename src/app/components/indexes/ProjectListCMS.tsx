@@ -72,6 +72,7 @@ export default function ProjectListCMS({
             {projectListData?.list.map((post, index) => (
               <ProjectItemCMS
                 key={index}
+                cohortId={cohortId}
                 projectId={post.id}
                 projectName={post.name}
                 lastSubmission={post.deadline_at}

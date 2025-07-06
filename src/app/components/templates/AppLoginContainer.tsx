@@ -7,7 +7,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-export default function AppLoginContainer({ currentDomain }) {
+interface AppLoginContainerProps {
+  currentDomain: string;
+}
+
+export default function AppLoginContainer({
+  currentDomain,
+}: AppLoginContainerProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 

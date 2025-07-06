@@ -10,10 +10,12 @@ import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import DropdownMenuCMS from "../elements/DropdownMenuCMS";
 import AppAlertDialog from "../modals/AppAlertDialog";
+import Link from "next/link";
 
 dayjs.extend(localizedFormat);
 
 interface ProjectItemCMSProps {
+  cohortId: number;
   projectId: number;
   projectName: string;
   lastSubmission: string;
@@ -21,6 +23,7 @@ interface ProjectItemCMSProps {
 }
 
 export default function ProjectItemCMS({
+  cohortId,
   projectId,
   projectName,
   lastSubmission,
@@ -77,31 +80,33 @@ export default function ProjectItemCMS({
   return (
     <React.Fragment>
       <div className="project-item flex items-center justify-between bg-white gap-2 p-1 rounded-md">
-        <div className="flex items-center w-[calc(87%)]">
-          <div className="icon relative aspect-square flex size-20 p-3 items-center">
-            <Gauge width={200} height={200} value={(30 / 48) * 100} />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs font-bold text-black bg-white font-bodycopy">
-                {((70 / 100) * 100).toFixed(0)}%
-              </span>
+        <Link href={`/cohorts/${cohortId}/projects/${projectId}`}>
+          <div className="flex items-center w-[calc(87%)]">
+            <div className="icon relative aspect-square flex size-20 p-3 items-center">
+              <Gauge width={200} height={200} value={(30 / 48) * 100} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-xs font-bold text-black bg-white font-bodycopy">
+                  {((70 / 100) * 100).toFixed(0)}%
+                </span>
+              </div>
+            </div>
+            <div className="attribute-data flex flex-col">
+              <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
+                {projectName}
+              </h3>
+              <p className="font-bodycopy font-medium text-alternative text-[13px]">
+                Last submission:{" "}
+                {dayjs(lastSubmission).format("D MMM YYYY HH.mm")}
+              </p>
             </div>
           </div>
-          <div className="attribute-data flex flex-col">
-            <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
-              {projectName}
-            </h3>
-            <p className="font-bodycopy font-medium text-alternative text-[13px]">
-              Last submission:{" "}
-              {dayjs(lastSubmission).format("D MMM YYYY HH.mm")}
-            </p>
-          </div>
-        </div>
+        </Link>
         <div className="actions-button flex relative" ref={wrapperRef}>
           <AppButton
             variant="ghost"
             size="small"
             type="button"
-            onClick={() => setIsActionsOpened(true)}
+            onClick={handleActionsDropdown}
           >
             <EllipsisVertical className="size-4" />
           </AppButton>

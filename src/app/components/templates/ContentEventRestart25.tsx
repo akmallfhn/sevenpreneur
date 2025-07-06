@@ -1,44 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import ButtonRestart25 from "../buttons/ButtonRestart25";
 import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
-import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25";
-import { Ticket, TicketPlus } from "lucide-react";
-import Link from "next/link";
 
 export default function ContentEventRestart25() {
-  const ref = useRef(null);
-  const viewedTickets = new Set();
-  const [hasBeenViewed, setHasBeenViewed] = useState(false);
-
-  // Tracking View Ticket
-  useEffect(() => {
-    // Membuat "mata pengintai" yang memantau apakah elemen sudah muncul
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // Looping semua elemen yang dipantau
-          if (entry.isIntersecting && !hasBeenViewed) {
-            // elemen sedang terlihat di layar dan mengecek apakah tiket ini sudah pernah dilihat.
-            window.dataLayer.push({
-              event: "view",
-              feature_name: "ticket_checkout_view",
-            });
-            setHasBeenViewed(true); // Tandai tiket ini sebagai sudah dilihat
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    // Mulai memantau elemen yang ditandai dengan ref.
-    if (ref.current) observer.observe(ref.current);
-    // Saat komponen dibuang dari layar (unmount), kita hentikan pengawasan supaya tidak membuang resource.
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
-  }, [hasBeenViewed]);
-
   return (
     <section id="content-event">
       <div className="content-event-root relative bg-black flex justify-center overflow-hidden">
