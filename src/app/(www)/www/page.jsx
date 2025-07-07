@@ -1,13 +1,12 @@
 import HeroEventRestart2025 from "../../components/templates/HeroEventRestart25";
-import VisionQuotesRestart25 from "../../components/templates/VisionQuotesRestart25";
 import ContentEventRestart25 from "../../components/templates/ContentEventRestart25";
 import TicketCarouselRestart25 from "../../components/indexes/TicketCarouselRestart25";
 import BannerEventRestart25 from "../../components/templates/BannerEventRestart25";
 import FAQEventRestart25 from "../../components/indexes/FAQEventRestart25";
-import TopicsRunningText from "../../components/indexes/TopicsRunningTextRestart25";
 import SpeakersLineUpRestart25 from "../../components/indexes/SpeakersLineUpRestart25";
 import EventExperienceRestart25 from "@/app/components/indexes/EventExperienceRestart25";
 import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
+import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerListRestart25";
 
 export const metadata = {
   title:
@@ -64,7 +63,7 @@ export default function HomePage() {
     <div className="root relative bg-black items-center">
       <HeroEventRestart2025 />
       <ContentEventRestart25 />
-      <TopicsRunningText />
+      <TopicSpeakerListRestart25 />
       <SpeakersLineUpRestart25 />
       <TicketCarouselRestart25 />
       <EventExperienceRestart25 />

@@ -1,12 +1,19 @@
 "use client";
 import Image from "next/image";
 
+interface EventExperienceCardItemRestart25Props {
+  experienceName: string;
+  experienceDescription: string;
+  experienceImage: string;
+  isexperienceVIP: boolean;
+}
+
 export default function EventExperienceCardItemRestart25({
   experienceName,
   experienceDescription,
   experienceImage,
   isexperienceVIP = false,
-}) {
+}: EventExperienceCardItemRestart25Props) {
   return (
     <div className="card-container flex flex-col w-full gap-3 lg:max-w-[300px]">
       <div className="experience-image relative">

@@ -51,58 +51,58 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.cohort` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `create.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `list.cohorts`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.cohort`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.cohort` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.cohort` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 ### Cohort Prices 💵
 
 | Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.cohortPrice` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `create.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `list.cohortPrices`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.cohortPrice`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.cohortPrice` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.cohortPrice` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 ## Modules 📕
 
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.module` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `create.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `list.modules`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.module`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.module` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.module` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 ## Learnings 📅
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.learning` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `create.learning` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `list.learnings`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.learning`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.learning` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.learning` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.learning` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.learning` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 ### Materials 📖
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.material` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `create.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `list.materials`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.material`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.material` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.material` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 ## Projects 🗂️
 
 | Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :--------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.project` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `create.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `list.projects`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.project`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.project` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.project` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
