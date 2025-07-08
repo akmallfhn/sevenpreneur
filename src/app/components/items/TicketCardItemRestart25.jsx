@@ -1,10 +1,11 @@
 "use client";
 import { useRef, useEffect } from "react";
-import { Check, LockOpen } from "lucide-react";
+import { ArrowDown, Check, LockOpen } from "lucide-react";
 import Image from "next/image";
 import ButtonRestart25 from "../buttons/ButtonRestart25";
 import Link from "next/link";
 import dayjs from "dayjs";
+import AppButton from "../buttons/AppButton";
 
 export default function TicketCardItemRestart25({
   post,
@@ -134,18 +135,21 @@ export default function TicketCardItemRestart25({
           target="_blank"
           rel="noopener noreferrer"
         >
-          <ButtonRestart25
-            feature_name={`ticket_checkout_${post.id}`}
-            feature_position={index + 1}
-            // disabled={isDisabled}
-            variant={"two liner"}
-            buttonTitle={"Unlock Access"}
-            buttonAltTitle={`before it's gone - ${dayjs(
-              post.expiredDate
-            ).format("D MMM")}`}
-            Icon={LockOpen}
-            addCSSIcon={"lg:size-6"}
-          />
+          <AppButton
+            size="defaultRounded"
+            featureName={`ticket_checkout_${post.id}`}
+            featurePosition={index + 1}
+          >
+            <div className="flex flex-col items-start">
+              <p className="font-bold text-xs">Buy Ticket Now</p>
+              <p className="font-medium text-[10px]">{`before it's gone - ${dayjs(
+                post.expiredDate
+              ).format("D MMM")}`}</p>
+            </div>
+            <div className="aspect-square p-1 bg-secondary rounded-full">
+              <LockOpen className="text-white size-4" />
+            </div>
+          </AppButton>
         </Link>
       </div>
     </div>

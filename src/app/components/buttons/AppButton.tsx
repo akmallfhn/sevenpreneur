@@ -4,13 +4,21 @@ import React, { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 
 type VariantType =
   | "primary"
+  | "secondary"
   | "outline"
   | "ghost"
   | "semiDestructive"
   | "cmsPrimary"
   | "cmsPrimaryLight"
   | "cmsLink";
-type SizeType = "default" | "medium" | "small" | "icon";
+type SizeType =
+  | "default"
+  | "medium"
+  | "large"
+  | "small"
+  | "icon"
+  | "largeRounded"
+  | "defaultRounded";
 type FontType = "brand" | "bodycopy" | "ui";
 
 interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,6 +26,8 @@ interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: VariantType;
   size?: SizeType;
   font?: FontType;
+  featureName?: string;
+  featurePosition?: number;
 }
 
 // --- Use forwardRef for pass ref component. forwardRef cant directly use with 'export default function'
@@ -31,15 +41,19 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       font = "bodycopy",
       disabled = false,
       className,
+      featureName,
+      featurePosition,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
   ) => {
     const baseClasses =
-      "app-button inline-flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50";
+      "app-button relative inline-flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50";
 
     const variantClasses: Record<VariantType, string> = {
       primary: "bg-primary text-white hover:bg-[#0759D3] active:bg-[#0759D3]",
+      secondary:
+        "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A]",
       outline:
         "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5]",
       ghost: "bg-white hover:bg-[#F5F5F5] active:bg-[#F5F5F5]",
@@ -53,10 +67,13 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
     };
 
     const sizeClasses: Record<SizeType, string> = {
+      large: "py-3 px-7 h-[52px] text-lg rounded-xl",
       default: "py-2 px-4 h-10 text-sm rounded-lg",
       medium: "py-1.5 px-3 h-9 text-sm rounded-md",
       small: "py-1 px-2 h-8 text-xs rounded-md",
       icon: "size-9 rounded-md",
+      largeRounded: "py-3 px-7 h-[52px] text-lg rounded-full",
+      defaultRounded: "py-2 px-4 h-10 text-sm rounded-full",
     };
 
     const fontClasses: Record<FontType, string> = {
@@ -73,11 +90,24 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       className,
     ].join(" ");
 
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      window.dataLayer?.push({
+        event: "click",
+        feature_name: featureName,
+        feature_position: featurePosition,
+      });
+
+      // Panggil onClick props jika ada
+      if (onClick) {
+        onClick(e);
+      }
+    };
+
     return (
       <button
         ref={ref}
         disabled={disabled}
-        onClick={onClick}
+        onClick={handleClick}
         className={finalClasses}
         {...rest}
       >
