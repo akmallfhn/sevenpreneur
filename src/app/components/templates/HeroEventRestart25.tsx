@@ -1,9 +1,9 @@
 "use client";
-import { ArrowDown, ArrowUpIcon } from "lucide-react";
-import ButtonRestart25 from "../buttons/ButtonRestart25";
+import { ArrowDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25";
+import AppButton from "../buttons/AppButton";
 
 export default function HeroEventRestart2025() {
   return (
@@ -50,18 +50,23 @@ export default function HeroEventRestart2025() {
           </div>
         </div>
         {/* Bottom Group Component */}
-        <div className="flex flex-col items-center gap-5 lg:items-start">
+        <div className="flex flex-col items-center gap-5 lg:items-start lg:gap-[28px]">
           {/* Countdown */}
           <CountdownTimerRestart25 />
-          {/* --- CTA */}
+          {/* CTA */}
           <Link href={"#ticket-id"}>
-            <ButtonRestart25
-              buttonTitle={"Join RE:START Conference 2025"}
-              Icon={ArrowDown}
-              addCSS={`animate-pulse lg:mx-3 lg:my-1`}
-              addCSSIcon={`lg:size-8`}
-              feature_name={"join_restart"}
-            />
+            <AppButton
+              size="largeRounded"
+              variant="secondary"
+              featureName="join_restart"
+            >
+              <p className="text-base lg:text-lg">
+                Join RE:START Conference 2025
+              </p>
+              <div className="aspect-square p-1 bg-primary rounded-full">
+                <ArrowDown className="text-white size-5" />
+              </div>
+            </AppButton>
           </Link>
         </div>
       </div>
@@ -72,7 +77,7 @@ export default function HeroEventRestart2025() {
       />
       {/* --- All Speakers */}
       <Image
-        className="all-speakers absolute flex max-w-[382px] bottom-[182px] left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:-right-14 lg:translate-x-0 lg:max-w-[638px] lg:bottom-0 xl:max-w-[848px]"
+        className="all-speakers absolute flex max-w-[382px] bottom-[158px] left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:-right-14 lg:translate-x-0 lg:max-w-[638px] lg:-bottom-5 xl:max-w-[848px]"
         src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//all-speakers-restart.webp"
         alt="Sevenpreneur Brand Representative"
         width={2440}
