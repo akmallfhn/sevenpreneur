@@ -19,7 +19,7 @@ export default function TopicSpeakerListRestart25() {
       topic_name:
         "The Art of Captivating the Market: Stories of Influence, Grit, and Local Power",
       topic_description:
-        "What does it take to truly captivate the market, not just with products, but with purpose and personality? In this rare convergence of influence and enterprise, Dr. Tirta and Arsjad Rasjid (President Commisioner of Indika Energy) explore how local businesses can build iconic value, move hearts, and scale impact.",
+        "What does it take to truly captivate the market, not just with products, but with purpose and personality? In this rare convergence of influence and enterprise, Dr. Tirta and Arsjad Rasjid (Commisioner of Indika Energy) explore how local businesses can build iconic value, move hearts, and scale impact.",
       topic_image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-arsjad-tirta.webp",
       moderator_name: "Devin Suhartono",
