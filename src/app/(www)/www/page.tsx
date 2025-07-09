@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import HeroEventRestart2025 from "../../components/templates/HeroEventRestart25";
 import ContentEventRestart25 from "../../components/templates/ContentEventRestart25";
 import TicketCarouselRestart25 from "../../components/indexes/TicketCarouselRestart25";
@@ -8,7 +9,7 @@ import EventExperienceRestart25 from "@/app/components/indexes/EventExperienceRe
 import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
 import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerListRestart25";
 
-export const metadata = {
+export const metadata: Metadata = {
   title:
     "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
   description:

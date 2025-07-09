@@ -6,6 +6,7 @@ import ButtonRestart25 from "../buttons/ButtonRestart25";
 import Link from "next/link";
 import dayjs from "dayjs";
 import AppButton from "../buttons/AppButton";
+import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25";
 
 export default function TicketCardItemRestart25({
   post,
@@ -16,27 +17,22 @@ export default function TicketCardItemRestart25({
 
   // Tracking View Ticket
   useEffect(() => {
-    // Membuat "mata pengintai" yang memantau apakah elemen sudah muncul
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Looping semua elemen yang dipantau
           if (entry.isIntersecting && !viewedTickets.has(post.id)) {
-            // elemen sedang terlihat di layar dan mengecek apakah tiket ini sudah pernah dilihat.
             window.dataLayer.push({
               event: "view",
               feature_name: `ticket_checkout_${post.id}_view`,
               feature_position: index + 1,
             });
-            viewedTickets.add(post.id); // Tandai tiket ini sebagai sudah dilihat
+            viewedTickets.add(post.id);
           }
         });
       },
       { threshold: 0.5 }
     );
-    // Mulai memantau elemen yang ditandai dengan ref.
     if (ref.current) observer.observe(ref.current);
-    // Saat komponen dibuang dari layar (unmount), kita hentikan pengawasan supaya tidak membuang resource.
     return () => {
       if (ref.current) observer.unobserve(ref.current);
     };
@@ -56,7 +52,7 @@ export default function TicketCardItemRestart25({
         />
         <div className="container absolute flex flex-col top-4 left-1/2 -translate-x-1/2 gap-2 z-20">
           {/* Tiket Metadata */}
-          <div className="metadata-ticket text-black flex flex-col items-center">
+          <div className="metadata-ticket text-black flex flex-col items-center gap-1">
             <div className="type-ticket flex items-center gap-1.5">
               <h3 className="font-brand font-bold text-2xl lg:text-[28px]">
                 {post.type}
@@ -76,18 +72,18 @@ export default function TicketCardItemRestart25({
             <p className="tagline-ticket font-bodycopy font-semibold text-sm lg:text-base">
               {post.tagline}
             </p>
-            {post.isPremium && (
-              <p className="marketing-ticke font-bodycopy text-xs font-medium text-[#7E7E7E] lg:text-sm">
-                Limited to 200 early movers
-              </p>
-            )}
+            <CountdownTimerRestart25
+              targetDateTime="2025-07-12T23:59:00"
+              variant="extra_small"
+              isIncludeDimension={false}
+            />
           </div>
 
           {/* Pricing */}
           <div className="pricing flex flex-col gap-1 items-center font-bodycopy text-black">
             {post.basePrice !== 0 && (
               <div className="discount flex items-center gap-2">
-                <p className="bg-secondary font-bold text-white text-[10px] px-1 py-0.5 rounded-sm lg:text-xs">
+                <p className="bg-primary font-bold text-white text-[10px] px-1 py-0.5 rounded-sm lg:text-xs">
                   {Math.round(
                     100 - (post.discountPrice / post.basePrice) * 100
                   )}

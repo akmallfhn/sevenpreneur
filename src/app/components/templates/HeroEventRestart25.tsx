@@ -2,8 +2,8 @@
 import { ArrowDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25";
 import AppButton from "../buttons/AppButton";
+import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25";
 
 export default function HeroEventRestart2025() {
   return (
@@ -52,7 +52,7 @@ export default function HeroEventRestart2025() {
         {/* Bottom Group Component */}
         <div className="flex flex-col items-center gap-5 lg:items-start lg:gap-[28px]">
           {/* Countdown */}
-          <CountdownTimerRestart25 />
+          <CountdownTimerRestart25 targetDateTime="2025-07-26T09:00:00" />
           {/* CTA */}
           <Link href={"#ticket-id"}>
             <AppButton
