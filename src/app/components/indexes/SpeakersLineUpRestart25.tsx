@@ -68,6 +68,13 @@ export default function SpeakersLineUpRestart25() {
       on_confirmation: false,
     },
     {
+      name: "Angga fauzan",
+      title: "CEO & Co-Founder MySkill",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/angga-fauzan.webp",
+      on_confirmation: false,
+    },
+    {
       name: "Suwandi Soh",
       title: "CEO Mekari",
       image:
@@ -87,6 +94,13 @@ export default function SpeakersLineUpRestart25() {
       title: "Founder & CEO BrainBoost",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/denny-santoso.webp",
+      on_confirmation: false,
+    },
+    {
+      name: "Diana Alim",
+      title: "CEO Marindo Boga",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/diana-alim.webp",
       on_confirmation: false,
     },
     {

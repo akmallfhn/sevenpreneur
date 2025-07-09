@@ -9,7 +9,7 @@ export default function HeroEventRestart2025() {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
       {/* --- Hero Content */}
-      <div className="hero-content flex flex-col pt-10 pb-10 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px]">
+      <div className="hero-content flex flex-col pt-10 pb-10 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px] 2xl:pl-[20vw]">
         {/* Top Group Component */}
         <div className="flex flex-col gap-3 items-center lg:items-start lg:gap-5">
           {/* Logo RE:START */}
@@ -77,8 +77,8 @@ export default function HeroEventRestart2025() {
       />
       {/* --- All Speakers */}
       <Image
-        className="all-speakers absolute flex max-w-[382px] bottom-[158px] left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:-right-14 lg:translate-x-0 lg:max-w-[638px] lg:-bottom-5 xl:max-w-[848px]"
-        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//all-speakers-restart.webp"
+        className="all-speakers absolute flex max-w-[392px] bottom-[184px] left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:-right-5 lg:translate-x-0 lg:max-w-[638px] lg:-bottom-5 xl:max-w-[856px] 2xl:right-[2vw]"
+        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/speakers-restart-9-jul%20(1).webp"
         alt="Sevenpreneur Brand Representative"
         width={2440}
         height={2440}
