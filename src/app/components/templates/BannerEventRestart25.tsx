@@ -3,6 +3,7 @@ import Image from "next/image";
 import ButtonRestart25 from "../buttons/ButtonRestart25";
 import { HeartHandshake, MessageCircleQuestion } from "lucide-react";
 import Link from "next/link";
+import AppButton from "../buttons/AppButton";
 
 export default function BannerEventRestart25() {
   return (
@@ -15,7 +16,7 @@ export default function BannerEventRestart25() {
               Having trouble??
             </h3>
             <p className="font-bodycopy text-sm lg:text-xl">
-              No worries — if you hit a snag while booking, we're here to help!
+              No worries — if you hit a snag while booking, we`re here to help!
             </p>
           </div>
           <Link
@@ -24,12 +25,12 @@ export default function BannerEventRestart25() {
             }
             className="z-20"
           >
-            <ButtonRestart25
-              buttonTitle={"Contact Us"}
-              Icon={MessageCircleQuestion}
-              addCSS={`lg:mx-3 lg:my-1`}
-              addCSSIcon={`lg:size-8`}
-            />
+            <AppButton size="defaultRounded" featureName="contact_us">
+              Contact Us
+              <div className="aspect-square p-1 bg-secondary rounded-full">
+                <MessageCircleQuestion className="text-white size-4" />
+              </div>
+            </AppButton>
           </Link>
 
           {/* Ornamen */}

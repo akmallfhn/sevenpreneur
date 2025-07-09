@@ -2,7 +2,15 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-export default function FAQItemRestart25({ questions, answer }) {
+interface FAQItemRestart25Props {
+  questions: string;
+  answer: string;
+}
+
+export default function FAQItemRestart25({
+  questions,
+  answer,
+}: FAQItemRestart25Props) {
   // State untuk membuka tutup FAQ Button
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(!isOpen);
