@@ -72,7 +72,7 @@ export default function TicketCardItemRestart25({
               {post.tagline}
             </p>
             <CountdownTimerRestart25
-              targetDateTime="2025-07-12T23:59:00"
+              targetDateTime={post.expiredDate}
               variant="extra_small"
               isIncludeDimension={false}
             />
