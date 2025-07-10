@@ -1,13 +1,14 @@
 import { Metadata } from "next";
-import HeroEventRestart2025 from "../../components/templates/HeroEventRestart25";
-import ContentEventRestart25 from "../../components/templates/ContentEventRestart25";
-import TicketCarouselRestart25 from "../../components/indexes/TicketCarouselRestart25";
-import BannerEventRestart25 from "../../components/templates/BannerEventRestart25";
-import FAQEventRestart25 from "../../components/indexes/FAQEventRestart25";
-import SpeakersLineUpRestart25 from "../../components/indexes/SpeakersLineUpRestart25";
+import HeroEventRestart2025 from "@/app/components/templates/HeroEventRestart25";
+import ContentEventRestart25 from "@/app/components/templates/ContentEventRestart25";
+import TicketCarouselRestart25 from "@/app/components/indexes/TicketCarouselRestart25";
+import BannerEventRestart25 from "@/app/components/templates/BannerEventRestart25";
+import FAQEventRestart25 from "@/app/components/indexes/FAQEventRestart25";
+import SpeakersLineUpRestart25 from "@/app/components/indexes/SpeakersLineUpRestart25";
 import EventExperienceRestart25 from "@/app/components/indexes/EventExperienceRestart25";
 import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
 import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerListRestart25";
+import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
 
 export const metadata: Metadata = {
   title:
@@ -62,6 +63,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <div className="root relative bg-black items-center">
+      <TopNavbar />
       <HeroEventRestart2025 />
       <ContentEventRestart25 />
       <TopicSpeakerListRestart25 />

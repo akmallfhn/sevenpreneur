@@ -1,5 +1,5 @@
 import Image from "next/image";
-import AppLoginContainer from "../../../../components/templates/AppLoginContainer";
+import AppLoginContainer from "@/app/components/templates/AppLoginContainer";
 
 export const metadata = {
   title: "Login | Sevenpreneur",

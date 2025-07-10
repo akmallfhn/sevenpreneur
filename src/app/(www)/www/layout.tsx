@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
 import AppBottomFooter from "@/app/components/navigations/AppBottomFooter";
 import { Metadata } from "next";
 import { ReactNode } from "react";
@@ -18,7 +17,6 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div>
-      <TopNavbar />
       {children}
       <AppBottomFooter />
     </div>
