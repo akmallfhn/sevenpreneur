@@ -15,6 +15,20 @@ CREATE TYPE learning_method_enum AS ENUM (
   'hybrid'
 );
 
+CREATE TYPE category_enum AS ENUM (
+  'cohort',
+  'video_course',
+  'ai'
+);
+
+-- Enumeration for the transactions table (t_*)
+
+CREATE TYPE t_status_enum AS ENUM (
+  'pending',
+  'paid',
+  'failed'
+);
+
 ------------
 -- Tables --
 ------------
@@ -140,6 +154,30 @@ CREATE TABLE projects (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE transactions (
+  id               SERIAL          PRIMARY KEY,
+  user_id          uuid            NOT NULL,
+  category         category_enum   NOT NULL,
+  item_id          INTEGER         NOT NULL,
+  amount           DECIMAL(12, 2)  NOT NULL,
+  currency         VARCHAR         NOT NULL,
+  invoice_number   VARCHAR         NOT NULL,
+  status           t_status_enum   NOT NULL,
+  payment_method   VARCHAR             NULL,
+  payment_channel  VARCHAR             NULL,
+  paid_at          TIMESTAMPTZ         NULL,
+  created_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Relation Tables --
+
+CREATE TABLE users_cohorts (
+  user_id    UUID     NOT NULL,
+  cohort_id  INTEGER  NOT NULL,
+  PRIMARY KEY (user_id, cohort_id)
+);
+
 ----------------
 -- References --
 ----------------
@@ -167,6 +205,13 @@ ALTER TABLE materials
   ADD FOREIGN KEY (learning_id) REFERENCES learnings (id);
 
 ALTER TABLE projects
+  ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+
+ALTER TABLE transactions
+  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE users_cohorts
+  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
 
 ---------------
@@ -217,5 +262,10 @@ CREATE TRIGGER update_materials_updated_at_trigger
 
 CREATE TRIGGER update_projects_updated_at_trigger
   BEFORE UPDATE ON projects
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_transactions_updated_at_trigger
+  BEFORE UPDATE ON transactions
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
