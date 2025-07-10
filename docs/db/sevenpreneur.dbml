@@ -18,6 +18,20 @@ enum learning_method_enum {
   hybrid
 }
 
+enum category_enum {
+  cohort
+  video_course
+  ai
+}
+
+// Enumeration for the transactions table (t_*)
+
+enum t_status_enum {
+  pending
+  paid
+  failed
+}
+
 ////////////
 // Tables //
 ////////////
@@ -69,7 +83,7 @@ Table tokens {
 }
 
 Table cohorts {
-  id            integer      [primary key]
+  id            integer      [primary key, ref: <> users.id]
   name          varchar
   description   varchar
   image         varchar
@@ -141,4 +155,20 @@ Table projects {
   status        status_enum
   created_at    timestamptz
   updated_at    timestamptz
+}
+
+Table transactions {
+  id               integer        [primary key]
+  user_id          uuid           [ref: > users.id]
+  category         category_enum
+  item_id          integer        [note: 'item's ID based on category']
+  amount           decimal(12,2)
+  currency         varchar        [note: 'IDR']
+  invoice_number   varchar
+  status           t_status_enum
+  payment_method   varchar        [note: 'e.g. bank transfer, e-wallet, QR, etc']
+  payment_channel  varchar        [note: 'details of payment method']
+  paid_at          timestamptz
+  created_at       timestamptz
+  updated_at       timestamptz
 }
