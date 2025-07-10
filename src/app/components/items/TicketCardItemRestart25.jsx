@@ -2,7 +2,6 @@
 import { useRef, useEffect } from "react";
 import { ArrowDown, Check, LockOpen } from "lucide-react";
 import Image from "next/image";
-import ButtonRestart25 from "../buttons/ButtonRestart25";
 import Link from "next/link";
 import dayjs from "dayjs";
 import AppButton from "../buttons/AppButton";

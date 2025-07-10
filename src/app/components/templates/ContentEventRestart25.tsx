@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
+import ScorecardRestart25 from "../items/ScorecardRestart25";
 
 export default function ContentEventRestart25() {
   return (
@@ -36,8 +37,22 @@ export default function ContentEventRestart25() {
               </div>
             </div>
           </section>
+          {/* Stats Number */}
+          <div className="flex gap-4 items-center lg:gap-8">
+            <ScorecardRestart25
+              scorecardValue={2000}
+              scorecardName="Attendees"
+              isMoreValue
+            />
+            <ScorecardRestart25
+              scorecardValue={15}
+              scorecardName="Speakers"
+              isMoreValue
+            />
+            <ScorecardRestart25 scorecardValue={10} scorecardName="Sessions" />
+          </div>
 
-          {/* About Event */}
+          {/* Main Topics */}
           <div className="about-event flex flex-col gap-3 items-center lg:gap-5">
             <SectionTitleRestart25 sectionTitle="Main Topic" />
             <p className="quotes font-bodycopy font-medium text-sm text-center text-white/90 max-w-[500px] lg:text-xl lg:max-w-[760px]">
