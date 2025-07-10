@@ -1,4 +1,8 @@
-import { administratorProcedure, createTRPCRouter } from "@/trpc/init";
+import {
+  administratorProcedure,
+  createTRPCRouter,
+  roleBasedProcedure,
+} from "@/trpc/init";
 import { stringToDate } from "@/trpc/utils/string_date";
 import {
   numberIsID,
@@ -63,7 +67,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  cohort: administratorProcedure
+  cohort: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -111,7 +115,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  cohortPrice: administratorProcedure
+  cohortPrice: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -152,7 +156,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  learning: administratorProcedure
+  learning: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -207,7 +211,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  material: administratorProcedure
+  material: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -250,7 +254,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  module: administratorProcedure
+  module: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -292,7 +296,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  project: administratorProcedure
+  project: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
