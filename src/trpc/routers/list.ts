@@ -3,7 +3,11 @@ import {
   createTRPCRouter,
   loggedInProcedure,
 } from "@/trpc/init";
-import { numberIsID, numberIsRoleID } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  numberIsRoleID,
+  stringIsUUID,
+} from "@/trpc/utils/validation";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -275,6 +279,36 @@ export const listRouter = createTRPCRouter({
           deadline_at: entry.deadline_at,
           status: entry.status,
           submission_percentage: Math.round(Math.random() * 100), // TODO: Use the actual data
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  transactions: loggedInProcedure
+    .input(
+      z.object({
+        user_id: stringIsUUID(),
+      })
+    )
+    .query(async (opts) => {
+      const transactionsList = await opts.ctx.prisma.transaction.findMany({
+        where: { user_id: opts.input.user_id },
+        orderBy: [{ updated_at: "asc" }, { created_at: "asc" }],
+      });
+      const returnedList = transactionsList.map((entry) => {
+        return {
+          id: entry.id,
+          user_id: entry.user_id,
+          category: entry.category,
+          item_id: entry.item_id,
+          amount: entry.amount,
+          currency: entry.currency,
+          status: entry.status,
+          paid_at: entry.paid_at,
         };
       });
       return {
