@@ -1,4 +1,8 @@
-import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
+import {
+  baseProcedure,
+  createTRPCRouter,
+  loggedInProcedure,
+} from "@/trpc/init";
 import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -105,7 +109,7 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
-  cohort: loggedInProcedure
+  cohort: baseProcedure
     .input(
       z.object({
         id: numberIsID(),
