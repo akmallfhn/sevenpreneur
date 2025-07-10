@@ -83,10 +83,10 @@ export default function ProjectItemCMS({
         <Link href={`/cohorts/${cohortId}/projects/${projectId}`}>
           <div className="flex items-center w-[calc(87%)]">
             <div className="icon relative aspect-square flex size-20 p-3 items-center">
-              <Gauge width={200} height={200} value={(30 / 48) * 100} />
+              <Gauge width={200} height={200} value={(0 / 1) * 100} />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-xs font-bold text-black bg-white font-bodycopy">
-                  {((70 / 100) * 100).toFixed(0)}%
+                  {((0 / 1) * 100).toFixed(0)}%
                 </span>
               </div>
             </div>
