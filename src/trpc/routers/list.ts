@@ -8,6 +8,7 @@ import {
   numberIsRoleID,
   stringIsUUID,
 } from "@/trpc/utils/validation";
+import { StatusEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -94,13 +95,22 @@ export const listRouter = createTRPCRouter({
     }),
 
   cohorts: baseProcedure.query(async (opts) => {
+    let whereClause = { deleted_at: null };
+    if (!opts.ctx.user) {
+      whereClause = Object.assign(whereClause, {
+        status: StatusEnum.ACTIVE,
+        published_at: {
+          lte: new Date(),
+        },
+      });
+    }
     const cohortList = await opts.ctx.prisma.cohort.findMany({
       orderBy: [
         { end_date: "desc" },
         { start_date: "desc" },
         { published_at: "desc" },
       ],
-      where: { deleted_at: null },
+      where: whereClause,
     });
     const returnedList = cohortList.map((entry) => {
       return {
@@ -188,7 +198,10 @@ export const listRouter = createTRPCRouter({
     .query(async (opts) => {
       const learningsList = await opts.ctx.prisma.learning.findMany({
         include: { speaker: true },
-        where: { cohort_id: opts.input.cohort_id },
+        where: {
+          cohort_id: opts.input.cohort_id,
+          status: StatusEnum.ACTIVE,
+        },
         orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
       });
       const returnedList = learningsList.map((entry) => {
