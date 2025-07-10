@@ -249,7 +249,7 @@ export default function LearningDetailsCMS({
                     }
                     userRole="EDUCATOR"
                     userAvatar={
-                      learningDetailsData?.learning.speaker_id ||
+                      learningDetailsData?.learning.speaker?.avatar ||
                       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
                     }
                   />
@@ -291,6 +291,7 @@ export default function LearningDetailsCMS({
       {/* Form Edit Cohort */}
       {editLearning && (
         <EditLearningFormCMS
+          sessionToken={sessionToken}
           learningId={learningId}
           initialData={learningDetailsData?.learning}
           isOpen={editLearning}
