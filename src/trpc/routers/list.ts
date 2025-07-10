@@ -1,4 +1,8 @@
-import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
+import {
+  baseProcedure,
+  createTRPCRouter,
+  loggedInProcedure,
+} from "@/trpc/init";
 import { numberIsID, numberIsRoleID } from "@/trpc/utils/validation";
 import { z } from "zod";
 
@@ -85,7 +89,7 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  cohorts: loggedInProcedure.query(async (opts) => {
+  cohorts: baseProcedure.query(async (opts) => {
     const cohortList = await opts.ctx.prisma.cohort.findMany({
       orderBy: [
         { end_date: "desc" },
@@ -162,6 +166,33 @@ export const listRouter = createTRPCRouter({
           location_url: entry.location_url,
           speaker: entry.speaker,
           status: entry.status,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  learnings_public: baseProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const learningsList = await opts.ctx.prisma.learning.findMany({
+        include: { speaker: true },
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
+      });
+      const returnedList = learningsList.map((entry) => {
+        return {
+          name: entry.name,
+          method: entry.method,
+          speaker_name: entry.speaker?.full_name || null,
+          speaker_avatar: entry.speaker?.avatar || null,
         };
       });
       return {
