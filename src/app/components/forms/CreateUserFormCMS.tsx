@@ -24,7 +24,6 @@ import {
   Save,
   ChevronRight,
 } from "lucide-react";
-import UploadImageCMS from "../fields/UploadAvatarUserCMS";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";

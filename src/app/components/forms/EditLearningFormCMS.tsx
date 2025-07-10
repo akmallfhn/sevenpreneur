@@ -12,6 +12,7 @@ import SelectCMS from "../fields/SelectCMS";
 import { LearningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
 
 interface EditLearningFormCMSProps {
+  sessionToken: string;
   learningId: number;
   initialData: any;
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface EditLearningFormCMSProps {
 }
 
 export default function EditLearningFormCMS({
+  sessionToken,
   learningId,
   initialData,
   isOpen,
@@ -27,6 +29,12 @@ export default function EditLearningFormCMS({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editLearning = trpc.update.learning.useMutation();
   const utils = trpc.useUtils();
+
+  const {
+    data: educatorUserList,
+    isLoading,
+    isError,
+  } = trpc.list.users.useQuery({ role_id: 1 }, { enabled: !!sessionToken });
 
   // --- Beginning State
   const [formData, setFormData] = useState<{
@@ -37,6 +45,7 @@ export default function EditLearningFormCMS({
     learningURL: string;
     learningLocation: string;
     learningLocationURL: string;
+    learningSpeaker: string;
   }>({
     learningName: initialData.name || "",
     learningDescription: initialData.description || "",
@@ -53,6 +62,7 @@ export default function EditLearningFormCMS({
     learningLocationURL: initialData.location_url
       ? initialData.location_url
       : "",
+    learningSpeaker: initialData.speaker_id ? initialData.speaker_id : "",
   });
 
   // --- Add event listener to prevent page refresh
@@ -98,6 +108,22 @@ export default function EditLearningFormCMS({
       }));
     }
   }, [formData.learningMethod]);
+
+  // --- Data State Rendering
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative">
+        <Loader2 className="animate-spin size-5 " />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+        No Data
+      </div>
+    );
+  }
 
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
@@ -192,21 +218,22 @@ export default function EditLearningFormCMS({
           location_url: formData.learningLocationURL.trim()
             ? formData.learningLocationURL
             : null,
+          speaker_id: formData.learningSpeaker.trim()
+            ? formData.learningSpeaker
+            : null,
         },
         {
           onSuccess: () => {
             toast.success("Learning session updated successfully");
             setIsSubmitting(false);
             utils.read.learning.invalidate();
+            utils.list.learnings.invalidate();
             onClose();
           },
           onError: (err) => {
-            toast.error(
-              "Update failed. Please review your inputs and try again.",
-              {
-                description: err.message,
-              }
-            );
+            toast.error("Update failed", {
+              description: err.message,
+            });
           },
         }
       );
@@ -312,6 +339,19 @@ export default function EditLearningFormCMS({
                 />
               </>
             )}
+            <SelectCMS
+              selectId="learning-speaker"
+              selectName="Assigned Educator"
+              selectPlaceholder="Select person to leading this session"
+              value={formData.learningSpeaker}
+              onChange={handleInputChange("learningSpeaker")}
+              options={
+                educatorUserList?.list.map((post) => ({
+                  label: post.full_name,
+                  value: post.id,
+                })) || []
+              }
+            />
           </div>
         </div>
         <div className="sticky bottom-0 w-full p-4 bg-white z-10">

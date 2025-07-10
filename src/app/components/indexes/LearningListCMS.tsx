@@ -174,6 +174,7 @@ export default function LearningListCMS({
       {/* --- Form Create Learning */}
       {createLearning && (
         <CreateLearningFormCMS
+          sessionToken={sessionToken}
           cohortId={cohortId}
           isOpen={createLearning}
           onClose={() => setCreateLearning(false)}

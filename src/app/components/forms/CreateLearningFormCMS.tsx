@@ -12,12 +12,14 @@ import SelectCMS from "../fields/SelectCMS";
 import { LearningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
 
 interface CreateLearningFormCMSProps {
+  sessionToken: string;
   cohortId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function CreateLearningFormCMS({
+  sessionToken,
   cohortId,
   isOpen,
   onClose,
@@ -25,6 +27,12 @@ export default function CreateLearningFormCMS({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createLearning = trpc.create.learning.useMutation();
   const utils = trpc.useUtils();
+
+  const {
+    data: educatorUserList,
+    isLoading,
+    isError,
+  } = trpc.list.users.useQuery({ role_id: 1 }, { enabled: !!sessionToken });
 
   // --- Beginning State
   const [formData, setFormData] = useState<{
@@ -35,6 +43,7 @@ export default function CreateLearningFormCMS({
     learningURL: string;
     learningLocation: string;
     learningLocationURL: string;
+    learningSpeaker: string;
   }>({
     learningName: "",
     learningDescription: "",
@@ -43,6 +52,7 @@ export default function CreateLearningFormCMS({
     learningURL: "",
     learningLocation: "",
     learningLocationURL: "",
+    learningSpeaker: "",
   });
 
   // --- Add event listener to prevent page refresh
@@ -89,6 +99,22 @@ export default function CreateLearningFormCMS({
     }
   }, [formData.learningMethod]);
 
+  // --- Data State Rendering
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative">
+        <Loader2 className="animate-spin size-5 " />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+        No Data
+      </div>
+    );
+  }
+
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -101,9 +127,7 @@ export default function CreateLearningFormCMS({
       return;
     }
     if (!formData.learningDescription) {
-      toast.error(
-        "A brief description helps set expectations — don't skip it."
-      );
+      toast.error("A brief description helps set expectations, don't skip it.");
       setIsSubmitting(false);
       return;
     }
@@ -181,6 +205,9 @@ export default function CreateLearningFormCMS({
             : null,
           location_url: formData.learningLocationURL.trim()
             ? formData.learningLocationURL
+            : null,
+          speaker_id: formData.learningSpeaker.trim()
+            ? formData.learningSpeaker
             : null,
         },
         {
@@ -301,6 +328,19 @@ export default function CreateLearningFormCMS({
                 />
               </>
             )}
+            <SelectCMS
+              selectId="learning-speaker"
+              selectName="Assigned Educator"
+              selectPlaceholder="Select person to leading this session"
+              value={formData.learningSpeaker}
+              onChange={handleInputChange("learningSpeaker")}
+              options={
+                educatorUserList?.list.map((post) => ({
+                  label: post.full_name,
+                  value: post.id,
+                })) || []
+              }
+            />
           </div>
         </div>
         <div className="sticky bottom-0 w-full p-4 bg-white z-10">
