@@ -69,7 +69,7 @@ export default function SpeakersLineUpRestart25() {
     },
     {
       name: "Angga fauzan",
-      title: "CEO & Co-Founder MySkill",
+      title: "CEO & Co-Founder MySkill, Board of Trustee Universitas Boyolali",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/angga-fauzan.webp",
       on_confirmation: false,
