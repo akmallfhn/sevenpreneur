@@ -22,6 +22,8 @@ export const updateRouter = createTRPCRouter({
         id: stringIsUUID(),
         full_name: stringNotBlank().optional(),
         email: stringNotBlank().optional(),
+        phone_country_id: numberIsID().nullable().optional(),
+        phone_number: stringNotBlank().nullable().optional(),
         avatar: stringNotBlank().nullable().optional(),
         role_id: numberIsRoleID().optional(),
         status: z.nativeEnum(StatusEnum).optional(),
@@ -38,6 +40,8 @@ export const updateRouter = createTRPCRouter({
         data: {
           full_name: opts.input.full_name,
           email: opts.input.email,
+          phone_country_id: opts.input.phone_country_id,
+          phone_number: opts.input.phone_number,
           avatar: opts.input.avatar,
           role_id: opts.input.role_id,
           status: opts.input.status,

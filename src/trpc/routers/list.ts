@@ -63,6 +63,23 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
+  phone_country_codes: loggedInProcedure.query(async (opts) => {
+    const codeList = await opts.ctx.prisma.phoneCountryCode.findMany();
+    const returnedList = codeList.map((entry) => {
+      return {
+        id: entry.id,
+        country_name: entry.country_name,
+        phone_code: entry.phone_code,
+        emoji: entry.emoji,
+      };
+    });
+    return {
+      status: 200,
+      message: "Success",
+      list: returnedList,
+    };
+  }),
+
   users: loggedInProcedure
     .input(z.object({ role_id: numberIsRoleID().optional() }).optional())
     .query(async (opts) => {
