@@ -56,10 +56,19 @@ Table roles {
   updated_at  timestamptz
 }
 
+Table phone_country_codes {
+  id            smallint  [primary key]
+  country_name  varchar
+  phone_code    varchar   [note: 'unique']
+  emoji         varchar
+}
+
 Table users {
   id                  uuid         [primary key]
   full_name           varchar      [note: 'e.g. Budi Sadikin']
   email               varchar      [note: 'unique, e.g. budisadikin@gmail.com']
+  phone_country_id    smallint     [ref: > phone_country_codes.id]
+  phone_number        varchar
   avatar              varchar
   role_id             smallint     [ref: > roles.id]
   status              status_enum
