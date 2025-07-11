@@ -20,7 +20,8 @@ export default function SpeakersLineUpRestart25() {
     },
     {
       name: "Arsjad Rasjid",
-      title: "Board of Commisioners Indika Energy",
+      title:
+        "Chair of the Board of Trustees at Indonesia Business Council (IBC)",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/arsjad-rasjid.webp",
       on_confirmation: false,
@@ -48,7 +49,7 @@ export default function SpeakersLineUpRestart25() {
     },
     {
       name: "Angela Tanoesoedibjo",
-      title: "Co-CEO MNC Group",
+      title: "Co-CEO MNC Group & CEO iNews Media Group",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/angela-tanoesoedibjo.webp",
       on_confirmation: false,
