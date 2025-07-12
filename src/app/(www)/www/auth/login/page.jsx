@@ -1,5 +1,6 @@
 import Image from "next/image";
 import AppLoginContainer from "@/app/components/templates/AppLoginContainer";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Login | Sevenpreneur",
@@ -57,7 +58,9 @@ export default function AuthPage() {
       <div className="relative flex w-full h-full bg-white justify-center items-start sm:items-center lg:flex-row-reverse">
         {/* Container Login & Right Side Desktop */}
         <div className="flex bg-white pt-24 sm:pt-0 lg:flex-1/2 lg:justify-center">
-          <AppLoginContainer currentDomain={domain} />
+          <Suspense fallback={null}>
+            <AppLoginContainer currentDomain={domain} />
+          </Suspense>
         </div>
         {/* Background Mobile & Left Side Desktop */}
         <div className="absolute flex inset-0 lg:relative lg:flex-1/2">
