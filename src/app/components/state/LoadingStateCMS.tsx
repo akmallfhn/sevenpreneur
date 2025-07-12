@@ -6,7 +6,7 @@ export default function LoadingStateCMS() {
   return (
     <div className="hidden lg:flex">
       <DotLottieReact
-        src="flying-list.lottie"
+        src="/animation/flying-list.lottie"
         loop
         autoplay
         speed={1}
