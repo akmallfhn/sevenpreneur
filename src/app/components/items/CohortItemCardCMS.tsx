@@ -86,10 +86,10 @@ export default function CohortItemCardCMS({
       <div className="card-container relative">
         <Link
           href={`/cohorts/${cohortId}`}
-          className="flex flex-col max-w-[252px] bg-white shadow-md rounded-md overflow-hidden"
+          className="flex flex-col w-[252px] bg-white shadow-md rounded-md overflow-hidden"
         >
           {/* --- Thumbnail */}
-          <div className="image-thumbnail aspect-thumbnail overflow-hidden">
+          <div className="image-thumbnail flex w-full aspect-thumbnail overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src={cohortImage}
