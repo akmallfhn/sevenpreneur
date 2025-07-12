@@ -1,6 +1,6 @@
 "use client";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
@@ -15,6 +15,8 @@ export default function AppLoginContainer({
   currentDomain,
 }: AppLoginContainerProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/";
   const [isLoading, setIsLoading] = useState(false);
 
   // --- Return token from Google
@@ -43,7 +45,7 @@ export default function AppLoginContainer({
         // --- Redirect and status message
         if (result.status === 200) {
           setIsLoading(false);
-          router.push(`https://www.${currentDomain}`);
+          router.push(redirectTo);
         } else {
         }
       } catch (error) {
