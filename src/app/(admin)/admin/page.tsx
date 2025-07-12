@@ -5,6 +5,7 @@ import Image from "next/image";
 export default async function AdminHomePage() {
   // This is for server-side rendering (on first page load)
   await trpc.hello.getHello.prefetch();
+  const sessionUser = (await trpc.auth.checkSession()).user;
 
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 overflow-y-auto lg:flex lg:pl-64">
@@ -14,7 +15,7 @@ export default async function AdminHomePage() {
             {/* Metadata */}
             <div className="metadata-leaderboard-learning flex flex-col pl-8 gap-1 z-10 ">
               <h1 className="font-brand font-bold text-2xl text-white">
-                <ClientGreeting />
+                Hello, {sessionUser.full_name}
               </h1>
               <h1 className="font-bodycopy font-bold text-xl text-white">
                 Welcome to Content Management System of Sevenpreneur
