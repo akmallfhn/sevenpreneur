@@ -37,7 +37,7 @@ export default function AttendeeRoleListRestart25() {
   ];
 
   return (
-    <div className="topics-running-text flex flex-col gap-3 items-center px-8 pb-8 lg:pb-[60px]">
+    <div className="topics-running-text flex flex-col gap-3 items-center px-8 pb-8 lg:pb-[60px] lg:gap-5">
       <div className="flex flex-col items-center">
         <SectionTitleRestart25 sectionTitle="Who's In The Room" />
       </div>
