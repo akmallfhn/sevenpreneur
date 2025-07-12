@@ -15,7 +15,9 @@ export default function AppBottomFooter() {
   const pathname = usePathname();
 
   // Path yang tidak mau menampilkan Navbar & Footer
-  const isAuthPage = pathname.startsWith("/auth");
+  const isDisallowedPage = ["/auth", "/checkout"].some((path) =>
+    pathname.includes(path)
+  );
 
   const socialMediaData = [
     {
@@ -42,7 +44,7 @@ export default function AppBottomFooter() {
 
   return (
     <React.Fragment>
-      {!isAuthPage && (
+      {!isDisallowedPage && (
         <div className="root-bottom-footer bg-[#171616] p-8 flex flex-col gap-5 lg:px-16 lg:py-10 lg:gap-8">
           <div className="company flex flex-col gap-5 lg:flex-row lg:justify-between lg:gap-0">
             <div className="company-part flex flex-col gap-5 max-w-[442px]">
