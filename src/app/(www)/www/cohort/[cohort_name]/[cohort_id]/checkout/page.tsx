@@ -1,3 +1,6 @@
+import CheckoutCohortForm from "@/app/components/forms/CheckoutCohortForm";
+import CheckoutHeader from "@/app/components/navigations/CheckoutHeader";
+import { trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -9,6 +12,7 @@ export default async function CheckoutCohortPage({
   params,
 }: CheckoutCohortPageProps) {
   const { cohort_name, cohort_id } = await params;
+  const cohortId = parseInt(cohort_id);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -17,5 +21,26 @@ export default async function CheckoutCohortPage({
       `/auth/login?redirectTo=/cohort/${cohort_name}/${cohort_id}/checkout`
     );
   }
-  return <div className="w-full h-[700px]">This is checkout Page</div>;
+
+  const cohortName = (await trpc.read.cohort({ id: cohortId })).cohort.name;
+  const ticketListRaw = (await trpc.read.cohort({ id: cohortId })).cohort
+    .cohort_prices;
+  const ticketList = ticketListRaw.map((item) => ({
+    ...item,
+    amount:
+      typeof item.amount === "object" && "toNumber" in item.amount
+        ? item.amount.toNumber()
+        : item.amount,
+  }));
+  return (
+    <div className="flex w-screen h-screen bg-section-background">
+      <div className="flex flex-col bg-white max-w-md w-full mx-auto overflow-hidden">
+        <CheckoutHeader />
+        <CheckoutCohortForm
+          cohortName={cohortName}
+          ticketListData={ticketList}
+        />
+      </div>
+    </div>
+  );
 }
