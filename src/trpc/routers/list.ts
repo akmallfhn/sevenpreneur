@@ -80,6 +80,22 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
+  payment_channels: loggedInProcedure.query(async (opts) => {
+    const channelList = await opts.ctx.prisma.paymentChannel.findMany();
+    const returnedList = channelList.map((entry) => {
+      return {
+        id: entry.id,
+        label: entry.label,
+        image: entry.image,
+      };
+    });
+    return {
+      status: 200,
+      message: "Success",
+      list: returnedList,
+    };
+  }),
+
   users: loggedInProcedure
     .input(z.object({ role_id: numberIsRoleID().optional() }).optional())
     .query(async (opts) => {
