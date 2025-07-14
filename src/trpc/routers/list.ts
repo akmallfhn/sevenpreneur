@@ -7,6 +7,7 @@ import {
   numberIsID,
   numberIsRoleID,
   stringIsUUID,
+  stringNotBlank,
 } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import { z } from "zod";
@@ -80,21 +81,27 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
-  payment_channels: loggedInProcedure.query(async (opts) => {
-    const channelList = await opts.ctx.prisma.paymentChannel.findMany();
-    const returnedList = channelList.map((entry) => {
+  payment_channels: loggedInProcedure
+    .input(z.object({ method: stringNotBlank().optional() }).optional())
+    .query(async (opts) => {
+      const channelList = await opts.ctx.prisma.paymentChannel.findMany({
+        where: { method: opts.input?.method },
+      });
+      const returnedList = channelList.map((entry) => {
+        return {
+          id: entry.id,
+          label: entry.label,
+          code: entry.code,
+          method: entry.method,
+          image: entry.image,
+        };
+      });
       return {
-        id: entry.id,
-        label: entry.label,
-        image: entry.image,
+        status: 200,
+        message: "Success",
+        list: returnedList,
       };
-    });
-    return {
-      status: 200,
-      message: "Success",
-      list: returnedList,
-    };
-  }),
+    }),
 
   users: loggedInProcedure
     .input(z.object({ role_id: numberIsRoleID().optional() }).optional())
