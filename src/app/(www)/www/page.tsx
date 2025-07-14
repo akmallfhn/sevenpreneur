@@ -9,6 +9,8 @@ import EventExperienceRestart25 from "@/app/components/indexes/EventExperienceRe
 import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
 import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerListRestart25";
 import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
+import AttendeeRoleListRestart25 from "@/app/components/indexes/AttendeeRoleListRestart25";
+
 
 export const metadata: Metadata = {
   title:
@@ -69,6 +71,7 @@ export default function HomePage() {
       <TopicSpeakerListRestart25 />
       <SpeakersLineUpRestart25 />
       <TicketCarouselRestart25 />
+      <AttendeeRoleListRestart25 />
       <EventExperienceRestart25 />
       <FAQEventRestart25 />
       <BannerEventRestart25 />

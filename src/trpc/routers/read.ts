@@ -4,6 +4,7 @@ import {
   loggedInProcedure,
 } from "@/trpc/init";
 import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
+import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -87,6 +88,7 @@ export const readRouter = createTRPCRouter({
     .query(async (opts) => {
       const theUser = await opts.ctx.prisma.user.findFirst({
         include: {
+          phone_country: true,
           role: true,
           entrepreneur_stage: true,
           industry: true,
@@ -116,14 +118,23 @@ export const readRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      let whereClause = {
+        id: opts.input.id,
+        deleted_at: null,
+      };
+      if (!opts.ctx.user) {
+        whereClause = Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+          published_at: {
+            lte: new Date(),
+          },
+        });
+      }
       const theCohort = await opts.ctx.prisma.cohort.findFirst({
         include: {
           cohort_prices: true,
         },
-        where: {
-          id: opts.input.id,
-          deleted_at: null,
-        },
+        where: whereClause,
       });
       if (!theCohort) {
         throw new TRPCError({

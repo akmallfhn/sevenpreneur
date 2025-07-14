@@ -7,7 +7,9 @@ import {
   numberIsID,
   numberIsRoleID,
   stringIsUUID,
+  stringNotBlank,
 } from "@/trpc/utils/validation";
+import { StatusEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -62,6 +64,45 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
+  phone_country_codes: loggedInProcedure.query(async (opts) => {
+    const codeList = await opts.ctx.prisma.phoneCountryCode.findMany();
+    const returnedList = codeList.map((entry) => {
+      return {
+        id: entry.id,
+        country_name: entry.country_name,
+        phone_code: entry.phone_code,
+        emoji: entry.emoji,
+      };
+    });
+    return {
+      status: 200,
+      message: "Success",
+      list: returnedList,
+    };
+  }),
+
+  payment_channels: loggedInProcedure
+    .input(z.object({ method: stringNotBlank().optional() }).optional())
+    .query(async (opts) => {
+      const channelList = await opts.ctx.prisma.paymentChannel.findMany({
+        where: { method: opts.input?.method },
+      });
+      const returnedList = channelList.map((entry) => {
+        return {
+          id: entry.id,
+          label: entry.label,
+          code: entry.code,
+          method: entry.method,
+          image: entry.image,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   users: loggedInProcedure
     .input(z.object({ role_id: numberIsRoleID().optional() }).optional())
     .query(async (opts) => {
@@ -94,13 +135,22 @@ export const listRouter = createTRPCRouter({
     }),
 
   cohorts: baseProcedure.query(async (opts) => {
+    let whereClause = { deleted_at: null };
+    if (!opts.ctx.user) {
+      whereClause = Object.assign(whereClause, {
+        status: StatusEnum.ACTIVE,
+        published_at: {
+          lte: new Date(),
+        },
+      });
+    }
     const cohortList = await opts.ctx.prisma.cohort.findMany({
       orderBy: [
         { end_date: "desc" },
         { start_date: "desc" },
         { published_at: "desc" },
       ],
-      where: { deleted_at: null },
+      where: whereClause,
     });
     const returnedList = cohortList.map((entry) => {
       return {
@@ -188,7 +238,10 @@ export const listRouter = createTRPCRouter({
     .query(async (opts) => {
       const learningsList = await opts.ctx.prisma.learning.findMany({
         include: { speaker: true },
-        where: { cohort_id: opts.input.cohort_id },
+        where: {
+          cohort_id: opts.input.cohort_id,
+          status: StatusEnum.ACTIVE,
+        },
         orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
       });
       const returnedList = learningsList.map((entry) => {

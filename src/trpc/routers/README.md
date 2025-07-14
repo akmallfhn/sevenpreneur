@@ -37,6 +37,18 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.roles`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.role`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
+## Phone Country Codes ☎️
+
+| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.phone_country_codes` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+## Payment Channels 🏦
+
+| Procedure Name          | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.payment_channels` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
 ## Users 👤
 
 | Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -79,13 +91,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Learnings 📅
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.learning` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.learnings`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.learning`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.learning` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.learning` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name          | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `list.learnings`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.learnings_public` |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| `read.learning`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 ### Materials 📖
 
@@ -106,3 +119,9 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `read.project`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `update.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+
+## Transactions 💰
+
+| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.transactions` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |

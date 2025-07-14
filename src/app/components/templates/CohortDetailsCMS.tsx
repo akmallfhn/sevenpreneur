@@ -237,33 +237,33 @@ export default function CohortDetailsCMS({
           <aside className="flex flex-col flex-[1] w-full gap-5">
             {/* Stats */}
             <div className="stats flex flex-col gap-3">
-              <StatItemCMS
+              {/* <StatItemCMS
                 statsIcon={faChalkboardUser}
                 statsIconBg="bg-cms-primary"
                 statsName="Total Enrolled User"
                 statsValue={345}
-              />
+              /> */}
               <StatItemCMS
                 statsIcon={faLaptop}
                 statsIconBg="bg-[#FFA524]"
                 statsName="Total Learning Sessions"
-                statsValue={8}
+                statsValue={cohortDetailsData.cohort.total_learning_session}
               />
               <StatItemCMS
                 statsIcon={faLinesLeaning}
                 statsIconBg="bg-cms-secondary"
                 statsName="Total Materials"
-                statsValue={45}
+                statsValue={cohortDetailsData.cohort.total_materials}
               />
-              <StatItemCMS
+              {/* <StatItemCMS
                 statsIcon={faMoneyBill1Wave}
                 statsIconBg="bg-secondary"
                 statsName="Total Revenue"
                 statsValue={RupiahCurrency(3453000000)}
-              />
+              /> */}
             </div>
             <ModuleListCMS sessionToken={sessionToken} cohortId={cohortId} />
-            <EnrolledUserListCMS />
+            {/* <EnrolledUserListCMS /> */}
             <ProjectListCMS sessionToken={sessionToken} cohortId={cohortId} />
           </aside>
         </div>

@@ -53,10 +53,29 @@ CREATE TABLE roles (
   updated_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE phone_country_codes (
+  id            SMALLSERIAL  PRIMARY KEY,
+  country_name  VARCHAR  NOT NULL,
+  phone_code    VARCHAR  NOT NULL  UNIQUE,
+  emoji         VARCHAR  NOT NULL
+);
+
+CREATE TABLE payment_channels (
+  id            SMALLSERIAL  PRIMARY KEY,
+  label         VARCHAR        NOT NULL,
+  code          VARCHAR        NOT NULL  UNIQUE,
+  method        VARCHAR        NOT NULL,
+  image         VARCHAR        NOT NULL,
+  calc_percent  DECIMAL(4, 2)  NOT NULL,
+  calc_flat     DECIMAL(5, 0)  NOT NULL
+);
+
 CREATE TABLE users (
   id                  UUID         PRIMARY KEY  DEFAULT gen_random_uuid(),
   full_name           VARCHAR      NOT NULL,
   email               VARCHAR      NOT NULL     UNIQUE,
+  phone_country_id    SMALLINT         NULL,
+  phone_number        VARCHAR          NULL,
   avatar              VARCHAR          NULL,
   role_id             SMALLINT     NOT NULL     DEFAULT 3, -- General User
   status              status_enum  NOT NULL     DEFAULT 'active',
@@ -183,7 +202,8 @@ CREATE TABLE users_cohorts (
 ----------------
 
 ALTER TABLE users
-  ADD FOREIGN KEY (role_id) REFERENCES roles (id);
+  ADD FOREIGN KEY (phone_country_id) REFERENCES phone_country_codes (id),
+  ADD FOREIGN KEY (role_id)          REFERENCES roles (id);
 
 ALTER TABLE tokens
   ADD FOREIGN KEY (user_id) REFERENCES users (id);

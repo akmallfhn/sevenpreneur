@@ -77,10 +77,35 @@ model Role {
   @@map("roles")
 }
 
+model PhoneCountryCode {
+  id           Int    @id @default(autoincrement()) @db.SmallInt
+  country_name String @db.VarChar()
+  phone_code   String @unique @db.VarChar()
+  emoji        String @db.VarChar()
+  users        User[]
+
+  @@map("phone_country_codes")
+}
+
+model PaymentChannel {
+  id           Int     @id @default(autoincrement()) @db.SmallInt
+  label        String  @db.VarChar()
+  code         String  @unique @db.VarChar()
+  method       String  @db.VarChar()
+  image        String  @db.VarChar()
+  calc_percent Decimal @db.Decimal(4, 2)
+  calc_flat    Decimal @db.Decimal(5, 0)
+
+  @@map("payment_channels")
+}
+
 model User {
   id                    String             @id @default(uuid()) @db.Uuid
   full_name             String             @db.VarChar()
   email                 String             @unique @db.VarChar()
+  phone_country         PhoneCountryCode?  @relation(fields: [phone_country_id], references: [id])
+  phone_country_id      Int?               @db.SmallInt
+  phone_number          String?            @db.VarChar()
   avatar                String?            @db.VarChar()
   role                  Role               @relation(fields: [role_id], references: [id])
   role_id               Int                @default(3) @db.SmallInt // General User
