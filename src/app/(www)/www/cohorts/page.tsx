@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export default async function TestPage() {
+export default async function CohortDiscoveryPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
@@ -21,7 +21,7 @@ export default async function TestPage() {
       <h2 className="font-bold">List Cohort</h2>
       <div className="flex flex-col gap-5">
         {listCohort.list.map((post, index) => (
-          <Link key={index} href={`/cohort/${post.slug_url}/${post.id}`}>
+          <Link key={index} href={`/cohorts/${post.slug_url}/${post.id}`}>
             <h2>{post.name}</h2>
           </Link>
         ))}

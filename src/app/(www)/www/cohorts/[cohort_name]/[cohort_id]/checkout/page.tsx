@@ -1,6 +1,6 @@
 import CheckoutCohortForm from "@/app/components/forms/CheckoutCohortForm";
 import CheckoutHeader from "@/app/components/navigations/CheckoutHeader";
-import { trpc } from "@/trpc/server";
+import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -16,12 +16,18 @@ export default async function CheckoutCohortPage({
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
+  // --- Redirect if not login
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/cohort/${cohort_name}/${cohort_id}/checkout`
+      `/auth/login?redirectTo=/cohorts/${cohort_name}/${cohort_id}/checkout`
     );
   }
 
+  // --- Get User Data
+  setSessionToken(sessionToken);
+  const checkUser = (await trpc.auth.checkSession()).user;
+
+  // --- Get Cohort Data
   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
   const ticketListRaw = (await trpc.read.cohort({ id: cohortId })).cohort
     .cohort_prices;
@@ -32,15 +38,24 @@ export default async function CheckoutCohortPage({
         ? item.amount.toNumber()
         : item.amount,
   }));
+
+  // --- Get Payment Data
+  const paymentMethod = (await trpc.list.payment_channels()).list;
+
   return (
-    <div className="flex w-full h-full bg-section-background">
-      <div className="flex flex-col bg-white max-w-md w-full mx-auto overflow-hidden">
+    <div className="flex w-full min-h-screen bg-section-background">
+      <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <CheckoutHeader />
-        <CheckoutCohortForm
-          cohortName={cohortData.name}
-          cohortImage={cohortData.image}
-          ticketListData={ticketList}
-        />
+        <div className="flex-1 overflow-y-auto">
+          <CheckoutCohortForm
+            cohortName={cohortData.name}
+            cohortImage={cohortData.image}
+            initialUserName={checkUser.full_name}
+            initialUserEmail={checkUser.email}
+            ticketListData={ticketList}
+            paymentMethodData={paymentMethod}
+          />
+        </div>
       </div>
     </div>
   );

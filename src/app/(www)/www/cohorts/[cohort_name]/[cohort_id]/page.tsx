@@ -27,13 +27,12 @@ export default async function CohortDetailsPage({
 
   const cohortDetails = await trpc.read.cohort({ id: cohortId });
   const data = cohortDetails.cohort;
-  console.log("data:", cohortDetails);
 
   return (
     <div className="w-full h-[700px]">
       <h1>{data.name}</h1>
       <p>{data.description}</p>
-      <Link href={`/cohort/${cohort_name}/${cohort_id}/checkout`}>
+      <Link href={`/cohorts/${cohort_name}/${cohort_id}/checkout`}>
         <AppButton>Buy</AppButton>
       </Link>
     </div>
