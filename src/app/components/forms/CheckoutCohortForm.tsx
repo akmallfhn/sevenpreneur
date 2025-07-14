@@ -53,7 +53,7 @@ export default function CheckoutCohortForm({
     userPhoneNumber: initialUserPhone || "",
   });
 
-  // --- Validating Params ticketId
+  // --- Validating params ticketId based on Cohort Data
   const isValidTicketId = useMemo(() => {
     const ticketId = parseInt(ticketIdParams || "");
     return (
@@ -61,17 +61,29 @@ export default function CheckoutCohortForm({
     );
   }, [ticketIdParams, ticketListData]);
 
-  // --- Get Data from selected id Ticket
+  // --- Get Data from selected TicketId
   const selectedTicket = useMemo(() => {
     return ticketListData.find((item) => item.id === selectedPriceTierId);
   }, [selectedPriceTierId, ticketListData]);
 
-  // --- Iterating Radio Button based on ticketId
+  // --- Iterating selected ticket based on params ticketId
   useEffect(() => {
     if (isValidTicketId && ticketIdParams) {
       setSelectedPriceTierId(parseInt(ticketIdParams));
     }
   }, [isValidTicketId, ticketIdParams]);
+
+  // --- Set default payment channel to BCA_VIRTUAL_ACCOUNT
+  useEffect(() => {
+    if (!selectedPaymentChannel && paymentMethodData?.length > 0) {
+      const defaultVA = paymentMethodData.find(
+        (item: any) => item.code === "BCA_VIRTUAL_ACCOUNT"
+      );
+      if (defaultVA) {
+        setSelectedPaymentChannel("BCA_VIRTUAL_ACCOUNT");
+      }
+    }
+  }, [paymentMethodData, selectedPaymentChannel]);
 
   // --- Handle Query Params ticketId
   const handleParamsQuery = () => {
@@ -125,12 +137,12 @@ export default function CheckoutCohortForm({
                 />
               ))}
             </div>
-            <div className="pt-10">
+            <div className="button-cta pt-10">
               <AppButton
                 size={"defaultRounded"}
                 className="w-full"
                 onClick={handleParamsQuery}
-                disabled={isLoadingCheckout}
+                disabled={isLoadingCheckout || selectedPriceTierId === 0}
               >
                 {isLoadingCheckout ? (
                   <Loader2 className="animate-spin size-5" />
@@ -281,6 +293,20 @@ export default function CheckoutCohortForm({
         <div className="absolute top-0 left-0 w-full h-[78px] bg-linear-to-r from-0% from-primary to-100% to-primary-deep" />
 
         {/* Footer */}
+        <div className="footer flex items-center p-5 gap-1.5 mx-auto">
+          <p className="font-ui font-medium text-xs text-alternative/60 truncate">
+            PROTECTED AND POWERED BY
+          </p>
+          <Image
+            className="object-contain h-[29px] w-auto"
+            src={
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//xendit-logo.png"
+            }
+            alt="Xendit"
+            width={100}
+            height={100}
+          />
+        </div>
       </div>
 
       {/* Floating CTA */}
