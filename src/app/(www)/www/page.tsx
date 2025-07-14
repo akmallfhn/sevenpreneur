@@ -11,6 +11,7 @@ import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerList
 import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
 import AttendeeRoleListRestart25 from "@/app/components/indexes/AttendeeRoleListRestart25";
 
+
 export const metadata: Metadata = {
   title:
     "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",

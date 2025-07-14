@@ -1,0 +1,43 @@
+"use client";
+
+import { ChevronUp } from "lucide-react";
+import { ReactNode, useState } from "react";
+
+interface PaymentChannelGroupCategoryProps {
+  groupPaymentName: string;
+  children: ReactNode;
+  defaultState?: boolean;
+}
+
+export default function PaymentChannelGroupCategory({
+  groupPaymentName,
+  children,
+  defaultState = false,
+}: PaymentChannelGroupCategoryProps) {
+  const [openPaymentChannel, setOpenPaymentChannel] = useState(defaultState);
+
+  return (
+    <div className="group-payment-channel flex flex-col gap-5">
+      <div
+        className="group-payment-name flex justify-between"
+        onClick={() => {
+          setOpenPaymentChannel(!openPaymentChannel);
+        }}
+      >
+        <p className="font-ui font-medium text-black text-sm">
+          {groupPaymentName}
+        </p>
+        <ChevronUp
+          className={`size-5 transition-transform duration-300 ${
+            openPaymentChannel ? "rotate-0" : "rotate-180"
+          }`}
+        />
+      </div>
+      {openPaymentChannel && (
+        <div className="payment-channel-list flex flex-col gap-5">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
