@@ -25,6 +25,26 @@ const nextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/:all*",
+        has: [
+          {
+            type: "header",
+            key: "host",
+            value: "www.(sevenpreneur|example).com.*",
+          },
+        ],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, must-revalidate",
+          },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {
