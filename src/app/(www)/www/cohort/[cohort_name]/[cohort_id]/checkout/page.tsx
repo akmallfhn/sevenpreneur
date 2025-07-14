@@ -22,7 +22,7 @@ export default async function CheckoutCohortPage({
     );
   }
 
-  const cohortName = (await trpc.read.cohort({ id: cohortId })).cohort.name;
+  const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
   const ticketListRaw = (await trpc.read.cohort({ id: cohortId })).cohort
     .cohort_prices;
   const ticketList = ticketListRaw.map((item) => ({
@@ -33,11 +33,12 @@ export default async function CheckoutCohortPage({
         : item.amount,
   }));
   return (
-    <div className="flex w-screen h-screen bg-section-background">
+    <div className="flex w-full h-full bg-section-background">
       <div className="flex flex-col bg-white max-w-md w-full mx-auto overflow-hidden">
         <CheckoutHeader />
         <CheckoutCohortForm
-          cohortName={cohortName}
+          cohortName={cohortData.name}
+          cohortImage={cohortData.image}
           ticketListData={ticketList}
         />
       </div>

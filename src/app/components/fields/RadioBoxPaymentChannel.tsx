@@ -23,7 +23,7 @@ export default function RadioBoxPaymentChannel({
   const isSelected = selectedValue === value;
 
   return (
-    <label className={`flex py-3 gap-4 rounded-md justify-between`}>
+    <label className="flex gap-4 rounded-md items-center justify-between">
       <div className="payment-channel flex items-center gap-3">
         <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
           <Image
@@ -40,13 +40,16 @@ export default function RadioBoxPaymentChannel({
           BCA Virtual Account
         </p>
       </div>
-      <input
-        type="radio"
-        name="payment_channel"
-        value={value}
-        checked={isSelected}
-        onChange={() => onChange(value)}
-      />
+      <div className="flex size-5 items-center justify-center">
+        <input
+          className="size-4"
+          type="radio"
+          name="payment_channel"
+          value={value}
+          checked={isSelected}
+          onChange={() => onChange(value)}
+        />
+      </div>
     </label>
   );
 }
