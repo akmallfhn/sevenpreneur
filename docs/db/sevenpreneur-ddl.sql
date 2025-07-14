@@ -60,6 +60,16 @@ CREATE TABLE phone_country_codes (
   emoji         VARCHAR  NOT NULL
 );
 
+CREATE TABLE payment_channels (
+  id            SMALLSERIAL  PRIMARY KEY,
+  label         VARCHAR        NOT NULL,
+  code          VARCHAR        NOT NULL  UNIQUE,
+  method        VARCHAR        NOT NULL,
+  image         VARCHAR        NOT NULL,
+  calc_percent  DECIMAL(4, 2)  NOT NULL,
+  calc_flat     DECIMAL(5, 0)  NOT NULL
+);
+
 CREATE TABLE users (
   id                  UUID         PRIMARY KEY  DEFAULT gen_random_uuid(),
   full_name           VARCHAR      NOT NULL,

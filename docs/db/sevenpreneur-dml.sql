@@ -196,3 +196,18 @@ INSERT INTO phone_country_codes (country_name, phone_code, emoji) VALUES
   ('Bahrain',              '973', '🇧🇭'),
   ('Libya',                '218', '🇱🇾'),
   ('Nepal',                '977', '🇳🇵');
+
+----------------------
+-- Payment Channels --
+----------------------
+
+INSERT INTO payment_channels (label, code, method, image, calc_percent, calc_flat) VALUES
+  ('BCA Virtual Account',        'BCA_VIRTUAL_ACCOUNT',     'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/bca-virtual-account
+  ('BRI Virtual Account',        'BRI_VIRTUAL_ACCOUNT',     'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/bri-virtual-account
+  ('BNI Virtual Account',        'BNI_VIRTUAL_ACCOUNT',     'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/bni-virtual-account
+  ('CIMB Niaga Virtual Account', 'CIMB_VIRTUAL_ACCOUNT',    'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/available-payment-channels
+  ('Mandiri Virtual Account',    'MANDIRI_VIRTUAL_ACCOUNT', 'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/mandiri-virtual-account
+  ('DANA',                       'DANA',                    'EWALLET',         '', 1.50,    0.), -- https://docs.xendit.co/docs/dana
+  ('OVO',                        'OVO',                     'EWALLET',         '', 2.73,    0.), -- https://docs.xendit.co/docs/ovo
+  ('ShopeePay',                  'SHOPEEPAY',               'EWALLET',         '', 4.00,    0.), -- https://docs.xendit.co/docs/shopeepay-e-wallets-id
+  ('QRIS',                       'QRIS',                    'QR_CODE',         '', 0.70,    0.); -- https://docs.xendit.co/docs/qris

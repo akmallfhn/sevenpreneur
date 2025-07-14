@@ -63,6 +63,16 @@ Table phone_country_codes {
   emoji         varchar
 }
 
+Table payment_channels {
+  id            smallint      [primary key]
+  label         varchar
+  code          varchar       [note: 'unique']
+  method        varchar       [note: 'e.g. virtual account, e-wallet, QR, etc.']
+  image         varchar
+  calc_percent  decimal(4,2)
+  calc_flat     decimal(5,0)
+}
+
 Table users {
   id                  uuid         [primary key]
   full_name           varchar      [note: 'e.g. Budi Sadikin']
@@ -110,7 +120,7 @@ Table cohort_prices {
   id          integer         [primary key]
   cohort_id   integer         [ref: > cohorts.id]
   name        varchar
-  amount      decimal(12, 2)
+  amount      decimal(12,2)
   status      status_enum
   created_at  timestamptz
 }
@@ -175,7 +185,7 @@ Table transactions {
   currency         varchar        [note: 'IDR']
   invoice_number   varchar
   status           t_status_enum
-  payment_method   varchar        [note: 'e.g. bank transfer, e-wallet, QR, etc']
+  payment_method   varchar        [note: 'e.g. virtual account, e-wallet, QR, etc.']
   payment_channel  varchar        [note: 'details of payment method']
   paid_at          timestamptz
   created_at       timestamptz
