@@ -69,8 +69,10 @@ Table payment_channels {
   code          varchar       [note: 'unique']
   method        varchar       [note: 'e.g. virtual account, e-wallet, QR, etc.']
   image         varchar
-  calc_percent  decimal(4,2)
+  status        status_enum
+  calc_percent  decimal(6,4)
   calc_flat     decimal(5,0)
+  calc_vat      boolean
 }
 
 Table users {
