@@ -88,13 +88,15 @@ model PhoneCountryCode {
 }
 
 model PaymentChannel {
-  id           Int     @id @default(autoincrement()) @db.SmallInt
-  label        String  @db.VarChar()
-  code         String  @unique @db.VarChar()
-  method       String  @db.VarChar()
-  image        String  @db.VarChar()
-  calc_percent Decimal @db.Decimal(4, 2)
-  calc_flat    Decimal @db.Decimal(5, 0)
+  id           Int        @id @default(autoincrement()) @db.SmallInt
+  label        String     @db.VarChar()
+  code         String     @unique @db.VarChar()
+  method       String     @db.VarChar()
+  image        String     @db.VarChar()
+  status       StatusEnum @default(ACTIVE)
+  calc_percent Decimal    @db.Decimal(6, 4)
+  calc_flat    Decimal    @db.Decimal(5, 0)
+  calc_vat     Boolean    @db.Boolean
 
   @@map("payment_channels")
 }

@@ -201,13 +201,23 @@ INSERT INTO phone_country_codes (country_name, phone_code, emoji) VALUES
 -- Payment Channels --
 ----------------------
 
-INSERT INTO payment_channels (label, code, method, image, calc_percent, calc_flat) VALUES
-  ('BCA Virtual Account',        'BCA_VIRTUAL_ACCOUNT',     'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/bca-virtual-account
-  ('BRI Virtual Account',        'BRI_VIRTUAL_ACCOUNT',     'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/bri-virtual-account
-  ('BNI Virtual Account',        'BNI_VIRTUAL_ACCOUNT',     'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/bni-virtual-account
-  ('CIMB Niaga Virtual Account', 'CIMB_VIRTUAL_ACCOUNT',    'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/available-payment-channels
-  ('Mandiri Virtual Account',    'MANDIRI_VIRTUAL_ACCOUNT', 'VIRTUAL_ACCOUNT', '', 0.00, 4000.), -- https://docs.xendit.co/docs/mandiri-virtual-account
-  ('DANA',                       'DANA',                    'EWALLET',         '', 1.50,    0.), -- https://docs.xendit.co/docs/dana
-  ('OVO',                        'OVO',                     'EWALLET',         '', 2.73,    0.), -- https://docs.xendit.co/docs/ovo
-  ('ShopeePay',                  'SHOPEEPAY',               'EWALLET',         '', 4.00,    0.), -- https://docs.xendit.co/docs/shopeepay-e-wallets-id
-  ('QRIS',                       'QRIS',                    'QR_CODE',         '', 0.70,    0.); -- https://docs.xendit.co/docs/qris
+-- https://archive.developers.xendit.co/api-reference/#create-invoice
+-- https://dashboard.xendit.co/settings/billings#fee-structure
+INSERT INTO payment_channels (label, code, method, image, calc_percent, calc_flat, calc_vat) VALUES
+  -- Bank Transfer (Virtual Account)
+  ('BCA Virtual Account',               'BCA',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('BRI Virtual Account',               'BRI',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('BNI Virtual Account',               'BNI',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('Mandiri Virtual Account',           'MANDIRI',           'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('Neobank Virtual Account',           'BNC',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('Sahabat Sampoerna Virtual Account', 'SAHABAT_SAMPOERNA', 'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('BSI Virtual Account',               'BSI',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  ('Permata Bank Virtual Account',      'PERMATA',           'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  -- E-wallet
+  ('DANA',                              'DANA',              'EWALLET',       '', 1.50,    0., TRUE ),
+  ('Jenius Pay',                        'JENIUSPAY',         'EWALLET',       '', 2.00,    0., TRUE ),
+  ('OVO',                               'OVO',               'EWALLET',       '', 2.73,    0., TRUE ),
+  ('ShopeePay',                         'SHOPEEPAY',         'EWALLET',       '', 4.00,    0., FALSE),
+  ('Link Aja',                          'LINKAJA',           'EWALLET',       '', 2.70,    0., TRUE ),
+  -- QR Code
+  ('QRIS',                              'QRIS',              'QR_CODE',       '', 0.70,    0., FALSE);

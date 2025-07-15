@@ -66,8 +66,10 @@ CREATE TABLE payment_channels (
   code          VARCHAR        NOT NULL  UNIQUE,
   method        VARCHAR        NOT NULL,
   image         VARCHAR        NOT NULL,
-  calc_percent  DECIMAL(4, 2)  NOT NULL,
-  calc_flat     DECIMAL(5, 0)  NOT NULL
+  status        status_enum    NOT NULL  DEFAULT 'active',
+  calc_percent  DECIMAL(6, 4)  NOT NULL,
+  calc_flat     DECIMAL(5, 0)  NOT NULL,
+  calc_vat      BOOLEAN        NOT NULL
 );
 
 CREATE TABLE users (
