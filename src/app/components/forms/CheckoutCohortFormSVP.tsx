@@ -1,14 +1,16 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import RadioBoxCheckoutPrice from "../fields/RadioBoxCheckoutPrice";
-import AppButton from "../buttons/AppButton";
-import { useRouter, useSearchParams } from "next/navigation";
-import RadioBoxPaymentChannel from "../fields/RadioBoxPaymentChannel";
-import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
-import PaymentChannelGroupCategory from "../titles/PaymentChannelGroupCategory";
-import { RupiahCurrency } from "@/lib/rupiah-currency";
 import Image from "next/image";
-import InputCMS from "../fields/InputCMS";
+import { useRouter, useSearchParams } from "next/navigation";
+import AppButton from "../buttons/AppButton";
+import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
+import { RupiahCurrency } from "@/lib/rupiah-currency";
+import InputSVP from "../fields/InputSVP";
+import RadioBoxProgramTierSVP from "../fields/RadioBoxProgramTierSVP";
+import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
+import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
+import InternationalPhoneInputSVP from "../fields/InternationalPhoneNumberInputSVP";
+import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 
 interface PaymentMethodItem {
   id: number;
@@ -25,7 +27,14 @@ interface PriceItem {
   cohort_id: number;
 }
 
-interface CheckoutCohortFormProps {
+interface PhoneNumberItem {
+  id: number;
+  country_name: string;
+  phone_code: string;
+  emoji: string;
+}
+
+interface CheckoutCohortFormSVPProps {
   cohortName: string;
   cohortImage: string;
   initialUserName: string;
@@ -33,8 +42,10 @@ interface CheckoutCohortFormProps {
   initialUserPhone?: string;
   ticketListData: PriceItem[];
   paymentMethodData: PaymentMethodItem[];
+  phoneNumberList: PhoneNumberItem[];
 }
-export default function CheckoutCohortForm({
+
+export default function CheckoutCohortFormSVP({
   cohortName,
   cohortImage,
   initialUserName,
@@ -42,7 +53,8 @@ export default function CheckoutCohortForm({
   initialUserPhone,
   ticketListData,
   paymentMethodData,
-}: CheckoutCohortFormProps) {
+  phoneNumberList,
+}: CheckoutCohortFormSVPProps) {
   const [selectedPriceTierId, setSelectedPriceTierId] = useState(0);
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
@@ -85,7 +97,7 @@ export default function CheckoutCohortForm({
   useEffect(() => {
     if (!selectedPaymentChannel && paymentMethodData?.length > 0) {
       const defaultVA = paymentMethodData.find(
-        (item: any) => item.code === "MANDIRI_VIRTUAL_ACCOUNT"
+        (item: PaymentMethodItem) => item.code === "MANDIRI_VIRTUAL_ACCOUNT"
       );
       if (defaultVA) {
         setSelectedPaymentChannel("MANDIRI_VIRTUAL_ACCOUNT");
@@ -115,7 +127,7 @@ export default function CheckoutCohortForm({
   // --- Get Data from Chosen Payment Channel
   const chosenPaymentChannelData = useMemo(() => {
     return paymentMethodData.find(
-      (item: any) => item.code === selectedPaymentChannel
+      (item: PaymentMethodItem) => item.code === selectedPaymentChannel
     );
   }, [selectedPaymentChannel, paymentMethodData]);
 
@@ -124,24 +136,30 @@ export default function CheckoutCohortForm({
   const programPrice = selectedTicket?.amount || 0;
   const subtotal = totalItem * programPrice;
   const vatRate = 0.11;
-  let adminRate = 0;
-  let adminFee = 0;
-  let valueAddedTax = 0;
-  let totalAmount = 0;
-  if (
-    chosenPaymentChannelData?.method === "EWALLET" ||
-    chosenPaymentChannelData?.method === "QR_CODE" ||
-    chosenPaymentChannelData?.method === "PAYLATER"
-  ) {
-    adminRate = 0.02;
-    totalAmount = Math.round(subtotal / (1 - adminRate * (1 + vatRate)));
-    adminFee = Math.round(adminRate * totalAmount);
-    valueAddedTax = Math.round(vatRate * adminFee);
-  } else if (chosenPaymentChannelData?.method === "VIRTUAL_ACCOUNT") {
-    adminFee = 4000;
-    valueAddedTax = adminFee * vatRate;
-    totalAmount = subtotal + adminFee + valueAddedTax;
-  }
+  const paymentCalculation = useMemo(() => {
+    if (!chosenPaymentChannelData) {
+      return { adminFee: 0, valueAddedTax: 0, totalAmount: 0 };
+    }
+
+    if (
+      chosenPaymentChannelData?.method === "EWALLET" ||
+      chosenPaymentChannelData?.method === "QR_CODE" ||
+      chosenPaymentChannelData?.method === "PAYLATER"
+    ) {
+      const percentRate = 0.02;
+      const total = Math.round(subtotal / (1 - percentRate * (1 + vatRate)));
+      const fee = Math.round(percentRate * total);
+      const tax = Math.round(vatRate * fee);
+      return { adminFee: fee, valueAddedTax: tax, totalAmount: total };
+    } else if (chosenPaymentChannelData.method === "VIRTUAL_ACCOUNT") {
+      const flatRate = 4000;
+      const tax = flatRate * vatRate;
+      const total = subtotal + flatRate + tax;
+      return { adminFee: flatRate, valueAddedTax: tax, totalAmount: total };
+    }
+
+    return { adminFee: 0, valueAddedTax: 0, totalAmount: subtotal };
+  }, [chosenPaymentChannelData, subtotal]);
 
   return (
     <React.Fragment>
@@ -158,11 +176,11 @@ export default function CheckoutCohortForm({
             </div>
             <div className="flex flex-col gap-3">
               {ticketListData.map((post, index) => (
-                <RadioBoxCheckoutPrice
+                <RadioBoxProgramTierSVP
                   key={index}
-                  radioName={post.name}
-                  radioCohortName={cohortName}
-                  radioPrice={post.amount}
+                  programTierName={post.name}
+                  programTierCohortName={cohortName}
+                  programTierPrice={post.amount}
                   value={post.id}
                   selectedValue={selectedPriceTierId}
                   onChange={setSelectedPriceTierId}
@@ -214,22 +232,32 @@ export default function CheckoutCohortForm({
                 Personal Information
               </h2>
               <div className="flex flex-col gap-3">
-                <InputCMS
+                <InputSVP
                   inputId="user-full-name"
                   inputName="Full Name"
                   inputType="text"
-                  inputPlaceholder="Name your program"
+                  inputPlaceholder="Enter your full name"
                   value={formData.userFullName}
                   onInputChange={handleInputChange("userFullName")}
                   required
                 />
-                <InputCMS
+                <InputSVP
                   inputId="user-email"
                   inputName="Email"
                   inputType="email"
-                  inputPlaceholder="Name your program"
+                  inputPlaceholder="Enter active email address"
                   value={formData.userEmail}
                   onInputChange={handleInputChange("userEmail")}
+                  required
+                />
+                <InternationalPhoneNumberInputSVP
+                  inputId="user-phone-number"
+                  inputName="Phone Number"
+                  inputIcon={phoneNumberList[0].emoji}
+                  inputCountryCode={phoneNumberList[0].phone_code}
+                  inputPlaceholder="Enter Mobile or WhatsApp number"
+                  value={formData.userPhoneNumber}
+                  onInputChange={handleInputChange("userPhoneNumber")}
                   required
                 />
               </div>
@@ -240,14 +268,17 @@ export default function CheckoutCohortForm({
                 Payment Method
               </h1>
               <div className="flex flex-col gap-5">
-                <PaymentChannelGroupCategory
+                <PaymentChannelGroupSVP
                   groupPaymentName="Bank Virtual Account"
                   defaultState
                 >
                   {paymentMethodData
-                    .filter((post: any) => post.method === "VIRTUAL_ACCOUNT")
-                    .map((post: any, index: number) => (
-                      <RadioBoxPaymentChannel
+                    .filter(
+                      (post: PaymentMethodItem) =>
+                        post.method === "VIRTUAL_ACCOUNT"
+                    )
+                    .map((post: PaymentMethodItem, index: number) => (
+                      <RadioBoxPaymentChannelSVP
                         key={index}
                         paymentChannelName={post.label}
                         paymentIcon={post.image}
@@ -256,12 +287,14 @@ export default function CheckoutCohortForm({
                         onChange={setSelectedPaymentChannel}
                       />
                     ))}
-                </PaymentChannelGroupCategory>
-                <PaymentChannelGroupCategory groupPaymentName="E-Wallet">
+                </PaymentChannelGroupSVP>
+                <PaymentChannelGroupSVP groupPaymentName="E-Wallet">
                   {paymentMethodData
-                    .filter((post: any) => post.method === "EWALLET")
-                    .map((post: any, index: number) => (
-                      <RadioBoxPaymentChannel
+                    .filter(
+                      (post: PaymentMethodItem) => post.method === "EWALLET"
+                    )
+                    .map((post: PaymentMethodItem, index: number) => (
+                      <RadioBoxPaymentChannelSVP
                         key={index}
                         paymentChannelName={post.label}
                         paymentIcon={post.image}
@@ -270,12 +303,14 @@ export default function CheckoutCohortForm({
                         onChange={setSelectedPaymentChannel}
                       />
                     ))}
-                </PaymentChannelGroupCategory>
-                <PaymentChannelGroupCategory groupPaymentName="Instant Payment">
+                </PaymentChannelGroupSVP>
+                <PaymentChannelGroupSVP groupPaymentName="Instant Payment">
                   {paymentMethodData
-                    .filter((post: any) => post.method === "QR_CODE")
-                    .map((post: any, index: number) => (
-                      <RadioBoxPaymentChannel
+                    .filter(
+                      (post: PaymentMethodItem) => post.method === "QR_CODE"
+                    )
+                    .map((post: PaymentMethodItem, index: number) => (
+                      <RadioBoxPaymentChannelSVP
                         key={index}
                         paymentChannelName={post.label}
                         paymentIcon={post.image}
@@ -284,7 +319,7 @@ export default function CheckoutCohortForm({
                         onChange={setSelectedPaymentChannel}
                       />
                     ))}
-                </PaymentChannelGroupCategory>
+                </PaymentChannelGroupSVP>
               </div>
             </div>
 
@@ -326,13 +361,13 @@ export default function CheckoutCohortForm({
                 <div className="payment-item flex items-center justify-between">
                   <p className="font-ui text-alternative text-sm">Admin Fee</p>
                   <p className="font-ui font-medium text-black text-sm text-right">
-                    {RupiahCurrency(adminFee)}
+                    {RupiahCurrency(paymentCalculation.adminFee)}
                   </p>
                 </div>
                 <div className="payment-item flex items-center justify-between">
                   <p className="font-ui text-alternative text-sm">VAT</p>
                   <p className="font-ui font-medium text-black text-sm text-right">
-                    {RupiahCurrency(valueAddedTax)}
+                    {RupiahCurrency(paymentCalculation.valueAddedTax)}
                   </p>
                 </div>
                 <hr className="border-t-outline border-dashed" />
@@ -341,7 +376,7 @@ export default function CheckoutCohortForm({
                     Total Amount
                   </p>
                   <p className="font-ui font-medium text-black text-sm text-right">
-                    {RupiahCurrency(totalAmount)}
+                    {RupiahCurrency(paymentCalculation.totalAmount)}
                   </p>
                 </div>
               </div>
@@ -354,7 +389,7 @@ export default function CheckoutCohortForm({
 
         {/* Footer */}
         <div className="footer flex items-center p-5 gap-1.5 mx-auto">
-          <p className="font-ui font-medium text-xs text-alternative/60 truncate">
+          <p className="font-ui text-xs text-alternative/60 truncate">
             PROTECTED AND POWERED BY
           </p>
           <Image
@@ -374,11 +409,13 @@ export default function CheckoutCohortForm({
         <div className="floating-cta sticky flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40">
           <div className="flex flex-col font-ui text-black">
             <p className="text-sm">Total Amount</p>
-            <p className="font-bold">{RupiahCurrency(totalAmount)}</p>
+            <p className="font-bold">
+              {RupiahCurrency(paymentCalculation.totalAmount)}
+            </p>
           </div>
           <AppButton>
             <ShieldCheck className="size-5" />
-            Pay
+            Pay Now
           </AppButton>
         </div>
       )}

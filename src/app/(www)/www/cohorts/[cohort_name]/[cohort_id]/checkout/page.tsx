@@ -1,4 +1,4 @@
-import CheckoutCohortForm from "@/app/components/forms/CheckoutCohortForm";
+import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP";
 import CheckoutHeader from "@/app/components/navigations/CheckoutHeader";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
@@ -39,6 +39,9 @@ export default async function CheckoutCohortPage({
         : item.amount,
   }));
 
+  // --- Get Phone Number List
+  const phoneNumberList = (await trpc.list.phone_country_codes()).list;
+
   // --- Get Payment Data
   const paymentMethod = (await trpc.list.payment_channels()).list;
 
@@ -47,13 +50,14 @@ export default async function CheckoutCohortPage({
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <CheckoutHeader />
         <div className="flex-1 overflow-y-auto">
-          <CheckoutCohortForm
+          <CheckoutCohortFormSVP
             cohortName={cohortData.name}
             cohortImage={cohortData.image}
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
             ticketListData={ticketList}
             paymentMethodData={paymentMethod}
+            phoneNumberList={phoneNumberList}
           />
         </div>
       </div>
