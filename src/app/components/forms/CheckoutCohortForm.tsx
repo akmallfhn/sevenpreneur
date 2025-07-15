@@ -4,11 +4,19 @@ import RadioBoxCheckoutPrice from "../fields/RadioBoxCheckoutPrice";
 import AppButton from "../buttons/AppButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import RadioBoxPaymentChannel from "../fields/RadioBoxPaymentChannel";
-import { ChevronUp, CreditCard, Loader2, ShieldCheck } from "lucide-react";
+import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import PaymentChannelGroupCategory from "../titles/PaymentChannelGroupCategory";
 import { RupiahCurrency } from "@/lib/rupiah-currency";
 import Image from "next/image";
 import InputCMS from "../fields/InputCMS";
+
+interface PaymentMethodItem {
+  id: number;
+  image: string;
+  label: string;
+  code: string;
+  method: string;
+}
 
 interface PriceItem {
   id: number;
@@ -24,7 +32,7 @@ interface CheckoutCohortFormProps {
   initialUserEmail: string;
   initialUserPhone?: string;
   ticketListData: PriceItem[];
-  paymentMethodData: any;
+  paymentMethodData: PaymentMethodItem[];
 }
 export default function CheckoutCohortForm({
   cohortName,
@@ -73,14 +81,14 @@ export default function CheckoutCohortForm({
     }
   }, [isValidTicketId, ticketIdParams]);
 
-  // --- Set default payment channel to BCA_VIRTUAL_ACCOUNT
+  // --- Set default payment channel to MANDIRI_VIRTUAL_ACCOUNT
   useEffect(() => {
     if (!selectedPaymentChannel && paymentMethodData?.length > 0) {
       const defaultVA = paymentMethodData.find(
-        (item: any) => item.code === "BCA_VIRTUAL_ACCOUNT"
+        (item: any) => item.code === "MANDIRI_VIRTUAL_ACCOUNT"
       );
       if (defaultVA) {
-        setSelectedPaymentChannel("BCA_VIRTUAL_ACCOUNT");
+        setSelectedPaymentChannel("MANDIRI_VIRTUAL_ACCOUNT");
       }
     }
   }, [paymentMethodData, selectedPaymentChannel]);
@@ -104,12 +112,36 @@ export default function CheckoutCohortForm({
     }));
   };
 
-  // Calculating price
+  // --- Get Data from Chosen Payment Channel
+  const chosenPaymentChannelData = useMemo(() => {
+    return paymentMethodData.find(
+      (item: any) => item.code === selectedPaymentChannel
+    );
+  }, [selectedPaymentChannel, paymentMethodData]);
+
+  // --- Calculating price
   const totalItem = 1;
   const programPrice = selectedTicket?.amount || 0;
   const subtotal = totalItem * programPrice;
-  const adminFee = 4000;
-  const totalAmount = subtotal + adminFee;
+  const vatRate = 0.11;
+  let adminRate = 0;
+  let adminFee = 0;
+  let valueAddedTax = 0;
+  let totalAmount = 0;
+  if (
+    chosenPaymentChannelData?.method === "EWALLET" ||
+    chosenPaymentChannelData?.method === "QR_CODE" ||
+    chosenPaymentChannelData?.method === "PAYLATER"
+  ) {
+    adminRate = 0.02;
+    totalAmount = Math.round(subtotal / (1 - adminRate * (1 + vatRate)));
+    adminFee = Math.round(adminRate * totalAmount);
+    valueAddedTax = Math.round(vatRate * adminFee);
+  } else if (chosenPaymentChannelData?.method === "VIRTUAL_ACCOUNT") {
+    adminFee = 4000;
+    valueAddedTax = adminFee * vatRate;
+    totalAmount = subtotal + adminFee + valueAddedTax;
+  }
 
   return (
     <React.Fragment>
@@ -239,6 +271,20 @@ export default function CheckoutCohortForm({
                       />
                     ))}
                 </PaymentChannelGroupCategory>
+                <PaymentChannelGroupCategory groupPaymentName="Instant Payment">
+                  {paymentMethodData
+                    .filter((post: any) => post.method === "QR_CODE")
+                    .map((post: any, index: number) => (
+                      <RadioBoxPaymentChannel
+                        key={index}
+                        paymentChannelName={post.label}
+                        paymentIcon={post.image}
+                        value={post.code}
+                        selectedValue={selectedPaymentChannel}
+                        onChange={setSelectedPaymentChannel}
+                      />
+                    ))}
+                </PaymentChannelGroupCategory>
               </div>
             </div>
 
@@ -248,6 +294,14 @@ export default function CheckoutCohortForm({
                 Payment Details
               </h1>
               <div className="calculation-price flex flex-col gap-2">
+                <div className="payment-item flex items-center justify-between">
+                  <p className="font-ui text-alternative text-sm">
+                    Payment Method
+                  </p>
+                  <p className="font-ui font-medium text-black text-sm text-right">
+                    {chosenPaymentChannelData?.label}
+                  </p>
+                </div>
                 <div className="payment-item flex items-center justify-between">
                   <p className="font-ui text-alternative text-sm">Total Item</p>
                   <p className="font-ui font-medium text-black text-sm text-right">
@@ -273,6 +327,12 @@ export default function CheckoutCohortForm({
                   <p className="font-ui text-alternative text-sm">Admin Fee</p>
                   <p className="font-ui font-medium text-black text-sm text-right">
                     {RupiahCurrency(adminFee)}
+                  </p>
+                </div>
+                <div className="payment-item flex items-center justify-between">
+                  <p className="font-ui text-alternative text-sm">VAT</p>
+                  <p className="font-ui font-medium text-black text-sm text-right">
+                    {RupiahCurrency(valueAddedTax)}
                   </p>
                 </div>
                 <hr className="border-t-outline border-dashed" />
