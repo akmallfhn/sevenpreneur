@@ -3,7 +3,7 @@
 import { RupiahCurrency } from "@/lib/rupiah-currency";
 import Image from "next/image";
 
-interface RadioBoxPaymentChannelProps {
+interface RadioBoxPaymentChannelSVPProps {
   paymentChannelName: string;
   paymentIcon: string;
   value: string;
@@ -11,17 +11,17 @@ interface RadioBoxPaymentChannelProps {
   onChange: (value: string) => void;
 }
 
-export default function RadioBoxPaymentChannel({
+export default function RadioBoxPaymentChannelSVP({
   paymentChannelName,
   paymentIcon,
   value,
   selectedValue,
   onChange,
-}: RadioBoxPaymentChannelProps) {
+}: RadioBoxPaymentChannelSVPProps) {
   const isSelected = selectedValue === value;
 
   return (
-    <label className="flex gap-4 rounded-md items-center justify-between">
+    <label className="flex gap-4 rounded-md items-center justify-between hover:cursor-pointer">
       <div className="payment-channel flex items-center gap-3">
         <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
           <Image

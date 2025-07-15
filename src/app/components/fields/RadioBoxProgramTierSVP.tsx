@@ -2,23 +2,23 @@
 
 import { RupiahCurrency } from "@/lib/rupiah-currency";
 
-interface RadioBoxCheckoutPriceProps {
-  radioName: string;
-  radioCohortName: string;
-  radioPrice: number;
+interface RadioBoxProgramTierSVPProps {
+  programTierName: string;
+  programTierCohortName: string;
+  programTierPrice: number;
   value: number;
   selectedValue: number;
   onChange: (value: number) => void;
 }
 
-export default function RadioBoxCheckoutPrice({
-  radioName,
-  radioCohortName,
-  radioPrice,
+export default function RadioBoxProgramTierSVP({
+  programTierName,
+  programTierCohortName,
+  programTierPrice,
   value,
   selectedValue,
   onChange,
-}: RadioBoxCheckoutPriceProps) {
+}: RadioBoxProgramTierSVPProps) {
   const isSelected = selectedValue === value;
 
   return (
@@ -34,13 +34,15 @@ export default function RadioBoxCheckoutPrice({
               isSelected ? "text-primary" : "text-black"
             }`}
           >
-            {radioName}
+            {programTierName}
           </p>
           <p className="text-alternative text-sm font-medium">
-            {radioCohortName}
+            {programTierCohortName}
           </p>
         </div>
-        <p className="text-secondary font-bold">{RupiahCurrency(radioPrice)}</p>
+        <p className="text-secondary font-bold">
+          {RupiahCurrency(programTierPrice)}
+        </p>
       </div>
       <input
         type="radio"
