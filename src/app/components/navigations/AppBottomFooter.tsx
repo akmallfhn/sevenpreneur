@@ -59,7 +59,7 @@ export default function AppBottomFooter() {
                   width={500}
                   height={500}
                 />
-                <p className="font-bodycopy text-sm lg:text-base">
+                <p className="font-bodycopy font-medium text-sm lg:text-base">
                   Sevenpreneur is a global launchpad empowering entrepreneurs to
                   scale their ventures and thrive on the world stage.
                 </p>
@@ -69,7 +69,7 @@ export default function AppBottomFooter() {
                 <h4 className="text-lg font-brand font-bold lg:text-xl">
                   PT Pengusaha Muda Indonesia
                 </h4>
-                <p className="font-bodycopy text-sm lg:text-base">
+                <p className="font-bodycopy font-medium text-sm lg:text-base">
                   Jakarta Barat, DKI Jakarta, Indonesia
                 </p>
               </div>
@@ -93,29 +93,46 @@ export default function AppBottomFooter() {
               </div>
             </div>
             {/* Company Contact*/}
-            <div className="contact-part flex flex-col gap-1 max-w-[420px]">
-              <h4 className="text-lg font-brand font-bold text-white lg:text-xl">
-                Contact Us
-              </h4>
+            <div className="contact-part flex flex-col gap-5 max-w-[420px]">
               <div className="flex flex-col gap-1">
-                <div className="flex flex-col">
-                  <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
-                    Got questions about RE:START Conference? We’re happy to help
-                    at
-                  </p>
-                  <p className="font-brand font-bold text-white lg:text-lg">
-                    event@sevenpreneur.com
-                  </p>
-                </div>
-                <div className="flex flex-col">
-                  <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
-                    For general inquiries, reach us anytime at
-                  </p>
-                  <p className="font-brand font-bold text-white lg:text-lg">
-                    info@sevenpreneur.com
-                  </p>
+                <h4 className="text-lg font-brand font-bold text-white lg:text-xl">
+                  Contact Us
+                </h4>
+                <div className="flex flex-col gap-1">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
+                      Got questions about RE:START Conference? We’re happy to
+                      help at
+                    </p>
+                    <p className="font-brand font-bold text-white lg:text-lg">
+                      event@sevenpreneur.com
+                    </p>
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
+                      For general inquiries, reach us anytime at
+                    </p>
+                    <p className="font-brand font-bold text-white lg:text-lg">
+                      info@sevenpreneur.com
+                    </p>
+                  </div>
                 </div>
               </div>
+              <ul className="menu flex flex-col gap-1.5 text-white/90 font-bodycopy font-medium">
+                <h4 className="text-lg font-brand font-bold text-white lg:text-xl">
+                  Legal & Accessibility
+                </h4>
+                <Link href={"/privacy-policy"}>
+                  <li className="hover:cursor-pointer hover:underline hover:text-primary">
+                    Privacy Policy
+                  </li>
+                </Link>
+                <Link href={"/terms-conditions"}>
+                  <li className="hover:cursor-pointer hover:underline hover:text-primary">
+                    Terms & Conditions
+                  </li>
+                </Link>
+              </ul>
             </div>
           </div>
           <hr className="w-full border-t border-[#3A3A3A]" />
