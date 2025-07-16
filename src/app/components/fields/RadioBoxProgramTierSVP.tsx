@@ -27,7 +27,7 @@ export default function RadioBoxProgramTierSVP({
         isSelected ? "bg-[#F2F8FF] border-primary" : "bg-white border-outline"
       } `}
     >
-      <div className="flex flex-col font-ui">
+      <div className="flex flex-col font-ui text-sm">
         <div className="flex flex-col">
           <p
             className={`font-bold ${
@@ -36,7 +36,7 @@ export default function RadioBoxProgramTierSVP({
           >
             {programTierName}
           </p>
-          <p className="text-alternative text-sm font-medium">
+          <p className="text-alternative font-medium">
             {programTierCohortName}
           </p>
         </div>

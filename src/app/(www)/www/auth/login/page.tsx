@@ -1,8 +1,9 @@
 import Image from "next/image";
 import AppLoginContainer from "@/app/components/templates/AppLoginContainer";
 import { Suspense } from "react";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Login | Sevenpreneur",
   description:
     "Akses platform eksklusif yang dirancang untuk bertumbuh bersama dan wujudkan bisnis terbaikmu. Login sekarang dan lanjutkan.",

@@ -26,13 +26,16 @@ export default function RadioBoxPaymentChannelSVP({
         <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={paymentIcon || ""}
+            src={
+              paymentIcon ||
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/payment-icon/payment-bsi.svg"
+            }
             alt="Icon Payment"
             width={100}
             height={100}
           />
         </div>
-        <p className="payment-channel-name font-ui font-medium text-black text-sm">
+        <p className="payment-channel-name font-ui font-[450px] text-black text-sm">
           {paymentChannelName}
         </p>
       </div>
