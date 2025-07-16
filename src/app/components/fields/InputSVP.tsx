@@ -77,11 +77,15 @@ export default function InputSVP({
           type={inputType}
           placeholder={inputPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
+          className={`flex w-full p-2 font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             error
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-primary"
-          } ${inputIcon ? "pl-10" : ""} `}
+          } ${
+            disabled
+              ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+              : "bg-white"
+          } ${inputIcon ? "pl-10" : ""}  `}
           value={value}
           onChange={handleInputChange}
         />

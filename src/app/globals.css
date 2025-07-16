@@ -12,10 +12,12 @@
   --aspect-topic-restart: 1.51/1;
   --aspect-speaker-restart: 0.8766/1;
   --color-primary: #0165fc;
+  --color-primary-light: #c5ddff;
   --color-primary-strong: #0041c2;
   --color-primary-dark: #003399;
   --color-primary-deep: #001659;
   --color-secondary: #e74d79;
+  --color-secondary-light: #ffe1ea;
   --color-outline: #cbd5e1;
   --color-alternative: #949494;
   --color-semi-destructive: #ffcdc9;

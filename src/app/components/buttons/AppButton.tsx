@@ -4,6 +4,7 @@ import React, { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 
 type VariantType =
   | "primary"
+  | "primaryLight"
   | "secondary"
   | "outline"
   | "ghost"
@@ -18,7 +19,9 @@ type SizeType =
   | "small"
   | "icon"
   | "largeRounded"
-  | "defaultRounded";
+  | "defaultRounded"
+  | "mediumRounded"
+  | "smallRounded";
 type FontType = "brand" | "bodycopy" | "ui";
 
 interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -52,6 +55,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
 
     const variantClasses: Record<VariantType, string> = {
       primary: "bg-primary text-white hover:bg-[#0759D3] active:bg-[#0759D3]",
+      primaryLight:
+        "bg-primary-light text-primary hover:bg-[#A0C7FF] active:bg-[#A0C7FF]",
       secondary:
         "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A]",
       outline:
@@ -74,6 +79,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       icon: "size-9 rounded-md",
       largeRounded: "py-3 px-7 h-[52px] text-lg rounded-full",
       defaultRounded: "py-2 px-4 h-10 text-sm rounded-full",
+      mediumRounded: "py-1.5 px-3 h-9 text-sm rounded-full",
+      smallRounded: "py-1 px-2 h-8 text-xs rounded-full",
     };
 
     const fontClasses: Record<FontType, string> = {

@@ -43,8 +43,18 @@ export default async function CheckoutCohortPage({
   const phoneNumberList = (await trpc.list.phone_country_codes()).list;
 
   // --- Get Payment Data
-  const paymentMethod = (await trpc.list.payment_channels()).list;
-
+  const paymentMethodRaw = (await trpc.list.payment_channels()).list;
+  const paymentMethodList = paymentMethodRaw.map((post) => ({
+    ...post,
+    calc_percent:
+      typeof post.calc_percent === "object" && "toNumber" in post.calc_percent
+        ? post.calc_percent.toNumber()
+        : post.calc_percent,
+    calc_flat:
+      typeof post.calc_flat === "object" && "toNumber" in post.calc_flat
+        ? post.calc_flat.toNumber()
+        : post.calc_flat,
+  }));
   return (
     <div className="flex w-full min-h-screen bg-section-background">
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
@@ -56,7 +66,7 @@ export default async function CheckoutCohortPage({
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
             ticketListData={ticketList}
-            paymentMethodData={paymentMethod}
+            paymentMethodData={paymentMethodList}
             phoneNumberList={phoneNumberList}
           />
         </div>
