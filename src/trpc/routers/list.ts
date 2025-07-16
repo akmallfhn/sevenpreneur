@@ -85,21 +85,15 @@ export const listRouter = createTRPCRouter({
     .input(z.object({ method: stringNotBlank().optional() }).optional())
     .query(async (opts) => {
       const channelList = await opts.ctx.prisma.paymentChannel.findMany({
-        where: { method: opts.input?.method },
-      });
-      const returnedList = channelList.map((entry) => {
-        return {
-          id: entry.id,
-          label: entry.label,
-          code: entry.code,
-          method: entry.method,
-          image: entry.image,
-        };
+        where: {
+          method: opts.input?.method,
+          status: StatusEnum.ACTIVE,
+        },
       });
       return {
         status: 200,
         message: "Success",
-        list: returnedList,
+        list: channelList,
       };
     }),
 
