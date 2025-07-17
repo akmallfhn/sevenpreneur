@@ -179,7 +179,7 @@ Table projects {
 }
 
 Table transactions {
-  id               integer        [primary key]
+  id               char(21)       [primary key, note: 'default nanoid()']
   user_id          uuid           [ref: > users.id]
   category         category_enum
   item_id          integer        [note: 'item's ID based on category']

@@ -244,7 +244,7 @@ model Project {
 }
 
 model Transaction {
-  id              Int          @id @default(autoincrement()) @db.Integer
+  id              String       @id @default(nanoid()) @db.Char(21)
   user            User         @relation(fields: [user_id], references: [id])
   user_id         String       @db.Uuid
   category        CategoryEnum
