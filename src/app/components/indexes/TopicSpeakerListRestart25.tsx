@@ -59,6 +59,28 @@ export default function TopicSpeakerListRestart25() {
       moderator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-adit.webp",
     },
+    {
+      topic_name:
+        "Digital Natives: How Edutech Youth Are Shaping a Smarter Generation",
+      topic_description:
+        "In an era defined by agility, access, and algorithmic influence, youth-led brands are rewriting the rules of impact. This session brings together two of Indonesia’s brightest minds in edutech — Zaky Muhammad Syah (CEO of dibimbing) and Angga Fauzan (CEO of MySkill) — to explore how digital-native founders are building brands that connect with the next generation of learners, professionals, and changemakers.",
+      topic_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-zaki-angga%20(1).webp",
+      moderator_name: "Vander Lesnussa",
+      moderator_avatar:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-vander.webp",
+    },
+    {
+      topic_name:
+        "Riding the Next Economic Wave: Reinventing Legacy in a Shifting Market",
+      topic_description:
+        "As economic landscapes evolve at unprecedented speed, businesses must either transform or be left behind. In this thought-provoking session, Fadly Hasan (Director, TransJakarta) and Diana Alim (CEO, Marindo Boga Group — home of Gyukaku, On-Yasai, and more) share how their sectors are navigating disruption, digital acceleration, and shifting consumer expectations.",
+      topic_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-fadly-diana%20(1).webp",
+      moderator_name: "Vander Lesnussa",
+      moderator_avatar:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-vander.webp",
+    },
   ];
 
   return (
