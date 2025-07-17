@@ -1,5 +1,5 @@
 import AppButton from "@/app/components/buttons/AppButton";
-import { setSessionToken, trpc } from "@/trpc/server";
+import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -14,6 +14,7 @@ export default async function CohortDetailsPage({
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
   const { cohort_name, cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
@@ -25,6 +26,8 @@ export default async function CohortDetailsPage({
     return notFound();
   }
 
+  // --- Get Data
+  setSecretKey(secretKey!);
   const cohortDetails = await trpc.read.cohort({ id: cohortId });
   const data = cohortDetails.cohort;
 

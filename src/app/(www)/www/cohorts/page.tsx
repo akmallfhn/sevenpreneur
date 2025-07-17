@@ -1,4 +1,4 @@
-import { setSessionToken, trpc } from "@/trpc/server";
+import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,6 +7,7 @@ export default async function CohortDiscoveryPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
   // --- Checking Access
   setSessionToken(sessionToken);
@@ -15,6 +16,8 @@ export default async function CohortDiscoveryPage() {
     return notFound();
   }
 
+  // --- Get List Cohort
+  setSecretKey(secretKey!);
   const listCohort = await trpc.list.cohorts();
   return (
     <div className="w-full pt-10 pb-20">
