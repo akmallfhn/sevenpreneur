@@ -56,7 +56,7 @@ export default function SpeakersLineUpRestart25() {
     },
     {
       name: "Fadly Hasan",
-      title: "Direktur Bisnis dan Pemanfaatan Aset Transjakarta",
+      title: "Director of Business & Asset Optimization",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/fadly-hasan.webp",
       on_confirmation: false,
