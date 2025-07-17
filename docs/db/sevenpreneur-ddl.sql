@@ -176,7 +176,7 @@ CREATE TABLE projects (
 );
 
 CREATE TABLE transactions (
-  id               SERIAL          PRIMARY KEY,
+  id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
   user_id          uuid            NOT NULL,
   category         category_enum   NOT NULL,
   item_id          INTEGER         NOT NULL,
