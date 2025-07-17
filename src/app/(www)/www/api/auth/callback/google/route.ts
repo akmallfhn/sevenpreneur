@@ -1,4 +1,4 @@
-import { trpc } from "@/trpc/server";
+import { setSecretKey, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -8,6 +8,7 @@ export async function POST(request: Request) {
   const accessToken = body.tokenResponse.access_token;
 
   // --- Backend Process
+  setSecretKey(process.env.SECRET_KEY_PUBLIC_API!);
   const loggedIn = await trpc.auth.login({ accessToken });
   const sessionToken = loggedIn.token.token;
   const user = loggedIn.registered_user;

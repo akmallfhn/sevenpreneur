@@ -6,7 +6,12 @@ import { createCallerFactory, createTRPCContext } from "./init";
 import { makeQueryClient } from "./query-client";
 import { appRouter } from "./routers/_app";
 
+let secretKey: string = "";
 let sessionToken: string = "";
+
+export function setSecretKey(newSecretKey: string) {
+  secretKey = newSecretKey;
+}
 
 export function setSessionToken(newToken: string) {
   sessionToken = newToken;
@@ -15,6 +20,7 @@ export function setSessionToken(newToken: string) {
 export const getQueryClient = cache(makeQueryClient);
 const caller = createCallerFactory(appRouter)(() =>
   createTRPCContext({
+    secretKey: secretKey,
     sessionToken: sessionToken,
   })
 );

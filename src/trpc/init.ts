@@ -5,12 +5,15 @@ import { headers } from "next/headers";
 const prisma = new PrismaClient();
 
 export type createTRPCContextOptions = {
+  secretKey: string;
   sessionToken: string;
 };
 
 export async function createTRPCContext(
   opts: createTRPCContextOptions | undefined
 ) {
+  let secret = opts?.secretKey;
+
   async function getSessionTokenFromHeader() {
     const heads = await headers();
     const authHeader = heads.get("authorization");
@@ -43,13 +46,12 @@ export async function createTRPCContext(
 
   const sessionToken =
     opts?.sessionToken || (await getSessionTokenFromHeader());
-  if (sessionToken === null) {
-    return { prisma };
+  let user;
+  if (sessionToken !== null) {
+    user = await getUserFromSessionToken(sessionToken);
   }
 
-  const user = await getUserFromSessionToken(sessionToken);
-
-  return { prisma, user };
+  return { prisma, secret, user };
 }
 
 export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
@@ -59,6 +61,19 @@ const t = initTRPC.context<TRPCContext>().create();
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
+
+export const publicProcedure = t.procedure.use(async (opts) => {
+  const { ctx } = opts;
+  if (!ctx.user) {
+    if (!ctx.secret) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    if (ctx.secret != process.env.SECRET_KEY_PUBLIC_API!) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+  }
+  return opts.next(opts);
+});
 
 export const loggedInProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;

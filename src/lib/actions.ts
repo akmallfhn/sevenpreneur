@@ -1,6 +1,6 @@
 "use server";
+import { setSecretKey, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
-import { trpc } from "@/trpc/server";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -12,6 +12,7 @@ export async function DeleteSession() {
   }
 
   // --- Request Backend Delete Token Database
+  setSecretKey(process.env.SECRET_KEY_PUBLIC_API!);
   const loggedOut = await trpc.auth.logout({ token: sessionData.value });
 
   // --- Delete token on Cookie

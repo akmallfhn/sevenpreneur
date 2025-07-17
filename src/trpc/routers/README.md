@@ -64,8 +64,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `create.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.cohorts`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.cohort`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.cohorts`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| `read.cohort`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 | `update.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
