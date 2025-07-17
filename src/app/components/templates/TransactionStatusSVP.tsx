@@ -10,7 +10,7 @@ import PaymentStatusAnimationSVP from "../labels/PaymentStatusAnimationSVP";
 export default function TransactionStatusSVP() {
   return (
     <React.Fragment>
-      <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] lg:mx-auto lg:max-w-[960] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
+      <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] lg:mx-auto lg:w-full lg:max-w-[960px] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
         {/* Transaction Status */}
         <div className="transaction-status flex flex-col items-center gap-5 bg-white p-5 lg:flex-1 lg:border lg:border-outline lg:rounded-lg">
           <div className="status-guidance flex flex-col items-center text-center font-ui">
