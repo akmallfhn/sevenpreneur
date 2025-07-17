@@ -1,7 +1,7 @@
 import {
-  baseProcedure,
   createTRPCRouter,
   loggedInProcedure,
+  publicProcedure,
 } from "@/trpc/init";
 import {
   numberIsID,
@@ -128,7 +128,7 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  cohorts: baseProcedure.query(async (opts) => {
+  cohorts: publicProcedure.query(async (opts) => {
     let whereClause = { deleted_at: null };
     if (!opts.ctx.user) {
       whereClause = Object.assign(whereClause, {
@@ -223,7 +223,7 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  learnings_public: baseProcedure
+  learnings_public: publicProcedure
     .input(
       z.object({
         cohort_id: numberIsID(),

@@ -1,7 +1,7 @@
 import {
-  baseProcedure,
   createTRPCRouter,
   loggedInProcedure,
+  publicProcedure,
 } from "@/trpc/init";
 import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
@@ -111,7 +111,7 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
-  cohort: baseProcedure
+  cohort: publicProcedure
     .input(
       z.object({
         id: numberIsID(),

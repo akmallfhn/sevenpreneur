@@ -1,7 +1,7 @@
 import {
-  baseProcedure,
   createTRPCRouter,
   loggedInProcedure,
+  publicProcedure,
 } from "@/trpc/init";
 import { GoogleTokenVerifier } from "@/trpc/utils/google_verifier";
 import { stringNotBlank } from "@/trpc/utils/validation";
@@ -11,7 +11,7 @@ import { randomBytes } from "crypto";
 import { z } from "zod";
 
 export const authRouter = createTRPCRouter({
-  login: baseProcedure
+  login: publicProcedure
     .input(
       z.object({
         accessToken: stringNotBlank(),
@@ -112,7 +112,7 @@ export const authRouter = createTRPCRouter({
     };
   }),
 
-  logout: baseProcedure
+  logout: publicProcedure
     .input(
       z.object({
         token: stringNotBlank(),
