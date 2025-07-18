@@ -3,6 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
 import AppButton from "../buttons/AppButton";
+import { useEffect, useRef, useState } from "react";
+import {
+  Blocks,
+  BookMarked,
+  LogOut,
+  Trash2,
+  UserRound,
+  Wallet,
+} from "lucide-react";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import { DeleteSession } from "@/lib/actions";
 
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
@@ -13,6 +25,47 @@ export default function HeaderNavbarSVP({
   isLoggedIn,
   userAvatar,
 }: HeaderNavbarSVPProps) {
+  const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const [isLoadingSignOut, setIsLoadingSignOut] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // --- Open and close dropdown
+  const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setIsActionsOpened((prev) => !prev);
+  };
+
+  // --- Close dropdown outside
+  useEffect(() => {
+    const handleClickOutside = (
+      event: MouseEvent | (MouseEvent & { target: Node })
+    ) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsActionsOpened(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // --- Domain
+  let domain = "sevenpreneur.com";
+  if (process.env.DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
+
+  // --- Sign out function
+  const handleSignOut = async () => {
+    setIsLoadingSignOut(true);
+    await DeleteSession();
+    setIsLoadingSignOut(false);
+  };
+
   return (
     <div className="navbar-container flex sticky w-full bg-white top-0 left-0 py-4 px-5 items-center justify-between shadow-md z-[90] lg:px-24">
       <Link href={"/"}>
@@ -27,7 +80,49 @@ export default function HeaderNavbarSVP({
         />
       </Link>
       {isLoggedIn ? (
-        <AvatarBadgeSVP userAvatar={userAvatar} />
+        <div
+          className="user-menu relative flex"
+          ref={wrapperRef}
+          onClick={handleActionsDropdown}
+        >
+          <AvatarBadgeSVP userAvatar={userAvatar} />
+          <AppDropdown
+            isOpen={isActionsOpened}
+            onClose={() => setIsActionsOpened(false)}
+          >
+            <Link href={"https://admin.sevenpreneur.com"}>
+              <AppDropdownItemList
+                menuIcon={<UserRound className="size-4" />}
+                menuName="Profile"
+              />
+            </Link>
+            <Link href={`https://admin.${domain}`}>
+              <AppDropdownItemList
+                menuIcon={<Blocks className="size-4" />}
+                menuName="Dashboard Admin"
+              />
+            </Link>
+            <Link href={`https://agora.${domain}`}>
+              <AppDropdownItemList
+                menuIcon={<BookMarked className="size-4" />}
+                menuName="Agora Learning"
+              />
+            </Link>
+            <Link href={`https://www.${domain}/transactions`}>
+              <AppDropdownItemList
+                menuIcon={<Wallet className="size-4" />}
+                menuName="Transaction"
+              />
+            </Link>
+            <hr className="my-1" />
+            <AppDropdownItemList
+              menuIcon={<LogOut className="size-4" />}
+              menuName="Sign out"
+              isDestructive
+              onClick={handleSignOut}
+            />
+          </AppDropdown>
+        </div>
       ) : (
         <AppButton>Login</AppButton>
       )}
