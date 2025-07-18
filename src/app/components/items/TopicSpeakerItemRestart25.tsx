@@ -51,7 +51,7 @@ export default function TopicSpeakerItemRestart25({
             {topicDescription}
           </p>
           <div className="flex items-center gap-3">
-            <div className="flex aspect-square size-10 rounded-full overflow-hidden lg:size-12">
+            <div className="flex aspect-square size-10 bg-[#65DCD0] rounded-full overflow-hidden lg:size-12">
               <Image
                 className="object-cover w-full h-full"
                 src={moderatorAvatar}

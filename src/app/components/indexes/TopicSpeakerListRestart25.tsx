@@ -66,9 +66,9 @@ export default function TopicSpeakerListRestart25() {
         "In an era defined by agility, access, and algorithmic influence, youth-led brands are rewriting the rules of impact. This session brings together two of Indonesia’s brightest minds in edutech — Zaky Muhammad Syah (CEO of dibimbing) and Angga Fauzan (CEO of MySkill) — to explore how digital-native founders are building brands that connect with the next generation of learners, professionals, and changemakers.",
       topic_image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-zaki-angga%20(1).webp",
-      moderator_name: "Vander Lesnussa",
+      moderator_name: "Rusherly Rinlohokyana",
       moderator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-vander.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-sherly.webp",
     },
     {
       topic_name:
