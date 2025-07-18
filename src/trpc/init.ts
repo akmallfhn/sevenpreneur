@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import GetPrismaClient from "@/lib/prisma";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
-
-const prisma = new PrismaClient();
 
 export type createTRPCContextOptions = {
   secretKey: string;
@@ -12,6 +10,8 @@ export type createTRPCContextOptions = {
 export async function createTRPCContext(
   opts: createTRPCContextOptions | undefined
 ) {
+  const prisma = GetPrismaClient();
+
   let secret = opts?.secretKey;
 
   async function getSessionTokenFromHeader() {
