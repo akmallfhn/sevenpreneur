@@ -181,6 +181,7 @@ CREATE TABLE transactions (
   category         category_enum   NOT NULL,
   item_id          INTEGER         NOT NULL,
   amount           DECIMAL(12, 2)  NOT NULL,
+  admin_fee        DECIMAL(12, 2)  NOT NULL,
   currency         VARCHAR         NOT NULL,
   invoice_number   VARCHAR         NOT NULL,
   status           t_status_enum   NOT NULL,

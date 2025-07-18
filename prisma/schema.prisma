@@ -250,6 +250,7 @@ model Transaction {
   category        CategoryEnum
   item_id         Int          @db.Integer
   amount          Decimal      @db.Decimal(12, 2)
+  admin_fee       Decimal      @db.Decimal(12, 2)
   currency        String       @db.VarChar()
   invoice_number  String       @db.VarChar()
   status          TStatusEnum
