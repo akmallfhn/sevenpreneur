@@ -21,24 +21,5 @@ export default async function TransactionDetailsPage({
     redirect(`/auth/login?redirectTo=/transactions/${transaction_id}`);
   }
 
-  // --- Check User Session
-  let userData:
-    | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
-    | null = null;
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-    const checkUser = await trpc.auth.checkSession();
-    userData = checkUser.user;
-  }
-
-  return (
-    <div className="flex flex-col">
-      <HeaderNavbarSVP
-        userAvatar={userData?.avatar ?? null}
-        userRole={userData?.role_id}
-        isLoggedIn={!!userData}
-      />
-      <TransactionStatusSVP />
-    </div>
-  );
+  return <TransactionStatusSVP />;
 }
