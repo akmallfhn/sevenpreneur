@@ -27,6 +27,14 @@ export type XenditCreateInvoiceResponse = {
 type XenditRequestParameters = XenditCreateInvoiceRequestParameters | object;
 type XenditResponse = XenditCreateInvoiceResponse & object;
 
+export type XenditInvoiceCallback = {
+  external_id: string;
+  status: "PAID" | "EXPIRED";
+  paid_at: string;
+  payment_method: string;
+  payment_channel: string;
+};
+
 export const xenditRequestCreateInvoice = (
   params: XenditCreateInvoiceRequestParameters
 ): Promise<XenditCreateInvoiceResponse> => {
