@@ -8,7 +8,7 @@ interface AvatarBadgeSVPProps {
 export default function AvatarBadgeSVP({ userAvatar }: AvatarBadgeSVPProps) {
   return (
     <div>
-      <div className="aspect-square size-8 rounded-full overflow-hidden">
+      <div className="aspect-square size-8 rounded-full overflow-hidden hover:cursor-pointer">
         <Image
           className="object-cover w-full h-full"
           src={

@@ -2,6 +2,7 @@ import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
 import TransactionStatusSVP from "@/app/components/templates/TransactionStatusSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 interface TransactionDetailsPageProps {
   params: Promise<{ transaction_id: string }>;
@@ -15,11 +16,15 @@ export default async function TransactionDetailsPage({
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
+  // --- Redirect if not login
+  if (!sessionToken) {
+    redirect(`/auth/login?redirectTo=/transactions/${transaction_id}`);
+  }
+
+  // --- Check User Session
   let userData:
     | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
     | null = null;
-
-  // --- Check User Session
   if (sessionToken) {
     setSessionToken(sessionToken);
     const checkUser = await trpc.auth.checkSession();
@@ -30,6 +35,7 @@ export default async function TransactionDetailsPage({
     <div className="flex flex-col">
       <HeaderNavbarSVP
         userAvatar={userData?.avatar ?? null}
+        userRole={userData?.role_id}
         isLoggedIn={!!userData}
       />
       <TransactionStatusSVP />
