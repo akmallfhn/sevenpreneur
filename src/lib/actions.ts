@@ -1,5 +1,5 @@
 "use server";
-import { setSecretKey, trpc } from "@/trpc/server";
+import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
 // DELETE SESSION FOR LOGOUT
@@ -31,4 +31,39 @@ export async function DeleteSession() {
   }
 
   return { status: 401, message: "Logout failed" };
+}
+
+// MAKE PAYMENT AT XENDIT
+interface MakePaymentXenditProps {
+  cohortPriceId: number;
+  paymentChannelId: number;
+  phoneNumber?: string | null | undefined;
+}
+
+export async function MakePaymentXendit({
+  cohortPriceId,
+  paymentChannelId,
+  phoneNumber,
+}: MakePaymentXenditProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+
+  setSessionToken(sessionData.value);
+  const paymentResponse = await trpc.buy.cohort({
+    cohort_price_id: cohortPriceId,
+    payment_channel_id: paymentChannelId,
+    phone_country_id: 1,
+    phone_number: phoneNumber,
+  });
+
+  return {
+    status: paymentResponse.status,
+    message: paymentResponse.message,
+    invoice_url: paymentResponse.invoice_url,
+    transaction_id: paymentResponse.transaction_id,
+  };
 }
