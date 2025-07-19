@@ -1,18 +1,18 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { RupiahCurrency } from "@/lib/rupiah-currency";
+import { MakePaymentXendit } from "@/lib/actions";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
 import RadioBoxProgramTierSVP from "../fields/RadioBoxProgramTierSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
-import { MakePaymentXendit } from "@/lib/actions";
-import { toast } from "sonner";
 
 interface PaymentMethodItem {
   id: number;
@@ -101,20 +101,23 @@ export default function CheckoutCohortFormSVP({
   }, [isValidTicketId, ticketIdParams]);
 
   // --- Set default payment channel to MANDIRI
+  const defaultPaymentChannel = useMemo(() => {
+    return (
+      paymentMethodData.find((item) => item.code === "MANDIRI")?.code ?? ""
+    );
+  }, [paymentMethodData]);
   useEffect(() => {
-    if (!selectedPaymentChannel && paymentMethodData?.length > 0) {
-      const defaultVA = paymentMethodData.find(
-        (item: PaymentMethodItem) => item.code === "MANDIRI"
-      );
-      if (defaultVA) {
-        setSelectedPaymentChannel("MANDIRI");
-      }
+    if (!selectedPaymentChannel && defaultPaymentChannel) {
+      setSelectedPaymentChannel(defaultPaymentChannel);
     }
-  }, [paymentMethodData, selectedPaymentChannel]);
+  }, [defaultPaymentChannel, selectedPaymentChannel]);
 
   // --- Handle Query Params ticketId
   const handleParamsQuery = () => {
-    if (selectedPriceTierId !== 0) {
+    if (
+      selectedPriceTierId !== 0 &&
+      ticketIdParams !== String(selectedPriceTierId)
+    ) {
       setIsLoadingCheckout(true);
       router.push(`?ticketId=${selectedPriceTierId}`);
     }
@@ -195,12 +198,12 @@ export default function CheckoutCohortFormSVP({
 
     // -- Validation
     if (!formData.userPhoneNumber) {
-      toast.error("Phone Number belum diisi");
+      toast.error("Phone number is required before making a payment");
       setIsLoadingPayment(false);
       return;
     }
     if (!selectedTicket?.id || !chosenPaymentChannelData?.id) {
-      toast.error("Please select a ticket or a payment method first.");
+      toast.error("Please select a ticket or a payment method first");
       return;
     }
 
