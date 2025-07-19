@@ -1,6 +1,6 @@
 import GetPrismaClient from "@/lib/prisma";
 import { XenditInvoiceCallback } from "@/lib/xendit";
-import { TStatusEnum } from "@prisma/client";
+import { CategoryEnum, TStatusEnum } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -39,7 +39,33 @@ export async function POST(req: NextRequest) {
   }
 
   if (transactionStatus === TStatusEnum.PAID) {
-    // TODO: Add cohort to user
+    const theTransaction = await prisma.transaction.findFirst({
+      where: { id: reqBody.external_id },
+    });
+    if (!theTransaction) {
+      console.error("xendit.webhook: The selected transaction is not found.");
+      return new NextResponse("The selected transaction is not found.", {
+        status: 404,
+      });
+    }
+
+    if (theTransaction.category === CategoryEnum.COHORT) {
+      try {
+        await prisma.user.update({
+          data: {
+            cohorts: {
+              connect: { id: theTransaction.item_id },
+            },
+          },
+          where: { id: theTransaction.user_id },
+        });
+      } catch (e) {
+        console.error("xendit.webhook: The selected user/cohort is not found.");
+        return new NextResponse("The selected user/cohort is not found.", {
+          status: 404,
+        });
+      }
+    }
   }
 
   return new NextResponse("OK", {
