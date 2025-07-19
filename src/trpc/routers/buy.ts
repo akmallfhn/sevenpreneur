@@ -41,7 +41,7 @@ export const buyRouter = createTRPCRouter({
           message: "The payment channel with the given ID is not found.",
         });
       }
-      const transactionAmount = calculateFinalPrice(
+      const transactionFinalPrice = calculateFinalPrice(
         selectedCohortPrice.amount,
         selectedPayment
       ).finalPrice;
@@ -50,7 +50,8 @@ export const buyRouter = createTRPCRouter({
           user_id: opts.ctx.user.id,
           category: CategoryEnum.COHORT,
           item_id: selectedCohortPrice.cohort_id,
-          amount: transactionAmount,
+          amount: selectedCohortPrice.amount,
+          admin_fee: transactionFinalPrice.minus(selectedCohortPrice.amount),
           currency: "IDR",
           invoice_number: "?", // updated after requesting Xendit
           status: TStatusEnum.PENDING,
@@ -70,7 +71,7 @@ export const buyRouter = createTRPCRouter({
       try {
         xenditResponse = await xenditRequestCreateInvoice({
           external_id: theTransaction.id,
-          amount: theTransaction.amount.toNumber(),
+          amount: transactionFinalPrice.toNumber(),
           description: selectedCohortPrice.cohort.name,
           invoice_duration: 300,
           success_redirect_url: "https://www.sevenpreneur.com/",
@@ -81,7 +82,7 @@ export const buyRouter = createTRPCRouter({
             {
               name: selectedCohortPrice.cohort.name,
               quantity: 1,
-              price: theTransaction.amount.toNumber(),
+              price: transactionFinalPrice.toNumber(),
             },
           ],
         });
