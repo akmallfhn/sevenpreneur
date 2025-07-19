@@ -6,6 +6,8 @@
   --aspect-thumbnail: 1.776/1;
   --aspect-mobile-banner: 3.4/2;
   --aspect-desktop-banner: 4/1;
+  --aspect-interstitial-banner: 9/16;
+  --aspect-web-popup: 17/10;
   --aspect-leaderboard-banner: 4.55/1;
   --aspect-panorama-leaderboard: 49/6;
   --aspect-card-restart: 7/4;

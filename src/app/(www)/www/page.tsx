@@ -1,16 +1,5 @@
 import { Metadata } from "next";
-import HeroEventRestart2025 from "@/app/components/templates/HeroEventRestart25";
-import ContentEventRestart25 from "@/app/components/templates/ContentEventRestart25";
-import TicketCarouselRestart25 from "@/app/components/indexes/TicketCarouselRestart25";
-import BannerEventRestart25 from "@/app/components/templates/BannerEventRestart25";
-import FAQEventRestart25 from "@/app/components/indexes/FAQEventRestart25";
-import SpeakersLineUpRestart25 from "@/app/components/indexes/SpeakersLineUpRestart25";
-import EventExperienceRestart25 from "@/app/components/indexes/EventExperienceRestart25";
-import CustomFloatingRestart25 from "@/app/components/buttons/CustomFloatingRestart25";
-import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerListRestart25";
-import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
-import AttendeeRoleListRestart25 from "@/app/components/indexes/AttendeeRoleListRestart25";
-
+import Restart25Page from "@/app/components/pages/Restart25Page";
 
 export const metadata: Metadata = {
   title:
@@ -63,19 +52,5 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return (
-    <div className="root relative bg-black items-center">
-      <TopNavbar />
-      <HeroEventRestart2025 />
-      <ContentEventRestart25 />
-      <TopicSpeakerListRestart25 />
-      <SpeakersLineUpRestart25 />
-      <TicketCarouselRestart25 />
-      <AttendeeRoleListRestart25 />
-      <EventExperienceRestart25 />
-      <FAQEventRestart25 />
-      <BannerEventRestart25 />
-      <CustomFloatingRestart25 />
-    </div>
-  );
+  return <Restart25Page />;
 }
