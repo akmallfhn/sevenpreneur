@@ -51,9 +51,9 @@ export default function TicketCardItemRestart25({
         />
         <div className="container absolute flex flex-col top-4 left-1/2 -translate-x-1/2 gap-2 z-20">
           {/* Tiket Metadata */}
-          <div className="metadata-ticket text-black flex flex-col items-center gap-1">
+          <div className="metadata-ticket text-black flex flex-col items-center gap-1 px-3">
             <div className="type-ticket flex items-center gap-1.5">
-              <h3 className="font-brand font-bold text-2xl lg:text-[28px]">
+              <h3 className="font-brand font-bold text-center text-2xl lg:text-[28px]">
                 {post.type}
               </h3>
               {post.isPremium && (

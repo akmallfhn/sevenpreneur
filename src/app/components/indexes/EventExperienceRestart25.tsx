@@ -45,14 +45,14 @@ export default function EventExperienceRestart25() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/vip-lounge.webp",
       isVIP: true,
     },
-    {
-      name: "Entertainment Show",
-      description:
-        "A fusion of live art and DJ vibes to elevate your senses and energy.",
-      image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/entertainment-show.webp",
-      isVIP: true,
-    },
+    // {
+    //   name: "Entertainment Show",
+    //   description:
+    //     "A fusion of live music vibes to elevate your senses and energy.",
+    //   image:
+    //     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/experience-v2/entertainment-show.webp",
+    //   isVIP: true,
+    // },
     {
       name: "Dinner & Dialogue",
       description:
