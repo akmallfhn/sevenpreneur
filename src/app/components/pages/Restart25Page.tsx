@@ -31,12 +31,12 @@ export default function Restart25Page() {
       <FAQEventRestart25 />
       <BannerEventRestart25 />
       <CustomFloatingRestart25 />
-      <AppInterstitialBanner
+      {/* <AppInterstitialBanner
         bannerTimeInterval={bannerTimeInterval}
         redirectUrl="https://vesta.halofans.id/event/v2/re-start"
         interstitialImageMobile="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//insterstitial-dseven.webp"
         interstitialImageDesktop="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//web-popup-dseven.webp"
-      />
+      /> */}
     </div>
   );
 }
