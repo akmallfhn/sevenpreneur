@@ -127,7 +127,7 @@ model User {
   deleted_cohorts       Cohort[]
   speaker_at            Learning[]
   transactions          Transaction[]
-  cohorts               Cohort[]           @relation("users_cohorts")
+  cohorts               UserCohort[]
 
   @@map("users")
 }
@@ -161,7 +161,7 @@ model Cohort {
   modules       Module[]
   learnings     Learning[]
   projects      Project[]
-  users         User[]        @relation("users_cohorts")
+  users         UserCohort[]
 
   @@map("cohorts")
 }
@@ -261,4 +261,14 @@ model Transaction {
   updated_at      DateTime     @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("transactions")
+}
+
+model UserCohort {
+  user      User   @relation(fields: [user_id], references: [id])
+  user_id   String @db.Uuid
+  cohort    Cohort @relation(fields: [cohort_id], references: [id])
+  cohort_id Int    @db.Integer
+
+  @@id([user_id, cohort_id])
+  @@map("users_cohorts")
 }

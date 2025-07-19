@@ -51,19 +51,14 @@ export async function POST(req: NextRequest) {
 
     if (theTransaction.category === CategoryEnum.COHORT) {
       try {
-        await prisma.user.update({
+        await prisma.userCohort.create({
           data: {
-            cohorts: {
-              connect: { id: theTransaction.item_id },
-            },
+            user_id: theTransaction.user_id,
+            cohort_id: theTransaction.item_id,
           },
-          where: { id: theTransaction.user_id },
         });
       } catch (e) {
-        console.error("xendit.webhook: The selected user/cohort is not found.");
-        return new NextResponse("The selected user/cohort is not found.", {
-          status: 404,
-        });
+        // The row might already exists.
       }
     }
   }
