@@ -67,15 +67,19 @@ export const buyRouter = createTRPCRouter({
         });
       }
 
+      let domain = "sevenpreneur.com";
+      if (process.env.DOMAIN_MODE === "local") {
+        domain = "example.com:3000";
+      }
       let xenditResponse: XenditCreateInvoiceResponse;
       try {
         xenditResponse = await xenditRequestCreateInvoice({
           external_id: theTransaction.id,
           amount: transactionFinalPrice.toNumber(),
           description: selectedCohortPrice.cohort.name,
-          invoice_duration: 300,
-          success_redirect_url: "https://www.sevenpreneur.com/",
-          failure_redirect_url: "https://www.sevenpreneur.com/",
+          invoice_duration: 12 * 60 * 60, // 12 hours
+          success_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
+          failure_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
           payment_methods: [selectedPayment.code],
           currency: theTransaction.currency,
           items: [
