@@ -53,7 +53,7 @@ export async function MakePaymentXendit({
   }
 
   setSessionToken(sessionData.value);
-  const paymentResponse = await trpc.buy.cohort({
+  const paymentResponse = await trpc.purchase.cohort({
     cohort_price_id: cohortPriceId,
     payment_channel_id: paymentChannelId,
     phone_country_id: 1,
