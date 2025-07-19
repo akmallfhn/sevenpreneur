@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
 import AppButton from "../buttons/AppButton";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { RupiahCurrency } from "@/lib/rupiah-currency";
@@ -11,6 +11,8 @@ import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
+import { MakePaymentXendit } from "@/lib/actions";
+import { toast } from "sonner";
 
 interface PaymentMethodItem {
   id: number;
@@ -42,7 +44,7 @@ interface CheckoutCohortFormSVPProps {
   cohortImage: string;
   initialUserName: string;
   initialUserEmail: string;
-  initialUserPhone?: string;
+  initialUserPhone?: string; // TO DO: Integrate User Phone dari TRPC Check User
   ticketListData: PriceItem[];
   paymentMethodData: PaymentMethodItem[];
   phoneNumberList: PhoneNumberItem[];
@@ -61,6 +63,7 @@ export default function CheckoutCohortFormSVP({
   const [selectedPriceTierId, setSelectedPriceTierId] = useState(0);
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
+  const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const ticketIdParams = searchParams.get("ticketId");
@@ -77,6 +80,7 @@ export default function CheckoutCohortFormSVP({
   });
 
   // --- Validating params ticketId based on Cohort Data
+  // --- ticketId not included on Cohort Data will be fallback to Programs Tier Form
   const isValidTicketId = useMemo(() => {
     const ticketId = parseInt(ticketIdParams || "");
     return (
@@ -184,6 +188,44 @@ export default function CheckoutCohortFormSVP({
 
     return { adminFee: 0, valueAddedTax: 0, totalAmount: subtotal };
   }, [chosenPaymentChannelData, subtotal]);
+
+  // --- Make Payment on Xendit
+  const handlePayment = async () => {
+    setIsLoadingPayment(true);
+
+    // -- Validation
+    if (!formData.userPhoneNumber) {
+      toast.error("Phone Number belum diisi");
+      setIsLoadingPayment(false);
+      return;
+    }
+    if (!selectedTicket?.id || !chosenPaymentChannelData?.id) {
+      toast.error("Please select a ticket or a payment method first.");
+      return;
+    }
+
+    // -- Call tRPC Payment
+    try {
+      const makePayment = await MakePaymentXendit({
+        cohortPriceId: selectedTicket.id,
+        paymentChannelId: chosenPaymentChannelData.id,
+        phoneNumber: formData.userPhoneNumber.trim(),
+      });
+      if (makePayment.status === 200) {
+        window.open(makePayment.invoice_url, "_blank");
+        router.push(`/transactions/${makePayment.transaction_id}`);
+      } else {
+        toast.error("Failed to create invoice", {
+          description: makePayment.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error during payment:", error);
+      toast.error("Unexpected error occurred during payment.");
+    } finally {
+      setIsLoadingPayment(false);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -455,8 +497,12 @@ export default function CheckoutCohortFormSVP({
               {RupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
-          <AppButton>
-            <ShieldCheck className="size-5" />
+          <AppButton onClick={handlePayment} disabled={isLoadingPayment}>
+            {isLoadingPayment ? (
+              <Loader2 className="animate-spin size-5" />
+            ) : (
+              <ShieldCheck className="size-5" />
+            )}
             Pay Now
           </AppButton>
         </div>
