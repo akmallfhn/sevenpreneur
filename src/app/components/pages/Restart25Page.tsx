@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import HeroEventRestart2025 from "@/app/components/templates/HeroEventRestart25";
 import ContentEventRestart25 from "@/app/components/templates/ContentEventRestart25";
 import TicketCarouselRestart25 from "@/app/components/indexes/TicketCarouselRestart25";
@@ -14,29 +13,10 @@ import AttendeeRoleListRestart25 from "@/app/components/indexes/AttendeeRoleList
 import AppInterstitialBanner from "../modals/AppInterstitialBanner";
 
 export default function Restart25Page() {
-  const [isBannerOpen, setIsBannerOpen] = useState(false);
-  const bannerTimeInterval = 1000 * 60 * 60;
-
-  // Logic untuk tampilkan banner hanya jika belum muncul dalam interval
-  useEffect(() => {
-    // Retrieves the timestamp value of the last time the popup was closed (saved previously) from localStorage.
-    const lastShown = localStorage.getItem("interstitial_last_shown");
-    const now = Date.now();
-    // !lastShown → If no timestamp has been saved before, it means the banner has never been closed → show the banner.
-    // now - parseInt(lastShown) → Calculate the difference between the current time and the last time the banner was closed.
-    // > bannerTimeInterval → Compare whether the time difference has exceeded the set interval
-    if (!lastShown || now - parseInt(lastShown) > bannerTimeInterval) {
-      setIsBannerOpen(true);
-    }
-  }, [bannerTimeInterval]);
-
-  // Function to set the time when the user actually interacts
-  const handleBannerClosed = () => {
-    const now = Date.now();
-    // Store timestamp only after user action.
-    localStorage.setItem("interstitial_last_shown", now.toString());
-    setIsBannerOpen(false);
-  };
+  let bannerTimeInterval = 1000 * 60 * 60;
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    bannerTimeInterval = 1000 * 40;
+  }
 
   return (
     <div className="root relative bg-black items-center">
@@ -51,13 +31,11 @@ export default function Restart25Page() {
       <FAQEventRestart25 />
       <BannerEventRestart25 />
       <CustomFloatingRestart25 />
-
       <AppInterstitialBanner
-        isOpen={isBannerOpen}
+        bannerTimeInterval={bannerTimeInterval}
         redirectUrl="https://vesta.halofans.id/event/v2/re-start"
         interstitialImageMobile="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//insterstitial-dseven.webp"
         interstitialImageDesktop="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//web-popup-dseven.webp"
-        onClose={handleBannerClosed}
       />
     </div>
   );
