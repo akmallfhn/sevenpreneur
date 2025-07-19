@@ -15,7 +15,7 @@ import AppInterstitialBanner from "../modals/AppInterstitialBanner";
 
 export default function Restart25Page() {
   const [isBannerOpen, setIsBannerOpen] = useState(false);
-  const bannerTimeInterval = 1000 * 15;
+  const bannerTimeInterval = 1000 * 60 * 60;
 
   // Logic untuk tampilkan banner hanya jika belum muncul dalam interval
   useEffect(() => {
