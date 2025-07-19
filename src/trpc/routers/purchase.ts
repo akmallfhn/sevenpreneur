@@ -9,7 +9,7 @@ import { CategoryEnum, TStatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-export const buyRouter = createTRPCRouter({
+export const purchaseRouter = createTRPCRouter({
   cohort: loggedInProcedure
     .input(
       z.object({
@@ -99,7 +99,7 @@ export const buyRouter = createTRPCRouter({
         );
         if (deletedTransaction.count > 1) {
           console.error(
-            "buy.cohort: More-than-one transactions are deleted at once."
+            "purchase.cohort: More-than-one transactions are deleted at once."
           );
         }
         // Rethrow error using TRPCError
@@ -123,7 +123,7 @@ export const buyRouter = createTRPCRouter({
         });
       } else if (updatedTransaction.length > 1) {
         console.error(
-          "buy.cohort: More-than-one transactions are updated at once."
+          "purchase.cohort: More-than-one transactions are updated at once."
         );
       }
 
@@ -141,7 +141,9 @@ export const buyRouter = createTRPCRouter({
             message: "The selected user is not found.",
           });
         } else if (updatedUser.length > 1) {
-          console.error("buy.cohort: More-than-one users are updated at once.");
+          console.error(
+            "purchase.cohort: More-than-one users are updated at once."
+          );
         }
       }
 
