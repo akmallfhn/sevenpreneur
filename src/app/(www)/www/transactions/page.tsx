@@ -1,5 +1,6 @@
 import TransactionCardItemSVP from "@/app/components/items/TransactionCardItemSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
+import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -35,15 +36,19 @@ export default async function TransactionsPage() {
         Transaction History
       </h1>
       <div className="flex flex-col gap-4">
-        {transactionData.map((post, index) => (
-          <TransactionCardItemSVP
-            key={index}
-            transactionId={post.id}
-            transactionDate={post.paid_at} // TO DO: Created At
-            transactionStatus={post.status}
-            totalTransactionAmount={post.amount}
-          />
-        ))}
+        {transactionData
+          .sort(
+            (a, b) => dayjs(b.paid_at).valueOf() - dayjs(a.paid_at).valueOf()
+          )
+          .map((post, index) => (
+            <TransactionCardItemSVP
+              key={index}
+              transactionId={post.id}
+              transactionDate={post.paid_at} // TO DO: Created At
+              transactionStatus={post.status}
+              totalTransactionAmount={post.amount}
+            />
+          ))}
       </div>
     </div>
   );
