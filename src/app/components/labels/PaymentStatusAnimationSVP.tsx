@@ -1,16 +1,15 @@
 "use client";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-
-type PaymentStatus = "SUCCESS" | "EXPIRED" | "PENDING";
+import { TransactionStatus } from "../items/TransactionCardItemSVP";
 
 const variantStyles: Record<
-  PaymentStatus,
+  TransactionStatus,
   {
     source: string;
     scale: string;
   }
 > = {
-  SUCCESS: {
+  PAID: {
     source: "/animation/success-payment.lottie",
     scale: "scale-150",
   },
@@ -18,14 +17,14 @@ const variantStyles: Record<
     source: "/animation/waiting-payment.lottie",
     scale: "scale-90",
   },
-  EXPIRED: {
+  FAILED: {
     source: "/animation/failed-payment.lottie",
     scale: "scale-125",
   },
 };
 
 interface PaymentStatusAnimationSVPProps {
-  variant: PaymentStatus;
+  variant: TransactionStatus;
 }
 
 export default function PaymentStatusAnimationSVP({

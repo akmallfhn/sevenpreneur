@@ -6,7 +6,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 
-type TransactionStatus = "PAID" | "PENDING" | "FAILED";
+export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
 
 const variantStyles: Record<
   TransactionStatus,
