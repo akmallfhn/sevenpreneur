@@ -6,6 +6,38 @@ import dayjs from "dayjs";
 const data = [
   // ACTIVE TICKET
   {
+    id: "regular",
+    type: "Regular",
+    tagline: "A ticket to insight",
+    basePrice: 540000,
+    discountPrice: 370000,
+    benefit: ["Main stage access", "Workshop", "Experience zone"],
+    startDate: "2025-05-28T00:00:00+07:00",
+    expiredDate: "2025-07-22T23:59:00+07:00",
+    isPremium: false,
+    isActive: true,
+  },
+  {
+    id: "vip",
+    type: "VIP",
+    tagline: "Full experience. Half price",
+    basePrice: 5400000,
+    discountPrice: 3000000,
+    benefit: [
+      "Everything in Regular Ticket",
+      "Front row seating",
+      "Dinner & after party invite",
+      "Community membership",
+      "Exclusive merch set",
+    ],
+    startDate: "2025-05-28T00:00:00+07:00",
+    expiredDate: "2025-07-22T23:59:00+07:00",
+    isPremium: true,
+    isActive: true,
+  },
+
+  // --- INACTIVE TICKET
+  {
     id: "d_seven_regular",
     type: "D-Seven Regular",
     tagline: "Special Price on Today",
@@ -35,38 +67,6 @@ const data = [
     isPremium: true,
     isActive: true,
   },
-  {
-    id: "regular",
-    type: "Regular",
-    tagline: "A ticket to insight",
-    basePrice: 540000,
-    discountPrice: 370000,
-    benefit: ["Main stage access", "Workshop", "Experience zone"],
-    startDate: "2025-05-28T00:00:00+07:00",
-    expiredDate: "2025-07-20T23:59:00+07:00",
-    isPremium: false,
-    isActive: true,
-  },
-  {
-    id: "vip",
-    type: "VIP",
-    tagline: "Full experience. Half price",
-    basePrice: 5400000,
-    discountPrice: 3000000,
-    benefit: [
-      "Everything in Regular Ticket",
-      "Front row seating",
-      "Dinner & after party invite",
-      "Community membership",
-      "Exclusive merch set",
-    ],
-    startDate: "2025-05-28T00:00:00+07:00",
-    expiredDate: "2025-07-20T23:59:00+07:00",
-    isPremium: true,
-    isActive: true,
-  },
-
-  // --- INACTIVE TICKET
   {
     id: "early_bird_yes",
     type: "Early Bird",
