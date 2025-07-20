@@ -12,7 +12,6 @@ export default async function TransactionDetailsPage({
   params,
 }: TransactionDetailsPageProps) {
   const { transaction_id } = await params;
-  const transactionId = parseInt(transaction_id);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -21,5 +20,18 @@ export default async function TransactionDetailsPage({
     redirect(`/auth/login?redirectTo=/transactions/${transaction_id}`);
   }
 
-  return <TransactionStatusSVP />;
+  // --- Get User Data from Session Token
+  setSessionToken(sessionToken);
+  const userSession = (await trpc.auth.checkSession()).user;
+
+  return (
+    <TransactionStatusSVP
+      transactionId={transaction_id}
+      transactionStatus="PENDING"
+      userName={userSession.full_name}
+      createTransactionAt="2025-07-19 17:11:13.218+00"
+      paidTransactionAt="2025-07-22 20:11:13.218+00"
+      productPrice={100000}
+    />
+  );
 }

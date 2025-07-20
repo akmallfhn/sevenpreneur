@@ -7,9 +7,86 @@ import AppButton from "../buttons/AppButton";
 import { ChevronDown, RefreshCcw, Timer } from "lucide-react";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import PaymentStatusAnimationSVP from "../labels/PaymentStatusAnimationSVP";
+import { TransactionStatus } from "../items/TransactionCardItemSVP";
+import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
-export default function TransactionStatusSVP() {
+const variantStyles: Record<
+  TransactionStatus,
+  {
+    statusWord: string;
+    statusDescription: string;
+  }
+> = {
+  PAID: {
+    statusWord: "Payment successful",
+    statusDescription:
+      "We've received your payment successfully. Welcome aboard, and enjoy your learning journey!",
+  },
+  PENDING: {
+    statusWord: "Waiting for payment",
+    statusDescription:
+      "Complete your payment to prevent automatic cancellation.",
+  },
+  FAILED: {
+    statusWord: "Payment canceled",
+    statusDescription:
+      "Your payment was either cancelled or the payment window has expired",
+  },
+};
+
+interface TransactionStatusSVPProps {
+  transactionId: string;
+  transactionStatus: TransactionStatus;
+  invoiceNumber?: string;
+  invoiceURL?: string;
+  productPrice: number;
+  productAdminFee?: number;
+  productVAT?: number;
+  productTotalAmount?: number;
+  cohortId?: number;
+  cohortName?: string;
+  cohortImage?: string;
+  cohortSlug?: string;
+  cohortPriceName?: string;
+  paymentChannelName?: string;
+  paymentChannelImage?: string;
+  userName: string;
+  createTransactionAt: string;
+  paidTransactionAt: string;
+}
+
+export default function TransactionStatusSVP({
+  transactionId,
+  transactionStatus,
+  invoiceNumber,
+  invoiceURL,
+  productPrice,
+  productAdminFee,
+  productVAT,
+  productTotalAmount,
+  cohortName,
+  cohortImage,
+  cohortPriceName,
+  paymentChannelName,
+  paymentChannelImage,
+  userName,
+  createTransactionAt,
+  paidTransactionAt,
+}: TransactionStatusSVPProps) {
+  const router = useRouter();
   const [openAmountDetails, setOpenAmountDetails] = useState(false);
+  const { statusWord, statusDescription } = variantStyles[transactionStatus];
+
+  // --- Refresh data without full page reload
+  const handleRefresh = () => {
+    router.refresh();
+  };
+
+  // --- Set Max Payment Deadline
+  const paymentDeadline = dayjs(createTransactionAt)
+    .add(12, "hour")
+    .format("DD MMM YYYY [at] HH:mm");
 
   return (
     <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] lg:mx-auto lg:w-full lg:max-w-[960px] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
@@ -17,32 +94,40 @@ export default function TransactionStatusSVP() {
         {/* Transaction Status */}
         <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white lg:border lg:border-outline lg:rounded-lg">
           <div className="status-guidance flex flex-col items-center text-center font-ui">
-            <PaymentStatusAnimationSVP variant={"PENDING"} />
+            <PaymentStatusAnimationSVP variant={transactionStatus} />
             <div className="flex flex-col items-center gap-2">
-              <h2 className="font-bold text-black">Menunggu Pembayaran</h2>
-              <p className="text-alternative text-sm">
-                Complete your payment to prevent automatic cancellation.
-              </p>
+              <h2 className="font-bold text-black">{statusWord}</h2>
+              <p className="text-alternative text-sm">{statusDescription}</p>
               <AppButton
                 className="w-fit"
                 variant="primaryLight"
                 size="mediumRounded"
+                onClick={handleRefresh}
               >
                 <RefreshCcw className="size-5" />
                 Refresh Payment Status
               </AppButton>
             </div>
           </div>
-          <div className="flex font-ui w-full items-center justify-between">
-            <div className="flex flex-col text-sm">
-              <p className="text-black font-bold">Make the payment before</p>
-              <p className="text-alternative">12 Jan 2002 Pukul 12:45</p>
+          {transactionStatus !== "FAILED" && (
+            <div className="flex font-ui w-full items-center justify-between">
+              <div className="flex flex-col text-sm">
+                <p className="text-black font-bold">
+                  {transactionStatus === "PAID" && "Payment received on"}
+                  {transactionStatus === "PENDING" && "Make the payment before"}
+                </p>
+                <p className="payment-deadline text-alternative">
+                  {transactionStatus === "PAID" &&
+                    dayjs(paidTransactionAt).format("DD MMM YYYY [at] HH:mm")}
+                  {transactionStatus === "PENDING" && paymentDeadline}
+                </p>
+              </div>
+              <div className="flex p-1 px-2 items-center gap-1 bg-secondary-light text-sm text-secondary rounded-full">
+                <Timer className="size-4" />
+                <p className="font-bold">20:04:05</p>
+              </div>
             </div>
-            <div className="flex p-1 px-2 items-center gap-1 bg-secondary-light text-sm text-secondary rounded-full">
-              <Timer className="size-4" />
-              <p className="font-bold">20:04:05</p>
-            </div>
-          </div>
+          )}
         </div>
         {/* Payment Method & Details*/}
         <div className="payment flex flex-col w-full bg-white p-5 lg:border lg:border-outline lg:rounded-lg">
@@ -71,15 +156,15 @@ export default function TransactionStatusSVP() {
           >
             <div className="amount-details flex flex-col gap-2">
               <ReceiptLineItemSVP
-                receiptName="Price"
+                receiptName="Program Price"
+                receiptValue={RupiahCurrency(productPrice)}
+              />
+              <ReceiptLineItemSVP
+                receiptName="Admin Fee"
                 receiptValue={RupiahCurrency(10000000)}
               />
               <ReceiptLineItemSVP
-                receiptName="Price"
-                receiptValue={RupiahCurrency(10000000)}
-              />
-              <ReceiptLineItemSVP
-                receiptName="Price"
+                receiptName="VAT"
                 receiptValue={RupiahCurrency(10000000)}
               />
               <hr className="border-t-outline border-dashed" />
@@ -128,7 +213,7 @@ export default function TransactionStatusSVP() {
         <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 lg:border lg:border-outline lg:rounded-lg">
           <ReceiptLineItemSVP
             receiptName="Transaction ID"
-            receiptValue={"bg435h9349g75"}
+            receiptValue={transactionId}
           />
           <ReceiptLineItemSVP
             receiptName="Invoice Number"
@@ -140,7 +225,7 @@ export default function TransactionStatusSVP() {
           />
           <ReceiptLineItemSVP
             receiptName="Customer Name"
-            receiptValue={"Akmal Luthfiansyah"}
+            receiptValue={userName}
           />
         </div>
 
@@ -176,16 +261,25 @@ export default function TransactionStatusSVP() {
 
         {/* CTA */}
         <div className="flex flex-col p-5 pt-8 gap-3 items-center lg:mx-auto lg:flex-row-reverse">
-          <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
-            Continue Payment
-          </AppButton>
-          <AppButton
-            variant="semiDestructive"
-            size="defaultRounded"
-            className="w-full lg:w-[240px]"
-          >
-            Cancel Order
-          </AppButton>
+          {transactionStatus === "PENDING" && (
+            <>
+              <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
+                Continue Payment
+              </AppButton>
+              <AppButton
+                variant="semiDestructive"
+                size="defaultRounded"
+                className="w-full lg:w-[240px]"
+              >
+                Cancel Order
+              </AppButton>
+            </>
+          )}
+          {transactionStatus === "FAILED" && (
+            <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
+              Retry Payment
+            </AppButton>
+          )}
         </div>
       </div>
     </div>
