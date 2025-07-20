@@ -54,7 +54,7 @@ export default function TransactionCardItemSVP({
       {/* Status & Date */}
       <div className="flex items-center justify-between font-ui">
         <p className="transaction-date text-sm text-black">
-          {dayjs(transactionDate).format("DD MMMM YYYY")}
+          {dayjs(transactionDate).format("DD MMMM YYYY [at] HH:mm")}
         </p>
         <p
           className={`transaction-status text-xs font-semibold px-2.5 py-1 rounded-sm ${statusColor}`}

@@ -1,4 +1,3 @@
-import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
 import TransactionStatusSVP from "@/app/components/templates/TransactionStatusSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
