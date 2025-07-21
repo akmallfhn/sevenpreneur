@@ -37,7 +37,6 @@ export default async function TransactionDetailsPage({
     return notFound();
   }
   const transactionDetailsData = transactionDetailsDataRaw.transaction;
-  console.log(transactionDetailsData);
 
   return (
     <TransactionStatusSVP
@@ -56,7 +55,7 @@ export default async function TransactionDetailsPage({
       cohortPriceName={transactionDetailsData.cohort_price_name}
       paymentChannelName={transactionDetailsData.payment_channel_name}
       paymentChannelImage={transactionDetailsData.payment_channel_image}
-      userName={userSession.full_name}
+      userName={transactionDetailsData.user_full_name}
       createTransactionAt={transactionDetailsData.created_at.toISOString()}
       paidTransactionAt={transactionDetailsData.paid_at?.toISOString()}
     />

@@ -10,6 +10,7 @@ import PaymentStatusAnimationSVP from "../labels/PaymentStatusAnimationSVP";
 import { TransactionStatus } from "../items/TransactionCardItemSVP";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
+import { useCountdownHours } from "@/lib/countdown-hours";
 
 const variantStyles: Record<
   TransactionStatus,
@@ -78,17 +79,24 @@ export default function TransactionStatusSVP({
 }: TransactionStatusSVPProps) {
   const router = useRouter();
   const [openAmountDetails, setOpenAmountDetails] = useState(false);
+  const [loadingRefresh, setLoadingRefresh] = useState(false);
   const { statusWord, statusDescription } = variantStyles[transactionStatus];
+  const isPaid = transactionStatus === "PAID";
+  const isPending = transactionStatus === "PENDING";
+  const isFailed = transactionStatus === "FAILED";
 
   // --- Refresh data without full page reload
   const handleRefresh = () => {
+    setLoadingRefresh(true);
     router.refresh();
+    setTimeout(() => {
+      setLoadingRefresh(false);
+    }, 600);
   };
 
   // --- Set Max Payment Deadline
-  const paymentDeadline = dayjs(createTransactionAt)
-    .add(12, "hour")
-    .format("DD MMM YYYY [at] HH:mm");
+  const paymentDeadline = dayjs(createTransactionAt).add(12, "hour");
+  const countdown = useCountdownHours(paymentDeadline);
 
   return (
     <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] lg:mx-auto lg:w-full lg:max-w-[960px] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
@@ -106,28 +114,37 @@ export default function TransactionStatusSVP({
                 size="mediumRounded"
                 onClick={handleRefresh}
               >
-                <RefreshCcw className="size-5" />
+                <RefreshCcw
+                  className={`size-5 ${loadingRefresh ? "animate-spin" : ""}`}
+                />
                 Refresh Payment Status
               </AppButton>
             </div>
           </div>
           {transactionStatus !== "FAILED" && (
-            <div className="flex font-ui w-full items-center justify-between">
+            <div
+              className={`flex font-ui w-full items-center ${
+                isPaid ? "justify-center" : "justify-between"
+              }`}
+            >
               <div className="flex flex-col text-sm">
                 <p className="text-black font-bold">
-                  {transactionStatus === "PAID" && "Payment received on"}
-                  {transactionStatus === "PENDING" && "Make the payment before"}
+                  {isPaid && "Payment received on"}
+                  {isPending && "Make the payment before"}
                 </p>
                 <p className="payment-deadline text-alternative">
-                  {transactionStatus === "PAID" &&
+                  {isPaid &&
                     dayjs(paidTransactionAt).format("DD MMM YYYY [at] HH:mm")}
-                  {transactionStatus === "PENDING" && paymentDeadline}
+                  {isPending &&
+                    paymentDeadline.format("DD MMM YYYY [at] HH:mm")}
                 </p>
               </div>
-              <div className="flex p-1 px-2 items-center gap-1 bg-secondary-light text-sm text-secondary rounded-full">
-                <Timer className="size-4" />
-                <p className="font-bold">20:04:05</p>
-              </div>
+              {isPending && (
+                <div className="flex p-1 px-2 items-center gap-1 bg-secondary-light text-sm text-secondary rounded-full">
+                  <Timer className="size-4" />
+                  <p className="font-bold">{countdown}</p>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -164,11 +181,11 @@ export default function TransactionStatusSVP({
               />
               <ReceiptLineItemSVP
                 receiptName="Admin Fee"
-                receiptValue={RupiahCurrency(productAdminFee)}
+                receiptValue={RupiahCurrency(Math.round(productAdminFee))}
               />
               <ReceiptLineItemSVP
                 receiptName="VAT"
-                receiptValue={RupiahCurrency(productVAT)}
+                receiptValue={RupiahCurrency(Math.round(productVAT))}
               />
               <hr className="border-t-outline border-dashed" />
             </div>
@@ -179,7 +196,9 @@ export default function TransactionStatusSVP({
           >
             <div className="amount flex flex-col font-ui text-black text-sm">
               <p>Total Amount</p>
-              <p className="font-bold">{RupiahCurrency(productTotalAmount)}</p>
+              <p className="font-bold">
+                {RupiahCurrency(Math.round(productTotalAmount))}
+              </p>
             </div>
             <ChevronDown
               className={`text-alternative size-6 transition-transform duration-300 ${
@@ -265,9 +284,14 @@ export default function TransactionStatusSVP({
 
         {/* CTA */}
         <div className="flex flex-col p-5 pt-8 gap-3 items-center lg:mx-auto lg:flex-row-reverse">
-          {transactionStatus === "PENDING" && (
+          {isPending && (
             <>
-              <a href={invoiceURL}>
+              <a
+                href={invoiceURL}
+                target="_blank"
+                rel="noopenner noreferrer"
+                className="w-full lg:w-[240px]"
+              >
                 <AppButton
                   size="defaultRounded"
                   className="w-full lg:w-[240px]"
@@ -284,7 +308,7 @@ export default function TransactionStatusSVP({
               </AppButton>
             </>
           )}
-          {transactionStatus === "FAILED" && (
+          {isFailed && (
             <Link href={`/cohorts/${cohortSlug}/${cohortId}`}>
               <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
                 Retry Payment
