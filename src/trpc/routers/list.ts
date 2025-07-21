@@ -9,7 +9,14 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import {
+  CategoryEnum,
+  Cohort,
+  CohortPrice,
+  StatusEnum,
+  TStatusEnum,
+} from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -130,7 +137,7 @@ export const listRouter = createTRPCRouter({
 
   cohorts: publicProcedure.query(async (opts) => {
     let whereClause = { deleted_at: null };
-    if (!opts.ctx.user) {
+    if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
       whereClause = Object.assign(whereClause, {
         status: StatusEnum.ACTIVE,
         published_at: {
@@ -342,20 +349,67 @@ export const listRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      let whereUser = opts.input.user_id;
+      if (opts.ctx.user.role.name !== "Administrator") {
+        whereUser = opts.ctx.user.id;
+      }
       const transactionsList = await opts.ctx.prisma.transaction.findMany({
-        where: { user_id: opts.input.user_id },
-        orderBy: [{ updated_at: "asc" }, { created_at: "asc" }],
+        where: { user_id: whereUser },
+        orderBy: [{ created_at: "desc" }],
       });
+
+      const cohortIdList: Set<number> = new Set();
+      transactionsList.forEach((entry) => {
+        if (entry.category === CategoryEnum.COHORT) {
+          cohortIdList.add(entry.item_id);
+        }
+      });
+      const cohortPriceList = await opts.ctx.prisma.cohortPrice.findMany({
+        include: { cohort: true },
+        where: { id: { in: Array.from(cohortIdList) } },
+      });
+      const cohortPriceMap = Object.assign(
+        {},
+        ...cohortPriceList.map((entry) => ({ [entry.id]: entry }))
+      );
+
       const returnedList = transactionsList.map((entry) => {
+        let invoiceUrl: string | undefined;
+        if (entry.status === TStatusEnum.PENDING) {
+          invoiceUrl = `https://checkout-staging.xendit.co/v2/${entry.invoice_number}`;
+        }
+
+        let cohortName: string | undefined;
+        let cohortPriceAmount: Decimal | undefined;
+        let cohortImage: string | undefined;
+        let cohortId: number | undefined;
+        let cohortSlugUrl: string | undefined;
+        if (entry.category === CategoryEnum.COHORT) {
+          const selectedCohortPrice: CohortPrice & { cohort: Cohort } =
+            cohortPriceMap[entry.item_id];
+          cohortName = selectedCohortPrice.cohort.name;
+          cohortPriceAmount = selectedCohortPrice.amount;
+          cohortImage = selectedCohortPrice.cohort.image;
+          cohortId = selectedCohortPrice.cohort.id;
+          cohortSlugUrl = selectedCohortPrice.cohort.slug_url;
+        }
+
         return {
           id: entry.id,
           user_id: entry.user_id,
           category: entry.category,
           item_id: entry.item_id,
-          amount: entry.amount,
+          total_amount: entry.amount.plus(entry.admin_fee),
           currency: entry.currency,
           status: entry.status,
           paid_at: entry.paid_at,
+          created_at: entry.created_at,
+          invoice_url: invoiceUrl,
+          cohort_name: cohortName,
+          cohort_ticket_price: cohortPriceAmount,
+          cohort_image: cohortImage,
+          cohort_id: cohortId,
+          cohort_slug: cohortSlugUrl,
         };
       });
       return {
