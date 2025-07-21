@@ -49,7 +49,7 @@ export const purchaseRouter = createTRPCRouter({
         data: {
           user_id: opts.ctx.user.id,
           category: CategoryEnum.COHORT,
-          item_id: selectedCohortPrice.cohort_id,
+          item_id: selectedCohortPrice.id,
           amount: selectedCohortPrice.amount,
           admin_fee: calculatedPrice.adminFee,
           vat: calculatedPrice.vat,
