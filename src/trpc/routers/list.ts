@@ -368,9 +368,8 @@ export const listRouter = createTRPCRouter({
         include: { cohort: true },
         where: { id: { in: Array.from(cohortIdList) } },
       });
-      const cohortPriceMap = Object.assign(
-        {},
-        ...cohortPriceList.map((entry) => ({ [entry.id]: entry }))
+      const cohortPriceMap = new Map(
+        cohortPriceList.map((entry) => [entry.id, entry])
       );
 
       const returnedList = transactionsList.map((entry) => {
@@ -379,24 +378,24 @@ export const listRouter = createTRPCRouter({
           invoiceUrl = `https://checkout-staging.xendit.co/v2/${entry.invoice_number}`;
         }
 
-        let cohortName: string | undefined;
-        let cohortPriceAmount: Decimal | undefined;
-        let cohortImage: string | undefined;
         let cohortId: number | undefined;
+        let cohortName: string | undefined;
+        let cohortImage: string | undefined;
         let cohortSlugUrl: string | undefined;
+        let cohortPriceName: string | undefined;
         if (entry.category === CategoryEnum.COHORT) {
-          const selectedCohortPrice: CohortPrice & { cohort: Cohort } =
-            cohortPriceMap[entry.item_id];
-          cohortName = selectedCohortPrice.cohort.name;
-          cohortPriceAmount = selectedCohortPrice.amount;
-          cohortImage = selectedCohortPrice.cohort.image;
-          cohortId = selectedCohortPrice.cohort.id;
-          cohortSlugUrl = selectedCohortPrice.cohort.slug_url;
+          const selectedCohortPrice = cohortPriceMap.get(entry.item_id);
+          if (selectedCohortPrice) {
+            cohortId = selectedCohortPrice.cohort.id;
+            cohortName = selectedCohortPrice.cohort.name;
+            cohortImage = selectedCohortPrice.cohort.image;
+            cohortSlugUrl = selectedCohortPrice.cohort.slug_url;
+            cohortPriceName = selectedCohortPrice.name;
+          }
         }
 
         return {
           id: entry.id,
-          user_id: entry.user_id,
           category: entry.category,
           item_id: entry.item_id,
           total_amount: entry.amount.plus(entry.admin_fee),
@@ -405,11 +404,11 @@ export const listRouter = createTRPCRouter({
           paid_at: entry.paid_at,
           created_at: entry.created_at,
           invoice_url: invoiceUrl,
-          cohort_name: cohortName,
-          cohort_ticket_price: cohortPriceAmount,
-          cohort_image: cohortImage,
           cohort_id: cohortId,
+          cohort_name: cohortName,
+          cohort_image: cohortImage,
           cohort_slug: cohortSlugUrl,
+          cohort_price_name: cohortPriceName,
         };
       });
       return {
