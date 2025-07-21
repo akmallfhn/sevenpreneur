@@ -14,6 +14,11 @@ export function stringIsUUID(): z.ZodString {
   return z.string().trim().min(32);
 }
 
+export function stringIsNanoid(): z.ZodString {
+  // Nanoid format (21 character)
+  return z.string().trim().min(21);
+}
+
 export function numberIsID(): z.ZodNumber {
   // Number should be 1 or bigger
   return z.number().finite().min(1);
