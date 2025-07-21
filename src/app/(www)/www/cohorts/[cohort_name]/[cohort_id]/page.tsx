@@ -16,7 +16,7 @@ export default async function CohortDetailsPage({
 }: CohortDetailsPageProps) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
+  // if (!sessionToken) return null;
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
   const { cohort_name, cohort_id } = await params;
@@ -33,11 +33,11 @@ export default async function CohortDetailsPage({
   }
 
   // --- Checking Access
-  setSessionToken(sessionToken);
-  const checkUser = (await trpc.auth.checkSession()).user;
-  if (checkUser.role_id !== 0) {
-    return notFound();
-  }
+  // setSessionToken(sessionToken);
+  // const checkUser = (await trpc.auth.checkSession()).user;
+  // if (checkUser.role_id !== 0) {
+  //   return notFound();
+  // }
 
   // --- Get Data
   setSecretKey(secretKey!);

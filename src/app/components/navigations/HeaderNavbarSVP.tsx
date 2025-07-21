@@ -4,7 +4,14 @@ import Link from "next/link";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
 import AppButton from "../buttons/AppButton";
 import { useEffect, useRef, useState } from "react";
-import { Blocks, BookMarked, LogOut, UserRound, Wallet } from "lucide-react";
+import {
+  Blocks,
+  BookMarked,
+  LogOut,
+  UserCircle2,
+  UserRound,
+  Wallet,
+} from "lucide-react";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
@@ -129,7 +136,12 @@ export default function HeaderNavbarSVP({
             </AppDropdown>
           </div>
         ) : (
-          <AppButton>Login</AppButton>
+          <Link href={"/auth/login"}>
+            <AppButton size="defaultRounded">
+              <UserCircle2 className="size-5" />
+              Login
+            </AppButton>
+          </Link>
         )}
       </div>
     </div>
