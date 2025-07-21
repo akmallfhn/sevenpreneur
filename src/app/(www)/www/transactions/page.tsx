@@ -23,9 +23,9 @@ export default async function TransactionsPage() {
   const transactionData = transactionDataRaw.list.map((post) => ({
     ...post,
     amount:
-      typeof post.amount === "object" && "toNumber" in post.amount
-        ? post.amount.toNumber()
-        : post.amount,
+      typeof post.total_amount === "object" && "toNumber" in post.total_amount
+        ? post.total_amount.toNumber()
+        : post.total_amount,
     paid_at: post.paid_at ? post.paid_at.toISOString() : null,
   }));
 
