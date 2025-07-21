@@ -41,20 +41,23 @@ export const purchaseRouter = createTRPCRouter({
           message: "The payment channel with the given ID is not found.",
         });
       }
-      const transactionFinalPrice = calculateFinalPrice(
+      const calculatedPrice = calculateFinalPrice(
         selectedCohortPrice.amount,
         selectedPayment
-      ).finalPrice;
+      );
       const createdTransaction = await opts.ctx.prisma.transaction.create({
         data: {
           user_id: opts.ctx.user.id,
           category: CategoryEnum.COHORT,
           item_id: selectedCohortPrice.cohort_id,
           amount: selectedCohortPrice.amount,
-          admin_fee: transactionFinalPrice.minus(selectedCohortPrice.amount),
+          admin_fee: calculatedPrice.adminFee,
+          vat: calculatedPrice.vat,
           currency: "IDR",
           invoice_number: "?", // updated after requesting Xendit
           status: TStatusEnum.PENDING,
+          payment_method: selectedPayment.method,
+          payment_channel: selectedPayment.code,
         },
       });
       const theTransaction = await opts.ctx.prisma.transaction.findFirst({
@@ -75,7 +78,7 @@ export const purchaseRouter = createTRPCRouter({
       try {
         xenditResponse = await xenditRequestCreateInvoice({
           external_id: theTransaction.id,
-          amount: transactionFinalPrice.toNumber(),
+          amount: calculatedPrice.finalPrice.toNumber(),
           description: selectedCohortPrice.cohort.name,
           invoice_duration: 12 * 60 * 60, // 12 hours
           success_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
@@ -86,7 +89,7 @@ export const purchaseRouter = createTRPCRouter({
             {
               name: selectedCohortPrice.cohort.name,
               quantity: 1,
-              price: transactionFinalPrice.toNumber(),
+              price: calculatedPrice.finalPrice.toNumber(),
             },
           ],
         });
