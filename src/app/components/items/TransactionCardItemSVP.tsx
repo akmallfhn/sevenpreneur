@@ -33,11 +33,11 @@ interface TransactionCardItemSVPProps {
   transactionId: string;
   transactionDate: string | null;
   transactionStatus: TransactionStatus;
-  cohortId?: number | undefined;
-  cohortImage?: string | undefined;
-  cohortName?: string | undefined;
-  cohortSlug?: string | undefined;
-  cohortPriceName?: string | undefined;
+  cohortId: number | undefined;
+  cohortImage: string | undefined;
+  cohortName: string | undefined;
+  cohortSlug: string | undefined;
+  cohortPriceName: string | undefined;
   totalTransactionAmount: number;
   invoiceURL: string | undefined;
 }
@@ -55,6 +55,10 @@ export default function TransactionCardItemSVP({
   invoiceURL,
 }: TransactionCardItemSVPProps) {
   const { statusColor, statusWord } = variantStyles[transactionStatus];
+  const isPaid = transactionStatus === "PAID";
+  const isPending = transactionStatus === "PENDING";
+  const isFailed = transactionStatus === "FAILED";
+
   return (
     <div className="transaction-item flex flex-col p-4 gap-3 bg-white rounded-md shadow-md">
       {/* Status & Date */}
@@ -99,10 +103,12 @@ export default function TransactionCardItemSVP({
       <div className="transaction-metadata flex items-center justify-between">
         <div className="flex flex-col font-ui text-black text-sm">
           <p>Total Amount</p>
-          <p className="font-bold">{RupiahCurrency(totalTransactionAmount)}</p>
+          <p className="font-bold">
+            {RupiahCurrency(Math.round(totalTransactionAmount))}
+          </p>
         </div>
-        {transactionStatus === "PENDING" && (
-          <a href={invoiceURL}>
+        {isPending && (
+          <a href={invoiceURL} target="_blank" rel="noopenner noreferrer">
             <AppButton
               className="w-[120px]"
               variant="primary"
@@ -112,7 +118,7 @@ export default function TransactionCardItemSVP({
             </AppButton>
           </a>
         )}
-        {transactionStatus === "FAILED" && (
+        {isFailed && (
           <Link href={`/cohorts/${cohortSlug}/${cohortId}`}>
             <AppButton
               className="w-[120px]"
