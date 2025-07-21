@@ -185,6 +185,7 @@ Table transactions {
   item_id          integer        [note: 'item's ID based on category']
   amount           decimal(12,2)
   admin_fee        decimal(12,2)
+  vat              decimal(12,2)
   currency         varchar        [note: 'IDR']
   invoice_number   varchar
   status           t_status_enum
