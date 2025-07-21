@@ -8,7 +8,7 @@ import {
   stringIsNanoid,
   stringIsUUID,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -318,7 +318,11 @@ export const readRouter = createTRPCRouter({
       if (opts.ctx.user.role.name === "Administrator") {
         whereUser = undefined;
       }
+
       const theTransaction = await opts.ctx.prisma.transaction.findFirst({
+        include: {
+          user: true,
+        },
         where: {
           id: opts.input.id,
           user_id: whereUser,
@@ -331,10 +335,66 @@ export const readRouter = createTRPCRouter({
           message: "The transaction with the given ID is not found.",
         });
       }
+
+      let invoiceUrl: string | undefined;
+      if (theTransaction.status === TStatusEnum.PENDING) {
+        invoiceUrl = `https://checkout-staging.xendit.co/v2/${theTransaction.invoice_number}`;
+      }
+
+      let paymentChannelName: string | undefined;
+      let paymentChannelImage: string | undefined;
+      const thePaymentChannel = await opts.ctx.prisma.paymentChannel.findFirst({
+        where: { code: theTransaction.payment_channel },
+      });
+      if (thePaymentChannel) {
+        paymentChannelName = thePaymentChannel.label;
+        paymentChannelImage = thePaymentChannel.image;
+      }
+
+      let cohortId: number | undefined;
+      let cohortName: string | undefined;
+      let cohortImage: string | undefined;
+      let cohortSlugUrl: string | undefined;
+      let cohortPriceName: string | undefined;
+      if (theTransaction.category === CategoryEnum.COHORT) {
+        const theCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
+          include: { cohort: true },
+          where: { id: theTransaction.item_id },
+        });
+        if (theCohortPrice) {
+          cohortId = theCohortPrice.cohort.id;
+          cohortName = theCohortPrice.cohort.name;
+          cohortImage = theCohortPrice.cohort.image;
+          cohortSlugUrl = theCohortPrice.cohort.slug_url;
+          cohortPriceName = theCohortPrice.name;
+        }
+      }
+
       return {
         status: 200,
         message: "Success",
-        transaction: theTransaction,
+        transaction: {
+          id: theTransaction.id,
+          status: theTransaction.status,
+          invoice_number: theTransaction.invoice_number,
+          invoice_url: invoiceUrl,
+          product_price: theTransaction.amount,
+          product_admin_fee: theTransaction.admin_fee,
+          product_vat: theTransaction.vat,
+          product_total_amount: theTransaction.amount
+            .plus(theTransaction.admin_fee)
+            .plus(theTransaction.vat),
+          cohort_id: cohortId,
+          cohort_name: cohortName,
+          cohort_image: cohortImage,
+          cohort_slug: cohortSlugUrl,
+          cohort_price_name: cohortPriceName,
+          payment_channel_name: paymentChannelName,
+          payment_channel_image: paymentChannelImage,
+          user_full_name: theTransaction.user.full_name,
+          created_at: theTransaction.created_at,
+          paid_at: theTransaction.paid_at,
+        },
       };
     }),
 });
