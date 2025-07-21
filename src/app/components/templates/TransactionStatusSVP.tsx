@@ -38,22 +38,22 @@ const variantStyles: Record<
 interface TransactionStatusSVPProps {
   transactionId: string;
   transactionStatus: TransactionStatus;
-  invoiceNumber?: string;
-  invoiceURL?: string;
+  invoiceNumber: string;
+  invoiceURL: string | undefined;
   productPrice: number;
-  productAdminFee?: number;
-  productVAT?: number;
-  productTotalAmount?: number;
-  cohortId?: number;
-  cohortName?: string;
-  cohortImage?: string;
-  cohortSlug?: string;
-  cohortPriceName?: string;
-  paymentChannelName?: string;
-  paymentChannelImage?: string;
+  productAdminFee: number;
+  productVAT: number;
+  productTotalAmount: number;
+  cohortId: number | undefined;
+  cohortName: string | undefined;
+  cohortImage: string | undefined;
+  cohortSlug: string | undefined;
+  cohortPriceName: string | undefined;
+  paymentChannelName: string | undefined;
+  paymentChannelImage: string | undefined;
   userName: string;
   createTransactionAt: string;
-  paidTransactionAt: string;
+  paidTransactionAt: string | undefined;
 }
 
 export default function TransactionStatusSVP({
@@ -65,8 +65,10 @@ export default function TransactionStatusSVP({
   productAdminFee,
   productVAT,
   productTotalAmount,
+  cohortId,
   cohortName,
   cohortImage,
+  cohortSlug,
   cohortPriceName,
   paymentChannelName,
   paymentChannelImage,
@@ -136,6 +138,7 @@ export default function TransactionStatusSVP({
               <Image
                 className="object-cover w-full h-full"
                 src={
+                  paymentChannelImage ||
                   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/payment-icon/payment-mandiri.svg"
                 }
                 alt="Icon Payment"
@@ -144,7 +147,7 @@ export default function TransactionStatusSVP({
               />
             </div>
             <p className="payment-channel-name font-ui font-[450px] text-black text-sm">
-              BSI Virtual Account
+              {paymentChannelName}
             </p>
           </div>
           <div
@@ -161,11 +164,11 @@ export default function TransactionStatusSVP({
               />
               <ReceiptLineItemSVP
                 receiptName="Admin Fee"
-                receiptValue={RupiahCurrency(10000000)}
+                receiptValue={RupiahCurrency(productAdminFee)}
               />
               <ReceiptLineItemSVP
                 receiptName="VAT"
-                receiptValue={RupiahCurrency(10000000)}
+                receiptValue={RupiahCurrency(productVAT)}
               />
               <hr className="border-t-outline border-dashed" />
             </div>
@@ -176,7 +179,7 @@ export default function TransactionStatusSVP({
           >
             <div className="amount flex flex-col font-ui text-black text-sm">
               <p>Total Amount</p>
-              <p className="font-bold">Rp 1,800,000</p>
+              <p className="font-bold">{RupiahCurrency(productTotalAmount)}</p>
             </div>
             <ChevronDown
               className={`text-alternative size-6 transition-transform duration-300 ${
@@ -193,6 +196,7 @@ export default function TransactionStatusSVP({
             <Image
               className="object-cover w-full h-full"
               src={
+                cohortImage ||
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aN-5V--yL4NOrcd_becVZJkBTc7T_EdYiw&s"
               }
               alt="Product Image"
@@ -201,11 +205,9 @@ export default function TransactionStatusSVP({
             />
           </div>
           <div className="flex flex-col font-ui text-black max-w-[calc(100%-4rem-0.75rem)]">
-            <p className="program-name font-bold line-clamp-2">
-              TETR College of Business
-            </p>
+            <p className="program-name font-bold line-clamp-2">{cohortName}</p>
             <p className="program-price-tier text-sm line-clamp-1">
-              Paket Intensive
+              {cohortPriceName}
             </p>
           </div>
         </div>
@@ -217,11 +219,13 @@ export default function TransactionStatusSVP({
           />
           <ReceiptLineItemSVP
             receiptName="Invoice Number"
-            receiptValue={"SVP-2384626813"}
+            receiptValue={invoiceNumber}
           />
           <ReceiptLineItemSVP
             receiptName="Transaction Date"
-            receiptValue={"2 Feb 2024 19:45"}
+            receiptValue={dayjs(createTransactionAt).format(
+              "DD MMM YYYY HH:mm"
+            )}
           />
           <ReceiptLineItemSVP
             receiptName="Customer Name"
@@ -263,9 +267,14 @@ export default function TransactionStatusSVP({
         <div className="flex flex-col p-5 pt-8 gap-3 items-center lg:mx-auto lg:flex-row-reverse">
           {transactionStatus === "PENDING" && (
             <>
-              <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
-                Continue Payment
-              </AppButton>
+              <a href={invoiceURL}>
+                <AppButton
+                  size="defaultRounded"
+                  className="w-full lg:w-[240px]"
+                >
+                  Continue Payment
+                </AppButton>
+              </a>
               <AppButton
                 variant="semiDestructive"
                 size="defaultRounded"
@@ -276,9 +285,11 @@ export default function TransactionStatusSVP({
             </>
           )}
           {transactionStatus === "FAILED" && (
-            <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
-              Retry Payment
-            </AppButton>
+            <Link href={`/cohorts/${cohortSlug}/${cohortId}`}>
+              <AppButton size="defaultRounded" className="w-full lg:w-[240px]">
+                Retry Payment
+              </AppButton>
+            </Link>
           )}
         </div>
       </div>
