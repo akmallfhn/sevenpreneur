@@ -82,7 +82,13 @@ export default function SpeakersLineUpRestart25() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/suwandi-soh.webp",
       on_confirmation: false,
     },
-
+    {
+      name: "Shintia Xu",
+      title: "CEO of ONA",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/shintia-xu.webp",
+      on_confirmation: false,
+    },
     {
       name: "Bhima Yudhistira",
       title: "Executive Director CELIOS",
@@ -109,6 +115,13 @@ export default function SpeakersLineUpRestart25() {
       title: "CEO & Co-Founder Kata.ai",
       image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/irzan-raditya.webp",
+      on_confirmation: false,
+    },
+    {
+      name: "Friska Wirya",
+      title: "Top 50 Global Change Management Expert",
+      image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/friska-wirya.webp",
       on_confirmation: false,
     },
     {

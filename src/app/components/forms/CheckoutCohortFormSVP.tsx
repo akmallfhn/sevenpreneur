@@ -119,7 +119,7 @@ export default function CheckoutCohortFormSVP({
       ticketIdParams !== String(selectedPriceTierId)
     ) {
       setIsLoadingCheckout(true);
-      router.push(`?ticketId=${selectedPriceTierId}`);
+      router.replace(`?ticketId=${selectedPriceTierId}`);
     }
   };
   useEffect(() => {
@@ -216,7 +216,7 @@ export default function CheckoutCohortFormSVP({
       });
       if (makePayment.status === 200) {
         window.open(makePayment.invoice_url, "_blank");
-        router.push(`/transactions/${makePayment.transaction_id}`);
+        router.replace(`/transactions/${makePayment.transaction_id}`);
       } else {
         toast.error("Failed to create invoice", {
           description: makePayment.message,

@@ -59,7 +59,7 @@ export default function HeaderNavbarSVP({
 
   // --- Domain Logic
   let domain = "sevenpreneur.com";
-  if (process.env.DOMAIN_MODE === "local") {
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
   }
 
