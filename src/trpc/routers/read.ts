@@ -3,7 +3,11 @@ import {
   loggedInProcedure,
   publicProcedure,
 } from "@/trpc/init";
-import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  stringIsNanoid,
+  stringIsUUID,
+} from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -300,6 +304,37 @@ export const readRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         project: theProject,
+      };
+    }),
+
+  transaction: loggedInProcedure
+    .input(
+      z.object({
+        id: stringIsNanoid(),
+      })
+    )
+    .query(async (opts) => {
+      let whereUser: string | undefined = opts.ctx.user.id;
+      if (opts.ctx.user.role.name === "Administrator") {
+        whereUser = undefined;
+      }
+      const theTransaction = await opts.ctx.prisma.transaction.findFirst({
+        where: {
+          id: opts.input.id,
+          user_id: whereUser,
+          // deleted_at: null,
+        },
+      });
+      if (!theTransaction) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The transaction with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        transaction: theTransaction,
       };
     }),
 });
