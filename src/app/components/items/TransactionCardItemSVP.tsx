@@ -33,20 +33,26 @@ interface TransactionCardItemSVPProps {
   transactionId: string;
   transactionDate: string | null;
   transactionStatus: TransactionStatus;
-  transactionImage?: string; // TO DO: Join table Cohort
-  transactionCohortName?: string;
-  transactionCohortPriceName?: string;
+  cohortId?: number | undefined;
+  cohortImage?: string | undefined;
+  cohortName?: string | undefined;
+  cohortSlug?: string | undefined;
+  cohortPriceName?: string | undefined;
   totalTransactionAmount: number;
+  invoiceURL: string | undefined;
 }
 
 export default function TransactionCardItemSVP({
   transactionId,
   transactionDate,
   transactionStatus,
-  transactionImage,
-  transactionCohortName,
-  transactionCohortPriceName,
+  cohortId,
+  cohortImage,
+  cohortName,
+  cohortSlug,
+  cohortPriceName,
   totalTransactionAmount,
+  invoiceURL,
 }: TransactionCardItemSVPProps) {
   const { statusColor, statusWord } = variantStyles[transactionStatus];
   return (
@@ -72,7 +78,7 @@ export default function TransactionCardItemSVP({
           <Image
             className="object-cover w-full h-full"
             src={
-              transactionImage ||
+              cohortImage ||
               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aN-5V--yL4NOrcd_becVZJkBTc7T_EdYiw&s"
             }
             alt="Product Image"
@@ -82,10 +88,10 @@ export default function TransactionCardItemSVP({
         </div>
         <div className="flex flex-col font-ui text-black max-w-[calc(100%-4rem-0.75rem)]">
           <p className="transaction-name font-bold line-clamp-2">
-            TETR College of Business
+            {cohortName}
           </p>
           <p className="transaction-price-tier text-sm line-clamp-1">
-            Paket Intensive
+            {cohortPriceName}
           </p>
         </div>
       </Link>
@@ -96,22 +102,26 @@ export default function TransactionCardItemSVP({
           <p className="font-bold">{RupiahCurrency(totalTransactionAmount)}</p>
         </div>
         {transactionStatus === "PENDING" && (
-          <AppButton
-            className="w-[120px]"
-            variant="primary"
-            size="smallRounded"
-          >
-            Pay Now
-          </AppButton>
+          <a href={invoiceURL}>
+            <AppButton
+              className="w-[120px]"
+              variant="primary"
+              size="smallRounded"
+            >
+              Pay Now
+            </AppButton>
+          </a>
         )}
         {transactionStatus === "FAILED" && (
-          <AppButton
-            className="w-[120px]"
-            variant="primary"
-            size="smallRounded"
-          >
-            Retry Payment
-          </AppButton>
+          <Link href={`/cohorts/${cohortSlug}/${cohortId}`}>
+            <AppButton
+              className="w-[120px]"
+              variant="primary"
+              size="smallRounded"
+            >
+              Retry Payment
+            </AppButton>
+          </Link>
         )}
       </div>
     </div>
