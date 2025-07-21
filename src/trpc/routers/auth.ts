@@ -104,6 +104,8 @@ export const authRouter = createTRPCRouter({
         id: theUser.id,
         full_name: theUser.full_name,
         email: theUser.email,
+        phone_country_id: theUser.phone_country_id,
+        phone_number: theUser.phone_number,
         avatar: theUser.avatar,
         role_id: theUser.role_id,
         role_name: theUser.role.name,
