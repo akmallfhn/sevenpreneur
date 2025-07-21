@@ -1,10 +1,15 @@
 import { calculateFinalPrice } from "@/lib/price-calc";
 import {
-  XenditCreateInvoiceResponse,
+  XenditInvoiceResponse,
   xenditRequestCreateInvoice,
+  xenditRequestExpireInvoice,
 } from "@/lib/xendit";
 import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
-import { numberIsID, stringNotBlank } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  stringIsNanoid,
+  stringNotBlank,
+} from "@/trpc/utils/validation";
 import { CategoryEnum, TStatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -74,7 +79,7 @@ export const purchaseRouter = createTRPCRouter({
       if (process.env.DOMAIN_MODE === "local") {
         domain = "example.com:3000";
       }
-      let xenditResponse: XenditCreateInvoiceResponse;
+      let xenditResponse: XenditInvoiceResponse;
       try {
         xenditResponse = await xenditRequestCreateInvoice({
           external_id: theTransaction.id,
@@ -155,6 +160,64 @@ export const purchaseRouter = createTRPCRouter({
         message: "Success",
         transaction_id: theTransaction.id,
         invoice_url: xenditResponse.invoice_url,
+      };
+    }),
+
+  cancel: loggedInProcedure
+    .input(
+      z.object({
+        id: stringIsNanoid(),
+      })
+    )
+    .mutation(async (opts) => {
+      let whereClause = { id: opts.input.id };
+      if (opts.ctx.user.role.name != "Administrator") {
+        whereClause = Object.assign(whereClause, { user_id: opts.ctx.user.id });
+      }
+      const theTransaction = await opts.ctx.prisma.transaction.findFirst({
+        where: whereClause,
+      });
+      if (!theTransaction) {
+        return {
+          status: 200,
+          message: "Success",
+        };
+      }
+
+      let xenditResponse: XenditInvoiceResponse;
+      try {
+        xenditResponse = await xenditRequestExpireInvoice({
+          invoice_id: theTransaction.invoice_number,
+        });
+      } catch (e) {
+        // Rethrow error using TRPCError
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to cancel an invoice.",
+        });
+      }
+
+      const updatedTransaction =
+        await opts.ctx.prisma.transaction.updateManyAndReturn({
+          data: {
+            status: TStatusEnum.FAILED,
+          },
+          where: { id: theTransaction.id },
+        });
+      if (updatedTransaction.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected transaction is not found.",
+        });
+      } else if (updatedTransaction.length > 1) {
+        console.error(
+          "purchase.cohort: More-than-one transactions are updated at once."
+        );
+      }
+
+      return {
+        status: 200,
+        message: "Success",
       };
     }),
 });

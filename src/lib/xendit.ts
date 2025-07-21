@@ -16,7 +16,11 @@ export type XenditCreateInvoiceRequestParameters = {
   }[];
 };
 
-export type XenditCreateInvoiceResponse = {
+export type XenditExpireInvoiceRequestParameters = {
+  invoice_id: string;
+};
+
+export type XenditInvoiceResponse = {
   id: string;
   external_id: string;
   status: "PENDING" | "PAID" | "EXPIRED";
@@ -25,7 +29,7 @@ export type XenditCreateInvoiceResponse = {
 };
 
 type XenditRequestParameters = XenditCreateInvoiceRequestParameters | object;
-type XenditResponse = XenditCreateInvoiceResponse & object;
+type XenditResponse = XenditInvoiceResponse & object;
 
 export type XenditInvoiceCallback = {
   external_id: string;
@@ -37,8 +41,17 @@ export type XenditInvoiceCallback = {
 
 export const xenditRequestCreateInvoice = (
   params: XenditCreateInvoiceRequestParameters
-): Promise<XenditCreateInvoiceResponse> => {
+): Promise<XenditInvoiceResponse> => {
   return xenditRequest("https://api.xendit.co/v2/invoices", params);
+};
+
+export const xenditRequestExpireInvoice = (
+  params: XenditExpireInvoiceRequestParameters
+): Promise<XenditInvoiceResponse> => {
+  return xenditRequest(
+    `https://api.xendit.co/invoices/${params.invoice_id}/expire!`,
+    {} // no parameter
+  );
 };
 
 const xenditRequest = (
