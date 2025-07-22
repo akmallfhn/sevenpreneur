@@ -67,3 +67,29 @@ export async function MakePaymentXendit({
     transaction_id: paymentResponse.transaction_id,
   };
 }
+
+// CANCEL PAYMENT AT XENDIT
+interface CancelPaymentXenditProps {
+  transactionId: string;
+}
+
+export async function CancelPaymentXendit({
+  transactionId,
+}: CancelPaymentXenditProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+
+  setSessionToken(sessionData.value);
+  const cancelResponse = await trpc.purchase.cancel({
+    id: transactionId,
+  });
+
+  return {
+    status: cancelResponse.status,
+    message: cancelResponse.message,
+  };
+}

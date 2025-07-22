@@ -44,7 +44,7 @@ interface CheckoutCohortFormSVPProps {
   cohortImage: string;
   initialUserName: string;
   initialUserEmail: string;
-  initialUserPhone?: string; // TO DO: Integrate User Phone dari TRPC Check User
+  initialUserPhone: string | null;
   ticketListData: PriceItem[];
   paymentMethodData: PaymentMethodItem[];
   phoneNumberList: PhoneNumberItem[];
