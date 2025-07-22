@@ -65,6 +65,7 @@ export default async function CheckoutCohortPage({
             cohortImage={cohortData.image}
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
+            initialUserPhone={checkUser.phone_number}
             ticketListData={ticketList}
             paymentMethodData={paymentMethodList}
             phoneNumberList={phoneNumberList}
