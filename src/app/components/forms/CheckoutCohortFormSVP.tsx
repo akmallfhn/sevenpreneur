@@ -32,13 +32,6 @@ interface PriceItem {
   cohort_id: number;
 }
 
-interface PhoneNumberItem {
-  id: number;
-  country_name: string;
-  phone_code: string;
-  emoji: string;
-}
-
 interface CheckoutCohortFormSVPProps {
   cohortName: string;
   cohortImage: string;
@@ -47,7 +40,6 @@ interface CheckoutCohortFormSVPProps {
   initialUserPhone: string | null;
   ticketListData: PriceItem[];
   paymentMethodData: PaymentMethodItem[];
-  phoneNumberList: PhoneNumberItem[];
 }
 
 export default function CheckoutCohortFormSVP({
@@ -58,7 +50,6 @@ export default function CheckoutCohortFormSVP({
   initialUserPhone,
   ticketListData,
   paymentMethodData,
-  phoneNumberList,
 }: CheckoutCohortFormSVPProps) {
   const [selectedPriceTierId, setSelectedPriceTierId] = useState(0);
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
@@ -320,8 +311,8 @@ export default function CheckoutCohortFormSVP({
                 <InternationalPhoneNumberInputSVP
                   inputId="user-phone-number"
                   inputName="Phone Number"
-                  inputIcon={phoneNumberList[0].emoji}
-                  inputCountryCode={phoneNumberList[0].phone_code}
+                  inputIcon="🇮🇩"
+                  inputCountryCode="62"
                   inputPlaceholder="Enter Mobile or WhatsApp number"
                   value={formData.userPhoneNumber}
                   onInputChange={handleInputChange("userPhoneNumber")}

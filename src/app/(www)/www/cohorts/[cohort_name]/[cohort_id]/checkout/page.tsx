@@ -39,9 +39,6 @@ export default async function CheckoutCohortPage({
         : item.amount,
   }));
 
-  // --- Get Phone Number List
-  const phoneNumberList = (await trpc.list.phone_country_codes()).list;
-
   // --- Get Payment Data
   const paymentMethodRaw = (await trpc.list.payment_channels()).list;
   const paymentMethodList = paymentMethodRaw.map((post) => ({
@@ -68,7 +65,6 @@ export default async function CheckoutCohortPage({
             initialUserPhone={checkUser.phone_number}
             ticketListData={ticketList}
             paymentMethodData={paymentMethodList}
-            phoneNumberList={phoneNumberList}
           />
         </div>
       </div>
