@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -187,8 +188,7 @@ export default function UserProfileDetailCMS({
                 inputType={"text"}
                 inputIcon={<User2 className="size-5" />}
                 value={userDetailData?.user.full_name || ""}
-                disabled={true}
-                required={true}
+                disabled
               />
               <InputCMS
                 inputId={"email"}
@@ -196,17 +196,24 @@ export default function UserProfileDetailCMS({
                 inputType={"email"}
                 inputIcon={<AtSign className="size-5" />}
                 value={userDetailData?.user.email || ""}
-                disabled={true}
-                required={true}
+                disabled
+              />
+              <InternationalPhoneNumberInputSVP
+                inputId={"phone-number"}
+                inputName={"Phone Number"}
+                inputIcon={"🇮🇩"}
+                inputPlaceholder="None"
+                inputCountryCode={"62"}
+                value={userDetailData?.user.phone_number || ""}
+                disabled
               />
               <SelectCMS
                 selectId={"role"}
                 selectName={"Role"}
                 selectIcon={<KeyRound className="size-5" />}
-                selectPlaceholder="Select Role"
+                selectPlaceholder="None"
                 value={userDetailData?.user.role_id}
-                disabled={true}
-                required={true}
+                disabled
                 options={rolesData?.list?.map((post) => ({
                   label: post.name,
                   value: post.id,
@@ -243,7 +250,7 @@ export default function UserProfileDetailCMS({
               textAreaPlaceholder={"None"}
               textAreaHeight={"h-[120px]"}
               value={userDetailData?.user.learning_goal || ""}
-              disabled={true}
+              disabled
             />
           </div>
 
@@ -260,7 +267,7 @@ export default function UserProfileDetailCMS({
                 inputPlaceholder={"None"}
                 inputIcon={<Building2 className="size-5" />}
                 value={userDetailData?.user.business_name || ""}
-                disabled={true}
+                disabled
               />
               <SelectCMS
                 selectId={"entrepreneur-stage"}
@@ -268,7 +275,7 @@ export default function UserProfileDetailCMS({
                 selectIcon={<Sprout className="size-5" />}
                 selectPlaceholder="None"
                 value={userDetailData?.user.entrepreneur_stage_id}
-                disabled={true}
+                disabled
                 options={stagesData?.list?.map((post) => ({
                   label: post.name,
                   value: post.id,
@@ -280,7 +287,7 @@ export default function UserProfileDetailCMS({
                 selectIcon={<Flag className="size-5" />}
                 selectPlaceholder="None"
                 value={userDetailData?.user.industry_id}
-                disabled={true}
+                disabled
                 options={
                   industriesData?.list?.map((post) => ({
                     label: post.name,

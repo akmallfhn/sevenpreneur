@@ -27,6 +27,7 @@ import {
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 
 interface EditUserFormProps {
   sessionToken: string;
@@ -77,6 +78,7 @@ export default function EditUserForm({
   const [formData, setFormData] = useState<{
     fullName: string;
     email: string;
+    phoneNumber: string;
     avatar: string;
     roleId: string | number;
     status: "ACTIVE" | "INACTIVE";
@@ -88,6 +90,7 @@ export default function EditUserForm({
   }>({
     fullName: initialData?.user.full_name || "",
     email: initialData?.user.email || "",
+    phoneNumber: initialData?.user.phone_number || "",
     avatar: initialData?.user.avatar || "",
     roleId: initialData?.user.role.id ?? "",
     status: initialData?.user.status || "ACTIVE",
@@ -106,6 +109,7 @@ export default function EditUserForm({
       setFormData({
         fullName: initialData.user.full_name || "",
         email: initialData.user.email || "",
+        phoneNumber: initialData.user.phone_number || "",
         avatar: initialData.user.avatar || "",
         roleId: initialData.user.role.id ?? "",
         status: initialData.user.status || "ACTIVE",
@@ -210,6 +214,10 @@ export default function EditUserForm({
           status: formData.status,
 
           // Optional fields:
+          phone_number: formData.phoneNumber.trim()
+            ? formData.phoneNumber
+            : null,
+          phone_country_id: formData.phoneNumber.trim() ? 1 : null,
           avatar: formData.avatar.trim() ? formData.avatar : null,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
@@ -326,7 +334,7 @@ export default function EditUserForm({
                 inputIcon={<User2 className="size-5" />}
                 value={formData.fullName}
                 onInputChange={handleInputChange("fullName")}
-                required={true}
+                required
               />
               {/* -- Email */}
               <InputCMS
@@ -337,7 +345,17 @@ export default function EditUserForm({
                 inputIcon={<AtSign className="size-5" />}
                 value={formData.email}
                 onInputChange={handleInputChange("email")}
-                required={true}
+                required
+              />
+              {/* -- Phone Number */}
+              <InternationalPhoneNumberInputSVP
+                inputId={"phone-number"}
+                inputName={"Phone Number"}
+                inputIcon={"🇮🇩"}
+                inputPlaceholder="Enter Mobile or WhatsApp number"
+                inputCountryCode={"62"}
+                value={formData.phoneNumber}
+                onInputChange={handleInputChange("phoneNumber")}
               />
               {/* -- Role */}
               <SelectCMS
@@ -347,7 +365,7 @@ export default function EditUserForm({
                 selectIcon={<KeyRound className="size-5" />}
                 value={formData.roleId}
                 onChange={handleInputChange("roleId")}
-                required={true}
+                required
                 options={
                   rolesData?.list?.map((role) => ({
                     label: role.name,

@@ -73,7 +73,7 @@ export default function InternationalPhoneNumberInputSVP({
         {inputIcon && (
           <div className="absolute left-0 flex items-center p-[9px] pl-3 gap-1 pointer-events-none text-alternative">
             <p className="text-sm">{inputIcon}</p>
-            <p className="text-xs font-ui">+{inputCountryCode}</p>
+            <p className="font-ui text-[13px]">+{inputCountryCode}</p>
           </div>
         )}
         <input
