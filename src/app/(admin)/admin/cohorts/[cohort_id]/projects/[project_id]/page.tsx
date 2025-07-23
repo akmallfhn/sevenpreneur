@@ -1,4 +1,4 @@
-import ProjectDetailsCMS from "@/app/components/templates/ProjectDetailsCMS";
+import ProjectDetailsCMS from "@/app/components/pages/ProjectDetailsCMS";
 import { cookies } from "next/headers";
 
 interface LearningDetailPageProps {

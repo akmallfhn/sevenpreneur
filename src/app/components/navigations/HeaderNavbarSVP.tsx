@@ -99,6 +99,7 @@ export default function HeaderNavbarSVP({
             <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
+              alignMobile="right"
             >
               <Link href={`https://www.${domain}/account`}>
                 <AppDropdownItemList

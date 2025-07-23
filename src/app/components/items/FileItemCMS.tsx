@@ -7,11 +7,11 @@ import AppButton from "../buttons/AppButton";
 import { EllipsisVertical, Settings2, Trash2 } from "lucide-react";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
-import DropdownMenuCMS from "../elements/DropdownMenuCMS";
-import AppAlertDialog from "../modals/AppAlertDialog";
 import EditModuleFormCMS from "../forms/EditModuleFormCMS";
-import { error } from "console";
 import EditMaterialFormCMS from "../forms/EditMaterialFormCMS";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 export type FileVariant =
   | "DOCX"
@@ -203,34 +203,34 @@ export default function FileItemCMS({
             <EllipsisVertical className="size-4" />
           </AppButton>
 
-          <DropdownMenuCMS
+          <AppDropdown
             isOpen={isActionsOpened}
             onClose={() => setIsActionsOpened(false)}
+            alignMobile="right"
+            alignDesktop="right"
           >
-            {/* -- Edit */}
-            <div
-              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
+            <AppDropdownItemList
+              menuIcon={<Settings2 className="size-4" />}
+              menuName="Edit File"
               onClick={() => setEditFile(true)}
-            >
-              <Settings2 className="size-4" />
-              Edit
-            </div>
-            <div
-              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-destructive hover:bg-[#FFCDC9] hover:cursor-pointer"
+            />
+            <AppDropdownItemList
+              menuIcon={<Trash2 className="size-4" />}
+              menuName="Delete"
+              isDestructive
               onClick={() => setIsOpenDeleteConfirmation(true)}
-            >
-              <Trash2 className="size-4" />
-              Delete
-            </div>
-          </DropdownMenuCMS>
+            />
+          </AppDropdown>
         </div>
       </div>
 
       {/* --- Delete Confirmation */}
       {isOpenDeleteConfirmation && (
-        <AppAlertDialog
+        <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"
           alertDialogMessage={`Are you sure you want to delete ${fileName}? This action cannot be undone.`}
+          alertCancelLabel="Cancel"
+          alertConfirmLabel="Delete"
           isOpen={isOpenDeleteConfirmation}
           onClose={() => setIsOpenDeleteConfirmation(false)}
           onConfirm={() => {

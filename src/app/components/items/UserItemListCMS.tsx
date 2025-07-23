@@ -6,9 +6,7 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import AppAlertDialog from "@/app/components/modals/AppAlertDialog";
 import AppButton from "@/app/components/buttons/AppButton";
-import DropdownMenuCMS from "@/app/components/elements/DropdownMenuCMS";
 import StatusLabelCMS, {
   StatusVariant,
 } from "@/app/components/labels/StatusLabelCMS";
@@ -20,6 +18,9 @@ import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { toCamelCase } from "@/lib/camel-case";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(timezone);
@@ -166,44 +167,43 @@ export default function UserItemListCMS({
               <EllipsisVertical className="size-5" />
             </AppButton>
 
-            <DropdownMenuCMS
+            <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
             >
               {/* -- View */}
-              <Link
-                href={`/users/${userId}`}
-                className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
-              >
-                <Eye className="size-4" />
-                View
+              <Link href={`/users/${userId}`}>
+                <AppDropdownItemList
+                  menuIcon={<Eye className="size-4" />}
+                  menuName="View Profile"
+                />
               </Link>
 
               {/* -- Edit */}
-              <Link
-                href={`/users/${userId}/edit`}
-                className="menu-list flex px-6 pl-4 py-2 items-center gap-2 hover:text-cms-primary hover:bg-[#E1EDFF] hover:cursor-pointer"
-              >
-                <Settings2 className="size-4" />
-                Edit
+              <Link href={`/users/${userId}/edit`}>
+                <AppDropdownItemList
+                  menuIcon={<Settings2 className="size-4" />}
+                  menuName="Edit Profile"
+                />
               </Link>
 
               {/* -- Delete */}
-              <div
+              <AppDropdownItemList
+                menuIcon={<Trash2 className="size-4" />}
+                menuName="Delete"
+                isDestructive
                 onClick={() => setIsOpenDeleteConfirmation(true)}
-                className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-[#E62314] hover:bg-[#FFCDC9] hover:cursor-pointer"
-              >
-                <Trash2 className="size-4" />
-                Delete
-              </div>
-            </DropdownMenuCMS>
+              />
+            </AppDropdown>
           </div>
         </div>
       </div>
       {isOpenDeleteConfirmation && (
-        <AppAlertDialog
+        <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"
           alertDialogMessage={`Are you sure you want to delete ${userName}? This action cannot be undone.`}
+          alertCancelLabel="Cancel"
+          alertConfirmLabel="Delete"
           isOpen={isOpenDeleteConfirmation}
           onClose={() => setIsOpenDeleteConfirmation(false)}
           onConfirm={() => {
