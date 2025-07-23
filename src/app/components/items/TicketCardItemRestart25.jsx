@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import dayjs from "dayjs";
 import AppButton from "../buttons/AppButton";
-import CountdownTimerRestart25 from "../elements/CountdownTimerRestart25";
+import CountdownTimerRestart25 from "../templates/CountdownTimerRestart25";
 
 export default function TicketCardItemRestart25({
   post,

@@ -1,4 +1,4 @@
-import TransactionStatusSVP from "@/app/components/templates/TransactionStatusSVP";
+import TransactionStatusSVP from "@/app/components/pages/TransactionStatusSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";

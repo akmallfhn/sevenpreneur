@@ -1,4 +1,4 @@
-import UserProfileDetailCMS from "@/app/components/templates/UserProfileDetailCMS";
+import UserProfileDetailCMS from "@/app/components/pages/UserProfileDetailCMS";
 import { cookies } from "next/headers";
 import React from "react";
 

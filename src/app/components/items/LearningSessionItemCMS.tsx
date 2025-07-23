@@ -10,10 +10,11 @@ import AppButton from "../buttons/AppButton";
 import LearningSessionIconLabelCMS, {
   LearningSessionVariant,
 } from "../labels/LearningSessionIconLabelCMS";
-import DropdownMenuCMS from "../elements/DropdownMenuCMS";
-import AppAlertDialog from "../modals/AppAlertDialog";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
 
 dayjs.extend(localizedFormat);
 
@@ -159,18 +160,17 @@ export default function LearningSessionItemCMS({
             <EllipsisVertical className="size-4" />
           </AppButton>
 
-          <DropdownMenuCMS
+          <AppDropdown
             isOpen={isActionsOpened}
             onClose={() => setIsActionsOpened(false)}
           >
-            <div
-              className="menu-list flex px-6 pl-4 py-2 items-center gap-2 text-destructive hover:bg-[#FFCDC9] hover:cursor-pointer"
+            <AppDropdownItemList
+              menuIcon={<Trash2 className="size-4" />}
+              menuName="Delete"
+              isDestructive
               onClick={() => setIsOpenDeleteConfirmation(true)}
-            >
-              <Trash2 className="size-4" />
-              Delete
-            </div>
-          </DropdownMenuCMS>
+            />
+          </AppDropdown>
         </div>
       </div>
 
@@ -185,9 +185,11 @@ export default function LearningSessionItemCMS({
 
       {/* --- Delete Confirmation */}
       {isOpenDeleteConfirmation && (
-        <AppAlertDialog
+        <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"
           alertDialogMessage={`Are you sure you want to delete ${sessionName}? This action cannot be undone.`}
+          alertCancelLabel="Cancel"
+          alertConfirmLabel="Delete"
           isOpen={isOpenDeleteConfirmation}
           onClose={() => setIsOpenDeleteConfirmation(false)}
           onConfirm={() => {

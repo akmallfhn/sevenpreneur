@@ -1,4 +1,4 @@
-import CohortDetailsCMS from "@/app/components/templates/CohortDetailsCMS";
+import CohortDetailsCMS from "@/app/components/pages/CohortDetailsCMS";
 import { cookies } from "next/headers";
 
 interface CohortDetailPageProps {
