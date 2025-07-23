@@ -181,16 +181,22 @@ export default function EditCohortFormCMS({
       );
       // Delete all tiers listed in deletedIds.
       await Promise.all(
-        deletedIds.map((id: number) => deleteCohortPrices.mutateAsync({ id }))
+        deletedIds.map((id: number) => {
+          try {
+            deleteCohortPrices.mutateAsync({ id });
+          } catch (error) {
+            toast.error("Failed to delete price tier");
+          }
+        })
       );
+
+      // Final toast & refetch
       toast.success("Cohort updated successfully");
       await utils.read.cohort.invalidate();
       await utils.list.cohorts.invalidate();
       onClose();
-    } catch (error: any) {
-      toast.error("Failed to update cohort", {
-        description: error,
-      });
+    } catch (error) {
+      toast.error("Something went wrong. Failed to update cohort.");
       setIsSubmitting(false);
     } finally {
       setIsSubmitting(false);
