@@ -1,8 +1,18 @@
-import { trpc } from "@/trpc/server";
+import { setSessionToken, trpc } from "@/trpc/server";
+import { cookies } from "next/headers";
 import Image from "next/image";
 
 export default async function AdminHomePage() {
-  const sessionUser = (await trpc.auth.checkSession()).user;
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  if (!sessionToken) {
+    return null;
+  }
+
+  setSessionToken(sessionToken);
+  const checkSession = await trpc.auth.checkSession();
+  const sessionUser = checkSession.user;
 
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 overflow-y-auto lg:flex lg:pl-64">
