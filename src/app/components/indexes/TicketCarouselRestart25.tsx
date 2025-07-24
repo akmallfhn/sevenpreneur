@@ -1,28 +1,30 @@
 "use client";
 import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
-import TicketCardItemRestart25 from "../items/TicketCardItemRestart25";
+import TicketItemCardRestart25 from "../items/TicketItemCardRestart25";
 import dayjs from "dayjs";
+import { useRef } from "react";
 
 const data = [
   // ACTIVE TICKET
   {
     id: "regular",
-    type: "Regular",
+    name: "Regular",
     tagline: "A ticket to insight",
-    basePrice: 540000,
-    discountPrice: 370000,
+    base_price: 540000,
+    discount_price: 370000,
     benefit: ["Main stage access", "Workshop", "Experience zone"],
-    startDate: "2025-05-28T00:00:00+07:00",
-    expiredDate: "2025-07-25T23:59:00+07:00",
-    isPremium: false,
-    isActive: true,
+    start_date: "2025-05-28T00:00:00+07:00",
+    expire_date: "2025-07-25T23:59:00+07:00",
+    is_premium: false,
+    is_active: true,
+    is_sold_out: false,
   },
   {
     id: "vip",
-    type: "VIP",
+    name: "VIP",
     tagline: "Full experience. Half price",
-    basePrice: 5400000,
-    discountPrice: 3000000,
+    base_price: 5400000,
+    discount_price: 3000000,
     benefit: [
       "Everything in Regular Ticket",
       "Front row seating",
@@ -30,31 +32,33 @@ const data = [
       "Community membership",
       "Exclusive merch set",
     ],
-    startDate: "2025-05-28T00:00:00+07:00",
-    expiredDate: "2025-07-25T23:59:00+07:00",
-    isPremium: true,
-    isActive: true,
+    start_date: "2025-05-28T00:00:00+07:00",
+    expire_date: "2025-07-25T23:59:00+07:00",
+    is_premium: true,
+    is_active: true,
+    is_sold_out: false,
   },
 
   // --- INACTIVE TICKET
   {
     id: "d_seven_regular",
-    type: "D-Seven Regular",
+    name: "D-Seven Regular",
     tagline: "Special Price on Today",
-    basePrice: 540000,
-    discountPrice: 277000,
+    base_price: 540000,
+    discount_price: 277000,
     benefit: ["Main stage access", "Workshop", "Experience zone"],
-    startDate: "2025-07-19T00:00:00+07:00",
-    expiredDate: "2025-07-19T23:59:00+07:00",
-    isPremium: false,
-    isActive: true,
+    start_date: "2025-07-19T00:00:00+07:00",
+    expire_date: "2025-07-19T23:59:00+07:00",
+    is_premium: false,
+    is_active: false,
+    is_sold_out: true,
   },
   {
     id: "d_seven_vip",
-    type: "D-Seven VIP",
+    name: "D-Seven VIP",
     tagline: "Special Price on Today",
-    basePrice: 5400000,
-    discountPrice: 2700000,
+    base_price: 5400000,
+    discount_price: 2700000,
     benefit: [
       "Everything in Regular Ticket",
       "Front row seating",
@@ -62,41 +66,44 @@ const data = [
       "Community membership",
       "Exclusive merch set",
     ],
-    startDate: "2025-07-10T00:00:00+07:00",
-    expiredDate: "2025-07-19T23:59:00+07:00",
-    isPremium: true,
-    isActive: true,
+    start_date: "2025-07-10T00:00:00+07:00",
+    expire_date: "2025-07-19T23:59:00+07:00",
+    is_premium: true,
+    is_active: false,
+    is_sold_out: true,
   },
   {
     id: "early_bird_yes",
-    type: "Early Bird",
+    name: "Early Bird",
     tagline: "YES Conference Edition",
-    basePrice: 270000,
-    discountPrice: 70000,
+    base_price: 270000,
+    discount_price: 70000,
     benefit: ["Main stage access", "Workshop", "Experience zone"],
-    startDate: "2025-04-27T11:00:00+07:00",
-    expiredDate: "2025-04-27T22:00:00+07:00",
-    isPremium: false,
-    isActive: false,
+    start_date: "2025-04-27T11:00:00+07:00",
+    expire_date: "2025-04-27T22:00:00+07:00",
+    is_premium: false,
+    is_active: false,
+    is_sold_out: true,
   },
   {
     id: "early_bird",
-    type: "Early Bird",
+    name: "Early Bird",
     tagline: "Start smart. Pay less!",
-    basePrice: 270000,
-    discountPrice: 170000,
+    base_price: 270000,
+    discount_price: 170000,
     benefit: ["Main stage access", "Workshop", "Experience zone"],
-    startDate: "2025-04-28T00:00:00+07:00",
-    expiredDate: "2025-05-27T23:59:00+07:00",
-    isPremium: false,
-    isActive: true,
+    start_date: "2025-04-28T00:00:00+07:00",
+    expire_date: "2025-05-27T23:59:00+07:00",
+    is_premium: false,
+    is_active: false,
+    is_sold_out: true,
   },
   {
     id: "vip",
-    type: "VIP",
+    name: "VIP",
     tagline: "Full experience. Half price",
-    basePrice: 5400000,
-    discountPrice: 2700000,
+    base_price: 5400000,
+    discount_price: 2700000,
     benefit: [
       "Everything in Regular Ticket",
       "Front row seating",
@@ -104,26 +111,33 @@ const data = [
       "Community membership",
       "Exclusive merch set",
     ],
-    startDate: "2025-04-27T11:00:00+07:00",
-    expiredDate: "2025-05-14T23:59:00+07:00",
-    isPremium: true,
-    isActive: true,
+    start_date: "2025-04-27T11:00:00+07:00",
+    expire_date: "2025-05-14T23:59:00+07:00",
+    is_premium: true,
+    is_active: false,
+    is_sold_out: true,
   },
 ];
 
 export default function TicketCarouselRestart25() {
-  const Now = dayjs();
-  const ticketListItem = data.filter(
-    (ticket) => dayjs(ticket.expiredDate).isAfter(Now) && ticket.isActive
-  );
+  // --- Avoid sending event view repeatedly
+  const viewedTickets = useRef<Set<string>>(new Set());
 
-  const viewedTickets = new Set(); // --- Supaya event "view" tidak dikirim dua kali untuk tiket yang sama
-
-  const filteredTickets = ticketListItem.filter((post) => {
-    const now = dayjs();
-    const start = dayjs(post.startDate);
-    return post.isActive === true && !start.isAfter(now);
-  });
+  const now = dayjs();
+  const filteredTickets = data
+    .filter((ticket) => {
+      const startDate = dayjs(ticket.start_date);
+      const isCurrentlyAvailable = ticket.is_active && now.isAfter(startDate);
+      return isCurrentlyAvailable;
+    })
+    .map((ticket) => {
+      const expireDate = dayjs(ticket.expire_date);
+      const isSoldOut = ticket.is_sold_out || now.isAfter(expireDate);
+      return {
+        ...ticket,
+        isSoldOut,
+      };
+    });
 
   return (
     <section id="ticket-id">
@@ -133,12 +147,20 @@ export default function TicketCarouselRestart25() {
         </div>
         <div className="ticket-container px-8 w-full overflow-x-auto lg:overflow-x-hidden">
           <div className="group-ticket flex items-start lg:justify-center lg:gap-5">
-            {filteredTickets.map((post, index) => (
-              <TicketCardItemRestart25
+            {filteredTickets.map((ticket, index) => (
+              <TicketItemCardRestart25
                 key={index}
-                post={post}
                 index={index}
-                viewedTickets={viewedTickets}
+                ticketId={ticket.id}
+                ticketName={ticket.name}
+                ticketTagline={ticket.tagline}
+                ticketExpireDate={ticket.expire_date}
+                ticketBasePrice={ticket.base_price}
+                ticketDiscountPrice={ticket.discount_price}
+                ticketBenefit={ticket.benefit}
+                isPremium={ticket.is_premium}
+                isSoldOut={ticket.isSoldOut}
+                viewedTickets={viewedTickets.current}
               />
             ))}
           </div>

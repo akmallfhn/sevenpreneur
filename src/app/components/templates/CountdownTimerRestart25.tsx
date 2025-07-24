@@ -60,13 +60,22 @@ export default function CountdownTimerRestart25({
     const calculateCountdown = () => {
       const now = dayjs(); // ambil waktu saat ini
       const diff = targetDate.diff(now); // hitung selisih waktu (dalam milidetik)
-      const dur = dayjs.duration(diff); // ubah jadi format waktu: hari, jam, menit, detik
 
+      // ✅ Kalau sudah lewat dari target, kembalikan semua ke nol
+      if (diff <= 0) {
+        return {
+          days: "00",
+          hours: "00",
+          minutes: "00",
+          seconds: "00",
+        };
+      }
+
+      const dur = dayjs.duration(diff); // ubah jadi format waktu: hari, jam, menit, detik
       const days = Math.floor(dur.asDays()); // total semua hari
       const hours = dur.hours(); // jam sisa setelah hari dihitung
       const minutes = dur.minutes(); // menit sisa setelah jam dihitung
       const seconds = dur.seconds(); // detik sisa setelah menit dihitung
-
       return {
         days: String(days).padStart(2, "0"),
         hours: String(hours).padStart(2, "0"),

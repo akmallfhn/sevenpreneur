@@ -1,44 +1,67 @@
 "use client";
 import { useRef, useEffect } from "react";
-import { ArrowDown, Check, LockOpen } from "lucide-react";
+import { ArrowDown, Ban, Check, LockOpen, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import dayjs from "dayjs";
 import AppButton from "../buttons/AppButton";
 import CountdownTimerRestart25 from "../templates/CountdownTimerRestart25";
 
-export default function TicketCardItemRestart25({
-  post,
+interface TicketItemCardRestart25Props {
+  index: number;
+  ticketId: string;
+  ticketName: string;
+  ticketTagline: string;
+  ticketExpireDate: string;
+  ticketBasePrice: number;
+  ticketDiscountPrice: number;
+  ticketBenefit: string[];
+  isPremium: boolean;
+  isSoldOut: boolean;
+  viewedTickets: Set<string>;
+}
+
+export default function TicketItemCardRestart25({
   index,
+  ticketId,
+  ticketName,
+  ticketTagline,
+  ticketExpireDate,
+  ticketBasePrice,
+  ticketDiscountPrice,
+  ticketBenefit,
+  isPremium,
+  isSoldOut,
   viewedTickets,
-}) {
-  const ref = useRef(null);
+}: TicketItemCardRestart25Props) {
+  const ref = useRef<HTMLDivElement | null>(null);
 
   // Tracking View Ticket
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !viewedTickets.has(post.id)) {
-            window.dataLayer.push({
+          if (entry.isIntersecting && !viewedTickets.has(ticketId)) {
+            window.dataLayer?.push({
               event: "view",
-              feature_name: `ticket_checkout_${post.id}_view`,
+              feature_name: `ticket_checkout_${ticketId}_view`,
               feature_position: index + 1,
             });
-            viewedTickets.add(post.id);
+            viewedTickets.add(ticketId);
           }
         });
       },
       { threshold: 0.5 }
     );
-    if (ref.current) observer.observe(ref.current);
+    const current = ref.current;
+    if (current) observer.observe(current);
     return () => {
-      if (ref.current) observer.unobserve(ref.current);
+      if (current) observer.unobserve(current);
     };
-  }, [post.id]);
+  }, [ticketId, index, viewedTickets]);
 
   return (
-    <div className="root py-3 pr-3 z-50 lg:pr-0" key={index} ref={ref}>
+    <div className="root py-3 pr-3 z-50 lg:pr-0" ref={ref}>
       <div className="ticket-container relative flex">
         <Image
           className="background max-w-[220px] overflow-hidden lg:max-w-[252px]"
@@ -54,9 +77,9 @@ export default function TicketCardItemRestart25({
           <div className="metadata-ticket text-black flex flex-col items-center gap-1 px-3">
             <div className="type-ticket flex items-center gap-1.5">
               <h3 className="font-brand font-bold text-center text-2xl lg:text-[28px]">
-                {post.type}
+                {ticketName}
               </h3>
-              {post.isPremium && (
+              {isPremium && (
                 <Image
                   className="aspect-square size-4 object-cover"
                   src={
@@ -69,10 +92,10 @@ export default function TicketCardItemRestart25({
               )}
             </div>
             <p className="tagline-ticket font-bodycopy font-semibold text-sm lg:text-base">
-              {post.tagline}
+              {ticketTagline}
             </p>
             <CountdownTimerRestart25
-              targetDateTime={post.expiredDate}
+              targetDateTime={ticketExpireDate}
               variant="extra_small"
               isIncludeDimension={false}
             />
@@ -80,18 +103,18 @@ export default function TicketCardItemRestart25({
 
           {/* Pricing */}
           <div className="pricing flex flex-col gap-1 items-center font-bodycopy text-black">
-            {post.basePrice !== 0 && (
+            {ticketBasePrice !== 0 && (
               <div className="discount flex items-center gap-2">
                 <p className="bg-primary font-bold text-white text-[10px] px-1 py-0.5 rounded-sm lg:text-xs">
                   {Math.round(
-                    100 - (post.discountPrice / post.basePrice) * 100
+                    100 - (ticketDiscountPrice / ticketBasePrice) * 100
                   )}
                   % OFF
                 </p>
                 <div className="flex items-center relative">
                   <p className="text-[10px] font-medium lg:text-xs">Rp</p>
                   <p className="font-semibold text-sm lg:text-base">
-                    {post.basePrice.toLocaleString("en-US")}
+                    {ticketBasePrice.toLocaleString("en-US")}
                   </p>
                   <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
                 </div>
@@ -100,7 +123,7 @@ export default function TicketCardItemRestart25({
             <div className="flex items-center gap-1">
               <p className="text-sm font-bold lg:text-base">Rp</p>
               <p className="font-black text-2xl lg:text-[28px]">
-                {post.discountPrice.toLocaleString("en-US")}
+                {ticketDiscountPrice.toLocaleString("en-US")}
               </p>
             </div>
           </div>
@@ -109,7 +132,7 @@ export default function TicketCardItemRestart25({
           <div className="benefit flex flex-col pl-6 font-bodycopy text-xs text-black gap-1 lg:text-sm">
             <p className="font-bold">What You’ll Enjoy</p>
             <div className="benefit-items flex flex-col gap-0.5">
-              {post.benefit.map((post, index) => (
+              {ticketBenefit.map((post, index) => (
                 <div className="item flex gap-1 items-center" key={index}>
                   <Check
                     color="#AFEB29"
@@ -132,18 +155,31 @@ export default function TicketCardItemRestart25({
         >
           <AppButton
             size="defaultRounded"
-            featureName={`ticket_checkout_${post.id}`}
+            featureName={`ticket_checkout_${ticketId}`}
             featurePosition={index + 1}
+            disabled={isSoldOut}
+            className="w-[198px]"
           >
-            <div className="flex flex-col items-start">
-              <p className="font-bold text-xs">Buy Ticket Now</p>
-              <p className="font-medium text-[10px]">{`before it's gone - ${dayjs(
-                post.expiredDate
-              ).format("D MMM")}`}</p>
-            </div>
-            <div className="aspect-square p-1 bg-secondary rounded-full">
-              <LockOpen className="text-white size-4" />
-            </div>
+            {isSoldOut ? (
+              <div className="flex w-full items-center justify-between">
+                <p className="font-bold text-sm">Sold Out</p>
+                <div className="aspect-square p-1 bg-secondary rounded-full">
+                  <Ban className="text-white size-4" />
+                </div>
+              </div>
+            ) : (
+              <div className="flex w-full items-center justify-between">
+                <div className="flex flex-col items-start">
+                  <p className="font-bold text-xs">Buy Ticket Now</p>
+                  <p className="font-medium text-[10px]">{`before it's gone - ${dayjs(
+                    ticketExpireDate
+                  ).format("D MMM")}`}</p>
+                </div>
+                <div className="aspect-square p-1 bg-secondary rounded-full">
+                  <ShieldCheck className="text-white size-4" />
+                </div>
+              </div>
+            )}
           </AppButton>
         </Link>
       </div>

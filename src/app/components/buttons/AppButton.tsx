@@ -51,7 +51,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
     ref: ForwardedRef<HTMLButtonElement>
   ) => {
     const baseClasses =
-      "app-button relative inline-flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50";
+      "app-button relative inline-flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50";
 
     const variantClasses: Record<VariantType, string> = {
       primary: "bg-primary text-white hover:bg-[#0759D3] active:bg-[#0759D3]",
