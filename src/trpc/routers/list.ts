@@ -165,6 +165,35 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
+  cohortMembers: loggedInProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const cohortMemberList = await opts.ctx.prisma.userCohort.findMany({
+        include: { user: { include: { phone_country: true } } },
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ user: { role_id: "asc" } }, { user: { full_name: "asc" } }],
+      });
+      const returnedList = cohortMemberList.map((entry) => {
+        return {
+          id: entry.user_id,
+          full_name: entry.user.full_name,
+          email: entry.user.email,
+          phone_country: entry.user.phone_country,
+          phone_number: entry.user.phone_number,
+          avatar: entry.user.avatar,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   cohortPrices: loggedInProcedure
     .input(
       z.object({

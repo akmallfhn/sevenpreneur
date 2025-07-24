@@ -69,6 +69,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
+### Cohort Members 👥
+
+| Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.cohortMembers` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
 ### Cohort Prices 💵
 
 | Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
