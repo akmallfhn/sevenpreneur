@@ -1,11 +1,52 @@
 import AppButton from "@/app/components/buttons/AppButton";
 import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
+import CohortSBBPBatch7SVP from "@/app/components/pages/CohortSBBPBatch7SVP";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "",
+  description: "",
+  keywords: "",
+  authors: [{ name: "Sevenpreneur" }],
+  publisher: "Sevenpreneur",
+  referrer: "origin-when-cross-origin",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "",
+    description: "",
+    url: "https://www.sevenpreneur.com",
+    siteName: "Sevenpreneur",
+    images: [
+      {
+        url: "",
+        width: 800,
+        height: 600,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "",
+    description: "",
+    images: "",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+};
 
 interface CohortDetailsPageProps {
   params: Promise<{ cohort_name: string; cohort_id: string }>;
@@ -14,15 +55,14 @@ interface CohortDetailsPageProps {
 export default async function CohortDetailsPage({
   params,
 }: CohortDetailsPageProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  // if (!sessionToken) return null;
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-
-  const { cohort_name, cohort_id } = await params;
+  const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
 
-  // --- Check User Session
+  // --- Get Token for Header Navbar
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+  // --- Check User Session for Header Navbar
   let userData:
     | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
     | null = null;
@@ -32,14 +72,7 @@ export default async function CohortDetailsPage({
     userData = checkUser.user;
   }
 
-  // --- Checking Access
-  // setSessionToken(sessionToken);
-  // const checkUser = (await trpc.auth.checkSession()).user;
-  // if (checkUser.role_id !== 0) {
-  //   return notFound();
-  // }
-
-  // --- Get Data
+  // Get Data
   setSecretKey(secretKey!);
   const cohortDetails = await trpc.read.cohort({ id: cohortId });
   const data = cohortDetails.cohort;
@@ -52,28 +85,8 @@ export default async function CohortDetailsPage({
         isLoggedIn={!!userData}
       />
 
-      {/* Beli */}
-      <div className="w-full h-[700px] font-ui justify-center pt-[160px]">
-        <div className="flex flex-col max-w-[620px] mx-auto items-center lg:flex-row">
-          <div className="flex flex-col items-center gap-4 lg:flex-row">
-            <div className="aspect-square w-[100px] rounded-md overflow-hidden">
-              <Image
-                className="object-cover w-full h-full"
-                src={data.image}
-                alt={data.name}
-                width={300}
-                height={300}
-              />
-            </div>
-            <div className="flex flex-col text-center max-w-[420px] lg:text-left">
-              <h1 className="font-bold">{data.name}</h1>
-              <p>{data.description}</p>
-            </div>
-          </div>
-          <Link href={`/cohorts/${cohort_name}/${cohort_id}/checkout`}>
-            <AppButton>Beli Kelas Ini</AppButton>
-          </Link>
-        </div>
+      <div className="w-full">
+        <CohortSBBPBatch7SVP />
       </div>
     </React.Fragment>
   );
