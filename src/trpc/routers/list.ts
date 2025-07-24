@@ -9,14 +9,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import {
-  CategoryEnum,
-  Cohort,
-  CohortPrice,
-  StatusEnum,
-  TStatusEnum,
-} from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -349,12 +342,12 @@ export const listRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
-      let whereUser = opts.input.user_id;
+      let selectedUserId = opts.input.user_id;
       if (opts.ctx.user.role.name !== "Administrator") {
-        whereUser = opts.ctx.user.id;
+        selectedUserId = opts.ctx.user.id;
       }
       const transactionsList = await opts.ctx.prisma.transaction.findMany({
-        where: { user_id: whereUser },
+        where: { user_id: selectedUserId },
         orderBy: [{ created_at: "desc" }],
       });
 

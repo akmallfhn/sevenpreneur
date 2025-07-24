@@ -314,9 +314,9 @@ export const readRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
-      let whereUser: string | undefined = opts.ctx.user.id;
+      let selectedUserId: string | undefined = opts.ctx.user.id;
       if (opts.ctx.user.role.name === "Administrator") {
-        whereUser = undefined;
+        selectedUserId = undefined;
       }
 
       const theTransaction = await opts.ctx.prisma.transaction.findFirst({
@@ -325,7 +325,7 @@ export const readRouter = createTRPCRouter({
         },
         where: {
           id: opts.input.id,
-          user_id: whereUser,
+          user_id: selectedUserId,
           // deleted_at: null,
         },
       });
