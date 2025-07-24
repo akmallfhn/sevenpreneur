@@ -10,6 +10,7 @@ import {
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const listRouter = createTRPCRouter({
@@ -338,13 +339,22 @@ export const listRouter = createTRPCRouter({
   transactions: loggedInProcedure
     .input(
       z.object({
-        user_id: stringIsUUID(),
+        user_id: stringIsUUID().optional(),
       })
     )
     .query(async (opts) => {
       let selectedUserId = opts.input.user_id;
       if (opts.ctx.user.role.name !== "Administrator") {
-        selectedUserId = opts.ctx.user.id;
+        if (!selectedUserId) {
+          selectedUserId = opts.ctx.user.id;
+        }
+        if (opts.ctx.user.id !== selectedUserId) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message:
+              "You're not allowed to read another user's transactions list.",
+          });
+        }
       }
       const transactionsList = await opts.ctx.prisma.transaction.findMany({
         where: { user_id: selectedUserId },
