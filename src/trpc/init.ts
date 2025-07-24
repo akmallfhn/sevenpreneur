@@ -68,7 +68,7 @@ export const publicProcedure = t.procedure.use(async (opts) => {
     if (!ctx.secret) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
-    if (ctx.secret != process.env.SECRET_KEY_PUBLIC_API!) {
+    if (ctx.secret !== process.env.SECRET_KEY_PUBLIC_API!) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
   }
@@ -93,7 +93,7 @@ export const administratorProcedure = t.procedure.use(async (opts) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  if (ctx.user.role.name != "Administrator") {
+  if (ctx.user.role.name !== "Administrator") {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({
