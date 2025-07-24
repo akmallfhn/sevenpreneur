@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "Sevenpreneur",
     images: [
       {
-        url: "https://static.wixstatic.com/media/02a5b1_75a55654d4b445da8c4500b84f0cb7a2~mv2.webp",
+        url: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//restart-og-images%20(1).webp",
         width: 800,
         height: 600,
       },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     description:
       "Ikuti RE:START, konferensi bisnis dari Sevenpreneur dan Raymond Chin untuk generasi Millennial dan Gen Z Indonesia. Jelajahi tren, teknologi, strategi, dan mindset yang membentuk masa depan bisnis. Saatnya Anda menjadi entrepreneur global berikutnya.",
     images:
-      "https://static.wixstatic.com/media/02a5b1_75a55654d4b445da8c4500b84f0cb7a2~mv2.webp",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//restart-og-images%20(1).webp",
   },
   robots: {
     index: true,

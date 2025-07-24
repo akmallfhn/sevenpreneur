@@ -1,10 +1,9 @@
 "use client";
 import { ArrowDown, ArrowUpIcon } from "lucide-react";
-import ButtonRestart25 from "../buttons/ButtonRestart25";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HeroTeaserRestart2025() {
+export default function HeroTeaserRestart25() {
   return (
     <div className="relative pb-10 pt-64 gap-5 flex flex-col items-center w-full bg-[#020203] overflow-hidden lg:pt-[542px]">
       {/* --- Welcoming Back */}
@@ -96,15 +95,6 @@ export default function HeroTeaserRestart2025() {
       </div>
 
       {/* --- CTA */}
-      <Link href={"#content-event"} className="z-60">
-        <ButtonRestart25
-          buttonTitle={"Join RE:START Conference 2025"}
-          Icon={ArrowDown}
-          addCSS={`lg:mx-3 lg:my-1`}
-          addCSSIcon={`lg:size-8`}
-          feature_name={"join_restart"}
-        />
-      </Link>
     </div>
   );
 }

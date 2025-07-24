@@ -1,5 +1,5 @@
 "use client";
-import HeroEventRestart2025 from "@/app/components/templates/HeroEventRestart25";
+import HeroEventRestart25 from "@/app/components/templates/HeroEventRestart25";
 import ContentEventRestart25 from "@/app/components/templates/ContentEventRestart25";
 import TicketCarouselRestart25 from "@/app/components/indexes/TicketCarouselRestart25";
 import BannerEventRestart25 from "@/app/components/templates/BannerEventRestart25";
@@ -21,7 +21,7 @@ export default function Restart25Page() {
   return (
     <div className="root relative bg-black items-center">
       <TopNavbar />
-      <HeroEventRestart2025 />
+      <HeroEventRestart25 />
       <ContentEventRestart25 />
       <TopicSpeakerListRestart25 />
       <SpeakersLineUpRestart25 />

@@ -5,7 +5,7 @@ import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 import CountdownTimerRestart25 from "./CountdownTimerRestart25";
 
-export default function HeroEventRestart2025() {
+export default function HeroEventRestart25() {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
       {/* --- Hero Content */}
