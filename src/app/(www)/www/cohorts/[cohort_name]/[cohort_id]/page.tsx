@@ -9,47 +9,60 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
-export const metadata: Metadata = {
-  title: "",
-  description: "",
-  keywords: "",
-  authors: [{ name: "Sevenpreneur" }],
-  publisher: "Sevenpreneur",
-  referrer: "origin-when-cross-origin",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "",
-    description: "",
-    url: "https://www.sevenpreneur.com",
-    siteName: "Sevenpreneur",
-    images: [
-      {
-        url: "",
-        width: 800,
-        height: 600,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "",
-    description: "",
-    images: "",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
-  },
-};
-
 interface CohortDetailsPageProps {
   params: Promise<{ cohort_name: string; cohort_id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: CohortDetailsPageProps): Promise<Metadata> {
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
+  const { cohort_id } = await params;
+  const cohortId = parseInt(cohort_id);
+
+  // Get Data
+  setSecretKey(secretKey!);
+  const cohortDetails = await trpc.read.cohort({ id: cohortId });
+  const data = cohortDetails.cohort;
+
+  return {
+    title: data.name,
+    description: data.description,
+    keywords: "Sevenpreneur, Business Blueprint, Raymond Chin",
+    authors: [{ name: "Sevenpreneur" }],
+    publisher: "Sevenpreneur",
+    referrer: "origin-when-cross-origin",
+    alternates: {
+      canonical: `/cohorts/${data.slug_url}/${data.id}`,
+    },
+    openGraph: {
+      title: data.name,
+      description: data.description,
+      url: `https://sevenpreneur.com/cohorts/${data.slug_url}/${data.id}`,
+      siteName: "Sevenpreneur",
+      images: [
+        {
+          url: data.image,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.name,
+      description: data.description,
+      images: data.image,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+  };
 }
 
 export default async function CohortDetailsPage({
