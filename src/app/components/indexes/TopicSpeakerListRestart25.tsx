@@ -28,11 +28,11 @@ export default function TopicSpeakerListRestart25() {
     },
     {
       topic_name:
-        "Inside Mekari: Building Indonesian Brands That Move the World",
+        "Leading the Shift: How Bold Brands Move the Market and the World",
       topic_description:
-        "From a bold local vision to becoming Indonesia’s leading SaaS powerhouse, Mekari’s journey is a masterclass in market leadership. In this RE:START 2025 spotlight, Suwandi Soh unpacks the strategies, culture, and decisions behind building a brand that doesn’t just scale—but shapes the way businesses work.",
+        "What does it take to lead in a hyper-competitive, ever-evolving global market? This RE:START 2025 session brings together Suwandi Soh (CEO of Mekari, Indonesia’s leading SaaS platform) and Shintia Xu (CEO of ONA, the next gen beauty-tech brand for haircare) to explore how visionary leadership and deep market empathy drive world-class brand movements.",
       topic_image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-suwandi.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-suwandi-shintia%20(1).webp",
       moderator_name: "Adythia Pratama",
       moderator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-adit.webp",
