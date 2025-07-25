@@ -8,6 +8,7 @@ type VariantType =
   | "secondary"
   | "outline"
   | "ghost"
+  | "dark"
   | "semiDestructive"
   | "cmsPrimary"
   | "cmsPrimaryLight"
@@ -62,6 +63,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       outline:
         "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5]",
       ghost: "bg-white hover:bg-[#F5F5F5] active:bg-[#F5F5F5]",
+      dark: "bg-[#202020] text-white hover:bg-black active:bg-black",
       semiDestructive: "bg-semi-destructive text-destructive",
       cmsPrimary:
         "bg-cms-primary text-white hover:bg-[#032E82] active:bg-[#032E82]",
