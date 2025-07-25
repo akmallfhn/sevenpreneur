@@ -1,9 +1,10 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
 import AppButton from "../buttons/AppButton";
-import { useEffect, useRef, useState } from "react";
 import {
   Blocks,
   BookMarked,
@@ -29,6 +30,7 @@ export default function HeaderNavbarSVP({
 }: HeaderNavbarSVPProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   // --- Detect screen size
   // useEffect(() => {
@@ -137,7 +139,7 @@ export default function HeaderNavbarSVP({
             </AppDropdown>
           </div>
         ) : (
-          <Link href={"/auth/login"}>
+          <Link href={`/auth/login?redirectTo=${pathname}`}>
             <AppButton variant="dark" size="defaultRounded">
               <UserCircle2 className="size-5" />
               Login

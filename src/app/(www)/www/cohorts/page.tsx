@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 export default async function CohortDiscoveryPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
+  if (!sessionToken) return notFound();
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
   // --- Checking Access
