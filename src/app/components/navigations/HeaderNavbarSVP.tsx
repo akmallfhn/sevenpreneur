@@ -101,12 +101,12 @@ export default function HeaderNavbarSVP({
               onClose={() => setIsActionsOpened(false)}
               alignMobile="right"
             >
-              <Link href={`https://www.${domain}/account`}>
+              {/* <Link href={`https://www.${domain}/account`}>
                 <AppDropdownItemList
                   menuIcon={<UserRound className="size-4" />}
                   menuName="Profile"
                 />
-              </Link>
+              </Link> */}
               {userRole !== 3 && (
                 <Link href={`https://admin.${domain}`}>
                   <AppDropdownItemList
@@ -115,12 +115,12 @@ export default function HeaderNavbarSVP({
                   />
                 </Link>
               )}
-              <Link href={`https://agora.${domain}`}>
+              {/* <Link href={`https://agora.${domain}`}>
                 <AppDropdownItemList
                   menuIcon={<BookMarked className="size-4" />}
                   menuName="Agora Learning"
                 />
-              </Link>
+              </Link> */}
               <Link href={`https://www.${domain}/transactions`}>
                 <AppDropdownItemList
                   menuIcon={<Wallet className="size-4" />}
@@ -138,7 +138,7 @@ export default function HeaderNavbarSVP({
           </div>
         ) : (
           <Link href={"/auth/login"}>
-            <AppButton size="defaultRounded">
+            <AppButton variant="dark" size="defaultRounded">
               <UserCircle2 className="size-5" />
               Login
             </AppButton>
