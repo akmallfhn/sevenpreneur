@@ -84,7 +84,6 @@ export default async function CohortDetailsPage({
         userRole={userData?.role_id}
         isLoggedIn={!!userData}
       />
-
       <div className="w-full">
         <CohortSBBPBatch7SVP />
       </div>

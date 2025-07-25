@@ -124,13 +124,13 @@ export default function SpeakersLineUpRestart25() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/friska-wirya.webp",
       on_confirmation: false,
     },
-    {
-      name: "And more speakers",
-      title: "will be revealed",
-      image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/more-speakers.webp",
-      on_confirmation: false,
-    },
+    // {
+    //   name: "And more speakers",
+    //   title: "will be revealed",
+    //   image:
+    //     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-restart/more-speakers.webp",
+    //   on_confirmation: false,
+    // },
   ];
 
   return (

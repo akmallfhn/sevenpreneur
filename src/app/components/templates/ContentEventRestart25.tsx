@@ -7,7 +7,38 @@ export default function ContentEventRestart25() {
   return (
     <section id="content-event">
       <div className="content-event-root relative bg-black flex justify-center overflow-hidden">
-        <div className="container flex flex-col py-8 px-8 gap-9 items-center z-20 lg:pt-24 lg:pb-[60px] lg:gap-[60px]">
+        <div className="container flex flex-col py-8 px-8 gap-9 items-center z-20 lg:pt-16 lg:pb-16 lg:gap-[60px]">
+          {/* Sponsor */}
+          <div className="flex flex-col items-center gap-2">
+            <h3 className="section-title text-white/70 text-sm font-bold font-brand tracking-[0.2em]">
+              {"Sponsored by".toUpperCase()}
+            </h3>
+            <div className="sponsor-logo flex gap-3.5 items-center">
+              <div className="flex w-full h-8">
+                <Image
+                  className="object-contain w-full h-full"
+                  src={
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sponsor-restart/sponsor-genesis.svg"
+                  }
+                  alt="Genesis Logo"
+                  width={500}
+                  height={500}
+                />
+              </div>
+              <div className="flex w-full h-7">
+                <Image
+                  className="object-contain w-full h-full"
+                  src={
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sponsor-restart/sponsor-kuningan-city.svg"
+                  }
+                  alt="Kuningan City Logo"
+                  width={500}
+                  height={500}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Embed Youtube */}
           <section id="teaser">
             <div className="p-[1px] rounded-md bg-gradient-to-r from-0% from-[#727272] via-50% via-[#333333] to-100% to-[#727272]">
@@ -37,6 +68,7 @@ export default function ContentEventRestart25() {
               </div>
             </div>
           </section>
+
           {/* Stats Number */}
           <div className="flex gap-4 items-center lg:gap-8">
             <ScorecardRestart25
