@@ -6,7 +6,7 @@ import AppButton from "../buttons/AppButton";
 
 export default function BannerEventRestart25() {
   return (
-    <div className="container-banner flex items-center justify-center px-8 pb-20">
+    <div className="container-banner flex items-center justify-center px-8 pb-8 lg:pb-[60px]">
       <div className="banner-outline p-[1px] rounded-md bg-gradient-to-br from-[#B4B4B4]/50 to-[#373737]/60">
         <div className="banner-event relative flex flex-col justify-center gap-5 p-5 max-w-[520px] bg-primary aspect-mobile-banner rounded-md overflow-hidden lg:pl-8 lg:w-[840px] lg:aspect-desktop-banner lg:max-w-[840px]">
           {/* Content */}

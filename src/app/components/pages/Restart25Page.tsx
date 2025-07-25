@@ -11,6 +11,7 @@ import TopicSpeakerListRestart25 from "@/app/components/indexes/TopicSpeakerList
 import TopNavbar from "@/app/components/navigations/TopNavbarRestart25";
 import AttendeeRoleListRestart25 from "@/app/components/indexes/AttendeeRoleListRestart25";
 import AppInterstitialBanner from "../modals/AppInterstitialBanner";
+import PartnerLogosRestart25 from "../templates/PartnerLogosRestart25";
 
 export default function Restart25Page() {
   let bannerTimeInterval = 1000 * 60 * 60;
@@ -30,6 +31,7 @@ export default function Restart25Page() {
       <EventExperienceRestart25 />
       <FAQEventRestart25 />
       <BannerEventRestart25 />
+      <PartnerLogosRestart25 />
       <CustomFloatingRestart25 />
       {/* <AppInterstitialBanner
         bannerTimeInterval={bannerTimeInterval}
