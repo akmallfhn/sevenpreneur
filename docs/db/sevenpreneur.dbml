@@ -178,6 +178,16 @@ Table projects {
   updated_at    timestamptz
 }
 
+Table submissions {
+  id            integer      [primary key]
+  project_id    integer      [ref: > projects.id]
+  submitter_id  uuid         [ref: > users.id]
+  document_url  varchar
+  comment       text
+  created_at    timestamptz
+  updated_at    timestamptz
+}
+
 Table transactions {
   id               char(21)       [primary key, note: 'default nanoid()']
   user_id          uuid           [ref: > users.id]

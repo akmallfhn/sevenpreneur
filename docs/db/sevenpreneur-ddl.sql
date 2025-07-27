@@ -175,6 +175,16 @@ CREATE TABLE projects (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE submissions (
+  id            SERIAL       PRIMARY KEY,
+  project_id    INTEGER      NOT NULL,
+  submitter_id  UUID         NOT NULL,
+  document_url  VARCHAR          NULL,
+  comment       TEXT             NULL,
+  created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE transactions (
   id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
   user_id          uuid            NOT NULL,
@@ -231,6 +241,10 @@ ALTER TABLE materials
 ALTER TABLE projects
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
 
+ALTER TABLE submissions
+  ADD FOREIGN KEY (project_id)   REFERENCES projects (id),
+  ADD FOREIGN KEY (submitter_id) REFERENCES users (id);
+
 ALTER TABLE transactions
   ADD FOREIGN KEY (user_id) REFERENCES users (id);
 
@@ -286,6 +300,11 @@ CREATE TRIGGER update_materials_updated_at_trigger
 
 CREATE TRIGGER update_projects_updated_at_trigger
   BEFORE UPDATE ON projects
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_submissions_updated_at_trigger
+  BEFORE UPDATE ON submissions
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 

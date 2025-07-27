@@ -128,6 +128,7 @@ model User {
   speaker_at            Learning[]
   transactions          Transaction[]
   cohorts               UserCohort[]
+  submissions           Submission[]
 
   @@map("users")
 }
@@ -229,18 +230,33 @@ model Material {
 }
 
 model Project {
-  id           Int        @id @default(autoincrement()) @db.Integer
-  cohort       Cohort     @relation(fields: [cohort_id], references: [id])
-  cohort_id    Int        @db.Integer
-  name         String     @db.VarChar()
-  description  String     @db.VarChar()
-  document_url String?    @db.VarChar()
-  deadline_at  DateTime   @default(now()) @db.Timestamptz()
+  id           Int          @id @default(autoincrement()) @db.Integer
+  cohort       Cohort       @relation(fields: [cohort_id], references: [id])
+  cohort_id    Int          @db.Integer
+  name         String       @db.VarChar()
+  description  String       @db.VarChar()
+  document_url String?      @db.VarChar()
+  deadline_at  DateTime     @default(now()) @db.Timestamptz()
   status       StatusEnum
-  created_at   DateTime   @default(now()) @db.Timestamptz()
-  updated_at   DateTime   @default(now()) @updatedAt @db.Timestamptz()
+  created_at   DateTime     @default(now()) @db.Timestamptz()
+  updated_at   DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  submissions  Submission[]
 
   @@map("projects")
+}
+
+model Submission {
+  id           Int      @id @default(autoincrement()) @db.Integer
+  project      Project  @relation(fields: [project_id], references: [id])
+  project_id   Int      @db.Integer
+  submitter    User     @relation(fields: [submitter_id], references: [id])
+  submitter_id String   @db.Uuid
+  document_url String?  @db.VarChar()
+  comment      String?  @db.Text
+  created_at   DateTime @default(now()) @db.Timestamptz()
+  updated_at   DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("submissions")
 }
 
 model Transaction {
