@@ -126,6 +126,16 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
+## Submissions 🗒️
+
+| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+| `list.submissions`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.submission`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.submission` |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
+| `delete.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+
 ## Transactions 💰
 
 | Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |

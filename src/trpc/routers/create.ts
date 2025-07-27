@@ -343,4 +343,38 @@ export const createRouter = createTRPCRouter({
         project: theProject,
       };
     }),
+
+  submission: roleBasedProcedure(["Administrator", "General User"])
+    .input(
+      z.object({
+        project_id: numberIsID(),
+        document_url: stringNotBlank().nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdSubmission = await opts.ctx.prisma.submission.create({
+        data: {
+          project_id: opts.input.project_id,
+          submitter_id: opts.ctx.user.id,
+          document_url: opts.input.document_url,
+        },
+      });
+      const theSubmission = await opts.ctx.prisma.submission.findFirst({
+        where: {
+          id: createdSubmission.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theSubmission) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new submission.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        submission: theSubmission,
+      };
+    }),
 });
