@@ -307,6 +307,38 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  submission: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      let selectedUserId: string | undefined = undefined;
+      if (opts.ctx.user.role.name === "General User") {
+        selectedUserId = opts.ctx.user.id;
+      }
+      const theSubmission = await opts.ctx.prisma.submission.findFirst({
+        include: { submitter: true },
+        where: {
+          id: opts.input.id,
+          submitter_id: selectedUserId,
+          // deleted_at: null,
+        },
+      });
+      if (!theSubmission) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The submission with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        submission: theSubmission,
+      };
+    }),
+
   transaction: loggedInProcedure
     .input(
       z.object({

@@ -343,4 +343,63 @@ export const updateRouter = createTRPCRouter({
         project: updatedProject[0],
       };
     }),
+
+  submission: roleBasedProcedure(["Administrator", "Educator", "General User"])
+    .input(
+      z.object({
+        id: numberIsID(),
+        document_url: stringNotBlank().nullable().optional(),
+        comment: stringNotBlank().nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      let theDocumentUrl, theComment: string | null | undefined;
+      if (opts.ctx.user.role.name !== "Educator") {
+        theDocumentUrl = opts.input.document_url;
+      }
+      if (opts.ctx.user.role.name !== "General User") {
+        theComment = opts.input.comment;
+      }
+
+      if (theDocumentUrl === undefined && theComment === undefined) {
+        return {
+          status: 400,
+          message: "Bad request",
+        };
+      }
+
+      let selectedUserId: string | undefined = undefined;
+      if (opts.ctx.user.role.name === "General User") {
+        selectedUserId = opts.ctx.user.id;
+      }
+
+      const updatedSubmission =
+        await opts.ctx.prisma.submission.updateManyAndReturn({
+          data: {
+            document_url: theDocumentUrl,
+            comment: theComment,
+          },
+          where: {
+            id: opts.input.id,
+            submitter_id: selectedUserId,
+            // deleted_at: null,
+          },
+        });
+      if (updatedSubmission.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected submission is not found.",
+        });
+      } else if (updatedSubmission.length > 1) {
+        console.error(
+          "update.submission: More-than-one submissions are updated at once."
+        );
+      }
+
+      return {
+        status: 200,
+        message: "Success",
+        submission: updatedSubmission[0],
+      };
+    }),
 });

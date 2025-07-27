@@ -161,4 +161,32 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  submission: roleBasedProcedure(["Administrator", "General User"])
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      let selectedUser: string | undefined = undefined;
+      if (opts.ctx.user.role.name === "General User") {
+        selectedUser = opts.ctx.user.id;
+      }
+      const deletedSubmission = await opts.ctx.prisma.submission.deleteMany({
+        where: {
+          id: opts.input.id,
+          submitter_id: selectedUser,
+        },
+      });
+      if (deletedSubmission.count > 1) {
+        console.error(
+          "delete.submission: More-than-one submissions are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });

@@ -365,6 +365,52 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  submissions: loggedInProcedure
+    .input(
+      z.object({
+        project_id: numberIsID(),
+        submitter_id: stringIsUUID().optional(),
+      })
+    )
+    .query(async (opts) => {
+      let selectedUserId = opts.input.submitter_id;
+      if (opts.ctx.user.role.name === "General User") {
+        if (!selectedUserId) {
+          selectedUserId = opts.ctx.user.id;
+        }
+        if (opts.ctx.user.id !== selectedUserId) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message:
+              "You're not allowed to read another user's submissions list.",
+          });
+        }
+      }
+      const submissionsList = await opts.ctx.prisma.submission.findMany({
+        include: { submitter: true },
+        where: {
+          project_id: opts.input.project_id,
+          submitter_id: selectedUserId,
+        },
+        orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
+      });
+      const returnedList = submissionsList.map((entry) => {
+        return {
+          id: entry.id,
+          project_id: entry.project_id,
+          submitter_id: entry.submitter_id,
+          full_name: entry.submitter.full_name,
+          avatar: entry.submitter.avatar,
+          created_at: entry.created_at,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   transactions: loggedInProcedure
     .input(
       z.object({
