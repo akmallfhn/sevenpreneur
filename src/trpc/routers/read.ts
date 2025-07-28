@@ -368,9 +368,14 @@ export const readRouter = createTRPCRouter({
         });
       }
 
+      let checkoutPrefix = "https://checkout.xendit.co/web/";
+      if (process.env.XENDIT_MODE === "test") {
+        checkoutPrefix = "https://checkout-staging.xendit.co/v2/";
+      }
+
       let invoiceUrl: string | undefined;
       if (theTransaction.status === TStatusEnum.PENDING) {
-        invoiceUrl = `https://checkout-staging.xendit.co/v2/${theTransaction.invoice_number}`;
+        invoiceUrl = `${checkoutPrefix}${theTransaction.invoice_number}`;
       }
 
       let paymentChannelName: string | undefined;

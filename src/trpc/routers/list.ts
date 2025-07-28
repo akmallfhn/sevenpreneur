@@ -450,10 +450,15 @@ export const listRouter = createTRPCRouter({
         cohortPriceList.map((entry) => [entry.id, entry])
       );
 
+      let checkoutPrefix = "https://checkout.xendit.co/web/";
+      if (process.env.XENDIT_MODE === "test") {
+        checkoutPrefix = "https://checkout-staging.xendit.co/v2/";
+      }
+
       const returnedList = transactionsList.map((entry) => {
         let invoiceUrl: string | undefined;
         if (entry.status === TStatusEnum.PENDING) {
-          invoiceUrl = `https://checkout-staging.xendit.co/v2/${entry.invoice_number}`;
+          invoiceUrl = `${checkoutPrefix}${entry.invoice_number}`;
         }
 
         let cohortId: number | undefined;
@@ -489,6 +494,7 @@ export const listRouter = createTRPCRouter({
           cohort_price_name: cohortPriceName,
         };
       });
+
       return {
         status: 200,
         message: "Success",
