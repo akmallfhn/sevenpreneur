@@ -39,15 +39,15 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Phone Country Codes ☎️
 
-| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.phone_country_codes` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.phoneCountryCodes` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 ## Payment Channels 🏦
 
-| Procedure Name          | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.payment_channels` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.paymentChannels` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 ## Users 👤
 
