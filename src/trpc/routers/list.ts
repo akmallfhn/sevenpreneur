@@ -65,7 +65,7 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
-  phone_country_codes: loggedInProcedure.query(async (opts) => {
+  phoneCountryCodes: loggedInProcedure.query(async (opts) => {
     const codeList = await opts.ctx.prisma.phoneCountryCode.findMany();
     const returnedList = codeList.map((entry) => {
       return {
@@ -82,7 +82,7 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
-  payment_channels: loggedInProcedure
+  paymentChannels: loggedInProcedure
     .input(z.object({ method: stringNotBlank().optional() }).optional())
     .query(async (opts) => {
       const channelList = await opts.ctx.prisma.paymentChannel.findMany({

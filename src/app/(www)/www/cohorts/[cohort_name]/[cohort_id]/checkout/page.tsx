@@ -40,7 +40,7 @@ export default async function CheckoutCohortPage({
   }));
 
   // --- Get Payment Data
-  const paymentMethodRaw = (await trpc.list.payment_channels()).list;
+  const paymentMethodRaw = (await trpc.list.paymentChannels()).list;
   const paymentMethodList = paymentMethodRaw.map((post) => ({
     ...post,
     calc_percent:
