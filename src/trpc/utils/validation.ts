@@ -29,3 +29,8 @@ export function numberIsRoleID(): z.ZodNumber {
   // Administrator role has ID 0
   return z.number().finite().min(0);
 }
+
+export function numberIsPositive(): z.ZodNumber {
+  // Number should be 1 or bigger
+  return z.number().finite().min(1);
+}
