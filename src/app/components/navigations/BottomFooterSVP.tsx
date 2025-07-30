@@ -11,7 +11,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import React from "react";
 
-export default function AppBottomFooter() {
+export default function BottomFooterSVP() {
   const pathname = usePathname();
 
   // Path yang tidak mau menampilkan Navbar & Footer
@@ -70,7 +70,8 @@ export default function AppBottomFooter() {
                   PT Pengusaha Muda Indonesia
                 </h4>
                 <p className="font-bodycopy font-medium text-sm lg:text-base">
-                  Jakarta Barat, DKI Jakarta, Indonesia
+                  Soho Capital Floor 19, Podomoro City, Jl. Letjend S.Parman
+                  Kav.28, Jakarta Barat, DKI Jakarta, Indonesia
                 </p>
               </div>
               {/* Company Socmed*/}

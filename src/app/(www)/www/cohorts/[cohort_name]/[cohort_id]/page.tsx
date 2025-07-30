@@ -72,19 +72,6 @@ export default async function CohortDetailsPage({
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
 
-  // --- Get Token for Header Navbar
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  // --- Check User Session for Header Navbar
-  let userData:
-    | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
-    | null = null;
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-    const checkUser = await trpc.auth.checkSession();
-    userData = checkUser.user;
-  }
-
   // Get Data
   setSecretKey(secretKey!);
   const cohortDetails = await trpc.read.cohort({ id: cohortId });
@@ -92,11 +79,6 @@ export default async function CohortDetailsPage({
 
   return (
     <React.Fragment>
-      <HeaderNavbarSVP
-        userAvatar={userData?.avatar ?? null}
-        userRole={userData?.role_id}
-        isLoggedIn={!!userData}
-      />
       <div className="w-full">
         <CohortSBBPBatch7SVP />
       </div>
