@@ -18,7 +18,7 @@ export default async function CohortDiscoveryPage() {
 
   // --- Get List Cohort
   setSecretKey(secretKey!);
-  const listCohort = await trpc.list.cohorts();
+  const listCohort = await trpc.list.cohorts({});
   return (
     <div className="w-full pt-10 pb-20">
       <h2 className="font-bold">List Cohort</h2>

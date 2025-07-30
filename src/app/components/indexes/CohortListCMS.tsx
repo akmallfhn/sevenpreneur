@@ -32,7 +32,7 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
     data: cohortListData,
     isError: isErrorCohortList,
     isLoading: isLoadingCohortList,
-  } = trpc.list.cohorts.useQuery(undefined, { enabled: !!sessionToken });
+  } = trpc.list.cohorts.useQuery({}, { enabled: !!sessionToken });
 
   const isLoading = isLoadingCohortList;
   const isError = isErrorCohortList;

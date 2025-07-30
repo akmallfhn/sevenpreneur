@@ -196,41 +196,78 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  cohorts: publicProcedure.query(async (opts) => {
-    let whereClause = { deleted_at: null };
-    if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
-      whereClause = Object.assign(whereClause, {
-        status: StatusEnum.ACTIVE,
-        published_at: {
-          lte: new Date(),
-        },
+  cohorts: publicProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const whereClause = { deleted_at: null };
+
+      if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
+        Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+          published_at: {
+            lte: new Date(),
+          },
+        });
+      }
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause, {
+          name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.cohort.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const cohortList = await opts.ctx.prisma.cohort.findMany({
+        orderBy: [
+          { end_date: "desc" },
+          { start_date: "desc" },
+          { published_at: "desc" },
+        ],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
       });
-    }
-    const cohortList = await opts.ctx.prisma.cohort.findMany({
-      orderBy: [
-        { end_date: "desc" },
-        { start_date: "desc" },
-        { published_at: "desc" },
-      ],
-      where: whereClause,
-    });
-    const returnedList = cohortList.map((entry) => {
+      const returnedList = cohortList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          image: entry.image,
+          status: entry.status,
+          slug_url: entry.slug_url,
+          start_date: entry.start_date,
+          end_date: entry.end_date,
+        };
+      });
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(paging.metapaging, {
+          keyword: opts.input.keyword,
+        });
+      }
+
       return {
-        id: entry.id,
-        name: entry.name,
-        image: entry.image,
-        status: entry.status,
-        slug_url: entry.slug_url,
-        start_date: entry.start_date,
-        end_date: entry.end_date,
+        status: 200,
+        message: "Success",
+        list: returnedList,
+        metapaging: paging.metapaging,
       };
-    });
-    return {
-      status: 200,
-      message: "Success",
-      list: returnedList,
-    };
-  }),
+    }),
 
   cohortMembers: loggedInProcedure
     .input(
