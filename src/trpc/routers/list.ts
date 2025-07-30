@@ -519,6 +519,8 @@ export const listRouter = createTRPCRouter({
     .input(
       z.object({
         user_id: stringIsUUID().optional(),
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
       })
     )
     .query(async (opts) => {
@@ -535,9 +537,21 @@ export const listRouter = createTRPCRouter({
           });
         }
       }
+      const whereClause = { user_id: selectedUserId };
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.transaction.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
       const transactionsList = await opts.ctx.prisma.transaction.findMany({
-        where: { user_id: selectedUserId },
+        where: whereClause,
         orderBy: [{ created_at: "desc" }],
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
       });
 
       const cohortIdList: Set<number> = new Set();
@@ -603,6 +617,7 @@ export const listRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         list: returnedList,
+        metapaging: paging.metapaging,
       };
     }),
 });
