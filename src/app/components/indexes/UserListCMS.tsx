@@ -25,9 +25,10 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   const utils = trpc.useUtils();
 
   // --- Return data from tRPC
-  const { data, isLoading, isError } = trpc.list.users.useQuery(undefined, {
-    enabled: !!sessionToken,
-  });
+  const { data, isLoading, isError } = trpc.list.users.useQuery(
+    {},
+    { enabled: !!sessionToken }
+  );
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">

@@ -5,6 +5,7 @@ import {
 } from "@/trpc/init";
 import {
   numberIsID,
+  numberIsPositive,
   numberIsRoleID,
   stringIsUUID,
   stringNotBlank,
@@ -12,6 +13,36 @@ import {
 import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+
+function calculatePage(
+  input: { page?: number; page_size?: number },
+  aggregation: { _count: number }
+) {
+  let pageSize: number | undefined;
+  let totalPage: number | undefined;
+  let currentPage: number | undefined;
+  let prismaSkip: number | undefined;
+
+  if (input.page_size) {
+    pageSize = input.page_size || 1;
+    totalPage = Math.ceil(aggregation._count / pageSize);
+    currentPage = Math.max(input.page || 1, 1);
+    prismaSkip = (currentPage - 1) * pageSize;
+  }
+
+  return {
+    prisma: {
+      skip: prismaSkip,
+      take: pageSize,
+    },
+    metapaging: {
+      total_data: aggregation._count,
+      total_page: totalPage,
+      current_page: currentPage,
+      page_size: pageSize,
+    },
+  };
+}
 
 export const listRouter = createTRPCRouter({
   industries: loggedInProcedure.query(async (opts) => {
@@ -99,15 +130,43 @@ export const listRouter = createTRPCRouter({
     }),
 
   users: loggedInProcedure
-    .input(z.object({ role_id: numberIsRoleID().optional() }).optional())
+    .input(
+      z.object({
+        role_id: numberIsRoleID().optional(),
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
     .query(async (opts) => {
+      const whereClause = {
+        role_id: opts.input.role_id,
+        deleted_at: null,
+      };
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause, {
+          full_name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.user.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
       const userList = await opts.ctx.prisma.user.findMany({
         include: { role: true },
         orderBy: [{ role_id: "asc" }, { full_name: "asc" }],
-        where: {
-          role_id: opts.input?.role_id,
-          deleted_at: null,
-        },
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
       });
       const returnedList = userList.map((entry) => {
         return {
@@ -122,10 +181,18 @@ export const listRouter = createTRPCRouter({
           last_login: entry.last_login,
         };
       });
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(paging.metapaging, {
+          keyword: opts.input.keyword,
+        });
+      }
+
       return {
         status: 200,
         message: "Success",
         list: returnedList,
+        metapaging: paging.metapaging,
       };
     }),
 
