@@ -17,7 +17,7 @@ CREATE TYPE learning_method_enum AS ENUM (
 
 CREATE TYPE category_enum AS ENUM (
   'cohort',
-  'video_course',
+  'playlist',
   'ai'
 );
 
@@ -185,9 +185,32 @@ CREATE TABLE submissions (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE playlists (
+  id                 SERIAL          PRIMARY KEY,
+  name               VARCHAR         NOT NULL,
+  tagline            VARCHAR         NOT NULL,
+  description        TEXT            NOT NULL,
+  video_preview_url  VARCHAR         NOT NULL,
+  image_url          VARCHAR         NOT NULL,
+  price              DECIMAL(12, 2)  NOT NULL,
+  status             status_enum     NOT NULL,
+  slug_url           VARCHAR         NOT NULL,
+  published_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  deleted_at         TIMESTAMPTZ         NULL,
+  deleted_by         UUID                NULL
+);
+
+CREATE TABLE videos (
+  id           SERIAL   PRIMARY KEY,
+  playlist_id  INTEGER  NOT NULL,
+  name         VARCHAR  NOT NULL,
+  video_url    VARCHAR  NOT NULL
+);
+
 CREATE TABLE transactions (
   id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
-  user_id          uuid            NOT NULL,
+  user_id          UUID            NOT NULL,
   category         category_enum   NOT NULL,
   item_id          INTEGER         NOT NULL,
   amount           DECIMAL(12, 2)  NOT NULL,
@@ -209,6 +232,20 @@ CREATE TABLE users_cohorts (
   user_id    UUID     NOT NULL,
   cohort_id  INTEGER  NOT NULL,
   PRIMARY KEY (user_id, cohort_id)
+);
+
+CREATE TABLE users_playlists (
+  user_id      UUID     NOT NULL,
+  playlist_id  INTEGER  NOT NULL,
+  rating       INTEGER  NOT NULL,
+  review       VARCHAR  NOT NULL,
+  PRIMARY KEY (user_id, playlist_id)
+);
+
+CREATE TABLE educators_playlists (
+  user_id      UUID     NOT NULL,
+  playlist_id  INTEGER  NOT NULL,
+  PRIMARY KEY (user_id, playlist_id)
 );
 
 ----------------
@@ -245,12 +282,26 @@ ALTER TABLE submissions
   ADD FOREIGN KEY (project_id)   REFERENCES projects (id),
   ADD FOREIGN KEY (submitter_id) REFERENCES users (id);
 
+ALTER TABLE playlists
+  ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
+
+ALTER TABLE videos
+  ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
+
 ALTER TABLE transactions
   ADD FOREIGN KEY (user_id) REFERENCES users (id);
 
 ALTER TABLE users_cohorts
   ADD FOREIGN KEY (user_id)   REFERENCES users (id),
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+
+ALTER TABLE users_playlists
+  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
+
+ALTER TABLE educators_playlists
+  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
 
 ---------------
 -- Functions --
@@ -305,6 +356,11 @@ CREATE TRIGGER update_projects_updated_at_trigger
 
 CREATE TRIGGER update_submissions_updated_at_trigger
   BEFORE UPDATE ON submissions
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_playlists_updated_at_trigger
+  BEFORE UPDATE ON playlists
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
