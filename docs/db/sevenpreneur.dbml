@@ -20,7 +20,7 @@ enum learning_method_enum {
 
 enum category_enum {
   cohort
-  video_course
+  playlist
   ai
 }
 
@@ -188,6 +188,29 @@ Table submissions {
   updated_at    timestamptz
 }
 
+Table playlists {
+  id                 integer        [primary key]
+  name               varchar
+  tagline            varchar
+  description        text
+  video_preview_url  varchar
+  image_url          varchar
+  price              decimal(12,2)
+  status             status_enum
+  slug_url           varchar
+  published_at       timestamptz
+  updated_at         timestamptz
+  deleted_at         timestamptz
+  deleted_by         uuid           [ref: > users.id]
+}
+
+Table videos {
+  id           integer  [primary key]
+  playlist_id  integer  [ref: > playlists.id]
+  name         varchar
+  video_url    varchar
+}
+
 Table transactions {
   id               char(21)       [primary key, note: 'default nanoid()']
   user_id          uuid           [ref: > users.id]
@@ -204,4 +227,16 @@ Table transactions {
   paid_at          timestamptz
   created_at       timestamptz
   updated_at       timestamptz
+}
+
+Table users_playlists {
+  user_id      uuid     [ref: > users.id]
+  playlist_id  integer  [ref: > playlists.id]
+  rating       integer
+  review       varchar
+}
+
+Table educators_playlists {
+  user_id      uuid     [ref: > users.id]
+  playlist_id  integer  [ref: > playlists.id]
 }
