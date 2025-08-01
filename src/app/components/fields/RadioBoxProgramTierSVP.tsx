@@ -1,6 +1,5 @@
 "use client";
-
-import { RupiahCurrency } from "@/lib/rupiah-currency";
+import { rupiahCurrency } from "@/lib/rupiah-currency";
 
 interface RadioBoxProgramTierSVPProps {
   programTierName: string;
@@ -41,7 +40,7 @@ export default function RadioBoxProgramTierSVP({
           </p>
         </div>
         <p className="text-secondary font-bold">
-          {RupiahCurrency(programTierPrice)}
+          {rupiahCurrency(programTierPrice)}
         </p>
       </div>
       <input

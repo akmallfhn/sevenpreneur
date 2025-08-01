@@ -32,7 +32,7 @@ import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
 import StatItemCMS from "../items/StatItemCMS";
-import { RupiahCurrency } from "@/lib/rupiah-currency";
+import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { notFound } from "next/navigation";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
 

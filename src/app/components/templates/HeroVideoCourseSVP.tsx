@@ -12,7 +12,7 @@ export default function HeroVideoCourseSVP() {
         <Image
           className="object-cover w-full h-full"
           src={
-            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-zaki-angga%20(1).webp"
+            "https://cdn1-production-images-kly.akamaized.net/HBgfaG-KNzdYi2QEZyrYa6KVnWs=/0x0:1500x845/1200x675/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/5277743/original/083152400_1752044562-PWN__1500X845_.jpg"
           }
           alt="Image"
           width={800}
@@ -75,15 +75,16 @@ export default function HeroVideoCourseSVP() {
         </div>
         <Link href={"/"} className="checkout-button w-full max-w-[420px]">
           <AppButton size="defaultRounded" className="w-full md:w-fit">
-            Get Course Video Only Rp127K
+            <p className="px-2">Start Learning for Only 127K</p>
           </AppButton>
         </Link>
-        <div className="ratings flex items-center gap-1">
+        <div className="ratings flex items-center gap-1 text-sm">
           <div className="flex items-center">
             <Star fill="#FBBC15" className="size-5" />
-            <p className="text-sm text-[#FBBC15] font-bold">4.6</p>
+            <p className="text-white/90">4.6 ratings</p>
           </div>
-          <p className="text-sm text-white">227 students</p>
+          <p className="text-white/45">●</p>
+          <p className="text-white/90">227 learners joined</p>
         </div>
       </div>
     </div>

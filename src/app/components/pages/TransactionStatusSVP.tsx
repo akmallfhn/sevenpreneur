@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { RupiahCurrency } from "@/lib/rupiah-currency";
+import { rupiahCurrency } from "@/lib/rupiah-currency";
 import AppButton from "../buttons/AppButton";
 import { ChevronDown, Loader2, RefreshCcw, Timer } from "lucide-react";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
@@ -208,15 +208,15 @@ export default function TransactionStatusSVP({
               <div className="amount-details flex flex-col gap-2">
                 <ReceiptLineItemSVP
                   receiptName="Program Price"
-                  receiptValue={RupiahCurrency(productPrice)}
+                  receiptValue={rupiahCurrency(productPrice)}
                 />
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
-                  receiptValue={RupiahCurrency(Math.round(productAdminFee))}
+                  receiptValue={rupiahCurrency(Math.round(productAdminFee))}
                 />
                 <ReceiptLineItemSVP
                   receiptName="VAT"
-                  receiptValue={RupiahCurrency(Math.round(productVAT))}
+                  receiptValue={rupiahCurrency(Math.round(productVAT))}
                 />
                 <hr className="border-t-outline border-dashed" />
               </div>
@@ -228,7 +228,7 @@ export default function TransactionStatusSVP({
               <div className="amount flex flex-col font-ui text-black text-sm">
                 <p>Total Amount</p>
                 <p className="font-bold">
-                  {RupiahCurrency(Math.round(productTotalAmount))}
+                  {rupiahCurrency(Math.round(productTotalAmount))}
                 </p>
               </div>
               <ChevronDown

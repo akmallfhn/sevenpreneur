@@ -1,6 +1,4 @@
 "use client";
-
-import { RupiahCurrency } from "@/lib/rupiah-currency";
 import Image from "next/image";
 
 interface RadioBoxPaymentChannelSVPProps {

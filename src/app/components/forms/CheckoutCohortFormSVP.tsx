@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
-import { RupiahCurrency } from "@/lib/rupiah-currency";
+import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { MakePaymentXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -425,27 +425,27 @@ export default function CheckoutCohortFormSVP({
                 />
                 <ReceiptLineItemSVP
                   receiptName="Program Price"
-                  receiptValue={RupiahCurrency(programPrice)}
+                  receiptValue={rupiahCurrency(programPrice)}
                 />
                 <hr className="border-t-outline border-dashed" />
                 <ReceiptLineItemSVP
                   receiptName="Subtotal"
-                  receiptValue={RupiahCurrency(subtotal)}
+                  receiptValue={rupiahCurrency(subtotal)}
                 />
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
-                  receiptValue={RupiahCurrency(paymentCalculation.adminFee)}
+                  receiptValue={rupiahCurrency(paymentCalculation.adminFee)}
                 />
                 <ReceiptLineItemSVP
                   receiptName="VAT"
-                  receiptValue={RupiahCurrency(
+                  receiptValue={rupiahCurrency(
                     paymentCalculation.valueAddedTax
                   )}
                 />
                 <hr className="border-t-outline border-dashed" />
                 <ReceiptLineItemSVP
                   receiptName="Total Amount"
-                  receiptValue={RupiahCurrency(paymentCalculation.totalAmount)}
+                  receiptValue={rupiahCurrency(paymentCalculation.totalAmount)}
                 />
               </div>
             </div>
@@ -488,7 +488,7 @@ export default function CheckoutCohortFormSVP({
           <div className="flex flex-col font-ui text-black">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">
-              {RupiahCurrency(paymentCalculation.totalAmount)}
+              {rupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
           <AppButton onClick={handlePayment} disabled={isLoadingPayment}>
