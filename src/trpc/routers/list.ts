@@ -515,6 +515,99 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  playlists: publicProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const whereClause = { deleted_at: null };
+
+      if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
+        Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+          published_at: {
+            lte: new Date(),
+          },
+        });
+      }
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause, {
+          name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.playlist.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const playlistList = await opts.ctx.prisma.playlist.findMany({
+        orderBy: [{ published_at: "desc" }],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+      const returnedList = playlistList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          tagline: entry.tagline,
+          image_url: entry.image_url,
+          price: entry.price,
+          status: entry.status,
+          slug_url: entry.slug_url,
+          published_at: entry.published_at,
+        };
+      });
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(paging.metapaging, {
+          keyword: opts.input.keyword,
+        });
+      }
+
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+        metapaging: paging.metapaging,
+      };
+    }),
+
+  educatorsPlaylist: loggedInProcedure
+    .input(
+      z.object({
+        playlist_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const educatorsPlaylistList =
+        await opts.ctx.prisma.educatorPlaylist.findMany({
+          include: { user: true },
+          where: { playlist_id: opts.input.playlist_id },
+          orderBy: [{ user_id: "asc" }],
+        });
+      const returnedList = educatorsPlaylistList.map((entry) => {
+        return entry.user;
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   transactions: loggedInProcedure
     .input(
       z.object({

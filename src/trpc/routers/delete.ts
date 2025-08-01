@@ -35,7 +35,7 @@ export const deleteRouter = createTRPCRouter({
     .mutation(async (opts) => {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedCohort: number = await opts.ctx.prisma
-        .$executeRaw`UPDATE cohorts SET deleted_at = CURRENT_TIMESTAMP WHERE id = ${opts.input.id};`;
+        .$executeRaw`UPDATE cohorts SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
       if (deletedCohort > 1) {
         console.error(
           "delete.cohort: More-than-one cohorts are deleted at once."
@@ -182,6 +182,53 @@ export const deleteRouter = createTRPCRouter({
       if (deletedSubmission.count > 1) {
         console.error(
           "delete.submission: More-than-one submissions are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
+
+  playlist: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
+      const deletedPlaylist: number = await opts.ctx.prisma
+        .$executeRaw`UPDATE playlists SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
+      if (deletedPlaylist > 1) {
+        console.error(
+          "delete.playlist: More-than-one playlists are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
+
+  educatorPlaylist: administratorProcedure
+    .input(
+      z.object({
+        playlist_id: numberIsID(),
+        user_id: stringIsUUID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedEducatorPlaylist =
+        await opts.ctx.prisma.educatorPlaylist.deleteMany({
+          where: {
+            playlist_id: opts.input.playlist_id,
+            user_id: opts.input.user_id,
+          },
+        });
+      if (deletedEducatorPlaylist.count > 1) {
+        console.error(
+          "delete.educatorPlaylist: More-than-one educator playlists are deleted at once."
         );
       }
       return {
