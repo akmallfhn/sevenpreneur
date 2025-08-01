@@ -21,6 +21,7 @@ import HeroVideoCourseSVP, {
   EducatorItem,
 } from "../templates/HeroVideoCourseSVP";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
+import Link from "next/link";
 
 dayjs.extend(localizedFormat);
 
@@ -30,6 +31,7 @@ interface PlaylistDetailsSVPProps {
   playlistTagline: string;
   playlistImage: string;
   playlistDescription: string;
+  playlistSlug: string;
   playlistPrice: number;
   playlistPublishedAt: string;
   playlistEducators: EducatorItem[];
@@ -42,6 +44,7 @@ export default function PlaylistDetailsSVP({
   playlistTagline,
   playlistImage,
   playlistDescription,
+  playlistSlug,
   playlistPrice,
   playlistPublishedAt,
   playlistEducators,
@@ -88,10 +91,12 @@ export default function PlaylistDetailsSVP({
       <div className="flex flex-col w-full">
         {/* --- Hero */}
         <HeroVideoCourseSVP
+          playlistId={playlistId}
           playlistName={playlistName}
           playlistTagline={playlistTagline}
           playlistImage={playlistImage}
-          educators={playlistEducators}
+          playlistSlug={playlistSlug}
+          playlistEducators={playlistEducators}
         />
         <div ref={sentinelRef} className="h-0" />
 
@@ -165,7 +170,11 @@ export default function PlaylistDetailsSVP({
 
           {/* -- Aside */}
           <aside className="aside flex flex-col gap-8 md:flex-1 lg:gap-10">
-            <OfferHighlightVideoCourseSVP playlistPrice={playlistPrice} />
+            <OfferHighlightVideoCourseSVP
+              playlistId={playlistId}
+              playlistSlug={playlistSlug}
+              playlistPrice={playlistPrice}
+            />
           </aside>
         </div>
       </div>
@@ -181,10 +190,15 @@ export default function PlaylistDetailsSVP({
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">{rupiahCurrency(playlistPrice)}</p>
           </div>
-          <AppButton size="defaultRounded">
-            <ShieldCheck className="size-5" />
-            Pay & Get Access
-          </AppButton>
+          <Link href={`/playlists/${playlistSlug}/${playlistId}/checkout`}>
+            <AppButton
+              size="defaultRounded"
+              featureName={`vod_checkout_${playlistSlug}`}
+            >
+              <ShieldCheck className="size-5" />
+              Pay & Get Access
+            </AppButton>
+          </Link>
         </div>
         <div className="flex w-full text-center justify-center items-center gap-1 text-alternative">
           <LockKeyhole className="size-3" />
