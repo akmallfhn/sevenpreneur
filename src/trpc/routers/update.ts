@@ -79,7 +79,7 @@ export const updateRouter = createTRPCRouter({
         description: stringNotBlank().optional(),
         image: stringNotBlank().optional(),
         status: z.nativeEnum(StatusEnum).optional(),
-        slug_url: stringNotBlank().optional().optional(),
+        slug_url: stringNotBlank().optional(),
         start_date: stringIsTimestampTz().optional(),
         end_date: stringIsTimestampTz().optional(),
         published_at: stringIsTimestampTz().optional(),
@@ -400,6 +400,57 @@ export const updateRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         submission: updatedSubmission[0],
+      };
+    }),
+
+  playlist: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        name: stringNotBlank().optional(),
+        tagline: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        video_preview_url: stringNotBlank().optional(),
+        image_url: stringNotBlank().optional(),
+        price: z.number().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+        slug_url: stringNotBlank().optional(),
+        published_at: stringIsTimestampTz().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedPlaylist =
+        await opts.ctx.prisma.playlist.updateManyAndReturn({
+          data: {
+            name: opts.input.name,
+            tagline: opts.input.tagline,
+            description: opts.input.description,
+            video_preview_url: opts.input.video_preview_url,
+            image_url: opts.input.image_url,
+            price: opts.input.price,
+            status: opts.input.status,
+            slug_url: opts.input.slug_url,
+            published_at: opts.input.published_at,
+          },
+          where: {
+            id: opts.input.id,
+            deleted_at: null,
+          },
+        });
+      if (updatedPlaylist.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected playlist is not found.",
+        });
+      } else if (updatedPlaylist.length > 1) {
+        console.error(
+          "update.playlist: More-than-one playlists are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        playlist: updatedPlaylist[0],
       };
     }),
 });

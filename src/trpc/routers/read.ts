@@ -339,6 +339,36 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  playlist: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
+        include: {
+          educators: { include: { user: true } },
+          videos: true,
+        },
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!thePlaylist) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The playlist with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        playlist: thePlaylist,
+      };
+    }),
+
   transaction: loggedInProcedure
     .input(
       z.object({

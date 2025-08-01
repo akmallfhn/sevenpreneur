@@ -136,6 +136,24 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.submission` |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
 | `delete.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
 
+## Playlists 📺
+
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `list.playlists`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| `read.playlist`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `delete.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+
+### Educators Playlists 👥
+
+| Procedure Name            | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `list.educatorsPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `delete.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+
 ## Transactions 💰
 
 | Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
