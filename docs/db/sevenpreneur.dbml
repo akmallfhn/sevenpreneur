@@ -208,6 +208,7 @@ Table videos {
   id           integer  [primary key]
   playlist_id  integer  [ref: > playlists.id]
   name         varchar
+  image_url    varchar
   video_url    varchar
 }
 
