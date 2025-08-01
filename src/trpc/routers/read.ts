@@ -376,6 +376,32 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  video: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theVideo = await opts.ctx.prisma.video.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theVideo) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The video with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        video: theVideo,
+      };
+    }),
+
   transaction: loggedInProcedure
     .input(
       z.object({
