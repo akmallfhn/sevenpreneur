@@ -4,7 +4,35 @@ import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { Star } from "lucide-react";
 
-export default function HeroVideoCourseSVP() {
+interface EducatorItem {
+  id: string;
+  full_name: string;
+  avatar: string | null;
+}
+interface HeroVideoCourseSVPProps {
+  playlistName: string;
+  playlistTagline: string;
+  educators: EducatorItem[];
+}
+
+export default function HeroVideoCourseSVP({
+  playlistName,
+  playlistTagline,
+  educators,
+}: HeroVideoCourseSVPProps) {
+  const formatEducatorNames = (educators: EducatorItem[]): string => {
+    const names = educators.map((e) => e.full_name);
+    const total = names.length;
+
+    if (total === 0) return "";
+    if (total === 1) return names[0];
+    if (total === 2) return `${names[0]} & ${names[1]}`;
+    if (total === 3) return `${names[0]}, ${names[1]}, and ${names[2]}`;
+    if (total > 3)
+      return `${names[0]}, ${names[1]}, ${names[2]}, and ${total - 3} more`;
+
+    return "";
+  };
   return (
     <div className="hero-video-course relative flex flex-col w-full h-full bg-black items-center md:flex-row-reverse lg:max-h-[460px] overflow-hidden">
       {/* Image & Video Thumbnail */}
@@ -32,44 +60,38 @@ export default function HeroVideoCourseSVP() {
       <div className="absolute flex flex-col w-full bottom-0 left-1/2 -translate-x-1/2 items-center font-ui p-5 pb-10 gap-4 z-10 sm:bottom-[100px] md:bottom-auto md:pb-5 md:items-start md:top-1/2 md:-translate-y-1/2 lg:p-0 lg:max-w-[960px] xl:max-w-[1208px]">
         <div className="title-tagline flex flex-col items-center max-w-[420px] gap-1 md:items-start">
           <h1 className="title font-bold text-3xl line-clamp-2 text-center text-transparent bg-clip-text bg-linear-to-br from-white to-[#999999] md:text-left lg:text-4xl">
-            RE:START Conference 2025
+            {playlistName}
           </h1>
           <p className="tagline text-sm text-white text-center line-clamp-3 md:text-left lg:text-base">
-            Bergabunglah dengan pembicaraan inspiratif yang berasal dari
-            tokoh-tokoh berpengaruh di Indonesia
+            {playlistTagline}
           </p>
         </div>
         <div className="instructor flex flex-col items-center gap-1 md:items-start max-w-[420px]">
           <p className="text-white/80 text-sm">Instructors</p>
           <div className="user-avatar-stack flex items-center gap-3 text-white">
             <div className="avatar-stack flex items-center">
-              <div className="flex aspect-square w-7 border border-white rounded-full overflow-hidden">
-                <Image
-                  src={"https://randomuser.me/api/portraits/men/32.jpg"}
-                  alt="Nama"
-                  width={150}
-                  height={150}
-                />
-              </div>
-              <div className="flex aspect-square w-7 -ml-3 border border-white rounded-full overflow-hidden">
-                <Image
-                  src={"https://randomuser.me/api/portraits/women/65.jpg"}
-                  alt="Nama"
-                  width={150}
-                  height={150}
-                />
-              </div>
-              <div className="flex aspect-square w-7 -ml-3 border border-white rounded-full overflow-hidden">
-                <Image
-                  src={"https://randomuser.me/api/portraits/women/43.jpg"}
-                  alt="Nama"
-                  width={150}
-                  height={150}
-                />
-              </div>
+              {educators.slice(0, 3).map((post, index) => (
+                <div
+                  className={`avatar-item flex aspect-square w-7 border border-white rounded-full overflow-hidden lg:w-8 ${
+                    index > 0 ? "-ml-2" : ""
+                  }`}
+                  key={index}
+                >
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      post.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                    }
+                    alt={post.full_name}
+                    width={150}
+                    height={150}
+                  />
+                </div>
+              ))}
             </div>
             <p className="max-w-[220px] text-sm font-bold lg:text-base lg:max-w-[420px]">
-              Basuki Tjahja Purnama, Arsjad Rasjid, dr. Tirta and 10 more
+              {formatEducatorNames(educators)}
             </p>
           </div>
         </div>

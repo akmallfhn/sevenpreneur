@@ -1,7 +1,15 @@
 "use client";
 import Image from "next/image";
 
-export default function VideoCourseItemSVP() {
+interface VideoCourseItemSVPProps {
+  index: number;
+  videoName: string;
+}
+
+export default function VideoCourseItemSVP({
+  index,
+  videoName,
+}: VideoCourseItemSVPProps) {
   return (
     <div className="flex w-full items-center gap-3">
       <div className="video-image-thumbnail relative flex aspect-video w-[152px] flex-shrink-0 lg:w-[186px] rounded-md overflow-hidden">
@@ -16,9 +24,12 @@ export default function VideoCourseItemSVP() {
           10:32
         </p>
       </div>
-      <h3 className="video-title font-ui font-bold line-clamp-3 text-sm lg:text-base">
-        Spiritual Awakening of Indonesia Through Global Founder In Indonesia
-      </h3>
+      <div className="flex flex-col font-ui lg:max-w-[440px] lg:gap-1">
+        <p className="font-medium text-xs text-alternative">EPISODE {index}</p>
+        <h3 className="video-title font-bold line-clamp-2 text-sm md:line-clamp-3 lg:text-base">
+          {videoName}
+        </h3>
+      </div>
     </div>
   );
 }

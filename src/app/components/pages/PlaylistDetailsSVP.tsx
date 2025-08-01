@@ -11,8 +11,45 @@ import {
 import { useEffect, useRef, useState } from "react";
 import SectionTitleSVP from "../titles/SectionTitleSVP";
 import OfferHighlightVideoCourseSVP from "../templates/OfferHighlightVideoCourseSVP";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import "dayjs/locale/en";
+import VideoCourseItemSVP from "../items/VideoCourseItemSVP";
 
-export default function PlaylistDetailsSVP() {
+dayjs.extend(localizedFormat);
+
+interface PlaylistData {
+  id: number;
+  name: string;
+  tagline: string;
+  description: string;
+  video_preview_url: string;
+  image_url: string;
+  price: number;
+  slug_url: string;
+  published_at: string;
+  educators: EducatorItem[];
+  videos: VideoItem[];
+}
+interface VideoItem {
+  id: number;
+  playlist_id: number;
+  name: string;
+  image_url: string;
+  video_url: string;
+}
+interface EducatorItem {
+  id: string;
+  full_name: string;
+  avatar: string | null;
+}
+type PlaylistDetailsSVPProps = {
+  playlistData: PlaylistData;
+};
+
+export default function PlaylistDetailsSVP({
+  playlistData,
+}: PlaylistDetailsSVPProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
@@ -33,13 +70,17 @@ export default function PlaylistDetailsSVP() {
 
   return (
     <div className="flex flex-col w-full">
-      <HeroVideoCourseSVP />
+      <HeroVideoCourseSVP
+        playlistName={playlistData.name}
+        playlistTagline={playlistData.tagline}
+        educators={playlistData.educators}
+      />
       <div className="root flex flex-col px-5 py-5 w-full gap-8 bg-white md:flex-row lg:gap-14 lg:px-0 lg:py-10 lg:pb-20 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
         {/* Main */}
         <main className="flex flex-col gap-8 md:flex-[1.7] lg:gap-10">
           {/* Description */}
           <div className="video-description relative flex flex-col gap-4">
-            <SectionTitleSVP sectionTitle="About RE:START Conference 2025" />
+            <SectionTitleSVP sectionTitle={`About ${playlistData.name}`} />
             <div className="flex flex-col gap-2 items-center md:items-start">
               <div>
                 <p
@@ -48,32 +89,7 @@ export default function PlaylistDetailsSVP() {
                   }`}
                   ref={paragraphRef}
                 >
-                  Ever wondered how AI technologies like OpenAI ChatGPT, GPT-4,
-                  DALL-E, Midjourney, and Stable Diffusion really work? In this
-                  course, you will learn the foundations of these groundbreaking
-                  applications. In this course you will build MULTIPLE practical
-                  systems using natural language processing, or NLP - the branch
-                  of machine learning and data science that deals with text and
-                  speech. This course is not part of my deep learning series, so
-                  it doesnt contain any hard math - just straight up coding in
-                  Python. All the materials for this course are FREE. After a
-                  brief discussion about what NLP is and what it can do, we will
-                  begin building very useful stuff. The first thing well build
-                  is a cipher decryption algorithm. These have applications in
-                  warfare and espionage. We will learn how to build and apply
-                  several useful NLP tools in this section, namely,
-                  character-level language models (using the Markov principle),
-                  and genetic algorithms. The second project, where we begin to
-                  use more traditional machine learning, is to build a spam
-                  detector. You likely get very little spam these days, compared
-                  to say, the early 2000s, because of systems like these. Next
-                  well build a model for sentiment analysis in Python. This is
-                  something that allows us to assign a score to a block of text
-                  that tells us how positive or negative it is. People have used
-                  sentiment analysis on Twitter to predict the stock market.
-                  Well go over some practical tools and techniques like the NLTK
-                  (natural language toolkit) library and latent semantic
-                  analysis or LSA.
+                  {playlistData.description}
                   <br />
                   <br />
                   <span className="inline-flex items-center gap-1 text-alternative">
@@ -83,7 +99,8 @@ export default function PlaylistDetailsSVP() {
                   <br />
                   <span className="inline-flex items-center gap-1 text-alternative">
                     <ArrowBigUpDash className="size-4" />
-                    <b>Published at:</b> 2 Agustus 2025
+                    <b>Published at:</b>{" "}
+                    {dayjs(playlistData.published_at).format("LLL")}
                   </span>
                   <br />
                 </p>
@@ -121,12 +138,20 @@ export default function PlaylistDetailsSVP() {
               sectionTitle="Course Playlist"
               sectionDescription="10 episodes ● 20 instrutors"
             />
-            <VideoCoursePlaylistSVP />
+            <div className="flex flex-col gap-3">
+              {playlistData.videos.map((post, index) => (
+                <VideoCourseItemSVP
+                  key={index}
+                  index={index + 1}
+                  videoName={post.name}
+                />
+              ))}
+            </div>
           </div>
         </main>
         {/* Aside */}
         <aside className="aside flex flex-col gap-8 md:flex-1 lg:gap-10">
-          <OfferHighlightVideoCourseSVP />
+          <OfferHighlightVideoCourseSVP playlistPrice={playlistData.price} />
         </aside>
       </div>
     </div>

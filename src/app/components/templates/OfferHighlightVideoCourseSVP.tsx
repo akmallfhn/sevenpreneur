@@ -10,9 +10,15 @@ import SectionTitleSVP from "../titles/SectionTitleSVP";
 import AppButton from "../buttons/AppButton";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 
-export default function OfferHighlightVideoCourseSVP() {
-  const discountPrice = 127000;
-  const basePrice = 370000;
+interface OfferHighlightVideoCourseSVPProps {
+  playlistPrice: number;
+}
+
+export default function OfferHighlightVideoCourseSVP({
+  playlistPrice,
+}: OfferHighlightVideoCourseSVPProps) {
+  const discountPrice = playlistPrice;
+  const basePrice = 430000;
   const discountRate = Math.round(
     ((basePrice - discountPrice) / basePrice) * 100
   );
