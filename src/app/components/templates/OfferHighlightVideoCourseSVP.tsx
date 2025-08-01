@@ -27,7 +27,7 @@ export default function OfferHighlightVideoCourseSVP({
     <div className="benefit-offer-container flex flex-col gap-3 p-5 bg-white border border-outline rounded-md md:sticky md:top-24">
       <SectionTitleSVP sectionTitle="This Course Include" />
       <div className="benefit-offer-list flex flex-col gap-1">
-        <div className="benefit-offer-item flex gap-2 items-center font-ui">
+        <div className="benefit-offer-item flex gap-1 items-center font-ui">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <Clock3 className="size-5 text-alternative" />
           </div>
@@ -35,7 +35,7 @@ export default function OfferHighlightVideoCourseSVP({
             <b>12+ hours</b> of on-demand video
           </p>
         </div>
-        <div className="benefit-offer-item flex gap-2 items-center font-ui">
+        <div className="benefit-offer-item flex gap-1 items-center font-ui">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <LayoutDashboard className="size-5 text-alternative" />
           </div>
@@ -43,7 +43,7 @@ export default function OfferHighlightVideoCourseSVP({
             <b>Lifetime access</b> on Sevenpreneur LMS
           </p>
         </div>
-        <div className="benefit-offer-item flex gap-2 items-center font-ui">
+        <div className="benefit-offer-item flex gap-1 items-center font-ui">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <Gauge className="size-5 text-alternative" />
           </div>
@@ -51,7 +51,7 @@ export default function OfferHighlightVideoCourseSVP({
             <b>Learn anytime, anywhere</b> at your own speed
           </p>
         </div>
-        <div className="benefit-offer-item flex gap-2 items-center font-ui">
+        <div className="benefit-offer-item flex gap-1 items-center font-ui">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <Laptop className="size-5 text-alternative" />
           </div>
@@ -77,7 +77,7 @@ export default function OfferHighlightVideoCourseSVP({
         </div>
         <div className="flex flex-col items-center gap-3 font-ui">
           <AppButton size="defaultRounded" className="w-full">
-            Checkout Now
+            Pay & Get Access
           </AppButton>
           <div className="flex items-center gap-1 text-alternative">
             <LockKeyhole className="size-3" />

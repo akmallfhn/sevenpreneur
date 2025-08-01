@@ -12,12 +12,14 @@ export type EducatorItem = {
 interface HeroVideoCourseSVPProps {
   playlistName: string;
   playlistTagline: string;
+  playlistImage: string;
   educators: EducatorItem[];
 }
 
 export default function HeroVideoCourseSVP({
   playlistName,
   playlistTagline,
+  playlistImage,
   educators,
 }: HeroVideoCourseSVPProps) {
   const formatEducatorNames = (educators: EducatorItem[]): string => {
@@ -39,9 +41,7 @@ export default function HeroVideoCourseSVP({
       <div className="image-thumbnail relative flex aspect-thumbnail w-full h-full overflow-hidden md:flex-[1.6] md:min-h-full md:aspect-auto lg:flex-2">
         <Image
           className="object-cover w-full h-full"
-          src={
-            "https://cdn1-production-images-kly.akamaized.net/HBgfaG-KNzdYi2QEZyrYa6KVnWs=/0x0:1500x845/1200x675/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/5277743/original/083152400_1752044562-PWN__1500X845_.jpg"
-          }
+          src={playlistImage}
           alt="Image"
           width={800}
           height={800}

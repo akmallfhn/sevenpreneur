@@ -4,18 +4,20 @@ import Image from "next/image";
 interface VideoCourseItemSVPProps {
   index: number;
   videoName: string;
+  videoImage: string;
 }
 
 export default function VideoCourseItemSVP({
   index,
   videoName,
+  videoImage,
 }: VideoCourseItemSVPProps) {
   return (
     <div className="flex w-full items-center gap-3">
       <div className="video-image-thumbnail relative flex aspect-video w-[152px] flex-shrink-0 lg:w-[186px] rounded-md overflow-hidden">
         <Image
           className="object-cover w-full h-full"
-          src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//session-zaki-angga%20(1).webp"
+          src={videoImage}
           alt="Image Thumbnail"
           width={500}
           height={500}

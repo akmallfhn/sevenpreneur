@@ -4,30 +4,100 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 interface PlaylistDetailsPageProps {
   params: Promise<{ playlist_name: string; playlist_id: string }>;
 }
 
+export async function generateMetadata({
+  params,
+}: PlaylistDetailsPageProps): Promise<Metadata> {
+  /////// Temporary////////
+  const cookiesStore = await cookies();
+  const sessionToken = cookiesStore.get("session_token")?.value;
+  ////////////
+
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
+  const { playlist_id, playlist_name } = await params;
+  const playlistId = parseInt(playlist_id);
+
+  // Get Data
+  setSessionToken(sessionToken!);
+  let playlistDataRaw;
+  try {
+    playlistDataRaw = await trpc.read.playlist({ id: playlistId });
+  } catch (error) {
+    return notFound();
+  }
+
+  return {
+    title: `${playlistDataRaw.playlist.name} | Video Course`,
+    description: playlistDataRaw.playlist.description,
+    keywords:
+      "Sevenpreneur, Business Blueprint, Raymond Chin, Video On Demand Bisnis",
+    authors: [{ name: "Sevenpreneur" }],
+    publisher: "Sevenpreneur",
+    referrer: "origin-when-cross-origin",
+    alternates: {
+      canonical: `/cohorts/${playlistDataRaw.playlist.slug_url}/${playlistDataRaw.playlist.id}`,
+    },
+    openGraph: {
+      title: `${playlistDataRaw.playlist.name} | Video Course`,
+      description: playlistDataRaw.playlist.description,
+      url: `https://sevenpreneur.com/cohorts/${playlistDataRaw.playlist.slug_url}/${playlistDataRaw.playlist.id}`,
+      siteName: "Sevenpreneur",
+      images: [
+        {
+          url: playlistDataRaw.playlist.image_url,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${playlistDataRaw.playlist.name} | Video Course`,
+      description: playlistDataRaw.playlist.description,
+      images: playlistDataRaw.playlist.image_url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+  };
+}
+
 export default async function PlaylistDetailsPage({
   params,
 }: PlaylistDetailsPageProps) {
-  // Temporary
+  /////// Temporary////////
   const cookiesStore = await cookies();
   const sessionToken = cookiesStore.get("session_token")?.value;
   if (!sessionToken) {
     return null;
   }
+  ////////////
 
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-  const { playlist_id } = await params;
+  const { playlist_id, playlist_name } = await params;
   const playlistId = parseInt(playlist_id);
 
   // Get Data
-  setSecretKey(sessionToken);
-  const playlistDataRaw = await trpc.read.playlist({ id: playlistId });
+  setSessionToken(sessionToken);
+  let playlistDataRaw;
+  try {
+    playlistDataRaw = await trpc.read.playlist({ id: playlistId });
+  } catch (error) {
+    return notFound();
+  }
+
+  // Sanitize Data from not supported format
   const playlistData = {
     ...playlistDataRaw.playlist,
     price: Number(playlistDataRaw.playlist.price),
@@ -39,11 +109,18 @@ export default async function PlaylistDetailsPage({
     })),
   };
 
+  // Redirect Wrong Slug
+  const correctSlug = playlistDataRaw.playlist.slug_url;
+  if (playlist_name !== correctSlug) {
+    redirect(`/playlists/${correctSlug}/${playlistId}`);
+  }
+
   return (
     <PlaylistDetailsSVP
       playlistId={playlistData.id}
       playlistName={playlistData.name}
       playlistTagline={playlistData.tagline}
+      playlistImage={playlistData.image_url}
       playlistDescription={playlistData.description}
       playlistPrice={playlistData.price}
       playlistPublishedAt={playlistData.published_at}
