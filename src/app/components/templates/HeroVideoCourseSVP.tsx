@@ -4,11 +4,11 @@ import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { Star } from "lucide-react";
 
-interface EducatorItem {
+export type EducatorItem = {
   id: string;
   full_name: string;
   avatar: string | null;
-}
+};
 interface HeroVideoCourseSVPProps {
   playlistName: string;
   playlistTagline: string;

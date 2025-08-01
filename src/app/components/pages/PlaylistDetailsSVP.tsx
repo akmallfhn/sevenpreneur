@@ -1,5 +1,5 @@
 "use client";
-import HeroVideoCourseSVP from "../templates/HeroVideoCourseSVP";
+
 import AppButton from "../buttons/AppButton";
 import {
   ArrowBigUpDash,
@@ -13,41 +13,35 @@ import OfferHighlightVideoCourseSVP from "../templates/OfferHighlightVideoCourse
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import VideoCourseItemSVP from "../items/VideoCourseItemSVP";
+import VideoCoursePlaylistSVP, {
+  VideoItem,
+} from "../indexes/VideoCoursePlaylistSVP";
+import HeroVideoCourseSVP, {
+  EducatorItem,
+} from "../templates/HeroVideoCourseSVP";
 
 dayjs.extend(localizedFormat);
 
-interface PlaylistData {
-  id: number;
-  name: string;
-  tagline: string;
-  description: string;
-  video_preview_url: string;
-  image_url: string;
-  price: number;
-  slug_url: string;
-  published_at: string;
-  educators: EducatorItem[];
-  videos: VideoItem[];
+interface PlaylistDetailsSVPProps {
+  playlistId: number;
+  playlistName: string;
+  playlistTagline: string;
+  playlistDescription: string;
+  playlistPrice: number;
+  playlistPublishedAt: string;
+  playlistEducators: EducatorItem[];
+  playlistVideos: VideoItem[];
 }
-interface VideoItem {
-  id: number;
-  playlist_id: number;
-  name: string;
-  image_url: string;
-  video_url: string;
-}
-interface EducatorItem {
-  id: string;
-  full_name: string;
-  avatar: string | null;
-}
-type PlaylistDetailsSVPProps = {
-  playlistData: PlaylistData;
-};
 
 export default function PlaylistDetailsSVP({
-  playlistData,
+  playlistId,
+  playlistName,
+  playlistTagline,
+  playlistDescription,
+  playlistPrice,
+  playlistPublishedAt,
+  playlistEducators,
+  playlistVideos,
 }: PlaylistDetailsSVPProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -70,16 +64,16 @@ export default function PlaylistDetailsSVP({
   return (
     <div className="flex flex-col w-full">
       <HeroVideoCourseSVP
-        playlistName={playlistData.name}
-        playlistTagline={playlistData.tagline}
-        educators={playlistData.educators}
+        playlistName={playlistName}
+        playlistTagline={playlistTagline}
+        educators={playlistEducators}
       />
       <div className="root flex flex-col px-5 py-5 w-full gap-8 bg-white md:flex-row lg:gap-14 lg:px-0 lg:py-10 lg:pb-20 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
         {/* Main */}
         <main className="flex flex-col gap-8 md:flex-[1.7] lg:gap-10">
           {/* Description */}
           <div className="video-description relative flex flex-col gap-4">
-            <SectionTitleSVP sectionTitle={`About ${playlistData.name}`} />
+            <SectionTitleSVP sectionTitle={`About ${playlistName}`} />
             <div className="flex flex-col gap-2 items-center md:items-start">
               <div>
                 <p
@@ -88,7 +82,7 @@ export default function PlaylistDetailsSVP({
                   }`}
                   ref={paragraphRef}
                 >
-                  {playlistData.description}
+                  {playlistDescription}
                   <br />
                   <br />
                   <span className="inline-flex items-center gap-1 text-alternative">
@@ -99,7 +93,7 @@ export default function PlaylistDetailsSVP({
                   <span className="inline-flex items-center gap-1 text-alternative">
                     <ArrowBigUpDash className="size-4" />
                     <b>Published at:</b>{" "}
-                    {dayjs(playlistData.published_at).format("LLL")}
+                    {dayjs(playlistPublishedAt).format("LLL")}
                   </span>
                   <br />
                 </p>
@@ -137,20 +131,12 @@ export default function PlaylistDetailsSVP({
               sectionTitle="Course Playlist"
               sectionDescription="10 episodes ● 20 instrutors"
             />
-            <div className="flex flex-col gap-3">
-              {playlistData.videos.map((post, index) => (
-                <VideoCourseItemSVP
-                  key={index}
-                  index={index + 1}
-                  videoName={post.name}
-                />
-              ))}
-            </div>
+            <VideoCoursePlaylistSVP playlistVideos={playlistVideos} />
           </div>
         </main>
         {/* Aside */}
         <aside className="aside flex flex-col gap-8 md:flex-1 lg:gap-10">
-          <OfferHighlightVideoCourseSVP playlistPrice={playlistData.price} />
+          <OfferHighlightVideoCourseSVP playlistPrice={playlistPrice} />
         </aside>
       </div>
     </div>

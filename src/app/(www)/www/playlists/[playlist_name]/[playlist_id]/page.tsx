@@ -39,5 +39,16 @@ export default async function PlaylistDetailsPage({
     })),
   };
 
-  return <PlaylistDetailsSVP playlistData={playlistData} />;
+  return (
+    <PlaylistDetailsSVP
+      playlistId={playlistData.id}
+      playlistName={playlistData.name}
+      playlistTagline={playlistData.tagline}
+      playlistDescription={playlistData.description}
+      playlistPrice={playlistData.price}
+      playlistPublishedAt={playlistData.published_at}
+      playlistEducators={playlistData.educators}
+      playlistVideos={playlistData.videos}
+    />
+  );
 }
