@@ -339,7 +339,7 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
-  playlist: loggedInProcedure
+  playlist: publicProcedure
     .input(
       z.object({
         id: numberIsID(),
@@ -348,8 +348,15 @@ export const readRouter = createTRPCRouter({
     .query(async (opts) => {
       const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
         include: {
-          educators: { include: { user: true } },
-          videos: true,
+          educators: {
+            include: { user: { select: { full_name: true, avatar: true } } },
+            omit: { user_id: true, playlist_id: true },
+          },
+          videos: { omit: { playlist_id: true, video_url: true } },
+        },
+        omit: {
+          deleted_at: true,
+          deleted_by_id: true,
         },
         where: {
           id: opts.input.id,
