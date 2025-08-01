@@ -1,6 +1,5 @@
 "use client";
 import HeroVideoCourseSVP from "../templates/HeroVideoCourseSVP";
-import VideoCoursePlaylistSVP from "../indexes/VideoCoursePlaylistSVP";
 import AppButton from "../buttons/AppButton";
 import {
   ArrowBigUpDash,
