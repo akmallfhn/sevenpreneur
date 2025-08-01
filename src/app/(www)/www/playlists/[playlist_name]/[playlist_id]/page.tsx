@@ -88,29 +88,30 @@ export default async function PlaylistDetailsPage({
   const { playlist_id, playlist_name } = await params;
   const playlistId = parseInt(playlist_id);
 
-  // Get Data
+  // --- Get Data
   setSessionToken(sessionToken);
+  setSecretKey(secretKey!);
   let playlistDataRaw;
   try {
-    playlistDataRaw = await trpc.read.playlist({ id: playlistId });
+    playlistDataRaw = (await trpc.read.playlist({ id: playlistId })).playlist;
   } catch (error) {
     return notFound();
   }
 
-  // Sanitize Data from not supported format
+  // --- Sanitize Data from not supported format
   const playlistData = {
-    ...playlistDataRaw.playlist,
-    price: Number(playlistDataRaw.playlist.price),
-    published_at: playlistDataRaw.playlist.published_at.toISOString(),
-    educators: playlistDataRaw.playlist.educators.map((educator) => ({
+    ...playlistDataRaw,
+    price: Number(playlistDataRaw.price),
+    published_at: playlistDataRaw.published_at.toISOString(),
+    educators: playlistDataRaw.educators.map((educator) => ({
       id: educator.user.id,
       full_name: educator.user.full_name,
       avatar: educator.user.avatar,
     })),
   };
 
-  // Redirect Wrong Slug
-  const correctSlug = playlistDataRaw.playlist.slug_url;
+  // --- Auto Correction Slug
+  const correctSlug = playlistData.slug_url;
   if (playlist_name !== correctSlug) {
     redirect(`/playlists/${correctSlug}/${playlistId}`);
   }
@@ -122,6 +123,7 @@ export default async function PlaylistDetailsPage({
       playlistTagline={playlistData.tagline}
       playlistImage={playlistData.image_url}
       playlistDescription={playlistData.description}
+      playlistSlug={playlistData.slug_url}
       playlistPrice={playlistData.price}
       playlistPublishedAt={playlistData.published_at}
       playlistEducators={playlistData.educators}

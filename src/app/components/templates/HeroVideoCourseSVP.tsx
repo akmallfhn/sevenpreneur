@@ -3,6 +3,7 @@ import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { Star } from "lucide-react";
+import { toSnakeCase } from "@/lib/snake-case";
 
 export type EducatorItem = {
   id: string;
@@ -10,17 +11,21 @@ export type EducatorItem = {
   avatar: string | null;
 };
 interface HeroVideoCourseSVPProps {
+  playlistId: number;
   playlistName: string;
   playlistTagline: string;
   playlistImage: string;
-  educators: EducatorItem[];
+  playlistSlug: string;
+  playlistEducators: EducatorItem[];
 }
 
 export default function HeroVideoCourseSVP({
+  playlistId,
   playlistName,
   playlistTagline,
   playlistImage,
-  educators,
+  playlistSlug,
+  playlistEducators,
 }: HeroVideoCourseSVPProps) {
   const formatEducatorNames = (educators: EducatorItem[]): string => {
     const names = educators.map((e) => e.full_name);
@@ -70,7 +75,7 @@ export default function HeroVideoCourseSVP({
           <p className="text-white/80 text-sm">Instructors</p>
           <div className="user-avatar-stack flex items-center gap-3 text-white">
             <div className="avatar-stack flex items-center">
-              {educators.slice(0, 3).map((post, index) => (
+              {playlistEducators.slice(0, 3).map((post, index) => (
                 <div
                   className={`avatar-item flex aspect-square w-7 border border-white rounded-full overflow-hidden lg:w-8 ${
                     index > 0 ? "-ml-2" : ""
@@ -91,12 +96,19 @@ export default function HeroVideoCourseSVP({
               ))}
             </div>
             <p className="max-w-[220px] text-sm font-bold lg:text-base lg:max-w-[420px]">
-              {formatEducatorNames(educators)}
+              {formatEducatorNames(playlistEducators)}
             </p>
           </div>
         </div>
-        <Link href={"/"} className="checkout-button w-full max-w-[420px]">
-          <AppButton size="defaultRounded" className="w-full md:w-fit">
+        <Link
+          href={`/playlists/${playlistSlug}/${playlistId}/checkout`}
+          className="checkout-button w-full max-w-[420px]"
+        >
+          <AppButton
+            size="defaultRounded"
+            className="w-full md:w-fit"
+            featureName={`vod_checkout_${toSnakeCase(playlistSlug)}`}
+          >
             <p className="px-2">Start Learning for Only 127K</p>
           </AppButton>
         </Link>

@@ -9,12 +9,18 @@ import {
 import SectionTitleSVP from "../titles/SectionTitleSVP";
 import AppButton from "../buttons/AppButton";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
+import Link from "next/link";
+import { toSnakeCase } from "@/lib/snake-case";
 
 interface OfferHighlightVideoCourseSVPProps {
+  playlistId: number;
+  playlistSlug: string;
   playlistPrice: number;
 }
 
 export default function OfferHighlightVideoCourseSVP({
+  playlistId,
+  playlistSlug,
   playlistPrice,
 }: OfferHighlightVideoCourseSVPProps) {
   const discountPrice = playlistPrice;
@@ -76,9 +82,18 @@ export default function OfferHighlightVideoCourseSVP({
           </div>
         </div>
         <div className="flex flex-col items-center gap-3 font-ui">
-          <AppButton size="defaultRounded" className="w-full">
-            Pay & Get Access
-          </AppButton>
+          <Link
+            href={`/playlists/${playlistSlug}/${playlistId}/checkout`}
+            className="w-full"
+          >
+            <AppButton
+              size="defaultRounded"
+              className="w-full"
+              featureName={`vod_checkout_${toSnakeCase(playlistSlug)}`}
+            >
+              Pay & Get Access
+            </AppButton>
+          </Link>
           <div className="flex items-center gap-1 text-alternative">
             <LockKeyhole className="size-3" />
             <p className="text-xs text-center">
