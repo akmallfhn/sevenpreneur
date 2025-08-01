@@ -142,7 +142,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `create.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `list.playlists`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `read.playlist`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.playlist`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 | `update.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
