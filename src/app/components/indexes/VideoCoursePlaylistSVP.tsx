@@ -23,6 +23,7 @@ export default function VideoCoursePlaylistSVP({
           key={index}
           index={index + 1}
           videoName={post.name}
+          videoImage={post.image_url}
         />
       ))}
     </div>
