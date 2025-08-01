@@ -154,6 +154,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.educatorsPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `delete.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+## Videos 🎞️
+
+| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `read.video`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
 ## Transactions 💰
 
 | Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
