@@ -369,10 +369,32 @@ export const readRouter = createTRPCRouter({
           message: "The playlist with the given ID is not found.",
         });
       }
+      const videosCount = await opts.ctx.prisma.video.count({
+        where: {
+          playlist_id: opts.input.id,
+        },
+      });
+      const durationsSumAggregate = await opts.ctx.prisma.video.aggregate({
+        _sum: { duration: true },
+        where: {
+          playlist_id: opts.input.id,
+        },
+      });
+      const durationsTotal = durationsSumAggregate._sum.duration;
+      const usersCount = await opts.ctx.prisma.userPlaylist.count({
+        where: {
+          playlist_id: opts.input.id,
+        },
+      });
+      const thePlaylistWithCounts = Object.assign(thePlaylist, {
+        total_video: videosCount,
+        total_duration: durationsTotal,
+        total_user_enrolled: usersCount,
+      });
       return {
         status: 200,
         message: "Success",
-        playlist: thePlaylist,
+        playlist: thePlaylistWithCounts,
       };
     }),
 
