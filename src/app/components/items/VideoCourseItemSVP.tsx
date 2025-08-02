@@ -1,16 +1,19 @@
 "use client";
 import Image from "next/image";
+import { durationFromSeconds } from "@/lib/duration-from-seconds";
 
 interface VideoCourseItemSVPProps {
   index: number;
   videoName: string;
   videoImage: string;
+  videoDuration: number;
 }
 
 export default function VideoCourseItemSVP({
   index,
   videoName,
   videoImage,
+  videoDuration,
 }: VideoCourseItemSVPProps) {
   return (
     <div className="flex w-full items-center gap-3">
@@ -23,7 +26,7 @@ export default function VideoCourseItemSVP({
           height={500}
         />
         <p className="absolute bottom-1 right-1 p-1 bg-black/60 text-white text-[10px] font-ui rounded-sm z-20">
-          10:32
+          {durationFromSeconds(2400)}
         </p>
       </div>
       <div className="flex flex-col font-ui lg:max-w-[440px] lg:gap-1">

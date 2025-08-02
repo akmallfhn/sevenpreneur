@@ -76,6 +76,8 @@ export default async function TransactionsPage() {
     created_at: post.created_at ? post.created_at.toISOString() : null,
   }));
 
+  console.log("transactions:", transactionData);
+
   return (
     <div className="flex flex-col w-full bg-white px-5 py-5 pb-20 gap-5 lg:px-0 lg:mx-auto lg:w-full lg:max-w-[960px] xl:max-w-[1208px]">
       <h1 className="font-bold font-ui text-xl text-black">
@@ -93,7 +95,7 @@ export default async function TransactionsPage() {
               transactionId={post.id}
               transactionDate={post.created_at}
               transactionStatus={post.status}
-              cohortId={post.cohort_id}
+              cohortId={post.cohort_id} // TO DO: Adjust this
               cohortImage={post.cohort_image}
               cohortName={post.cohort_name}
               cohortSlug={post.cohort_slug}

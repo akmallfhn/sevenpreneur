@@ -1,8 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
-import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
+import { setSecretKey, trpc } from "@/trpc/server";
 import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
 
 interface PlaylistDetailsPageProps {
@@ -12,19 +11,12 @@ interface PlaylistDetailsPageProps {
 export async function generateMetadata({
   params,
 }: PlaylistDetailsPageProps): Promise<Metadata> {
-  /////// Temporary////////
-  const cookiesStore = await cookies();
-  const sessionToken = cookiesStore.get("session_token")?.value;
-  ////////////
-
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id);
 
   // --- Get Data
-  setSessionToken(sessionToken!);
   setSecretKey(secretKey!);
-
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
   return {
@@ -71,20 +63,11 @@ export async function generateMetadata({
 export default async function PlaylistDetailsPage({
   params,
 }: PlaylistDetailsPageProps) {
-  /////// Temporary////////
-  const cookiesStore = await cookies();
-  const sessionToken = cookiesStore.get("session_token")?.value;
-  if (!sessionToken) {
-    return null;
-  }
-  ////////////
-
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { playlist_id, playlist_name } = await params;
   const playlistId = parseInt(playlist_id);
 
   // --- Get Data
-  setSessionToken(sessionToken);
   setSecretKey(secretKey!);
   let playlistDataRaw;
   try {
@@ -120,6 +103,8 @@ export default async function PlaylistDetailsPage({
       playlistSlug={playlistData.slug_url}
       playlistPrice={playlistData.price}
       playlistPublishedAt={playlistData.published_at}
+      playlistTotalEpisodes={playlistData.total_video}
+      playlistTotalDuration={playlistData.total_duration}
       playlistEducators={playlistData.educators}
       playlistVideos={playlistData.videos}
     />

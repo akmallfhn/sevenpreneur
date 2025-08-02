@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
-import { MakePaymentXendit } from "@/lib/actions";
+import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
@@ -25,6 +25,7 @@ type PaymentMethodItem = {
 };
 
 interface CheckoutPlaylistFormSVPProps {
+  playlistId: number;
   playlistName: string;
   playlistImage: string;
   playlistPrice: number;
@@ -35,6 +36,7 @@ interface CheckoutPlaylistFormSVPProps {
 }
 
 export default function CheckoutPlaylistFormSVP({
+  playlistId,
   playlistName,
   playlistImage,
   playlistPrice,
@@ -151,27 +153,27 @@ export default function CheckoutPlaylistFormSVP({
       return;
     }
 
-    // -- Call tRPC Payment
-    //   try {
-    //     const makePayment = await MakePaymentXendit({
-    //       cohortPriceId: selectedTicket.id,
-    //       paymentChannelId: chosenPaymentChannelData.id,
-    //       phoneNumber: formData.userPhoneNumber.trim(),
-    //     });
-    //     if (makePayment.status === 200) {
-    //       window.open(makePayment.invoice_url, "_blank");
-    //       router.replace(`/transactions/${makePayment.transaction_id}`);
-    //     } else {
-    //       toast.error("Failed to create invoice", {
-    //         description: makePayment.message,
-    //       });
-    //     }
-    //   } catch (error) {
-    //     console.error("Error during payment:", error);
-    //     toast.error("Unexpected error occurred during payment.");
-    //   } finally {
-    //     setIsLoadingPayment(false);
-    //   }
+    // -- Call tRPC Payment Playlist
+    try {
+      const makePayment = await MakePaymentPlaylistXendit({
+        playlistId: playlistId,
+        paymentChannelId: chosenPaymentChannelData.id,
+        phoneNumber: formData.userPhoneNumber.trim(),
+      });
+      if (makePayment.status === 200) {
+        window.open(makePayment.invoice_url, "_blank");
+        router.replace(`/transactions/${makePayment.transaction_id}`);
+      } else {
+        toast.error("Failed to create invoice", {
+          description: makePayment.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error during payment:", error);
+      toast.error("Unexpected error occurred during payment.");
+    } finally {
+      setIsLoadingPayment(false);
+    }
   };
 
   return (

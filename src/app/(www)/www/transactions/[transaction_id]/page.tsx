@@ -1,4 +1,4 @@
-import TransactionStatusSVP from "@/app/components/pages/TransactionStatusSVP";
+import TransactionStatusDetailsSVP from "@/app/components/pages/TransactionStatusDetailsSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -96,8 +96,9 @@ export default async function TransactionDetailsPage({
     return notFound();
   }
 
+  console.log("transaction_status:", transactionDetailsData);
   return (
-    <TransactionStatusSVP
+    <TransactionStatusDetailsSVP
       transactionId={transaction_id}
       transactionStatus={transactionDetailsData.status}
       invoiceNumber={transactionDetailsData.invoice_number}

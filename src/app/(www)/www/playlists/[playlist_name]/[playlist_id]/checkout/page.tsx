@@ -33,9 +33,7 @@ export async function generateMetadata({
       canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
     },
     openGraph: {
-
       title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
-
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
       url: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
@@ -50,7 +48,6 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-
       title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
@@ -120,6 +117,7 @@ export default async function CheckoutPlaylistPage({
         <CheckoutHeader />
         <div className="flex-1 overflow-y-auto">
           <CheckoutPlaylistFormSVP
+            playlistId={playlistData.id}
             playlistName={playlistData.name}
             playlistImage={playlistData.image_url}
             playlistPrice={playlistData.price}
