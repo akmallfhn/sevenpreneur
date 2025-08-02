@@ -733,13 +733,13 @@ export const listRouter = createTRPCRouter({
       );
 
       const playlistList = await opts.ctx.prisma.playlist.findMany({
-        where: { id: { in: Array.from(cohortIdList) } },
+        where: { id: { in: Array.from(playlistIdList) } },
       });
       const videosCountList = await opts.ctx.prisma.video.groupBy({
         by: ["playlist_id"],
         _count: true,
         where: {
-          playlist_id: { in: Array.from(cohortIdList) },
+          playlist_id: { in: Array.from(playlistIdList) },
         },
       });
       const videosCountMap = new Map(
