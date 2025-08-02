@@ -8,9 +8,9 @@ import AppButton from "../buttons/AppButton";
 import {
   Blocks,
   BookMarked,
+  ChevronDown,
   LogOut,
   UserCircle2,
-  UserRound,
   Wallet,
 } from "lucide-react";
 import AppDropdown from "../elements/AppDropdown";
@@ -20,12 +20,14 @@ import { DeleteSession } from "@/lib/actions";
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
   userAvatar: string | null;
+  userName: string | undefined;
   userRole: number | undefined;
 }
 
 export default function HeaderNavbarSVP({
   isLoggedIn,
   userAvatar,
+  userName,
   userRole,
 }: HeaderNavbarSVPProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
@@ -36,6 +38,9 @@ export default function HeaderNavbarSVP({
   const disallowedPath = ["/auth", "/checkout", "/event"];
   const isDisallowedPage =
     pathname === "/" || disallowedPath.some((path) => pathname.includes(path));
+
+  //  --- Get Nickname
+  const nickName = userName?.split(" ")[0];
 
   // --- Detect screen size
   // useEffect(() => {
@@ -100,11 +105,19 @@ export default function HeaderNavbarSVP({
             </Link>
             {isLoggedIn ? (
               <div
-                className="user-menu relative flex"
+                className="user-menu relative flex hover:cursor-pointer"
                 ref={wrapperRef}
                 onClick={handleActionsDropdown}
               >
-                <AvatarBadgeSVP userAvatar={userAvatar} />
+                <div className="flex items-center gap-3">
+                  <AvatarBadgeSVP userAvatar={userAvatar} />
+                  <div className="hidden items-center gap-1 lg:flex">
+                    <p className="max-w-28 font-ui font-semibold text-sm text-black overflow-hidden text-ellipsis whitespace-nowrap">
+                      {nickName}
+                    </p>
+                    <ChevronDown className="size-3" />
+                  </div>
+                </div>
                 <AppDropdown
                   isOpen={isActionsOpened}
                   onClose={() => setIsActionsOpened(false)}
@@ -124,12 +137,12 @@ export default function HeaderNavbarSVP({
                       />
                     </Link>
                   )}
-                  {/* <Link href={`https://agora.${domain}`}>
-                <AppDropdownItemList
-                  menuIcon={<BookMarked className="size-4" />}
-                  menuName="Agora Learning"
-                />
-              </Link> */}
+                  <Link href={`https://agora.${domain}`}>
+                    <AppDropdownItemList
+                      menuIcon={<BookMarked className="size-4" />}
+                      menuName="My Learning"
+                    />
+                  </Link>
                   <Link href={`https://www.${domain}/transactions`}>
                     <AppDropdownItemList
                       menuIcon={<Wallet className="size-4" />}
