@@ -38,7 +38,7 @@ export default function OfferHighlightVideoCourseSVP({
             <Clock3 className="size-5 text-alternative" />
           </div>
           <p className="text-sm">
-            <b>12+ hours</b> of on-demand video
+            <b>6+ hours</b> of on-demand video
           </p>
         </div>
         <div className="benefit-offer-item flex gap-1 items-center font-ui">

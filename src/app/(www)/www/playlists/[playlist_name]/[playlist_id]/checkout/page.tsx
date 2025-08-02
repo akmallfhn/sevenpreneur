@@ -1,11 +1,78 @@
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 import CheckoutPlaylistFormSVP from "@/app/components/forms/CheckoutPlaylistFormSVP";
 import CheckoutHeader from "@/app/components/navigations/CheckoutHeader";
 import { setSessionToken, trpc } from "@/trpc/server";
-import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
 
 interface CheckoutPlaylistPageProps {
   params: Promise<{ playlist_name: string; playlist_id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: CheckoutPlaylistPageProps): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+  const { playlist_id, playlist_name } = await params;
+  const playlistId = parseInt(playlist_id);
+
+  // --- Redirect if not login
+  if (!sessionToken) {
+    redirect(
+      `/auth/login?redirectTo=/cohorts/${playlist_name}/${playlist_id}/checkout`
+    );
+  }
+
+  // --- Get Data
+  setSessionToken(sessionToken);
+  let playlistData;
+  try {
+    playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
+  } catch (error) {
+    return notFound();
+  }
+
+  return {
+    title: `Checkout - Video Course ${playlistData.name}`,
+    description:
+      "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+    authors: [{ name: "Sevenpreneur" }],
+    publisher: "Sevenpreneur",
+    referrer: "origin-when-cross-origin",
+    alternates: {
+      canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
+    },
+    openGraph: {
+      title: `Checkout - Video Course ${playlistData.name}`,
+      description:
+        "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+      url: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
+      siteName: "Sevenpreneur",
+      images: [
+        {
+          url: playlistData.image_url,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Checkout - Video Course ${playlistData.name}`,
+      description:
+        "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+      images: playlistData.image_url,
+    },
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
+  };
 }
 
 export default async function CheckoutPlaylistPage({
@@ -23,11 +90,9 @@ export default async function CheckoutPlaylistPage({
     );
   }
 
-  // --- Get User Data
+  // --- Get Data
   setSessionToken(sessionToken);
   const checkUser = (await trpc.auth.checkSession()).user;
-
-  // --- Get Playlist Data
   let playlistDataRaw;
   try {
     playlistDataRaw = (await trpc.read.playlist({ id: playlistId })).playlist;
@@ -38,8 +103,6 @@ export default async function CheckoutPlaylistPage({
     ...playlistDataRaw,
     price: Number(playlistDataRaw.price),
   };
-
-  // --- Get Payment Data
   const paymentMethodRaw = (await trpc.list.paymentChannels()).list;
   const paymentMethodList = paymentMethodRaw.map((post) => ({
     ...post,

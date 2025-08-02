@@ -1,11 +1,9 @@
-import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
-import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
+import React from "react";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import React from "react";
+import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
+import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
 
 interface PlaylistDetailsPageProps {
   params: Promise<{ playlist_name: string; playlist_id: string }>;
@@ -20,37 +18,38 @@ export async function generateMetadata({
   ////////////
 
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-  const { playlist_id, playlist_name } = await params;
+  const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id);
 
-  // Get Data
+  // --- Get Data
   setSessionToken(sessionToken!);
-  let playlistDataRaw;
+  setSecretKey(secretKey!);
+  let playlistData;
   try {
-    playlistDataRaw = await trpc.read.playlist({ id: playlistId });
+    playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
   } catch (error) {
     return notFound();
   }
 
   return {
-    title: `${playlistDataRaw.playlist.name} | Video Course`,
-    description: playlistDataRaw.playlist.description,
+    title: `${playlistData.name} | Video Course`,
+    description: playlistData.description,
     keywords:
       "Sevenpreneur, Business Blueprint, Raymond Chin, Video On Demand Bisnis",
     authors: [{ name: "Sevenpreneur" }],
     publisher: "Sevenpreneur",
     referrer: "origin-when-cross-origin",
     alternates: {
-      canonical: `/cohorts/${playlistDataRaw.playlist.slug_url}/${playlistDataRaw.playlist.id}`,
+      canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}`,
     },
     openGraph: {
-      title: `${playlistDataRaw.playlist.name} | Video Course`,
-      description: playlistDataRaw.playlist.description,
-      url: `https://sevenpreneur.com/cohorts/${playlistDataRaw.playlist.slug_url}/${playlistDataRaw.playlist.id}`,
+      title: `${playlistData.name} | Video Course`,
+      description: playlistData.description,
+      url: `/playlists/${playlistData.slug_url}/${playlistData.id}`,
       siteName: "Sevenpreneur",
       images: [
         {
-          url: playlistDataRaw.playlist.image_url,
+          url: playlistData.image_url,
           width: 800,
           height: 600,
         },
@@ -58,9 +57,9 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${playlistDataRaw.playlist.name} | Video Course`,
-      description: playlistDataRaw.playlist.description,
-      images: playlistDataRaw.playlist.image_url,
+      title: `${playlistData.name} | Video Course`,
+      description: playlistData.description,
+      images: playlistData.image_url,
     },
     robots: {
       index: true,
@@ -121,7 +120,7 @@ export default async function PlaylistDetailsPage({
       playlistId={playlistData.id}
       playlistName={playlistData.name}
       playlistTagline={playlistData.tagline}
-      playlistImage={playlistData.image_url}
+      playlistVideoPreview={playlistData.video_preview_url}
       playlistDescription={playlistData.description}
       playlistSlug={playlistData.slug_url}
       playlistPrice={playlistData.price}

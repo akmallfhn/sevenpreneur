@@ -2,19 +2,21 @@
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Star, Volume2, VolumeOff } from "lucide-react";
 import { toSnakeCase } from "@/lib/snake-case";
+import { useRef, useState } from "react";
 
 export type EducatorItem = {
   id: string;
   full_name: string;
   avatar: string | null;
 };
+
 interface HeroVideoCourseSVPProps {
   playlistId: number;
   playlistName: string;
   playlistTagline: string;
-  playlistImage: string;
+  playlistVideoPreview: string;
   playlistSlug: string;
   playlistEducators: EducatorItem[];
 }
@@ -23,10 +25,21 @@ export default function HeroVideoCourseSVP({
   playlistId,
   playlistName,
   playlistTagline,
-  playlistImage,
+  playlistVideoPreview,
   playlistSlug,
   playlistEducators,
 }: HeroVideoCourseSVPProps) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  // Formatting Educators List Name
   const formatEducatorNames = (educators: EducatorItem[]): string => {
     const names = educators.map((e) => e.full_name);
     const total = names.length;
@@ -42,27 +55,54 @@ export default function HeroVideoCourseSVP({
   };
   return (
     <div className="hero-video-course relative flex flex-col w-full h-full bg-black items-center md:flex-row-reverse lg:max-h-[460px] overflow-hidden">
-      {/* Image & Video Thumbnail */}
-      <div className="image-thumbnail relative flex aspect-thumbnail w-full h-full overflow-hidden md:flex-[1.6] md:min-h-full md:aspect-auto lg:flex-2">
-        <Image
+      {/* Video Thumbnail */}
+      <div className="video-thumbnail relative flex aspect-thumbnail w-full h-full overflow-hidden md:flex-[1.6] md:min-h-full md:aspect-auto lg:flex-2">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted={isMuted}
+          loop
+          playsInline
           className="object-cover w-full h-full"
-          src={playlistImage}
-          alt="Image"
-          width={800}
-          height={800}
-        />
+        >
+          <source src={playlistVideoPreview} />
+          Your browser does not support the video tag.
+        </video>
+        {/* Overlay Mobile */}
         <div
-          className={`overlay absolute inset-0 z-10 bg-linear-to-t from-5% from-black to-60% to-black/0 lg:hidden`}
+          className={`overlay flex absolute inset-0 bg-linear-to-t from-5% from-black to-60% to-black/0 pointer-events-none z-10 lg:hidden`}
         />
+        {/* Overlay Desktop */}
         <div
-          className={`overlay hidden absolute inset-0 z-10 bg-linear-to-r from-5% from-black to-60% to-black/0 md:flex`}
+          className={`overlay hidden absolute inset-0 bg-linear-to-r from-5% from-black to-45% to-black/0 pointer-events-none z-10 md:flex`}
         />
+        {/* Button Mute Unmute */}
+        <button
+          onClick={toggleMute}
+          className="button-mute-unmute flex absolute right-2 bottom-2 p-2 bg-black rounded-full z-40 xl:hidden"
+        >
+          {isMuted ? (
+            <VolumeOff className="size-5 text-white/60" />
+          ) : (
+            <Volume2 className="size-5 text-white/60" />
+          )}
+        </button>
       </div>
+      <button
+        onClick={toggleMute}
+        className="button-mute-unmute hidden absolute right-3 bottom-3 p-2 bg-black rounded-full z-30 hover:cursor-pointer xl:flex"
+      >
+        {isMuted ? (
+          <VolumeOff className="size-4 text-white/60" />
+        ) : (
+          <Volume2 className="size-4 text-white/60" />
+        )}
+      </button>
       {/* Canvas */}
-      <div className="white-area w-full h-[360px] md:flex-1 md:h-auto" />
+      <div className="white-area relative w-full bg-black h-[360px] -mt-[1px] z-[21] md:flex-1 md:h-auto md:mt-auto" />
 
       {/* Headline */}
-      <div className="absolute flex flex-col w-full bottom-0 left-1/2 -translate-x-1/2 items-center font-ui p-5 pb-10 gap-4 z-10 sm:bottom-[100px] md:bottom-auto md:pb-5 md:items-start md:top-1/2 md:-translate-y-1/2 lg:p-0 lg:max-w-[960px] xl:max-w-[1208px]">
+      <div className="absolute flex flex-col w-full bottom-0 left-1/2 -translate-x-1/2 items-center font-ui p-5 pb-10 gap-4 z-30 sm:bottom-[100px] md:bottom-auto md:pb-5 md:items-start md:top-1/2 md:-translate-y-1/2 lg:p-0 lg:max-w-[960px] xl:max-w-[1208px]">
         <div className="title-tagline flex flex-col items-center max-w-[420px] gap-1 md:items-start">
           <h1 className="title font-bold text-3xl line-clamp-2 text-center text-transparent bg-clip-text bg-linear-to-br from-white to-[#999999] md:text-left lg:text-4xl">
             {playlistName}
@@ -95,7 +135,7 @@ export default function HeroVideoCourseSVP({
                 </div>
               ))}
             </div>
-            <p className="max-w-[220px] text-sm font-bold lg:text-base lg:max-w-[420px]">
+            <p className="max-w-[220px] text-sm font-semibold lg:text-base md:max-w-[420px]">
               {formatEducatorNames(playlistEducators)}
             </p>
           </div>
