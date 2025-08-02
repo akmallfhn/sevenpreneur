@@ -96,17 +96,22 @@ export default async function TransactionDetailsPage({
     return notFound();
   }
 
-  console.log("transaction_status:", transactionDetailsData);
   return (
     <TransactionStatusDetailsSVP
       transactionId={transaction_id}
       transactionStatus={transactionDetailsData.status}
       invoiceNumber={transactionDetailsData.invoice_number}
       invoiceURL={transactionDetailsData.invoice_url}
+      productCategory={transactionDetailsData.category}
       productPrice={transactionDetailsData.product_price.toNumber()}
       productAdminFee={transactionDetailsData.product_admin_fee.toNumber()}
       productVAT={transactionDetailsData.product_vat.toNumber()}
       productTotalAmount={transactionDetailsData.product_total_amount.toNumber()}
+      playlistId={transactionDetailsData.playlist_id}
+      playlistName={transactionDetailsData.playlist_name}
+      playlistImage={transactionDetailsData.playlist_image}
+      playlistSlug={transactionDetailsData.playlist_slug_url}
+      playlistTotalVideo={transactionDetailsData.playlist_total_video}
       cohortId={transactionDetailsData.cohort_id}
       cohortName={transactionDetailsData.cohort_name}
       cohortImage={transactionDetailsData.cohort_image}

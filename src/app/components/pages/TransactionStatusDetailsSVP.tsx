@@ -44,10 +44,16 @@ interface TransactionStatusDetailsSVPProps {
   transactionStatus: TransactionStatus;
   invoiceNumber: string;
   invoiceURL: string | undefined;
+  productCategory: ProductCategory;
   productPrice: number;
   productAdminFee: number;
   productVAT: number;
   productTotalAmount: number;
+  playlistId: number | undefined;
+  playlistName: string | undefined;
+  playlistImage: string | undefined;
+  playlistSlug: string | undefined;
+  playlistTotalVideo: number | undefined;
   cohortId: number | undefined;
   cohortName: string | undefined;
   cohortImage: string | undefined;
@@ -60,15 +66,23 @@ interface TransactionStatusDetailsSVPProps {
   paidTransactionAt: string | undefined;
 }
 
+export type ProductCategory = "PLAYLIST" | "COHORT" | "AI";
+
 export default function TransactionStatusDetailsSVP({
   transactionId,
   transactionStatus,
   invoiceNumber,
   invoiceURL,
+  productCategory,
   productPrice,
   productAdminFee,
   productVAT,
   productTotalAmount,
+  playlistId,
+  playlistName,
+  playlistImage,
+  playlistSlug,
+  playlistTotalVideo,
   cohortId,
   cohortName,
   cohortImage,
@@ -246,8 +260,11 @@ export default function TransactionStatusDetailsSVP({
               <Image
                 className="object-cover w-full h-full"
                 src={
-                  cohortImage ||
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aN-5V--yL4NOrcd_becVZJkBTc7T_EdYiw&s"
+                  productCategory === "PLAYLIST"
+                    ? playlistImage ||
+                      "https://www.jport.co/Editor/image/4721055615600659_empty.png"
+                    : cohortImage ||
+                      "https://www.jport.co/Editor/image/4721055615600659_empty.png"
                 }
                 alt="Product Image"
                 height={400}
@@ -256,10 +273,12 @@ export default function TransactionStatusDetailsSVP({
             </div>
             <div className="flex flex-col font-ui text-black max-w-[calc(100%-4rem-0.75rem)]">
               <p className="program-name font-bold line-clamp-2">
-                {cohortName}
+                {productCategory === "COHORT" ? cohortName : playlistName}
               </p>
               <p className="program-price-tier text-sm line-clamp-1">
-                {cohortPriceName}
+                {productCategory === "COHORT"
+                  ? cohortPriceName
+                  : `${playlistTotalVideo} video course episodes`}
               </p>
             </div>
           </div>
@@ -347,7 +366,13 @@ export default function TransactionStatusDetailsSVP({
               </>
             )}
             {isFailed && (
-              <Link href={`/cohorts/${cohortSlug}/${cohortId}`}>
+              <Link
+                href={
+                  productCategory === "COHORT"
+                    ? `/cohorts/${cohortSlug}/${cohortId}`
+                    : `/playlists/${playlistSlug}/${playlistId}`
+                }
+              >
                 <AppButton
                   size="defaultRounded"
                   className="w-full lg:w-[240px]"

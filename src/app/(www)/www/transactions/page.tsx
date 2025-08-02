@@ -95,11 +95,17 @@ export default async function TransactionsPage() {
               transactionId={post.id}
               transactionDate={post.created_at}
               transactionStatus={post.status}
-              cohortId={post.cohort_id} // TO DO: Adjust this
+              productCategory={post.category}
+              playlistId={post.playlist_id}
+              playlistImage={post.playlist_image}
+              playlistName={post.playlist_name}
+              playlistSlug={post.playlist_slug_url}
+              playlistTotalVideo={post.playlist_total_video}
+              cohortId={post.cohort_id}
               cohortImage={post.cohort_image}
               cohortName={post.cohort_name}
               cohortSlug={post.cohort_slug}
-              cohortPriceName="Regular Program"
+              cohortPriceName={post.cohort_price_name}
               totalTransactionAmount={post.amount}
               invoiceURL={post.invoice_url}
             />

@@ -5,6 +5,7 @@ import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
+import { ProductCategory } from "../pages/TransactionStatusDetailsSVP";
 
 export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
 
@@ -33,6 +34,12 @@ interface TransactionCardItemSVPProps {
   transactionId: string;
   transactionDate: string | null;
   transactionStatus: TransactionStatus;
+  productCategory: ProductCategory;
+  playlistId: number | undefined;
+  playlistImage: string | undefined;
+  playlistName: string | undefined;
+  playlistSlug: string | undefined;
+  playlistTotalVideo: number | undefined;
   cohortId: number | undefined;
   cohortImage: string | undefined;
   cohortName: string | undefined;
@@ -46,6 +53,12 @@ export default function TransactionCardItemSVP({
   transactionId,
   transactionDate,
   transactionStatus,
+  productCategory,
+  playlistId,
+  playlistImage,
+  playlistName,
+  playlistSlug,
+  playlistTotalVideo,
   cohortId,
   cohortImage,
   cohortName,
@@ -82,8 +95,11 @@ export default function TransactionCardItemSVP({
           <Image
             className="object-cover w-full h-full"
             src={
-              cohortImage ||
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2aN-5V--yL4NOrcd_becVZJkBTc7T_EdYiw&s"
+              productCategory === "COHORT"
+                ? cohortImage ||
+                  "https://www.jport.co/Editor/image/4721055615600659_empty.png"
+                : playlistImage ||
+                  "https://www.jport.co/Editor/image/4721055615600659_empty.png"
             }
             alt="Product Image"
             height={400}
@@ -92,10 +108,14 @@ export default function TransactionCardItemSVP({
         </div>
         <div className="flex flex-col font-ui text-black max-w-[calc(100%-4rem-0.75rem)]">
           <p className="transaction-name font-bold line-clamp-2">
-            {cohortName}
+            {productCategory === "COHORT"
+              ? cohortName || "-"
+              : playlistName || "-"}
           </p>
           <p className="transaction-price-tier text-sm line-clamp-1">
-            {cohortPriceName}
+            {productCategory === "COHORT"
+              ? cohortPriceName
+              : `${playlistTotalVideo} video course episodes`}
           </p>
         </div>
       </Link>
@@ -119,7 +139,13 @@ export default function TransactionCardItemSVP({
           </a>
         )}
         {isFailed && (
-          <Link href={`/cohorts/${cohortSlug}/${cohortId}`}>
+          <Link
+            href={
+              productCategory === "COHORT"
+                ? `/cohorts/${cohortSlug}/${cohortId}`
+                : `/playlists/${cohortSlug}/${cohortId}`
+            }
+          >
             <AppButton
               className="w-[120px]"
               variant="primary"
