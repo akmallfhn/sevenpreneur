@@ -492,11 +492,34 @@ export const readRouter = createTRPCRouter({
         }
       }
 
+      let playlistId: number | undefined;
+      let playlistName: string | undefined;
+      let playlistImage: string | undefined;
+      let playlistSlugUrl: string | undefined;
+      let playlistTotalVideo: number | undefined;
+      if (theTransaction.category === CategoryEnum.PLAYLIST) {
+        const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
+          where: { id: theTransaction.item_id },
+        });
+        if (thePlaylist) {
+          playlistId = thePlaylist.id;
+          playlistName = thePlaylist.name;
+          playlistImage = thePlaylist.image_url;
+          playlistSlugUrl = thePlaylist.slug_url;
+          playlistTotalVideo = await opts.ctx.prisma.video.count({
+            where: {
+              playlist_id: thePlaylist.id,
+            },
+          });
+        }
+      }
+
       return {
         status: 200,
         message: "Success",
         transaction: {
           id: theTransaction.id,
+          category: theTransaction.category,
           status: theTransaction.status,
           invoice_number: theTransaction.invoice_number,
           invoice_url: invoiceUrl,
@@ -511,6 +534,11 @@ export const readRouter = createTRPCRouter({
           cohort_image: cohortImage,
           cohort_slug: cohortSlugUrl,
           cohort_price_name: cohortPriceName,
+          playlist_id: playlistId,
+          playlist_name: playlistName,
+          playlist_image: playlistImage,
+          playlist_slug_url: playlistSlugUrl,
+          playlist_total_video: playlistTotalVideo,
           payment_channel_name: paymentChannelName,
           payment_channel_image: paymentChannelImage,
           user_full_name: theTransaction.user.full_name,
