@@ -154,6 +154,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.educatorsPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `delete.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+### Enrolled Playlists 📺
+
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.enrolledPlaylists` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.enrolledPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
 ## Videos 🎞️
 
 | Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |

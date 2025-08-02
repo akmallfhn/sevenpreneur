@@ -398,6 +398,72 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  enrolledPlaylist: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const thePlaylist = await opts.ctx.prisma.userPlaylist.findFirst({
+        include: {
+          playlist: {
+            include: {
+              educators: {
+                include: {
+                  user: { select: { full_name: true, avatar: true } },
+                },
+                omit: { user_id: true, playlist_id: true },
+              },
+              videos: { omit: { playlist_id: true, video_url: true } },
+            },
+            omit: {
+              deleted_at: true,
+              deleted_by_id: true,
+            },
+          },
+        },
+        where: {
+          user_id: opts.ctx.user.id,
+          playlist_id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!thePlaylist) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The playlist with the given ID is not found.",
+        });
+      }
+      const videosCount = await opts.ctx.prisma.video.count({
+        where: {
+          playlist_id: opts.input.id,
+        },
+      });
+      const durationsSumAggregate = await opts.ctx.prisma.video.aggregate({
+        _sum: { duration: true },
+        where: {
+          playlist_id: opts.input.id,
+        },
+      });
+      const durationsTotal = durationsSumAggregate._sum.duration;
+      const usersCount = await opts.ctx.prisma.userPlaylist.count({
+        where: {
+          playlist_id: opts.input.id,
+        },
+      });
+      const thePlaylistWithCounts = Object.assign(thePlaylist, {
+        total_video: videosCount,
+        total_duration: durationsTotal,
+        total_user_enrolled: usersCount,
+      });
+      return {
+        status: 200,
+        message: "Success",
+        playlist: thePlaylistWithCounts,
+      };
+    }),
+
   video: loggedInProcedure
     .input(
       z.object({

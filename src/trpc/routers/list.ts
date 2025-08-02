@@ -585,6 +585,73 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  enrolledPlaylists: loggedInProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const whereClause = {
+        user_id: opts.ctx.user.id,
+        playlist: {
+          deleted_at: null,
+        },
+      };
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause.playlist, {
+          name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.userPlaylist.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const playlistList = await opts.ctx.prisma.userPlaylist.findMany({
+        include: { playlist: true },
+        orderBy: [{ playlist: { published_at: "desc" } }],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+      const returnedList = playlistList.map((entry) => {
+        return {
+          id: entry.playlist.id,
+          name: entry.playlist.name,
+          tagline: entry.playlist.tagline,
+          image_url: entry.playlist.image_url,
+          price: entry.playlist.price,
+          status: entry.playlist.status,
+          slug_url: entry.playlist.slug_url,
+          published_at: entry.playlist.published_at,
+        };
+      });
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(paging.metapaging, {
+          keyword: opts.input.keyword,
+        });
+      }
+
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+        metapaging: paging.metapaging,
+      };
+    }),
+
   educatorsPlaylist: loggedInProcedure
     .input(
       z.object({
