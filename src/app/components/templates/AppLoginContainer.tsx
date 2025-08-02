@@ -6,6 +6,7 @@ import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { isValidRedirectUrl } from "@/lib/valid-redirect";
 
 interface AppLoginContainerProps {
   currentDomain: string;
@@ -16,7 +17,9 @@ export default function AppLoginContainer({
 }: AppLoginContainerProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/";
+  const redirectTo = searchParams.get("redirectTo");
+  const safeRedirect =
+    redirectTo && isValidRedirectUrl(redirectTo) ? redirectTo : "/";
   const [isLoading, setIsLoading] = useState(false);
 
   // --- Return token from Google
@@ -45,7 +48,7 @@ export default function AppLoginContainer({
         // --- Redirect and status message
         if (result.status === 200) {
           setIsLoading(false);
-          router.push(redirectTo);
+          router.push(safeRedirect);
           router.refresh();
         } else {
         }

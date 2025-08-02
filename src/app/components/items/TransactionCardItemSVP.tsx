@@ -143,7 +143,7 @@ export default function TransactionCardItemSVP({
             href={
               productCategory === "COHORT"
                 ? `/cohorts/${cohortSlug}/${cohortId}`
-                : `/playlists/${cohortSlug}/${cohortId}`
+                : `/playlists/${playlistSlug}/${playlistId}`
             }
           >
             <AppButton

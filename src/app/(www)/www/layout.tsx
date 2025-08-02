@@ -35,6 +35,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   return (
     <div>
       <HeaderNavbarSVP
+        userName={userData?.full_name}
         userAvatar={userData?.avatar ?? null}
         userRole={userData?.role_id}
         isLoggedIn={!!userData}
