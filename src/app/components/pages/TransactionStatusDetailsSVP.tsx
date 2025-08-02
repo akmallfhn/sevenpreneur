@@ -39,7 +39,7 @@ const variantStyles: Record<
   },
 };
 
-interface TransactionStatusSVPProps {
+interface TransactionStatusDetailsSVPProps {
   transactionId: string;
   transactionStatus: TransactionStatus;
   invoiceNumber: string;
@@ -60,7 +60,7 @@ interface TransactionStatusSVPProps {
   paidTransactionAt: string | undefined;
 }
 
-export default function TransactionStatusSVP({
+export default function TransactionStatusDetailsSVP({
   transactionId,
   transactionStatus,
   invoiceNumber,
@@ -79,7 +79,7 @@ export default function TransactionStatusSVP({
   userName,
   createTransactionAt,
   paidTransactionAt,
-}: TransactionStatusSVPProps) {
+}: TransactionStatusDetailsSVPProps) {
   const router = useRouter();
   const [openAmountDetails, setOpenAmountDetails] = useState(false);
   const [loadingRefresh, setLoadingRefresh] = useState(false);

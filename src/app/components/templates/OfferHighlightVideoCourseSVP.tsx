@@ -11,17 +11,20 @@ import AppButton from "../buttons/AppButton";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import { toSnakeCase } from "@/lib/snake-case";
+import { getRoundedHourFromSeconds } from "@/lib/rounded-hour-from-second";
 
 interface OfferHighlightVideoCourseSVPProps {
   playlistId: number;
   playlistSlug: string;
   playlistPrice: number;
+  playlistTotalDuration: number | null;
 }
 
 export default function OfferHighlightVideoCourseSVP({
   playlistId,
   playlistSlug,
   playlistPrice,
+  playlistTotalDuration,
 }: OfferHighlightVideoCourseSVPProps) {
   const discountPrice = playlistPrice;
   const basePrice = 430000;
@@ -38,7 +41,10 @@ export default function OfferHighlightVideoCourseSVP({
             <Clock3 className="size-5 text-alternative" />
           </div>
           <p className="text-sm">
-            <b>6+ hours</b> of on-demand video
+            <b>
+              {getRoundedHourFromSeconds(playlistTotalDuration || 1)}+ hours
+            </b>{" "}
+            of on-demand video
           </p>
         </div>
         <div className="benefit-offer-item flex gap-1 items-center font-ui">

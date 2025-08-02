@@ -39,7 +39,6 @@ interface MakePaymentXenditProps {
   paymentChannelId: number;
   phoneNumber?: string | null | undefined;
 }
-
 export async function MakePaymentXendit({
   cohortPriceId,
   paymentChannelId,
@@ -47,11 +46,9 @@ export async function MakePaymentXendit({
 }: MakePaymentXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
-
   if (!sessionData) {
     return { status: 401, message: "No session token found" };
   }
-
   setSessionToken(sessionData.value);
   const paymentResponse = await trpc.purchase.cohort({
     cohort_price_id: cohortPriceId,
@@ -59,7 +56,6 @@ export async function MakePaymentXendit({
     phone_country_id: 1,
     phone_number: phoneNumber,
   });
-
   return {
     status: paymentResponse.status,
     message: paymentResponse.message,
@@ -72,24 +68,51 @@ export async function MakePaymentXendit({
 interface CancelPaymentXenditProps {
   transactionId: string;
 }
-
 export async function CancelPaymentXendit({
   transactionId,
 }: CancelPaymentXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
-
   if (!sessionData) {
     return { status: 401, message: "No session token found" };
   }
-
   setSessionToken(sessionData.value);
   const cancelResponse = await trpc.purchase.cancel({
     id: transactionId,
   });
-
   return {
     status: cancelResponse.status,
     message: cancelResponse.message,
+  };
+}
+
+// MAKE PAYMENT PLAYLIST AT XENDIT
+interface MakePaymentPlaylistXenditProps {
+  playlistId: number;
+  paymentChannelId: number;
+  phoneNumber?: string | null | undefined;
+}
+export async function MakePaymentPlaylistXendit({
+  playlistId,
+  paymentChannelId,
+  phoneNumber,
+}: MakePaymentPlaylistXenditProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+  const paymentResponse = await trpc.purchase.playlist({
+    playlist_id: playlistId,
+    payment_channel_id: paymentChannelId,
+    phone_country_id: 1,
+    phone_number: phoneNumber,
+  });
+  return {
+    status: paymentResponse.status,
+    message: paymentResponse.message,
+    invoice_url: paymentResponse.invoice_url,
+    transaction_id: paymentResponse.transaction_id,
   };
 }

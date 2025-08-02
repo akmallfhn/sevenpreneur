@@ -34,6 +34,8 @@ interface PlaylistDetailsSVPProps {
   playlistSlug: string;
   playlistPrice: number;
   playlistPublishedAt: string;
+  playlistTotalEpisodes: number;
+  playlistTotalDuration: number | null;
   playlistEducators: EducatorItem[];
   playlistVideos: VideoItem[];
 }
@@ -47,6 +49,8 @@ export default function PlaylistDetailsSVP({
   playlistSlug,
   playlistPrice,
   playlistPublishedAt,
+  playlistTotalEpisodes,
+  playlistTotalDuration,
   playlistEducators,
   playlistVideos,
 }: PlaylistDetailsSVPProps) {
@@ -161,7 +165,7 @@ export default function PlaylistDetailsSVP({
             <div className="video-course flex flex-col gap-4">
               <SectionTitleSVP
                 sectionTitle="Course Playlist"
-                sectionDescription="10 episodes ● 20 instructors"
+                sectionDescription={`${playlistTotalEpisodes} episodes of course video`}
               />
               <VideoCoursePlaylistSVP playlistVideos={playlistVideos} />
             </div>
@@ -172,6 +176,7 @@ export default function PlaylistDetailsSVP({
               playlistId={playlistId}
               playlistSlug={playlistSlug}
               playlistPrice={playlistPrice}
+              playlistTotalDuration={playlistTotalDuration}
             />
           </aside>
         </div>
