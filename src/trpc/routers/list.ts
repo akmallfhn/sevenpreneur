@@ -648,17 +648,41 @@ export const listRouter = createTRPCRouter({
       });
 
       const cohortIdList: Set<number> = new Set();
+      const playlistIdList: Set<number> = new Set();
       transactionsList.forEach((entry) => {
         if (entry.category === CategoryEnum.COHORT) {
           cohortIdList.add(entry.item_id);
+        } else if (entry.category === CategoryEnum.PLAYLIST) {
+          playlistIdList.add(entry.item_id);
         }
       });
+
       const cohortPriceList = await opts.ctx.prisma.cohortPrice.findMany({
         include: { cohort: true },
         where: { id: { in: Array.from(cohortIdList) } },
       });
       const cohortPriceMap = new Map(
         cohortPriceList.map((entry) => [entry.id, entry])
+      );
+
+      const playlistList = await opts.ctx.prisma.playlist.findMany({
+        where: { id: { in: Array.from(cohortIdList) } },
+      });
+      const videosCountList = await opts.ctx.prisma.video.groupBy({
+        by: ["playlist_id"],
+        _count: true,
+        where: {
+          playlist_id: { in: Array.from(cohortIdList) },
+        },
+      });
+      const videosCountMap = new Map(
+        videosCountList.map((entry) => [entry.playlist_id, entry._count])
+      );
+      const playlistMap = new Map(
+        playlistList.map((entry) => {
+          const videosCount = videosCountMap.get(entry.id) || 0;
+          return [entry.id, { entry, videosCount }];
+        })
       );
 
       let checkoutPrefix = "https://checkout.xendit.co/web/";
@@ -688,6 +712,22 @@ export const listRouter = createTRPCRouter({
           }
         }
 
+        let playlistId: number | undefined;
+        let playlistName: string | undefined;
+        let playlistImage: string | undefined;
+        let playlistSlugUrl: string | undefined;
+        let playlistTotalVideo: number | undefined;
+        if (entry.category === CategoryEnum.PLAYLIST) {
+          const selectedPlaylist = playlistMap.get(entry.item_id);
+          if (selectedPlaylist) {
+            playlistId = selectedPlaylist.entry.id;
+            playlistName = selectedPlaylist.entry.name;
+            playlistImage = selectedPlaylist.entry.image_url;
+            playlistSlugUrl = selectedPlaylist.entry.slug_url;
+            playlistTotalVideo = selectedPlaylist.videosCount;
+          }
+        }
+
         return {
           id: entry.id,
           category: entry.category,
@@ -703,6 +743,11 @@ export const listRouter = createTRPCRouter({
           cohort_image: cohortImage,
           cohort_slug: cohortSlugUrl,
           cohort_price_name: cohortPriceName,
+          playlist_id: playlistId,
+          playlist_name: playlistName,
+          playlist_image: playlistImage,
+          playlist_slug_url: playlistSlugUrl,
+          playlist_total_video: playlistTotalVideo,
         };
       });
 
