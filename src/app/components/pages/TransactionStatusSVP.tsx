@@ -292,7 +292,7 @@ export default function TransactionStatusSVP({
                 <Image
                   className="object-cover w-full h-full"
                   src={
-                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/customer-service-icon.svg"
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//customer-service-icon.svg"
                   }
                   alt="helpdesk-icon"
                   width={100}

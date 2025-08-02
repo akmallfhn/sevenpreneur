@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Login | Sevenpreneur",
     description:
       "Akses platform eksklusif yang dirancang untuk bertumbuh bersama dan wujudkan bisnis terbaikmu. Login sekarang dan lanjutkan.",
-    url: "https://sevenpreneur.com/auth/login",
+    url: "/auth/login",
     siteName: "Sevenpreneur",
     images: [
       {

@@ -1,8 +1,53 @@
 import TransactionCardItemSVP from "@/app/components/items/TransactionCardItemSVP";
+import ForbiddenComponent from "@/app/components/state/403Forbidden";
+import EmptyTransactions from "@/app/components/state/EmptyTransactions";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Transactions | Sevenpreneur",
+  description:
+    "Cek status pesanan dan riwayat pembayaran di halaman transaksi. Mudah, aman, dan transparan untuk semua pembelian",
+  authors: [{ name: "Sevenpreneur Team" }],
+  publisher: "Sevenpreneur",
+  referrer: "origin-when-cross-origin",
+  alternates: {
+    canonical: "/transactions",
+  },
+  openGraph: {
+    title: "Transactions | Sevenpreneur",
+    description:
+      "Cek status pesanan dan riwayat pembayaran di halaman transaksi. Mudah, aman, dan transparan untuk semua pembelian",
+    url: "/transactions",
+    siteName: "Sevenpreneur",
+    images: [
+      {
+        url: "https://static.wixstatic.com/media/02a5b1_d0f0ef7195ce4fa0ada080a1bd432f17~mv2.webp",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Transactions | Sevenpreneur",
+    description:
+      "Cek status pesanan dan riwayat pembayaran di halaman transaksi. Mudah, aman, dan transparan untuk semua pembelian",
+    images:
+      "https://static.wixstatic.com/media/02a5b1_d0f0ef7195ce4fa0ada080a1bd432f17~mv2.webp",
+  },
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
 export default async function TransactionsPage() {
   const cookieStore = await cookies();
@@ -32,10 +77,11 @@ export default async function TransactionsPage() {
   }));
 
   return (
-    <div className="flex flex-col w-full bg-white pb-36 p-5 gap-5 lg:mx-auto lg:w-full lg:max-w-[960px] xl:max-w-[1208px]">
+    <div className="flex flex-col w-full bg-white px-5 py-5 pb-20 gap-5 lg:px-0 lg:mx-auto lg:w-full lg:max-w-[960px] xl:max-w-[1208px]">
       <h1 className="font-bold font-ui text-xl text-black">
         Transaction History
       </h1>
+      {transactionData.length === 0 && <EmptyTransactions />}
       <div className="flex flex-col gap-4">
         {transactionData
           .sort(
