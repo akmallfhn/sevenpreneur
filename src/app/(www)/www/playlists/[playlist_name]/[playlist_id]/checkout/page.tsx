@@ -14,27 +14,16 @@ export async function generateMetadata({
 }: CheckoutPlaylistPageProps): Promise<Metadata> {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  const { playlist_id, playlist_name } = await params;
+
+  const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id);
 
-  // --- Redirect if not login
-  if (!sessionToken) {
-    redirect(
-      `/auth/login?redirectTo=/cohorts/${playlist_name}/${playlist_id}/checkout`
-    );
-  }
-
   // --- Get Data
-  setSessionToken(sessionToken);
-  let playlistData;
-  try {
-    playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
-  } catch (error) {
-    return notFound();
-  }
+  setSessionToken(sessionToken!);
+  const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
   return {
-    title: `Checkout - Video Course ${playlistData.name}`,
+    title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
     description:
       "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
     authors: [{ name: "Sevenpreneur" }],
@@ -44,7 +33,9 @@ export async function generateMetadata({
       canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
     },
     openGraph: {
-      title: `Checkout - Video Course ${playlistData.name}`,
+
+      title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
+
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
       url: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
@@ -59,7 +50,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `Checkout - Video Course ${playlistData.name}`,
+
+      title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
       images: playlistData.image_url,

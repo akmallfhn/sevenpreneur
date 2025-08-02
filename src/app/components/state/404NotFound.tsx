@@ -12,7 +12,7 @@ export default function NotFoundComponent() {
             src={
               "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//404-not-found.webp"
             }
-            alt="disallowed-mobile"
+            alt="404-not-found"
             width={500}
             height={400}
           />

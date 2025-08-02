@@ -46,6 +46,7 @@ export default function AppLoginContainer({
         if (result.status === 200) {
           setIsLoading(false);
           router.push(redirectTo);
+          router.refresh();
         } else {
         }
       } catch (error) {
