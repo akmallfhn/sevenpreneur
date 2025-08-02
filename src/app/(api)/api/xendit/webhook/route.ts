@@ -72,6 +72,27 @@ export async function POST(req: NextRequest) {
       } catch (e) {
         // The row might already exists.
       }
+    } else if (theTransaction.category === CategoryEnum.PLAYLIST) {
+      const thePlaylist = await prisma.playlist.findFirst({
+        where: { id: theTransaction.item_id },
+      });
+      if (!thePlaylist) {
+        console.error("xendit.webhook: The selected playlist is not found.");
+        return new NextResponse("The selected playlist is not found.", {
+          status: 404,
+        });
+      }
+
+      try {
+        await prisma.userPlaylist.create({
+          data: {
+            user_id: theTransaction.user_id,
+            playlist_id: thePlaylist.id,
+          },
+        });
+      } catch (e) {
+        // The row might already exists.
+      }
     }
   }
 
