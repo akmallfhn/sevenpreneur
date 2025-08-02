@@ -332,8 +332,8 @@ model UserPlaylist {
   user_id     String   @db.Uuid
   playlist    Playlist @relation(fields: [playlist_id], references: [id])
   playlist_id Int      @db.Integer
-  rating      Int      @db.Integer
-  review      String   @db.VarChar()
+  rating      Int?     @db.Integer
+  review      String?  @db.VarChar()
 
   @@id([user_id, playlist_id])
   @@map("users_playlists")

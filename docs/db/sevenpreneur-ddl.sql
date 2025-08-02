@@ -239,8 +239,8 @@ CREATE TABLE users_cohorts (
 CREATE TABLE users_playlists (
   user_id      UUID     NOT NULL,
   playlist_id  INTEGER  NOT NULL,
-  rating       INTEGER  NOT NULL,
-  review       VARCHAR  NOT NULL,
+  rating       INTEGER      NULL,
+  review       VARCHAR      NULL,
   PRIMARY KEY (user_id, playlist_id)
 );
 
