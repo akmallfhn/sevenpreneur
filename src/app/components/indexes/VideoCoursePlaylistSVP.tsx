@@ -17,7 +17,7 @@ export default function VideoCoursePlaylistSVP({
   playlistVideos,
 }: VideoCoursePlaylistSVPProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
       {playlistVideos.map((post, index) => (
         <VideoCourseItemSVP
           key={index}

@@ -29,7 +29,7 @@ interface PlaylistDetailsSVPProps {
   playlistId: number;
   playlistName: string;
   playlistTagline: string;
-  playlistImage: string;
+  playlistVideoPreview: string;
   playlistDescription: string;
   playlistSlug: string;
   playlistPrice: number;
@@ -42,7 +42,7 @@ export default function PlaylistDetailsSVP({
   playlistId,
   playlistName,
   playlistTagline,
-  playlistImage,
+  playlistVideoPreview,
   playlistDescription,
   playlistSlug,
   playlistPrice,
@@ -94,7 +94,7 @@ export default function PlaylistDetailsSVP({
           playlistId={playlistId}
           playlistName={playlistName}
           playlistTagline={playlistTagline}
-          playlistImage={playlistImage}
+          playlistVideoPreview={playlistVideoPreview}
           playlistSlug={playlistSlug}
           playlistEducators={playlistEducators}
         />
@@ -157,7 +157,6 @@ export default function PlaylistDetailsSVP({
                 )}
               </div>
             </div>
-
             {/* Playlist */}
             <div className="video-course flex flex-col gap-4">
               <SectionTitleSVP
@@ -167,7 +166,6 @@ export default function PlaylistDetailsSVP({
               <VideoCoursePlaylistSVP playlistVideos={playlistVideos} />
             </div>
           </main>
-
           {/* -- Aside */}
           <aside className="aside flex flex-col gap-8 md:flex-1 lg:gap-10">
             <OfferHighlightVideoCourseSVP
