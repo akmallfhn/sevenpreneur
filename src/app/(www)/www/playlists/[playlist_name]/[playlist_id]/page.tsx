@@ -24,6 +24,7 @@ export async function generateMetadata({
   // --- Get Data
   setSessionToken(sessionToken!);
   setSecretKey(secretKey!);
+
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
   return {

@@ -14,6 +14,7 @@ export async function generateMetadata({
 }: CheckoutPlaylistPageProps): Promise<Metadata> {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
+
   const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id);
 
@@ -32,7 +33,9 @@ export async function generateMetadata({
       canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
     },
     openGraph: {
+
       title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
+
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
       url: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
@@ -47,6 +50,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
+
       title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
