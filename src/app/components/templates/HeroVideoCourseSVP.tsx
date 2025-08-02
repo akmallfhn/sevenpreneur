@@ -7,7 +7,6 @@ import { toSnakeCase } from "@/lib/snake-case";
 import { useRef, useState } from "react";
 
 export type EducatorItem = {
-  id: string;
   full_name: string;
   avatar: string | null;
 };

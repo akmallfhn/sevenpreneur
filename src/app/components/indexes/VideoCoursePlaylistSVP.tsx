@@ -3,10 +3,9 @@ import VideoCourseItemSVP from "../items/VideoCourseItemSVP";
 
 export type VideoItem = {
   id: number;
-  playlist_id: number;
   name: string;
   image_url: string;
-  video_url: string;
+  duration: number;
 };
 
 interface VideoCoursePlaylistSVPProps {

@@ -99,7 +99,6 @@ export default async function PlaylistDetailsPage({
     price: Number(playlistDataRaw.price),
     published_at: playlistDataRaw.published_at.toISOString(),
     educators: playlistDataRaw.educators.map((educator) => ({
-      id: educator.user.id,
       full_name: educator.user.full_name,
       avatar: educator.user.avatar,
     })),
