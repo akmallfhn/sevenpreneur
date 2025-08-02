@@ -49,17 +49,19 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const theCohortPrice = await prisma.cohortPrice.findFirst({
-      where: { id: theTransaction.item_id },
-    });
-    if (!theCohortPrice) {
-      console.error("xendit.webhook: The selected cohort price is not found.");
-      return new NextResponse("The selected cohort price is not found.", {
-        status: 404,
-      });
-    }
-
     if (theTransaction.category === CategoryEnum.COHORT) {
+      const theCohortPrice = await prisma.cohortPrice.findFirst({
+        where: { id: theTransaction.item_id },
+      });
+      if (!theCohortPrice) {
+        console.error(
+          "xendit.webhook: The selected cohort price is not found."
+        );
+        return new NextResponse("The selected cohort price is not found.", {
+          status: 404,
+        });
+      }
+
       try {
         await prisma.userCohort.create({
           data: {
