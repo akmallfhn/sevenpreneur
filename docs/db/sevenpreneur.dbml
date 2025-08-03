@@ -211,6 +211,7 @@ Table videos {
   duration     integer
   image_url    varchar
   video_url    varchar
+  num_order    smallint
 }
 
 Table transactions {

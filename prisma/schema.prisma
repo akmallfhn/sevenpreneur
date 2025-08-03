@@ -292,6 +292,7 @@ model Video {
   duration    Int      @db.Integer
   image_url   String   @db.VarChar()
   video_url   String   @db.VarChar()
+  num_order   Int      @default(0) @db.SmallInt
 
   @@map("videos")
 }

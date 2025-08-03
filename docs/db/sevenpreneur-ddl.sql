@@ -202,12 +202,13 @@ CREATE TABLE playlists (
 );
 
 CREATE TABLE videos (
-  id           SERIAL   PRIMARY KEY,
-  playlist_id  INTEGER  NOT NULL,
-  name         VARCHAR  NOT NULL,
-  duration     INTEGER  NOT NULL,
-  image_url    VARCHAR  NOT NULL,
-  video_url    VARCHAR  NOT NULL
+  id           SERIAL    PRIMARY KEY,
+  playlist_id  INTEGER   NOT NULL,
+  name         VARCHAR   NOT NULL,
+  duration     INTEGER   NOT NULL,
+  image_url    VARCHAR   NOT NULL,
+  video_url    VARCHAR   NOT NULL,
+  num_order    SMALLINT  NOT NULL  DEFAULT 0
 );
 
 CREATE TABLE transactions (
