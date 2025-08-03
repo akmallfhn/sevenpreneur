@@ -16,6 +16,8 @@ import {
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
+import ThemeSwitcher from "../buttons/ThemeSwitcher";
+import { useTheme } from "next-themes";
 
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
@@ -31,8 +33,10 @@ export default function HeaderNavbarSVP({
   userRole,
 }: HeaderNavbarSVPProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const { theme } = useTheme();
 
   // Path yang tidak mau menampilkan Navbar & Footer
   const disallowedPath = ["/auth", "/checkout", "/event"];
@@ -88,21 +92,30 @@ export default function HeaderNavbarSVP({
     await DeleteSession();
   };
 
+  // --- Render if component client mounted
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <React.Fragment>
       {!isDisallowedPage && (
-        <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90]">
+        <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
           <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-4 lg:max-w-[960px] xl:max-w-[1208px]">
             <Link href={"/"}>
-              <Image
-                className="max-w-[180px]"
-                src={
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//logo-sevenpreneur-main.svg"
-                }
-                alt="Homepage"
-                width={320}
-                height={320}
-              />
+              {mounted && (
+                <Image
+                  className="max-w-[168px]"
+                  src={
+                    theme === "dark"
+                      ? "https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"
+                      : "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//logo-sevenpreneur-main.svg"
+                  }
+                  alt="Homepage"
+                  width={320}
+                  height={320}
+                />
+              )}
             </Link>
             {isLoggedIn ? (
               <div
@@ -142,6 +155,8 @@ export default function HeaderNavbarSVP({
                       menuName="Transaction"
                     />
                   </Link>
+                  <hr className="my-1" />
+                  <ThemeSwitcher />
                   <hr className="my-1" />
                   <AppDropdownItemList
                     menuIcon={<LogOut className="size-4" />}

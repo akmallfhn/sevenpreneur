@@ -6,6 +6,7 @@ import Script from "next/script";
 import localFont from "next/font/local";
 import { ReactNode } from "react";
 import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -80,16 +81,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       {/* --- Google Tag Manager */}
       <GoogleTagManager gtmId={googleTagManagerId!} />
 
       <body
         className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
+        suppressHydrationWarning
       >
         {/* --- Google Oauth Login */}
         <GoogleOAuthProvider clientId={googleOauthId!}>
-          {children}
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            {children}
+          </ThemeProvider>
         </GoogleOAuthProvider>
 
         {/* --- Google Analytics */}
