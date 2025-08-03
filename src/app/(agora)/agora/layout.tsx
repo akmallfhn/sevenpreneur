@@ -1,27 +1,42 @@
-import "@/app/globals.css";
+import HeaderNavbarLMS from "@/app/components/navigations/HeaderNavbarLMS";
+import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
-import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
-import { cookies } from "next/headers";
-import { setSessionToken, trpc } from "@/trpc/server";
-import BottomFooterSVP from "@/app/components/navigations/BottomFooterSVP";
 
+// --- Metadata
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.sevenpreneur.com"),
+  title: {
+    template: "%s | Agora Learning Sevenpreneur",
+    default: "Agora Learning Sevenpreneur",
+  },
+  description:
+    "Central hub to manage all operations of the Sevenpreneur ecosystem",
+  metadataBase: new URL("https://agora.sevenpreneur.com"),
   alternates: {
     canonical: "/",
   },
+  openGraph: {
+    images: [
+      {
+        url: "https://static.wixstatic.com/media/02a5b1_75a55654d4b445da8c4500b84f0cb7a2~mv2.webp",
+        width: 800,
+        height: 600,
+      },
+    ],
+  },
 };
 
-interface MainLayoutProps {
+interface AgoraLayoutProps {
   children: ReactNode;
 }
 
-export default async function MainLayout({ children }: MainLayoutProps) {
+export default async function AgoraLayout({ children }: AgoraLayoutProps) {
   // --- Get Token for Header Navbar
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
+
   // --- Check User Session for Header Navbar
   let userData:
     | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
@@ -33,7 +48,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   }
   return (
     <div>
-      <HeaderNavbarSVP
+      <HeaderNavbarLMS
         userName={userData?.full_name}
         userAvatar={userData?.avatar ?? null}
         userRole={userData?.role_id}
@@ -41,7 +56,6 @@ export default async function MainLayout({ children }: MainLayoutProps) {
       />
       {children}
       <Toaster richColors position="top-center" />
-      <BottomFooterSVP />
     </div>
   );
 }
