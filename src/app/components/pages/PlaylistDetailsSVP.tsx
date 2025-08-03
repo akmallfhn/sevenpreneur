@@ -22,6 +22,7 @@ import HeroVideoCourseSVP, {
 } from "../templates/HeroVideoCourseSVP";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 dayjs.extend(localizedFormat);
 
@@ -57,6 +58,7 @@ export default function PlaylistDetailsSVP({
   const [showCTA, setShowCTA] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const { theme } = useTheme();
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -74,6 +76,7 @@ export default function PlaylistDetailsSVP({
     return () => window.removeEventListener("resize", checkOverflow);
   }, []);
 
+  // Show floating button when sentinel was gone
   useEffect(() => {
     if (!sentinelRef.current) return;
     const observer = new IntersectionObserver(
@@ -92,7 +95,7 @@ export default function PlaylistDetailsSVP({
 
   return (
     <React.Fragment>
-      <div className="flex flex-col w-full bg-coal-black">
+      <div className="flex flex-col w-full bg-white dark:bg-coal-black">
         {/* --- Hero */}
         <HeroVideoCourseSVP
           playlistId={playlistId}
@@ -114,7 +117,7 @@ export default function PlaylistDetailsSVP({
               <div className="flex flex-col gap-2 items-center md:items-start">
                 <div>
                   <p
-                    className={`ratings text-sm text-white/80 font-ui ${
+                    className={`ratings text-sm text-black font-ui dark:text-white/80 ${
                       !isExpanded && "line-clamp-5"
                     }`}
                     ref={paragraphRef}
@@ -138,7 +141,9 @@ export default function PlaylistDetailsSVP({
                 {isOverflowing && (
                   <div className="flex transition-all transform z-10">
                     <AppButton
-                      variant="surfaceDark"
+                      variant={
+                        theme === "dark" ? "surfaceDark" : "primaryLight"
+                      }
                       size="small"
                       onClick={() => setIsExpanded((prev) => !prev)}
                     >
@@ -157,7 +162,7 @@ export default function PlaylistDetailsSVP({
                   </div>
                 )}
                 {!isExpanded && isOverflowing && (
-                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-coal-black to-transparent pointer-events-none" />
+                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-white to-transparent pointer-events-none dark:from-coal-black" />
                 )}
               </div>
             </div>

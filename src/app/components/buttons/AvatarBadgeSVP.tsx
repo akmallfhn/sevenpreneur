@@ -26,7 +26,7 @@ export default function AvatarBadgeSVP({
         />
       </div>
       <div className="hidden items-center gap-1 lg:flex">
-        <p className="max-w-28 font-ui font-semibold text-sm text-black overflow-hidden text-ellipsis whitespace-nowrap">
+        <p className="max-w-28 font-ui font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
           {userName}
         </p>
         <ChevronDown className="size-3" />

@@ -31,7 +31,7 @@ export default function VideoCourseItemSVP({
       </div>
       <div className="flex flex-col font-ui lg:max-w-[440px] lg:gap-1">
         <p className="font-medium text-xs text-alternative">EPISODE {index}</p>
-        <h3 className="video-title font-bold text-white line-clamp-2 text-sm md:line-clamp-3 lg:text-base">
+        <h3 className="video-title font-bold text-black line-clamp-2 text-sm md:line-clamp-3 dark:text-white lg:text-base">
           {videoName}
         </h3>
       </div>
