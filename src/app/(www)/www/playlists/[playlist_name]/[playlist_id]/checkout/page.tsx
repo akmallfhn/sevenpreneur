@@ -75,7 +75,7 @@ export default async function CheckoutPlaylistPage({
   // --- Redirect if not login
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/cohorts/${playlist_name}/${playlist_id}/checkout`
+      `/auth/login?redirectTo=/playlists/${playlist_name}/${playlist_id}/checkout`
     );
   }
 

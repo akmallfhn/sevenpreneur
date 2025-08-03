@@ -92,7 +92,7 @@ export default function PlaylistDetailsSVP({
 
   return (
     <React.Fragment>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full bg-coal-black">
         {/* --- Hero */}
         <HeroVideoCourseSVP
           playlistId={playlistId}
@@ -105,7 +105,7 @@ export default function PlaylistDetailsSVP({
         <div ref={sentinelRef} className="h-0" />
 
         {/* --- Content */}
-        <div className="content flex flex-col px-5 py-5 w-full gap-8 bg-white md:flex-row lg:gap-14 lg:px-0 lg:py-10 lg:pb-20 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
+        <div className="content flex flex-col px-5 py-5 w-full gap-8 md:flex-row lg:gap-14 lg:px-0 lg:py-10 lg:pb-20 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
           {/* -- Main */}
           <main className="flex flex-col gap-8 md:flex-[1.7] lg:gap-10">
             {/* Description */}
@@ -114,7 +114,7 @@ export default function PlaylistDetailsSVP({
               <div className="flex flex-col gap-2 items-center md:items-start">
                 <div>
                   <p
-                    className={`ratings text-sm text-black/90 font-ui ${
+                    className={`ratings text-sm text-white/80 font-ui ${
                       !isExpanded && "line-clamp-5"
                     }`}
                     ref={paragraphRef}
@@ -138,7 +138,7 @@ export default function PlaylistDetailsSVP({
                 {isOverflowing && (
                   <div className="flex transition-all transform z-10">
                     <AppButton
-                      variant="primaryLight"
+                      variant="surfaceDark"
                       size="small"
                       onClick={() => setIsExpanded((prev) => !prev)}
                     >
@@ -157,7 +157,7 @@ export default function PlaylistDetailsSVP({
                   </div>
                 )}
                 {!isExpanded && isOverflowing && (
-                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-white to-transparent pointer-events-none" />
+                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-coal-black to-transparent pointer-events-none" />
                 )}
               </div>
             </div>
@@ -184,12 +184,12 @@ export default function PlaylistDetailsSVP({
 
       {/* --- Floating CTA */}
       <div
-        className={`floating-cta fixed flex flex-col bg-white bottom-0 left-0 w-full gap-2 p-5 border-t border-outline/50 transition-all duration-300 z-40 md:hidden ${
+        className={`floating-cta fixed flex flex-col bg-surface-black bottom-0 left-0 w-full gap-2 p-5 border-t border-outline-dark transition-all duration-300 z-40 md:hidden ${
           showCTA ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
         }`}
       >
         <div className="flex  items-center justify-between">
-          <div className="flex flex-col font-ui text-black">
+          <div className="flex flex-col font-ui text-white">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">{rupiahCurrency(playlistPrice)}</p>
           </div>

@@ -12,7 +12,7 @@ export default function SectionTitleSVP({
   return (
     <div className="section-title-group flex flex-col gap-2">
       <div className="section-title-container flex flex-col">
-        <h2 className="section-title font-brand font-bold text-xl lg:text-[21px]">
+        <h2 className="section-title font-brand text-white font-bold text-xl lg:text-[21px]">
           {sectionTitle}
         </h2>
         {sectionDescription && (
@@ -21,7 +21,7 @@ export default function SectionTitleSVP({
           </p>
         )}
       </div>
-      <hr />
+      <hr className="border-t-1 border-outline-dark" />
     </div>
   );
 }

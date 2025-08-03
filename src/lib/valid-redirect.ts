@@ -1,5 +1,8 @@
 export function isValidRedirectUrl(url: string): boolean {
   try {
+    if (url.startsWith("/")) {
+      return !url.startsWith("//");
+    }
     const redirect = new URL(url);
     const localMode = process.env.DOMAIN_MODE === "local";
     const allowedDomains = localMode

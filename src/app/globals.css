@@ -21,12 +21,15 @@
   --color-secondary: #e74d79;
   --color-secondary-light: #ffe1ea;
   --color-outline: #cbd5e1;
+  --color-outline-dark: #3a3939;
   --color-alternative: #949494;
   --color-semi-destructive: #ffcdc9;
   --color-cms-primary: #013393;
   --color-cms-secondary: #65d6ca;
   --color-cms-primary-light: #cde2ff;
   --color-section-background: #f5f7fb;
+  --color-surface-black: #171616;
+  --color-coal-black: #0c0d0e;
 }
 
 @theme inline {

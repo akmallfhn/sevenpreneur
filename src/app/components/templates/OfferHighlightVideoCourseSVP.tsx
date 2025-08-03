@@ -33,9 +33,9 @@ export default function OfferHighlightVideoCourseSVP({
   );
 
   return (
-    <div className="benefit-offer-container flex flex-col gap-3 p-5 bg-white border border-outline rounded-md md:sticky md:top-24">
+    <div className="benefit-offer-container flex flex-col gap-3 p-5 bg-surface-black border border-outline-dark rounded-md md:sticky md:top-24">
       <SectionTitleSVP sectionTitle="This Course Include" />
-      <div className="benefit-offer-list flex flex-col gap-1">
+      <div className="benefit-offer-list flex flex-col gap-1 text-white">
         <div className="benefit-offer-item flex gap-1 items-center font-ui">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <Clock3 className="size-5 text-alternative" />
@@ -72,14 +72,14 @@ export default function OfferHighlightVideoCourseSVP({
           </p>
         </div>
       </div>
-      <hr className="hidden lg:flex" />
+      <hr className="hidden border-t-1 border-outline-dark lg:flex" />
       <div className="hidden flex-col gap-3 lg:flex">
         <div className="price-information flex flex-col font-ui">
           <p className="text-alternative font-medium text-sm">
             <s>{rupiahCurrency(basePrice)}</s>
           </p>
           <div className="flex items-center gap-1">
-            <h3 className="font-bold text-black text-2xl">
+            <h3 className="font-bold text-white text-2xl">
               {rupiahCurrency(discountPrice)}
             </h3>
             <p className="bg-secondary w-fit font-bold text-white text-[10px] px-1.5 py-0.5 rounded-sm lg:text-xs">
