@@ -352,7 +352,10 @@ export const readRouter = createTRPCRouter({
             include: { user: { select: { full_name: true, avatar: true } } },
             omit: { user_id: true, playlist_id: true },
           },
-          videos: { omit: { playlist_id: true, video_url: true } },
+          videos: {
+            omit: { playlist_id: true, video_url: true },
+            orderBy: [{ num_order: "asc" }, { id: "asc" }],
+          },
         },
         omit: {
           deleted_at: true,
@@ -415,7 +418,10 @@ export const readRouter = createTRPCRouter({
                 },
                 omit: { user_id: true, playlist_id: true },
               },
-              videos: { omit: { playlist_id: true, video_url: true } },
+              videos: {
+                omit: { playlist_id: true, video_url: true },
+                orderBy: [{ num_order: "asc" }, { id: "asc" }],
+              },
             },
             omit: {
               deleted_at: true,
