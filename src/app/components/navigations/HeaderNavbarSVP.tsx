@@ -109,15 +109,7 @@ export default function HeaderNavbarSVP({
                 ref={wrapperRef}
                 onClick={handleActionsDropdown}
               >
-                <div className="flex items-center gap-3">
-                  <AvatarBadgeSVP userAvatar={userAvatar} />
-                  <div className="hidden items-center gap-1 lg:flex">
-                    <p className="max-w-28 font-ui font-semibold text-sm text-black overflow-hidden text-ellipsis whitespace-nowrap">
-                      {nickName}
-                    </p>
-                    <ChevronDown className="size-3" />
-                  </div>
-                </div>
+                <AvatarBadgeSVP userAvatar={userAvatar} userName={nickName} />
                 <AppDropdown
                   isOpen={isActionsOpened}
                   onClose={() => setIsActionsOpened(false)}

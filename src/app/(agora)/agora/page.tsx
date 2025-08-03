@@ -11,11 +11,13 @@ export default async function AgoraHomePage() {
 
   // --- Get Data
   setSessionToken(sessionToken!);
-  const enrolledPlaylistData = (await trpc.read.enrolledPlaylist({ id: 1 }))
-    .playlist.playlist;
+  let enrolledPlaylistData;
+  try {
+    enrolledPlaylistData = (await trpc.read.enrolledPlaylist({ id: 1 }))
+      .playlist.playlist;
 
-  console.log("data:", enrolledPlaylistData);
-  if (!enrolledPlaylistData) {
+    console.log("data:", enrolledPlaylistData);
+  } catch (error) {
     return <EmptyTransactions />;
   }
 

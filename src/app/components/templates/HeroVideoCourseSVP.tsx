@@ -53,7 +53,7 @@ export default function HeroVideoCourseSVP({
     return "";
   };
   return (
-    <div className="hero-video-course relative flex flex-col w-full h-full bg-black items-center md:flex-row-reverse lg:max-h-[460px] overflow-hidden">
+    <div className="hero-video-course relative flex flex-col w-full h-full bg-black items-center lg:flex-row-reverse lg:max-h-[504px] overflow-hidden">
       {/* Video Thumbnail */}
       <div className="video-thumbnail relative flex aspect-thumbnail w-full h-full overflow-hidden md:flex-[1.6] md:min-h-full md:aspect-auto lg:flex-2">
         <video
@@ -102,10 +102,21 @@ export default function HeroVideoCourseSVP({
 
       {/* Headline */}
       <div className="absolute flex flex-col w-full bottom-0 left-1/2 -translate-x-1/2 items-center font-ui p-5 pb-10 gap-4 z-30 sm:bottom-[100px] md:bottom-auto md:pb-5 md:items-start md:top-1/2 md:-translate-y-1/2 lg:p-0 lg:max-w-[960px] xl:max-w-[1208px]">
-        <div className="title-tagline flex flex-col items-center max-w-[420px] gap-1 md:items-start">
-          <h1 className="title font-bold text-3xl line-clamp-2 text-center text-transparent bg-clip-text bg-linear-to-br from-white to-[#999999] md:text-left lg:text-4xl">
+        <div className="title-tagline flex flex-col items-center max-w-[420px] gap-3 md:items-start lg:gap-4">
+          <div className="flex max-w-[280px] max-h-[72px] overflow-hidden xl:max-w-[320px] xl:max-h-[86px]">
+            <Image
+              className="object-contain"
+              src={
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/playlists/RESTART-CONFERENCE-2025-LOGO.svg"
+              }
+              alt={playlistName}
+              width={800}
+              height={800}
+            />
+          </div>
+          {/* <h1 className="title font-bold text-3xl line-clamp-2 text-center text-transparent bg-clip-text bg-linear-to-br from-white to-[#999999] md:text-left lg:text-4xl">
             {playlistName}
-          </h1>
+          </h1> */}
           <p className="tagline text-sm text-white text-center line-clamp-3 md:text-left lg:text-base">
             {playlistTagline}
           </p>

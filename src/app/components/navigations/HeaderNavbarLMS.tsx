@@ -2,13 +2,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
 import AppButton from "../buttons/AppButton";
 import {
   Blocks,
   BookMarked,
   ChevronDown,
+  Compass,
   LogOut,
   UserCircle2,
   Wallet,
@@ -30,6 +31,7 @@ export default function HeaderNavbarLMS({
   userName,
   userRole,
 }: HeaderNavbarLMSProps) {
+  const router = useRouter();
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -78,7 +80,13 @@ export default function HeaderNavbarLMS({
 
   // --- Sign out function
   const handleSignOut = async () => {
-    await DeleteSession();
+    const result = await DeleteSession();
+    // -- Redirect to login page
+    if (result.code === "SUCCESS") {
+      router.push(`https://www.${domain}/auth/login`);
+    } else {
+      console.error("Logout failed");
+    }
   };
 
   return (
@@ -95,15 +103,7 @@ export default function HeaderNavbarLMS({
             ref={wrapperRef}
             onClick={handleActionsDropdown}
           >
-            <div className="flex items-center gap-3">
-              <AvatarBadgeSVP userAvatar={userAvatar} />
-              <div className="hidden items-center gap-1 lg:flex">
-                <p className="max-w-28 font-ui font-semibold text-sm text-black overflow-hidden text-ellipsis whitespace-nowrap">
-                  {nickName}
-                </p>
-                <ChevronDown className="size-3" />
-              </div>
-            </div>
+            <AvatarBadgeSVP userAvatar={userAvatar} userName={nickName} />
             <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
@@ -123,10 +123,10 @@ export default function HeaderNavbarLMS({
                   />
                 </Link>
               )}
-              <Link href={`https://agora.${domain}`}>
+              <Link href={`https://www.${domain}`}>
                 <AppDropdownItemList
-                  menuIcon={<BookMarked className="size-4" />}
-                  menuName="My Learning"
+                  menuIcon={<Compass className="size-4" />}
+                  menuName="Discovery"
                 />
               </Link>
               <Link href={`https://www.${domain}/transactions`}>

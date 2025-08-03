@@ -80,7 +80,6 @@ export default function SidebarCMS({
   const handleLogout = async () => {
     setIsLoadingButton(true);
     const result = await DeleteSession();
-    console.log("result logout:", result);
     // -- Redirect to login page
     if (result.code === "SUCCESS") {
       router.push(`https://www.${currentDomain}/auth/login`);
