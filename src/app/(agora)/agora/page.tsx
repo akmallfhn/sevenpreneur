@@ -1,5 +1,5 @@
 import VideoCoursePlaylistLMS from "@/app/components/indexes/VideoCoursePlaylistLMS";
-import EmptyTransactions from "@/app/components/state/EmptyTransactions";
+import EmptyPlaylistsLMS from "@/app/components/state/EmptyPlaylistsLMS";
 import SectionTitleSVP from "@/app/components/titles/SectionTitleSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
@@ -18,7 +18,11 @@ export default async function AgoraHomePage() {
 
     console.log("data:", enrolledPlaylistData);
   } catch (error) {
-    return <EmptyTransactions />;
+    return (
+      <div className="flex pt-10 lg:pt-24">
+        <EmptyPlaylistsLMS />
+      </div>
+    );
   }
 
   return (

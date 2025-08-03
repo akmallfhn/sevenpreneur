@@ -6,6 +6,11 @@ import AppButton from "../buttons/AppButton";
 import CountdownTimerRestart25 from "./CountdownTimerRestart25";
 
 export default function HeroEventRestart25() {
+  let domain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
+
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
       {/* --- Hero Content */}
@@ -54,14 +59,16 @@ export default function HeroEventRestart25() {
           {/* Countdown */}
           <CountdownTimerRestart25 targetDateTime="2025-07-26T09:00:00" />
           {/* CTA */}
-          <Link href={"#ticket-id"}>
+          <Link
+            href={`https://www.${domain}/playlists/restart-conference-2025/1`}
+          >
             <AppButton
               size="largeRounded"
               variant="secondary"
               featureName="join_restart"
             >
               <p className="text-base lg:text-lg">
-                Join RE:START Conference 2025
+                Get Digital Access RE:START 2025
               </p>
               <div className="aspect-square p-1 bg-primary rounded-full">
                 <ArrowDown className="text-white size-5" />
