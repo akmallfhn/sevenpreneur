@@ -36,8 +36,9 @@ export default function HeaderNavbarSVP({
 
   // Path yang tidak mau menampilkan Navbar & Footer
   const disallowedPath = ["/auth", "/checkout", "/event"];
-  const isDisallowedPage =
-    pathname === "/" || disallowedPath.some((path) => pathname.includes(path));
+  const isDisallowedPage = disallowedPath.some((path) =>
+    pathname.includes(path)
+  );
 
   //  --- Get Nickname
   const nickName = userName?.split(" ")[0];
