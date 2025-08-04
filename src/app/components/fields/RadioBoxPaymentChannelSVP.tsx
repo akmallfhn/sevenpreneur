@@ -33,7 +33,7 @@ export default function RadioBoxPaymentChannelSVP({
             height={100}
           />
         </div>
-        <p className="payment-channel-name font-ui font-[450px] text-black text-sm">
+        <p className="payment-channel-name font-ui font-[450px] text-sm">
           {paymentChannelName}
         </p>
       </div>

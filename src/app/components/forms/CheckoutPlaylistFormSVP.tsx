@@ -62,9 +62,7 @@ export default function CheckoutPlaylistFormSVP({
 
   // --- Set default payment channel to MANDIRI
   const defaultPaymentChannel = useMemo(() => {
-    return (
-      paymentMethodData.find((item) => item.code === "MANDIRI")?.code ?? ""
-    );
+    return paymentMethodData.find((item) => item.code === "QRIS")?.code ?? "";
   }, [paymentMethodData]);
   useEffect(() => {
     if (!selectedPaymentChannel && defaultPaymentChannel) {
@@ -178,10 +176,10 @@ export default function CheckoutPlaylistFormSVP({
 
   return (
     <React.Fragment>
-      <div className="checkout-form relative flex flex-col min-h-full pb-36 bg-[#F9F9F9]">
+      <div className="checkout-form relative flex flex-col min-h-full pb-36 bg-[#F9F9F9] dark:bg-[#121212]">
         <div className="payment-details relative flex flex-col gap-1 z-10">
           {/* Payment Summary */}
-          <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm">
+          <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm dark:bg-surface-black dark:border-outline-dark">
             <div className="aspect-square size-16 rounded-md overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
@@ -192,19 +190,15 @@ export default function CheckoutPlaylistFormSVP({
               />
             </div>
             <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
-              <p className="font-bold text-black line-clamp-1">
-                {playlistName || "-"}
-              </p>
+              <p className="font-bold line-clamp-1">{playlistName || "-"}</p>
               <p className="text-alternative text-sm font-medium line-clamp-2">
                 Video Course - 10 episodes
               </p>
             </div>
           </div>
           {/* Personal Information */}
-          <div className="payment-method flex flex-col gap-3 bg-white p-5">
-            <h2 className="font-ui font-bold text-black">
-              Personal Information
-            </h2>
+          <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
+            <h2 className="font-ui font-bold">Personal Information</h2>
             <div className="flex flex-col gap-3">
               <InputSVP
                 inputId="user-full-name"
@@ -233,16 +227,16 @@ export default function CheckoutPlaylistFormSVP({
             </div>
           </div>
           {/* Payment Method */}
-          <div className="payment-method flex flex-col gap-3 bg-white p-5">
-            <h1 className="font-ui font-bold text-black">Payment Method</h1>
+          <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
+            <h1 className="font-ui font-bold">Payment Method</h1>
             <div className="flex flex-col gap-5">
               <PaymentChannelGroupSVP
-                groupPaymentName="Bank Virtual Account"
+                groupPaymentName="Instant Payment"
                 defaultState
               >
                 {paymentMethodData
                   .filter(
-                    (post: PaymentMethodItem) => post.method === "BANK_TRANSFER"
+                    (post: PaymentMethodItem) => post.method === "QR_CODE"
                   )
                   .map((post: PaymentMethodItem, index: number) => (
                     <RadioBoxPaymentChannelSVP
@@ -255,10 +249,13 @@ export default function CheckoutPlaylistFormSVP({
                     />
                   ))}
               </PaymentChannelGroupSVP>
-              <PaymentChannelGroupSVP groupPaymentName="Instant Payment">
+              <PaymentChannelGroupSVP
+                groupPaymentName="Bank Virtual Account"
+                defaultState
+              >
                 {paymentMethodData
                   .filter(
-                    (post: PaymentMethodItem) => post.method === "QR_CODE"
+                    (post: PaymentMethodItem) => post.method === "BANK_TRANSFER"
                   )
                   .map((post: PaymentMethodItem, index: number) => (
                     <RadioBoxPaymentChannelSVP
@@ -323,8 +320,8 @@ export default function CheckoutPlaylistFormSVP({
           </div>
 
           {/* Payment Details */}
-          <div className="payment-details flex flex-col gap-2 bg-white p-5">
-            <h1 className="font-ui font-bold text-black">Payment Details</h1>
+          <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black ">
+            <h1 className="font-ui font-bold">Payment Details</h1>
             <div className="calculation-price flex flex-col gap-2">
               <ReceiptLineItemSVP
                 receiptName="Payment Method"
@@ -338,7 +335,7 @@ export default function CheckoutPlaylistFormSVP({
                 receiptName="Course Price"
                 receiptValue={rupiahCurrency(programPrice)}
               />
-              <hr className="border-t-outline border-dashed" />
+              <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
               <ReceiptLineItemSVP
                 receiptName="Subtotal"
                 receiptValue={rupiahCurrency(subtotal)}
@@ -351,7 +348,7 @@ export default function CheckoutPlaylistFormSVP({
                 receiptName="VAT"
                 receiptValue={rupiahCurrency(paymentCalculation.valueAddedTax)}
               />
-              <hr className="border-t-outline border-dashed" />
+              <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
               <ReceiptLineItemSVP
                 receiptName="Total Amount"
                 receiptValue={rupiahCurrency(paymentCalculation.totalAmount)}
@@ -362,11 +359,11 @@ export default function CheckoutPlaylistFormSVP({
 
         {/* Background */}
         <div className="absolute top-0 left-0 w-full h-[78px] bg-linear-to-r from-0% from-primary to-100% to-primary-deep" />
-        <div className="absolute top-[78px] left-0 w-full h-[78px] bg-white" />
+        <div className="absolute top-[78px] left-0 w-full h-[78px] bg-white dark:bg-coal-black" />
 
         {/* Footer */}
         <div className="footer-box flex p-5">
-          <div className="footer-container flex w-full items-center p-3 gap-1.5 bg-white border border-outline rounded-md">
+          <div className="footer-container flex w-full items-center p-3 gap-1.5 bg-white border border-outline rounded-md dark:bg-surface-black dark:border-outline-dark">
             <div className="flex aspect-square size-10">
               <Image
                 className="object-cover w-full h-full"
@@ -391,8 +388,8 @@ export default function CheckoutPlaylistFormSVP({
       </div>
 
       {/* Floating CTA */}
-      <div className="floating-cta sticky flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40">
-        <div className="flex flex-col font-ui text-black">
+      <div className="floating-cta sticky flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
+        <div className="flex flex-col font-ui">
           <p className="text-sm">Total Amount</p>
           <p className="font-bold">
             {rupiahCurrency(paymentCalculation.totalAmount)}

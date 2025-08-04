@@ -59,7 +59,7 @@ export default function InputSVP({
       {/* --- Label */}
       <label
         htmlFor={inputId}
-        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        className="flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
       >
         {inputName}
         {required && <span className="text-destructive">*</span>}
@@ -80,11 +80,11 @@ export default function InputSVP({
           className={`flex w-full p-2 font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             error
               ? "border-destructive focus:outline-semi-destructive"
-              : "border-outline focus:outline-primary/15 focus:border-primary"
+              : "border-outline focus:outline-primary/15 focus:border-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
           } ${
             disabled
-              ? "bg-gray-100 text-gray-500 cursor-not-allowed"
-              : "bg-white"
+              ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"
+              : "bg-white dark:bg-[#2C2C2C]"
           } ${inputIcon ? "pl-10" : ""}  `}
           value={value}
           onChange={handleInputChange}

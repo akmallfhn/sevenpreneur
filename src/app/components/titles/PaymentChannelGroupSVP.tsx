@@ -24,9 +24,7 @@ export default function PaymentChannelGroupSVP({
           setOpenPaymentChannel(!openPaymentChannel);
         }}
       >
-        <p className="font-ui font-medium text-black text-sm">
-          {groupPaymentName}
-        </p>
+        <p className="font-ui font-medium text-sm">{groupPaymentName}</p>
         <ChevronUp
           className={`size-5 transition-transform duration-300 ${
             openPaymentChannel ? "rotate-0" : "rotate-180"

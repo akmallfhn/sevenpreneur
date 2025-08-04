@@ -53,9 +53,7 @@ export default function ZTemporaryPlaylistLMS({
     "https://youtu.be/lw0Txg5_Dz4?feature=shared"
   );
   if (selectedVideoData) {
-    embedYoutube = extractEmbedPathFromYouTubeURL(
-      "https://youtu.be/Q6U6_NChhm4?feature=shared"
-    );
+    embedYoutube = extractEmbedPathFromYouTubeURL(selectedVideoData.video_url!);
   }
 
   return (
