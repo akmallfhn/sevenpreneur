@@ -32,7 +32,7 @@ export default function AppDropdown({
 
   return (
     <div
-      className={`dropdown-container absolute flex flex-col w-max bg-white p-3 mt-2 top-full shadow-[0px_0px_14px_rgba(0,0,0,0.15)] rounded-md z-30 overflow-hidden dark:bg-coal-black ${mobileAlignmentClass} ${desktopAlignmentClass}`}
+      className={`dropdown-container absolute flex flex-col w-max bg-white p-3 mt-2 top-full shadow-[0px_0px_14px_rgba(0,0,0,0.15)] rounded-md z-30 overflow-hidden dark:bg-surface-black ${mobileAlignmentClass} ${desktopAlignmentClass}`}
     >
       {children}
     </div>

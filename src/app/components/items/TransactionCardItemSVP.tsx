@@ -17,15 +17,17 @@ const variantStyles: Record<
   }
 > = {
   PAID: {
-    statusColor: "text-green-700 bg-green-200",
+    statusColor: "text-green-700 bg-green-200 dark:bg-[#0E2F1B]",
     statusWord: "Success",
   },
   PENDING: {
-    statusColor: "text-[#D99E00] bg-[#FEF2D0]",
+    statusColor:
+      "text-[#D99E00] bg-[#FEF2D0] dark:text-[#BC8A06] dark:bg-[#363010]",
     statusWord: "Waiting for Payment",
   },
   FAILED: {
-    statusColor: "text-destructive bg-semi-destructive",
+    statusColor:
+      "text-destructive bg-semi-destructive dark:text-red-700 dark:bg-semi-destructive-dark",
     statusWord: "Canceled",
   },
 };
@@ -73,10 +75,10 @@ export default function TransactionCardItemSVP({
   const isFailed = transactionStatus === "FAILED";
 
   return (
-    <div className="transaction-item flex flex-col p-4 gap-3 bg-white rounded-md shadow-md">
+    <div className="transaction-item flex flex-col p-4 gap-3 bg-white rounded-md shadow-md dark:bg-surface-black">
       {/* Status & Date */}
       <div className="flex items-center justify-between font-ui">
-        <p className="transaction-date text-sm text-black">
+        <p className="transaction-date text-sm dark:text-alternative">
           {dayjs(transactionDate).format("DD MMMM YYYY [at] HH:mm")}
         </p>
         <p
@@ -85,7 +87,7 @@ export default function TransactionCardItemSVP({
           {statusWord}
         </p>
       </div>
-      <hr />
+      <hr className="border-t border-outline dark:border-outline-dark" />
       {/* Metadata */}
       <Link
         href={`/transactions/${transactionId}`}
@@ -106,13 +108,13 @@ export default function TransactionCardItemSVP({
             width={400}
           />
         </div>
-        <div className="flex flex-col font-ui text-black max-w-[calc(100%-4rem-0.75rem)]">
+        <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
           <p className="transaction-name font-bold line-clamp-2">
             {productCategory === "COHORT"
               ? cohortName || "-"
               : playlistName || "-"}
           </p>
-          <p className="transaction-price-tier text-sm line-clamp-1">
+          <p className="transaction-price-tier text-sm line-clamp-1 dark:text-alternative">
             {productCategory === "COHORT"
               ? cohortPriceName
               : `${playlistTotalVideo} video course episodes`}
@@ -121,7 +123,7 @@ export default function TransactionCardItemSVP({
       </Link>
       {/* Price & CTA */}
       <div className="transaction-metadata flex items-center justify-between">
-        <div className="flex flex-col font-ui text-black text-sm">
+        <div className="flex flex-col font-ui text-sm">
           <p>Total Amount</p>
           <p className="font-bold">
             {rupiahCurrency(Math.round(totalTransactionAmount))}
