@@ -388,7 +388,7 @@ export default function CheckoutPlaylistFormSVP({
       </div>
 
       {/* Floating CTA */}
-      <div className="floating-cta sticky flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
+      <div className="floating-cta absolute flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
         <div className="flex flex-col font-ui">
           <p className="text-sm">Total Amount</p>
           <p className="font-bold">
