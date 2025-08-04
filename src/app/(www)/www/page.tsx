@@ -87,6 +87,7 @@ export default async function HomePage() {
       playlistPublishedAt={playlistData.published_at}
       playlistTotalEpisodes={playlistData.total_video}
       playlistTotalDuration={playlistData.total_duration}
+      playlistTotalUserEnrolled={playlistData.total_user_enrolled}
       playlistEducators={playlistData.educators}
       playlistVideos={playlistData.videos}
     />
