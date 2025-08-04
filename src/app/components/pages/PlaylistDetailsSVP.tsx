@@ -37,6 +37,7 @@ interface PlaylistDetailsSVPProps {
   playlistPublishedAt: string;
   playlistTotalEpisodes: number;
   playlistTotalDuration: number | null;
+  playlistTotalUserEnrolled: number;
   playlistEducators: EducatorItem[];
   playlistVideos: VideoItem[];
 }
@@ -52,6 +53,7 @@ export default function PlaylistDetailsSVP({
   playlistPublishedAt,
   playlistTotalEpisodes,
   playlistTotalDuration,
+  playlistTotalUserEnrolled,
   playlistEducators,
   playlistVideos,
 }: PlaylistDetailsSVPProps) {
@@ -103,6 +105,7 @@ export default function PlaylistDetailsSVP({
           playlistTagline={playlistTagline}
           playlistVideoPreview={playlistVideoPreview}
           playlistSlug={playlistSlug}
+          playlistTotalUserEnrolled={playlistTotalUserEnrolled}
           playlistEducators={playlistEducators}
         />
         <div ref={sentinelRef} className="h-0" />

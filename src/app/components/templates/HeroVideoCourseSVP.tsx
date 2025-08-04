@@ -17,6 +17,7 @@ interface HeroVideoCourseSVPProps {
   playlistTagline: string;
   playlistVideoPreview: string;
   playlistSlug: string;
+  playlistTotalUserEnrolled: number;
   playlistEducators: EducatorItem[];
 }
 
@@ -26,6 +27,7 @@ export default function HeroVideoCourseSVP({
   playlistTagline,
   playlistVideoPreview,
   playlistSlug,
+  playlistTotalUserEnrolled,
   playlistEducators,
 }: HeroVideoCourseSVPProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -122,7 +124,7 @@ export default function HeroVideoCourseSVP({
           </p>
         </div>
         <div className="instructor flex flex-col items-center gap-1 md:items-start max-w-[420px]">
-          <p className="text-white/80 text-sm">Instructors</p>
+          <p className="text-white/80 text-sm">With Speakers & Panelist</p>
           <div className="user-avatar-stack flex items-center gap-3 text-white">
             <div className="avatar-stack flex items-center">
               {playlistEducators.slice(0, 3).map((post, index) => (
@@ -164,11 +166,13 @@ export default function HeroVideoCourseSVP({
         </Link>
         <div className="ratings flex items-center gap-1 text-sm">
           <div className="flex items-center">
-            <Star fill="#FBBC15" className="size-5" />
+            <Star fill="#FBBC15" className="size-5" stroke="none" />
             <p className="text-white/90">4.6 ratings</p>
           </div>
           <p className="text-white/45">●</p>
-          <p className="text-white/90">227 learners joined</p>
+          <p className="text-white/90">
+            {playlistTotalUserEnrolled + 227} learners joined
+          </p>
         </div>
       </div>
     </div>
