@@ -419,7 +419,7 @@ export const readRouter = createTRPCRouter({
                 omit: { user_id: true, playlist_id: true },
               },
               videos: {
-                omit: { playlist_id: true, video_url: true },
+                omit: { playlist_id: true },
                 orderBy: [{ num_order: "asc" }, { id: "asc" }],
               },
             },
