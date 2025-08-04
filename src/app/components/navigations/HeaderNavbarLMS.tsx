@@ -17,6 +17,7 @@ import {
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
+import ThemeSwitcher from "../buttons/ThemeSwitcher";
 
 interface HeaderNavbarLMSProps {
   isLoggedIn: boolean;
@@ -91,7 +92,7 @@ export default function HeaderNavbarLMS({
 
   return (
     <React.Fragment>
-      <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90]">
+      <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
         <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-4 lg:max-w-[960px] xl:max-w-[1208px]">
           <Link href={"/"} className="flex flex-col hover:cursor-pointer">
             <h1 className="font-brand font-bold lg:text-xl">
@@ -135,6 +136,8 @@ export default function HeaderNavbarLMS({
                   menuName="Transaction"
                 />
               </Link>
+              <hr className="my-1" />
+              <ThemeSwitcher />
               <hr className="my-1" />
               <AppDropdownItemList
                 menuIcon={<LogOut className="size-4" />}

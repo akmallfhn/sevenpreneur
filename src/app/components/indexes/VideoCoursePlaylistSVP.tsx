@@ -6,6 +6,7 @@ export type VideoItem = {
   name: string;
   image_url: string;
   duration: number;
+  video_url?: string;
 };
 
 interface VideoCoursePlaylistSVPProps {
