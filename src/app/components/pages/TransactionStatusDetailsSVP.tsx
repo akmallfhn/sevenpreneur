@@ -14,6 +14,7 @@ import { useCountdownHours } from "@/lib/countdown-hours";
 import { CancelPaymentXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import { useTheme } from "next-themes";
 
 const variantStyles: Record<
   TransactionStatus,
@@ -95,6 +96,7 @@ export default function TransactionStatusDetailsSVP({
   paidTransactionAt,
 }: TransactionStatusDetailsSVPProps) {
   const router = useRouter();
+  const { theme } = useTheme();
   const [openAmountDetails, setOpenAmountDetails] = useState(false);
   const [loadingRefresh, setLoadingRefresh] = useState(false);
   const [loadingCancelation, setLoadingCancelation] = useState(false);
@@ -144,18 +146,18 @@ export default function TransactionStatusDetailsSVP({
 
   return (
     <React.Fragment>
-      <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] lg:mx-auto lg:w-full lg:max-w-[960px] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
+      <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] dark:bg-coal-black lg:mx-auto lg:w-full lg:max-w-[960px] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
         <div className="flex flex-col gap-1 lg:flex-1 lg:gap-3">
           {/* Transaction Status */}
-          <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white lg:border lg:border-outline lg:rounded-lg">
+          <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
             <div className="status-guidance flex flex-col items-center text-center font-ui">
               <PaymentStatusAnimationSVP variant={transactionStatus} />
               <div className="flex flex-col items-center gap-2">
-                <h2 className="font-bold text-black">{statusWord}</h2>
+                <h2 className="font-bold">{statusWord}</h2>
                 <p className="text-alternative text-sm">{statusDescription}</p>
                 <AppButton
                   className="w-fit"
-                  variant="primaryLight"
+                  variant={theme === "dark" ? "surfaceDark" : "primaryLight"}
                   size="mediumRounded"
                   onClick={handleRefresh}
                 >
@@ -173,7 +175,7 @@ export default function TransactionStatusDetailsSVP({
                 }`}
               >
                 <div className="flex flex-col text-sm">
-                  <p className="text-black font-bold">
+                  <p className="font-bold">
                     {isPaid && "Payment received on"}
                     {isPending && "Make the payment before"}
                   </p>
@@ -185,7 +187,7 @@ export default function TransactionStatusDetailsSVP({
                   </p>
                 </div>
                 {isPending && (
-                  <div className="flex p-1 px-2 items-center gap-1 bg-secondary-light text-sm text-secondary rounded-full">
+                  <div className="flex p-1 px-2 items-center gap-1 bg-secondary-light text-sm text-secondary rounded-full dark:bg-[#2C0D17]">
                     <Timer className="size-4" />
                     <p className="font-bold">{countdown}</p>
                   </div>
@@ -194,7 +196,7 @@ export default function TransactionStatusDetailsSVP({
             )}
           </div>
           {/* Payment Method & Details*/}
-          <div className="payment flex flex-col w-full bg-white p-5 lg:border lg:border-outline lg:rounded-lg">
+          <div className="payment flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
             <div className="payment-channel flex items-center gap-3 pb-4">
               <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
                 <Image
@@ -208,7 +210,7 @@ export default function TransactionStatusDetailsSVP({
                   height={100}
                 />
               </div>
-              <p className="payment-channel-name font-ui font-[450px] text-black text-sm">
+              <p className="payment-channel-name font-ui font-[450px] text-sm">
                 {paymentChannelName}
               </p>
             </div>
@@ -232,14 +234,14 @@ export default function TransactionStatusDetailsSVP({
                   receiptName="VAT"
                   receiptValue={rupiahCurrency(Math.round(productVAT))}
                 />
-                <hr className="border-t-outline border-dashed" />
+                <hr className="border-t border-outline border-dashed dark:border-outline-dark" />
               </div>
             </div>
             <div
               className="payment-details flex items-center justify-between"
               onClick={() => setOpenAmountDetails(!openAmountDetails)}
             >
-              <div className="amount flex flex-col font-ui text-black text-sm">
+              <div className="amount flex flex-col font-ui text-sm">
                 <p>Total Amount</p>
                 <p className="font-bold">
                   {rupiahCurrency(Math.round(productTotalAmount))}
@@ -255,7 +257,7 @@ export default function TransactionStatusDetailsSVP({
         </div>
         <div className="flex flex-col gap-1 lg:flex-2 lg:gap-3">
           {/* Program Metadata */}
-          <div className="program-metadata flex w-full items-center gap-4 bg-white p-5 lg:border lg:border-outline lg:rounded-lg">
+          <div className="program-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
             <div className="program-image aspect-square size-16 rounded-md overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
@@ -271,7 +273,7 @@ export default function TransactionStatusDetailsSVP({
                 width={400}
               />
             </div>
-            <div className="flex flex-col font-ui text-black max-w-[calc(100%-4rem-0.75rem)]">
+            <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
               <p className="program-name font-bold line-clamp-2">
                 {productCategory === "COHORT" ? cohortName : playlistName}
               </p>
@@ -283,7 +285,7 @@ export default function TransactionStatusDetailsSVP({
             </div>
           </div>
           {/* Transaction Metadata */}
-          <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 lg:border lg:border-outline lg:rounded-lg">
+          <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
             <ReceiptLineItemSVP
               receiptName="Transaction ID"
               receiptValue={transactionId}
@@ -305,7 +307,7 @@ export default function TransactionStatusDetailsSVP({
           </div>
 
           {/* Support Helpdesk */}
-          <div className="support-helpdesk flex gap-1 bg-white py-4 p-5 items-center justify-between lg:border lg:border-outline lg:rounded-lg">
+          <div className="support-helpdesk flex gap-1 bg-white py-4 p-5 items-center justify-between dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
             <div className="flex items-center gap-2">
               <div className="helpdesk-icon flex aspect-square size-[52px] overflow-hidden">
                 <Image
@@ -319,7 +321,7 @@ export default function TransactionStatusDetailsSVP({
                 />
               </div>
               <div className="flex flex-col font-ui text-sm">
-                <p className="font-bold text-black">Having Trouble?</p>
+                <p className="font-bold">Having Trouble?</p>
                 <p className="text-alternative">We are ready to help you</p>
               </div>
             </div>
@@ -328,7 +330,10 @@ export default function TransactionStatusDetailsSVP({
               target="_blank"
               rel="noopenner noreferrer"
             >
-              <AppButton variant="primaryLight" size="smallRounded">
+              <AppButton
+                variant={theme === "dark" ? "surfaceDark" : "primaryLight"}
+                size="smallRounded"
+              >
                 Contact Us
               </AppButton>
             </Link>

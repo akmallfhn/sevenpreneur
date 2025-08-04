@@ -63,13 +63,14 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       secondary:
         "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A]",
       outline:
-        "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5]",
+        "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5] dark:bg-surface-black dark:text-white dark:border-outline-dark",
       ghost: "bg-white hover:bg-[#F5F5F5] active:bg-[#F5F5F5]",
       link: "text-primary hover:underline active:underline underline-offset-4",
       dark: "bg-[#202020] text-white hover:bg-black active:bg-black",
       surfaceDark:
         "bg-[#27292E] text-[#9498A1] hover:bg-[#242529] active:bg-[#242529]",
-      semiDestructive: "bg-semi-destructive text-destructive",
+      semiDestructive:
+        "bg-semi-destructive text-destructive dark:text-red-700 dark:bg-[#29110C]",
       cmsPrimary:
         "bg-cms-primary text-white hover:bg-[#032E82] active:bg-[#032E82]",
       cmsPrimaryLight:

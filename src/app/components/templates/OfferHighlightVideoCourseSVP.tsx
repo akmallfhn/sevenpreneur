@@ -72,7 +72,7 @@ export default function OfferHighlightVideoCourseSVP({
           </p>
         </div>
       </div>
-      <hr className="hidden border-t-1 border-outline-dark lg:flex" />
+      <hr className="hidden border-t-1 border-outline dark:border-outline-dark lg:flex" />
       <div className="hidden flex-col gap-3 lg:flex">
         <div className="price-information flex flex-col font-ui">
           <p className="text-alternative font-medium text-sm">

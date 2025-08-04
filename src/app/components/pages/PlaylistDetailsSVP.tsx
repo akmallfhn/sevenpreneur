@@ -189,12 +189,12 @@ export default function PlaylistDetailsSVP({
 
       {/* --- Floating CTA */}
       <div
-        className={`floating-cta fixed flex flex-col bg-surface-black bottom-0 left-0 w-full gap-2 p-5 border-t border-outline-dark transition-all duration-300 z-40 md:hidden ${
+        className={`floating-cta fixed flex flex-col bg-white bottom-0 left-0 w-full gap-2 p-5 border-t border-outline transition-all duration-300 z-40 dark:bg-surface-black dark:border-outline-dark md:hidden ${
           showCTA ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
         }`}
       >
         <div className="flex  items-center justify-between">
-          <div className="flex flex-col font-ui text-white">
+          <div className="flex flex-col font-ui">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">{rupiahCurrency(playlistPrice)}</p>
           </div>

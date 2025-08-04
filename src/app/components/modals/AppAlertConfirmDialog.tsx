@@ -34,11 +34,11 @@ export default function AppAlertConfirmDialog({
   if (!isOpen) return null;
   return (
     <div
-      className="root fixed inset-0 flex w-full h-full items-end justify-center bg-black/40 z-50"
+      className="root fixed inset-0 flex w-full h-full items-end justify-center bg-black/40 z-50 dark:bg-black/70"
       onClick={onClose}
     >
       <div
-        className="container-alert-dialog fixed flex flex-col bg-white w-full max-w-[calc(100%-2rem)] p-6 gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md sm:max-w-lg"
+        className="container-alert-dialog fixed flex flex-col bg-white w-full max-w-[calc(100%-2rem)] p-6 gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md dark:bg-surface-black sm:max-w-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dialog-text flex flex-col">

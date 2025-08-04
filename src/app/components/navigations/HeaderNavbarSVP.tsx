@@ -101,11 +101,11 @@ export default function HeaderNavbarSVP({
     <React.Fragment>
       {!isDisallowedPage && (
         <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
-          <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-4 lg:max-w-[960px] xl:max-w-[1208px]">
+          <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[960px] xl:max-w-[1208px]">
             <Link href={"/"}>
               {mounted && (
                 <Image
-                  className="max-w-[168px]"
+                  className="max-w-[142px] lg:max-w-[168px]"
                   src={
                     theme === "dark"
                       ? "https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"

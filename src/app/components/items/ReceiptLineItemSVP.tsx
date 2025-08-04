@@ -12,7 +12,7 @@ export default function ReceiptLineItemSVP({
   return (
     <div className="line-item flex items-center justify-between">
       <p className="font-ui text-alternative text-sm">{receiptName}</p>
-      <p className="font-ui font-medium text-black text-sm text-right">
+      <p className="font-ui font-medium text-sm text-right dark:text-alternative">
         {receiptValue}
       </p>
     </div>

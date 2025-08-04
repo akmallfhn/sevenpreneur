@@ -13,7 +13,7 @@ export default function AvatarBadgeSVP({
 }: AvatarBadgeSVPProps) {
   return (
     <div className="flex items-center gap-3">
-      <div className="aspect-square size-8 rounded-full overflow-hidden hover:cursor-pointer">
+      <div className="aspect-square size-7 rounded-full overflow-hidden hover:cursor-pointer">
         <Image
           className="object-cover w-full h-full"
           src={
