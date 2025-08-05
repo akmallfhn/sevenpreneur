@@ -4,46 +4,45 @@ import { Stream } from "@cloudflare/stream-react";
 
 interface AppVideoPlayerProps {
   videoId: string;
+  videoImage: string;
 }
 
-export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
-  const [signedUrl, setSignedUrl] = useState<string | null>(null);
+export default function AppVideoPlayer({
+  videoId,
+  videoImage,
+}: AppVideoPlayerProps) {
+  const [signedToken, setSignedToken] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  let domain = "sevenpreneur.com";
-  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
-    domain = "example.com:3000";
-  }
-
   useEffect(() => {
-    const fetchSignedUrl = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`/api/stream/url/${videoId}`);
+        const response = await fetch(`api/stream/url/${videoId}`);
         const data = await response.json();
-        setSignedUrl(data.signed_url);
+        const url = new URL(data.signed_url);
+        const tokenfromURL = url.searchParams.get("token");
+        setSignedToken(tokenfromURL!);
       } catch (error) {
         console.error("Failed to fetch signed token:", error);
       }
     };
-
-    fetchSignedUrl();
-
-    // Set timer to refresh token before expired (4 mins)
+    fetchData();
     const interval = setInterval(() => {
-      fetchSignedUrl();
-      setRefreshKey((prev) => prev + 1); // force rerender if needed
-    }, 4 * 60 * 1000);
+      fetchData();
+      setRefreshKey((prev) => prev + 1);
+    }, 1000 * 60 * 30);
 
     return () => clearInterval(interval);
-  }, [domain, videoId]);
+  }, [videoId]);
 
-  if (!signedUrl) return <p>Loading video…</p>;
+  if (!signedToken) return <p>Video unavailable. Please refresh the page.</p>;
 
   return (
     <div key={refreshKey}>
       <Stream
-        src={signedUrl}
+        src={signedToken}
         controls
+        poster={videoImage}
         width="100%"
         height="100%"
         autoplay={false}
