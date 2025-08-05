@@ -5,6 +5,7 @@ import { VideoItem } from "../indexes/VideoCoursePlaylistSVP";
 import SectionTitleSVP from "../titles/SectionTitleSVP";
 import { useRouter, useSearchParams } from "next/navigation";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
 
 interface ZTemporaryPlaylistLMSProps {
   playlistVideos: VideoItem[];
@@ -59,7 +60,7 @@ export default function ZTemporaryPlaylistLMS({
   return (
     <div className="flex flex-col gap-5 px-5 py-5 pb-24 lg:px-0 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
       <div className="flex flex-col gap-4">
-        <div className="relative w-full aspect-video rounded-md overflow-hidden lg:max-w-[768px]">
+        {/* <div className="relative w-full aspect-video rounded-md overflow-hidden lg:max-w-[768px]">
           <iframe
             width="100%"
             height="100%"
@@ -70,7 +71,8 @@ export default function ZTemporaryPlaylistLMS({
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           ></iframe>
-        </div>
+        </div> */}
+        <AppVideoPlayer videoId="d929af5a12b4d3fbe74215e9678b1b58" />
         <h1 className="font-brand font-bold text-sm lg:text-lg">
           {selectedVideoData
             ? selectedVideoData.name
