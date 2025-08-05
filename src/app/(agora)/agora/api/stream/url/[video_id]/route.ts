@@ -9,21 +9,24 @@ interface VideoStreamProps {
 }
 
 export async function GET(req: Request, { params }: VideoStreamProps) {
-  const { video_id } = await params;
-  const videoId = parseInt(video_id);
+  const videoId = (await params).video_id;
+
+  if (!videoId || !/^[a-zA-Z0-9]{32}$/.test(videoId)) {
+    return NextResponse.json({ status: 400, message: "Invalid video ID" });
+  }
 
   const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
   const CLOUDFLARE_SIGNING_KEY = process.env.CLOUDFLARE_SIGNING_KEY!;
   const CLOUDFLARE_PRIVATE_KEY = process.env.CLOUDFLARE_PRIVATE_KEY!;
 
-  const expiresInSecond = 60 * 5;
+  const expiresInSecond = 3600;
   const exp = Math.floor(Date.now() / 1000) + expiresInSecond;
 
   // Create Payload JWT
   const payload = {
+    sub: videoId,
     kid: CLOUDFLARE_SIGNING_KEY,
     exp,
-    videoId,
   };
 
   // Create Header JWT
@@ -53,6 +56,7 @@ export async function GET(req: Request, { params }: VideoStreamProps) {
   const signedToken = `${unsignedToken}.${signature}`;
 
   return NextResponse.json({
+    status: 200,
     signed_url: `https://customer-${CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${videoId}/manifest/video.m3u8?token=${signedToken}`,
   });
 }
