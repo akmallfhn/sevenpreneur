@@ -285,14 +285,15 @@ model Playlist {
 }
 
 model Video {
-  id          Int      @id @default(autoincrement()) @db.Integer
-  playlist    Playlist @relation(fields: [playlist_id], references: [id])
-  playlist_id Int      @db.Integer
-  name        String   @db.VarChar()
-  duration    Int      @db.Integer
-  image_url   String   @db.VarChar()
-  video_url   String   @db.VarChar()
-  num_order   Int      @default(0) @db.SmallInt
+  id                Int      @id @default(autoincrement()) @db.Integer
+  playlist          Playlist @relation(fields: [playlist_id], references: [id])
+  playlist_id       Int      @db.Integer
+  name              String   @db.VarChar()
+  duration          Int      @db.Integer
+  image_url         String   @db.VarChar()
+  video_url         String   @db.VarChar()
+  num_order         Int      @default(0) @db.SmallInt
+  external_video_id String   @db.VarChar()
 
   @@map("videos")
 }
