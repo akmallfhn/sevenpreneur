@@ -13,36 +13,61 @@ export default function AppVideoPlayer({
 }: AppVideoPlayerProps) {
   const [signedToken, setSignedToken] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
+      if (!videoId) return;
+
+      if (isMounted) {
+        setIsLoading(true);
+        setHasError(false);
+        setSignedToken(null);
+      }
+
       try {
         const response = await fetch(`api/stream/url/${videoId}`);
         const data = await response.json();
         const url = new URL(data.signed_url);
-        const tokenfromURL = url.searchParams.get("token");
-        setSignedToken(tokenfromURL!);
+        const tokenFromURL = url.searchParams.get("token");
+        if (isMounted && tokenFromURL) {
+          setSignedToken(tokenFromURL);
+        }
       } catch (error) {
         console.error("Failed to fetch signed token:", error);
+        if (isMounted) {
+          setSignedToken(null);
+          setHasError(true);
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
     const interval = setInterval(() => {
       fetchData();
-      setRefreshKey((prev) => prev + 1);
+      if (isMounted) setRefreshKey((prev) => prev + 1);
     }, 1000 * 60 * 30);
 
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [videoId]);
 
-  if (!signedToken) return <p>Video unavailable. Please refresh the page.</p>;
+  if (isLoading) return <p>Loading video...</p>;
+
+  if (!signedToken || hasError)
+    return <p>Video unavailable. Please refresh the page.</p>;
 
   return (
     <div key={refreshKey}>
       <Stream
         src={signedToken}
         controls
-        poster={videoImage}
         width="100%"
         height="100%"
         autoplay={false}

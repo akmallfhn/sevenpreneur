@@ -55,7 +55,7 @@ export default function ZTemporaryPlaylistLMS({
         <div className="relative w-full h-auto aspect-video overflow-hidden md:rounded-md lg:max-w-[768px]">
           {selectedVideoData ? (
             <AppVideoPlayer
-              videoId="d929af5a12b4d3fbe74215e9678b1b58"
+              videoId={selectedVideoData.external_video_id}
               videoImage={selectedVideoData.image_url}
             />
           ) : (
