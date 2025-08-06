@@ -236,4 +236,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  video: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedVideo = await opts.ctx.prisma.video.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedVideo.count > 1) {
+        console.error(
+          "delete.video: More-than-one videos are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });

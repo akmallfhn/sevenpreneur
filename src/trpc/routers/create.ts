@@ -7,6 +7,7 @@ import { createSlugFromTitle } from "@/trpc/utils/slug";
 import { stringToDate } from "@/trpc/utils/string_date";
 import {
   numberIsID,
+  numberIsPositive,
   numberIsRoleID,
   stringIsTimestampTz,
   stringIsUUID,
@@ -444,6 +445,48 @@ export const createRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         educatorPlaylist: theEducatorPlaylist,
+      };
+    }),
+
+  video: administratorProcedure
+    .input(
+      z.object({
+        playlist_id: numberIsID(),
+        name: stringNotBlank(),
+        duration: numberIsPositive(),
+        image_url: stringNotBlank(),
+        video_url: stringNotBlank(),
+        num_order: z.number().optional(),
+        external_video_id: stringNotBlank(),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdVideo = await opts.ctx.prisma.video.create({
+        data: {
+          playlist_id: opts.input.playlist_id,
+          name: opts.input.name,
+          duration: opts.input.duration,
+          image_url: opts.input.image_url,
+          video_url: opts.input.video_url,
+          num_order: opts.input.num_order,
+          external_video_id: opts.input.external_video_id,
+        },
+      });
+      const theVideo = await opts.ctx.prisma.video.findFirst({
+        where: {
+          id: createdVideo.id,
+        },
+      });
+      if (!theVideo) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new video.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        video: theVideo,
       };
     }),
 
