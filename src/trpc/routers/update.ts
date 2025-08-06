@@ -6,6 +6,7 @@ import {
 import { stringToDate } from "@/trpc/utils/string_date";
 import {
   numberIsID,
+  numberIsPositive,
   numberIsRoleID,
   stringIsTimestampTz,
   stringIsUUID,
@@ -451,6 +452,51 @@ export const updateRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         playlist: updatedPlaylist[0],
+      };
+    }),
+
+  video: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        playlist_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        duration: numberIsPositive().optional(),
+        image_url: stringNotBlank().optional(),
+        video_url: stringNotBlank().optional(),
+        num_order: z.number().optional(),
+        external_video_id: stringNotBlank().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedVideo = await opts.ctx.prisma.video.updateManyAndReturn({
+        data: {
+          playlist_id: opts.input.playlist_id,
+          name: opts.input.name,
+          duration: opts.input.duration,
+          image_url: opts.input.image_url,
+          video_url: opts.input.video_url,
+          num_order: opts.input.num_order,
+          external_video_id: opts.input.external_video_id,
+        },
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (updatedVideo.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected video is not found.",
+        });
+      } else if (updatedVideo.length > 1) {
+        console.error(
+          "update.video: More-than-one videos are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        video: updatedVideo[0],
       };
     }),
 });
