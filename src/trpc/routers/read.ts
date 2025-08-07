@@ -3,6 +3,7 @@ import {
   createTRPCRouter,
   loggedInProcedure,
   publicProcedure,
+  roleBasedProcedure,
 } from "@/trpc/init";
 import {
   numberIsID,
@@ -104,7 +105,7 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
-  user: loggedInProcedure
+  user: roleBasedProcedure(["Administrator", "Educator", "Class Manager"])
     .input(
       z.object({
         id: stringIsUUID(),
