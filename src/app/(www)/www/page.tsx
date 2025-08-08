@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Restart25Page from "@/app/components/pages/Restart25Page";
 import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
 import { notFound } from "next/navigation";
 import { setSecretKey, trpc } from "@/trpc/server";

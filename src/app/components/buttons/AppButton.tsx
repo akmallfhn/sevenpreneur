@@ -34,6 +34,7 @@ interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   font?: FontType;
   featureName?: string;
   featurePosition?: number;
+  featureItem?: string;
 }
 
 // --- Use forwardRef for pass ref component. forwardRef cant directly use with 'export default function'
@@ -49,6 +50,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       className,
       featureName,
       featurePosition,
+      featureItem,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
@@ -110,6 +112,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         event: "click",
         feature_name: featureName,
         feature_position: featurePosition,
+        feature_item: featureItem,
       });
 
       // Panggil onClick props jika ada
