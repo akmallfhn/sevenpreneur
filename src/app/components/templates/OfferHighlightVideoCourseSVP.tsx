@@ -95,7 +95,8 @@ export default function OfferHighlightVideoCourseSVP({
             <AppButton
               size="defaultRounded"
               className="w-full"
-              featureName={`vod_checkout_${toSnakeCase(playlistSlug)}`}
+              featureName={`checkout_playlist`}
+              featureItem={toSnakeCase(playlistSlug)}
             >
               Pay & Get Access
             </AppButton>

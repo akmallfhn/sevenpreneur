@@ -1,5 +1,4 @@
 import TransactionCardItemSVP from "@/app/components/items/TransactionCardItemSVP";
-import ForbiddenComponent from "@/app/components/state/403Forbidden";
 import EmptyTransactions from "@/app/components/state/EmptyTransactions";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
@@ -75,8 +74,6 @@ export default async function TransactionsPage() {
     paid_at: post.paid_at ? post.paid_at.toISOString() : null,
     created_at: post.created_at ? post.created_at.toISOString() : null,
   }));
-
-  console.log("transactions:", transactionData);
 
   return (
     <div className="flex flex-col w-full bg-white px-5 py-5 pb-20 gap-5 dark:bg-coal-black lg:px-0 lg:mx-auto lg:w-full lg:max-w-[960px] xl:max-w-[1208px]">

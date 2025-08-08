@@ -159,7 +159,8 @@ export default function HeroVideoCourseSVP({
           <AppButton
             size="defaultRounded"
             className="w-full md:w-fit"
-            featureName={`vod_checkout_${toSnakeCase(playlistSlug)}`}
+            featureName={`checkout_playlist`}
+            featureItem={toSnakeCase(playlistName)}
           >
             <p className="px-2">Start Learning for Only 127K</p>
           </AppButton>

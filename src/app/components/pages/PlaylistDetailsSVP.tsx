@@ -23,6 +23,7 @@ import HeroVideoCourseSVP, {
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { toSnakeCase } from "@/lib/snake-case";
 
 dayjs.extend(localizedFormat);
 
@@ -204,7 +205,8 @@ export default function PlaylistDetailsSVP({
           <Link href={`/playlists/${playlistSlug}/${playlistId}/checkout`}>
             <AppButton
               size="defaultRounded"
-              featureName={`vod_checkout_${playlistSlug}`}
+              featureName={`checkout_playlist`}
+              featureItem={toSnakeCase(playlistName)}
             >
               <ShieldCheck className="size-5" />
               Pay & Get Access

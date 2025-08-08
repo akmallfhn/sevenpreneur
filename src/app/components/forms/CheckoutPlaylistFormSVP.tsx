@@ -12,6 +12,7 @@ import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
+import { toSnakeCase } from "@/lib/snake-case";
 
 type PaymentMethodItem = {
   id: number;
@@ -395,7 +396,12 @@ export default function CheckoutPlaylistFormSVP({
             {rupiahCurrency(paymentCalculation.totalAmount)}
           </p>
         </div>
-        <AppButton onClick={handlePayment} disabled={isLoadingPayment}>
+        <AppButton
+          onClick={handlePayment}
+          disabled={isLoadingPayment}
+          featureName="payment_playlist"
+          featureItem={toSnakeCase(playlistName)}
+        >
           {isLoadingPayment ? (
             <Loader2 className="animate-spin size-5" />
           ) : (

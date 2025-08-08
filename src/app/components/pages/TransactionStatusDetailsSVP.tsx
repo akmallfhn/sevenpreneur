@@ -15,6 +15,7 @@ import { CancelPaymentXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { useTheme } from "next-themes";
+import { toSnakeCase } from "@/lib/snake-case";
 
 const variantStyles: Record<
   TransactionStatus,
@@ -106,6 +107,8 @@ export default function TransactionStatusDetailsSVP({
   const isPaid = transactionStatus === "PAID";
   const isPending = transactionStatus === "PENDING";
   const isFailed = transactionStatus === "FAILED";
+  const isCohort = productCategory === "COHORT";
+  const isPlaylist = productCategory === "PLAYLIST";
 
   // --- Refresh data without full page reload
   const handleRefresh = () => {
@@ -352,6 +355,14 @@ export default function TransactionStatusDetailsSVP({
                   <AppButton
                     size="defaultRounded"
                     className="w-full lg:w-[240px]"
+                    featureName={
+                      isCohort ? "payment_cohort" : "payment_playlist"
+                    }
+                    featureItem={
+                      isCohort
+                        ? toSnakeCase(cohortName || "")
+                        : toSnakeCase(playlistName || "")
+                    }
                   >
                     Continue Payment
                   </AppButton>
@@ -362,6 +373,7 @@ export default function TransactionStatusDetailsSVP({
                   className="w-full lg:w-[240px]"
                   onClick={() => setIsOpenCancelConfirmation(true)}
                   disabled={loadingCancelation}
+                  featureName="cancel_payment"
                 >
                   {loadingCancelation && (
                     <Loader2 className="animate-spin size-5" />
@@ -381,6 +393,7 @@ export default function TransactionStatusDetailsSVP({
                 <AppButton
                   size="defaultRounded"
                   className="w-full lg:w-[240px]"
+                  featureName="retry_payment"
                 >
                   Retry Payment
                 </AppButton>
