@@ -1,6 +1,7 @@
 import HeaderNavbarLMS from "@/app/components/navigations/HeaderNavbarLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
@@ -48,14 +49,16 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
   }
   return (
     <div>
-      <HeaderNavbarLMS
-        userName={userData?.full_name}
-        userAvatar={userData?.avatar ?? null}
-        userRole={userData?.role_id}
-        isLoggedIn={!!userData}
-      />
-      {children}
-      <Toaster richColors position="top-center" />
+      <ThemeProvider attribute="class" defaultTheme="dark">
+        <HeaderNavbarLMS
+          userName={userData?.full_name}
+          userAvatar={userData?.avatar ?? null}
+          userRole={userData?.role_id}
+          isLoggedIn={!!userData}
+        />
+        {children}
+        <Toaster richColors position="top-center" />
+      </ThemeProvider>
     </div>
   );
 }
