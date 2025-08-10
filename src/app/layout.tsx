@@ -91,9 +91,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         {/* --- Google Oauth Login */}
         <GoogleOAuthProvider clientId={googleOauthId!}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            {children}
-          </ThemeProvider>
+          {children}
         </GoogleOAuthProvider>
 
         {/* --- Google Analytics */}

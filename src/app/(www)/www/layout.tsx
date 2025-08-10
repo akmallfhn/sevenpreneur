@@ -6,6 +6,7 @@ import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
 import { cookies } from "next/headers";
 import { setSessionToken, trpc } from "@/trpc/server";
 import BottomFooterSVP from "@/app/components/navigations/BottomFooterSVP";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sevenpreneur.com"),
@@ -33,15 +34,17 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   }
   return (
     <div>
-      <HeaderNavbarSVP
-        userName={userData?.full_name}
-        userAvatar={userData?.avatar ?? null}
-        userRole={userData?.role_id}
-        isLoggedIn={!!userData}
-      />
-      {children}
-      <Toaster richColors position="top-center" />
-      <BottomFooterSVP />
+      <ThemeProvider attribute="class" defaultTheme="dark">
+        <HeaderNavbarSVP
+          userName={userData?.full_name}
+          userAvatar={userData?.avatar ?? null}
+          userRole={userData?.role_id}
+          isLoggedIn={!!userData}
+        />
+        {children}
+        <Toaster richColors position="top-center" />
+        <BottomFooterSVP />
+      </ThemeProvider>
     </div>
   );
 }
