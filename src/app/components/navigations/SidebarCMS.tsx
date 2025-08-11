@@ -6,6 +6,7 @@ import { DeleteSession } from "@/lib/actions";
 import SidebarMenuItemCMS from "@/app/components/navigations/SidebarMenuItemCMS";
 import UserBadgeCMS from "@/app/components/buttons/UserBadgeCMS";
 import {
+  BanknoteArrowDown,
   CircleHelp,
   CircleUserIcon,
   DoorOpen,
@@ -55,6 +56,19 @@ export default function SidebarCMS({
     );
   }
 
+  // --- Logout function
+  const handleLogout = async () => {
+    setIsLoadingButton(true);
+    const result = await DeleteSession();
+    // -- Redirect to login page
+    if (result.code === "SUCCESS") {
+      router.push(`https://www.${currentDomain}/auth/login`);
+    } else {
+      console.error("Logout failed");
+    }
+    setIsLoadingButton(false);
+  };
+
   const menuItemData = [
     {
       title: "Dashboard",
@@ -74,20 +88,13 @@ export default function SidebarCMS({
       icon: <CircleUserIcon />,
       exact: false,
     },
+    {
+      title: "Transactions",
+      url: "/transactions",
+      icon: <BanknoteArrowDown />,
+      exact: false,
+    },
   ];
-
-  // --- Logout function
-  const handleLogout = async () => {
-    setIsLoadingButton(true);
-    const result = await DeleteSession();
-    // -- Redirect to login page
-    if (result.code === "SUCCESS") {
-      router.push(`https://www.${currentDomain}/auth/login`);
-    } else {
-      console.error("Logout failed");
-    }
-    setIsLoadingButton(false);
-  };
 
   return (
     <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">

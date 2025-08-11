@@ -31,6 +31,12 @@
   --color-section-background: #f5f7fb;
   --color-surface-black: #171616;
   --color-coal-black: #0c0d0e;
+  --color-warning-background: #fef2d0;
+  --color-warning-foreground: #d99e00;
+  --color-success-background: #daf2f0;
+  --color-success-foreground: #499e95;
+  --color-danger-background: #f6d7e0;
+  --color-danger-foreground: #df396a;
 }
 
 @theme inline {

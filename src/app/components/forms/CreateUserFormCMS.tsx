@@ -36,6 +36,7 @@ interface CreateUserFormProps {
 export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   const createUser = trpc.create.user.useMutation();
   const router = useRouter();
+  const utils = trpc.useUtils();
 
   // --- Set session token to client
   useEffect(() => {
@@ -210,6 +211,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
               industry: "",
               entrepreneurStage: "",
             });
+            utils.list.users.invalidate();
             router.push("/users");
           },
           onError: (err) => {
