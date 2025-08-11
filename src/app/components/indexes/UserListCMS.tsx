@@ -14,19 +14,18 @@ interface UserListCMSProps {
 }
 
 export default function UserListCMS({ sessionToken }: UserListCMSProps) {
-  // --- Set token for API
+  const utils = trpc.useUtils();
+
+  // Set token for API
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
 
-  // --- Trigger to refetch component
-  const utils = trpc.useUtils();
-
-  // --- Return data from tRPC
+  // Return data from tRPC
   const { data, isLoading, isError } = trpc.list.users.useQuery(
-    {},
+    { page: 1, page_size: 20 },
     { enabled: !!sessionToken }
   );
   if (isLoading) {
@@ -57,7 +56,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
         <div className="page-title-actions flex justify-between items-center">
           {/* -- Page Title */}
           <TitleRevealCMS
-            titlePage={"List User"}
+            titlePage={"User List"}
             descPage={
               "View and manage all registered users in one place, with quick access to actions like edit or delete."
             }
@@ -71,6 +70,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
           </Link>
         </div>
       </div>
+
       {/* --- TABLE */}
       <div className="table-cons flex flex-col shadow-md rounded-md">
         <div className="flex w-full bg-[#f5f5f5] px-7 py-4 text-[13px] text-alternative font-bodycopy font-semibold rounded-t-md">
