@@ -11,14 +11,14 @@ const variantStyles: Record<
   }
 > = {
   ACTIVE: {
-    backgroundColor: "bg-[#E3F9E2]",
-    labelColor: "text-[#2F7F2C]",
-    signColor: "bg-[#2F7F2C]",
+    backgroundColor: "bg-success-background",
+    labelColor: "text-success-foreground",
+    signColor: "bg-success-foreground",
   },
   INACTIVE: {
-    backgroundColor: "bg-[#FFF4F3]",
-    labelColor: "text-[#DF5B4F]",
-    signColor: "bg-[#DF5B4F]",
+    backgroundColor: "bg-danger-background",
+    labelColor: "text-danger-foreground",
+    signColor: "bg-danger-foreground",
   },
 };
 
