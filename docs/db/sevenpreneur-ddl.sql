@@ -212,6 +212,20 @@ CREATE TABLE videos (
   external_video_id  VARCHAR   NOT NULL
 );
 
+CREATE TABLE discounts (
+  id            SERIAL         PRIMARY KEY,
+  name          VARCHAR        NOT NULL,
+  code          VARCHAR        NOT NULL,
+  category      category_enum  NOT NULL,
+  item_id       INTEGER        NOT NULL,
+  calc_percent  DECIMAL(6, 4)  NOT NULL,
+  status        status_enum    NOT NULL,
+  start_date    TIMESTAMPTZ    NOT NULL,
+  end_date      TIMESTAMPTZ    NOT NULL,
+  created_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE transactions (
   id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
   user_id          UUID            NOT NULL,
@@ -365,6 +379,11 @@ CREATE TRIGGER update_submissions_updated_at_trigger
 
 CREATE TRIGGER update_playlists_updated_at_trigger
   BEFORE UPDATE ON playlists
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_discounts_updated_at_trigger
+  BEFORE UPDATE ON discounts
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 

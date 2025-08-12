@@ -215,6 +215,20 @@ Table videos {
   external_video_id  varchar
 }
 
+Table discounts {
+  id            integer        [primary key]
+  name          varchar
+  code          varchar
+  category      category_enum
+  item_id       integer        [note: 'item's ID based on category']
+  calc_percent  decimal(6,4)
+  status        status_enum
+  start_date    timestamptz
+  end_date      timestamptz
+  created_at    timestamptz
+  updated_at    timestamptz
+}
+
 Table transactions {
   id               char(21)       [primary key, note: 'default nanoid()']
   user_id          uuid           [ref: > users.id]
