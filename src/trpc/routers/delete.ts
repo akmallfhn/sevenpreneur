@@ -259,4 +259,27 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  discount: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedDiscount = await opts.ctx.prisma.discount.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedDiscount.count > 1) {
+        console.error(
+          "delete.discount: More-than-one discounts are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
 });

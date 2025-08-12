@@ -170,6 +170,16 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+## Discounts 🪙
+
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `list.discounts`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `read.discount`   |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `update.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `delete.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+
 ## Transactions 💰
 
 | Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |

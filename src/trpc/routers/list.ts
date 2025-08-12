@@ -1,4 +1,5 @@
 import {
+  administratorProcedure,
   createTRPCRouter,
   loggedInProcedure,
   publicProcedure,
@@ -12,6 +13,7 @@ import {
 } from "@/trpc/utils/validation";
 import {
   CategoryEnum,
+  Prisma,
   PrismaClient,
   StatusEnum,
   TStatusEnum,
@@ -51,7 +53,8 @@ function calculatePage(
 
 async function fetchItems(
   prisma: PrismaClient,
-  list: { category: CategoryEnum; item_id: number }[]
+  list: { category: CategoryEnum; item_id: number }[],
+  useCohortPrice: boolean
 ) {
   const cohortIdList: Set<number> = new Set();
   const playlistIdList: Set<number> = new Set();
@@ -63,13 +66,26 @@ async function fetchItems(
     }
   });
 
-  const cohortPriceList = await prisma.cohortPrice.findMany({
-    include: { cohort: true },
-    where: { id: { in: Array.from(cohortIdList) } },
-  });
-  const cohortPriceMap = new Map(
-    cohortPriceList.map((entry) => [entry.id, entry])
-  );
+  type Cohort = Prisma.CohortGetPayload<{}>;
+  let cohortMap: Map<number, Cohort> | undefined;
+  if (!useCohortPrice) {
+    const cohortList = await prisma.cohort.findMany({
+      where: { id: { in: Array.from(cohortIdList) } },
+    });
+    cohortMap = new Map(cohortList.map((entry) => [entry.id, entry]));
+  }
+
+  type CohortPrice = Prisma.CohortPriceGetPayload<{
+    include: { cohort: true };
+  }>;
+  let cohortPriceMap: Map<number, CohortPrice> | undefined;
+  if (useCohortPrice) {
+    const cohortPriceList = await prisma.cohortPrice.findMany({
+      include: { cohort: true },
+      where: { id: { in: Array.from(cohortIdList) } },
+    });
+    cohortPriceMap = new Map(cohortPriceList.map((entry) => [entry.id, entry]));
+  }
 
   const playlistList = await prisma.playlist.findMany({
     where: { id: { in: Array.from(playlistIdList) } },
@@ -91,7 +107,7 @@ async function fetchItems(
     })
   );
 
-  return { cohortPriceMap, playlistMap };
+  return { cohortMap, cohortPriceMap, playlistMap };
 }
 
 type CohortBadge = {
@@ -99,6 +115,9 @@ type CohortBadge = {
   name: string | undefined;
   image: string | undefined;
   slugUrl: string | undefined;
+};
+
+type CohortBadgeWithPrice = CohortBadge & {
   priceName: string | undefined;
 };
 
@@ -741,6 +760,89 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  discounts: administratorProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.discount.aggregate({ _count: true })
+      );
+
+      const discountList = await opts.ctx.prisma.discount.findMany({
+        orderBy: [{ created_at: "desc" }],
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+
+      const { cohortMap, playlistMap } = await fetchItems(
+        opts.ctx.prisma,
+        discountList,
+        false // uses cohort ID
+      );
+
+      const returnedList = discountList.map((entry) => {
+        let cohortBadge: CohortBadge | undefined;
+        if (entry.category === CategoryEnum.COHORT) {
+          const selectedCohortPrice = cohortMap!.get(entry.item_id);
+          if (selectedCohortPrice) {
+            cohortBadge = {
+              id: selectedCohortPrice.id,
+              name: selectedCohortPrice.name,
+              image: selectedCohortPrice.image,
+              slugUrl: selectedCohortPrice.slug_url,
+            };
+          }
+        }
+
+        let playlistBadge: PlaylistBadge | undefined;
+        if (entry.category === CategoryEnum.PLAYLIST) {
+          const selectedPlaylist = playlistMap.get(entry.item_id);
+          if (selectedPlaylist) {
+            playlistBadge = {
+              id: selectedPlaylist.entry.id,
+              name: selectedPlaylist.entry.name,
+              image: selectedPlaylist.entry.image_url,
+              slugUrl: selectedPlaylist.entry.slug_url,
+              totalVideo: selectedPlaylist.videosCount,
+            };
+          }
+        }
+
+        return {
+          id: entry.id,
+          name: entry.name,
+          code: entry.code,
+          category: entry.category,
+          item_id: entry.item_id,
+          calc_percent: entry.calc_percent,
+          status: entry.status,
+          start_date: entry.start_date,
+          end_date: entry.end_date,
+          cohort_id: cohortBadge?.id,
+          cohort_name: cohortBadge?.name,
+          cohort_image: cohortBadge?.image,
+          cohort_slug: cohortBadge?.slugUrl,
+          playlist_id: playlistBadge?.id,
+          playlist_name: playlistBadge?.name,
+          playlist_image: playlistBadge?.image,
+          playlist_slug_url: playlistBadge?.slugUrl,
+          playlist_total_video: playlistBadge?.totalVideo,
+        };
+      });
+
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+        metapaging: paging.metapaging,
+      };
+    }),
+
   transactions: loggedInProcedure
     .input(
       z.object({
@@ -782,7 +884,8 @@ export const listRouter = createTRPCRouter({
 
       const { cohortPriceMap, playlistMap } = await fetchItems(
         opts.ctx.prisma,
-        transactionsList
+        transactionsList,
+        true // uses cohort price ID
       );
 
       let checkoutPrefix = "https://checkout.xendit.co/web/";
@@ -796,7 +899,7 @@ export const listRouter = createTRPCRouter({
           invoiceUrl = `${checkoutPrefix}${entry.invoice_number}`;
         }
 
-        let cohortBadge: CohortBadge | undefined;
+        let cohortBadge: CohortBadgeWithPrice | undefined;
         if (entry.category === CategoryEnum.COHORT) {
           const selectedCohortPrice = cohortPriceMap!.get(entry.item_id);
           if (selectedCohortPrice) {

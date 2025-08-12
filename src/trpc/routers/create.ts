@@ -13,7 +13,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { LearningMethodEnum, StatusEnum } from "@prisma/client";
+import { CategoryEnum, LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -521,6 +521,51 @@ export const createRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         submission: theSubmission,
+      };
+    }),
+
+  discount: administratorProcedure
+    .input(
+      z.object({
+        name: stringNotBlank(),
+        code: stringNotBlank(),
+        category: z.nativeEnum(CategoryEnum),
+        item_id: numberIsID(),
+        calc_percent: z.number(),
+        status: z.nativeEnum(StatusEnum),
+        start_date: stringIsTimestampTz(),
+        end_date: stringIsTimestampTz(),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdDiscount = await opts.ctx.prisma.discount.create({
+        data: {
+          name: opts.input.name,
+          code: opts.input.code,
+          category: opts.input.category,
+          item_id: opts.input.item_id,
+          calc_percent: opts.input.calc_percent,
+          status: opts.input.status,
+          start_date: opts.input.start_date,
+          end_date: opts.input.end_date,
+        },
+      });
+      const theDiscount = await opts.ctx.prisma.discount.findFirst({
+        where: {
+          id: createdDiscount.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theDiscount) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new discount.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        discount: theDiscount,
       };
     }),
 });
