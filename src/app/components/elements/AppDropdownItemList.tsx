@@ -24,7 +24,7 @@ export default function AppDropdownItemList({
       onClick={onClick}
     >
       {menuIcon}
-      <p className="text-sm font-bodycopy">{menuName}</p>
+      <p className="text-sm font-medium font-bodycopy">{menuName}</p>
     </div>
   );
 }
