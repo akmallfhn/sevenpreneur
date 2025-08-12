@@ -12,7 +12,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { LearningMethodEnum, StatusEnum } from "@prisma/client";
+import { CategoryEnum, LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -497,6 +497,54 @@ export const updateRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         video: updatedVideo[0],
+      };
+    }),
+
+  discount: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        name: stringNotBlank().optional(),
+        code: stringNotBlank().optional(),
+        category: z.nativeEnum(CategoryEnum).optional(),
+        item_id: numberIsID().optional(),
+        calc_percent: z.number().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+        start_date: stringIsTimestampTz().optional(),
+        end_date: stringIsTimestampTz().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedDiscount =
+        await opts.ctx.prisma.discount.updateManyAndReturn({
+          data: {
+            name: opts.input.name,
+            code: opts.input.code,
+            category: opts.input.category,
+            item_id: opts.input.item_id,
+            calc_percent: opts.input.calc_percent,
+            status: opts.input.status,
+            start_date: opts.input.start_date,
+            end_date: opts.input.end_date,
+          },
+          where: {
+            id: opts.input.id,
+          },
+        });
+      if (updatedDiscount.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected discount is not found.",
+        });
+      } else if (updatedDiscount.length > 1) {
+        console.error(
+          "update.discount: More-than-one discounts are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        discount: updatedDiscount[0],
       };
     }),
 });

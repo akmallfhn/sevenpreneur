@@ -1,4 +1,5 @@
 import {
+  administratorProcedure,
   createTRPCRouter,
   loggedInProcedure,
   publicProcedure,
@@ -17,6 +18,9 @@ type CohortBadge = {
   name: string | undefined;
   image: string | undefined;
   slugUrl: string | undefined;
+};
+
+type CohortBadgeWithPrice = CohortBadge & {
   priceName: string | undefined;
 };
 
@@ -516,6 +520,89 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  discount: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theDiscount = await opts.ctx.prisma.discount.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theDiscount) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The discount with the given ID is not found.",
+        });
+      }
+
+      let cohortBadge: CohortBadge | undefined;
+      if (theDiscount.category === CategoryEnum.COHORT) {
+        const theCohortPrice = await opts.ctx.prisma.cohort.findFirst({
+          where: { id: theDiscount.item_id },
+        });
+        if (theCohortPrice) {
+          cohortBadge = {
+            id: theCohortPrice.id,
+            name: theCohortPrice.name,
+            image: theCohortPrice.image,
+            slugUrl: theCohortPrice.slug_url,
+          };
+        }
+      }
+
+      let playlistBadge: PlaylistBadge | undefined;
+      if (theDiscount.category === CategoryEnum.PLAYLIST) {
+        const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
+          where: { id: theDiscount.item_id },
+        });
+        if (thePlaylist) {
+          playlistBadge = {
+            id: thePlaylist.id,
+            name: thePlaylist.name,
+            image: thePlaylist.image_url,
+            slugUrl: thePlaylist.slug_url,
+            totalVideo: await opts.ctx.prisma.video.count({
+              where: {
+                playlist_id: thePlaylist.id,
+              },
+            }),
+          };
+        }
+      }
+
+      return {
+        status: 200,
+        message: "Success",
+        discount: {
+          id: theDiscount.id,
+          name: theDiscount.name,
+          code: theDiscount.code,
+          category: theDiscount.category,
+          item_id: theDiscount.item_id,
+          calc_percent: theDiscount.calc_percent,
+          status: theDiscount.status,
+          start_date: theDiscount.start_date,
+          end_date: theDiscount.end_date,
+          cohort_id: cohortBadge?.id,
+          cohort_name: cohortBadge?.name,
+          cohort_image: cohortBadge?.image,
+          cohort_slug: cohortBadge?.slugUrl,
+          playlist_id: playlistBadge?.id,
+          playlist_name: playlistBadge?.name,
+          playlist_image: playlistBadge?.image,
+          playlist_slug_url: playlistBadge?.slugUrl,
+          playlist_total_video: playlistBadge?.totalVideo,
+          created_at: theDiscount.created_at,
+          updated_at: theDiscount.updated_at,
+        },
+      };
+    }),
+
   transaction: loggedInProcedure
     .input(
       z.object({
@@ -565,7 +652,7 @@ export const readRouter = createTRPCRouter({
         paymentChannelImage = thePaymentChannel.image;
       }
 
-      let cohortBadge: CohortBadge | undefined;
+      let cohortBadge: CohortBadgeWithPrice | undefined;
       if (theTransaction.category === CategoryEnum.COHORT) {
         const theCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
           include: { cohort: true },
