@@ -33,16 +33,8 @@ export const metadata: Metadata = {
 
 // --- Pass the base URL to the client
 let baseURL = "https://api.sevenpreneur.com/trpc";
-if (process.env.DOMAIN_MODE === "staging")
-  baseURL = "https://api.staging.sevenpreneur.com/trpc";
 if (process.env.DOMAIN_MODE === "local")
   baseURL = "https://api.example.com:3000/trpc";
-
-// --- Current Domain
-let domain = "sevenpreneur.com";
-if (process.env.DOMAIN_MODE === "local") {
-  domain = "example.com:3000";
-}
 
 export default async function AdminLayout(
   props: Readonly<{ children: React.ReactNode }>
@@ -62,7 +54,10 @@ export default async function AdminLayout(
   return (
     <TRPCProvider baseURL={baseURL}>
       <div>
-        <SidebarCMS sessionToken={sessionToken} currentDomain={domain} />
+        <SidebarCMS
+          sessionToken={sessionToken}
+          userSessionRole={checkUser.role_id}
+        />
         {props.children}
         <DisallowedMobile />
         <Toaster richColors position="top-center" />

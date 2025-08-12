@@ -7,7 +7,6 @@ import SidebarMenuItemCMS from "@/app/components/navigations/SidebarMenuItemCMS"
 import UserBadgeCMS from "@/app/components/buttons/UserBadgeCMS";
 import {
   BanknoteArrowDown,
-  CircleHelp,
   CircleUserIcon,
   DoorOpen,
   HouseIcon,
@@ -17,26 +16,30 @@ import {
 import { setSessionToken, trpc } from "@/trpc/client";
 
 interface SidebarCMSProps {
-  currentDomain: string;
   sessionToken: string;
+  userSessionRole: number;
 }
 
 export default function SidebarCMS({
-  currentDomain,
   sessionToken,
+  userSessionRole,
 }: SidebarCMSProps) {
   // --- Defining React Hook
   const router = useRouter();
   const [isLoadingButton, setIsLoadingButton] = useState(false);
+  const isAdministrator = userSessionRole === 0;
 
-  // --- Header Session Token
+  let domain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
+
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
 
-  // --- Call data from tRPC
   const { data, isLoading, isError } = trpc.auth.checkSession.useQuery(
     undefined,
     { enabled: !!sessionToken }
@@ -62,39 +65,12 @@ export default function SidebarCMS({
     const result = await DeleteSession();
     // -- Redirect to login page
     if (result.code === "SUCCESS") {
-      router.push(`https://www.${currentDomain}/auth/login`);
+      router.push(`https://www.${domain}/auth/login`);
     } else {
       console.error("Logout failed");
     }
     setIsLoadingButton(false);
   };
-
-  const menuItemData = [
-    {
-      title: "Dashboard",
-      url: "/",
-      icon: <HouseIcon />,
-      exact: true,
-    },
-    {
-      title: "Cohort Programs",
-      url: "/cohorts",
-      icon: <Presentation />,
-      exact: false,
-    },
-    {
-      title: "Users",
-      url: "/users",
-      icon: <CircleUserIcon />,
-      exact: false,
-    },
-    {
-      title: "Transactions",
-      url: "/transactions",
-      icon: <BanknoteArrowDown />,
-      exact: false,
-    },
-  ];
 
   return (
     <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">
@@ -131,15 +107,31 @@ export default function SidebarCMS({
 
         {/* --- Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">
-          {menuItemData.map((post, index) => (
+          <SidebarMenuItemCMS
+            menuTitle="Dashboard"
+            url="/"
+            icon={<HouseIcon />}
+            exact
+          />
+          <SidebarMenuItemCMS
+            menuTitle="Cohort & Program"
+            url="/cohorts"
+            icon={<Presentation />}
+          />
+          {isAdministrator && (
             <SidebarMenuItemCMS
-              key={index}
-              exact={post.exact}
-              url={post.url}
-              menuTitle={post.title}
-              icon={post.icon}
+              menuTitle="Users"
+              url="/users"
+              icon={<CircleUserIcon />}
             />
-          ))}
+          )}
+          {isAdministrator && (
+            <SidebarMenuItemCMS
+              menuTitle="Transactions"
+              url="/transactions"
+              icon={<BanknoteArrowDown />}
+            />
+          )}
         </div>
       </div>
 

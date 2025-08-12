@@ -21,19 +21,19 @@ const variantStyles: Record<
   COHORT: {
     backgroundColor: "bg-[#EFEDF9]",
     labelColor: "text-[#42359B]",
-    labelIcon: <FontAwesomeIcon icon={faPersonChalkboard} />,
+    labelIcon: <FontAwesomeIcon icon={faPersonChalkboard} className="size-3" />,
     labelName: "Cohort",
   },
   PLAYLIST: {
     backgroundColor: "bg-[#E2F0FF]",
     labelColor: "text-[#164EA6]",
-    labelIcon: <FontAwesomeIcon icon={faPlay} />,
+    labelIcon: <FontAwesomeIcon icon={faPlay} className="size-3" />,
     labelName: "Playlist",
   },
   AI: {
     backgroundColor: "bg-[#ECFDF3]",
     labelColor: "text-[#0A4F2D]",
-    labelIcon: <FontAwesomeIcon icon={faPenNib} />,
+    labelIcon: <FontAwesomeIcon icon={faPenNib} className="size-3" />,
     labelName: "AI",
   },
 };
@@ -51,7 +51,7 @@ export default function ProductCategoryLabelCMS({
 
   return (
     <div
-      className={`label-container inline-flex py-0.5 px-2 rounded-md items-center justify-center gap-1 text-xs font-semibold font-bodycopy truncate ${labelColor} ${backgroundColor}`}
+      className={`label-container inline-flex w-fit py-0.5 px-2 rounded-sm items-center justify-center gap-1 text-[13px] font-semibold font-bodycopy truncate ${labelColor} ${backgroundColor}`}
     >
       {labelIcon}
       {labelName}

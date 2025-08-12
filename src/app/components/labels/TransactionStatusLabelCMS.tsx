@@ -40,7 +40,7 @@ export default function TransactionStatusLabelCMS({
 
   return (
     <div
-      className={`label-container inline-flex py-0.5 px-2 rounded-sm items-center justify-center gap-1 text-[13px] font-semibold font-bodycopy truncate ${statusColor}`}
+      className={`label-container inline-flex w-fit py-0.5 px-2 rounded-sm items-center justify-center gap-1 text-[13px] font-semibold font-bodycopy truncate ${statusColor}`}
     >
       {statusIcon}
       {statusWord}

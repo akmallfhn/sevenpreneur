@@ -35,6 +35,7 @@ import StatItemCMS from "../items/StatItemCMS";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { notFound } from "next/navigation";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
+import ScorecardItemCMS from "../items/ScorecardItemCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -237,30 +238,16 @@ export default function CohortDetailsCMS({
           <aside className="flex flex-col flex-[1] w-full gap-5">
             {/* Stats */}
             <div className="stats flex flex-col gap-3">
-              {/* <StatItemCMS
-                statsIcon={faChalkboardUser}
-                statsIconBg="bg-cms-primary"
-                statsName="Total Enrolled User"
-                statsValue={345}
-              /> */}
-              <StatItemCMS
-                statsIcon={faLaptop}
-                statsIconBg="bg-[#FFA524]"
-                statsName="Total Learning Sessions"
-                statsValue={cohortDetailsData.cohort.total_learning_session}
+              <ScorecardItemCMS
+                scorecardName="Total Learning Sessions"
+                scorecardValue={cohortDetailsData.cohort.total_learning_session}
+                scorecardBackground="bg-success-foreground"
               />
-              <StatItemCMS
-                statsIcon={faLinesLeaning}
-                statsIconBg="bg-cms-secondary"
-                statsName="Total Materials"
-                statsValue={cohortDetailsData.cohort.total_materials}
+              <ScorecardItemCMS
+                scorecardName="Total Materials"
+                scorecardValue={cohortDetailsData.cohort.total_materials}
+                scorecardBackground="bg-warning-foreground"
               />
-              {/* <StatItemCMS
-                statsIcon={faMoneyBill1Wave}
-                statsIconBg="bg-secondary"
-                statsName="Total Revenue"
-                statsValue={RupiahCurrency(3453000000)}
-              /> */}
             </div>
             <ModuleListCMS sessionToken={sessionToken} cohortId={cohortId} />
             {/* <EnrolledUserListCMS /> */}
