@@ -182,10 +182,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Transactions 💰
 
-| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `purchase.cohort`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `purchase.playlist` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `purchase.cancel`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.transactions` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.transaction`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `purchase.checkDiscount` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `purchase.cohort`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `purchase.playlist`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `purchase.cancel`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.transactions`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.transaction`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |

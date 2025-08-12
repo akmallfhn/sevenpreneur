@@ -10,7 +10,12 @@ import {
   stringIsNanoid,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { CategoryEnum, PrismaClient, TStatusEnum } from "@prisma/client";
+import {
+  CategoryEnum,
+  PrismaClient,
+  StatusEnum,
+  TStatusEnum,
+} from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -146,6 +151,59 @@ async function changePhoneNumber(
 }
 
 export const purchaseRouter = createTRPCRouter({
+  checkDiscount: loggedInProcedure
+    .input(
+      z.object({
+        code: stringNotBlank(),
+        cohort_id: numberIsID().optional(),
+        playlist_id: numberIsID().optional(),
+      })
+    )
+    .query(async (opts) => {
+      if (
+        (opts.input.cohort_id && opts.input.playlist_id) || // both
+        (!opts.input.cohort_id && !opts.input.playlist_id) // none
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Provide either cohort_id only or playlist_id only.",
+        });
+      }
+
+      let selectedCategory: CategoryEnum;
+      let selectedItemId: number;
+      if (opts.input.cohort_id) {
+        selectedCategory = CategoryEnum.COHORT;
+        selectedItemId = opts.input.cohort_id;
+      }
+      if (opts.input.playlist_id) {
+        selectedCategory = CategoryEnum.PLAYLIST;
+        selectedItemId = opts.input.playlist_id;
+      }
+      const theDiscount = await opts.ctx.prisma.discount.findFirst({
+        omit: { id: true, created_at: true, updated_at: true },
+        where: {
+          code: opts.input.code,
+          category: selectedCategory!,
+          item_id: selectedItemId!,
+          status: StatusEnum.ACTIVE,
+        },
+      });
+
+      if (!theDiscount) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The discount with the given code and item ID is not found.",
+        });
+      }
+
+      return {
+        status: 200,
+        message: "Success",
+        discount: theDiscount,
+      };
+    }),
+
   cohort: loggedInProcedure
     .input(
       z.object({
