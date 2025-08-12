@@ -298,6 +298,22 @@ model Video {
   @@map("videos")
 }
 
+model Discount {
+  id           Int          @id @default(autoincrement()) @db.Integer
+  name         String       @db.VarChar()
+  code         String       @db.VarChar()
+  category     CategoryEnum
+  item_id      Int          @db.Integer
+  calc_percent Decimal      @db.Decimal(6, 4)
+  status       StatusEnum
+  start_date   DateTime     @db.Timestamptz()
+  end_date     DateTime     @db.Timestamptz()
+  created_at   DateTime     @default(now()) @db.Timestamptz()
+  updated_at   DateTime     @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("discounts")
+}
+
 model Transaction {
   id              String       @id @default(nanoid()) @db.Char(21)
   user            User         @relation(fields: [user_id], references: [id])
