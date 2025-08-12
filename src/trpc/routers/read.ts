@@ -12,6 +12,22 @@ import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+type CohortBadge = {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  slugUrl: string | undefined;
+  priceName: string | undefined;
+};
+
+type PlaylistBadge = {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  slugUrl: string | undefined;
+  totalVideo: number | undefined;
+};
+
 export const readRouter = createTRPCRouter({
   industry: loggedInProcedure
     .input(
@@ -549,44 +565,40 @@ export const readRouter = createTRPCRouter({
         paymentChannelImage = thePaymentChannel.image;
       }
 
-      let cohortId: number | undefined;
-      let cohortName: string | undefined;
-      let cohortImage: string | undefined;
-      let cohortSlugUrl: string | undefined;
-      let cohortPriceName: string | undefined;
+      let cohortBadge: CohortBadge | undefined;
       if (theTransaction.category === CategoryEnum.COHORT) {
         const theCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
           include: { cohort: true },
           where: { id: theTransaction.item_id },
         });
         if (theCohortPrice) {
-          cohortId = theCohortPrice.cohort.id;
-          cohortName = theCohortPrice.cohort.name;
-          cohortImage = theCohortPrice.cohort.image;
-          cohortSlugUrl = theCohortPrice.cohort.slug_url;
-          cohortPriceName = theCohortPrice.name;
+          cohortBadge = {
+            id: theCohortPrice.cohort.id,
+            name: theCohortPrice.cohort.name,
+            image: theCohortPrice.cohort.image,
+            slugUrl: theCohortPrice.cohort.slug_url,
+            priceName: theCohortPrice.name,
+          };
         }
       }
 
-      let playlistId: number | undefined;
-      let playlistName: string | undefined;
-      let playlistImage: string | undefined;
-      let playlistSlugUrl: string | undefined;
-      let playlistTotalVideo: number | undefined;
+      let playlistBadge: PlaylistBadge | undefined;
       if (theTransaction.category === CategoryEnum.PLAYLIST) {
         const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
           where: { id: theTransaction.item_id },
         });
         if (thePlaylist) {
-          playlistId = thePlaylist.id;
-          playlistName = thePlaylist.name;
-          playlistImage = thePlaylist.image_url;
-          playlistSlugUrl = thePlaylist.slug_url;
-          playlistTotalVideo = await opts.ctx.prisma.video.count({
-            where: {
-              playlist_id: thePlaylist.id,
-            },
-          });
+          playlistBadge = {
+            id: thePlaylist.id,
+            name: thePlaylist.name,
+            image: thePlaylist.image_url,
+            slugUrl: thePlaylist.slug_url,
+            totalVideo: await opts.ctx.prisma.video.count({
+              where: {
+                playlist_id: thePlaylist.id,
+              },
+            }),
+          };
         }
       }
 
@@ -605,16 +617,16 @@ export const readRouter = createTRPCRouter({
           product_total_amount: theTransaction.amount
             .plus(theTransaction.admin_fee)
             .plus(theTransaction.vat),
-          cohort_id: cohortId,
-          cohort_name: cohortName,
-          cohort_image: cohortImage,
-          cohort_slug: cohortSlugUrl,
-          cohort_price_name: cohortPriceName,
-          playlist_id: playlistId,
-          playlist_name: playlistName,
-          playlist_image: playlistImage,
-          playlist_slug_url: playlistSlugUrl,
-          playlist_total_video: playlistTotalVideo,
+          cohort_id: cohortBadge?.id,
+          cohort_name: cohortBadge?.name,
+          cohort_image: cohortBadge?.image,
+          cohort_slug: cohortBadge?.slugUrl,
+          cohort_price_name: cohortBadge?.priceName,
+          playlist_id: playlistBadge?.id,
+          playlist_name: playlistBadge?.name,
+          playlist_image: playlistBadge?.image,
+          playlist_slug_url: playlistBadge?.slugUrl,
+          playlist_total_video: playlistBadge?.totalVideo,
           payment_channel_name: paymentChannelName,
           payment_channel_image: paymentChannelImage,
           user_full_name: theTransaction.user.full_name,
