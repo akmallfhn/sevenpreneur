@@ -10,7 +10,12 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
+import {
+  CategoryEnum,
+  PrismaClient,
+  StatusEnum,
+  TStatusEnum,
+} from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -43,6 +48,67 @@ function calculatePage(
     },
   };
 }
+
+async function fetchItems(
+  prisma: PrismaClient,
+  list: { category: CategoryEnum; item_id: number }[]
+) {
+  const cohortIdList: Set<number> = new Set();
+  const playlistIdList: Set<number> = new Set();
+  list.forEach((entry) => {
+    if (entry.category === CategoryEnum.COHORT) {
+      cohortIdList.add(entry.item_id);
+    } else if (entry.category === CategoryEnum.PLAYLIST) {
+      playlistIdList.add(entry.item_id);
+    }
+  });
+
+  const cohortPriceList = await prisma.cohortPrice.findMany({
+    include: { cohort: true },
+    where: { id: { in: Array.from(cohortIdList) } },
+  });
+  const cohortPriceMap = new Map(
+    cohortPriceList.map((entry) => [entry.id, entry])
+  );
+
+  const playlistList = await prisma.playlist.findMany({
+    where: { id: { in: Array.from(playlistIdList) } },
+  });
+  const videosCountList = await prisma.video.groupBy({
+    by: ["playlist_id"],
+    _count: true,
+    where: {
+      playlist_id: { in: Array.from(playlistIdList) },
+    },
+  });
+  const videosCountMap = new Map(
+    videosCountList.map((entry) => [entry.playlist_id, entry._count])
+  );
+  const playlistMap = new Map(
+    playlistList.map((entry) => {
+      const videosCount = videosCountMap.get(entry.id) || 0;
+      return [entry.id, { entry, videosCount }];
+    })
+  );
+
+  return { cohortPriceMap, playlistMap };
+}
+
+type CohortBadge = {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  slugUrl: string | undefined;
+  priceName: string | undefined;
+};
+
+type PlaylistBadge = {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  slugUrl: string | undefined;
+  totalVideo: number | undefined;
+};
 
 export const listRouter = createTRPCRouter({
   industries: loggedInProcedure.query(async (opts) => {
@@ -714,42 +780,9 @@ export const listRouter = createTRPCRouter({
         take: paging.prisma.take,
       });
 
-      const cohortIdList: Set<number> = new Set();
-      const playlistIdList: Set<number> = new Set();
-      transactionsList.forEach((entry) => {
-        if (entry.category === CategoryEnum.COHORT) {
-          cohortIdList.add(entry.item_id);
-        } else if (entry.category === CategoryEnum.PLAYLIST) {
-          playlistIdList.add(entry.item_id);
-        }
-      });
-
-      const cohortPriceList = await opts.ctx.prisma.cohortPrice.findMany({
-        include: { cohort: true },
-        where: { id: { in: Array.from(cohortIdList) } },
-      });
-      const cohortPriceMap = new Map(
-        cohortPriceList.map((entry) => [entry.id, entry])
-      );
-
-      const playlistList = await opts.ctx.prisma.playlist.findMany({
-        where: { id: { in: Array.from(playlistIdList) } },
-      });
-      const videosCountList = await opts.ctx.prisma.video.groupBy({
-        by: ["playlist_id"],
-        _count: true,
-        where: {
-          playlist_id: { in: Array.from(playlistIdList) },
-        },
-      });
-      const videosCountMap = new Map(
-        videosCountList.map((entry) => [entry.playlist_id, entry._count])
-      );
-      const playlistMap = new Map(
-        playlistList.map((entry) => {
-          const videosCount = videosCountMap.get(entry.id) || 0;
-          return [entry.id, { entry, videosCount }];
-        })
+      const { cohortPriceMap, playlistMap } = await fetchItems(
+        opts.ctx.prisma,
+        transactionsList
       );
 
       let checkoutPrefix = "https://checkout.xendit.co/web/";
@@ -763,35 +796,31 @@ export const listRouter = createTRPCRouter({
           invoiceUrl = `${checkoutPrefix}${entry.invoice_number}`;
         }
 
-        let cohortId: number | undefined;
-        let cohortName: string | undefined;
-        let cohortImage: string | undefined;
-        let cohortSlugUrl: string | undefined;
-        let cohortPriceName: string | undefined;
+        let cohortBadge: CohortBadge | undefined;
         if (entry.category === CategoryEnum.COHORT) {
-          const selectedCohortPrice = cohortPriceMap.get(entry.item_id);
+          const selectedCohortPrice = cohortPriceMap!.get(entry.item_id);
           if (selectedCohortPrice) {
-            cohortId = selectedCohortPrice.cohort.id;
-            cohortName = selectedCohortPrice.cohort.name;
-            cohortImage = selectedCohortPrice.cohort.image;
-            cohortSlugUrl = selectedCohortPrice.cohort.slug_url;
-            cohortPriceName = selectedCohortPrice.name;
+            cohortBadge = {
+              id: selectedCohortPrice.cohort.id,
+              name: selectedCohortPrice.cohort.name,
+              image: selectedCohortPrice.cohort.image,
+              slugUrl: selectedCohortPrice.cohort.slug_url,
+              priceName: selectedCohortPrice.name,
+            };
           }
         }
 
-        let playlistId: number | undefined;
-        let playlistName: string | undefined;
-        let playlistImage: string | undefined;
-        let playlistSlugUrl: string | undefined;
-        let playlistTotalVideo: number | undefined;
+        let playlistBadge: PlaylistBadge | undefined;
         if (entry.category === CategoryEnum.PLAYLIST) {
           const selectedPlaylist = playlistMap.get(entry.item_id);
           if (selectedPlaylist) {
-            playlistId = selectedPlaylist.entry.id;
-            playlistName = selectedPlaylist.entry.name;
-            playlistImage = selectedPlaylist.entry.image_url;
-            playlistSlugUrl = selectedPlaylist.entry.slug_url;
-            playlistTotalVideo = selectedPlaylist.videosCount;
+            playlistBadge = {
+              id: selectedPlaylist.entry.id,
+              name: selectedPlaylist.entry.name,
+              image: selectedPlaylist.entry.image_url,
+              slugUrl: selectedPlaylist.entry.slug_url,
+              totalVideo: selectedPlaylist.videosCount,
+            };
           }
         }
 
@@ -805,16 +834,16 @@ export const listRouter = createTRPCRouter({
           paid_at: entry.paid_at,
           created_at: entry.created_at,
           invoice_url: invoiceUrl,
-          cohort_id: cohortId,
-          cohort_name: cohortName,
-          cohort_image: cohortImage,
-          cohort_slug: cohortSlugUrl,
-          cohort_price_name: cohortPriceName,
-          playlist_id: playlistId,
-          playlist_name: playlistName,
-          playlist_image: playlistImage,
-          playlist_slug_url: playlistSlugUrl,
-          playlist_total_video: playlistTotalVideo,
+          cohort_id: cohortBadge?.id,
+          cohort_name: cohortBadge?.name,
+          cohort_image: cohortBadge?.image,
+          cohort_slug: cohortBadge?.slugUrl,
+          cohort_price_name: cohortBadge?.priceName,
+          playlist_id: playlistBadge?.id,
+          playlist_name: playlistBadge?.name,
+          playlist_image: playlistBadge?.image,
+          playlist_slug_url: playlistBadge?.slugUrl,
+          playlist_total_video: playlistBadge?.totalVideo,
         };
       });
 
