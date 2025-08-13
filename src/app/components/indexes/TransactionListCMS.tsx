@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { setSessionToken, trpc } from "@/trpc/client";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
@@ -62,129 +61,127 @@ export default function TransactionListCMS({
     { enabled: !!sessionToken }
   );
   const transactionList = data?.list;
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
 
   return (
     <React.Fragment>
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        {/* --- PAGE HEADER */}
+        {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users" isCurrentPage>
+            <AppBreadcrumbItem href="/transactions" isCurrentPage>
               Transactions
             </AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            {/* -- Page Title */}
+            {/* Page Title */}
             <TitleRevealCMS
               titlePage={"Transaction List"}
-              descPage={
-                "View and manage all registered users in one place, with quick access to actions like edit or delete."
-              }
+              descPage={"View and monitor all payment records in one place."}
             />
           </div>
         </div>
 
+        {/* Conditional Rendering */}
+        {isLoading && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy">
+            No Data
+          </div>
+        )}
+
         {/* TABLE */}
-
-        <div className="flex items-center gap-3">
-          <ScorecardItemCMS
-            scorecardName="Total Revenue"
-            scorecardValue={rupiahCurrency(0)}
-            scorecardBackground="bg-[#400FDF]"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Transactions"
-            scorecardValue={0}
-            scorecardBackground="bg-primary"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Paid Transactions"
-            scorecardValue={0}
-            scorecardBackground="bg-success-foreground"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Pending Transactions"
-            scorecardValue={0}
-            scorecardBackground="bg-warning-foreground"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Failed Transactions"
-            scorecardValue={0}
-            scorecardBackground="bg-danger-foreground"
-          />
-        </div>
-
-        <table className="relative w-full rounded-sm overflow-hidden">
-          <thead className="bg-[#FAFAFA] text-alternative/70">
-            <tr>
-              <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Transaction Id`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Product Name`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Category`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Amount`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Created At`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Paid At`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
-            </tr>
-          </thead>
-          <tbody>
-            {transactionList?.map((post, index) => (
-              <tr
-                className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                key={index}
-              >
-                <TableCellCMS>{index + 1}</TableCellCMS>
-                <TableCellCMS>{post.id}</TableCellCMS>
-                <TableCellCMS>
-                  {post.cohort_name ? post.cohort_name : post.playlist_name}
-                </TableCellCMS>
-                <TableCellCMS>
-                  <ProductCategoryLabelCMS variants={post.category} />
-                </TableCellCMS>
-                <TableCellCMS>
-                  {rupiahCurrency(Math.round(Number(post.total_amount)))}
-                </TableCellCMS>
-                <TableCellCMS>
-                  <TransactionStatusLabelCMS variants={post.status} />
-                </TableCellCMS>
-                <TableCellCMS>
-                  {dayjs(post.created_at).format("D MMM YYYY HH:mm")}
-                </TableCellCMS>
-                <TableCellCMS>
-                  {post.paid_at
-                    ? dayjs(post.paid_at).format("D MMM YYYY HH:mm")
-                    : "-"}
-                </TableCellCMS>
-                <TableCellCMS>
-                  <AppButton
-                    variant="outline"
-                    size="small"
-                    onClick={() => viewTransactionDetails(post.id)}
+        {!isLoading && !isError && (
+          <>
+            <div className="flex items-center gap-3">
+              <ScorecardItemCMS
+                scorecardName="Total Revenue"
+                scorecardValue={rupiahCurrency(0)}
+                scorecardBackground="bg-[#400FDF]"
+              />
+              <ScorecardItemCMS
+                scorecardName="Total Transactions"
+                scorecardValue={0}
+                scorecardBackground="bg-primary"
+              />
+              <ScorecardItemCMS
+                scorecardName="Total Paid Transactions"
+                scorecardValue={0}
+                scorecardBackground="bg-success-foreground"
+              />
+              <ScorecardItemCMS
+                scorecardName="Total Pending Transactions"
+                scorecardValue={0}
+                scorecardBackground="bg-warning-foreground"
+              />
+              <ScorecardItemCMS
+                scorecardName="Total Failed Transactions"
+                scorecardValue={0}
+                scorecardBackground="bg-danger-foreground"
+              />
+            </div>
+            <table className="relative w-full rounded-sm overflow-hidden">
+              <thead className="bg-[#FAFAFA] text-alternative/70">
+                <tr>
+                  <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Transaction Id`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Product Name`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Category`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Amount`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Created At`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Paid At`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
+                </tr>
+              </thead>
+              <tbody>
+                {transactionList?.map((post, index) => (
+                  <tr
+                    className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                    key={index}
                   >
-                    <Eye className="size-4" />
-                    View
-                  </AppButton>
-                </TableCellCMS>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    <TableCellCMS>{index + 1}</TableCellCMS>
+                    <TableCellCMS>{post.id}</TableCellCMS>
+                    <TableCellCMS>
+                      {post.cohort_name ? post.cohort_name : post.playlist_name}
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <ProductCategoryLabelCMS variants={post.category} />
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      {rupiahCurrency(Math.round(Number(post.total_amount)))}
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <TransactionStatusLabelCMS variants={post.status} />
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      {dayjs(post.created_at).format("D MMM YYYY HH:mm")}
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      {post.paid_at
+                        ? dayjs(post.paid_at).format("D MMM YYYY HH:mm")
+                        : "-"}
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <AppButton
+                        variant="outline"
+                        size="small"
+                        onClick={() => viewTransactionDetails(post.id)}
+                      >
+                        <Eye className="size-4" />
+                        View
+                      </AppButton>
+                    </TableCellCMS>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
       </div>
 
       {/* Open Transaction Details */}
