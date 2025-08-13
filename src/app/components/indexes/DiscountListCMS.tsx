@@ -246,7 +246,6 @@ export default function DiscountListCMS({
       {isOpenCreateForm && (
         <CreateDiscountFormCMS
           sessionToken={sessionToken}
-          cohortId={36}
           isOpen={isOpenCreateForm}
           onClose={() => setIsOpenCreateForm(false)}
         />

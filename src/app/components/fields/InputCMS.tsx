@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-interface InputCMSProps {
+interface InputCMSProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
   inputName: string;
   inputType: string;
@@ -27,6 +27,7 @@ export default function InputCMS({
   value: propValue,
   disabled,
   required,
+  ...rest
 }: InputCMSProps) {
   // --- Declaration state
   const [value, setValue] = useState(propValue);
@@ -77,6 +78,7 @@ export default function InputCMS({
           type={inputType}
           placeholder={inputPlaceholder}
           disabled={disabled}
+          {...rest}
           className={`flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             error
               ? "border-destructive focus:outline-semi-destructive"

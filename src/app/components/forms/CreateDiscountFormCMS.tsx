@@ -8,17 +8,18 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
 import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
+import dayjs from "dayjs";
+import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
+import { Switch } from "@/components/ui/switch";
 
 interface CreateDiscountFormCMSProps {
   sessionToken: string;
-  cohortId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function CreateDiscountFormCMS({
   sessionToken,
-  cohortId,
   isOpen,
   onClose,
 }: CreateDiscountFormCMSProps) {
@@ -33,17 +34,19 @@ export default function CreateDiscountFormCMS({
   const [formData, setFormData] = useState<{
     discountName: string;
     discountCode: string;
-    discountRate: number;
+    discountRate: string;
     discountStartDate: string;
     discountEndDate: string;
+    discountStatus: StatusVariant;
     productCategory: ProductCategory | "";
     productItem: number;
   }>({
     discountName: "",
     discountCode: "",
-    discountRate: 0,
+    discountRate: "",
     discountStartDate: "",
     discountEndDate: "",
+    discountStatus: "ACTIVE",
     productCategory: "",
     productItem: 0,
   });
@@ -66,14 +69,24 @@ export default function CreateDiscountFormCMS({
   }, []);
 
   // Fetch tRPC for Product Item
-  const { data: playlistData } = trpc.list.playlists.useQuery(
+  const {
+    data: playlistData,
+    isLoading: isLoadingPlaylistData,
+    isError: isErrorPlaylistData,
+  } = trpc.list.playlists.useQuery(
     {},
     { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken }
   );
-  const { data: cohortData } = trpc.list.cohorts.useQuery(
+  const {
+    data: cohortData,
+    isLoading: isLoadingCohortData,
+    isError: isErrorCohortData,
+  } = trpc.list.cohorts.useQuery(
     {},
     { enabled: formData.productCategory === "COHORT" && !!sessionToken }
   );
+  const isLoading = isLoadingCohortData || isLoadingPlaylistData;
+  const isError = isErrorCohortData || isErrorPlaylistData;
 
   // Conditional Fetch Data Product Item
   useEffect(() => {
@@ -109,7 +122,61 @@ export default function CreateDiscountFormCMS({
 
     // -- Required field checking
     if (!formData.discountName) {
-      toast.error("Don’t leave the session untitled");
+      toast.error("Oops! Don’t forget to give your discount a name.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountCode) {
+      toast.error("Promo code cannot be empty");
+      setIsSubmitting(false);
+      return;
+    }
+    if (/\s/.test(formData.discountCode)) {
+      toast.error("Promo code cannot be contain spaces");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountRate) {
+      toast.error("Add a discount rate to make it work.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (isNaN(Number(formData.discountRate))) {
+      toast.error("Hmm… that doesn’t look like a valid number for the rate");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountStartDate) {
+      toast.error("Pick a start date to kick things off");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountStartDate) {
+      toast.error("Pick a start date to kick things off");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountEndDate) {
+      toast.error("Define the expiry date.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (
+      dayjs(formData.discountEndDate).isBefore(
+        dayjs(formData.discountStartDate)
+      )
+    ) {
+      toast.error("Oops! End date must come after the start date");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.productCategory) {
+      toast.error("Choose a category so we know where this discount belongs");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.productItem) {
+      toast.error("Pick a product item to apply this discount magic");
       setIsSubmitting(false);
       return;
     }
@@ -120,9 +187,9 @@ export default function CreateDiscountFormCMS({
         {
           // Mandatory fields:
           name: formData.discountName.trim(),
-          status: "ACTIVE",
-          code: formData.discountCode.trim(),
-          calc_percent: 20,
+          status: formData.discountStatus,
+          code: formData.discountCode.trim().toUpperCase(),
+          calc_percent: Number(formData.discountRate),
           start_date: new Date(formData.discountStartDate).toISOString(),
           end_date: new Date(formData.discountEndDate).toISOString(),
           category: formData.productCategory as ProductCategory,
@@ -164,69 +231,120 @@ export default function CreateDiscountFormCMS({
           <div className="group-input flex flex-col gap-4">
             <InputCMS
               inputId="discount-name"
-              inputName="Name"
+              inputName="Discount Name"
               inputType="text"
-              inputPlaceholder="What’s the topic of this meeting?"
+              inputPlaceholder="e.g. Summer Sale 2025"
               value={formData.discountName}
               onInputChange={handleInputChange("discountName")}
               required
             />
-            <InputCMS
-              inputId="discount-code"
-              inputName="Code"
-              inputType="text"
-              inputPlaceholder="What’s the topic of this meeting?"
-              value={formData.discountCode}
-              onInputChange={handleInputChange("discountCode")}
-              required
-            />
             <div className="flex gap-4 justify-between">
-              <InputCMS
-                inputId="discount-start-date"
-                inputName="Start"
-                inputType="datetime-local"
-                value={formData.discountStartDate}
-                onInputChange={handleInputChange("discountStartDate")}
-                required
-              />
-              <InputCMS
-                inputId="discount-end-date"
-                inputName="End"
-                inputType="datetime-local"
-                value={formData.discountEndDate}
-                onInputChange={handleInputChange("discountEndDate")}
-                required
-              />
+              <div className="w-full flex-1">
+                <InputCMS
+                  inputId="discount-code"
+                  inputName="Promo Code"
+                  inputType="text"
+                  inputPlaceholder="e.g. SUMMER25"
+                  value={formData.discountCode}
+                  onInputChange={handleInputChange("discountCode")}
+                  required
+                />
+              </div>
+              <div className="w-full flex-1">
+                <InputCMS
+                  inputId="discount-rate"
+                  inputName="Discount Percentage (%)"
+                  inputType="text"
+                  inputMode="numeric"
+                  pattern="\d*"
+                  inputPlaceholder="e.g. 20"
+                  value={formData.discountRate}
+                  onInputChange={handleInputChange("discountRate")}
+                  characterLength={2}
+                  required
+                />
+              </div>
             </div>
-            <SelectCMS
-              selectId="product-category"
-              selectName="Category"
-              selectPlaceholder="Choose how this session will be delivered"
-              value={formData.productCategory}
-              onChange={handleInputChange("productCategory")}
+            <InputCMS
+              inputId="discount-start-date"
+              inputName="Available from"
+              inputType="datetime-local"
+              value={formData.discountStartDate}
+              onInputChange={handleInputChange("discountStartDate")}
               required
-              options={[
-                // {
-                //   label: "Cohort",
-                //   value: "COHORT",
-                // },
-                {
-                  label: "Playlist",
-                  value: "PLAYLIST",
-                },
-              ]}
             />
-            {formData.productCategory && (
+            <InputCMS
+              inputId="discount-end-date"
+              inputName="Valid until"
+              inputType="datetime-local"
+              value={formData.discountEndDate}
+              onInputChange={handleInputChange("discountEndDate")}
+              required
+            />
+            <div className="status flex flex-col gap-1">
+              <label
+                htmlFor={"discount-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.discountStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("discountStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                <StatusLabelCMS variants={formData.discountStatus} />
+              </div>
+            </div>
+            <div className="bg-section-background flex flex-col gap-4 p-4 rounded-md">
+              <h3 className="font-brand font-bold">
+                Applies Discount to Product
+              </h3>
               <SelectCMS
-                selectId="product-item"
-                selectName="Product Item"
-                selectPlaceholder="Select person to leading this session"
-                value={formData.productItem}
-                onChange={handleInputChange("productItem")}
-                options={itemOptions}
+                selectId="product-category"
+                selectName="Product Category"
+                selectPlaceholder="Choose a product category"
+                value={formData.productCategory}
+                onChange={handleInputChange("productCategory")}
                 required
+                options={[
+                  // {
+                  //   label: "Cohort",
+                  //   value: "COHORT",
+                  // },
+                  {
+                    label: "Playlist",
+                    value: "PLAYLIST",
+                  },
+                ]}
               />
-            )}
+              {isLoading && (
+                <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  <Loader2 className="animate-spin size-5 " />
+                </div>
+              )}
+              {isError && (
+                <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  No Data
+                </div>
+              )}
+              {formData.productCategory && !isLoading && !isError && (
+                <SelectCMS
+                  selectId="product-item"
+                  selectName="Product Item"
+                  selectPlaceholder="Select specific products"
+                  value={formData.productItem}
+                  onChange={handleInputChange("productItem")}
+                  options={itemOptions}
+                  required
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className="sticky bottom-0 w-full p-4 bg-white z-10">

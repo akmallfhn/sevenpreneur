@@ -1,4 +1,4 @@
-import UserProfileDetailCMS from "@/app/components/pages/UserProfileDetailCMS";
+import UserProfileDetailsCMS from "@/app/components/pages/UserProfileDetailsCMS";
 import { cookies } from "next/headers";
 import React from "react";
 
@@ -13,7 +13,7 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
 
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <UserProfileDetailCMS sessionToken={sessionToken} userId={user_id} />
+      <UserProfileDetailsCMS sessionToken={sessionToken} userId={user_id} />
     </div>
   );
 }
