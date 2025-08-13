@@ -11,7 +11,6 @@ import {
   DoorOpen,
   HouseIcon,
   Loader2,
-  Percent,
   Presentation,
   Tags,
 } from "lucide-react";
@@ -26,7 +25,7 @@ export default function SidebarCMS({
   sessionToken,
   userSessionRole,
 }: SidebarCMSProps) {
-  // --- Defining React Hook
+  // Defining React Hook
   const router = useRouter();
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const isAdministrator = userSessionRole === 0;
@@ -46,26 +45,12 @@ export default function SidebarCMS({
     undefined,
     { enabled: !!sessionToken }
   );
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
 
-  // --- Logout function
+  // Logout function
   const handleLogout = async () => {
     setIsLoadingButton(true);
     const result = await DeleteSession();
-    // -- Redirect to login page
+    // Redirect to login page
     if (result.code === "SUCCESS") {
       router.push(`https://www.${domain}/auth/login`);
     } else {
@@ -76,9 +61,9 @@ export default function SidebarCMS({
 
   return (
     <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">
-      {/* --- TOP AREA */}
+      {/* TOP AREA */}
       <div className="sidebar-cms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
-        {/* --- Logo & Platform */}
+        {/* Logo & Platform */}
         <div className="platform-and-logo flex w-full items-center gap-4">
           <div className="logo size-14 aspect-square rounded-md overflow-hidden">
             <Image
@@ -97,17 +82,31 @@ export default function SidebarCMS({
           </div>
         </div>
 
-        {/* --- User & Roles */}
-        <UserBadgeCMS
-          userName={data?.user.full_name || ""}
-          userRole={data?.user.role_name.toUpperCase() || ""}
-          userAvatar={
-            data?.user.avatar ||
-            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-          }
-        />
+        {/* Conditional Rendering */}
+        {isLoading && (
+          <div className="flex w-full h-full items-center justify-center text-alternative">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+            No Data
+          </div>
+        )}
 
-        {/* --- Sidebar Menu */}
+        {/* User & Roles */}
+        {!isLoading && !isError && (
+          <UserBadgeCMS
+            userName={data?.user.full_name || ""}
+            userRole={data?.user.role_name.toUpperCase() || ""}
+            userAvatar={
+              data?.user.avatar ||
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+            }
+          />
+        )}
+
+        {/* Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">
           <SidebarMenuItemCMS
             menuTitle="Dashboard"
@@ -142,9 +141,9 @@ export default function SidebarCMS({
         </div>
       </div>
 
-      {/* --- BOTTOM AREA */}
+      {/* BOTTOM AREA */}
       <div className="sidebar-cms-bottom flex flex-col max-w-[224px] mx-auto w-full">
-        {/* --- Logout Button */}
+        {/* Logout Button */}
         <div
           className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-sm font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
             isLoadingButton ? "opacity-50 cursor-not-allowed" : ""

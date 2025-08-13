@@ -1,5 +1,4 @@
 import DiscountListCMS from "@/app/components/indexes/DiscountListCMS";
-import TransactionListCMS from "@/app/components/indexes/TransactionListCMS";
 import { cookies } from "next/headers";
 
 export default async function DiscountsPageCMS() {
