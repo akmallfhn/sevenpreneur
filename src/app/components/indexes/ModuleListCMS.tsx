@@ -21,30 +21,12 @@ export default function ModuleListCMS({
   // --- Call data from tRPC
   const {
     data: moduleListData,
-    isError: isErrorModuleList,
-    isLoading: isLoadingModuleList,
+    isError,
+    isLoading,
   } = trpc.list.modules.useQuery(
     { cohort_id: cohortId },
     { enabled: !!sessionToken }
   );
-
-  // --- Extract variable
-  const isLoading = isLoadingModuleList;
-  const isError = isErrorModuleList;
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
 
   return (
     <React.Fragment>
@@ -60,6 +42,16 @@ export default function ModuleListCMS({
             Add file
           </AppButton>
         </div>
+        {isLoading && (
+          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
+            No Data
+          </div>
+        )}
         {(!moduleListData?.list || moduleListData.list.length === 0) && (
           <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
             No Data

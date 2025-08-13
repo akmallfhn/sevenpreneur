@@ -22,30 +22,12 @@ export default function LearningListCMS({
   // --- Call data from tRPC
   const {
     data: learningListData,
-    isLoading: isLoadingLearningList,
-    isError: isErrorLearningList,
+    isLoading,
+    isError,
   } = trpc.list.learnings.useQuery(
     { cohort_id: cohortId },
     { enabled: !!sessionToken }
   );
-
-  // --- Extract variable
-  const isLoading = isLoadingLearningList;
-  const isError = isErrorLearningList;
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
 
   return (
     <React.Fragment>
@@ -61,6 +43,16 @@ export default function LearningListCMS({
             Add sessions
           </AppButton>
         </div>
+        {isLoading && (
+          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
+            No Data
+          </div>
+        )}
         {/* --- Null Condition */}
         {(!learningListData?.list || learningListData.list.length === 0) && (
           <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">

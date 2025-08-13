@@ -22,30 +22,12 @@ export default function MaterialListCMS({
   // --- Call data from tRPC
   const {
     data: materialListData,
-    isError: isErrorMaterialList,
-    isLoading: isLoadingMaterialList,
+    isError,
+    isLoading,
   } = trpc.list.materials.useQuery(
     { learning_id: learningId },
     { enabled: !!sessionToken }
   );
-
-  // --- Extract variable
-  const isLoading = isLoadingMaterialList;
-  const isError = isErrorMaterialList;
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
 
   return (
     <React.Fragment>
@@ -63,6 +45,16 @@ export default function MaterialListCMS({
             Add file
           </AppButton>
         </div>
+        {isLoading && (
+          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
+            No Data
+          </div>
+        )}
         {(!materialListData?.list || materialListData.list.length === 0) && (
           <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
             No Data

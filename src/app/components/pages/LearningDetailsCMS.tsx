@@ -56,15 +56,12 @@ export default function LearningDetailsCMS({
   // --- Call data from tRPC
   const {
     data: learningDetailsData,
-    isLoading: isLoadingLearningDetails,
-    isError: isErrorLearningDetails,
+    isLoading,
+    isError,
   } = trpc.read.learning.useQuery(
     { id: learningId },
     { enabled: !!sessionToken }
   );
-  // --- Extract variable
-  const isLoading = isLoadingLearningDetails;
-  const isError = isErrorLearningDetails;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">

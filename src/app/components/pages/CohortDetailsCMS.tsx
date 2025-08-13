@@ -13,25 +13,16 @@ import {
   PenTool,
 } from "lucide-react";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import {
-  faCalendar,
-  faChalkboardUser,
-  faLaptop,
-  faLinesLeaning,
-  faMoneyBill1Wave,
-} from "@fortawesome/free-solid-svg-icons";
 import LearningListCMS from "../indexes/LearningListCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
 import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
-import StatItemCMS from "../items/StatItemCMS";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { notFound } from "next/navigation";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
@@ -63,8 +54,8 @@ export default function CohortDetailsCMS({
   // --- Call data from tRPC
   const {
     data: cohortDetailsData,
-    isLoading: isLoadingCohortDetails,
-    isError: isErrorCohortDetails,
+    isLoading,
+    isError,
   } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
 
   // --- Checking height content description
@@ -77,8 +68,6 @@ export default function CohortDetailsCMS({
   }, [cohortDetailsData?.cohort.description]);
 
   // --- Extract variable
-  const isLoading = isLoadingCohortDetails;
-  const isError = isErrorCohortDetails;
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">

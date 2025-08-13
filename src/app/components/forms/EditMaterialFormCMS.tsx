@@ -108,22 +108,6 @@ export default function EditMaterialFormCMS({
     }));
   };
 
-  // --- Data State Rendering
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
-
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -189,85 +173,97 @@ export default function EditMaterialFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form
-        className="relative w-full h-full flex flex-col"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
-          <div className="group-input flex flex-col gap-4">
-            <InputCMS
-              inputId="material-name"
-              inputName="Document Title"
-              inputType="text"
-              inputPlaceholder="e.g. Curriculum Brief"
-              value={formData.materialName}
-              onInputChange={handleInputChange("materialName")}
-              required
-            />
-            <TextAreaCMS
-              textAreaId="material-description"
-              textAreaName="Description"
-              textAreaPlaceholder="Briefly describe the content or purpose of this document (optional)"
-              textAreaHeight="h-20"
-              value={formData.materialDescription}
-              onInputChange={handleInputChange("materialDescription")}
-            />
-            <div className="flex flex-col gap-5 pt-4">
-              <div className="flex flex-col">
-                <h3 className="font-bold font-brand">Upload Document</h3>
-                <p className="font-bodycopy font-medium text-sm text-alternative">
-                  Choose how you’d like to add the document
-                </p>
+      {isLoading && (
+        <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
+          <Loader2 className="animate-spin size-5 " />
+        </div>
+      )}
+      {isError && (
+        <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
+          <Loader2 className="animate-spin size-5 " />
+        </div>
+      )}
+      {!isLoading && !isError && (
+        <form
+          className="relative w-full h-full flex flex-col"
+          onSubmit={handleSubmit}
+        >
+          <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+            <div className="group-input flex flex-col gap-4">
+              <InputCMS
+                inputId="material-name"
+                inputName="Document Title"
+                inputType="text"
+                inputPlaceholder="e.g. Curriculum Brief"
+                value={formData.materialName}
+                onInputChange={handleInputChange("materialName")}
+                required
+              />
+              <TextAreaCMS
+                textAreaId="material-description"
+                textAreaName="Description"
+                textAreaPlaceholder="Briefly describe the content or purpose of this document (optional)"
+                textAreaHeight="h-20"
+                value={formData.materialDescription}
+                onInputChange={handleInputChange("materialDescription")}
+              />
+              <div className="flex flex-col gap-5 pt-4">
+                <div className="flex flex-col">
+                  <h3 className="font-bold font-brand">Upload Document</h3>
+                  <p className="font-bodycopy font-medium text-sm text-alternative">
+                    Choose how you’d like to add the document
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <RadioBoxCMS
+                    radioName="Document Link (Recommended)"
+                    radioDescription="Provide a public URL to the document"
+                    value="attach"
+                    selectedValue={selectedUploadMethod}
+                    onChange={setSelectedUploadMethod}
+                  />
+                  <RadioBoxCMS
+                    radioName="Upload File From Device"
+                    radioDescription="Upload a single PDF file, no larger than 5MB."
+                    value="upload"
+                    selectedValue={selectedUploadMethod}
+                    onChange={setSelectedUploadMethod}
+                  />
+                </div>
+                {selectedUploadMethod === "attach" && (
+                  <InputCMS
+                    inputId="learning-name"
+                    inputName="Document Link"
+                    inputType="url"
+                    inputPlaceholder="Paste the document’s shareable link here"
+                    value={formData.materialURL}
+                    onInputChange={handleInputChange("materialURL")}
+                    characterLength={1000}
+                    required
+                  />
+                )}
+                {selectedUploadMethod === "upload" && (
+                  <UploadFilesCMS
+                    value={formData.materialURL}
+                    onUpload={handleInputChange("materialURL")}
+                  />
+                )}
               </div>
-              <div className="flex flex-col gap-3">
-                <RadioBoxCMS
-                  radioName="Document Link (Recommended)"
-                  radioDescription="Provide a public URL to the document"
-                  value="attach"
-                  selectedValue={selectedUploadMethod}
-                  onChange={setSelectedUploadMethod}
-                />
-                <RadioBoxCMS
-                  radioName="Upload File From Device"
-                  radioDescription="Upload a single PDF file, no larger than 5MB."
-                  value="upload"
-                  selectedValue={selectedUploadMethod}
-                  onChange={setSelectedUploadMethod}
-                />
-              </div>
-              {selectedUploadMethod === "attach" && (
-                <InputCMS
-                  inputId="learning-name"
-                  inputName="Document Link"
-                  inputType="url"
-                  inputPlaceholder="Paste the document’s shareable link here"
-                  value={formData.materialURL}
-                  onInputChange={handleInputChange("materialURL")}
-                  characterLength={1000}
-                  required
-                />
-              )}
-              {selectedUploadMethod === "upload" && (
-                <UploadFilesCMS
-                  value={formData.materialURL}
-                  onUpload={handleInputChange("materialURL")}
-                />
-              )}
             </div>
           </div>
-        </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
-          <AppButton
-            className="w-full"
-            variant="cmsPrimary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Save Changes
-          </AppButton>
-        </div>
-      </form>
+          <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+            <AppButton
+              className="w-full"
+              variant="cmsPrimary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2 className="animate-spin size-4" />}
+              Save Changes
+            </AppButton>
+          </div>
+        </form>
+      )}
     </AppSheet>
   );
 }

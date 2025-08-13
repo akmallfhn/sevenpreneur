@@ -162,7 +162,7 @@ export default function DiscountListCMS({
           </div>
         )}
         {isError && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy">
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
             No Data
           </div>
         )}

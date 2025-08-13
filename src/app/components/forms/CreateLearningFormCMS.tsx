@@ -99,22 +99,6 @@ export default function CreateLearningFormCMS({
     }
   }, [formData.learningMethod]);
 
-  // --- Data State Rendering
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
-
   // --- Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -328,19 +312,31 @@ export default function CreateLearningFormCMS({
                 />
               </>
             )}
-            <SelectCMS
-              selectId="learning-speaker"
-              selectName="Assigned Educator"
-              selectPlaceholder="Select person to leading this session"
-              value={formData.learningSpeaker}
-              onChange={handleInputChange("learningSpeaker")}
-              options={
-                educatorUserList?.list.map((post) => ({
-                  label: post.full_name,
-                  value: post.id,
-                })) || []
-              }
-            />
+            {isLoading && (
+              <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
+                <Loader2 className="animate-spin size-5 " />
+              </div>
+            )}
+            {isError && (
+              <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
+                <Loader2 className="animate-spin size-5 " />
+              </div>
+            )}
+            {educatorUserList && !isLoading && !isError && (
+              <SelectCMS
+                selectId="learning-speaker"
+                selectName="Assigned Educator"
+                selectPlaceholder="Select person to leading this session"
+                value={formData.learningSpeaker}
+                onChange={handleInputChange("learningSpeaker")}
+                options={
+                  educatorUserList.list.map((post) => ({
+                    label: post.full_name,
+                    value: post.id,
+                  })) || []
+                }
+              />
+            )}
           </div>
         </div>
         <div className="sticky bottom-0 w-full p-4 bg-white z-10">
