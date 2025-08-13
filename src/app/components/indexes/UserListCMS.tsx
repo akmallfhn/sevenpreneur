@@ -105,25 +105,10 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
     );
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
-
   return (
     <React.Fragment>
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        {/* --- PAGE HEADER */}
+        {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -132,14 +117,12 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             </AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            {/* -- Page Title */}
             <TitleRevealCMS
               titlePage={"User List"}
               descPage={
                 "View and manage all registered users in one place, with quick access to actions like edit or delete."
               }
             />
-            {/* -- Page Actions */}
             <Link href={"/users/create"} className="w-fit h-fit">
               <AppButton variant="cmsPrimary">
                 <PlusCircle className="size-5" />
@@ -149,128 +132,141 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
           </div>
         </div>
 
-        {/* --- TABLE */}
-        <table className="relative w-full rounded-sm overflow-hidden">
-          <thead className="bg-[#FAFAFA] text-alternative/70">
-            <tr>
-              <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`User`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Last Login`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
-            </tr>
-          </thead>
-          <tbody>
-            {userList?.map((post, index) => (
-              <tr
-                className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                key={index}
-              >
-                <TableCellCMS>{index + 1}</TableCellCMS>
+        {isLoading && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            No Data
+          </div>
+        )}
 
-                {/* Name & Email */}
-                <TableCellCMS>
-                  <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
-                    <div className="flex size-9 rounded-full overflow-hidden">
-                      <Image
-                        className="object-cover w-full h-full"
-                        src={
-                          post.avatar ||
-                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                        }
-                        alt={`Image ${post.full_name}`}
-                        width={300}
-                        height={300}
-                      />
-                    </div>
-                    <div className="user-name-email flex flex-col">
-                      <Link href={`/users/${post.id}`}>
-                        <h2 className="user-name font-bold font-bodycopy text-black line-clamp-1">
-                          {post.full_name}
-                        </h2>
-                      </Link>
-                      <p className="user-email flex items-center gap-2 text-alternative font-bodycopy text-sm">
-                        {post.email}
-                      </p>
-                    </div>
-                  </div>
-                </TableCellCMS>
-
-                {/* Roles */}
-                <TableCellCMS>
-                  <RolesLabelCMS
-                    labelName={post.role_name}
-                    variants={toCamelCase(post.role_name) as RolesVariant}
-                  />
-                </TableCellCMS>
-
-                {/* Status */}
-                <TableCellCMS>
-                  <StatusLabelCMS
-                    labelName={post.status}
-                    variants={post.status as StatusVariant}
-                  />
-                </TableCellCMS>
-
-                {/* Last Login */}
-                <TableCellCMS>
-                  {dayjs(post.last_login).format("D MMM YYYY HH:mm")}
-                </TableCellCMS>
-
-                {/* Actions */}
-                <TableCellCMS>
-                  <div
-                    className="actions-button flex relative"
-                    ref={setWrapperRef(post.id)}
-                  >
-                    <AppButton
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => handleActionsDropdown(e, post.id)}
-                    >
-                      <EllipsisVertical className="size-5" />
-                    </AppButton>
-                    <AppDropdown
-                      isOpen={actionsOpened === post.id}
-                      alignDesktop="right"
-                      onClose={() => setActionsOpened(null)}
-                      anchorEl={wrapperRef.current[post.id]}
-                    >
-                      {/* -- View */}
-                      <Link href={`/users/${post.id}`}>
-                        <AppDropdownItemList
-                          menuIcon={<Eye className="size-4" />}
-                          menuName="View Profile"
-                        />
-                      </Link>
-                      {/* -- Edit */}
-                      <Link href={`/users/${post.id}/edit`}>
-                        <AppDropdownItemList
-                          menuIcon={<Settings2 className="size-4" />}
-                          menuName="Edit Profile"
-                        />
-                      </Link>
-                      {/* -- Delete */}
-                      <AppDropdownItemList
-                        menuIcon={<Trash2 className="size-4" />}
-                        menuName="Delete"
-                        isDestructive
-                        onClick={() => {
-                          setDeleteTargetUser({
-                            id: post.id,
-                            name: post.full_name,
-                          });
-                          setIsOpenDeleteConfirmation(true);
-                        }}
-                      />
-                    </AppDropdown>
-                  </div>
-                </TableCellCMS>
+        {/* TABLE */}
+        {!isLoading && !isError && (
+          <table className="relative w-full rounded-sm overflow-hidden">
+            <thead className="bg-[#FAFAFA] text-alternative/70">
+              <tr>
+                <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`User`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Last Login`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {userList?.map((post, index) => (
+                <tr
+                  className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                  key={index}
+                >
+                  <TableCellCMS>{index + 1}</TableCellCMS>
+
+                  {/* Name & Email */}
+                  <TableCellCMS>
+                    <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
+                      <div className="flex size-9 rounded-full overflow-hidden">
+                        <Image
+                          className="object-cover w-full h-full"
+                          src={
+                            post.avatar ||
+                            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                          }
+                          alt={`Image ${post.full_name}`}
+                          width={300}
+                          height={300}
+                        />
+                      </div>
+                      <div className="user-name-email flex flex-col">
+                        <Link href={`/users/${post.id}`}>
+                          <h2 className="user-name font-bold font-bodycopy text-black line-clamp-1">
+                            {post.full_name}
+                          </h2>
+                        </Link>
+                        <p className="user-email flex items-center gap-2 text-alternative font-bodycopy text-sm">
+                          {post.email}
+                        </p>
+                      </div>
+                    </div>
+                  </TableCellCMS>
+
+                  {/* Roles */}
+                  <TableCellCMS>
+                    <RolesLabelCMS
+                      labelName={post.role_name}
+                      variants={toCamelCase(post.role_name) as RolesVariant}
+                    />
+                  </TableCellCMS>
+
+                  {/* Status */}
+                  <TableCellCMS>
+                    <StatusLabelCMS
+                      labelName={post.status}
+                      variants={post.status as StatusVariant}
+                    />
+                  </TableCellCMS>
+
+                  {/* Last Login */}
+                  <TableCellCMS>
+                    {dayjs(post.last_login).format("D MMM YYYY HH:mm")}
+                  </TableCellCMS>
+
+                  {/* Actions */}
+                  <TableCellCMS>
+                    <div
+                      className="actions-button flex relative"
+                      ref={setWrapperRef(post.id)}
+                    >
+                      <AppButton
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => handleActionsDropdown(e, post.id)}
+                      >
+                        <EllipsisVertical className="size-5" />
+                      </AppButton>
+                      <AppDropdown
+                        isOpen={actionsOpened === post.id}
+                        alignDesktop="right"
+                        onClose={() => setActionsOpened(null)}
+                        anchorEl={wrapperRef.current[post.id]}
+                      >
+                        {/* -- View */}
+                        <Link href={`/users/${post.id}`}>
+                          <AppDropdownItemList
+                            menuIcon={<Eye className="size-4" />}
+                            menuName="View Profile"
+                          />
+                        </Link>
+                        {/* -- Edit */}
+                        <Link href={`/users/${post.id}/edit`}>
+                          <AppDropdownItemList
+                            menuIcon={<Settings2 className="size-4" />}
+                            menuName="Edit Profile"
+                          />
+                        </Link>
+                        {/* -- Delete */}
+                        <AppDropdownItemList
+                          menuIcon={<Trash2 className="size-4" />}
+                          menuName="Delete"
+                          isDestructive
+                          onClick={() => {
+                            setDeleteTargetUser({
+                              id: post.id,
+                              name: post.full_name,
+                            });
+                            setIsOpenDeleteConfirmation(true);
+                          }}
+                        />
+                      </AppDropdown>
+                    </div>
+                  </TableCellCMS>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {isOpenDeleteConfirmation && (
