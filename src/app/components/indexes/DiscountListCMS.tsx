@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -128,21 +129,6 @@ export default function DiscountListCMS({
     );
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative">
-        <Loader2 className="animate-spin size-5 " />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
-        No Data
-      </div>
-    );
-  }
-
   return (
     <React.Fragment>
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
@@ -159,94 +145,112 @@ export default function DiscountListCMS({
               titlePage={"Discount List"}
               descPage={"Manage discounts for all product easily"}
             />
-            <AppButton variant="cmsPrimary">
+            <AppButton
+              variant="cmsPrimary"
+              onClick={() => setIsOpenCreateForm(true)}
+            >
               <PlusCircle className="size-5" />
-              Add Discount
+              New Discount
             </AppButton>
           </div>
         </div>
 
+        {/* Conditional Rendering */}
+        {isLoading && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy">
+            No Data
+          </div>
+        )}
+
         {/* TABLE */}
-        <table className="relative w-full rounded-sm">
-          <thead className="bg-[#FAFAFA] text-alternative/70">
-            <tr>
-              <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Discount Code`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Rate`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Start date`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Expired date`.toUpperCase()}</TableHeadCMS>
-              <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
-            </tr>
-          </thead>
-          <tbody>
-            {discountList?.map((post, index) => (
-              <tr
-                className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                key={index}
-              >
-                <TableCellCMS>{index + 1}</TableCellCMS>
-                <TableCellCMS>{post.name}</TableCellCMS>
-                <TableCellCMS>{post.code}</TableCellCMS>
-                <TableCellCMS>{`${post.calc_percent}%`}</TableCellCMS>
-                <TableCellCMS>
-                  <StatusLabelCMS variants={post.status} />
-                </TableCellCMS>
-                <TableCellCMS>
-                  {dayjs(post.start_date).format("D MMM YYYY HH:mm")}
-                </TableCellCMS>
-                <TableCellCMS>
-                  {dayjs(post.end_date).format("D MMM YYYY HH:mm")}
-                </TableCellCMS>
-                <TableCellCMS>
-                  <div
-                    className="actions-button flex relative"
-                    ref={setWrapperRef(post.id)}
-                  >
-                    <AppButton
-                      variant="ghost"
-                      size="small"
-                      onClick={(e) => handleActionsDropdown(e, post.id)}
-                    >
-                      <EllipsisVertical className="size-4" />
-                    </AppButton>
-                    <AppDropdown
-                      isOpen={actionsOpened === post.id}
-                      alignDesktop="right"
-                      onClose={() => setActionsOpened(null)}
-                      anchorEl={wrapperRef.current[post.id]}
-                    >
-                      {/* -- Delete */}
-                      <AppDropdownItemList
-                        menuIcon={<Trash2 className="size-4" />}
-                        menuName="Delete"
-                        isDestructive
-                        onClick={() => {
-                          setDeleteTargetItem({
-                            id: post.id,
-                            name: post.name,
-                          });
-                          setIsOpenDeleteConfirmation(true);
-                        }}
-                      />
-                    </AppDropdown>
-                  </div>
-                </TableCellCMS>
+        {!isLoading && !isError && (
+          <table className="relative w-full rounded-sm">
+            <thead className="bg-[#FAFAFA] text-alternative/70">
+              <tr>
+                <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Discount Code`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Rate`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Start date`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Expired date`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {discountList?.map((post, index) => (
+                <tr
+                  className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                  key={index}
+                >
+                  <TableCellCMS>{index + 1}</TableCellCMS>
+                  <TableCellCMS>{post.name}</TableCellCMS>
+                  <TableCellCMS>{post.code}</TableCellCMS>
+                  <TableCellCMS>{`${post.calc_percent}%`}</TableCellCMS>
+                  <TableCellCMS>
+                    <StatusLabelCMS variants={post.status} />
+                  </TableCellCMS>
+                  <TableCellCMS>
+                    {dayjs(post.start_date).format("D MMM YYYY HH:mm")}
+                  </TableCellCMS>
+                  <TableCellCMS>
+                    {dayjs(post.end_date).format("D MMM YYYY HH:mm")}
+                  </TableCellCMS>
+                  <TableCellCMS>
+                    <div
+                      className="actions-button flex relative"
+                      ref={setWrapperRef(post.id)}
+                    >
+                      <AppButton
+                        variant="ghost"
+                        size="small"
+                        onClick={(e) => handleActionsDropdown(e, post.id)}
+                      >
+                        <EllipsisVertical className="size-4" />
+                      </AppButton>
+                      <AppDropdown
+                        isOpen={actionsOpened === post.id}
+                        alignDesktop="right"
+                        onClose={() => setActionsOpened(null)}
+                        anchorEl={wrapperRef.current[post.id]}
+                      >
+                        {/* -- Delete */}
+                        <AppDropdownItemList
+                          menuIcon={<Trash2 className="size-4" />}
+                          menuName="Delete"
+                          isDestructive
+                          onClick={() => {
+                            setDeleteTargetItem({
+                              id: post.id,
+                              name: post.name,
+                            });
+                            setIsOpenDeleteConfirmation(true);
+                          }}
+                        />
+                      </AppDropdown>
+                    </div>
+                  </TableCellCMS>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
-      {/* Open Transaction Details */}
-      {/* {isOpenModal && (
-        <TransactionDetailsCMS
-          transactionId={selectedId}
-          isOpen={isOpenModal}
-          onClose={handleClose}
+      {/* Open Create Details */}
+      {isOpenCreateForm && (
+        <CreateDiscountFormCMS
+          sessionToken={sessionToken}
+          cohortId={36}
+          isOpen={isOpenCreateForm}
+          onClose={() => setIsOpenCreateForm(false)}
         />
-      )} */}
+      )}
 
       {/* Open Dropdown */}
       {isOpenDeleteConfirmation && (
