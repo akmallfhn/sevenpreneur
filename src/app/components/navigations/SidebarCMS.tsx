@@ -11,7 +11,9 @@ import {
   DoorOpen,
   HouseIcon,
   Loader2,
+  Percent,
   Presentation,
+  Tags,
 } from "lucide-react";
 import { setSessionToken, trpc } from "@/trpc/client";
 
@@ -132,6 +134,11 @@ export default function SidebarCMS({
               icon={<BanknoteArrowDown />}
             />
           )}
+          <SidebarMenuItemCMS
+            menuTitle="Discounts"
+            url="/discounts"
+            icon={<Tags />}
+          />
         </div>
       </div>
 
