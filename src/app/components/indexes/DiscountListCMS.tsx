@@ -12,6 +12,7 @@ import {
   EllipsisVertical,
   PlusCircle,
   Trash2,
+  Settings2,
 } from "lucide-react";
 import TableHeadCMS from "../elements/TableHeadCMS";
 import dayjs from "dayjs";
@@ -25,6 +26,7 @@ import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
+import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -87,17 +89,17 @@ export default function DiscountListCMS({
   }, []);
 
   // Push Parameter to URL
-  const editDiscountDetails = (discountId: string) => {
+  const editDiscountForm = (discountId: number) => {
     router.push(`/discounts?id=${discountId}`, { scroll: false });
   };
 
-  // Open modal when has id
+  // Open edit form when has id
   useEffect(() => {
     setIsOpenEditForm(!!selectedId);
   }, [selectedId]);
 
-  // Close modal when close
-  const handleClose = () => {
+  // Close edit form when close
+  const handleCloseEditDiscount = () => {
     setIsOpenEditForm(false);
     router.push("/discounts", { scroll: false });
   };
@@ -219,7 +221,13 @@ export default function DiscountListCMS({
                         onClose={() => setActionsOpened(null)}
                         anchorEl={wrapperRef.current[post.id]}
                       >
-                        {/* -- Delete */}
+                        {/* Edit */}
+                        <AppDropdownItemList
+                          menuIcon={<Settings2 className="size-4" />}
+                          menuName="Edit Details"
+                          onClick={() => editDiscountForm(post.id)}
+                        />
+                        {/* Delete */}
                         <AppDropdownItemList
                           menuIcon={<Trash2 className="size-4" />}
                           menuName="Delete"
@@ -242,12 +250,22 @@ export default function DiscountListCMS({
         )}
       </div>
 
-      {/* Open Create Details */}
+      {/* Open Create Form */}
       {isOpenCreateForm && (
         <CreateDiscountFormCMS
           sessionToken={sessionToken}
           isOpen={isOpenCreateForm}
           onClose={() => setIsOpenCreateForm(false)}
+        />
+      )}
+
+      {/* Open Edit Form */}
+      {isOpenEditForm && (
+        <EditDiscountFormCMS
+          sessionToken={sessionToken}
+          discountId={Number(selectedId)}
+          isOpen={isOpenEditForm}
+          onClose={handleCloseEditDiscount}
         />
       )}
 
