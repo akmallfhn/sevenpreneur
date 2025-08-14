@@ -38,7 +38,7 @@ export default function CreateDiscountFormCMS({
     discountStartDate: string;
     discountEndDate: string;
     discountStatus: StatusVariant;
-    productCategory: ProductCategory | "";
+    productCategory: ProductCategory | null;
     productItem: number;
   }>({
     discountName: "",
@@ -47,7 +47,7 @@ export default function CreateDiscountFormCMS({
     discountStartDate: "",
     discountEndDate: "",
     discountStatus: "ACTIVE",
-    productCategory: "",
+    productCategory: null,
     productItem: 0,
   });
 
@@ -99,10 +99,12 @@ export default function CreateDiscountFormCMS({
       );
     } else if (formData.productCategory === "COHORT") {
       setItemOptions(
-        cohortData?.list.map((post: any) => ({
-          label: `${post.name}`,
-          value: post.id,
-        })) || []
+        cohortData?.list.flatMap((post: any) =>
+          post.prices.map((price: any) => ({
+            label: `${price.name} - ${post.name}`,
+            value: price.id,
+          }))
+        ) || []
       );
     }
   }, [formData.productCategory, playlistData, cohortData]);
@@ -313,10 +315,10 @@ export default function CreateDiscountFormCMS({
                 onChange={handleInputChange("productCategory")}
                 required
                 options={[
-                  // {
-                  //   label: "Cohort",
-                  //   value: "COHORT",
-                  // },
+                  {
+                    label: "Cohort",
+                    value: "COHORT",
+                  },
                   {
                     label: "Playlist",
                     value: "PLAYLIST",

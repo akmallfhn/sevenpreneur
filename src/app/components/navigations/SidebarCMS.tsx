@@ -115,7 +115,7 @@ export default function SidebarCMS({
             exact
           />
           <SidebarMenuItemCMS
-            menuTitle="Cohort & Program"
+            menuTitle="Cohorts"
             url="/cohorts"
             icon={<Presentation />}
           />
