@@ -295,8 +295,9 @@ export const listRouter = createTRPCRouter({
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
         Object.assign(whereClause, {
           status: StatusEnum.ACTIVE,
-          published_at: {
-            lte: new Date(),
+          published_at: { lte: new Date() },
+          cohort_prices: {
+            status: StatusEnum.ACTIVE,
           },
         });
       }
@@ -319,6 +320,22 @@ export const listRouter = createTRPCRouter({
       );
 
       const cohortList = await opts.ctx.prisma.cohort.findMany({
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          status: true,
+          slug_url: true,
+          start_date: true,
+          end_date: true,
+          cohort_prices: {
+            select: {
+              id: true,
+              name: true,
+              amount: true,
+            },
+          },
+        },
         orderBy: [
           { end_date: "desc" },
           { start_date: "desc" },
@@ -337,6 +354,7 @@ export const listRouter = createTRPCRouter({
           slug_url: entry.slug_url,
           start_date: entry.start_date,
           end_date: entry.end_date,
+          prices: entry.cohort_prices,
         };
       });
 
