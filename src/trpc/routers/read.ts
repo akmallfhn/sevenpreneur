@@ -617,7 +617,9 @@ export const readRouter = createTRPCRouter({
 
       const theTransaction = await opts.ctx.prisma.transaction.findFirst({
         include: {
-          user: true,
+          user: {
+            include: { phone_country: true },
+          },
         },
         where: {
           id: opts.input.id,
@@ -717,6 +719,10 @@ export const readRouter = createTRPCRouter({
           payment_channel_name: paymentChannelName,
           payment_channel_image: paymentChannelImage,
           user_full_name: theTransaction.user.full_name,
+          user_email: theTransaction.user.email,
+          user_phone_country: theTransaction.user.phone_country,
+          user_phone_number: theTransaction.user.phone_number,
+          user_avatar: theTransaction.user.avatar,
           created_at: theTransaction.created_at,
           paid_at: theTransaction.paid_at,
         },
