@@ -2,11 +2,9 @@
 import { Loader2 } from "lucide-react";
 import AppSheet from "./AppSheet";
 import { trpc } from "@/trpc/client";
-import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import Image from "next/image";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
 import TransactionDetailItemCMS from "../items/TransactionDetailItem";
 import dayjs from "dayjs";
@@ -78,10 +76,13 @@ export default function TransactionDetailsCMS({
               Customer Details
             </h5>
             <UserItemCMS
-              userName={transactionDetails?.user_full_name || ""}
-              userAvatar="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-              userEmail="akmal@sevenpreneur.com"
-              userPhoneNumber="895803221561"
+              userName={transactionDetails?.user_full_name || "-"}
+              userAvatar={
+                transactionDetails?.user_avatar ||
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+              }
+              userEmail={transactionDetails?.user_email || ""}
+              userPhoneNumber={transactionDetails?.user_phone_number || ""}
               isShowWhatsapp
             />
           </div>
