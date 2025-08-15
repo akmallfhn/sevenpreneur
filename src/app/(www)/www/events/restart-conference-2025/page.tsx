@@ -12,14 +12,14 @@ export const metadata: Metadata = {
   publisher: "Sevenpreneur",
   referrer: "origin-when-cross-origin",
   alternates: {
-    canonical: "/event/restart-conference-2025",
+    canonical: "/events/restart-conference-2025",
   },
   openGraph: {
     title:
       "RE:START Conference by Sevenpreneur and Raymond Chin | Business Conference for Indonesia's Millennial and Gen Z Entrepreneurs 2025",
     description:
       "Ikuti RE:START, konferensi bisnis dari Sevenpreneur dan Raymond Chin untuk generasi Millennial dan Gen Z Indonesia. Jelajahi tren, teknologi, strategi, dan mindset yang membentuk masa depan bisnis. Saatnya Anda menjadi entrepreneur global berikutnya.",
-    url: "/event/restart-conference-2025",
+    url: "/events/restart-conference-2025",
     siteName: "Sevenpreneur",
     images: [
       {
