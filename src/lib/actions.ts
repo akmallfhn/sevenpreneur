@@ -34,16 +34,16 @@ export async function DeleteSession() {
 }
 
 // MAKE PAYMENT AT XENDIT
-interface MakePaymentXenditProps {
+interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
   paymentChannelId: number;
   phoneNumber?: string | null | undefined;
 }
-export async function MakePaymentXendit({
+export async function MakePaymentCohortXendit({
   cohortPriceId,
   paymentChannelId,
   phoneNumber,
-}: MakePaymentXenditProps) {
+}: MakePaymentCohortXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
@@ -114,5 +114,40 @@ export async function MakePaymentPlaylistXendit({
     message: paymentResponse.message,
     invoice_url: paymentResponse.invoice_url,
     transaction_id: paymentResponse.transaction_id,
+  };
+}
+
+// CHECK DISCOUNT
+interface CheckDiscountPlaylistProps {
+  discountCode: string;
+  playlistId: number;
+}
+export async function CheckDiscountPlaylist({
+  discountCode,
+  playlistId,
+}: CheckDiscountPlaylistProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+  const checkDiscount = await trpc.purchase.checkDiscount({
+    code: discountCode,
+    playlist_id: playlistId,
+  });
+  const discountDataRaw = checkDiscount?.discount;
+  const discountData = {
+    ...discountDataRaw,
+    calc_percent:
+      typeof discountDataRaw?.calc_percent === "object" &&
+      "toNumber" in discountDataRaw.calc_percent
+        ? discountDataRaw.calc_percent.toNumber()
+        : Number(discountDataRaw?.calc_percent ?? 0),
+  };
+  return {
+    status: checkDiscount.status,
+    message: checkDiscount.message,
+    data: discountData,
   };
 }

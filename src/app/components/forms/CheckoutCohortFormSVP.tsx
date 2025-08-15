@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
-import { MakePaymentXendit } from "@/lib/actions";
+import { MakePaymentCohortXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
@@ -200,7 +200,7 @@ export default function CheckoutCohortFormSVP({
 
     // -- Call tRPC Payment
     try {
-      const makePayment = await MakePaymentXendit({
+      const makePayment = await MakePaymentCohortXendit({
         cohortPriceId: selectedTicket.id,
         paymentChannelId: chosenPaymentChannelData.id,
         phoneNumber: formData.userPhoneNumber.trim(),

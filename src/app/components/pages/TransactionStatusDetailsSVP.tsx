@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { useTheme } from "next-themes";
 import { toSnakeCase } from "@/lib/snake-case";
+import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 
 const variantStyles: Record<
   TransactionStatus,
@@ -67,8 +68,6 @@ interface TransactionStatusDetailsSVPProps {
   createTransactionAt: string;
   paidTransactionAt: string | undefined;
 }
-
-export type ProductCategory = "PLAYLIST" | "COHORT" | "AI";
 
 export default function TransactionStatusDetailsSVP({
   transactionId,

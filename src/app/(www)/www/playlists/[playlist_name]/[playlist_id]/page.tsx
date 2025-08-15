@@ -19,11 +19,27 @@ export async function generateMetadata({
   setSecretKey(secretKey!);
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
+  if (playlistData.status !== "ACTIVE") {
+    return {
+      title: `404 Not Found`,
+      description:
+        "Sorry, the page you’re looking for doesn’t exist or may have been moved.",
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    };
+  }
+
   return {
-    title: `${playlistData.name} - Video Course | Sevenpreneur`,
+    title: `${playlistData.name} - Learning Series | Sevenpreneur`,
     description: playlistData.description,
     keywords:
-      "Sevenpreneur, Business Blueprint, Raymond Chin, Video On Demand Bisnis",
+      "Sevenpreneur, Business Blueprint, Raymond Chin, Video On Demand Bisnis, Learning Series",
     authors: [{ name: "Sevenpreneur" }],
     publisher: "Sevenpreneur",
     referrer: "origin-when-cross-origin",
@@ -31,7 +47,7 @@ export async function generateMetadata({
       canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}`,
     },
     openGraph: {
-      title: `${playlistData.name} - Video Course | Sevenpreneur`,
+      title: `${playlistData.name} - Learning Series | Sevenpreneur`,
       description: playlistData.description,
       url: `/playlists/${playlistData.slug_url}/${playlistData.id}`,
       siteName: "Sevenpreneur",
@@ -45,7 +61,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${playlistData.name} - Video Course | Sevenpreneur`,
+      title: `${playlistData.name} - Learning Series | Sevenpreneur`,
       description: playlistData.description,
       images: playlistData.image_url,
     },
@@ -73,6 +89,11 @@ export default async function PlaylistDetailsPage({
   try {
     playlistDataRaw = (await trpc.read.playlist({ id: playlistId })).playlist;
   } catch (error) {
+    return notFound();
+  }
+
+  // Return 404 if INACTIVE status
+  if (playlistDataRaw.status !== "ACTIVE") {
     return notFound();
   }
 

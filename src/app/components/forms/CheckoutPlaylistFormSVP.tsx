@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Loader2, ShieldCheck } from "lucide-react";
+import { Loader2, ShieldCheck, X } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
@@ -13,8 +13,10 @@ import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import { toSnakeCase } from "@/lib/snake-case";
+import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
+import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 
-type PaymentMethodItem = {
+export type PaymentMethodItem = {
   id: number;
   image: string;
   label: string;
@@ -23,6 +25,13 @@ type PaymentMethodItem = {
   calc_percent: number;
   calc_flat: number;
   calc_vat: boolean;
+};
+
+export type DiscountType = {
+  code: string | undefined;
+  calc_percent: number | undefined;
+  category: ProductCategory;
+  item_id: number | undefined;
 };
 
 interface CheckoutPlaylistFormSVPProps {
@@ -48,6 +57,8 @@ export default function CheckoutPlaylistFormSVP({
 }: CheckoutPlaylistFormSVPProps) {
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+  const [openDiscount, setOpenDiscount] = useState(false);
+  const [discount, setDiscount] = useState<DiscountType | null>(null);
   const router = useRouter();
 
   // --- Beginning State
@@ -193,7 +204,7 @@ export default function CheckoutPlaylistFormSVP({
             <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
               <p className="font-bold line-clamp-1">{playlistName || "-"}</p>
               <p className="text-alternative text-sm font-medium line-clamp-2">
-                Video Course - 10 episodes
+                Learning Series - 10 episodes
               </p>
             </div>
           </div>
@@ -227,6 +238,16 @@ export default function CheckoutPlaylistFormSVP({
               />
             </div>
           </div>
+          {/* <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
+            {discount && (
+              <div>
+                <p>{discount.code}</p>
+                <X onClick={() => setDiscount(null)} />
+              </div>
+            )}
+
+            <AppButton onClick={() => setOpenDiscount(true)}>Test</AppButton>
+          </div> */}
           {/* Payment Method */}
           <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
             <h1 className="font-ui font-bold">Payment Method</h1>
@@ -410,6 +431,16 @@ export default function CheckoutPlaylistFormSVP({
           Pay Now
         </AppButton>
       </div>
+
+      {/* Modal Discount */}
+      <ApplyDiscountModalSVP
+        playlistId={playlistId}
+        isOpen={openDiscount}
+        onClose={() => setOpenDiscount(false)}
+        onApplyDiscount={(discountData) => {
+          setDiscount(discountData);
+        }}
+      />
     </React.Fragment>
   );
 }

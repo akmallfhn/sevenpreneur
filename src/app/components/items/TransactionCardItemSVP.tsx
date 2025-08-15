@@ -5,7 +5,7 @@ import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
-import { ProductCategory } from "../pages/TransactionStatusDetailsSVP";
+import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 
 export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
 
