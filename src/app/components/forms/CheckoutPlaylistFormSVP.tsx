@@ -2,8 +2,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ChevronRight, Loader2, ShieldCheck, X } from "lucide-react";
+import { Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
+import { toSnakeCase } from "@/lib/snake-case";
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -12,10 +13,9 @@ import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
-import { toSnakeCase } from "@/lib/snake-case";
 import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
-import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
+import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
 
 export type PaymentMethodItem = {
   id: number;
@@ -337,19 +337,21 @@ export default function CheckoutPlaylistFormSVP({
           </div>
 
           {/* Promo Discount */}
-          {/* <div className="discount-promo flex bg-white p-5 dark:bg-coal-black"> */}
-          {/* Discount Gateway */}
-          {/* {!discount && (
+          <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
+            {/* Discount Gateway */}
+            {/* {!discount && (
               <ApplyDiscountGatewaySVP onClick={() => setOpenDiscount(true)} />
             )} */}
-          {/* Applied Discount */}
-          {/* {discount && (
-              <div>
-                <p>{discount.code}</p>
-                <X onClick={() => setDiscount(null)} />
-              </div>
-            )} */}
-          {/* </div> */}
+            {/* Applied Discount */}
+            {discount && (
+              <AppliedDiscountCardSVP
+                discountName={discount.name || ""}
+                discountRate={discount.calc_percent || 0}
+                discountCode={discount.code || ""}
+                onClose={() => setDiscount(null)}
+              />
+            )}
+          </div>
 
           {/* Payment Details */}
           <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black ">
