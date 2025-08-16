@@ -11,7 +11,7 @@ export default function ApplyDiscountGatewaySVP({
 }: ApplyDiscountGatewaySVPProps) {
   return (
     <div
-      className="discount-gateway flex w-full bg-[#F8FBFF] p-3 border border-primary/30 rounded-md sm:hover:cursor-pointer"
+      className="discount-gateway flex w-full bg-[#F8FBFF] p-3 border border-primary/30 rounded-md dark:bg-surface-black dark:border-outline-dark sm:hover:cursor-pointer"
       {...rest}
     >
       <div className="discount-content-group flex w-full items-center justify-between">
@@ -27,9 +27,9 @@ export default function ApplyDiscountGatewaySVP({
               height={100}
             />
           </div>
-          <div className="flex flex-col font-bodycopy gap-0.5">
-            <p className="font-bold text-xs text-primary">
-              {`Special Discount for you`.toUpperCase()}
+          <div className="flex flex-col font-bodycopy gap-[1px]">
+            <p className="font-bold w-fit text-xs text-primary">
+              Special Discount
             </p>
             <p className="font-semibold text-sm">
               Apply discount for extra savings!
