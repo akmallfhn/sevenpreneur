@@ -49,6 +49,7 @@ interface TransactionStatusDetailsSVPProps {
   invoiceURL: string | undefined;
   productCategory: ProductCategory;
   productPrice: number;
+  productDiscount: number;
   productAdminFee: number;
   productVAT: number;
   productTotalAmount: number;
@@ -76,6 +77,7 @@ export default function TransactionStatusDetailsSVP({
   invoiceURL,
   productCategory,
   productPrice,
+  productDiscount,
   productAdminFee,
   productVAT,
   productTotalAmount,
@@ -228,6 +230,15 @@ export default function TransactionStatusDetailsSVP({
                   receiptName="Program Price"
                   receiptValue={rupiahCurrency(productPrice)}
                 />
+                {productDiscount !== 0 && (
+                  <ReceiptLineItemSVP
+                    receiptName="Discount"
+                    receiptValue={`-${rupiahCurrency(
+                      Math.round(productDiscount)
+                    )}`}
+                    isDiscount
+                  />
+                )}
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
                   receiptValue={rupiahCurrency(Math.round(productAdminFee))}

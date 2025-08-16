@@ -104,6 +104,7 @@ export default async function TransactionDetailsPage({
       invoiceURL={transactionDetailsData.invoice_url}
       productCategory={transactionDetailsData.category}
       productPrice={transactionDetailsData.product_price.toNumber()}
+      productDiscount={transactionDetailsData.product_discount.toNumber()}
       productAdminFee={transactionDetailsData.product_admin_fee.toNumber()}
       productVAT={transactionDetailsData.product_vat.toNumber()}
       productTotalAmount={transactionDetailsData.product_total_amount.toNumber()}
