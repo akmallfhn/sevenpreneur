@@ -117,7 +117,7 @@ export async function MakePaymentPlaylistXendit({
   };
 }
 
-// CHECK DISCOUNT
+// CHECK DISCOUNT PLAYLIST
 interface CheckDiscountPlaylistProps {
   discountCode: string;
   playlistId: number;
@@ -135,6 +135,41 @@ export async function CheckDiscountPlaylist({
   const checkDiscount = await trpc.purchase.checkDiscount({
     code: discountCode,
     playlist_id: playlistId,
+  });
+  const discountDataRaw = checkDiscount?.discount;
+  const discountData = {
+    ...discountDataRaw,
+    calc_percent:
+      typeof discountDataRaw?.calc_percent === "object" &&
+      "toNumber" in discountDataRaw.calc_percent
+        ? discountDataRaw.calc_percent.toNumber()
+        : Number(discountDataRaw?.calc_percent ?? 0),
+  };
+  return {
+    status: checkDiscount.status,
+    message: checkDiscount.message,
+    data: discountData,
+  };
+}
+
+// CHECK DISCOUNT COHORT
+interface CheckDiscountCohortProps {
+  discountCode: string;
+  cohortId: number;
+}
+export async function CheckDiscountCohort({
+  discountCode,
+  cohortId,
+}: CheckDiscountCohortProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+  const checkDiscount = await trpc.purchase.checkDiscount({
+    code: discountCode,
+    cohort_id: cohortId,
   });
   const discountDataRaw = checkDiscount?.discount;
   const discountData = {

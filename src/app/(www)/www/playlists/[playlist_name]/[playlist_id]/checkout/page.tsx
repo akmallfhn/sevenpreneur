@@ -121,6 +121,7 @@ export default async function CheckoutPlaylistPage({
             playlistName={playlistData.name}
             playlistImage={playlistData.image_url}
             playlistPrice={playlistData.price}
+            playlistTotalVideo={playlistData.total_video}
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
             initialUserPhone={checkUser.phone_number}
