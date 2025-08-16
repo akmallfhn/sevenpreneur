@@ -234,6 +234,8 @@ CREATE TABLE transactions (
   category         category_enum   NOT NULL,
   item_id          INTEGER         NOT NULL,
   amount           DECIMAL(12, 2)  NOT NULL,
+  discount_id      INTEGER             NULL,
+  discount_amount  DECIMAL(12, 2)  NOT NULL  DEFAULT 0,
   admin_fee        DECIMAL(12, 2)  NOT NULL,
   vat              DECIMAL(12, 2)  NOT NULL,
   currency         VARCHAR         NOT NULL,
@@ -309,7 +311,8 @@ ALTER TABLE videos
   ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
 
 ALTER TABLE transactions
-  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+  ADD FOREIGN KEY (user_id) REFERENCES users (id),
+  ADD FOREIGN KEY (discount_id) REFERENCES discounts (id);
 
 ALTER TABLE users_cohorts
   ADD FOREIGN KEY (user_id)   REFERENCES users (id),

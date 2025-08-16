@@ -235,6 +235,8 @@ Table transactions {
   category         category_enum
   item_id          integer        [note: 'item's ID based on category']
   amount           decimal(12,2)
+  discount_id      integer
+  discount_amount  decimal(12,2)
   admin_fee        decimal(12,2)
   vat              decimal(12,2)
   currency         varchar        [note: 'IDR']
