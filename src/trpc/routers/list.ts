@@ -20,6 +20,7 @@ import {
 } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { stringToDate } from "../utils/string_date";
 
 function calculatePage(
   input: { page?: number; page_size?: number },
@@ -865,6 +866,10 @@ export const listRouter = createTRPCRouter({
     .input(
       z.object({
         user_id: stringIsUUID().optional(),
+        cohort_id: numberIsID().optional(),
+        playlist_id: numberIsID().optional(),
+        start_date: z.string().date().optional(),
+        end_date: z.string().date().optional(),
         page: numberIsPositive().optional(),
         page_size: numberIsPositive().optional(),
       })
@@ -883,7 +888,46 @@ export const listRouter = createTRPCRouter({
           });
         }
       }
-      const whereClause = { user_id: selectedUserId };
+
+      const whereClause = {
+        user_id: selectedUserId,
+        created_at: {},
+      };
+
+      if (opts.input.cohort_id && opts.input.playlist_id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Provide either cohort_id only or playlist_id only.",
+        });
+      }
+
+      if (opts.input.cohort_id) {
+        Object.assign(whereClause, {
+          category: CategoryEnum.COHORT,
+          item_id: opts.input.cohort_id,
+        });
+      }
+      if (opts.input.playlist_id) {
+        Object.assign(whereClause, {
+          category: CategoryEnum.PLAYLIST,
+          item_id: opts.input.playlist_id,
+        });
+      }
+
+      if (opts.input.start_date) {
+        Object.assign(whereClause.created_at, {
+          gte: stringToDate(opts.input.start_date),
+        });
+      }
+      if (opts.input.end_date) {
+        const endDate = stringToDate(opts.input.end_date);
+        if (endDate) {
+          endDate.setDate(endDate.getDate() + 1);
+          Object.assign(whereClause.created_at, {
+            lt: endDate, // exclusive less than
+          });
+        }
+      }
 
       const paging = calculatePage(
         opts.input,
