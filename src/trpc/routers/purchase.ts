@@ -12,6 +12,7 @@ import {
 } from "@/trpc/utils/validation";
 import {
   CategoryEnum,
+  Prisma,
   PrismaClient,
   StatusEnum,
   TStatusEnum,
@@ -29,7 +30,8 @@ async function createTransaction(
     name: string;
     amount: Decimal;
   },
-  paymentChannelId: number
+  paymentChannelId: number,
+  discountCode: string | undefined
 ): Promise<{ transactionId: string; invoiceUrl: string }> {
   const selectedPayment = await prisma.paymentChannel.findFirst({
     where: { id: paymentChannelId },
@@ -40,13 +42,44 @@ async function createTransaction(
       message: "The payment channel with the given ID is not found.",
     });
   }
-  const calculatedPrice = calculateFinalPrice(item.amount, selectedPayment);
+
+  let discountId: number | null = null;
+  let discountPercent = new Prisma.Decimal(0);
+  if (discountCode) {
+    const selectedDiscount = await prisma.discount.findFirst({
+      where: { code: discountCode },
+    });
+    if (!selectedDiscount) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "The discount with the given code is not found.",
+      });
+    }
+    if (
+      selectedDiscount.category != category ||
+      selectedDiscount.item_id != item.id
+    ) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message:
+          "The discount with the given code does not apply to this item.",
+      });
+    }
+    discountId = selectedDiscount.id;
+    discountPercent = selectedDiscount.calc_percent.dividedBy(100);
+  }
+
+  const discountAmount = item.amount.mul(discountPercent);
+  const discountedPrice = item.amount.sub(discountAmount);
+  const calculatedPrice = calculateFinalPrice(discountedPrice, selectedPayment);
   const createdTransaction = await prisma.transaction.create({
     data: {
       user_id: userId,
       category: category,
       item_id: item.id,
       amount: item.amount,
+      discount_id: discountId,
+      discount_amount: discountAmount,
       admin_fee: calculatedPrice.adminFee,
       vat: calculatedPrice.vat,
       currency: "IDR",
@@ -211,6 +244,7 @@ export const purchaseRouter = createTRPCRouter({
         phone_number: stringNotBlank().nullable().optional(),
         cohort_price_id: numberIsID(),
         payment_channel_id: numberIsID(),
+        discount_code: stringNotBlank().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -236,7 +270,8 @@ export const purchaseRouter = createTRPCRouter({
           name: `${selectedCohortPrice.cohort.name} (${selectedCohortPrice.name})`,
           amount: selectedCohortPrice.amount,
         },
-        opts.input.payment_channel_id
+        opts.input.payment_channel_id,
+        opts.input.discount_code
       );
 
       if (opts.input.phone_country_id && opts.input.phone_number) {
@@ -263,6 +298,7 @@ export const purchaseRouter = createTRPCRouter({
         phone_number: stringNotBlank().nullable().optional(),
         playlist_id: numberIsID(),
         payment_channel_id: numberIsID(),
+        discount_code: stringNotBlank().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -285,7 +321,8 @@ export const purchaseRouter = createTRPCRouter({
           name: selectedPlaylist.name,
           amount: selectedPlaylist.price,
         },
-        opts.input.payment_channel_id
+        opts.input.payment_channel_id,
+        opts.input.discount_code
       );
 
       if (opts.input.phone_country_id && opts.input.phone_number) {
