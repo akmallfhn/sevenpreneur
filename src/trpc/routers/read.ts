@@ -148,7 +148,7 @@ export const readRouter = createTRPCRouter({
         deleted_at: null,
       };
       if (!opts.ctx.user) {
-        whereClause = Object.assign(whereClause, {
+        Object.assign(whereClause, {
           status: StatusEnum.ACTIVE,
           published_at: {
             lte: new Date(),
@@ -184,7 +184,7 @@ export const readRouter = createTRPCRouter({
           },
         },
       });
-      const theCohortWithCounts = Object.assign(theCohort, {
+      const theCohortWithCounts = Object.assign({}, theCohort, {
         total_learning_session: learningsCount,
         total_materials: modulesCount + materialsCount,
       });
@@ -414,7 +414,7 @@ export const readRouter = createTRPCRouter({
           playlist_id: opts.input.id,
         },
       });
-      const thePlaylistWithCounts = Object.assign(thePlaylist, {
+      const thePlaylistWithCounts = Object.assign({}, thePlaylist, {
         total_video: videosCount,
         total_duration: durationsTotal,
         total_user_enrolled: usersCount,
@@ -483,7 +483,7 @@ export const readRouter = createTRPCRouter({
           playlist_id: opts.input.id,
         },
       });
-      const thePlaylistWithCounts = Object.assign(thePlaylist, {
+      const thePlaylistWithCounts = Object.assign({}, thePlaylist, {
         total_video: videosCount,
         total_duration: durationsTotal,
         total_user_enrolled: usersCount,

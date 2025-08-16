@@ -351,7 +351,7 @@ export const purchaseRouter = createTRPCRouter({
     .mutation(async (opts) => {
       let whereClause = { id: opts.input.id };
       if (opts.ctx.user.role.name !== "Administrator") {
-        whereClause = Object.assign(whereClause, { user_id: opts.ctx.user.id });
+        Object.assign(whereClause, { user_id: opts.ctx.user.id });
       }
       const theTransaction = await opts.ctx.prisma.transaction.findFirst({
         where: whereClause,
