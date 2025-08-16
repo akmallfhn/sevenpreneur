@@ -10,6 +10,7 @@ import {
   stringIsUUID,
 } from "@/trpc/utils/validation";
 import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -644,6 +645,18 @@ export const readRouter = createTRPCRouter({
         invoiceUrl = `${checkoutPrefix}${theTransaction.invoice_number}`;
       }
 
+      let discountCode: string | undefined;
+      let discountPercent: Decimal | undefined;
+      if (theTransaction.discount_id) {
+        const theDiscount = await opts.ctx.prisma.discount.findFirst({
+          where: { id: theTransaction.discount_id },
+        });
+        if (theDiscount) {
+          discountCode = theDiscount.code;
+          discountPercent = theDiscount.calc_percent;
+        }
+      }
+
       let paymentChannelName: string | undefined;
       let paymentChannelImage: string | undefined;
       const thePaymentChannel = await opts.ctx.prisma.paymentChannel.findFirst({
@@ -701,11 +714,15 @@ export const readRouter = createTRPCRouter({
           invoice_number: theTransaction.invoice_number,
           invoice_url: invoiceUrl,
           product_price: theTransaction.amount,
+          product_discount: theTransaction.discount_amount,
           product_admin_fee: theTransaction.admin_fee,
           product_vat: theTransaction.vat,
           product_total_amount: theTransaction.amount
+            .sub(theTransaction.discount_amount)
             .plus(theTransaction.admin_fee)
             .plus(theTransaction.vat),
+          discount_code: discountCode,
+          discount_percent: discountPercent,
           cohort_id: cohortBadge?.id,
           cohort_name: cohortBadge?.name,
           cohort_image: cohortBadge?.image,

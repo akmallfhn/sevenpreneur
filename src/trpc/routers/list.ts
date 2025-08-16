@@ -949,7 +949,10 @@ export const listRouter = createTRPCRouter({
           id: entry.id,
           category: entry.category,
           item_id: entry.item_id,
-          total_amount: entry.amount.plus(entry.admin_fee),
+          total_amount: entry.amount
+            .sub(entry.discount_amount)
+            .plus(entry.admin_fee)
+            .plus(entry.vat),
           currency: entry.currency,
           status: entry.status,
           paid_at: entry.paid_at,
