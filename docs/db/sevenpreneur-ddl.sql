@@ -226,6 +226,8 @@ CREATE TABLE discounts (
   updated_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, category, item_id);
+
 CREATE TABLE transactions (
   id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
   user_id          UUID            NOT NULL,
