@@ -344,9 +344,9 @@ export default function CheckoutPlaylistFormSVP({
           {/* Promo Discount */}
           <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
             {/* Discount Gateway */}
-            {/* {!discount && (
+            {!discount && (
               <ApplyDiscountGatewaySVP onClick={() => setOpenDiscount(true)} />
-            )} */}
+            )}
             {/* Applied Discount */}
             {discount && (
               <AppliedDiscountCardSVP
