@@ -1015,6 +1015,47 @@ export const listRouter = createTRPCRouter({
         };
       });
 
+      const totalAmounts = await opts.ctx.prisma.transaction.aggregate({
+        _sum: { amount: true, discount_amount: true },
+        where: whereClause,
+      });
+      const ZERO = new Prisma.Decimal(0);
+      const totalAmount = totalAmounts._sum.amount || ZERO;
+      const totalDiscountAmount = totalAmounts._sum.discount_amount || ZERO;
+
+      const wherePaid = Object.assign(
+        { status: TStatusEnum.PAID },
+        whereClause
+      );
+      const wherePending = Object.assign(
+        { status: TStatusEnum.PENDING },
+        whereClause
+      );
+      const whereFailed = Object.assign(
+        { status: TStatusEnum.FAILED },
+        whereClause
+      );
+
+      const totalPaid = await opts.ctx.prisma.transaction.aggregate({
+        _count: true,
+        where: wherePaid,
+      });
+      const totalPending = await opts.ctx.prisma.transaction.aggregate({
+        _count: true,
+        where: wherePending,
+      });
+      const totalFailed = await opts.ctx.prisma.transaction.aggregate({
+        _count: true,
+        where: whereFailed,
+      });
+
+      Object.assign(paging.metapaging, {
+        total_revenue: totalAmount.sub(totalDiscountAmount),
+        total_paid: totalPaid._count,
+        total_pending: totalPending._count,
+        total_failed: totalFailed._count,
+      });
+
       return {
         status: 200,
         message: "Success",
