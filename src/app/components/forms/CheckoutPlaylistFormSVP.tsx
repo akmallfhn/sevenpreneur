@@ -14,6 +14,7 @@ import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
+import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
 
@@ -171,9 +172,13 @@ export default function CheckoutPlaylistFormSVP({
     // -- Call tRPC Payment Playlist
     try {
       const makePayment = await MakePaymentPlaylistXendit({
+        // Mandatory fields
         playlistId: playlistId,
         paymentChannelId: chosenPaymentChannelData.id,
         phoneNumber: formData.userPhoneNumber.trim(),
+
+        // Optional fields
+        discountCode: discount?.code,
       });
       if (makePayment.status === 200) {
         window.open(makePayment.invoice_url, "_blank");

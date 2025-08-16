@@ -38,11 +38,13 @@ interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
   paymentChannelId: number;
   phoneNumber?: string | null | undefined;
+  discountCode?: string | undefined;
 }
 export async function MakePaymentCohortXendit({
   cohortPriceId,
   paymentChannelId,
   phoneNumber,
+  discountCode,
 }: MakePaymentCohortXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -55,6 +57,7 @@ export async function MakePaymentCohortXendit({
     payment_channel_id: paymentChannelId,
     phone_country_id: 1,
     phone_number: phoneNumber,
+    discount_code: discountCode,
   });
   return {
     status: paymentResponse.status,
@@ -91,11 +94,13 @@ interface MakePaymentPlaylistXenditProps {
   playlistId: number;
   paymentChannelId: number;
   phoneNumber?: string | null | undefined;
+  discountCode?: string | undefined;
 }
 export async function MakePaymentPlaylistXendit({
   playlistId,
   paymentChannelId,
   phoneNumber,
+  discountCode,
 }: MakePaymentPlaylistXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -108,6 +113,7 @@ export async function MakePaymentPlaylistXendit({
     payment_channel_id: paymentChannelId,
     phone_country_id: 1,
     phone_number: phoneNumber,
+    discount_code: discountCode,
   });
   return {
     status: paymentResponse.status,
