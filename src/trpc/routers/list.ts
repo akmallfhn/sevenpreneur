@@ -268,17 +268,15 @@ export const listRouter = createTRPCRouter({
         };
       });
 
-      if (opts.input.keyword !== undefined) {
-        Object.assign(paging.metapaging, {
-          keyword: opts.input.keyword,
-        });
-      }
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
 
       return {
         status: 200,
         message: "Success",
         list: returnedList,
-        metapaging: paging.metapaging,
+        metapaging: returnedMetapaging,
       };
     }),
 
@@ -359,17 +357,15 @@ export const listRouter = createTRPCRouter({
         };
       });
 
-      if (opts.input.keyword !== undefined) {
-        Object.assign(paging.metapaging, {
-          keyword: opts.input.keyword,
-        });
-      }
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
 
       return {
         status: 200,
         message: "Success",
         list: returnedList,
-        metapaging: paging.metapaging,
+        metapaging: returnedMetapaging,
       };
     }),
 
@@ -675,17 +671,15 @@ export const listRouter = createTRPCRouter({
         };
       });
 
-      if (opts.input.keyword !== undefined) {
-        Object.assign(paging.metapaging, {
-          keyword: opts.input.keyword,
-        });
-      }
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
 
       return {
         status: 200,
         message: "Success",
         list: returnedList,
-        metapaging: paging.metapaging,
+        metapaging: returnedMetapaging,
       };
     }),
 
@@ -742,17 +736,15 @@ export const listRouter = createTRPCRouter({
         };
       });
 
-      if (opts.input.keyword !== undefined) {
-        Object.assign(paging.metapaging, {
-          keyword: opts.input.keyword,
-        });
-      }
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
 
       return {
         status: 200,
         message: "Success",
         list: returnedList,
-        metapaging: paging.metapaging,
+        metapaging: returnedMetapaging,
       };
     }),
 
@@ -1049,7 +1041,7 @@ export const listRouter = createTRPCRouter({
         where: whereFailed,
       });
 
-      Object.assign(paging.metapaging, {
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
         total_revenue: totalAmount.sub(totalDiscountAmount),
         total_paid: totalPaid._count,
         total_pending: totalPending._count,
@@ -1060,7 +1052,7 @@ export const listRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         list: returnedList,
-        metapaging: paging.metapaging,
+        metapaging: returnedMetapaging,
       };
     }),
 });
