@@ -31,29 +31,37 @@ export default function InputCMS({
 }: InputCMSProps) {
   // --- Declaration state
   const [value, setValue] = useState(propValue);
-  const [error, setError] = useState("");
+  const [internalError, setInternalError] = useState("");
   const maxLength = characterLength ?? 128;
-  const errMsg = errorMessage ?? "Oops, you’ve reached the character limit.";
+  const characterLimitErrorMessage =
+    "Oops, you’ve reached the character limit.";
 
   // --- Character Limitation on Input
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     if (newValue.length > maxLength) {
-      setError(errMsg);
-      setValue(newValue.slice(0, maxLength));
-      if (onInputChange) onInputChange(newValue.slice(0, maxLength));
-      return;
+      setInternalError(characterLimitErrorMessage);
     } else {
-      setError("");
-      setValue(newValue);
-      if (onInputChange) onInputChange(newValue);
+      setInternalError("");
     }
+    setValue(newValue.slice(0, maxLength));
+    if (onInputChange) onInputChange(newValue.slice(0, maxLength));
   };
 
   // --- Sync on value change
   useEffect(() => {
     setValue(propValue || "");
   }, [propValue]);
+
+  // --- Reset internalError if get any errorMessage from parent
+  useEffect(() => {
+    if (errorMessage) {
+      setInternalError("");
+    }
+  }, [errorMessage]);
+
+  // --- Compute error (parent > internal)
+  const computedError = errorMessage || internalError;
 
   return (
     <div className="input-group-component flex flex-col gap-1">
@@ -80,14 +88,16 @@ export default function InputCMS({
           disabled={disabled}
           {...rest}
           className={`flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
-            error
+            computedError
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-cms-primary"
           } ${inputIcon ? "pl-10" : ""} `}
           value={value}
           onChange={handleInputChange}
         />
-        {error && <p className="inline-flex text-red-600 text-xs">{error}</p>}
+        {computedError && (
+          <p className="inline-flex text-red-600 text-xs">{computedError}</p>
+        )}
       </div>
     </div>
   );

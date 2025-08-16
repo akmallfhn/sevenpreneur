@@ -6,7 +6,7 @@ import { CheckDiscountPlaylist } from "@/lib/actions";
 import { toast } from "sonner";
 import { DiscountType } from "../forms/CheckoutPlaylistFormSVP";
 import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
-import InputCMS from "../fields/InputCMS";
+import InputSVP from "../fields/InputSVP";
 
 interface ApplyDiscountModalSVPProps {
   playlistId?: number;
@@ -24,6 +24,7 @@ export default function ApplyDiscountModalSVP({
   onApplyDiscount,
 }: ApplyDiscountModalSVPProps) {
   const [discountCode, setDiscountCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoadingApplyDiscount, setIsLoadingApplyDiscount] = useState(false);
 
   // Blocked scroll behind
@@ -36,11 +37,18 @@ export default function ApplyDiscountModalSVP({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Reset in every open modal
+  useEffect(() => {
+    if (isOpen) {
+      setDiscountCode("");
+      setErrorMessage("");
+    }
+  }, [isOpen]);
 
   // Handle input change
   const handleInputChange = (value: string) => {
     setDiscountCode(value);
+    setErrorMessage("");
   };
 
   // Handle Checking
@@ -49,7 +57,7 @@ export default function ApplyDiscountModalSVP({
     setIsLoadingApplyDiscount(true);
 
     if (!discountCode.trim()) {
-      toast.error("Please enter a promo code before redeeming");
+      setErrorMessage("Please enter a promo code before redeeming");
       setIsLoadingApplyDiscount(false);
       return;
     }
@@ -67,6 +75,7 @@ export default function ApplyDiscountModalSVP({
         return;
       }
       const discountData: DiscountType = {
+        name: responseDiscount?.data?.name,
         code: responseDiscount?.data?.code,
         calc_percent: responseDiscount?.data?.calc_percent,
         category: responseDiscount?.data?.category as ProductCategory,
@@ -76,14 +85,16 @@ export default function ApplyDiscountModalSVP({
         onApplyDiscount?.(discountData);
         onClose();
       } else {
-        toast.error(responseDiscount?.message || "Invalid discount code");
+        setErrorMessage("Invalid discount code");
       }
     } catch (error) {
-      toast.error("Invalid discount code");
+      setErrorMessage("Invalid discount code");
     } finally {
       setIsLoadingApplyDiscount(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div>
@@ -103,14 +114,16 @@ export default function ApplyDiscountModalSVP({
               <h2 className="w-full font-bodycopy font-bold pl-0.5">
                 Redeem Promo
               </h2>
-              <InputCMS
+              <InputSVP
                 className="w-full"
                 inputId="discount-code"
                 inputName="Promo Code"
                 inputType="text"
                 inputPlaceholder="Enter promo code here. e.g. GOODLUCK20"
+                characterLength={32}
                 value={discountCode}
                 onInputChange={handleInputChange}
+                errorMessage={errorMessage}
               />
             </div>
             <AppButton type="submit" disabled={isLoadingApplyDiscount}>
@@ -120,7 +133,6 @@ export default function ApplyDiscountModalSVP({
               Redeem Now
             </AppButton>
           </form>
-
           {/* Button Close */}
           <div
             className="absolute flex top-4 right-4 hover:cursor-pointer"

@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Loader2, ShieldCheck, X } from "lucide-react";
+import { ChevronRight, Loader2, ShieldCheck, X } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import { toSnakeCase } from "@/lib/snake-case";
 import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
+import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 
 export type PaymentMethodItem = {
   id: number;
@@ -28,6 +29,7 @@ export type PaymentMethodItem = {
 };
 
 export type DiscountType = {
+  name: string | undefined;
   code: string | undefined;
   calc_percent: number | undefined;
   category: ProductCategory;
@@ -39,6 +41,7 @@ interface CheckoutPlaylistFormSVPProps {
   playlistName: string;
   playlistImage: string;
   playlistPrice: number;
+  playlistTotalVideo: number;
   initialUserName: string;
   initialUserEmail: string;
   initialUserPhone: string | null;
@@ -50,6 +53,7 @@ export default function CheckoutPlaylistFormSVP({
   playlistName,
   playlistImage,
   playlistPrice,
+  playlistTotalVideo,
   initialUserName,
   initialUserEmail,
   initialUserPhone,
@@ -100,13 +104,16 @@ export default function CheckoutPlaylistFormSVP({
   // --- Calculating price
   const totalItem = 1;
   const programPrice = playlistPrice || 0;
-  const subtotal = totalItem * programPrice;
+  let subtotal = totalItem * programPrice;
+  if (discount?.calc_percent) {
+    const discountRate = discount.calc_percent / 100;
+    subtotal = totalItem * programPrice * (1 - discountRate);
+  }
   const vatRate = 0.11;
   const paymentCalculation = useMemo(() => {
     if (!chosenPaymentChannelData) {
       return { adminFee: 0, valueAddedTax: 0, totalAmount: 0 };
     }
-
     if (
       chosenPaymentChannelData.calc_flat === 0 &&
       chosenPaymentChannelData.calc_percent > 0
@@ -151,7 +158,6 @@ export default function CheckoutPlaylistFormSVP({
   // --- Make Payment on Xendit
   const handlePayment = async () => {
     setIsLoadingPayment(true);
-
     // -- Validation
     if (!formData.userPhoneNumber) {
       toast.error("Phone number is required before making a payment");
@@ -162,7 +168,6 @@ export default function CheckoutPlaylistFormSVP({
       toast.error("Please select a payment method first");
       return;
     }
-
     // -- Call tRPC Payment Playlist
     try {
       const makePayment = await MakePaymentPlaylistXendit({
@@ -201,16 +206,16 @@ export default function CheckoutPlaylistFormSVP({
                 width={400}
               />
             </div>
-            <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
+            <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
               <p className="font-bold line-clamp-1">{playlistName || "-"}</p>
               <p className="text-alternative text-sm font-medium line-clamp-2">
-                Learning Series - 10 episodes
+                {`Learning Series - ${playlistTotalVideo} episodes`}
               </p>
             </div>
           </div>
           {/* Personal Information */}
           <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
-            <h2 className="font-ui font-bold">Personal Information</h2>
+            <h2 className="font-bodycopy font-bold">Personal Information</h2>
             <div className="flex flex-col gap-3">
               <InputSVP
                 inputId="user-full-name"
@@ -238,19 +243,9 @@ export default function CheckoutPlaylistFormSVP({
               />
             </div>
           </div>
-          {/* <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
-            {discount && (
-              <div>
-                <p>{discount.code}</p>
-                <X onClick={() => setDiscount(null)} />
-              </div>
-            )}
-
-            <AppButton onClick={() => setOpenDiscount(true)}>Test</AppButton>
-          </div> */}
           {/* Payment Method */}
           <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
-            <h1 className="font-ui font-bold">Payment Method</h1>
+            <h1 className="font-bodycopy font-bold">Payment Method</h1>
             <div className="flex flex-col gap-5">
               <PaymentChannelGroupSVP
                 groupPaymentName="Instant Payment"
@@ -341,22 +336,40 @@ export default function CheckoutPlaylistFormSVP({
             </div>
           </div>
 
+          {/* Promo Discount */}
+          {/* <div className="discount-promo flex bg-white p-5 dark:bg-coal-black"> */}
+          {/* Discount Gateway */}
+          {/* {!discount && (
+              <ApplyDiscountGatewaySVP onClick={() => setOpenDiscount(true)} />
+            )} */}
+          {/* Applied Discount */}
+          {/* {discount && (
+              <div>
+                <p>{discount.code}</p>
+                <X onClick={() => setDiscount(null)} />
+              </div>
+            )} */}
+          {/* </div> */}
+
           {/* Payment Details */}
           <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black ">
-            <h1 className="font-ui font-bold">Payment Details</h1>
+            <h1 className="font-bodycopy font-bold">Payment Details</h1>
             <div className="calculation-price flex flex-col gap-2">
               <ReceiptLineItemSVP
                 receiptName="Payment Method"
                 receiptValue={chosenPaymentChannelData?.label}
               />
               <ReceiptLineItemSVP
-                receiptName="Total Item"
-                receiptValue={totalItem}
-              />
-              <ReceiptLineItemSVP
                 receiptName="Course Price"
                 receiptValue={rupiahCurrency(programPrice)}
               />
+              {discount?.calc_percent && (
+                <ReceiptLineItemSVP
+                  receiptName={`Discount (${discount.calc_percent}%)`}
+                  receiptValue={`- ${rupiahCurrency(programPrice - subtotal)}`}
+                  isDiscount
+                />
+              )}
               <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
               <ReceiptLineItemSVP
                 receiptName="Subtotal"
@@ -374,6 +387,7 @@ export default function CheckoutPlaylistFormSVP({
               <ReceiptLineItemSVP
                 receiptName="Total Amount"
                 receiptValue={rupiahCurrency(paymentCalculation.totalAmount)}
+                isGrandTotal
               />
             </div>
           </div>
@@ -397,7 +411,7 @@ export default function CheckoutPlaylistFormSVP({
                 height={100}
               />
             </div>
-            <p className="font-ui text-xs text-alternative">
+            <p className="font-bodycopy text-xs text-alternative">
               Payment is securely processed with advanced encryption. Powered by{" "}
               {""}
               <a href="https://www.xendit.co/id/" className="font-bold">
@@ -407,31 +421,30 @@ export default function CheckoutPlaylistFormSVP({
             </p>
           </div>
         </div>
-      </div>
 
-      {/* Floating CTA */}
-      <div className="floating-cta absolute flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
-        <div className="flex flex-col font-ui">
-          <p className="text-sm">Total Amount</p>
-          <p className="font-bold">
-            {rupiahCurrency(paymentCalculation.totalAmount)}
-          </p>
+        {/* Floating CTA */}
+        <div className="floating-cta fixed flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
+          <div className="flex flex-col font-bodycopy">
+            <p className="text-sm">Total Amount</p>
+            <p className="font-bold">
+              {rupiahCurrency(paymentCalculation.totalAmount)}
+            </p>
+          </div>
+          <AppButton
+            onClick={handlePayment}
+            disabled={isLoadingPayment}
+            featureName="payment_playlist"
+            featureItem={toSnakeCase(playlistName)}
+          >
+            {isLoadingPayment ? (
+              <Loader2 className="animate-spin size-5" />
+            ) : (
+              <ShieldCheck className="size-5" />
+            )}
+            Pay Now
+          </AppButton>
         </div>
-        <AppButton
-          onClick={handlePayment}
-          disabled={isLoadingPayment}
-          featureName="payment_playlist"
-          featureItem={toSnakeCase(playlistName)}
-        >
-          {isLoadingPayment ? (
-            <Loader2 className="animate-spin size-5" />
-          ) : (
-            <ShieldCheck className="size-5" />
-          )}
-          Pay Now
-        </AppButton>
       </div>
-
       {/* Modal Discount */}
       <ApplyDiscountModalSVP
         playlistId={playlistId}
