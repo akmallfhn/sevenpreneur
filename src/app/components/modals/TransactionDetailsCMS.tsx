@@ -1,5 +1,5 @@
 "use client";
-import { Loader2 } from "lucide-react";
+import { Copy, Loader2 } from "lucide-react";
 import AppSheet from "./AppSheet";
 import { trpc } from "@/trpc/client";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
@@ -10,6 +10,9 @@ import TransactionDetailItemCMS from "../items/TransactionDetailItem";
 import dayjs from "dayjs";
 import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import UserItemCMS from "../items/UserItemCMS";
+import AppButton from "../buttons/AppButton";
+import { useClipboard } from "@/lib/use-clipboard";
+import { toast } from "sonner";
 
 interface TransactionDetailsCMSProps {
   transactionId: string | null;
@@ -22,6 +25,8 @@ export default function TransactionDetailsCMS({
   isOpen,
   onClose,
 }: TransactionDetailsCMSProps) {
+  const { copy, copied } = useClipboard();
+
   if (!transactionId) return;
 
   const { data, isLoading, isError } = trpc.read.transaction.useQuery(
@@ -36,6 +41,14 @@ export default function TransactionDetailsCMS({
   } else if (transactionDetails?.category === "PLAYLIST") {
     productName = transactionDetails.playlist_name ?? "";
   }
+
+  // Handle Copy URL
+  const handleCopyInvoiceURL = () => {
+    if (transactionDetails?.invoice_url) {
+      copy(transactionDetails.invoice_url);
+      toast.success("Invoice URL copied to clipboard");
+    }
+  };
 
   return (
     <AppSheet
@@ -124,9 +137,27 @@ export default function TransactionDetailsCMS({
                 ? dayjs(transactionDetails?.paid_at).format("DD MMM YYYY HH:mm")
                 : "-"}
             </TransactionDetailItemCMS>
-            <TransactionDetailItemCMS itemName="Invoice URL">
-              <p className="line-clamp-1">{transactionDetails?.invoice_url}</p>
-            </TransactionDetailItemCMS>
+            {transactionDetails?.invoice_url && (
+              <TransactionDetailItemCMS itemName="Invoice URL">
+                <div className="flex items-center gap-1">
+                  <a
+                    className="line-clamp-1 hover:text-cms-primary hover:underline hover:underline-offset-2"
+                    href={transactionDetails.invoice_url}
+                  >
+                    {transactionDetails.invoice_url}
+                  </a>
+                  <AppButton
+                    className="shrink-0"
+                    variant="outline"
+                    size="small"
+                    onClick={handleCopyInvoiceURL}
+                  >
+                    <Copy className="size-4" />
+                    {copied ? "Copied!" : "Copy URL"}
+                  </AppButton>
+                </div>
+              </TransactionDetailItemCMS>
+            )}
           </div>
 
           {/* Payment Details */}
