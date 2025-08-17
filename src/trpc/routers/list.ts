@@ -1007,14 +1007,6 @@ export const listRouter = createTRPCRouter({
         };
       });
 
-      const totalAmounts = await opts.ctx.prisma.transaction.aggregate({
-        _sum: { amount: true, discount_amount: true },
-        where: whereClause,
-      });
-      const ZERO = new Prisma.Decimal(0);
-      const totalAmount = totalAmounts._sum.amount || ZERO;
-      const totalDiscountAmount = totalAmounts._sum.discount_amount || ZERO;
-
       const wherePaid = Object.assign(
         { status: TStatusEnum.PAID },
         whereClause
@@ -1027,6 +1019,14 @@ export const listRouter = createTRPCRouter({
         { status: TStatusEnum.FAILED },
         whereClause
       );
+
+      const totalAmounts = await opts.ctx.prisma.transaction.aggregate({
+        _sum: { amount: true, discount_amount: true },
+        where: wherePaid, // only sum paid transactions
+      });
+      const ZERO = new Prisma.Decimal(0);
+      const totalAmount = totalAmounts._sum.amount || ZERO;
+      const totalDiscountAmount = totalAmounts._sum.discount_amount || ZERO;
 
       const totalPaid = await opts.ctx.prisma.transaction.aggregate({
         _count: true,
