@@ -103,28 +103,28 @@ export default function TransactionListCMS({
                 scorecardValue={
                   data?.metapaging.total_revenue
                     ? rupiahCurrency(Number(data?.metapaging.total_revenue))
-                    : ""
+                    : 0
                 }
                 scorecardBackground="bg-[#400FDF]"
               />
               <ScorecardItemCMS
                 scorecardName="Total Transactions"
-                scorecardValue={data?.metapaging.total_data || ""}
+                scorecardValue={data?.metapaging.total_data || 0}
                 scorecardBackground="bg-primary"
               />
               <ScorecardItemCMS
                 scorecardName="Total Paid Transactions"
-                scorecardValue={data?.metapaging.total_paid || ""}
+                scorecardValue={data?.metapaging.total_paid || 0}
                 scorecardBackground="bg-success-foreground"
               />
               <ScorecardItemCMS
                 scorecardName="Total Pending Transactions"
-                scorecardValue={data?.metapaging.total_pending || ""}
+                scorecardValue={data?.metapaging.total_pending || 0}
                 scorecardBackground="bg-warning-foreground"
               />
               <ScorecardItemCMS
                 scorecardName="Total Failed Transactions"
-                scorecardValue={data?.metapaging.total_failed || ""}
+                scorecardValue={data?.metapaging.total_failed || 0}
                 scorecardBackground="bg-danger-foreground"
               />
             </div>
