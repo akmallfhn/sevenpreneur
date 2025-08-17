@@ -124,6 +124,9 @@ export default function TransactionDetailsCMS({
                 ? dayjs(transactionDetails?.paid_at).format("DD MMM YYYY HH:mm")
                 : "-"}
             </TransactionDetailItemCMS>
+            <TransactionDetailItemCMS itemName="Invoice URL">
+              <p className="line-clamp-1">{transactionDetails?.invoice_url}</p>
+            </TransactionDetailItemCMS>
           </div>
 
           {/* Payment Details */}
@@ -135,6 +138,15 @@ export default function TransactionDetailsCMS({
                 Math.round(Number(transactionDetails?.product_price))
               )}
             />
+            {transactionDetails?.product_discount !== "0" && (
+              <ReceiptLineItemCMS
+                receiptName="Discount"
+                receiptValue={`-${rupiahCurrency(
+                  Math.round(Number(transactionDetails?.product_discount))
+                )}`}
+                isDiscount
+              />
+            )}
             <ReceiptLineItemCMS
               receiptName="Admin Fee"
               receiptValue={rupiahCurrency(
@@ -153,6 +165,7 @@ export default function TransactionDetailsCMS({
               receiptValue={rupiahCurrency(
                 Math.round(Number(transactionDetails?.product_total_amount))
               )}
+              isGrandTotal
             />
           </div>
         </div>

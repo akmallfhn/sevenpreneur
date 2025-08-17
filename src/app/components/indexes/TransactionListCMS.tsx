@@ -100,27 +100,31 @@ export default function TransactionListCMS({
             <div className="flex items-center gap-3">
               <ScorecardItemCMS
                 scorecardName="Total Revenue"
-                scorecardValue={rupiahCurrency(0)}
+                scorecardValue={
+                  data?.metapaging.total_revenue
+                    ? rupiahCurrency(Number(data?.metapaging.total_revenue))
+                    : ""
+                }
                 scorecardBackground="bg-[#400FDF]"
               />
               <ScorecardItemCMS
                 scorecardName="Total Transactions"
-                scorecardValue={0}
+                scorecardValue={data?.metapaging.total_data || ""}
                 scorecardBackground="bg-primary"
               />
               <ScorecardItemCMS
                 scorecardName="Total Paid Transactions"
-                scorecardValue={0}
+                scorecardValue={data?.metapaging.total_paid || ""}
                 scorecardBackground="bg-success-foreground"
               />
               <ScorecardItemCMS
                 scorecardName="Total Pending Transactions"
-                scorecardValue={0}
+                scorecardValue={data?.metapaging.total_pending || ""}
                 scorecardBackground="bg-warning-foreground"
               />
               <ScorecardItemCMS
                 scorecardName="Total Failed Transactions"
-                scorecardValue={0}
+                scorecardValue={data?.metapaging.total_failed || ""}
                 scorecardBackground="bg-danger-foreground"
               />
             </div>
