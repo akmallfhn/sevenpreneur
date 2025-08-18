@@ -46,8 +46,13 @@ async function createTransaction(
   let discountId: number | null = null;
   let discountPercent = new Prisma.Decimal(0);
   if (discountCode) {
+    const now = new Date();
     const selectedDiscount = await prisma.discount.findFirst({
-      where: { code: discountCode },
+      where: {
+        code: discountCode,
+        start_date: { lte: now },
+        end_date: { gte: now },
+      },
     });
     if (!selectedDiscount) {
       throw new TRPCError({
@@ -213,6 +218,7 @@ export const purchaseRouter = createTRPCRouter({
         selectedCategory = CategoryEnum.PLAYLIST;
         selectedItemId = opts.input.playlist_id;
       }
+      const now = new Date();
       const theDiscount = await opts.ctx.prisma.discount.findFirst({
         omit: { id: true, created_at: true, updated_at: true },
         where: {
@@ -220,6 +226,8 @@ export const purchaseRouter = createTRPCRouter({
           category: selectedCategory!,
           item_id: selectedItemId!,
           status: StatusEnum.ACTIVE,
+          start_date: { lte: now },
+          end_date: { gte: now },
         },
       });
 
