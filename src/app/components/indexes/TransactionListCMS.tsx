@@ -157,7 +157,7 @@ export default function TransactionListCMS({
                       <ProductCategoryLabelCMS variants={post.category} />
                     </TableCellCMS>
                     <TableCellCMS>
-                      {rupiahCurrency(Math.round(Number(post.total_amount)))}
+                      {rupiahCurrency(Math.round(Number(post.net_amount)))}
                     </TableCellCMS>
                     <TableCellCMS>
                       <TransactionStatusLabelCMS variants={post.status} />
