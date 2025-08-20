@@ -10,7 +10,12 @@ import {
   stringIsNanoid,
   stringIsUUID,
 } from "@/trpc/utils/validation";
-import { CategoryEnum, StatusEnum, TStatusEnum } from "@prisma/client";
+import {
+  CategoryEnum,
+  PrismaClient,
+  StatusEnum,
+  TStatusEnum,
+} from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -33,6 +38,26 @@ type PlaylistBadge = {
   slugUrl: string | undefined;
   totalVideo: number | undefined;
 };
+
+async function isEnrolledCohort(
+  prisma: PrismaClient,
+  user_id: string,
+  cohort_id: number,
+  error_message: string
+) {
+  const theEnrolledCohort = await prisma.userCohort.findFirst({
+    where: {
+      user_id: user_id,
+      cohort_id: cohort_id,
+    },
+  });
+  if (!theEnrolledCohort) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: error_message,
+    });
+  }
+}
 
 export const readRouter = createTRPCRouter({
   industry: loggedInProcedure
@@ -258,6 +283,24 @@ export const readRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const checkMaterial = await opts.ctx.prisma.material.findFirst({
+          select: { learning: { select: { cohort_id: true } } },
+          where: { id: opts.input.id },
+        });
+        if (!checkMaterial) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The material with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          checkMaterial.learning.cohort_id,
+          "You're not allowed to read materials of a cohort which you aren't enrolled."
+        );
+      }
       const theMaterial = await opts.ctx.prisma.material.findFirst({
         where: {
           id: opts.input.id,
@@ -284,6 +327,24 @@ export const readRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const checkModule = await opts.ctx.prisma.module.findFirst({
+          select: { cohort_id: true },
+          where: { id: opts.input.id },
+        });
+        if (!checkModule) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The module with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          checkModule.cohort_id,
+          "You're not allowed to read modules of a cohort which you aren't enrolled."
+        );
+      }
       const theModule = await opts.ctx.prisma.module.findFirst({
         where: {
           id: opts.input.id,
@@ -310,6 +371,24 @@ export const readRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const checkProject = await opts.ctx.prisma.project.findFirst({
+          select: { cohort_id: true },
+          where: { id: opts.input.id },
+        });
+        if (!checkProject) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The project with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          checkProject.cohort_id,
+          "You're not allowed to read projects of a cohort which you aren't enrolled."
+        );
+      }
       const theProject = await opts.ctx.prisma.project.findFirst({
         where: {
           id: opts.input.id,

@@ -131,6 +131,26 @@ type PlaylistBadge = {
   totalVideo: number | undefined;
 };
 
+async function isEnrolledCohort(
+  prisma: PrismaClient,
+  user_id: string,
+  cohort_id: number,
+  error_message: string
+) {
+  const theEnrolledCohort = await prisma.userCohort.findFirst({
+    where: {
+      user_id: user_id,
+      cohort_id: cohort_id,
+    },
+  });
+  if (!theEnrolledCohort) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: error_message,
+    });
+  }
+}
+
 export const listRouter = createTRPCRouter({
   industries: loggedInProcedure.query(async (opts) => {
     const industryList = await opts.ctx.prisma.industry.findMany({
@@ -377,6 +397,14 @@ export const listRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          opts.input.cohort_id,
+          "You're not allowed to read members of a cohort which you aren't enrolled."
+        );
+      }
       const cohortMemberList = await opts.ctx.prisma.userCohort.findMany({
         include: { user: { include: { phone_country: true } } },
         where: { cohort_id: opts.input.cohort_id },
@@ -495,6 +523,24 @@ export const listRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const theLearning = await opts.ctx.prisma.learning.findFirst({
+          select: { cohort_id: true },
+          where: { id: opts.input.learning_id },
+        });
+        if (!theLearning) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The learning with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          theLearning.cohort_id,
+          "You're not allowed to read materials of a cohort which you aren't enrolled."
+        );
+      }
       const materialsList = await opts.ctx.prisma.material.findMany({
         where: { learning_id: opts.input.learning_id },
         orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
@@ -522,6 +568,14 @@ export const listRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          opts.input.cohort_id,
+          "You're not allowed to read modules of a cohort which you aren't enrolled."
+        );
+      }
       const modulesList = await opts.ctx.prisma.module.findMany({
         where: { cohort_id: opts.input.cohort_id },
         orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
@@ -549,6 +603,14 @@ export const listRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          opts.input.cohort_id,
+          "You're not allowed to read projects of a cohort which you aren't enrolled."
+        );
+      }
       const projectsList = await opts.ctx.prisma.project.findMany({
         where: { cohort_id: opts.input.cohort_id },
         orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
