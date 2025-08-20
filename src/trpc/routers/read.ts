@@ -582,6 +582,32 @@ export const readRouter = createTRPCRouter({
       })
     )
     .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const checkVideo = await opts.ctx.prisma.video.findFirst({
+          select: { playlist_id: true },
+          where: { id: opts.input.id },
+        });
+        if (!checkVideo) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The video with the given ID is not found.",
+          });
+        }
+        const theEnrolledPlaylist =
+          await opts.ctx.prisma.userPlaylist.findFirst({
+            where: {
+              user_id: opts.ctx.user.id,
+              playlist_id: checkVideo.playlist_id,
+            },
+          });
+        if (!theEnrolledPlaylist) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message:
+              "You're not allowed to read videos of a playlist which you aren't enrolled.",
+          });
+        }
+      }
       const theVideo = await opts.ctx.prisma.video.findFirst({
         where: {
           id: opts.input.id,
