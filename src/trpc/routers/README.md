@@ -16,12 +16,16 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `auth.checkSession` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `auth.logout`       |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 
+**Scopes:** `auth.checkSession`: All logged-in users only have read access to their own user data.
+
 ## Industries 🏭
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `list.industries` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.industry`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:** All logged-in users have read access to all industries.
 
 ## Entrepreneur Stages 📈
 
@@ -30,6 +34,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.entrepreneurStages` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.entrepreneurStage`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
+**Scopes:** All logged-in users have read access to all entrepreneur stages.
+
 ## Roles 👥
 
 | Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -37,17 +43,23 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.roles`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.role`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
+**Scopes:** All logged-in users have read access to all roles.
+
 ## Phone Country Codes ☎️
 
 | Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `list.phoneCountryCodes` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
+**Scopes:** All logged-in users have read access to all phone country codes.
+
 ## Payment Channels 🏦
 
 | Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `list.paymentChannels` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:** All logged-in users have read access to all payment channels.
 
 ## Users 👤
 
@@ -59,6 +71,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Administrators have write access to all users' data.
+- Administrators, Educators, and Class Managers have read access to all users' data.
+
 ## Cohorts 🎓
 
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -69,11 +86,26 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Administrators and Class Manager have write access to all cohorts' data.
+- `list.cohorts`:
+  - Administrators can see all cohorts.
+  - Non-Administrators can only see active and published cohorts.
+- `read.cohort`:
+  - Logged-in users can read all cohorts given the cohort ID.
+  - Non-logged-in users can only read active and published cohorts.
+
 ### Cohort Members 👥
 
 | Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `list.cohortMembers` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrators, Educators, and Class Managers can see all cohort members given the cohort ID.
+- General Users can see all cohort members given the cohort ID which the users are enrolled.
 
 ### Cohort Prices 💵
 
@@ -85,6 +117,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Administrators and Class Manager have write access to all cohort prices' data.
+- Logged-in users can see all cohort prices given the cohort ID.
+
 ## Modules 📕
 
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -94,6 +131,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `read.module`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `update.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Administrators and Class Manager have write access to all modules' data.
+- Administrators, Educators, and Class Managers can see all modules given the cohort ID.
+- General Users can see all modules given the cohort ID which the users are enrolled.
 
 ## Learnings 📅
 
@@ -106,6 +149,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Administrators and Class Manager have write access to all learnings' data.
+- Logged-in users can see all learnings given the cohort ID.
+- `list.learnings_public`: Non-logged-in users can only see active and published learnings given the cohort ID.
+
 ### Materials 📖
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -115,6 +164,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `read.material`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `update.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Administrators and Class Manager have write access to all materials' data.
+- Administrators, Educators, and Class Managers can see all materials given the learning ID.
+- General Users can see all materials given the learning ID which the users are enrolled.
 
 ## Projects 🗂️
 
@@ -126,6 +181,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 | `delete.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Administrators and Class Manager have write access to all projects' data.
+- Administrators, Educators, and Class Managers can see all projects given the cohort ID.
+- General Users can see all projects given the cohort ID which the users are enrolled.
+
 ## Submissions 🗒️
 
 | Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -135,6 +196,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `read.submission`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `update.submission` |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
 | `delete.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrators have write access to all submissions' data.
+- Administrators, Educators, and Class Managers have read access to all submissions' data.
+- General Users have read/write access to their own submission data.
 
 ## Playlists 📺
 
@@ -146,6 +213,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Only Administrators have write access to all playlists' data.
+- `list.playlists`:
+  - Administrators can see all playlists.
+  - Non-Administrators can only see active and published playlists.
+- `read.cohort`: Everyone can read all playlists given the playlist ID.
+
 ### Educators Playlists 👥
 
 | Procedure Name            | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -154,12 +229,19 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.educatorsPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `delete.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+**Scopes:**
+
+- Only Administrators have write access to all educator playlists' data.
+- Logged-in users can see all educator playlists given the playlist ID.
+
 ### Enrolled Playlists 📺
 
 | Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `list.enrolledPlaylists` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.enrolledPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:** Logged-in users can see all their own paid/enrolled playlists.
 
 ## Videos 🎞️
 
@@ -169,6 +251,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `read.video`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `update.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Only Administrators have write access to all videos' data.
+- Administrators, Educators, and Class Managers can see all videos given the playlist ID.
+- General Users can see all videos given the playlist ID which the users are enrolled.
 
 ## Discounts 🪙
 
@@ -180,6 +268,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `update.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
+**Scopes:** Only Administrators have access to all discounts' data.
+
 ## Transactions 💰
 
 | Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -190,3 +280,9 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `purchase.cancel`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.transactions`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.transaction`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrator can see all transactions.
+- Logged-in users can purchase items for their own.
+- Logged-in users can see all their own transactions.
