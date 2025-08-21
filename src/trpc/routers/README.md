@@ -284,5 +284,6 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 **Scopes:**
 
 - Administrator can see all transactions.
+- Administrator and Class Manager can purchase items for other users.
 - Logged-in users can purchase items for their own.
 - Logged-in users can see all their own transactions.

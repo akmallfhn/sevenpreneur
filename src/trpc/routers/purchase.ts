@@ -8,6 +8,7 @@ import { createTRPCRouter, loggedInProcedure } from "@/trpc/init";
 import {
   numberIsID,
   stringIsNanoid,
+  stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import {
@@ -248,6 +249,7 @@ export const purchaseRouter = createTRPCRouter({
   cohort: loggedInProcedure
     .input(
       z.object({
+        user_id: stringIsUUID().optional(),
         phone_country_id: numberIsID().nullable().optional(),
         phone_number: stringNotBlank().nullable().optional(),
         cohort_price_id: numberIsID(),
@@ -256,6 +258,14 @@ export const purchaseRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      let currentRole = opts.ctx.user.role.name;
+      let selectedUserId = opts.ctx.user.id;
+      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+        if (opts.input.user_id) {
+          selectedUserId = opts.input.user_id;
+        }
+      }
+
       const selectedCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
         include: {
           cohort: true,
@@ -271,7 +281,7 @@ export const purchaseRouter = createTRPCRouter({
 
       const { transactionId, invoiceUrl } = await createTransaction(
         opts.ctx.prisma,
-        opts.ctx.user.id,
+        selectedUserId,
         CategoryEnum.COHORT,
         {
           id: selectedCohortPrice.id,
@@ -285,7 +295,7 @@ export const purchaseRouter = createTRPCRouter({
       if (opts.input.phone_country_id && opts.input.phone_number) {
         await changePhoneNumber(
           opts.ctx.prisma,
-          opts.ctx.user.id,
+          selectedUserId,
           opts.input.phone_country_id,
           opts.input.phone_number
         );
@@ -302,6 +312,7 @@ export const purchaseRouter = createTRPCRouter({
   playlist: loggedInProcedure
     .input(
       z.object({
+        user_id: stringIsUUID().optional(),
         phone_country_id: numberIsID().nullable().optional(),
         phone_number: stringNotBlank().nullable().optional(),
         playlist_id: numberIsID(),
@@ -310,6 +321,14 @@ export const purchaseRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      let currentRole = opts.ctx.user.role.name;
+      let selectedUserId = opts.ctx.user.id;
+      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+        if (opts.input.user_id) {
+          selectedUserId = opts.input.user_id;
+        }
+      }
+
       const selectedPlaylist = await opts.ctx.prisma.playlist.findFirst({
         where: { id: opts.input.playlist_id },
       });
@@ -322,7 +341,7 @@ export const purchaseRouter = createTRPCRouter({
 
       const { transactionId, invoiceUrl } = await createTransaction(
         opts.ctx.prisma,
-        opts.ctx.user.id,
+        selectedUserId,
         CategoryEnum.PLAYLIST,
         {
           id: selectedPlaylist.id,
@@ -336,7 +355,7 @@ export const purchaseRouter = createTRPCRouter({
       if (opts.input.phone_country_id && opts.input.phone_number) {
         await changePhoneNumber(
           opts.ctx.prisma,
-          opts.ctx.user.id,
+          selectedUserId,
           opts.input.phone_country_id,
           opts.input.phone_number
         );
