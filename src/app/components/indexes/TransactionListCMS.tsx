@@ -5,7 +5,7 @@ import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
-import { ChevronRight, PlusCircle, Loader2, Eye } from "lucide-react";
+import { ChevronRight, Loader2, Eye, FileSpreadsheet } from "lucide-react";
 import TableHeadCMS from "../elements/TableHeadCMS";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -17,6 +17,7 @@ import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import { useRouter, useSearchParams } from "next/navigation";
 import TransactionDetailsCMS from "../modals/TransactionDetailsCMS";
+import CreateInvoiceFormCMS from "../forms/CreateInvoiceFormCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -30,7 +31,8 @@ export default function TransactionListCMS({
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("id");
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenDetails, setIsOpenDetails] = useState(false);
+  const [isOpenCreateInvoice, setIsOpenCreateInvoice] = useState(false);
 
   // Set token for API
   useEffect(() => {
@@ -46,12 +48,12 @@ export default function TransactionListCMS({
 
   // Open modal when has id
   useEffect(() => {
-    setIsOpenModal(!!selectedId);
+    setIsOpenDetails(!!selectedId);
   }, [selectedId]);
 
   // Close modal when close
   const handleClose = () => {
-    setIsOpenModal(false);
+    setIsOpenDetails(false);
     router.push("/transactions", { scroll: false });
   };
 
@@ -79,6 +81,13 @@ export default function TransactionListCMS({
               titlePage={"Transaction List"}
               descPage={"View and monitor all payment records in one place."}
             />
+            <AppButton
+              variant="cmsPrimary"
+              onClick={() => setIsOpenCreateInvoice(true)}
+            >
+              <FileSpreadsheet className="size-5" />
+              Create Invoice
+            </AppButton>
           </div>
         </div>
 
@@ -108,22 +117,22 @@ export default function TransactionListCMS({
                 scorecardBackground="bg-[#400FDF]"
               />
               <ScorecardItemCMS
-                scorecardName="Total Transactions"
+                scorecardName="Transactions Attempt"
                 scorecardValue={data?.metapaging.total_data || 0}
                 scorecardBackground="bg-primary"
               />
               <ScorecardItemCMS
-                scorecardName="Total Paid Transactions"
+                scorecardName="Paid Transactions"
                 scorecardValue={data?.metapaging.total_paid || 0}
                 scorecardBackground="bg-success-foreground"
               />
               <ScorecardItemCMS
-                scorecardName="Total Pending Transactions"
+                scorecardName="Pending Transactions"
                 scorecardValue={data?.metapaging.total_pending || 0}
                 scorecardBackground="bg-warning-foreground"
               />
               <ScorecardItemCMS
-                scorecardName="Total Failed Transactions"
+                scorecardName="Failed Transactions"
                 scorecardValue={data?.metapaging.total_failed || 0}
                 scorecardBackground="bg-danger-foreground"
               />
@@ -188,11 +197,20 @@ export default function TransactionListCMS({
         )}
       </div>
 
+      {/* Open Create Invoice */}
+      {isOpenCreateInvoice && (
+        <CreateInvoiceFormCMS
+          sessionToken={sessionToken}
+          isOpen={isOpenCreateInvoice}
+          onClose={() => setIsOpenCreateInvoice(false)}
+        />
+      )}
+
       {/* Open Transaction Details */}
-      {isOpenModal && (
+      {isOpenDetails && (
         <TransactionDetailsCMS
           transactionId={selectedId}
-          isOpen={isOpenModal}
+          isOpen={isOpenDetails}
           onClose={handleClose}
         />
       )}
