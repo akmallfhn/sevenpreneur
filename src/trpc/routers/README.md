@@ -91,10 +91,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators and Class Manager have write access to all cohorts' data.
 - `list.cohorts`:
   - Administrators can see all cohorts.
-  - Non-Administrators can only see active and published cohorts.
+  - Non-Administrators can only see active cohorts.
 - `read.cohort`:
   - Logged-in users can read all cohorts given the cohort ID.
-  - Non-logged-in users can only read active and published cohorts.
+  - Non-logged-in users can only read active cohorts.
 
 ### Cohort Members 👥
 
@@ -153,7 +153,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators and Class Manager have write access to all learnings' data.
 - Logged-in users can see all learnings given the cohort ID.
-- `list.learnings_public`: Non-logged-in users can only see active and published learnings given the cohort ID.
+- `list.learnings_public`: Non-logged-in users can only see active learnings given the cohort ID.
 
 ### Materials 📖
 
@@ -218,8 +218,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Only Administrators have write access to all playlists' data.
 - `list.playlists`:
   - Administrators can see all playlists.
-  - Non-Administrators can only see active and published playlists.
-- `read.cohort`: Everyone can read all playlists given the playlist ID.
+  - Non-Administrators can only see active playlists.
+- `read.playlist`: Everyone can read all playlists given the playlist ID.
 
 ### Educators Playlists 👥
 
