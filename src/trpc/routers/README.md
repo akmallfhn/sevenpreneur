@@ -219,7 +219,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - `list.playlists`:
   - Administrators can see all playlists.
   - Non-Administrators can only see active and published playlists.
-- `read.cohort`: Everyone can read all playlists given the playlist ID.
+- `read.playlist`: Everyone can read all playlists given the playlist ID.
 
 ### Educators Playlists 👥
 
