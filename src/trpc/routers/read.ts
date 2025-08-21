@@ -176,9 +176,6 @@ export const readRouter = createTRPCRouter({
       if (!opts.ctx.user) {
         Object.assign(whereClause, {
           status: StatusEnum.ACTIVE,
-          published_at: {
-            lte: new Date(),
-          },
         });
       }
       const theCohort = await opts.ctx.prisma.cohort.findFirst({

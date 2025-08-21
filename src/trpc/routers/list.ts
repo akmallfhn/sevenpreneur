@@ -315,7 +315,6 @@ export const listRouter = createTRPCRouter({
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
         Object.assign(whereClause, {
           status: StatusEnum.ACTIVE,
-          published_at: { lte: new Date() },
           cohort_prices: {
             status: StatusEnum.ACTIVE,
           },
@@ -692,9 +691,6 @@ export const listRouter = createTRPCRouter({
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
         Object.assign(whereClause, {
           status: StatusEnum.ACTIVE,
-          published_at: {
-            lte: new Date(),
-          },
         });
       }
 
