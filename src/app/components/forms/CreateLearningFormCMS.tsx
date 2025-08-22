@@ -224,105 +224,106 @@ export default function CreateLearningFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form
-        className="relative w-full h-full flex flex-col"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
-          <div className="group-input flex flex-col gap-4">
-            <InputCMS
-              inputId="learning-name"
-              inputName="Session Topic"
-              inputType="text"
-              inputPlaceholder="What’s the topic of this meeting?"
-              value={formData.learningName}
-              onInputChange={handleInputChange("learningName")}
-              required
-            />
-            <TextAreaCMS
-              textAreaId="learning-description"
-              textAreaName="Session Description"
-              textAreaPlaceholder="Give a short overview of what will be covered."
-              textAreaHeight="h-32"
-              value={formData.learningDescription}
-              onInputChange={handleInputChange("learningDescription")}
-              required
-            />
-            <InputCMS
-              inputId="learning-date"
-              inputName="Session Schedule"
-              inputType="datetime-local"
-              value={formData.learningDate}
-              onInputChange={handleInputChange("learningDate")}
-              required
-            />
-            <SelectCMS
-              selectId="learning-method"
-              selectName="Session Method"
-              selectPlaceholder="Choose how this session will be delivered"
-              value={formData.learningMethod}
-              onChange={handleInputChange("learningMethod")}
-              required
-              options={[
-                {
-                  label: "Online",
-                  value: "ONLINE",
-                },
-                {
-                  label: "On Site",
-                  value: "ONSITE",
-                },
-                {
-                  label: "Hybrid",
-                  value: "HYBRID",
-                },
-              ]}
-            />
-            {["ONLINE", "HYBRID"].includes(formData.learningMethod) && (
+      {isLoading && (
+        <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+          <Loader2 className="animate-spin size-5 " />
+        </div>
+      )}
+      {isError && (
+        <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+          No Data
+        </div>
+      )}
+
+      {educatorUserList && !isLoading && !isError && (
+        <form
+          className="relative w-full h-full flex flex-col"
+          onSubmit={handleSubmit}
+        >
+          <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
+            <div className="group-input flex flex-col gap-4">
               <InputCMS
-                inputId="learning-url"
-                inputName="Meeting Link"
-                inputType="url"
-                inputPlaceholder="e.g. https://meet.google.com/vjd-wovj-xfe"
-                value={formData.learningURL}
-                onInputChange={handleInputChange("learningURL")}
-                characterLength={300}
+                inputId="learning-name"
+                inputName="Session Topic"
+                inputType="text"
+                inputPlaceholder="What’s the topic of this meeting?"
+                value={formData.learningName}
+                onInputChange={handleInputChange("learningName")}
                 required
               />
-            )}
-            {["ONSITE", "HYBRID"].includes(formData.learningMethod) && (
-              <>
+              <TextAreaCMS
+                textAreaId="learning-description"
+                textAreaName="Session Description"
+                textAreaPlaceholder="Give a short overview of what will be covered."
+                textAreaHeight="h-32"
+                value={formData.learningDescription}
+                onInputChange={handleInputChange("learningDescription")}
+                required
+              />
+              <InputCMS
+                inputId="learning-date"
+                inputName="Session Schedule"
+                inputType="datetime-local"
+                value={formData.learningDate}
+                onInputChange={handleInputChange("learningDate")}
+                required
+              />
+              <SelectCMS
+                selectId="learning-method"
+                selectName="Session Method"
+                selectPlaceholder="Choose how this session will be delivered"
+                value={formData.learningMethod}
+                onChange={handleInputChange("learningMethod")}
+                required
+                options={[
+                  {
+                    label: "Online",
+                    value: "ONLINE",
+                  },
+                  {
+                    label: "On Site",
+                    value: "ONSITE",
+                  },
+                  {
+                    label: "Hybrid",
+                    value: "HYBRID",
+                  },
+                ]}
+              />
+              {["ONLINE", "HYBRID"].includes(formData.learningMethod) && (
                 <InputCMS
-                  inputId="learning-location"
-                  inputName="Venue Name"
-                  inputType="text"
-                  inputPlaceholder="e.g. The Ritz-Carlton Jakarta"
-                  value={formData.learningLocation}
-                  onInputChange={handleInputChange("learningLocation")}
-                  required
-                />
-                <InputCMS
-                  inputId="learning-location-url"
-                  inputName="Google Maps Link"
+                  inputId="learning-url"
+                  inputName="Meeting Link"
                   inputType="url"
-                  inputPlaceholder="e.g. https://maps.app.goo.gl/3UxudP"
-                  value={formData.learningLocationURL}
-                  onInputChange={handleInputChange("learningLocationURL")}
+                  inputPlaceholder="e.g. https://meet.google.com/vjd-wovj-xfe"
+                  value={formData.learningURL}
+                  onInputChange={handleInputChange("learningURL")}
+                  characterLength={300}
                   required
                 />
-              </>
-            )}
-            {isLoading && (
-              <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
-                <Loader2 className="animate-spin size-5 " />
-              </div>
-            )}
-            {isError && (
-              <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
-                <Loader2 className="animate-spin size-5 " />
-              </div>
-            )}
-            {educatorUserList && !isLoading && !isError && (
+              )}
+              {["ONSITE", "HYBRID"].includes(formData.learningMethod) && (
+                <>
+                  <InputCMS
+                    inputId="learning-location"
+                    inputName="Venue Name"
+                    inputType="text"
+                    inputPlaceholder="e.g. The Ritz-Carlton Jakarta"
+                    value={formData.learningLocation}
+                    onInputChange={handleInputChange("learningLocation")}
+                    required
+                  />
+                  <InputCMS
+                    inputId="learning-location-url"
+                    inputName="Google Maps Link"
+                    inputType="url"
+                    inputPlaceholder="e.g. https://maps.app.goo.gl/3UxudP"
+                    value={formData.learningLocationURL}
+                    onInputChange={handleInputChange("learningLocationURL")}
+                    required
+                  />
+                </>
+              )}
               <SelectCMS
                 selectId="learning-speaker"
                 selectName="Assigned Educator"
@@ -332,25 +333,28 @@ export default function CreateLearningFormCMS({
                 options={
                   educatorUserList.list.map((post) => ({
                     label: post.full_name,
+                    image:
+                      post.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png",
                     value: post.id,
                   })) || []
                 }
               />
-            )}
+            </div>
           </div>
-        </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
-          <AppButton
-            className="w-full"
-            variant="cmsPrimary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Create Session
-          </AppButton>
-        </div>
-      </form>
+          <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+            <AppButton
+              className="w-full"
+              variant="cmsPrimary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2 className="animate-spin size-4" />}
+              Create Session
+            </AppButton>
+          </div>
+        </form>
+      )}
     </AppSheet>
   );
 }

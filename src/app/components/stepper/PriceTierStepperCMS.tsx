@@ -56,7 +56,7 @@ export default function PriceTierStepperCMS({
       {tiers.map((post, index) => (
         <div
           key={index}
-          className="price-tier-item relative p-3 pb-5 bg-section-background flex w-full gap-4 rounded-md transform transition-all"
+          className="price-tier-item relative p-3 pb-5 bg-section-background/50 border border-outline flex w-full gap-4 rounded-md transform transition-all"
         >
           <div className="w-full">
             <InputCMS
