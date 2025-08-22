@@ -23,7 +23,7 @@ export async function generateMetadata({
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
   return {
-    title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
+    title: `Checkout ${playlistData.name} - Learning Series | Sevenpreneur`,
     description:
       "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
     authors: [{ name: "Sevenpreneur" }],
@@ -33,7 +33,7 @@ export async function generateMetadata({
       canonical: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
     },
     openGraph: {
-      title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
+      title: `Checkout ${playlistData.name} - Learning Series | Sevenpreneur`,
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
       url: `/playlists/${playlistData.slug_url}/${playlistData.id}/checkout`,
@@ -48,7 +48,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `Checkout ${playlistData.name} - Video Course | Sevenpreneur`,
+      title: `Checkout ${playlistData.name} - Learning Series | Sevenpreneur`,
       description:
         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
       images: playlistData.image_url,

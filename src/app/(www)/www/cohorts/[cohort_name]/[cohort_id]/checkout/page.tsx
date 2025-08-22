@@ -1,20 +1,76 @@
 import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP";
 import CheckoutHeader from "@/app/components/navigations/CheckoutHeader";
 import { setSessionToken, trpc } from "@/trpc/server";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 interface CheckoutCohortPageProps {
   params: Promise<{ cohort_name: string; cohort_id: string }>;
 }
 
+export async function generateMetadata({
+  params,
+}: CheckoutCohortPageProps): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  const { cohort_id } = await params;
+  const cohortId = parseInt(cohort_id);
+
+  // --- Get Data
+  setSessionToken(sessionToken!);
+  const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
+
+  return {
+    title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
+    description:
+      "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+    authors: [{ name: "Sevenpreneur" }],
+    publisher: "Sevenpreneur",
+    referrer: "origin-when-cross-origin",
+    alternates: {
+      canonical: `/cohorts/${cohortData.slug_url}/${cohortData.id}/checkout`,
+    },
+    openGraph: {
+      title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
+      description:
+        "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+      url: `/cohorts/${cohortData.slug_url}/${cohortData.id}/checkout`,
+      siteName: "Sevenpreneur",
+      images: [
+        {
+          url: cohortData.image,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
+      description:
+        "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+      images: cohortData.image,
+    },
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
+  };
+}
+
 export default async function CheckoutCohortPage({
   params,
 }: CheckoutCohortPageProps) {
-  const { cohort_name, cohort_id } = await params;
-  const cohortId = parseInt(cohort_id);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
+  const { cohort_name, cohort_id } = await params;
+  const cohortId = parseInt(cohort_id);
 
   // --- Redirect if not login
   if (!sessionToken) {
@@ -23,14 +79,16 @@ export default async function CheckoutCohortPage({
     );
   }
 
-  // --- Get User Data
+  // --- Get Data
   setSessionToken(sessionToken);
   const checkUser = (await trpc.auth.checkSession()).user;
-
-  // --- Get Cohort Data
-  const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
-  const ticketListRaw = (await trpc.read.cohort({ id: cohortId })).cohort
-    .cohort_prices;
+  let cohortData;
+  try {
+    cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
+  } catch (error) {
+    return notFound();
+  }
+  const ticketListRaw = cohortData.cohort_prices;
   const ticketList = ticketListRaw.map((item) => ({
     ...item,
     amount:
@@ -38,8 +96,6 @@ export default async function CheckoutCohortPage({
         ? item.amount.toNumber()
         : item.amount,
   }));
-
-  // --- Get Payment Data
   const paymentMethodRaw = (await trpc.list.paymentChannels()).list;
   const paymentMethodList = paymentMethodRaw.map((post) => ({
     ...post,
@@ -52,12 +108,20 @@ export default async function CheckoutCohortPage({
         ? post.calc_flat.toNumber()
         : post.calc_flat,
   }));
+
+  // --- Auto Correction Slug
+  const correctSlug = cohortData.slug_url;
+  if (cohort_name !== correctSlug) {
+    redirect(`/cohorts/${correctSlug}/${cohortId}/checkout`);
+  }
+
   return (
     <div className="flex w-full min-h-screen bg-section-background">
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <CheckoutHeader />
         <div className="flex-1 overflow-y-auto">
           <CheckoutCohortFormSVP
+            cohortId={cohortData.id}
             cohortName={cohortData.name}
             cohortImage={cohortData.image}
             initialUserName={checkUser.full_name}

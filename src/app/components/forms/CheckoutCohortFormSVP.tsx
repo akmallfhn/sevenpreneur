@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
+import { toSnakeCase } from "@/lib/snake-case";
 import { MakePaymentCohortXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -13,17 +14,10 @@ import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
-
-interface PaymentMethodItem {
-  id: number;
-  image: string;
-  label: string;
-  code: string;
-  method: string;
-  calc_percent: number;
-  calc_flat: number;
-  calc_vat: boolean;
-}
+import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
+import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
+import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
+import { DiscountType, PaymentMethodItem } from "./CheckoutPlaylistFormSVP";
 
 interface PriceItem {
   id: number;
@@ -33,6 +27,7 @@ interface PriceItem {
 }
 
 interface CheckoutCohortFormSVPProps {
+  cohortId: number;
   cohortName: string;
   cohortImage: string;
   initialUserName: string;
@@ -43,6 +38,7 @@ interface CheckoutCohortFormSVPProps {
 }
 
 export default function CheckoutCohortFormSVP({
+  cohortId,
   cohortName,
   cohortImage,
   initialUserName,
@@ -55,6 +51,8 @@ export default function CheckoutCohortFormSVP({
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+  const [openDiscount, setOpenDiscount] = useState(false);
+  const [discount, setDiscount] = useState<DiscountType | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const ticketIdParams = searchParams.get("ticketId");
@@ -135,7 +133,11 @@ export default function CheckoutCohortFormSVP({
   // --- Calculating price
   const totalItem = 1;
   const programPrice = selectedTicket?.amount || 0;
-  const subtotal = totalItem * programPrice;
+  let subtotal = totalItem * programPrice;
+  if (discount?.calc_percent) {
+    const discountRate = discount.calc_percent / 100;
+    subtotal = Math.round(totalItem * programPrice * (1 - discountRate));
+  }
   const vatRate = 0.11;
   const paymentCalculation = useMemo(() => {
     if (!chosenPaymentChannelData) {
@@ -201,9 +203,13 @@ export default function CheckoutCohortFormSVP({
     // -- Call tRPC Payment
     try {
       const makePayment = await MakePaymentCohortXendit({
+        // Mandatory fields
         cohortPriceId: selectedTicket.id,
         paymentChannelId: chosenPaymentChannelData.id,
         phoneNumber: formData.userPhoneNumber.trim(),
+
+        // Optional fields
+        discountCode: discount?.code,
       });
       if (makePayment.status === 200) {
         window.open(makePayment.invoice_url, "_blank");
@@ -223,12 +229,12 @@ export default function CheckoutCohortFormSVP({
 
   return (
     <React.Fragment>
-      <div className="checkout-form relative flex flex-col min-h-full pb-36 bg-[#F9F9F9]">
+      <div className="checkout-form relative flex flex-col min-h-full pb-36 bg-[#F9F9F9] dark:bg-[#121212]">
         {!isValidTicketId ? (
           // Programs Tier Ticketing
           <div className="programs-tier-box flex p-5 pt-8">
             <div className="programs-tier flex flex-col gap-4 bg-white p-4 rounded-md shadow-sm z-10">
-              <div className="flex flex-col font-ui">
+              <div className="flex flex-col font-bodycopy">
                 <h1 className="font-bold text-black">Programs Tier</h1>
                 <p className="text-alternative text-sm">
                   Get the most out of your learning. Choose the tier that suits
@@ -254,6 +260,8 @@ export default function CheckoutCohortFormSVP({
                   className="w-full"
                   onClick={handleParamsQuery}
                   disabled={isLoadingCheckout || selectedPriceTierId === 0}
+                  featureName="checkout_price_cohort"
+                  featureItem={toSnakeCase(cohortName)}
                 >
                   {isLoadingCheckout ? (
                     <Loader2 className="animate-spin size-5" />
@@ -269,7 +277,7 @@ export default function CheckoutCohortFormSVP({
           // Payment Details
           <div className="payment-details relative flex flex-col gap-1 z-10">
             {/* Payment Summary */}
-            <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm">
+            <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm dark:bg-surface-black dark:border-outline-dark">
               <div className="aspect-square size-16 rounded-md overflow-hidden">
                 <Image
                   className="object-cover w-full h-full"
@@ -279,8 +287,8 @@ export default function CheckoutCohortFormSVP({
                   width={400}
                 />
               </div>
-              <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
-                <p className="font-bold text-black line-clamp-1">
+              <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
+                <p className="font-bold line-clamp-1">
                   {selectedTicket?.name || "-"}
                 </p>
                 <p className="text-alternative text-sm font-medium line-clamp-2">
@@ -289,10 +297,8 @@ export default function CheckoutCohortFormSVP({
               </div>
             </div>
             {/* Personal Information */}
-            <div className="payment-method flex flex-col gap-3 bg-white p-5">
-              <h2 className="font-ui font-bold text-black">
-                Personal Information
-              </h2>
+            <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
+              <h2 className="font-bodycopy font-bold">Personal Information</h2>
               <div className="flex flex-col gap-3">
                 <InputSVP
                   inputId="user-full-name"
@@ -321,8 +327,8 @@ export default function CheckoutCohortFormSVP({
               </div>
             </div>
             {/* Payment Method */}
-            <div className="payment-method flex flex-col gap-3 bg-white p-5">
-              <h1 className="font-ui font-bold text-black">Payment Method</h1>
+            <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
+              <h1 className="font-bodycopy font-bold">Payment Method</h1>
               <div className="flex flex-col gap-5">
                 <PaymentChannelGroupSVP
                   groupPaymentName="Bank Virtual Account"
@@ -411,23 +417,47 @@ export default function CheckoutCohortFormSVP({
               </div>
             </div>
 
+            {/* Promo Discount */}
+            <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
+              {/* Discount Gateway */}
+              {!discount && (
+                <ApplyDiscountGatewaySVP
+                  onClick={() => setOpenDiscount(true)}
+                />
+              )}
+              {/* Applied Discount */}
+              {discount && (
+                <AppliedDiscountCardSVP
+                  discountName={discount.name || ""}
+                  discountRate={discount.calc_percent || 0}
+                  discountCode={discount.code || ""}
+                  onClose={() => setDiscount(null)}
+                />
+              )}
+            </div>
+
             {/* Payment Details */}
-            <div className="payment-details flex flex-col gap-2 bg-white p-5">
-              <h1 className="font-ui font-bold text-black">Payment Details</h1>
+            <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">
+              <h1 className="font-bodycopy font-bold">Payment Details</h1>
               <div className="calculation-price flex flex-col gap-2">
                 <ReceiptLineItemSVP
                   receiptName="Payment Method"
                   receiptValue={chosenPaymentChannelData?.label}
                 />
                 <ReceiptLineItemSVP
-                  receiptName="Total Item"
-                  receiptValue={totalItem}
-                />
-                <ReceiptLineItemSVP
                   receiptName="Program Price"
                   receiptValue={rupiahCurrency(programPrice)}
                 />
-                <hr className="border-t-outline border-dashed" />
+                {discount?.calc_percent && (
+                  <ReceiptLineItemSVP
+                    receiptName={`Discount (${discount.calc_percent}%)`}
+                    receiptValue={`- ${rupiahCurrency(
+                      Math.round(programPrice - subtotal)
+                    )}`}
+                    isDiscount
+                  />
+                )}
+                <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
                 <ReceiptLineItemSVP
                   receiptName="Subtotal"
                   receiptValue={rupiahCurrency(subtotal)}
@@ -442,7 +472,7 @@ export default function CheckoutCohortFormSVP({
                     paymentCalculation.valueAddedTax
                   )}
                 />
-                <hr className="border-t-outline border-dashed" />
+                <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
                 <ReceiptLineItemSVP
                   receiptName="Total Amount"
                   receiptValue={rupiahCurrency(paymentCalculation.totalAmount)}
@@ -454,11 +484,11 @@ export default function CheckoutCohortFormSVP({
 
         {/* Background */}
         <div className="absolute top-0 left-0 w-full h-[78px] bg-linear-to-r from-0% from-primary to-100% to-primary-deep" />
-        <div className="absolute top-[78px] left-0 w-full h-[78px] bg-white" />
+        <div className="absolute top-[78px] left-0 w-full h-[78px] bg-white dark:bg-coal-black" />
 
         {/* Footer */}
         <div className="footer-box flex p-5">
-          <div className="footer-container flex w-full items-center p-3 gap-1.5 bg-white border border-outline rounded-md">
+          <div className="footer-container flex w-full items-center p-3 gap-1.5 bg-white border border-outline rounded-md dark:bg-surface-black dark:border-outline-dark">
             <div className="flex aspect-square size-10">
               <Image
                 className="object-cover w-full h-full"
@@ -470,7 +500,7 @@ export default function CheckoutCohortFormSVP({
                 height={100}
               />
             </div>
-            <p className="font-ui text-xs text-alternative">
+            <p className="font-bodycopy text-xs text-alternative">
               Payment is securely processed with advanced encryption. Powered by{" "}
               {""}
               <a href="https://www.xendit.co/id/" className="font-bold">
@@ -484,14 +514,19 @@ export default function CheckoutCohortFormSVP({
 
       {/* Floating CTA */}
       {isValidTicketId && (
-        <div className="floating-cta sticky flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40">
-          <div className="flex flex-col font-ui text-black">
+        <div className="floating-cta fixed flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
+          <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">
               {rupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
-          <AppButton onClick={handlePayment} disabled={isLoadingPayment}>
+          <AppButton
+            onClick={handlePayment}
+            disabled={isLoadingPayment}
+            featureName="payment_cohort"
+            featureItem={toSnakeCase(cohortName)}
+          >
             {isLoadingPayment ? (
               <Loader2 className="animate-spin size-5" />
             ) : (
@@ -501,6 +536,16 @@ export default function CheckoutCohortFormSVP({
           </AppButton>
         </div>
       )}
+
+      {/* Modal Discount */}
+      <ApplyDiscountModalSVP
+        cohortId={selectedTicket?.id}
+        isOpen={openDiscount}
+        onClose={() => setOpenDiscount(false)}
+        onApplyDiscount={(discountData) => {
+          setDiscount(discountData);
+        }}
+      />
     </React.Fragment>
   );
 }
