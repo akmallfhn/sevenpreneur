@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
-import SelectCMS from "../fields/SelectCMS";
+import SelectCMS, { OptionType } from "../fields/SelectCMS";
 import AppSheet from "../modals/AppSheet";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { DiscountType } from "./CheckoutPlaylistFormSVP";
+import MultipleSelectUser from "../fields/SelectWithSearchCMS";
 
 interface CreateInvoiceFormCMSProps {
   sessionToken: string;
@@ -30,6 +31,7 @@ export default function CreateInvoiceFormCMS({
   const [itemOptions, setItemOptions] = useState<
     { label: string; value: number; price: number }[]
   >([]);
+  const [userSelected, setUserSelected] = useState<OptionType | null>(null);
   const [isLoadingApplyDiscount, setIsLoadingApplyDiscount] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [discount, setDiscount] = useState<DiscountType | null>(null);
@@ -51,6 +53,14 @@ export default function CreateInvoiceFormCMS({
     paymentChannelId: "",
     paymentDiscount: "",
   });
+
+  // Fetch tRPC for User Id
+  // const {
+  //   data: userData,
+  //   isLoading: isLoadingUserData,
+  //   isError: isErrorUserData,
+  // } = trpc.list.users.useQuery({}, { enabled: !!sessionToken });
+  // const userList = userData?.list;
 
   // Fetch tRPC for Payment Channel
   const {
@@ -262,6 +272,11 @@ export default function CreateInvoiceFormCMS({
     setIsSubmitting(true);
 
     // -- Required field checking
+    if (!formData.invoiceUserId) {
+      toast.error("User still empty");
+      setIsSubmitting(false);
+      return;
+    }
     if (!formData.invoiceUserPhone) {
       toast.error("Phone number’s still empty");
       setIsSubmitting(false);
@@ -303,7 +318,7 @@ export default function CreateInvoiceFormCMS({
         createInvoicePlaylist.mutate(
           {
             // Mandatory fields:
-            user_id: "f1d27a50-00f1-48c0-9265-c516ae1f532a",
+            user_id: formData.invoiceUserId,
             payment_channel_id: Number(formData.paymentChannelId),
             playlist_id: Number(formData.invoiceProductItem),
 
@@ -369,6 +384,17 @@ export default function CreateInvoiceFormCMS({
         {!isLoading && !isError && (
           <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
+              {/* User */}
+              <InputCMS
+                inputId="invoice-user-id"
+                inputName="Billed to"
+                inputType="text"
+                inputPlaceholder="Input ID User"
+                value={formData.invoiceUserId}
+                onInputChange={handleInputChange("invoiceUserId")}
+                required
+              />
+
               {/* Phone Number */}
               <InternationalPhoneNumberInputSVP
                 inputId="invoice-user-phone"

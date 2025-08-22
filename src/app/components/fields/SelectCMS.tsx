@@ -3,11 +3,11 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 
-interface OptionType {
+export type OptionType = {
   label: string;
   value: any;
   image?: string;
-}
+};
 
 interface SelectCMSProps {
   selectId: string;
