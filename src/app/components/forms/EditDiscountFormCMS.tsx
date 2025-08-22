@@ -360,10 +360,10 @@ export default function EditDiscountFormCMS({
                   )}
                 </div>
               </div>
-              <div className="bg-section-background flex flex-col gap-4 p-4 rounded-md">
-                <h3 className="font-brand font-bold">
+              <div className="flex flex-col bg-section-background/50 border border-outline gap-4 p-4 rounded-md">
+                <h5 className="font-bodycopy font-bold text-sm">
                   Applies Discount to Product
-                </h3>
+                </h5>
                 <SelectCMS
                   selectId="product-category"
                   selectName="Product Category"

@@ -1,10 +1,12 @@
 "use client";
 import { ChevronDown } from "lucide-react";
+import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 
 interface OptionType {
   label: string;
   value: any;
+  image?: string;
 }
 
 interface SelectCMSProps {
@@ -51,7 +53,7 @@ export default function SelectCMS({
   }, []);
 
   // --- Finding selected value in Array dropdown
-  const selectedLabel = options.find((opt) => opt.value === value)?.label ?? "";
+  const selectedOption = options.find((opt) => opt.value === value);
 
   return (
     <div
@@ -87,14 +89,27 @@ export default function SelectCMS({
           </div>
         )}
 
-        {/* -- Label Value */}
-        <span
-          className={`block truncate text-sm font-medium ${
-            selectedLabel ? "" : "text-alternative"
-          }`}
-        >
-          {selectedLabel || selectPlaceholder}
-        </span>
+        {/* -- Selected Value or Placeholder */}
+        <div className="flex items-center gap-2 truncate">
+          {selectedOption?.image && (
+            <div className="flex aspect-square size-5 rounded-full overflow-hidden">
+              <Image
+                className="object-cover w-full h-full"
+                src={selectedOption.image}
+                alt={selectedOption.label}
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
+          <span
+            className={`block truncate text-sm font-medium ${
+              selectedOption ? "" : "text-alternative"
+            }`}
+          >
+            {selectedOption?.label || selectPlaceholder}
+          </span>
+        </div>
 
         {/* -- Icon Dropdown */}
         {!disabled && (
@@ -105,22 +120,35 @@ export default function SelectCMS({
 
         {/* --- Dropdown options */}
         {isOpen && !disabled && (
-          <div className="absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md">
+          <div className="absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden">
             <ul className="flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt) => (
-                <li
+                <div
                   key={opt.value}
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange?.(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`px-4 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-cms-primary ${
+                  className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-cms-primary ${
                     value === opt.value ? "bg-[#E1EDFF] text-cms-primary" : ""
                   }`}
                 >
-                  {opt.label}
-                </li>
+                  {/* Image (optional) */}
+                  {opt.image && (
+                    <div className="flex aspect-square size-[26px] rounded-full overflow-hidden">
+                      <Image
+                        className="object-cover w-full h-full"
+                        src={opt.image}
+                        alt={opt.label}
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                  )}
+                  {/* Label */}
+                  <li>{opt.label}</li>
+                </div>
               ))}
             </ul>
           </div>
