@@ -77,7 +77,7 @@ export default function CheckoutPlaylistFormSVP({
     userPhoneNumber: initialUserPhone || "",
   });
 
-  // --- Set default payment channel to MANDIRI
+  // --- Set default payment channel to QRIS
   const defaultPaymentChannel = useMemo(() => {
     return paymentMethodData.find((item) => item.code === "QRIS")?.code ?? "";
   }, [paymentMethodData]);
@@ -108,7 +108,7 @@ export default function CheckoutPlaylistFormSVP({
   let subtotal = totalItem * programPrice;
   if (discount?.calc_percent) {
     const discountRate = discount.calc_percent / 100;
-    subtotal = totalItem * programPrice * (1 - discountRate);
+    subtotal = Math.round(totalItem * programPrice * (1 - discountRate));
   }
   const vatRate = 0.11;
   const paymentCalculation = useMemo(() => {
@@ -359,7 +359,7 @@ export default function CheckoutPlaylistFormSVP({
           </div>
 
           {/* Payment Details */}
-          <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black ">
+          <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">
             <h1 className="font-bodycopy font-bold">Payment Details</h1>
             <div className="calculation-price flex flex-col gap-2">
               <ReceiptLineItemSVP
@@ -367,7 +367,7 @@ export default function CheckoutPlaylistFormSVP({
                 receiptValue={chosenPaymentChannelData?.label}
               />
               <ReceiptLineItemSVP
-                receiptName="Course Price"
+                receiptName="Learning Series Price"
                 receiptValue={rupiahCurrency(programPrice)}
               />
               {discount?.calc_percent && (
@@ -452,6 +452,7 @@ export default function CheckoutPlaylistFormSVP({
           </AppButton>
         </div>
       </div>
+
       {/* Modal Discount */}
       <ApplyDiscountModalSVP
         playlistId={playlistId}

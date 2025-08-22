@@ -2,7 +2,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import { Loader2, X } from "lucide-react";
-import { CheckDiscountPlaylist } from "@/lib/actions";
+import { CheckDiscountCohort, CheckDiscountPlaylist } from "@/lib/actions";
 import { toast } from "sonner";
 import { DiscountType } from "../forms/CheckoutPlaylistFormSVP";
 import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
@@ -70,9 +70,10 @@ export default function ApplyDiscountModalSVP({
           playlistId: playlistId,
         });
       } else if (cohortId) {
-        toast.info("Discount check untuk cohort belum tersedia");
-        setIsLoadingApplyDiscount(false);
-        return;
+        responseDiscount = await CheckDiscountCohort({
+          discountCode: discountCode.trim(),
+          cohortId: cohortId,
+        });
       }
       const discountData: DiscountType = {
         name: responseDiscount?.data?.name,
