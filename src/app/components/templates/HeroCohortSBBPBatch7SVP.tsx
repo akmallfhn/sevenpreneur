@@ -23,29 +23,6 @@ export default function HeroCohortSBBPBatch7SVP() {
         width={1000}
         height={1000}
       />
-
-      {/* CTA */}
-      <a
-        href={"https://forms.gle/bsMEhPyh2nLCHHsK8"}
-        className="absolute hidden bottom-14 left-1/2 -translate-x-1/2 lg:flex xl:bottom-24"
-        target="_blank"
-        rel="noopenner noreferrer"
-      >
-        <AppButton size="largeRounded" className="w-[320px]">
-          Get 50% Discount
-        </AppButton>
-      </a>
-
-      <a
-        href={"https://forms.gle/bsMEhPyh2nLCHHsK8"}
-        className="absolute flex bottom-16 left-1/2 -translate-x-1/2 lg:hidden"
-        target="_blank"
-        rel="noopenner noreferrer"
-      >
-        <AppButton size="defaultRounded" className="w-[320px]">
-          Get 50% Discount
-        </AppButton>
-      </a>
     </div>
   );
 }

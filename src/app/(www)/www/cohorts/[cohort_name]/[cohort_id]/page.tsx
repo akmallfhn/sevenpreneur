@@ -1,12 +1,9 @@
-import AppButton from "@/app/components/buttons/AppButton";
-import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
-import CohortSBBPBatch7SVP from "@/app/components/pages/CohortSBBPBatch7SVP";
+import BlueprintProgramBatch7CohortPageSVP from "@/app/components/pages/BlueprintProgramBatch7CohortPageSVP";
+import Restart25Page from "@/app/components/pages/Restart25Page";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 interface CohortDetailsPageProps {
@@ -22,27 +19,43 @@ export async function generateMetadata({
 
   // Get Data
   setSecretKey(secretKey!);
-  const cohortDetails = await trpc.read.cohort({ id: cohortId });
-  const data = cohortDetails.cohort;
+  const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
+
+  if (cohortData.status !== "ACTIVE") {
+    return {
+      title: `404 Not Found`,
+      description:
+        "Sorry, the page you’re looking for doesn’t exist or may have been moved.",
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    };
+  }
 
   return {
-    title: data.name,
-    description: data.description,
-    keywords: "Sevenpreneur, Business Blueprint, Raymond Chin",
+    title: `${cohortData.name} | Sevenpreneur`,
+    description: cohortData.description,
+    keywords:
+      "Sevenpreneur, Business Blueprint, Raymond Chin, Scale up business, Pengusaha naik level",
     authors: [{ name: "Sevenpreneur" }],
     publisher: "Sevenpreneur",
     referrer: "origin-when-cross-origin",
     alternates: {
-      canonical: `/cohorts/${data.slug_url}/${data.id}`,
+      canonical: `/cohorts/${cohortData.slug_url}/${cohortData.id}`,
     },
     openGraph: {
-      title: data.name,
-      description: data.description,
-      url: `https://sevenpreneur.com/cohorts/${data.slug_url}/${data.id}`,
+      title: `${cohortData.name} | Sevenpreneur`,
+      description: cohortData.description,
+      url: `/cohorts/${cohortData.slug_url}/${cohortData.id}`,
       siteName: "Sevenpreneur",
       images: [
         {
-          url: data.image,
+          url: cohortData.image,
           width: 800,
           height: 600,
         },
@@ -50,9 +63,9 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: data.name,
-      description: data.description,
-      images: data.image,
+      title: `${cohortData.name} | Sevenpreneur`,
+      description: cohortData.description,
+      images: cohortData.image,
     },
     robots: {
       index: true,
@@ -69,19 +82,35 @@ export default async function CohortDetailsPage({
   params,
 }: CohortDetailsPageProps) {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-  const { cohort_id } = await params;
+  const { cohort_id, cohort_name } = await params;
   const cohortId = parseInt(cohort_id);
 
   // Get Data
   setSecretKey(secretKey!);
-  const cohortDetails = await trpc.read.cohort({ id: cohortId });
-  const data = cohortDetails.cohort;
+  let cohortDataRaw;
+  try {
+    cohortDataRaw = (await trpc.read.cohort({ id: cohortId })).cohort;
+  } catch (error) {
+    return notFound();
+  }
 
-  return (
-    <React.Fragment>
-      <div className="w-full">
-        <CohortSBBPBatch7SVP />
-      </div>
-    </React.Fragment>
-  );
+  // Return 404 if INACTIVE status
+  if (cohortDataRaw.status !== "ACTIVE") {
+    return notFound();
+  }
+
+  // Auto Correction Slug
+  const correctSlug = cohortDataRaw.slug_url;
+  if (cohort_name.toLowerCase() !== correctSlug.toLowerCase()) {
+    redirect(`/cohorts/${correctSlug}/${cohortId}`);
+  }
+
+  // Conditional Rendering by Landing Page
+  if (cohortDataRaw.id === 36) {
+    return <BlueprintProgramBatch7CohortPageSVP />;
+  } else if (cohortDataRaw.id === 37) {
+    return <Restart25Page />;
+  }
+
+  return <div>No data</div>;
 }

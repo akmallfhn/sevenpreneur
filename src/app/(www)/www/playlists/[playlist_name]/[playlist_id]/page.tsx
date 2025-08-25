@@ -83,7 +83,7 @@ export default async function PlaylistDetailsPage({
   const { playlist_id, playlist_name } = await params;
   const playlistId = parseInt(playlist_id);
 
-  // --- Get Data
+  // Get Data
   setSecretKey(secretKey!);
   let playlistDataRaw;
   try {
@@ -97,7 +97,7 @@ export default async function PlaylistDetailsPage({
     return notFound();
   }
 
-  // --- Sanitize Data from not supported format
+  // Sanitize Data from not supported format
   const playlistData = {
     ...playlistDataRaw,
     price: Number(playlistDataRaw.price),
@@ -108,7 +108,7 @@ export default async function PlaylistDetailsPage({
     })),
   };
 
-  // --- Auto Correction Slug
+  // Auto Correction Slug
   const correctSlug = playlistData.slug_url;
   if (playlist_name !== correctSlug) {
     redirect(`/playlists/${correctSlug}/${playlistId}`);
