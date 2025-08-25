@@ -14,6 +14,7 @@ import {
   Settings2,
   Eye,
   Trash2,
+  UserSearch,
 } from "lucide-react";
 import TableHeadCMS from "../elements/TableHeadCMS";
 import TableCellCMS from "../elements/TableCellCMS";
@@ -26,6 +27,7 @@ import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import InputCMS from "../fields/InputCMS";
 
 interface UserListCMSProps {
   sessionToken: string;
@@ -39,6 +41,10 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
     id: string;
     name: string;
   } | null>(null);
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
+    ""
+  );
   const wrapperRef = useRef<Record<string, HTMLDivElement | null>>({});
   const setWrapperRef = (id: string) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;
@@ -51,6 +57,14 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
+
+  // Debounce Typing for 1 second
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword.trim() === "" ? undefined : keyword);
+    }, 600);
+    return () => clearTimeout(handler);
+  }, [keyword]);
 
   // Open and close dropdown
   const handleActionsDropdown = (
@@ -80,7 +94,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
 
   // Return data from tRPC
   const { data, isLoading, isError } = trpc.list.users.useQuery(
-    { page: 1, page_size: 80 },
+    { page: 1, page_size: 20, keyword: debouncedKeyword },
     { enabled: !!sessionToken }
   );
   const userList = data?.list;
@@ -132,6 +146,20 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
           </div>
         </div>
 
+        {/* Filter */}
+        <div className="filter flex w-full">
+          <div className="max-w-80 w-full">
+            <InputCMS
+              inputId="search-user"
+              inputType="search"
+              inputIcon={<UserSearch className="size-5" />}
+              inputPlaceholder="Search users..."
+              value={keyword}
+              onInputChange={(value) => setKeyword(value)}
+            />
+          </div>
+        </div>
+
         {isLoading && (
           <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
             <Loader2 className="animate-spin size-5 " />
@@ -144,7 +172,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
         )}
 
         {/* TABLE */}
-        {!isLoading && !isError && (
+        {userList && !isLoading && !isError && (
           <table className="relative w-full rounded-sm overflow-hidden">
             <thead className="bg-[#FAFAFA] text-alternative/70">
               <tr>
@@ -266,6 +294,9 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
               ))}
             </tbody>
           </table>
+        )}
+        {userList?.length === 0 && (
+          <p className="mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
         )}
       </div>
 

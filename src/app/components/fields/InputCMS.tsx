@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 interface InputCMSProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
-  inputName: string;
+  inputName?: string;
   inputType: string;
   inputIcon?: React.ReactNode;
   inputPlaceholder?: string;
@@ -66,13 +66,15 @@ export default function InputCMS({
   return (
     <div className="input-group-component flex flex-col gap-1">
       {/* --- Label */}
-      <label
-        htmlFor={inputId}
-        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-      >
-        {inputName}
-        {required && <span className="text-destructive">*</span>}
-      </label>
+      {inputName && (
+        <label
+          htmlFor={inputId}
+          className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        >
+          {inputName}
+          {required && <span className="text-destructive">*</span>}
+        </label>
+      )}
 
       {/* --- Input Placeholder */}
       <div className="input-container relative ">
