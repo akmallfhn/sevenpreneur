@@ -28,12 +28,20 @@ import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import InputCMS from "../fields/InputCMS";
+import { useRouter, useSearchParams } from "next/navigation";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 interface UserListCMSProps {
   sessionToken: string;
 }
 
 export default function UserListCMS({ sessionToken }: UserListCMSProps) {
+  const router = useRouter();
+  const pageSize = 20;
+  const searchParam = useSearchParams();
+  const pageParam = searchParam.get("page");
+  const currentPage = Number(pageParam) || 1;
+  const utils = trpc.useUtils();
   const [actionsOpened, setActionsOpened] = useState<string | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
@@ -49,7 +57,6 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   const setWrapperRef = (id: string) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;
   };
-  const utils = trpc.useUtils();
 
   // Set token for API
   useEffect(() => {
@@ -94,7 +101,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
 
   // Return data from tRPC
   const { data, isLoading, isError } = trpc.list.users.useQuery(
-    { page: 1, page_size: 20, keyword: debouncedKeyword },
+    { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
     { enabled: !!sessionToken }
   );
   const userList = data?.list;
@@ -147,15 +154,20 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
         </div>
 
         {/* Filter */}
-        <div className="filter flex w-full">
-          <div className="max-w-80 w-full">
+        <div className="filter flex w-full items-center">
+          <div className="max-w-96 w-full">
             <InputCMS
               inputId="search-user"
               inputType="search"
               inputIcon={<UserSearch className="size-5" />}
               inputPlaceholder="Search users..."
               value={keyword}
-              onInputChange={(value) => setKeyword(value)}
+              onInputChange={(value) => {
+                setKeyword(value);
+                const params = new URLSearchParams(searchParam.toString());
+                params.set("page", "1");
+                router.push(`?${params.toString()}`);
+              }}
             />
           </div>
         </div>
@@ -180,7 +192,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                 <TableHeadCMS>{`User`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Last Login`.toUpperCase()}</TableHeadCMS>
+                <TableHeadCMS>{`Register at`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
               </tr>
             </thead>
@@ -190,7 +202,10 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                   className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
                   key={index}
                 >
-                  <TableCellCMS>{index + 1}</TableCellCMS>
+                  {/* No */}
+                  <TableCellCMS>
+                    {(currentPage - 1) * pageSize + (index + 1)}
+                  </TableCellCMS>
 
                   {/* Name & Email */}
                   <TableCellCMS>
@@ -238,7 +253,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
 
                   {/* Last Login */}
                   <TableCellCMS>
-                    {dayjs(post.last_login).format("D MMM YYYY HH:mm")}
+                    {dayjs(post.created_at).format("D MMM YYYY HH:mm")}
                   </TableCellCMS>
 
                   {/* Actions */}
@@ -297,6 +312,17 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
         )}
         {userList?.length === 0 && (
           <p className="mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+        )}
+
+        {/* Pagination */}
+        {!isLoading && !isError && (
+          <div className="pagination-container flex flex-col w-full items-center gap-3">
+            <AppNumberPagination
+              currentPage={currentPage}
+              totalPages={data?.metapaging.total_page ?? 1}
+            />
+            <p className="text-sm text-alternative text-center italic font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
+          </div>
         )}
       </div>
 
