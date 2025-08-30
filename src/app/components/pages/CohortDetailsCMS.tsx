@@ -239,8 +239,11 @@ export default function CohortDetailsCMS({
               />
             </div>
             <ModuleListCMS sessionToken={sessionToken} cohortId={cohortId} />
-            {/* <EnrolledUserListCMS /> */}
             <ProjectListCMS sessionToken={sessionToken} cohortId={cohortId} />
+            <EnrolledUserListCMS
+              sessionToken={sessionToken}
+              cohortId={cohortId}
+            />
           </aside>
         </div>
       </div>

@@ -5,7 +5,7 @@ interface CohortDetailPageProps {
   params: Promise<{ cohort_id: string }>;
 }
 
-export default async function CohortDetailPage({
+export default async function CohortDetailsPage({
   params,
 }: CohortDetailPageProps) {
   const { cohort_id } = await params;

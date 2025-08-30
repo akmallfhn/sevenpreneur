@@ -32,12 +32,7 @@ export default function EditDiscountFormCMS({
     { label: string; value: number }[]
   >([]);
 
-  useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
-    }
-  }, [sessionToken]);
-
+  // Fetch tRPC for Initial Data
   const {
     data,
     isLoading: isLoadingInitialData,
@@ -48,7 +43,7 @@ export default function EditDiscountFormCMS({
   );
   const initialData = data?.discount;
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     discountName: string;
     discountCode: string;

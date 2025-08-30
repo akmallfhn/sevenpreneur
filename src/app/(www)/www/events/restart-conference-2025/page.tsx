@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Restart25Page from "@/app/components/pages/Restart25Page";
+import Restart25Page from "@/app/components/custom-pages/Restart25Page";
 
 export const metadata: Metadata = {
   title:

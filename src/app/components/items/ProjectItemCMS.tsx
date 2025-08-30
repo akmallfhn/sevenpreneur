@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
-import { EllipsisVertical, Trash2 } from "lucide-react";
+import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
@@ -12,6 +12,7 @@ import Link from "next/link";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import EditProjectFormCMS from "../forms/EditProjectFormCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -20,6 +21,7 @@ interface ProjectItemCMSProps {
   projectId: number;
   projectName: string;
   lastSubmission: string;
+  submissionPercentage: number;
   onDeleteSuccess?: () => void;
 }
 
@@ -28,21 +30,23 @@ export default function ProjectItemCMS({
   projectId,
   projectName,
   lastSubmission,
+  submissionPercentage,
   onDeleteSuccess,
 }: ProjectItemCMSProps) {
-  // --- State
+  // State
   const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const [editProject, setEditProject] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // --- Open and close dropdown
+  // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Close dropdown outside
+  // Close dropdown outside
   useEffect(() => {
     const handleClickOutside = (
       event: MouseEvent | (MouseEvent & { target: Node })
@@ -81,13 +85,13 @@ export default function ProjectItemCMS({
   return (
     <React.Fragment>
       <div className="project-item flex items-center justify-between bg-white gap-2 p-1 rounded-md">
-        <Link href={`/cohorts/${cohortId}/projects/${projectId}`}>
+        <Link href={`/cohorts/${cohortId}/projects/${projectId}/submissions`}>
           <div className="flex items-center w-[calc(87%)]">
             <div className="icon relative aspect-square flex size-20 p-3 items-center">
-              <Gauge width={200} height={200} value={(0 / 1) * 100} />
+              <Gauge width={200} height={200} value={submissionPercentage} />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-xs font-bold text-black bg-white font-bodycopy">
-                  {((0 / 1) * 100).toFixed(0)}%
+                  {submissionPercentage}%
                 </span>
               </div>
             </div>
@@ -117,6 +121,11 @@ export default function ProjectItemCMS({
             onClose={() => setIsActionsOpened(false)}
           >
             <AppDropdownItemList
+              menuIcon={<Pencil className="size-4" />}
+              menuName="Edit"
+              onClick={() => setEditProject(true)}
+            />
+            <AppDropdownItemList
               menuIcon={<Trash2 className="size-4" />}
               menuName="Delete"
               isDestructive
@@ -126,7 +135,16 @@ export default function ProjectItemCMS({
         </div>
       </div>
 
-      {/* --- Delete Confirmation */}
+      {/* Open Edit Form */}
+      {editProject && (
+        <EditProjectFormCMS
+          projectId={projectId}
+          isOpen={editProject}
+          onClose={() => setEditProject(false)}
+        />
+      )}
+
+      {/* Delete Confirmation */}
       {isOpenDeleteConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"

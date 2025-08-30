@@ -1,5 +1,5 @@
-import BlueprintProgramBatch7CohortPageSVP from "@/app/components/pages/BlueprintProgramBatch7CohortPageSVP";
-import Restart25Page from "@/app/components/pages/Restart25Page";
+import BlueprintProgramBatch7SVP from "@/app/components/custom-pages/BlueprintProgramBatch7SVP";
+import Restart25Page from "@/app/components/custom-pages/Restart25Page";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 
@@ -107,7 +107,7 @@ export default async function CohortDetailsPage({
 
   // Conditional Rendering by Landing Page
   if (cohortDataRaw.id === 36) {
-    return <BlueprintProgramBatch7CohortPageSVP />;
+    return <BlueprintProgramBatch7SVP />;
   } else if (cohortDataRaw.id === 37) {
     return <Restart25Page />;
   }
