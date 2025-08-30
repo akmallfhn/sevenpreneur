@@ -104,7 +104,7 @@ export default function DiscountListCMS({
     router.push("/discounts", { scroll: false });
   };
 
-  // tRPC Discount List
+  // Fetch tRPC for Discount List
   const { data, isLoading, isError } = trpc.list.discounts.useQuery(
     {},
     { enabled: !!sessionToken }

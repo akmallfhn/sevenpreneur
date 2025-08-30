@@ -5,7 +5,7 @@ interface LearningDetailPageProps {
   params: Promise<{ cohort_id: string; learning_id: string }>;
 }
 
-export default async function LearningDetailPage({
+export default async function LearningDetailsPage({
   params,
 }: LearningDetailPageProps) {
   const { cohort_id, learning_id } = await params;

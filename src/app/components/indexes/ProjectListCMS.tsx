@@ -68,6 +68,7 @@ export default function ProjectListCMS({
                 projectId={post.id}
                 projectName={post.name}
                 lastSubmission={post.deadline_at}
+                submissionPercentage={post.submission_percentage}
                 onDeleteSuccess={() => utils.list.projects.invalidate()}
               />
             ))}

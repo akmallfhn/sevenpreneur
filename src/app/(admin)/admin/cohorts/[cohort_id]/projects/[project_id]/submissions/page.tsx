@@ -1,11 +1,11 @@
-import ProjectDetailsCMS from "@/app/components/pages/ProjectDetailsCMS";
+import SubmissionListCMS from "@/app/components/indexes/SubmissionListCMS";
 import { cookies } from "next/headers";
 
 interface LearningDetailPageProps {
   params: Promise<{ cohort_id: string; project_id: string }>;
 }
 
-export default async function LearningDetailPage({
+export default async function SubmissionsPageCMS({
   params,
 }: LearningDetailPageProps) {
   const { cohort_id, project_id } = await params;
@@ -16,7 +16,7 @@ export default async function LearningDetailPage({
 
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <ProjectDetailsCMS
+      <SubmissionListCMS
         sessionToken={sessionToken}
         cohortId={cohortId}
         projectId={projectId}

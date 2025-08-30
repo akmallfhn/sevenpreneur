@@ -4,7 +4,7 @@ import AppButton from "../buttons/AppButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
-interface UserItemSimpleCMSProps {
+interface UserItemCMSProps {
   userName: string;
   userAvatar: string;
   userEmail: string;
@@ -18,14 +18,17 @@ export default function UserItemCMS({
   userEmail,
   userPhoneNumber,
   isShowWhatsapp = false,
-}: UserItemSimpleCMSProps) {
+}: UserItemCMSProps) {
   return (
     <div className="user-item flex items-center justify-between">
       <div className="flex gap-3 items-center">
         <div className="size-8 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={userAvatar}
+            src={
+              userAvatar ||
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+            }
             alt={userName}
             width={80}
             height={80}

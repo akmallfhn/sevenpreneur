@@ -13,14 +13,12 @@ import dayjs from "dayjs";
 
 interface EditProjectFormCMSProps {
   projectId: number;
-  initialData: any;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function EditProjectFormCMS({
   projectId,
-  initialData,
   isOpen,
   onClose,
 }: EditProjectFormCMSProps) {
@@ -31,35 +29,50 @@ export default function EditProjectFormCMS({
   const editProject = trpc.update.project.useMutation();
   const utils = trpc.useUtils();
 
-  // --- Beginning State
+  const { data, isLoading, isError } = trpc.read.project.useQuery({
+    id: projectId,
+  });
+  const initialData = data?.project;
+
+  // Beginning State
   const [formData, setFormData] = useState<{
     projectName: string;
     projectDescription: string;
     projectDeadline: string;
     projectURL: string;
   }>({
-    projectName: initialData.name || "",
-    projectDescription: initialData.description || "",
-    projectDeadline: initialData.deadline_at
+    projectName: initialData?.name.trim() ? initialData.name : "",
+    projectDescription: initialData?.description.trim()
+      ? initialData.description
+      : "",
+    projectDeadline: initialData?.deadline_at.trim()
       ? dayjs(initialData.deadline_at).format("YYYY-MM-DDTHH:mm")
       : "",
-    projectURL: initialData.document_url ? initialData.document_url : "",
+    projectURL: initialData?.document_url?.trim()
+      ? initialData?.document_url
+      : "",
   });
 
-  // --- Update formData if initialData changes
+  // Update formData if initialData changes
   useEffect(() => {
     if (!initialData) return;
     const url = initialData.document_url || "";
     const isSupabaseFile = url.includes("supabase.co");
 
-    setFormData({
-      projectName: initialData.name || "",
-      projectDescription: initialData.description || "",
-      projectDeadline: initialData.deadline_at
-        ? dayjs(initialData.deadline_at).format("YYYY-MM-DDTHH:mm")
-        : "",
-      projectURL: url,
-    });
+    if (initialData) {
+      setFormData({
+        projectName: initialData?.name.trim() ? initialData.name : "",
+        projectDescription: initialData?.description.trim()
+          ? initialData.description
+          : "",
+        projectDeadline: initialData?.deadline_at.trim()
+          ? dayjs(initialData.deadline_at).format("YYYY-MM-DDTHH:mm")
+          : "",
+        projectURL: initialData?.document_url?.trim()
+          ? initialData?.document_url
+          : "",
+      });
+    }
 
     if (url) {
       setSelectedUploadMethod(isSupabaseFile ? "upload" : "attach");
@@ -69,7 +82,7 @@ export default function EditProjectFormCMS({
     isFirstLoad.current = true;
   }, [initialData]);
 
-  /// --- Reset URL if upload method changed (except on first load)
+  // Reset URL if upload method changed (except on first load)
   useEffect(() => {
     if (isFirstLoad.current) {
       isFirstLoad.current = false;
@@ -85,7 +98,7 @@ export default function EditProjectFormCMS({
     prevUploadMethod.current = selectedUploadMethod;
   }, [selectedUploadMethod]);
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -96,7 +109,7 @@ export default function EditProjectFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -104,7 +117,7 @@ export default function EditProjectFormCMS({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -173,98 +186,110 @@ export default function EditProjectFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form
-        className="relative w-full h-full flex flex-col"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
-          <div className="group-input flex flex-col gap-4">
-            <InputCMS
-              inputId="project-name"
-              inputName="Project Title"
-              inputType="text"
-              inputPlaceholder="Give your project a concise name."
-              value={formData.projectName}
-              onInputChange={handleInputChange("projectName")}
-              required
-            />
-            <TextAreaCMS
-              textAreaId="project-description"
-              textAreaName="Project Brief"
-              textAreaPlaceholder="Outline the project objectives, deliverables, and any specific instructions."
-              textAreaHeight="h-36"
-              value={formData.projectDescription}
-              onInputChange={handleInputChange("projectDescription")}
-              required
-            />
-            <InputCMS
-              inputId="project-deadline"
-              inputName="Submission Deadline"
-              inputType="datetime-local"
-              inputPlaceholder="e.g. Curriculum Brief"
-              value={formData.projectDeadline}
-              onInputChange={handleInputChange("projectDeadline")}
-              required
-            />
-            <div className="flex flex-col gap-5 pt-4">
-              <div className="flex flex-col">
-                <h3 className="font-bold font-brand">
-                  Upload Supporting Document
-                </h3>
-                <p className="font-bodycopy font-medium text-sm text-alternative">
-                  Optional — attach any file that can guide participants, such
-                  as a case study, brief, or template.
-                </p>
+      {isLoading && (
+        <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+          <Loader2 className="animate-spin size-5 " />
+        </div>
+      )}
+      {isError && (
+        <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+          No Data
+        </div>
+      )}
+      {initialData && !isLoading && !isError && (
+        <form
+          className="relative w-full h-full flex flex-col"
+          onSubmit={handleSubmit}
+        >
+          <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+            <div className="group-input flex flex-col gap-4">
+              <InputCMS
+                inputId="project-name"
+                inputName="Project Title"
+                inputType="text"
+                inputPlaceholder="Give your project a concise name."
+                value={formData.projectName}
+                onInputChange={handleInputChange("projectName")}
+                required
+              />
+              <TextAreaCMS
+                textAreaId="project-description"
+                textAreaName="Project Brief"
+                textAreaPlaceholder="Outline the project objectives, deliverables, and any specific instructions."
+                textAreaHeight="h-36"
+                value={formData.projectDescription}
+                onInputChange={handleInputChange("projectDescription")}
+                required
+              />
+              <InputCMS
+                inputId="project-deadline"
+                inputName="Submission Deadline"
+                inputType="datetime-local"
+                inputPlaceholder="e.g. Curriculum Brief"
+                value={formData.projectDeadline}
+                onInputChange={handleInputChange("projectDeadline")}
+                required
+              />
+              <div className="flex flex-col gap-5 pt-4">
+                <div className="flex flex-col">
+                  <h3 className="font-bold font-brand">
+                    Upload Supporting Document
+                  </h3>
+                  <p className="font-bodycopy font-medium text-sm text-alternative">
+                    Optional — attach any file that can guide participants, such
+                    as a case study, brief, or template.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <RadioBoxCMS
+                    radioName="Document Link (Recommended)"
+                    radioDescription="Provide a public URL to the document"
+                    value="attach"
+                    selectedValue={selectedUploadMethod}
+                    onChange={setSelectedUploadMethod}
+                  />
+                  <RadioBoxCMS
+                    radioName="Upload File From Device"
+                    radioDescription="Upload a single PDF file, no larger than 5MB."
+                    value="upload"
+                    selectedValue={selectedUploadMethod}
+                    onChange={setSelectedUploadMethod}
+                  />
+                </div>
+                {selectedUploadMethod === "attach" && (
+                  <InputCMS
+                    inputId="project-url"
+                    inputName="Document Link"
+                    inputType="url"
+                    inputPlaceholder="Paste the document’s shareable link here"
+                    value={formData.projectURL}
+                    onInputChange={handleInputChange("projectURL")}
+                    characterLength={1000}
+                    required
+                  />
+                )}
+                {selectedUploadMethod === "upload" && (
+                  <UploadFilesCMS
+                    value={formData.projectURL}
+                    onUpload={handleInputChange("projectURL")}
+                  />
+                )}
               </div>
-              <div className="flex flex-col gap-3">
-                <RadioBoxCMS
-                  radioName="Document Link (Recommended)"
-                  radioDescription="Provide a public URL to the document"
-                  value="attach"
-                  selectedValue={selectedUploadMethod}
-                  onChange={setSelectedUploadMethod}
-                />
-                <RadioBoxCMS
-                  radioName="Upload File From Device"
-                  radioDescription="Upload a single PDF file, no larger than 5MB."
-                  value="upload"
-                  selectedValue={selectedUploadMethod}
-                  onChange={setSelectedUploadMethod}
-                />
-              </div>
-              {selectedUploadMethod === "attach" && (
-                <InputCMS
-                  inputId="project-url"
-                  inputName="Document Link"
-                  inputType="url"
-                  inputPlaceholder="Paste the document’s shareable link here"
-                  value={formData.projectURL}
-                  onInputChange={handleInputChange("projectURL")}
-                  characterLength={1000}
-                  required
-                />
-              )}
-              {selectedUploadMethod === "upload" && (
-                <UploadFilesCMS
-                  value={formData.projectURL}
-                  onUpload={handleInputChange("projectURL")}
-                />
-              )}
             </div>
           </div>
-        </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
-          <AppButton
-            className="w-full"
-            variant="cmsPrimary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Save Changes
-          </AppButton>
-        </div>
-      </form>
+          <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+            <AppButton
+              className="w-full"
+              variant="cmsPrimary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2 className="animate-spin size-4" />}
+              Save Changes
+            </AppButton>
+          </div>
+        </form>
+      )}
     </AppSheet>
   );
 }
