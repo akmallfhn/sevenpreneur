@@ -1,0 +1,171 @@
+"use client";
+import Image from "next/image";
+import AppButton from "../buttons/AppButton";
+import CountdownTimerRestart25 from "./CountdownTimerRestart25";
+import Link from "next/link";
+import { ArrowDown } from "lucide-react";
+
+export default function HeroBlueprintProgramBatch7SVP() {
+  let domain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
+
+  return (
+    <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
+      {/* --- Hero Content */}
+      <div className="hero-content flex flex-col pt-10 pb-10 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px] 2xl:pl-[20vw]">
+        {/* Top Group Component */}
+        <div className="flex flex-col gap-3 items-center w-[645px] lg:items-start lg:gap-5">
+          <div className="flex flex-col gap-2 items-center font-bodycopy text-white text-center lg:items-start lg:text-left">
+            {/* Event Title */}
+            <h1 className="font-brand font-bold text-xl max-w-[280px] lg:text-[32px] lg:max-w-[472px] xl:text-[62px] xl:max-w-[612px] xl">
+              Bawa Bisnismu Naik Level Bareng Sevenpreneur
+            </h1>
+            <h2 className="font-semibold font-ui">
+              {`Sevenpreneur Business Blueprint Program`.toUpperCase()}
+            </h2>
+            {/* Event Date & Place */}
+            <p className="font-semibold text-base lg:text-xl xl:text-xl">
+              All-in-one roadmap esensial untuk mulai, membangun, dan
+              mengembangkan bisnis.
+            </p>
+            {/* Event Date & Place */}
+            <p className="font-semibold text-base truncate lg:text-xl xl:text-2xl">
+              27 November - 14 Desember 2025
+            </p>
+          </div>
+        </div>
+        {/* Bottom Group Component */}
+        <div className="flex flex-col items-center gap-5 lg:items-start lg:gap-[28px]">
+          {/* CTA */}
+          <div className="flex items-center gap-5">
+            <Link
+              href={`https://www.${domain}/playlists/restart-conference-2025/1`}
+            >
+              <AppButton
+                size="largeRounded"
+                variant="secondary"
+                featureName="join_restart"
+              >
+                <p className="text-base lg:text-lg">Gabung Program</p>
+              </AppButton>
+            </Link>
+            <a href="https://wa.me/62895803221561">
+              <AppButton
+                size="largeRounded"
+                variant="secondary"
+                featureName="join_restart"
+              >
+                <p className="text-base lg:text-lg">Konsultasi Gratis</p>
+              </AppButton>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* --- Overlay */}
+      <div
+        className={`overlay absolute left-1/2 -translate-x-1/2 bottom-0 w-full h-[288px] z-40 bg-gradient-to-t from-0% from-[#202020] via-60% via-[#202020] to-100% to-[#202020]/0 lg:h-[254px] lg:from-black/80 lg:via-[#202020]/[0.42]`}
+      />
+      {/* --- All Speakers */}
+      <Image
+        className="all-speakers absolute flex max-w-[392px] bottom-[176px] left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:-right-5 lg:translate-x-0 lg:max-w-[638px] lg:-bottom-5 xl:max-w-[856px] 2xl:right-[2vw]"
+        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//speakers-restart-25.webp"
+        alt="Sevenpreneur Brand Representative"
+        width={2440}
+        height={2440}
+        loading="lazy"
+      />
+      {/* Ornament Square */}
+      <Image
+        className="ornament-square-left absolute flex max-w-[108px] top-1/2 -translate-y-1/2 -left-2 blur-sm opacity-70 z-10 lg:max-w-[172px] lg:translate-y-0 lg:top-auto lg:bottom-[112px] lg:blur-lg"
+        src={
+          "https://static.wixstatic.com/shapes/02a5b1_9616da59cbeb438fa0394a699d7f0955.svg"
+        }
+        alt="Ornament Square"
+        width={200}
+        height={200}
+      />
+      <Image
+        className="ornament-square-right absolute flex max-w-[72px] right-0 bottom-[180px] rotate-90 z-50 blur-xs lg:max-w-[98px] lg:right-[320px] lg:bottom-auto lg:top-[112px] lg:z-10 xl:right-[480px] xl:top-[72px]"
+        src={
+          "https://static.wixstatic.com/shapes/02a5b1_9616da59cbeb438fa0394a699d7f0955.svg"
+        }
+        alt="Ornament Square"
+        width={200}
+        height={200}
+      />
+      {/* Rainbow Effect */}
+      <Image
+        className="rainbow-effect absolute flex max-w-[288px] top-[280px] -right-32 z-10 lg:max-w-[420px] lg:-right-12 lg:top-36 xl:top-24"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//effect-rainbow.svg"
+        }
+        alt="Rainbow Effect"
+        width={500}
+        height={500}
+      />
+      {/* Effect Neon Side */}
+      <Image
+        className="neon-side-top-left absolute flex w-80 top-0 left-0 z-10 lg:w-[520px]"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//effect-side-neon.webp"
+        }
+        alt="Effect Neon Side"
+        width={200}
+        height={200}
+        layout="raw"
+      />
+      <Image
+        className="neon-side-bottom-left absolute hidden bottom-0 left-0 scale-y-[-1] z-10 lg:flex lg:w-[520px]"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//effect-side-neon.webp"
+        }
+        alt="Effect Neon Side"
+        width={200}
+        height={200}
+        layout="raw"
+      />
+      <Image
+        className="neon-side-top-right absolute flex w-80 top-0 right-0 scale-x-[-1] z-10 lg:w-[520px]"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//effect-side-neon.webp"
+        }
+        alt="Effect Neon Side"
+        width={200}
+        height={200}
+        layout="raw"
+      />
+      {/* Glowing Arrow */}
+      <Image
+        className="glowing-arrow-left absolute flex max-w-[320px] -top-10 -left-[120px] mix-blend-plus-lighter opacity-80 lg:max-w-[478px] lg:-left-[98px]"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//glowing-restart-1.webp"
+        }
+        alt="Glowing Arrow"
+        width={1000}
+        height={1000}
+      />
+      <Image
+        className="glowing-arrow-left absolute flex max-w-[185px] top-32 -right-[60px] scale-x-[-1] mix-blend-plus-lighter opacity-60 lg:max-w-[302px] lg:top-0 lg:right-0 xl:-top-10"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//glowing-restart-1.webp"
+        }
+        alt="Glowing Arrow"
+        width={1000}
+        height={1000}
+      />
+      {/* Center Gradient */}
+      <Image
+        className="center-gradient absolute flex max-w-[500px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 lg:max-w-[1092px]"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//center-gradient.svg"
+        }
+        alt="Center Gradient"
+        width={1000}
+        height={1000}
+      />
+    </div>
+  );
+}
