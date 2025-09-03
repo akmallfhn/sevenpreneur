@@ -15,6 +15,7 @@ import {
   Tags,
 } from "lucide-react";
 import { setSessionToken, trpc } from "@/trpc/client";
+import SidebarMenuGroupCMS from "./SidebarMenuGroupCMS";
 
 interface SidebarCMSProps {
   sessionToken: string;
@@ -114,30 +115,33 @@ export default function SidebarCMS({
             icon={<HouseIcon />}
             exact
           />
-          <SidebarMenuItemCMS
-            menuTitle="Cohorts"
-            url="/cohorts"
-            icon={<Presentation />}
-          />
-          {isAdministrator && (
+          <SidebarMenuGroupCMS title="Product">
             <SidebarMenuItemCMS
-              menuTitle="Users"
-              url="/users"
-              icon={<CircleUserIcon />}
+              menuTitle="Cohorts"
+              url="/cohorts"
+              icon={<Presentation />}
             />
-          )}
-          {isAdministrator && (
             <SidebarMenuItemCMS
-              menuTitle="Transactions"
-              url="/transactions"
-              icon={<BanknoteArrowDown />}
+              menuTitle="Discounts"
+              url="/discounts"
+              icon={<Tags />}
             />
+          </SidebarMenuGroupCMS>
+
+          {isAdministrator && (
+            <SidebarMenuGroupCMS title="Administration">
+              <SidebarMenuItemCMS
+                menuTitle="Users"
+                url="/users"
+                icon={<CircleUserIcon />}
+              />
+              <SidebarMenuItemCMS
+                menuTitle="Transactions"
+                url="/transactions"
+                icon={<BanknoteArrowDown />}
+              />
+            </SidebarMenuGroupCMS>
           )}
-          <SidebarMenuItemCMS
-            menuTitle="Discounts"
-            url="/discounts"
-            icon={<Tags />}
-          />
         </div>
       </div>
 
