@@ -3,7 +3,8 @@ import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import CountdownTimerRestart25 from "./CountdownTimerRestart25";
 import Link from "next/link";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Sparkles } from "lucide-react";
+import ScorecardItemSVP from "../items/ScorecardItemSVP";
 
 export default function HeroBlueprintProgramBatch7SVP() {
   let domain = "sevenpreneur.com";
@@ -12,34 +13,64 @@ export default function HeroBlueprintProgramBatch7SVP() {
   }
 
   return (
-    <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
-      {/* --- Hero Content */}
-      <div className="hero-content flex flex-col pt-10 pb-10 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px] 2xl:pl-[20vw]">
+    <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
+      {/* Hero Content */}
+      <div className="hero-content flex flex-col w-full items-center gap-72 py-14 px-4 z-[70] lg:gap-[28px] lg:px-0 lg:items-start lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         {/* Top Group Component */}
-        <div className="flex flex-col gap-3 items-center w-[645px] lg:items-start lg:gap-5">
-          <div className="flex flex-col gap-2 items-center font-bodycopy text-white text-center lg:items-start lg:text-left">
-            {/* Event Title */}
-            <h1 className="font-brand font-bold text-xl max-w-[280px] lg:text-[32px] lg:max-w-[472px] xl:text-[62px] xl:max-w-[612px] xl">
-              Bawa Bisnismu Naik Level Bareng Sevenpreneur
+        <div className="flex flex-col gap-3 items-center text-white lg:items-start ">
+          <div className="flex flex-col items-center text-center gap-2.5 lg:flex-row lg:text-left">
+            <h1 className="text-sm font-brand font-semibold tracking-widest lg:text-lg xl:text-xl">
+              BUSINESS BLUEPRINT PROGRAM
             </h1>
-            <h2 className="font-semibold font-ui">
-              {`Sevenpreneur Business Blueprint Program`.toUpperCase()}
-            </h2>
-            {/* Event Date & Place */}
-            <p className="font-semibold text-base lg:text-xl xl:text-xl">
-              All-in-one roadmap esensial untuk mulai, membangun, dan
-              mengembangkan bisnis.
-            </p>
-            {/* Event Date & Place */}
-            <p className="font-semibold text-base truncate lg:text-xl xl:text-2xl">
-              27 November - 14 Desember 2025
-            </p>
+            <div className="p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-100% to-[#30266D] rounded-full">
+              <div className="flex text-white items-center gap-1 py-1 px-3.5 bg-gradient-to-tr from-0% from-[#2B0E6E] to-100% to-[#1C125F] rounded-full">
+                <p className="text-[13px] font-brand font-bold">
+                  INTEGRATED WITH AI
+                </p>
+              </div>
+            </div>
           </div>
+          <div className="flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[52px] xl:max-w-[698px]">
+            <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] truncate">
+              Don’t Just Start a Business.
+            </h2>
+            <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-secondary">
+              Build a Blueprint.
+            </h2>
+          </div>
+          <p className="w-[317px] italic text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
+            End-to-end business mastery with proven frameworks and top-tier
+            coaching.
+          </p>
+          <div className="scorecards flex gap-4">
+            <ScorecardItemSVP
+              scorecardValue={7}
+              scorecardName="Business Chapters"
+              isMoreValue
+            />
+            <ScorecardItemSVP
+              scorecardValue={20}
+              scorecardName="Modules & AI Tools"
+              isMoreValue
+            />
+            <ScorecardItemSVP
+              scorecardValue={10}
+              scorecardName="Coaches & Speakers"
+              isMoreValue
+            />
+            <ScorecardItemSVP
+              scorecardValue={3000}
+              scorecardName="Program Alumni"
+              isMoreValue
+            />
+          </div>
+          {/* <p className="font-semibold text-base truncate lg:text-xl xl:text-2xl">
+              27 November - 14 Desember 2025
+            </p> */}
         </div>
         {/* Bottom Group Component */}
         <div className="flex flex-col items-center gap-5 lg:items-start lg:gap-[28px]">
-          {/* CTA */}
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col items-center gap-5 lg:flex-row">
             <Link
               href={`https://www.${domain}/playlists/restart-conference-2025/1`}
             >
@@ -69,14 +100,14 @@ export default function HeroBlueprintProgramBatch7SVP() {
         className={`overlay absolute left-1/2 -translate-x-1/2 bottom-0 w-full h-[288px] z-40 bg-gradient-to-t from-0% from-[#202020] via-60% via-[#202020] to-100% to-[#202020]/0 lg:h-[254px] lg:from-black/80 lg:via-[#202020]/[0.42]`}
       />
       {/* --- All Speakers */}
-      <Image
+      {/* <Image
         className="all-speakers absolute flex max-w-[392px] bottom-[176px] left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:-right-5 lg:translate-x-0 lg:max-w-[638px] lg:-bottom-5 xl:max-w-[856px] 2xl:right-[2vw]"
         src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//speakers-restart-25.webp"
         alt="Sevenpreneur Brand Representative"
         width={2440}
         height={2440}
         loading="lazy"
-      />
+      /> */}
       {/* Ornament Square */}
       <Image
         className="ornament-square-left absolute flex max-w-[108px] top-1/2 -translate-y-1/2 -left-2 blur-sm opacity-70 z-10 lg:max-w-[172px] lg:translate-y-0 lg:top-auto lg:bottom-[112px] lg:blur-lg"
