@@ -101,7 +101,7 @@ export default function HeaderNavbarSVP({
     <React.Fragment>
       {!isDisallowedPage && (
         <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
-          <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[960px] xl:max-w-[1208px]">
+          <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
             <Link href={"/"}>
               {mounted && (
                 <Image

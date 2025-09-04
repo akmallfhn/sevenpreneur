@@ -89,7 +89,6 @@ export default function HeroEventRestart25() {
         alt="Sevenpreneur Brand Representative"
         width={2440}
         height={2440}
-        loading="lazy"
       />
       {/* Ornament Square */}
       <Image
