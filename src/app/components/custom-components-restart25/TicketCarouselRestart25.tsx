@@ -1,6 +1,6 @@
 "use client";
-import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
-import TicketItemCardRestart25 from "../items/TicketItemCardRestart25";
+import SectionTitleRestart25 from "./SectionTitleRestart25";
+import TicketItemCardRestart25 from "./TicketItemCardRestart25";
 import dayjs from "dayjs";
 import { useRef } from "react";
 

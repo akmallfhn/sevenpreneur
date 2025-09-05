@@ -1,6 +1,6 @@
 "use client";
-import AttendeeRoleCardItemRestart25 from "../items/AttendeeRoleCardRestart25";
-import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
+import AttendeeRoleCardItemRestart25 from "./AttendeeRoleCardRestart25";
+import SectionTitleRestart25 from "./SectionTitleRestart25";
 
 export default function AttendeeRoleListRestart25() {
   const attendeeRoleData = [

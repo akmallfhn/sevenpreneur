@@ -1,6 +1,6 @@
 "use client";
-import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
-import SpeakerItemRestart25 from "../items/SpeakerItemRestart25";
+import SectionTitleRestart25 from "./SectionTitleRestart25";
+import SpeakerItemRestart25 from "./SpeakerItemRestart25";
 
 export default function SpeakersLineUpRestart25() {
   const speakerData = [

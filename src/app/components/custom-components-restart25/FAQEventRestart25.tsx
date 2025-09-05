@@ -1,6 +1,6 @@
 "use client";
-import SectionTitleRestart25 from "@/app/components/titles/SectionTitleRestart25";
-import FAQItemRestart25 from "@/app/components/items/FAQItemRestart25";
+import SectionTitleRestart25 from "@/app/components/custom-components-restart25/SectionTitleRestart25";
+import FAQItemRestart25 from "@/app/components/custom-components-restart25/FAQItemRestart25";
 
 export default function FAQEventRestart25() {
   const FAQData = [
