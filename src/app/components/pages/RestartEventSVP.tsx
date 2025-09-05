@@ -13,7 +13,7 @@ import AttendeeRoleListRestart25 from "@/app/components/custom-components-restar
 import AppInterstitialBanner from "../modals/AppInterstitialBanner";
 import PartnerLogosRestart25 from "../custom-components-restart25/PartnerLogosRestart25";
 
-export default function Restart25Page() {
+export default function RestartEventSVP() {
   let bannerTimeInterval = 1000 * 60 * 60;
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     bannerTimeInterval = 1000 * 40;
