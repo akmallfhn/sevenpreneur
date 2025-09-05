@@ -1,5 +1,5 @@
 "use client";
-import HeroBlueprintProgramBatch7SVP from "../templates/HeroBlueprintProgramBatch7SVP";
+import HeroBlueprintProgramBatch7SVP from "../custom-components-blueprint7/HeroBlueprintProgramBatch7SVP";
 
 export default function BlueprintProgramBatch7SVP() {
   return (
