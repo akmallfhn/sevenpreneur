@@ -1,22 +1,15 @@
 import React from "react";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
 
-interface CohortDetailsPageProps {
-  params: Promise<{ cohort_name: string; cohort_id: string }>;
-}
-
-export async function generateMetadata({
-  params,
-}: CohortDetailsPageProps): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-  const { cohort_id } = await params;
-  const cohortId = parseInt(cohort_id);
 
   // Get Data
   setSecretKey(secretKey!);
-  const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
+  const cohortData = (await trpc.read.cohort({ id: 36 })).cohort;
 
   if (cohortData.status !== "ACTIVE") {
     return {
@@ -43,12 +36,12 @@ export async function generateMetadata({
     publisher: "Sevenpreneur",
     referrer: "origin-when-cross-origin",
     alternates: {
-      canonical: `/cohorts/${cohortData.slug_url}/${cohortData.id}`,
+      canonical: `/cohorts/sevenpreneur-business-blueprint-program`,
     },
     openGraph: {
       title: `${cohortData.name} | Sevenpreneur`,
       description: cohortData.description,
-      url: `/cohorts/${cohortData.slug_url}/${cohortData.id}`,
+      url: `/cohorts/sevenpreneur-business-blueprint-program`,
       siteName: "Sevenpreneur",
       images: [
         {
@@ -75,18 +68,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function CohortDetailsPage({
-  params,
-}: CohortDetailsPageProps) {
+export default async function BlueprintProgramPage() {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-  const { cohort_id, cohort_name } = await params;
-  const cohortId = parseInt(cohort_id);
 
   // Get Data
   setSecretKey(secretKey!);
   let cohortDataRaw;
   try {
-    cohortDataRaw = (await trpc.read.cohort({ id: cohortId })).cohort;
+    cohortDataRaw = (await trpc.read.cohort({ id: 36 })).cohort;
   } catch (error) {
     return notFound();
   }
@@ -96,18 +85,5 @@ export default async function CohortDetailsPage({
     return notFound();
   }
 
-  // Auto Correction Slug
-  const correctSlug = cohortDataRaw.slug_url;
-  if (cohort_name.toLowerCase() !== correctSlug.toLowerCase()) {
-    redirect(`/cohorts/${correctSlug}/${cohortId}`);
-  }
-
-  // Conditional Rendering by Landing Page
-  // if (cohortDataRaw.id === 36) {
-  //   return <BlueprintProgramBatch7SVP />;
-  // } else if (cohortDataRaw.id === 37) {
-  //   return <Restart25Page />;
-  // }
-
-  return;
+  return <BlueprintProgramSVP />;
 }

@@ -8,7 +8,7 @@ import ScorecardItemSVP from "../items/ScorecardItemSVP";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
-export default function HeroBlueprintProgramBatch7SVP() {
+export default function HeroBlueprintProgramSVP() {
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
