@@ -1,6 +1,6 @@
 "use client";
-import EventExperienceCardItemRestart25 from "@/app/components/items/EventExperienceCardItemRestart25";
-import SectionTitleRestart25 from "@/app/components/titles/SectionTitleRestart25";
+import EventExperienceCardItemRestart25 from "@/app/components/custom-components-restart25/EventExperienceCardItemRestart25";
+import SectionTitleRestart25 from "@/app/components/custom-components-restart25/SectionTitleRestart25";
 
 export default function EventExperienceRestart25() {
   const experienceData = [

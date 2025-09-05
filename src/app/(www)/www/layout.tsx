@@ -5,8 +5,8 @@ import { Toaster } from "sonner";
 import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
 import { cookies } from "next/headers";
 import { setSessionToken, trpc } from "@/trpc/server";
-import BottomFooterSVP from "@/app/components/navigations/BottomFooterSVP";
 import { ThemeProvider } from "next-themes";
+import FooterNavbarSVP from "@/app/components/navigations/FooterNavbarSVP";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sevenpreneur.com"),
@@ -43,7 +43,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
         />
         {children}
         <Toaster richColors position="top-center" />
-        <BottomFooterSVP />
+        <FooterNavbarSVP />
       </ThemeProvider>
     </div>
   );

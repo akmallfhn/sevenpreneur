@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
-import CountdownTimerRestart25 from "./CountdownTimerRestart25";
+import CountdownTimerRestart25 from "../custom-components-restart25/CountdownTimerRestart25";
 import Link from "next/link";
 import { ArrowDown, Sparkles } from "lucide-react";
 import ScorecardItemSVP from "../items/ScorecardItemSVP";

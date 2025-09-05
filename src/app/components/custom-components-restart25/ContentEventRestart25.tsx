@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import SectionTitleRestart25 from "../titles/SectionTitleRestart25";
-import ScorecardRestart25 from "../items/ScorecardRestart25";
+import SectionTitleRestart25 from "./SectionTitleRestart25";
+import ScorecardRestart25 from "./ScorecardRestart25";
 
 export default function ContentEventRestart25() {
   return (
