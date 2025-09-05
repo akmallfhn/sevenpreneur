@@ -111,7 +111,7 @@ export default function HeaderNavbarSVP({
                       ? "https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"
                       : "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//logo-sevenpreneur-main.svg"
                   }
-                  alt="Homepage"
+                  alt="Logo Sevenpreneur"
                   width={320}
                   height={320}
                 />
