@@ -26,7 +26,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Vicktor Aritonang",
       session_educator_title: "CEO SSPACE Media",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
       session_variant: "frameworkSecondary",
     },
     {
@@ -36,7 +36,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Zaky Muhammad Syah",
       session_educator_title: "CEO Dibimbing & Cakrawala University",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-zaky.webp",
       session_variant: "founderSeries",
     },
     {
@@ -52,10 +52,10 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
     },
     {
       session_number: "",
-      session_name: "From Personal Readiness to Strong Business Ideas",
+      session_name: "Research Case",
       session_description: "",
-      session_educator: "Zaky Muhammad Syah",
-      session_educator_title: "CEO Dibimbing & Cakrawala University",
+      session_educator: "Inu",
+      session_educator_title: "BMI Research",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
       session_variant: "founderSeries",
@@ -68,7 +68,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Vicktor Aritonang",
       session_educator_title: "CEO SSPACE Media",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
       session_variant: "frameworkSecondary",
     },
     {
@@ -98,9 +98,9 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_description:
         "Build the systems that keep your business running smoothly as it scales.",
       session_educator: "Berry Boen",
-      session_educator_title: "COO Datascript",
+      session_educator_title: "Operational Director Datascript",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-berry-boen.webp",
       session_variant: "frameworkSecondary",
     },
     {
