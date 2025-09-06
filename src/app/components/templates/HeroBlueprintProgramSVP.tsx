@@ -47,7 +47,7 @@ export default function HeroBlueprintProgramSVP() {
             <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] truncate">
               Don’t Just Start a Business.
             </h2>
-            <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-secondary">
+            <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-90% to-secondary">
               Build a Blueprint.
             </h2>
           </div>
@@ -129,7 +129,7 @@ export default function HeroBlueprintProgramSVP() {
       {/* Circle Blur */}
       <div className="circle-blur-top-left absolute flex bg-[#3417E3] size-64 -top-32 -left-32 blur-[90px] rounded-full z-10 lg:size-80 lg:-top-20 lg:blur-[120px]" />
       <div className="circle-blur-right absolute flex bg-secondary size-64 bottom-20 -right-36 blur-[90px] rounded-full z-10 lg:size-80 lg:top-1/2 lg:-translate-y-1/2 lg:blur-[120px]" />
-      <div className="circle-blur-right absolute flex bg-[#3417E3] w-[685px] h-[230px] -bottom-[115px] left-1/2 -translate-x-1/2 blur-[90px] rounded-full z-10" />
+      <div className="circle-blur-center absolute flex bg-[#3417E3] w-[685px] h-[230px] -bottom-[115px] left-1/2 -translate-x-1/2 blur-[90px] rounded-full z-10" />
 
       {/* Overlay Maps */}
       <Image
@@ -144,7 +144,7 @@ export default function HeroBlueprintProgramSVP() {
 
       {/* Main Background */}
       <Image
-        className="center-gradient absolute flex inset-0 w-full h-full object-cover"
+        className="main-background absolute flex inset-0 w-full h-full object-cover"
         src={
           "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/hero-background-sbbp.webp"
         }

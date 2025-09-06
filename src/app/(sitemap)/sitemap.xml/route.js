@@ -1,13 +1,29 @@
+import { url } from "inspector";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const BASE_URL = "https://www.sevenpreneur.com";
+export function GET() {
+  let domain = "sevenpreneur.com";
+  if (process.env.DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
 
   const sitemaps = [
     {
-      url: `${BASE_URL}`,
+      url: `https://www.${domain}`,
       lastModified: new Date(),
       changeFrequency: "yearly",
+      priority: 1.0,
+    },
+    {
+      url: `https://www.${domain}/events/restart-conference`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 1.0,
+    },
+    {
+      url: `https://www.${domain}/cohorts/sevenpreneur-business-blueprint-program`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
       priority: 1.0,
     },
   ];
