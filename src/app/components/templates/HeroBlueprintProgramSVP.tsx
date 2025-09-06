@@ -1,35 +1,12 @@
 "use client";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
-import CountdownTimerRestart25 from "../custom-components-restart25/CountdownTimerRestart25";
 import Link from "next/link";
-import { ArrowDown, Sparkles } from "lucide-react";
 import ScorecardItemSVP from "../items/ScorecardItemSVP";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { useEffect, useState } from "react";
 
 export default function HeroBlueprintProgramSVP() {
-  const [buttonSize, setButtonSize] = useState<
-    "defaultRounded" | "largeRounded"
-  >(
-    typeof window !== "undefined" && window.innerWidth < 1024
-      ? "defaultRounded"
-      : "largeRounded"
-  );
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setButtonSize("defaultRounded");
-      } else {
-        setButtonSize("largeRounded");
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
@@ -38,9 +15,9 @@ export default function HeroBlueprintProgramSVP() {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
       {/* Hero Container */}
-      <div className="hero-container relative flex w-full items-center py-14 px-4 z-[70] lg:px-0 lg:pt-20 lg:pb-24 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+      <div className="hero-container relative flex w-full items-center py-10 px-4 z-[70] lg:px-0 lg:pt-20 lg:pb-24 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         {/* Content */}
-        <div className="hero-content flex flex-col w-full items-center gap-52 lg:gap-[28px] lg:items-start">
+        <div className="hero-content flex flex-col w-full items-center gap-60 lg:gap-[28px] lg:items-start">
           <div className="flex flex-col gap-3 items-center text-white lg:items-start ">
             <div className="flex flex-col items-center text-center gap-2.5 lg:flex-row lg:text-left">
               <h1 className="text-sm font-brand font-semibold tracking-widest lg:text-lg xl:text-xl">
@@ -105,14 +82,26 @@ export default function HeroBlueprintProgramSVP() {
               href={`https://www.${domain}/playlists/restart-conference-2025/1`}
               className="w-full p-[1px] rounded-full bg-gradient-to-b from-0% from-[#7B6FF0] to-69% to-[#4C3FEC]"
             >
-              <AppButton
-                size={buttonSize}
-                variant="primaryGradient"
-                className="w-full lg:w-fit"
-                featureName="join_program_scroll"
-              >
-                <p className="text-base lg:text-lg">Gabung Program</p>
-              </AppButton>
+              <div className="flex lg:hidden">
+                <AppButton
+                  size="defaultRounded"
+                  variant="primaryGradient"
+                  className="w-full lg:w-fit"
+                  featureName="join_program_scroll"
+                >
+                  <p className="text-base lg:text-lg">Gabung Program</p>
+                </AppButton>
+              </div>
+              <div className="hidden lg:flex">
+                <AppButton
+                  size="largeRounded"
+                  variant="primaryGradient"
+                  className="w-full lg:w-fit"
+                  featureName="join_program_scroll"
+                >
+                  <p className="text-base lg:text-lg">Gabung Program</p>
+                </AppButton>
+              </div>
             </Link>
             <a
               href="https://wa.me/62895803221561"
@@ -120,15 +109,28 @@ export default function HeroBlueprintProgramSVP() {
               target="_blank"
               rel="noopenner noreferrer"
             >
-              <AppButton
-                size={buttonSize}
-                variant="hollowWhatsapp"
-                className="w-full lg:w-fit"
-                featureName="whatsapp_consultation"
-              >
-                <FontAwesomeIcon icon={faWhatsapp} />
-                <p className="text-base lg:text-lg">Konsultasi Gratis</p>
-              </AppButton>
+              <div className="flex lg:hidden">
+                <AppButton
+                  size="defaultRounded"
+                  variant="hollowWhatsapp"
+                  className="w-full lg:w-fit"
+                  featureName="whatsapp_consultation"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} />
+                  <p className="text-base lg:text-lg">Konsultasi Gratis</p>
+                </AppButton>
+              </div>
+              <div className="hidden lg:flex">
+                <AppButton
+                  size="largeRounded"
+                  variant="hollowWhatsapp"
+                  className="w-full lg:w-fit"
+                  featureName="whatsapp_consultation"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} />
+                  <p className="text-base lg:text-lg">Konsultasi Gratis</p>
+                </AppButton>
+              </div>
             </a>
           </div>
         </div>
