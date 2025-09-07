@@ -31,7 +31,7 @@ export default function PackageItemBlueprintProgramSVP({
 }: PackageItemBlueprintProgramSVPProps) {
   return (
     <div
-      className={`package-outline  z-10 ${
+      className={`package-outline relative z-10 ${
         isPriority
           ? "p-1 bg-gradient-to-tr from-21% from-[#3417E3] to-100% to-[#E74D79] rounded-[12px]"
           : "p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-lg"
@@ -51,12 +51,12 @@ export default function PackageItemBlueprintProgramSVP({
 
         {/* Price Information */}
         <div className="price-discount flex items-center gap-2 font-brand text-white">
-          <p className="discount-rate bg-secondary font-bold text-[10px] px-1 py-0.5 rounded-sm lg:text-xs">
+          <p className="discount-rate bg-secondary font-bold text-xs px-1 py-0.5 rounded-sm lg:text-sm">
             {Math.round(100 - (salePeriodPrice / normalPrice) * 100)}% OFF
           </p>
           <div className="normal-price relative flex items-center gap-0.5">
-            <p className="text-[10px] font-medium lg:text-xs">Rp</p>
-            <p className="font-semibold text-sm lg:text-base">
+            <p className="text-[10px] font-medium text-xs lg:text-sm">Rp</p>
+            <p className="font-semibold lg:text-lg">
               {normalPrice.toLocaleString("id-ID")}
             </p>
             <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
@@ -79,7 +79,7 @@ export default function PackageItemBlueprintProgramSVP({
           }`}
         >
           <AppButton
-            variant={isPriority ? "primaryGradient" : "secondary"}
+            variant={isPriority ? "primaryGradient" : "outline"}
             size="defaultRounded"
             className="cta-button flex w-full"
             featureName="buy"
@@ -112,6 +112,13 @@ export default function PackageItemBlueprintProgramSVP({
           </div>
         </div>
       </div>
+
+      {/* Badge Priority */}
+      {isPriority && (
+        <p className="badge-priority absolute -top-3 left-1/2 -translate-x-1/2 px-6 py-1.5 bg-secondary font-brand font-bold text-xs text-white tracking-[3px] truncate rounded-full">
+          SWEET SPOT
+        </p>
+      )}
     </div>
   );
 }

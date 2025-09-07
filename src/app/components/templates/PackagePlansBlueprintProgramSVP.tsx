@@ -1,5 +1,6 @@
 "use client";
 import PackageItemBlueprintProgramSVP from "../items/PackageItemBlueprintProgramSVP";
+import PackageLabelBlueprintProgramSVP from "../labels/PackageLabelBlueprintProgramSVP";
 import { StatusVariant } from "../labels/StatusLabelCMS";
 
 export type PackageItem = {
@@ -45,6 +46,9 @@ export default function PackagePlansBlueprintProgramSVP({
                 cohortId={cohortId}
                 cohortSlug={cohortSlug}
                 packageId={post.id}
+                packageLabel={
+                  <PackageLabelBlueprintProgramSVP variant="regular" />
+                }
                 packageName="Batch 7"
                 packageDescription="Kuasai 7 framework lengkap untuk upgrade mindset & skill bisnismu."
                 packageBenefits={[
@@ -85,6 +89,7 @@ export default function PackagePlansBlueprintProgramSVP({
                 cohortSlug={cohortSlug}
                 packageId={post.id}
                 packageName="Batch 7"
+                packageLabel={<PackageLabelBlueprintProgramSVP variant="vip" />}
                 packageDescription="Pengalaman lebih eksklusif dalam satu paket lengkap."
                 packageBenefits={[
                   <>
@@ -113,7 +118,7 @@ export default function PackagePlansBlueprintProgramSVP({
             ))}
         </div>
       </div>
-      <div className="color-background absolute bg-[#3417E3] blur-[120px] w-[500px] h-[1000px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full z-[1] lg:blur-[400px] lg:w-[1488px] lg:h-[400px]" />
+      <div className="color-background absolute bg-[#3417E3] blur-[120px] w-[500px] h-[1000px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full z-[1] will-change-transform lg:blur-[200px] lg:w-[1488px] lg:h-[400px]" />
     </div>
   );
 }
