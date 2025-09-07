@@ -45,7 +45,7 @@ export default function FooterNavbarSVP() {
   return (
     <React.Fragment>
       {!isDisallowedPage && (
-        <div className="root-bottom-footer flex bg-[#171616] w-full items-center justify-center">
+        <footer className="root-bottom-footer flex bg-[#171616] w-full items-center justify-center">
           <div className="container-bottom-footer flex flex-col w-full p-8 gap-5 lg:px-0 lg:py-10 lg:gap-8 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
             <div className="company flex flex-col gap-5 lg:flex-row lg:justify-between lg:gap-0">
               <div className="company-part flex flex-col gap-5 max-w-[442px]">
@@ -142,7 +142,7 @@ export default function FooterNavbarSVP() {
               Copyright © 2025 Sevenpreneur. All rights reserved.
             </p>
           </div>
-        </div>
+        </footer>
       )}
     </React.Fragment>
   );

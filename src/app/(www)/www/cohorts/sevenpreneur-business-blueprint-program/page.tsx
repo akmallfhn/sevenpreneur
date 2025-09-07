@@ -85,5 +85,20 @@ export default async function BlueprintProgramPage() {
     return notFound();
   }
 
-  return <BlueprintProgramSVP />;
+  // Sanitize data type
+  const cohortData = {
+    ...cohortDataRaw,
+    cohort_prices: cohortDataRaw.cohort_prices.map((price: any) => ({
+      ...price,
+      amount: Number(price.amount),
+    })),
+  };
+
+  return (
+    <BlueprintProgramSVP
+      cohortId={cohortData.id}
+      cohortSlug={cohortData.slug_url}
+      cohortPrices={cohortData.cohort_prices}
+    />
+  );
 }
