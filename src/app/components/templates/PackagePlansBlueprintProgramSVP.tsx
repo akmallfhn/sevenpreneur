@@ -111,7 +111,7 @@ export default function PackagePlansBlueprintProgramSVP({
                 isPriority
               />
             ))}
-          <div className="color-background absolute bg-[#3417E3] blur-[400px] w-[1488px] h-[1000px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full lg:h-[400px]" />
+          <div className="color-background absolute bg-[#3417E3] blur-[120px] w-[500px] h-[1000px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full z-[1] lg:blur-[400px] lg:w-[1488px] lg:h-[400px]" />
         </div>
       </div>
     </div>

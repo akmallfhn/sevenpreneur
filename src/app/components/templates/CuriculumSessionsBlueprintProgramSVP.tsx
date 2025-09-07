@@ -98,7 +98,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_description:
         "Build the systems that keep your business running smoothly as it scales.",
       session_educator: "Berry Boen",
-      session_educator_title: "Operational Director Datascript",
+      session_educator_title: "Operational Director Datascrip Indonesia",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-berry-boen.webp",
       session_variant: "frameworkSecondary",

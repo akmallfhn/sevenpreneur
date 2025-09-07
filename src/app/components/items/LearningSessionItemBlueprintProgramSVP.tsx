@@ -113,10 +113,10 @@ export default function LearningSessionItemBlueprintProgramSVP({
           )}
         </div>
         <div className="flex flex-col font-bodycopy z-40">
-          <h4 className="session-educator font-bold text-[10px] lg:text-lg">
+          <h4 className="session-educator font-bold text-xs lg:text-lg">
             {sessionEducator}
           </h4>
-          <p className="session-educator-title text-[8px] lg:text-base">
+          <p className="session-educator-title text-[10px] lg:text-base">
             {sessionEducatorTitle}
           </p>
         </div>
