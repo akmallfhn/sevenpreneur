@@ -47,19 +47,19 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Yusuf Arezany",
       session_educator_title: "Researcher Govtech Procurement",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-yusuf.webp",
       session_variant: "frameworkPrimary",
     },
-    {
-      session_number: "",
-      session_name: "Research Case",
-      session_description: "",
-      session_educator: "Inu",
-      session_educator_title: "BMI Research",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
-      session_variant: "founderSeries",
-    },
+    // {
+    //   session_number: "",
+    //   session_name: "Research Case",
+    //   session_description: "",
+    //   session_educator: "Inu",
+    //   session_educator_title: "BMI Research",
+    //   session_educator_avatar:
+    //     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+    //   session_variant: "founderSeries",
+    // },
     {
       session_number: "04.",
       session_name: "Sales & Marketing",
@@ -78,7 +78,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Adythia Pratama",
       session_educator_title: "Guerilla Marketing Specialist",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-adythia.webp",
       session_variant: "founderSeries",
     },
     {
@@ -89,7 +89,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Vander Lesnussa",
       session_educator_title: "Senior Product Manager Allofresh",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vander.webp",
       session_variant: "frameworkPrimary",
     },
     {
@@ -121,7 +121,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Wafa Taftazani",
       session_educator_title: "Entrepreneur & Investor",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-wafa.webp",
       session_variant: "extraordinary",
     },
     {
@@ -132,7 +132,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Tom Lembong",
       session_educator_title: "ex Trade Minister & Banking Investor",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tom-lembong.webp",
       session_variant: "extraordinary",
     },
     {
@@ -143,7 +143,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Basuki T. Purnama",
       session_educator_title: "Governor of DKI Jakarta 2017",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-ahok.webp",
       session_variant: "extraordinary",
     },
   ];
