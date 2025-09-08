@@ -119,7 +119,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_name: "From Pitch Perfect to Investable Opportunity",
       session_description: "",
       session_educator: "Wafa Taftazani",
-      session_educator_title: "Investor",
+      session_educator_title: "Entrepreneur & Investor",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
       session_variant: "extraordinary",

@@ -79,7 +79,7 @@ export default function HeroBlueprintProgramSVP() {
           </div>
           <div className="flex flex-col w-[300px] items-center gap-3 lg:w-fit lg:flex-row">
             <Link
-              href={`https://www.${domain}/playlists/restart-conference-2025/1`}
+              href={"#package-plans"}
               className="w-full p-[1px] rounded-full bg-gradient-to-b from-0% from-[#7B6FF0] to-69% to-[#4C3FEC]"
             >
               <div className="flex lg:hidden">
