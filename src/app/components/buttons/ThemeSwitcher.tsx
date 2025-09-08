@@ -2,6 +2,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
 
 export default function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
@@ -19,24 +20,24 @@ export default function ThemeSwitcher() {
     }
   }, [mounted, theme, setTheme]);
 
+  // State Button
+  let menuIcon;
+  let menuName;
+  if (theme === "dark") {
+    menuName = "Light Mode";
+    menuIcon = <Sun className="size-4" />;
+  } else {
+    menuName = "Dark Mode";
+    menuIcon = <Moon className="size-4" />;
+  }
+
   if (!mounted) return null;
 
   return (
-    <div
-      className="theme-switcher flex p-2 w-44 items-center gap-2 rounded-sm text-black hover:cursor-pointer hover:bg-[#F1F5F9] dark:text-white dark:hover:bg-[#27292E]"
+    <AppDropdownItemList
+      menuIcon={menuIcon}
+      menuName={menuName}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-    >
-      {theme === "dark" ? (
-        <>
-          <Sun className="size-4" />
-          <p className="text-sm font-ui">Light Mode</p>
-        </>
-      ) : (
-        <>
-          <Moon className="size-4" />
-          <p className="text-sm font-ui">Dark Mode</p>
-        </>
-      )}
-    </div>
+    />
   );
 }
