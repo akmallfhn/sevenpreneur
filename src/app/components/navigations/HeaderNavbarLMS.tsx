@@ -17,7 +17,7 @@ import {
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
-import ThemeSwitcher from "../buttons/ThemeSwitcher";
+import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
 
 interface HeaderNavbarLMSProps {
   isLoggedIn: boolean;
@@ -137,7 +137,7 @@ export default function HeaderNavbarLMS({
                 />
               </Link>
               <hr className="my-1" />
-              <ThemeSwitcher />
+              <AppThemeSwitcher size="dropdown-item" />
               <hr className="my-1" />
               <AppDropdownItemList
                 menuIcon={<LogOut className="size-4" />}

@@ -17,7 +17,7 @@ export default function AppSheet({
   onClose,
   children,
 }: AppSheetProps) {
-  // --- Blocked scroll behind
+  // Blocked scroll behind
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -31,7 +31,7 @@ export default function AppSheet({
 
   return (
     <div
-      className={`root fixed inset-0 flex w-full h-full bg-black/40 items-end justify-center z-50 transition transform ease-in-out`}
+      className={`sheet-root fixed inset-0 flex w-full h-full bg-black/40 items-end justify-center z-50 transition transform ease-in-out`}
       onClick={onClose}
     >
       <div
@@ -42,11 +42,11 @@ export default function AppSheet({
           <h2 className="text-black text-lg font-brand font-bold">
             {sheetName}
           </h2>
-          <p className="text-alternative text-sm font-bodycopy font-medium">
+          <p className="sheet-description text-alternative text-sm font-bodycopy font-medium">
             {sheetDescription}
           </p>
           <X
-            className="absolute text-alternative size-5 top-2 right-2 cursor-pointer"
+            className="sheet-close absolute text-alternative size-5 top-2 right-2 cursor-pointer"
             onClick={onClose}
           />
         </div>

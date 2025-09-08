@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
 import AppButton from "../buttons/AppButton";
 import {
+  AlignLeftIcon,
   Blocks,
   BookMarked,
   ChevronDown,
@@ -16,9 +17,10 @@ import {
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
-import ThemeSwitcher from "../buttons/ThemeSwitcher";
 import { useTheme } from "next-themes";
 import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
+import SideMenuMobileSVP from "./SideMenuMobileSVP";
+import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
 
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
@@ -33,7 +35,8 @@ export default function HeaderNavbarSVP({
   userName,
   userRole,
 }: HeaderNavbarSVPProps) {
-  const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -61,7 +64,7 @@ export default function HeaderNavbarSVP({
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    setIsActionsOpened((prev) => !prev);
+    setAccountMenuOpen((prev) => !prev);
   };
 
   // Close dropdown if clicked outside
@@ -73,7 +76,7 @@ export default function HeaderNavbarSVP({
         wrapperRef.current &&
         !wrapperRef.current.contains(event.target as Node)
       ) {
-        setIsActionsOpened(false);
+        setAccountMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -103,7 +106,7 @@ export default function HeaderNavbarSVP({
       {!isDisallowedPage && (
         <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
           <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-            {/* Homepage */}
+            {/* LEFT SIDE */}
             <Link href={"/"}>
               {mounted && (
                 <Image
@@ -120,7 +123,7 @@ export default function HeaderNavbarSVP({
               )}
             </Link>
 
-            {/* Menu Desktop */}
+            {/* Menu Desktop Center */}
             <nav className="menu-container hidden lg:flex">
               <ul className="menu-item-list flex items-center gap-10">
                 <HeaderNavbarItemSVP
@@ -136,60 +139,81 @@ export default function HeaderNavbarSVP({
               </ul>
             </nav>
 
-            {/* User Navigation */}
-            {isLoggedIn ? (
-              <div
-                className="user-menu relative flex hover:cursor-pointer"
-                ref={wrapperRef}
-                onClick={handleActionsDropdown}
-              >
-                <AvatarBadgeSVP userAvatar={userAvatar} userName={nickName} />
-                <AppDropdown
-                  isOpen={isActionsOpened}
-                  onClose={() => setIsActionsOpened(false)}
-                  alignMobile="right"
+            {/* RIGHT SIDE */}
+            <div className="flex items-center gap-4">
+              {/* Theme Switcher */}
+              <div className="hidden lg:flex">
+                <AppThemeSwitcher size="square" />
+              </div>
+
+              {/* User Navigation */}
+              {isLoggedIn ? (
+                <div
+                  className="user-menu relative flex hover:cursor-pointer"
+                  ref={wrapperRef}
+                  onClick={handleActionsDropdown}
                 >
-                  {userRole !== 3 && (
-                    <Link href={`https://admin.${domain}`}>
+                  <AvatarBadgeSVP userAvatar={userAvatar} userName={nickName} />
+                  <AppDropdown
+                    isOpen={accountMenuOpen}
+                    onClose={() => setAccountMenuOpen(false)}
+                    alignMobile="right"
+                  >
+                    {userRole !== 3 && (
+                      <Link href={`https://admin.${domain}`}>
+                        <AppDropdownItemList
+                          menuIcon={<Blocks className="size-4" />}
+                          menuName="Dashboard Admin"
+                        />
+                      </Link>
+                    )}
+                    <Link href={`https://agora.${domain}`}>
                       <AppDropdownItemList
-                        menuIcon={<Blocks className="size-4" />}
-                        menuName="Dashboard Admin"
+                        menuIcon={<BookMarked className="size-4" />}
+                        menuName="My Learning"
                       />
                     </Link>
-                  )}
-                  <Link href={`https://agora.${domain}`}>
+                    <Link href={`/transactions`}>
+                      <AppDropdownItemList
+                        menuIcon={<Wallet className="size-4" />}
+                        menuName="Transaction"
+                      />
+                    </Link>
+                    <hr className="my-1" />
                     <AppDropdownItemList
-                      menuIcon={<BookMarked className="size-4" />}
-                      menuName="My Learning"
+                      menuIcon={<LogOut className="size-4" />}
+                      menuName="Sign out"
+                      isDestructive
+                      onClick={handleSignOut}
                     />
-                  </Link>
-                  <Link href={`/transactions`}>
-                    <AppDropdownItemList
-                      menuIcon={<Wallet className="size-4" />}
-                      menuName="Transaction"
-                    />
-                  </Link>
-                  <hr className="my-1" />
-                  <ThemeSwitcher />
-                  <hr className="my-1" />
-                  <AppDropdownItemList
-                    menuIcon={<LogOut className="size-4" />}
-                    menuName="Sign out"
-                    isDestructive
-                    onClick={handleSignOut}
-                  />
-                </AppDropdown>
+                  </AppDropdown>
+                </div>
+              ) : (
+                <Link href={`/auth/login?redirectTo=${pathname}`}>
+                  <AppButton variant="primary" size="defaultRounded">
+                    <UserCircle2 className="size-5" />
+                    Login
+                  </AppButton>
+                </Link>
+              )}
+
+              {/* Hamburger Button */}
+              <div
+                className="flex lg:hidden"
+                onClick={() => setMobileMenuOpen(true)}
+              >
+                <AlignLeftIcon className="size-6" />
               </div>
-            ) : (
-              <Link href={`/auth/login?redirectTo=${pathname}`}>
-                <AppButton variant="primary" size="defaultRounded">
-                  <UserCircle2 className="size-5" />
-                  Login
-                </AppButton>
-              </Link>
-            )}
+            </div>
           </div>
         </div>
+      )}
+
+      {mobileMenuOpen && (
+        <SideMenuMobileSVP
+          isOpen={mobileMenuOpen}
+          onClose={() => setMobileMenuOpen(false)}
+        />
       )}
     </React.Fragment>
   );
