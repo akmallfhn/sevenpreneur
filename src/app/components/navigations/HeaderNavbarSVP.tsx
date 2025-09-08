@@ -18,6 +18,7 @@ import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
 import ThemeSwitcher from "../buttons/ThemeSwitcher";
 import { useTheme } from "next-themes";
+import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
 
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
@@ -44,7 +45,7 @@ export default function HeaderNavbarSVP({
     pathname.includes(path)
   );
 
-  //  --- Get Nickname
+  //  Get Nickname
   const nickName = userName?.split(" ")[0];
 
   // --- Detect screen size
@@ -57,13 +58,13 @@ export default function HeaderNavbarSVP({
   //   return () => window.removeEventListener("resize", handleResize);
   // }, []);
 
-  // --- Open and close dropdown
+  // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Close dropdown if clicked outside
+  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (
       event: MouseEvent | (MouseEvent & { target: Node })
@@ -81,18 +82,18 @@ export default function HeaderNavbarSVP({
     };
   }, []);
 
-  // --- Domain Logic
+  // Domain Logic
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
   }
 
-  // --- Sign out function
+  // Sign out function
   const handleSignOut = async () => {
     await DeleteSession();
   };
 
-  // --- Render if component client mounted
+  // Render if component client mounted
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -102,6 +103,7 @@ export default function HeaderNavbarSVP({
       {!isDisallowedPage && (
         <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
           <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+            {/* Homepage */}
             <Link href={"/"}>
               {mounted && (
                 <Image
@@ -117,6 +119,24 @@ export default function HeaderNavbarSVP({
                 />
               )}
             </Link>
+
+            {/* Menu Desktop */}
+            <nav className="menu-container hidden lg:flex">
+              <ul className="menu-item-list flex items-center gap-10">
+                <HeaderNavbarItemSVP
+                  menuTitle="Programs"
+                  menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
+                  activeUrls={["/cohorts", "/playlists", "/events"]}
+                />
+                <HeaderNavbarItemSVP menuTitle="About Us" menuUrl="/company" />
+                <HeaderNavbarItemSVP
+                  menuTitle="Collab with Us"
+                  menuUrl="/collaboration"
+                />
+              </ul>
+            </nav>
+
+            {/* User Navigation */}
             {isLoggedIn ? (
               <div
                 className="user-menu relative flex hover:cursor-pointer"
@@ -129,12 +149,6 @@ export default function HeaderNavbarSVP({
                   onClose={() => setIsActionsOpened(false)}
                   alignMobile="right"
                 >
-                  {/* <Link href={`https://www.${domain}/account`}>
-                <AppDropdownItemList
-                  menuIcon={<UserRound className="size-4" />}
-                  menuName="Profile"
-                />
-              </Link> */}
                   {userRole !== 3 && (
                     <Link href={`https://admin.${domain}`}>
                       <AppDropdownItemList
@@ -149,7 +163,7 @@ export default function HeaderNavbarSVP({
                       menuName="My Learning"
                     />
                   </Link>
-                  <Link href={`https://www.${domain}/transactions`}>
+                  <Link href={`/transactions`}>
                     <AppDropdownItemList
                       menuIcon={<Wallet className="size-4" />}
                       menuName="Transaction"
@@ -168,7 +182,7 @@ export default function HeaderNavbarSVP({
               </div>
             ) : (
               <Link href={`/auth/login?redirectTo=${pathname}`}>
-                <AppButton variant="dark" size="defaultRounded">
+                <AppButton variant="primary" size="defaultRounded">
                   <UserCircle2 className="size-5" />
                   Login
                 </AppButton>
