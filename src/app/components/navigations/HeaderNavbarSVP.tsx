@@ -190,31 +190,39 @@ export default function HeaderNavbarSVP({
                 </div>
               ) : (
                 <Link href={`/auth/login?redirectTo=${pathname}`}>
-                  <AppButton variant="primary" size="defaultRounded">
-                    <UserCircle2 className="size-5" />
-                    Login
-                  </AppButton>
+                  <div className="login-mobile flex lg:hidden">
+                    <AppButton variant="ghost" size="iconRounded">
+                      <UserCircle2 className="size-6" />
+                    </AppButton>
+                  </div>
+                  <div className="login-desktop hidden lg:flex">
+                    <AppButton variant="primary" size="mediumRounded">
+                      <UserCircle2 className="size-5" />
+                      Login
+                    </AppButton>
+                  </div>
                 </Link>
               )}
 
               {/* Hamburger Button */}
-              <div
+              {/* <div
                 className="flex lg:hidden"
                 onClick={() => setMobileMenuOpen(true)}
               >
                 <AlignLeftIcon className="size-6" />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       )}
 
-      {mobileMenuOpen && (
+      {/* Mobile Menu */}
+      {/* {mobileMenuOpen && (
         <SideMenuMobileSVP
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
         />
-      )}
+      )} */}
     </React.Fragment>
   );
 }
