@@ -97,6 +97,7 @@ export default async function BlueprintProgramPage() {
   return (
     <BlueprintProgramSVP
       cohortId={cohortData.id}
+      cohortName={cohortData.name}
       cohortSlug={cohortData.slug_url}
       cohortPrices={cohortData.cohort_prices}
     />

@@ -12,12 +12,14 @@ export type PackageItem = {
 
 interface PackagePlanBlueprintProgramSVPProps {
   cohortId: number;
+  cohortName: string;
   cohortSlug: string;
   cohortPrices: PackageItem[];
 }
 
 export default function PackagePlansBlueprintProgramSVP({
   cohortId,
+  cohortName,
   cohortSlug,
   cohortPrices,
 }: PackagePlanBlueprintProgramSVPProps) {
@@ -45,6 +47,7 @@ export default function PackagePlansBlueprintProgramSVP({
                 <PackageItemBlueprintProgramSVP
                   key={index}
                   cohortId={cohortId}
+                  cohortName={cohortName}
                   cohortSlug={cohortSlug}
                   packageId={post.id}
                   packageLabel={
@@ -79,6 +82,8 @@ export default function PackagePlansBlueprintProgramSVP({
                   ]}
                   normalPrice={5000000}
                   salePeriodPrice={post.amount}
+                  featureProductName="Regular"
+                  featurePosition={1}
                 />
               ))}
             {cohortPrices
@@ -87,6 +92,7 @@ export default function PackagePlansBlueprintProgramSVP({
                 <PackageItemBlueprintProgramSVP
                   key={index}
                   cohortId={cohortId}
+                  cohortName={cohortName}
                   cohortSlug={cohortSlug}
                   packageId={post.id}
                   packageName="Batch 7"
@@ -116,6 +122,8 @@ export default function PackagePlansBlueprintProgramSVP({
                   ]}
                   normalPrice={10000000}
                   salePeriodPrice={post.amount}
+                  featureProductName="VIP"
+                  featurePosition={2}
                   isPriority
                 />
               ))}

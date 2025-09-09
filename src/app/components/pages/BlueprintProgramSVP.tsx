@@ -7,12 +7,14 @@ import PackagePlansBlueprintProgramSVP, {
 
 interface BlueprintProgramSVPProps {
   cohortId: number;
+  cohortName: string;
   cohortSlug: string;
   cohortPrices: PackageItem[];
 }
 
 export default function BlueprintProgramSVP({
   cohortId,
+  cohortName,
   cohortSlug,
   cohortPrices,
 }: BlueprintProgramSVPProps) {
@@ -22,6 +24,7 @@ export default function BlueprintProgramSVP({
       <CuriculumSessionsBlueprintProgramSVP />
       <PackagePlansBlueprintProgramSVP
         cohortId={cohortId}
+        cohortName={cohortName}
         cohortSlug={cohortSlug}
         cohortPrices={cohortPrices}
       />

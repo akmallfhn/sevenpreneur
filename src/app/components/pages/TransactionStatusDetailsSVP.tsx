@@ -365,14 +365,8 @@ export default function TransactionStatusDetailsSVP({
                   <AppButton
                     size="defaultRounded"
                     className="w-full lg:w-[240px]"
-                    featureName={
-                      isCohort ? "payment_cohort" : "payment_playlist"
-                    }
-                    featureItem={
-                      isCohort
-                        ? toSnakeCase(cohortName || "")
-                        : toSnakeCase(playlistName || "")
-                    }
+                    featureName="continue_payment"
+                    featurePagePoint="Transaction Details Page"
                   >
                     Continue Payment
                   </AppButton>
@@ -383,7 +377,8 @@ export default function TransactionStatusDetailsSVP({
                   className="w-full lg:w-[240px]"
                   onClick={() => setIsOpenCancelConfirmation(true)}
                   disabled={loadingCancelation}
-                  featureName="cancel_payment"
+                  featureName="cancel_payment_initiated"
+                  featurePagePoint="Transaction Details Page"
                 >
                   {loadingCancelation && (
                     <Loader2 className="animate-spin size-5" />
@@ -404,6 +399,7 @@ export default function TransactionStatusDetailsSVP({
                   size="defaultRounded"
                   className="w-full lg:w-[240px]"
                   featureName="retry_payment"
+                  featurePagePoint="Transaction Details Page"
                 >
                   Retry Payment
                 </AppButton>

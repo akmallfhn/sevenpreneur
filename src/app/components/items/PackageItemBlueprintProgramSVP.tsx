@@ -3,9 +3,12 @@ import { Check } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { toSnakeCase } from "@/lib/snake-case";
+import { FeatureTrackingProps } from "@/lib/props/feature-tracking";
 
-interface PackageItemBlueprintProgramSVPProps {
+interface PackageItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;
+  cohortName: string;
   cohortSlug: string;
   packageId: number;
   packageName: string;
@@ -19,6 +22,7 @@ interface PackageItemBlueprintProgramSVPProps {
 
 export default function PackageItemBlueprintProgramSVP({
   cohortId,
+  cohortName,
   cohortSlug,
   packageId,
   packageName,
@@ -28,6 +32,8 @@ export default function PackageItemBlueprintProgramSVP({
   normalPrice,
   salePeriodPrice,
   isPriority,
+  featureProductName,
+  featurePosition,
 }: PackageItemBlueprintProgramSVPProps) {
   return (
     <div
@@ -82,7 +88,14 @@ export default function PackageItemBlueprintProgramSVP({
             variant={isPriority ? "primaryGradient" : "outline"}
             size="defaultRounded"
             className="cta-button flex w-full"
-            featureName="buy"
+            featureName="add_to_cart_blueprint_program"
+            featureId={String(packageId)}
+            featureProductCategory="COHORT"
+            featureProductName={`${cohortName} - ${featureProductName}`}
+            featureProductAmount={salePeriodPrice}
+            featurePagePoint="Product Detail Page"
+            featurePlacement="package-plan"
+            featurePosition={featurePosition}
           >
             {isPriority ? "Best Value – Choose Plan" : "Purchase Now"}
           </AppButton>
