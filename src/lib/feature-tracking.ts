@@ -8,3 +8,14 @@ export interface FeatureTrackingProps {
   featurePlacement?: string;
   featurePosition?: number;
 }
+
+export interface MetaObjectProps {
+  metaEventName?: string;
+  metaContentIds?: string[];
+  metaContentType?: string;
+  metaContentName?: string;
+  metaContentCategory?: string;
+  metaContents?: string;
+  metaCurrency?: string;
+  metaValue?: number;
+}

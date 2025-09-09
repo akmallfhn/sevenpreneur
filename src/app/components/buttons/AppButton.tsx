@@ -1,6 +1,5 @@
 "use client";
-
-import { FeatureTrackingProps } from "@/lib/props/feature-tracking";
+import { FeatureTrackingProps, MetaObjectProps } from "@/lib/feature-tracking";
 import React, { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 
 type VariantType =
@@ -33,7 +32,8 @@ type FontType = "brand" | "bodycopy" | "ui";
 
 interface AppButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    FeatureTrackingProps {
+    FeatureTrackingProps,
+    MetaObjectProps {
   children: React.ReactNode;
   variant?: VariantType;
   size?: SizeType;
@@ -59,6 +59,13 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       featurePagePoint,
       featurePlacement,
       featurePosition,
+      metaEventName,
+      metaContentIds,
+      metaContentType,
+      metaContentCategory,
+      metaContentName,
+      metaCurrency,
+      metaValue,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
@@ -121,7 +128,9 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       className,
     ].join(" ");
 
+    // Tracking Handle
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      // Google Tag Manager
       const eventData: Record<string, any> = {
         event: "click",
         feature_id: featureId,
@@ -133,13 +142,30 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         feature_placement: featurePlacement,
         feature_position: featurePosition,
       };
-
-      // Delete undefined parameter
       Object.keys(eventData).forEach(
-        (key) => eventData[key] === undefined && delete eventData[key]
+        (key) => eventData[key] == null && delete eventData[key]
       );
-
       window.dataLayer?.push(eventData);
+
+      // Meta Pixel
+      if (
+        typeof window !== "undefined" &&
+        (window as any).fbq &&
+        metaEventName
+      ) {
+        const fbqData: Record<string, any> = {
+          content_ids: metaContentIds,
+          content_type: metaContentType,
+          content_name: metaContentName,
+          content_category: metaContentCategory,
+          currency: metaCurrency,
+          value: metaValue,
+        };
+        Object.keys(fbqData).forEach(
+          (key) => fbqData[key] == null && delete fbqData[key]
+        );
+        (window as any).fbq("track", metaEventName, fbqData);
+      }
 
       // Panggil onClick props jika ada
       if (onClick) {

@@ -4,7 +4,7 @@ import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { toSnakeCase } from "@/lib/snake-case";
-import { FeatureTrackingProps } from "@/lib/props/feature-tracking";
+import { FeatureTrackingProps } from "@/lib/feature-tracking";
 
 interface PackageItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;
@@ -88,6 +88,7 @@ export default function PackageItemBlueprintProgramSVP({
             variant={isPriority ? "primaryGradient" : "outline"}
             size="defaultRounded"
             className="cta-button flex w-full"
+            // GTM
             featureName="add_to_cart_blueprint_program"
             featureId={String(packageId)}
             featureProductCategory="COHORT"
@@ -96,6 +97,14 @@ export default function PackageItemBlueprintProgramSVP({
             featurePagePoint="Product Detail Page"
             featurePlacement="package-plan"
             featurePosition={featurePosition}
+            // Meta Pixel
+            metaEventName="AddToCart"
+            metaContentIds={[String(packageId)]}
+            metaContentType="service"
+            metaContentName={`${cohortName} - ${featureProductName}`}
+            metaContentCategory="Business Education Program"
+            metaCurrency="IDR"
+            metaValue={salePeriodPrice}
           >
             {isPriority ? "Best Value – Choose Plan" : "Purchase Now"}
           </AppButton>
