@@ -235,10 +235,10 @@ export default function CheckoutCohortFormSVP({
           <div className="programs-tier-box flex p-5 pt-8">
             <div className="programs-tier flex flex-col gap-4 bg-white p-4 rounded-md shadow-sm z-10">
               <div className="flex flex-col font-bodycopy">
-                <h1 className="font-bold text-black">Programs Tier</h1>
-                <p className="text-alternative text-sm">
-                  Get the most out of your learning. Choose the tier that suits
-                  you best.
+                <h1 className="font-bold text-black">Programs Package</h1>
+                <p className="font-medium text-alternative text-sm">
+                  Get the most out of your learning. Choose the package that
+                  suits you best.
                 </p>
               </div>
               <div className="flex flex-col gap-3">
@@ -254,14 +254,18 @@ export default function CheckoutCohortFormSVP({
                   />
                 ))}
               </div>
-              <div className="button-cta pt-10">
+              <div className="pt-10">
                 <AppButton
                   size={"defaultRounded"}
-                  className="w-full"
+                  className="select_price_tier w-full"
                   onClick={handleParamsQuery}
                   disabled={isLoadingCheckout || selectedPriceTierId === 0}
-                  featureName="checkout_price_cohort"
-                  featureItem={toSnakeCase(cohortName)}
+                  featureName="select_price_tier"
+                  featureId={String(selectedPriceTierId)}
+                  featureProductCategory="COHORT"
+                  featureProductName={`${cohortName} - ${selectedTicket?.name}`}
+                  featureProductAmount={selectedTicket?.amount}
+                  featurePagePoint="Checkout Page"
                 >
                   {isLoadingCheckout ? (
                     <Loader2 className="animate-spin size-5" />
@@ -524,8 +528,12 @@ export default function CheckoutCohortFormSVP({
           <AppButton
             onClick={handlePayment}
             disabled={isLoadingPayment}
-            featureName="payment_cohort"
-            featureItem={toSnakeCase(cohortName)}
+            featureName="checkout_payment_cohort"
+            featureId={String(selectedTicket?.id)}
+            featureProductCategory="COHORT"
+            featureProductName={`${cohortName} - ${selectedTicket?.name}`}
+            featureProductAmount={subtotal}
+            featurePagePoint="Checkout Page"
           >
             {isLoadingPayment ? (
               <Loader2 className="animate-spin size-5" />

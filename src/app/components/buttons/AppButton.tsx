@@ -1,5 +1,6 @@
 "use client";
 
+import { FeatureTrackingProps } from "@/lib/props/feature-tracking";
 import React, { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 
 type VariantType =
@@ -30,14 +31,13 @@ type SizeType =
   | "iconRounded";
 type FontType = "brand" | "bodycopy" | "ui";
 
-interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface AppButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    FeatureTrackingProps {
   children: React.ReactNode;
   variant?: VariantType;
   size?: SizeType;
   font?: FontType;
-  featureName?: string;
-  featurePosition?: number;
-  featureItem?: string;
 }
 
 // --- Use forwardRef for pass ref component. forwardRef cant directly use with 'export default function'
@@ -52,8 +52,13 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       disabled = false,
       className,
       featureName,
+      featureId,
+      featureProductCategory,
+      featureProductName,
+      featureProductAmount,
+      featurePagePoint,
+      featurePlacement,
       featurePosition,
-      featureItem,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
@@ -117,12 +122,24 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
     ].join(" ");
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-      window.dataLayer?.push({
+      const eventData: Record<string, any> = {
         event: "click",
+        feature_id: featureId,
         feature_name: featureName,
+        feature_product_category: featureProductCategory,
+        feature_product_name: featureProductName,
+        feature_product_amount: featureProductAmount,
+        feature_page_point: featurePagePoint,
+        feature_placement: featurePlacement,
         feature_position: featurePosition,
-        feature_item: featureItem,
-      });
+      };
+
+      // Delete undefined parameter
+      Object.keys(eventData).forEach(
+        (key) => eventData[key] === undefined && delete eventData[key]
+      );
+
+      window.dataLayer?.push(eventData);
 
       // Panggil onClick props jika ada
       if (onClick) {

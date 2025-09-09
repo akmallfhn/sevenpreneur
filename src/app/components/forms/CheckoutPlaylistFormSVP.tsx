@@ -440,8 +440,12 @@ export default function CheckoutPlaylistFormSVP({
           <AppButton
             onClick={handlePayment}
             disabled={isLoadingPayment}
-            featureName="payment_playlist"
-            featureItem={toSnakeCase(playlistName)}
+            featureName="checkout_payment_playlist"
+            featureId={String(playlistId)}
+            featureProductCategory="PLAYLIST"
+            featureProductName={playlistName}
+            featureProductAmount={subtotal}
+            featurePagePoint="Checkout Page"
           >
             {isLoadingPayment ? (
               <Loader2 className="animate-spin size-5" />

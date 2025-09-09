@@ -15,6 +15,7 @@ import { getRoundedHourFromSeconds } from "@/lib/rounded-hour-from-second";
 
 interface OfferHighlightVideoCourseSVPProps {
   playlistId: number;
+  playlistName: string;
   playlistSlug: string;
   playlistPrice: number;
   playlistTotalDuration: number | null;
@@ -22,6 +23,7 @@ interface OfferHighlightVideoCourseSVPProps {
 
 export default function OfferHighlightVideoCourseSVP({
   playlistId,
+  playlistName,
   playlistSlug,
   playlistPrice,
   playlistTotalDuration,
@@ -95,8 +97,13 @@ export default function OfferHighlightVideoCourseSVP({
             <AppButton
               size="defaultRounded"
               className="w-full"
-              featureName={`checkout_playlist`}
-              featureItem={toSnakeCase(playlistSlug)}
+              featureName="add_to_cart_playlist"
+              featureId={String(playlistId)}
+              featureProductCategory="PLAYLIST"
+              featureProductName={playlistName}
+              featureProductAmount={playlistPrice}
+              featurePagePoint="Product Detail Page"
+              featurePlacement="aside-panel-desktop"
             >
               Pay & Get Access
             </AppButton>

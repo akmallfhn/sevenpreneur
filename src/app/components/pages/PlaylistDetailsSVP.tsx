@@ -106,6 +106,7 @@ export default function PlaylistDetailsSVP({
           playlistTagline={playlistTagline}
           playlistVideoPreview={playlistVideoPreview}
           playlistSlug={playlistSlug}
+          playlistPrice={playlistPrice}
           playlistTotalUserEnrolled={playlistTotalUserEnrolled}
           playlistEducators={playlistEducators}
         />
@@ -183,6 +184,7 @@ export default function PlaylistDetailsSVP({
           <aside className="aside flex flex-col gap-8 md:flex-1 lg:gap-10">
             <OfferHighlightVideoCourseSVP
               playlistId={playlistId}
+              playlistName={playlistName}
               playlistSlug={playlistSlug}
               playlistPrice={playlistPrice}
               playlistTotalDuration={playlistTotalDuration}
@@ -205,8 +207,13 @@ export default function PlaylistDetailsSVP({
           <Link href={`/playlists/${playlistSlug}/${playlistId}/checkout`}>
             <AppButton
               size="defaultRounded"
-              featureName={`checkout_playlist`}
-              featureItem={toSnakeCase(playlistName)}
+              featureName="add_to_cart_playlist"
+              featureId={String(playlistId)}
+              featureProductCategory="PLAYLIST"
+              featureProductName={playlistName}
+              featureProductAmount={playlistPrice}
+              featurePagePoint="Product Detail Page"
+              featurePlacement="floating-panel-mobile"
             >
               <ShieldCheck className="size-5" />
               Pay & Get Access

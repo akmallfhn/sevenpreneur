@@ -17,6 +17,7 @@ interface HeroVideoCourseSVPProps {
   playlistTagline: string;
   playlistVideoPreview: string;
   playlistSlug: string;
+  playlistPrice: number;
   playlistTotalUserEnrolled: number;
   playlistEducators: EducatorItem[];
 }
@@ -27,6 +28,7 @@ export default function HeroVideoCourseSVP({
   playlistTagline,
   playlistVideoPreview,
   playlistSlug,
+  playlistPrice,
   playlistTotalUserEnrolled,
   playlistEducators,
 }: HeroVideoCourseSVPProps) {
@@ -159,8 +161,13 @@ export default function HeroVideoCourseSVP({
           <AppButton
             size="defaultRounded"
             className="w-full md:w-fit"
-            featureName={`checkout_playlist`}
-            featureItem={toSnakeCase(playlistName)}
+            featureName="add_to_cart_playlist"
+            featureId={String(playlistId)}
+            featureProductCategory="PLAYLIST"
+            featureProductName={playlistName}
+            featureProductAmount={playlistPrice}
+            featurePagePoint="Product Detail Page"
+            featurePlacement="hero-banner"
           >
             <p className="px-2">Start Learning for Only 127K</p>
           </AppButton>

@@ -135,6 +135,8 @@ export default function TransactionCardItemSVP({
               className="w-[120px]"
               variant="primary"
               size="smallRounded"
+              featureName="continue_payment"
+              featurePagePoint="Transactions Page"
             >
               Pay Now
             </AppButton>
@@ -152,6 +154,8 @@ export default function TransactionCardItemSVP({
               className="w-[120px]"
               variant="primary"
               size="smallRounded"
+              featureName="retry_payment"
+              featurePagePoint="Transactions Page"
             >
               Retry Payment
             </AppButton>
