@@ -137,8 +137,6 @@ export default function HeaderNavbarLMS({
                 />
               </Link>
               <hr className="my-1" />
-              <AppThemeSwitcher size="dropdown-item" />
-              <hr className="my-1" />
               <AppDropdownItemList
                 menuIcon={<LogOut className="size-4" />}
                 menuName="Sign out"

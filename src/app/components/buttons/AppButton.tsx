@@ -71,7 +71,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A]",
       outline:
         "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5] dark:bg-surface-black dark:text-white dark:border-outline-dark",
-      ghost: "bg-white hover:bg-[#F5F5F5] active:bg-[#F5F5F5]",
+      ghost:
+        "hover:bg-white/10 active:bg-white/10 dark:hover:bg-black/5 dark:active:bg-black/5",
       hollowWhatsapp:
         "bg-transparent border border-white text-white overflow-hidden transition-all duration-300 before:absolute before:inset-0 before:bg-green-500 before:-translate-x-full before:transition-transform before:duration-300 hover:before:translate-x-0 hover:border-transparent before:-z-10",
       link: "text-primary hover:underline active:underline underline-offset-4",

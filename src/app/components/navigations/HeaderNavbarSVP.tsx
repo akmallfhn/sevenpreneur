@@ -123,7 +123,8 @@ export default function HeaderNavbarSVP({
               )}
             </Link>
 
-            {/* Menu Desktop Center */}
+            {/* CENTER SIDE */}
+            {/* Menu Desktop */}
             <nav className="menu-container hidden lg:flex">
               <ul className="menu-item-list flex items-center gap-10">
                 <HeaderNavbarItemSVP
@@ -143,7 +144,7 @@ export default function HeaderNavbarSVP({
             <div className="flex items-center gap-4">
               {/* Theme Switcher */}
               <div className="hidden lg:flex">
-                <AppThemeSwitcher size="square" />
+                <AppThemeSwitcher />
               </div>
 
               {/* User Navigation */}
@@ -205,24 +206,27 @@ export default function HeaderNavbarSVP({
               )}
 
               {/* Hamburger Button */}
-              {/* <div
-                className="flex lg:hidden"
-                onClick={() => setMobileMenuOpen(true)}
-              >
-                <AlignLeftIcon className="size-6" />
-              </div> */}
+              <div className="flex lg:hidden">
+                <AppButton
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  <AlignLeftIcon className="size-6" />
+                </AppButton>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* Mobile Menu */}
-      {/* {mobileMenuOpen && (
+      {mobileMenuOpen && (
         <SideMenuMobileSVP
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
         />
-      )} */}
+      )}
     </React.Fragment>
   );
 }
