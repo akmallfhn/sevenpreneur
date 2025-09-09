@@ -66,6 +66,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       metaContentName,
       metaCurrency,
       metaValue,
+      metaNumItems,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
@@ -160,6 +161,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
           content_category: metaContentCategory,
           currency: metaCurrency,
           value: metaValue,
+          num_items: metaNumItems,
         };
         Object.keys(fbqData).forEach(
           (key) => fbqData[key] == null && delete fbqData[key]

@@ -440,12 +440,22 @@ export default function CheckoutPlaylistFormSVP({
           <AppButton
             onClick={handlePayment}
             disabled={isLoadingPayment}
+            // GTM
             featureName="checkout_payment_playlist"
             featureId={String(playlistId)}
             featureProductCategory="PLAYLIST"
             featureProductName={playlistName}
             featureProductAmount={subtotal}
             featurePagePoint="Checkout Page"
+            // Meta
+            metaEventName="InitiateCheckout"
+            metaContentIds={[String(playlistId)]}
+            metaContentType="digital"
+            metaContentName={playlistName}
+            metaContentCategory="Video On Demand Playlist"
+            metaCurrency="IDR"
+            metaValue={subtotal}
+            metaNumItems={1}
           >
             {isLoadingPayment ? (
               <Loader2 className="animate-spin size-5" />

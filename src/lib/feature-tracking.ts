@@ -18,4 +18,5 @@ export interface MetaObjectProps {
   metaContents?: string;
   metaCurrency?: string;
   metaValue?: number;
+  metaNumItems?: number;
 }
