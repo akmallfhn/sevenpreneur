@@ -72,7 +72,7 @@ export default function HeroBlueprintProgramSVP() {
               />
               <ScorecardItemSVP
                 scorecardValue={3000}
-                scorecardName="Program Alumni"
+                scorecardName="Program Alumnee"
                 isMoreValue
               />
             </div>

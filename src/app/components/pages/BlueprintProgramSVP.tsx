@@ -1,5 +1,6 @@
 "use client";
 import CuriculumSessionsBlueprintProgramSVP from "../templates/CuriculumSessionsBlueprintProgramSVP";
+import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
 import HeroBlueprintProgramSVP from "../templates/HeroBlueprintProgramSVP";
 import PackagePlansBlueprintProgramSVP, {
   PackageItem,
@@ -28,6 +29,7 @@ export default function BlueprintProgramSVP({
         cohortSlug={cohortSlug}
         cohortPrices={cohortPrices}
       />
+      {/* <FAQCustomerBlueprintProgramSVP /> */}
     </div>
   );
 }
