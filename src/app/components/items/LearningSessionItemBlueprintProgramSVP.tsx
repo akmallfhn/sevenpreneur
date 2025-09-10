@@ -1,6 +1,6 @@
 "use client";
-
 import Image from "next/image";
+import PackageLabelBlueprintProgramSVP from "../labels/PackageLabelBlueprintProgramSVP";
 
 export type LearningSessionVariantBlueprintProgramSVP =
   | "frameworkPrimary"
@@ -82,11 +82,11 @@ export default function LearningSessionItemBlueprintProgramSVP({
   const imageDecoration = image_decoration;
 
   return (
-    <div className="session-outline p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-md lg:rounded-lg">
+    <div className="learning-session-outline p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-md lg:rounded-lg">
       <div
-        className={`session-item-container relative flex flex-col w-[340px] h-full text-white p-5 justify-between aspect-[340/170] lg:aspect-[624/302] lg:w-[594px] ${backgroundColor} rounded-md overflow-hidden lg:rounded-lg`}
+        className={`learning-session-container relative flex flex-col w-[340px] h-full text-white p-5 justify-between aspect-[340/170] lg:aspect-[624/302] lg:w-[594px] ${backgroundColor} rounded-md overflow-hidden lg:rounded-lg`}
       >
-        <div className="flex flex-col z-40">
+        <div className="learning-session-content flex flex-col z-40">
           {sessionNumber && (
             <h4 className="session-chapter font-bold font-brand text-2xl lg:text-[48px]">
               {sessionNumber}
@@ -112,7 +112,7 @@ export default function LearningSessionItemBlueprintProgramSVP({
             </p>
           )}
         </div>
-        <div className="flex flex-col font-bodycopy z-40">
+        <div className="learning-session-content flex flex-col font-bodycopy z-40">
           <h4 className="session-educator font-bold text-xs lg:text-lg">
             {sessionEducator}
           </h4>
@@ -167,6 +167,13 @@ export default function LearningSessionItemBlueprintProgramSVP({
             height={400}
           />
         </div>
+
+        {/* Label */}
+        {variant === "extraordinary" && (
+          <div className="extraordinary-label absolute top-2 right-2 z-30 lg:top-4 lg:right-4">
+            <PackageLabelBlueprintProgramSVP variant="vip" size="small" />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -47,7 +47,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Yusuf Arezany",
       session_educator_title: "Researcher Govtech Procurement",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-yusuf.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-yusuf-arezany.webp",
       session_variant: "frameworkPrimary",
     },
     // {
@@ -130,7 +130,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
         "The Secrets Investors for Businesses Worth Funding and Go Global",
       session_description: "",
       session_educator: "Tom Lembong",
-      session_educator_title: "ex Trade Minister & Banking Investor",
+      session_educator_title: "Former Minister of Trade of Indonesia",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tom-lembong.webp",
       session_variant: "extraordinary",
@@ -141,16 +141,16 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
         "Ethics & Effectiveness: Drivers of Businesses and Investment",
       session_description: "",
       session_educator: "Basuki T. Purnama",
-      session_educator_title: "Governor of DKI Jakarta 2017",
+      session_educator_title: "Governor of DKI Jakarta 2014-2017",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-ahok.webp",
       session_variant: "extraordinary",
     },
   ];
   return (
-    <div className="root relative flex items-center justify-center bg-gradient-to-b from-0% from-black via-60% via-[#2C2196] to-100% to-[#3426AE]">
+    <div className="section-root relative flex items-center justify-center bg-gradient-to-b from-0% from-black via-60% via-[#2C2196] to-100% to-[#3426AE]">
       {/* Container */}
-      <div className="container flex flex-col w-full items-center p-5 pb-24 gap-8 z-10 lg:px-0 lg:gap-[64px] lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px] lg:flex-row lg:items-start">
+      <div className="section-container flex flex-col w-full items-center p-5 pb-24 gap-8 z-10 lg:px-0 lg:gap-[64px] lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px] lg:flex-row lg:items-start">
         {/* Section Title & Desc */}
         <div className="section-title-desc flex flex-col w-full text-center items-center gap-3 lg:sticky lg:top-28 lg:text-left lg:items-start">
           <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl lg:text-4xl">
