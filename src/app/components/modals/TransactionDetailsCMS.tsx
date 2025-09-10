@@ -6,7 +6,7 @@ import { rupiahCurrency } from "@/lib/rupiah-currency";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import Image from "next/image";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
-import TransactionDetailItemCMS from "../items/TransactionDetailItem";
+import TransactionDetailItemCMS from "../items/TransactionDetailItemCMS";
 import dayjs from "dayjs";
 import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import UserItemCMS from "../items/UserItemCMS";

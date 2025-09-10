@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function CheckoutHeader() {
+export default function CheckoutHeaderSVP() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
