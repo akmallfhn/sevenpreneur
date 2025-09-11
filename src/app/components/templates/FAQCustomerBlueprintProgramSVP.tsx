@@ -1,5 +1,7 @@
 "use client";
+import Image from "next/image";
 import FAQItemBlueprintProgramSVP from "../items/FAQItemBlueprintProgramSVP";
+import AppButton from "../buttons/AppButton";
 
 export default function FAQCustomerBlueprintProgramSVP() {
   const faqSevenpreneur = [
@@ -59,7 +61,7 @@ export default function FAQCustomerBlueprintProgramSVP() {
 
   return (
     <div className="section-root relative flex items-center justify-center bg-black overflow-hidden">
-      <div className="section-container flex flex-col w-full items-center p-5 py-10 pb-24 z-10 lg:px-0 lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+      <div className="section-container flex flex-col w-full items-center gap-10 p-5 py-10 pb-0 z-20 lg:px-0 lg:py-[60px] lg:pb-0 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         {/* FAQ */}
         <div className="section-item flex flex-col w-full items-center gap-8 lg:gap-[64px]">
           <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-center text-2xl lg:text-4xl">
@@ -76,8 +78,96 @@ export default function FAQCustomerBlueprintProgramSVP() {
           </div>
         </div>
 
-        <div></div>
+        {/* Help Desk */}
+        <div className="section-item flex items-center justify-between gap-8 max-w-[840px]">
+          <div className="section-title hidden gap-8 shrink-0 lg:flex lg:flex-col">
+            <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-20% from-[#FFFFFF] to-100% to-[#B89FE0] font-brand font-bold text-2xl lg:text-4xl">
+              Punya pertanyaan lanjutan? <br /> Konsultasikan bersama kami
+            </h2>
+            <a
+              href="https://wa.me/625117442167"
+              target="_blank"
+              rel="noopenner noreferrer"
+              className="w-[240px]"
+            >
+              <AppButton
+                variant="primaryGradient"
+                size="largeRounded"
+                className="w-full"
+              >
+                Hubungi Kami
+                <Image
+                  className="flex size-6"
+                  src={
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/whatsapp-logo.svg"
+                  }
+                  alt="Whatsapp Logo"
+                  width={30}
+                  height={30}
+                />
+              </AppButton>
+            </a>
+          </div>
+          <div className="customer-support-image flex w-full max-w-[360px] lg:max-w-[320px]">
+            <Image
+              src={
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/talent-cs.webp"
+              }
+              alt="Customer Support"
+              width={400}
+              height={400}
+            />
+          </div>
+        </div>
       </div>
+
+      {/* Absolute Layout */}
+      {/* Title on Mobile */}
+      <div className="section-title absolute flex flex-col w-[350px] bottom-14 left-1/2 -translate-x-1/2 items-center gap-3 z-40 lg:hidden">
+        <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-20% from-[#FFFFFF] to-100% to-[#B89FE0] font-brand font-bold text-center text-2xl lg:text-4xl">
+          Punya pertanyaan lanjutan? <br /> Konsultasikan bersama kami
+        </h2>
+        <a
+          href="https://wa.me/625117442167"
+          target="_blank"
+          rel="noopenner noreferrer"
+          className="w-[240px]"
+        >
+          <AppButton
+            variant="primaryGradient"
+            size="defaultRounded"
+            className="w-full"
+          >
+            Hubungi Kami
+            <Image
+              className="flex size-6"
+              src={
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/whatsapp-logo.svg"
+              }
+              alt="Whatsapp Logo"
+              width={30}
+              height={30}
+            />
+          </AppButton>
+        </a>
+      </div>
+
+      {/* Overlay Black */}
+      <div className="overlay-black absolute flex w-full h-[300px] bottom-0 bg-gradient-to-t from-0% from-surface-black to-100% to-transparent z-30 lg:hidden" />
+
+      {/* Overlay Maps */}
+      <Image
+        className="maps absolute flex opacity-25 bottom-[275px] scale-150 z-10 sm:scale-100 lg:bottom-[200px]"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/hero-maps.webp"
+        }
+        alt="Overlay Maps"
+        width={1000}
+        height={1000}
+      />
+
+      {/* Circle Blur */}
+      <div className="circle-blur-bottom absolute flex bg-[#5E17E3]/60 w-[1488px] h-[436px] bottom-0 left-1/2 -translate-x-1/2 blur-[140px] rounded-full lg:-bottom-[146px] lg:blur-[200px]" />
     </div>
   );
 }
