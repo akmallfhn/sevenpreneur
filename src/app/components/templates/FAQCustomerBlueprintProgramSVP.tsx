@@ -3,7 +3,13 @@ import Image from "next/image";
 import FAQItemBlueprintProgramSVP from "../items/FAQItemBlueprintProgramSVP";
 import AppButton from "../buttons/AppButton";
 
-export default function FAQCustomerBlueprintProgramSVP() {
+interface FAQCustomerBlueprintProgramSVPProps {
+  cohortId: number;
+}
+
+export default function FAQCustomerBlueprintProgramSVP({
+  cohortId,
+}: FAQCustomerBlueprintProgramSVPProps) {
   const faqSevenpreneur = [
     {
       question: "Apakah program ini dapat dicicil pembayarannya?",
@@ -85,7 +91,7 @@ export default function FAQCustomerBlueprintProgramSVP() {
               Punya pertanyaan lanjutan? <br /> Konsultasikan bersama kami
             </h2>
             <a
-              href="https://wa.me/625117442167"
+              href="https://wa.me/6285353533844"
               target="_blank"
               rel="noopenner noreferrer"
               className="w-[240px]"
@@ -94,6 +100,19 @@ export default function FAQCustomerBlueprintProgramSVP() {
                 variant="primaryGradient"
                 size="largeRounded"
                 className="w-full"
+                // GTM
+                featureName="whatsapp_consultation"
+                featureId={String(cohortId)}
+                featureProductCategory="COHORT"
+                featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
+                featurePagePoint="Product Detail Page"
+                featurePlacement="page-end-desktop"
+                // Meta
+                metaEventName="Contact"
+                metaContentIds={[String(cohortId)]}
+                metaContentType="service"
+                metaContentCategory="Business Education Program"
+                metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
               >
                 Hubungi Kami
                 <Image
@@ -128,7 +147,7 @@ export default function FAQCustomerBlueprintProgramSVP() {
           Punya pertanyaan lanjutan? <br /> Konsultasikan bersama kami
         </h2>
         <a
-          href="https://wa.me/625117442167"
+          href="https://wa.me/6285353533844"
           target="_blank"
           rel="noopenner noreferrer"
           className="w-[240px]"
@@ -137,6 +156,19 @@ export default function FAQCustomerBlueprintProgramSVP() {
             variant="primaryGradient"
             size="defaultRounded"
             className="w-full"
+            // GTM
+            featureName="whatsapp_consultation"
+            featureId={String(cohortId)}
+            featureProductCategory="COHORT"
+            featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
+            featurePagePoint="Product Detail Page"
+            featurePlacement="page-end-mobile"
+            // Meta
+            metaEventName="Contact"
+            metaContentIds={[String(cohortId)]}
+            metaContentType="service"
+            metaContentCategory="Business Education Program"
+            metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
           >
             Hubungi Kami
             <Image

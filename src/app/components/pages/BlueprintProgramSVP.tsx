@@ -22,7 +22,7 @@ export default function BlueprintProgramSVP({
 }: BlueprintProgramSVPProps) {
   return (
     <div className="root relative items-center">
-      <HeroBlueprintProgramSVP />
+      <HeroBlueprintProgramSVP cohortId={cohortId} />
       <OverviewBlueprintProgramSVP />
       <CuriculumSessionsBlueprintProgramSVP />
       <PackagePlansBlueprintProgramSVP
@@ -31,7 +31,7 @@ export default function BlueprintProgramSVP({
         cohortSlug={cohortSlug}
         cohortPrices={cohortPrices}
       />
-      <FAQCustomerBlueprintProgramSVP />
+      <FAQCustomerBlueprintProgramSVP cohortId={cohortId} />
     </div>
   );
 }

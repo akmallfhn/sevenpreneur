@@ -6,7 +6,13 @@ import ScorecardItemSVP from "../items/ScorecardItemSVP";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
-export default function HeroBlueprintProgramSVP() {
+interface HeroBlueprintProgramSVPProps {
+  cohortId: number;
+}
+
+export default function HeroBlueprintProgramSVP({
+  cohortId,
+}: HeroBlueprintProgramSVPProps) {
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
@@ -104,7 +110,7 @@ export default function HeroBlueprintProgramSVP() {
               </div>
             </Link>
             <a
-              href="https://wa.me/62895803221561"
+              href="https://wa.me/6285353533844"
               className="w-full"
               target="_blank"
               rel="noopenner noreferrer"
@@ -114,7 +120,19 @@ export default function HeroBlueprintProgramSVP() {
                   size="defaultRounded"
                   variant="hollowWhatsapp"
                   className="w-full lg:w-fit"
+                  // GTM
                   featureName="whatsapp_consultation"
+                  featureId={String(cohortId)}
+                  featureProductCategory="COHORT"
+                  featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
+                  featurePagePoint="Product Detail Page"
+                  featurePlacement="hero-banner-mobile"
+                  // Meta
+                  metaEventName="Contact"
+                  metaContentIds={[String(cohortId)]}
+                  metaContentType="service"
+                  metaContentCategory="Business Education Program"
+                  metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
                   <p className="text-base lg:text-lg">Konsultasi Gratis</p>
@@ -125,7 +143,19 @@ export default function HeroBlueprintProgramSVP() {
                   size="largeRounded"
                   variant="hollowWhatsapp"
                   className="w-full lg:w-fit"
+                  // GTM
                   featureName="whatsapp_consultation"
+                  featureId={String(cohortId)}
+                  featureProductCategory="COHORT"
+                  featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
+                  featurePagePoint="Product Detail Page"
+                  featurePlacement="hero-banner-desktop"
+                  // Meta
+                  metaEventName="Contact"
+                  metaContentIds={[String(cohortId)]}
+                  metaContentType="service"
+                  metaContentCategory="Business Education Program"
+                  metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
                   <p className="text-base lg:text-lg">Konsultasi Gratis</p>
