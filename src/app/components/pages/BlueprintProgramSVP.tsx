@@ -29,7 +29,7 @@ export default function BlueprintProgramSVP({
         cohortSlug={cohortSlug}
         cohortPrices={cohortPrices}
       />
-      {/* <FAQCustomerBlueprintProgramSVP /> */}
+      <FAQCustomerBlueprintProgramSVP />
     </div>
   );
 }
