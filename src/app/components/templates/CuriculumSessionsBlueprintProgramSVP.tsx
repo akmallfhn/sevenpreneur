@@ -150,7 +150,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
   return (
     <div className="section-root relative flex items-center justify-center bg-gradient-to-b from-0% from-black via-60% via-[#2C2196] to-100% to-[#3426AE]">
       {/* Container */}
-      <div className="section-container flex flex-col w-full items-center p-5 pb-24 gap-8 z-10 lg:px-0 lg:gap-[64px] lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px] lg:flex-row lg:items-start">
+      <div className="section-container flex flex-col w-full items-center p-5 py-10 pb-24 gap-8 z-10 lg:px-0 lg:gap-[64px] lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px] lg:flex-row lg:items-start">
         {/* Section Title & Desc */}
         <div className="section-title-desc flex flex-col w-full text-center items-center gap-3 lg:sticky lg:top-28 lg:text-left lg:items-start">
           <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl lg:text-4xl">
