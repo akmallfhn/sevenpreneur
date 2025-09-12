@@ -30,6 +30,7 @@ interface CheckoutCohortFormSVPProps {
   cohortId: number;
   cohortName: string;
   cohortImage: string;
+  initialUserId: string;
   initialUserName: string;
   initialUserEmail: string;
   initialUserPhone: string | null;
@@ -41,6 +42,7 @@ export default function CheckoutCohortFormSVP({
   cohortId,
   cohortName,
   cohortImage,
+  initialUserId,
   initialUserName,
   initialUserEmail,
   initialUserPhone,
@@ -537,6 +539,7 @@ export default function CheckoutCohortFormSVP({
             featurePagePoint="Checkout Page"
             // Meta
             metaEventName="InitiateCheckout"
+            metaEventId={initialUserId}
             metaContentIds={[String(selectedTicket?.id)]}
             metaContentType="service"
             metaContentName={`${cohortName} - ${selectedTicket?.name}`}

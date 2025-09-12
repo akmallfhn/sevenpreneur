@@ -11,6 +11,7 @@ export interface FeatureTrackingProps {
 
 export interface MetaObjectProps {
   metaEventName?: string;
+  metaEventId?: string;
   metaContentIds?: string[];
   metaContentType?: string;
   metaContentName?: string;
