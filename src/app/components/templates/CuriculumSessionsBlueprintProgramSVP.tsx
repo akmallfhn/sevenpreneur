@@ -62,6 +62,17 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
     // },
     {
       session_number: "04.",
+      session_name: "Product & Offer",
+      session_description:
+        "Turn what you have into what people can’t wait to pay for.",
+      session_educator: "Vander Lesnussa",
+      session_educator_title: "Senior Product Manager Allofresh",
+      session_educator_avatar:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vander.webp",
+      session_variant: "frameworkSecondary",
+    },
+    {
+      session_number: "05.",
       session_name: "Sales & Marketing",
       session_description:
         "Master the art of attracting, converting, and retaining customers",
@@ -69,7 +80,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator_title: "CEO SSPACE Media",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
-      session_variant: "frameworkSecondary",
+      session_variant: "frameworkPrimary",
     },
     {
       session_number: "",
@@ -80,17 +91,6 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-adythia.webp",
       session_variant: "founderSeries",
-    },
-    {
-      session_number: "05.",
-      session_name: "Product & Offer",
-      session_description:
-        "Turn what you have into what people can’t wait to pay for.",
-      session_educator: "Vander Lesnussa",
-      session_educator_title: "Senior Product Manager Allofresh",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vander.webp",
-      session_variant: "frameworkPrimary",
     },
     {
       session_number: "06.",
@@ -163,7 +163,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
         </div>
 
         {/* Session Item */}
-        <div className="sessions flex flex-col gap-4">
+        <div className="sessions flex flex-col w-full items-center gap-4">
           {data.map((post, index) => (
             <LearningSessionItemBlueprintProgramSVP
               key={index}

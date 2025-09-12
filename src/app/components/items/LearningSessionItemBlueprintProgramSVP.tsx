@@ -82,9 +82,9 @@ export default function LearningSessionItemBlueprintProgramSVP({
   const imageDecoration = image_decoration;
 
   return (
-    <div className="learning-session-outline p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-md lg:rounded-lg">
+    <div className="learning-session-outline flex w-full h-full max-w-[380px] p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-md lg:max-w-none lg:rounded-lg">
       <div
-        className={`learning-session-container relative flex flex-col w-[340px] h-full text-white p-5 justify-between aspect-[340/170] lg:aspect-[624/302] lg:w-[594px] ${backgroundColor} rounded-md overflow-hidden lg:rounded-lg`}
+        className={`learning-session-container relative flex flex-col w-full h-full text-white p-5 justify-between aspect-[340/170] lg:aspect-[624/302] lg:w-[594px] ${backgroundColor} rounded-md overflow-hidden lg:rounded-lg`}
       >
         <div className="learning-session-content flex flex-col z-40">
           {sessionNumber && (

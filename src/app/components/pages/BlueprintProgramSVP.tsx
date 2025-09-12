@@ -2,6 +2,7 @@
 import CuriculumSessionsBlueprintProgramSVP from "../templates/CuriculumSessionsBlueprintProgramSVP";
 import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
 import HeroBlueprintProgramSVP from "../templates/HeroBlueprintProgramSVP";
+import OfferHighlightBlueprintProgramSVP from "../templates/OfferHighlightBlueprintProgramSVP";
 import OverviewBlueprintProgramSVP from "../templates/OverviewBlueprintProgramSVP";
 import PackagePlansBlueprintProgramSVP, {
   PackageItem,
@@ -24,6 +25,7 @@ export default function BlueprintProgramSVP({
     <div className="root relative items-center">
       <HeroBlueprintProgramSVP cohortId={cohortId} />
       <OverviewBlueprintProgramSVP />
+      <OfferHighlightBlueprintProgramSVP />
       <CuriculumSessionsBlueprintProgramSVP />
       <PackagePlansBlueprintProgramSVP
         cohortId={cohortId}
