@@ -60,6 +60,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       featurePlacement,
       featurePosition,
       metaEventName,
+      metaEventId,
       metaContentIds,
       metaContentType,
       metaContentCategory,
@@ -155,6 +156,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         metaEventName
       ) {
         const fbqData: Record<string, any> = {
+          event_id: metaEventId,
           content_ids: metaContentIds,
           content_type: metaContentType,
           content_name: metaContentName,

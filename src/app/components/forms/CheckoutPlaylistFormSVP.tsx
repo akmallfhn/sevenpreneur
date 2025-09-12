@@ -43,6 +43,7 @@ interface CheckoutPlaylistFormSVPProps {
   playlistImage: string;
   playlistPrice: number;
   playlistTotalVideo: number;
+  initialUserId: string;
   initialUserName: string;
   initialUserEmail: string;
   initialUserPhone: string | null;
@@ -55,6 +56,7 @@ export default function CheckoutPlaylistFormSVP({
   playlistImage,
   playlistPrice,
   playlistTotalVideo,
+  initialUserId,
   initialUserName,
   initialUserEmail,
   initialUserPhone,
@@ -449,6 +451,7 @@ export default function CheckoutPlaylistFormSVP({
             featurePagePoint="Checkout Page"
             // Meta
             metaEventName="InitiateCheckout"
+            metaEventId={initialUserId}
             metaContentIds={[String(playlistId)]}
             metaContentType="digital"
             metaContentName={playlistName}

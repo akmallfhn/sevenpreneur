@@ -1,3 +1,4 @@
+import { encodeSHA256 } from "@/lib/encode";
 import GetPrismaClient from "@/lib/prisma";
 import { XenditInvoiceCallback } from "@/lib/xendit";
 import { CategoryEnum, TStatusEnum } from "@prisma/client";
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
   if (transactionStatus === TStatusEnum.PAID) {
     const theTransaction = await prisma.transaction.findFirst({
       where: { id: reqBody.external_id },
+      include: { user: true },
     });
     if (!theTransaction) {
       console.error("xendit.webhook: The selected transaction is not found.");
@@ -49,31 +51,39 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // await fetch(
-    //   `https://graph.facebook.com/v18.0/${process.env.META_PIXEL_ID}/events`,
-    //   {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       data: [
-    //         {
-    //           event_name: "Purchase",
-    //           event_time: Math.floor(Date.now() / 1000),
-    //           user_data: {
-    //             em: theTransaction.user_id,
-    //           },
-    //           custom_data: {
-    //             currency: "IDR",
-    //             value: theTransaction.amount,
-    //             content_ids: [theTransaction.item_id],
-    //             content_type: "product",
-    //           },
-    //         },
-    //       ],
-    //       access_token: process.env.META_ACCESS_TOKEN,
-    //     }),
-    //   }
-    // );
+    try {
+      const metaResponse = await fetch(
+        `https://graph.facebook.com/v18.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_PIXEL_ACCESS_TOKEN}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: [
+              {
+                event_name: "Purchase",
+                event_time: Math.floor(Date.now() / 1000),
+                event_id: theTransaction.user_id,
+                user_data: {
+                  em: encodeSHA256(theTransaction.user.email),
+                  ph: encodeSHA256(`62${theTransaction.user.phone_number}`),
+                },
+                custom_data: {
+                  currency: "IDR",
+                  value: theTransaction.amount,
+                  content_ids: [theTransaction.item_id],
+                  content_type: "product",
+                  num_items: 1,
+                },
+              },
+            ],
+          }),
+        }
+      );
+      const metaResult = await metaResponse.json();
+      console.log("Meta Result:", metaResult);
+    } catch (error) {
+      console.error("Failed to response Meta API:", error);
+    }
 
     if (theTransaction.category === CategoryEnum.COHORT) {
       const theCohortPrice = await prisma.cohortPrice.findFirst({
