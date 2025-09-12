@@ -79,6 +79,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID;
   const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
   const googleOauthId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID;
+  const metaPixelId = process.env.META_PIXEL_ID;
 
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
@@ -149,7 +150,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '725830956549523');
+            fbq('init', ${metaPixelId});
             fbq('track', 'PageView');
           `}
         </Script>
@@ -158,7 +159,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             height="1"
             width="1"
             style={{ display: "none" }}
-            src={`https://www.facebook.com/tr?id=725830956549523&ev=PageView&noscript=1`}
+            src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
             alt=""
           />
         </noscript>
