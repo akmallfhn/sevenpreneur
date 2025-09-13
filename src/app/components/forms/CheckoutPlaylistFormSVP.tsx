@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
-import { toSnakeCase } from "@/lib/snake-case";
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -17,6 +16,7 @@ import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
+import { encodeSHA256 } from "@/lib/encode";
 
 export type PaymentMethodItem = {
   id: number;
@@ -459,6 +459,9 @@ export default function CheckoutPlaylistFormSVP({
             metaCurrency="IDR"
             metaValue={subtotal}
             metaNumItems={1}
+            metaExternalId={encodeSHA256(initialUserId)}
+            metaFirstName={encodeSHA256(initialUserName)}
+            metaEmail={encodeSHA256(initialUserEmail)}
           >
             {isLoadingPayment ? (
               <Loader2 className="animate-spin size-5" />

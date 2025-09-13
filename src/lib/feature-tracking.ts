@@ -20,4 +20,8 @@ export interface MetaObjectProps {
   metaCurrency?: string;
   metaValue?: number;
   metaNumItems?: number;
+  metaExternalId?: string;
+  metaFirstName?: string;
+  metaEmail?: string;
+  metaPhoneNumber?: string;
 }
