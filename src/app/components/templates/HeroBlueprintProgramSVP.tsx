@@ -13,11 +13,6 @@ interface HeroBlueprintProgramSVPProps {
 export default function HeroBlueprintProgramSVP({
   cohortId,
 }: HeroBlueprintProgramSVPProps) {
-  let domain = "sevenpreneur.com";
-  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
-    domain = "example.com:3000";
-  }
-
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
       {/* Hero Container */}

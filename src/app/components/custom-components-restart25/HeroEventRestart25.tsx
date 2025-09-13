@@ -14,7 +14,7 @@ export default function HeroEventRestart25() {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-[#3417E3] overflow-hidden lg:items-start">
       {/* --- Hero Content */}
-      <div className="hero-content flex flex-col pt-10 pb-10 px-5 items-center gap-72 z-[70] lg:py-28 lg:pb-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:py-[132px] xl:px-[72px] xl:pb-[82px] 2xl:pl-[20vw]">
+      <div className="hero-content flex flex-col py-10 px-5 items-center gap-72 z-[70] lg:py-[42px] lg:px-12 lg:gap-[28px] lg:items-start xl:px-[72px] xl:py-[82px] 2xl:pl-[20vw]">
         {/* Top Group Component */}
         <div className="flex flex-col gap-3 items-center lg:items-start lg:gap-5">
           {/* Logo RE:START */}

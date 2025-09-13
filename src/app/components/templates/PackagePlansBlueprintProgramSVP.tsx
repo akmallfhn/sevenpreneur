@@ -80,7 +80,7 @@ export default function PackagePlansBlueprintProgramSVP({
                       ambisius dan expert industri.
                     </>,
                   ]}
-                  normalPrice={5000000}
+                  normalPrice={3000000}
                   salePeriodPrice={post.amount}
                   featureProductName="Regular"
                   featurePosition={1}

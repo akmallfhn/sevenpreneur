@@ -53,6 +53,21 @@ export default function SideMenuMobileSVP({
             </li>
             <hr className="border-t border-outline dark:border-outline-dark" />
             <li>
+              <Link
+                href={"/playlists/restart-conference-2025/1"}
+                onClick={onClose}
+              >
+                Learning Series
+              </Link>
+            </li>
+            <hr className="border-t border-outline dark:border-outline-dark" />
+            <li>
+              <Link href={"/events/restart-conference"} onClick={onClose}>
+                Event
+              </Link>
+            </li>
+            <hr className="border-t border-outline dark:border-outline-dark" />
+            <li>
               <Link href={"/company"} onClick={onClose}>
                 About Us
               </Link>

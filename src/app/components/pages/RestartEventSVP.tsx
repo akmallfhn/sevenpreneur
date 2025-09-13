@@ -21,7 +21,6 @@ export default function RestartEventSVP() {
 
   return (
     <div className="root relative bg-black items-center">
-      <TopNavbar />
       <HeroEventRestart25 />
       <ContentEventRestart25 />
       <TopicSpeakerListRestart25 />

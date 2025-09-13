@@ -43,7 +43,7 @@ export default function HeaderNavbarSVP({
   const { theme } = useTheme();
 
   // Path yang tidak mau menampilkan Navbar & Footer
-  const disallowedPath = ["/auth", "/checkout", "/event"];
+  const disallowedPath = ["/auth", "/checkout"];
   const isDisallowedPage = disallowedPath.some((path) =>
     pathname.includes(path)
   );
@@ -128,9 +128,19 @@ export default function HeaderNavbarSVP({
             <nav className="menu-container hidden lg:flex">
               <ul className="menu-item-list flex items-center gap-10">
                 <HeaderNavbarItemSVP
-                  menuTitle="Programs"
+                  menuTitle="Program"
                   menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
-                  activeUrls={["/cohorts", "/playlists", "/events"]}
+                  // activeUrls={["/cohorts", "/playlists", "/events"]}
+                />
+                <HeaderNavbarItemSVP
+                  menuTitle="Learning Series"
+                  menuUrl="/playlists/restart-conference-2025/1"
+                  // activeUrls={["/cohorts", "/playlists", "/events"]}
+                />
+                <HeaderNavbarItemSVP
+                  menuTitle="Event"
+                  menuUrl="/events/restart-conference"
+                  // activeUrls={["/cohorts", "/playlists", "/events"]}
                 />
                 <HeaderNavbarItemSVP menuTitle="About Us" menuUrl="/company" />
                 <HeaderNavbarItemSVP
