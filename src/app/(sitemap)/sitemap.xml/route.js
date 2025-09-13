@@ -22,7 +22,7 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error generating sitemap index:", error);
-    return NextResponse.error;
+    return NextResponse.error();
   }
 }
 
