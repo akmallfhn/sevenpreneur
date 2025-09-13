@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
-import { toSnakeCase } from "@/lib/snake-case";
 import { MakePaymentCohortXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -18,6 +17,7 @@ import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
 import { DiscountType, PaymentMethodItem } from "./CheckoutPlaylistFormSVP";
+import { encodeSHA256 } from "@/lib/encode";
 
 interface PriceItem {
   id: number;
@@ -547,6 +547,9 @@ export default function CheckoutCohortFormSVP({
             metaCurrency="IDR"
             metaValue={subtotal}
             metaNumItems={1}
+            metaExternalId={encodeSHA256(initialUserId)}
+            metaFirstName={encodeSHA256(initialUserName)}
+            metaEmail={encodeSHA256(initialUserEmail)}
           >
             {isLoadingPayment ? (
               <Loader2 className="animate-spin size-5" />

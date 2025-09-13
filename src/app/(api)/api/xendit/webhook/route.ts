@@ -51,40 +51,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    try {
-      const metaResponse = await fetch(
-        `https://graph.facebook.com/v18.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_PIXEL_ACCESS_TOKEN}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            data: [
-              {
-                event_name: "Purchase",
-                event_time: Math.floor(Date.now() / 1000),
-                event_id: theTransaction.user_id,
-                user_data: {
-                  em: encodeSHA256(theTransaction.user.email),
-                  ph: encodeSHA256(`62${theTransaction.user.phone_number}`),
-                },
-                custom_data: {
-                  currency: "IDR",
-                  value: theTransaction.amount,
-                  content_ids: [theTransaction.item_id],
-                  content_type: "product",
-                  num_items: 1,
-                },
-              },
-            ],
-          }),
-        }
-      );
-      const metaResult = await metaResponse.json();
-      console.log("Meta Result:", metaResult);
-    } catch (error) {
-      console.error("Failed to response Meta API:", error);
-    }
-
     if (theTransaction.category === CategoryEnum.COHORT) {
       const theCohortPrice = await prisma.cohortPrice.findFirst({
         where: { id: theTransaction.item_id },
@@ -96,6 +62,43 @@ export async function POST(req: NextRequest) {
         return new NextResponse("The selected cohort price is not found.", {
           status: 404,
         });
+      }
+
+      try {
+        const metaResponse = await fetch(
+          `https://graph.facebook.com/v18.0/${process.env.META_PIXEL_ID}/events?access_token=${process.env.META_PIXEL_ACCESS_TOKEN}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              data: [
+                {
+                  event_name: "Purchase",
+                  event_time: Math.floor(Date.now() / 1000),
+                  event_id: theTransaction.user_id,
+                  user_data: {
+                    external_id: encodeSHA256(theTransaction.user_id),
+                    fn: encodeSHA256(theTransaction.user.full_name),
+                    em: encodeSHA256(theTransaction.user.email),
+                    ph: encodeSHA256(`62${theTransaction.user.phone_number}`),
+                  },
+                  custom_data: {
+                    currency: "IDR",
+                    value: theTransaction.amount,
+                    content_ids: [theTransaction.item_id],
+                    content_type: "service",
+                    content_category: "Business Education Program",
+                    num_items: 1,
+                  },
+                },
+              ],
+            }),
+          }
+        );
+        const metaResult = await metaResponse.json();
+        console.log("Meta Result:", metaResult);
+      } catch (error) {
+        console.error("Failed to response Meta API:", error);
       }
 
       try {
