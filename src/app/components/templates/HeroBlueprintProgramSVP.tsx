@@ -163,7 +163,7 @@ export default function HeroBlueprintProgramSVP({
         {/* All Speakers 2XL */}
         <Image
           className="all-speakers absolute hidden max-w-[672px] -bottom-5 -right-10 2xl:flex"
-          src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers.webp"
+          src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-new%20(1).webp"
           alt="Sevenpreneur Coach and Mentor"
           width={2440}
           height={2440}
@@ -173,8 +173,8 @@ export default function HeroBlueprintProgramSVP({
       {/* Absolute Decoration */}
       {/* All Speakers */}
       <Image
-        className="all-speakers absolute flex max-w-[424px] bottom-0 left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:translate-x-0 lg:max-w-[638px] lg:-bottom-5 lg:-right-20 xl:max-w-[662px] xl:right-5 2xl:hidden"
-        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers.webp"
+        className="all-speakers absolute flex max-w-[424px] bottom-0 left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:translate-x-0 lg:max-w-[600px] lg:-bottom-5 lg:-right-8 xl:max-w-[662px] xl:right-5 2xl:hidden"
+        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-new%20(1).webp"
         alt="Sevenpreneur Coach and Mentor"
         width={2440}
         height={2440}

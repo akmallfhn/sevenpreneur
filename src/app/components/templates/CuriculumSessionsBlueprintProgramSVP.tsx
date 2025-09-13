@@ -119,9 +119,9 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_name: "From Pitch Perfect to Investable Opportunity",
       session_description: "",
       session_educator: "Wafa Taftazani",
-      session_educator_title: "Entrepreneur & Investor",
+      session_educator_title: "Entrepreneur, Executive & Investor",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-wafa.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-wafa-taftazani.webp",
       session_variant: "extraordinary",
     },
     {
@@ -132,7 +132,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Tom Lembong",
       session_educator_title: "Former Minister of Trade of Indonesia",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tom-lembong.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tom.webp",
       session_variant: "extraordinary",
     },
     {
@@ -143,7 +143,7 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_educator: "Basuki T. Purnama",
       session_educator_title: "Governor of DKI Jakarta 2014-2017",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-ahok.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-basuki-btp.webp",
       session_variant: "extraordinary",
     },
   ];
