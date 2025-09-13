@@ -1,49 +1,40 @@
-import { url } from "inspector";
 import { NextResponse } from "next/server";
 
-export function GET() {
+export async function GET() {
   let domain = "sevenpreneur.com";
   if (process.env.DOMAIN_MODE === "local") {
     domain = "example.com:3000";
   }
 
-  const sitemaps = [
-    {
-      url: `https://www.${domain}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1.0,
-    },
-    {
-      url: `https://www.${domain}/events/restart-conference`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1.0,
-    },
-    {
-      url: `https://www.${domain}/cohorts/sevenpreneur-business-blueprint-program`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1.0,
-    },
-  ];
+  try {
+    const sitemaps = [
+      {
+        url: `https://www.${domain}/sitemap-basic.xml`,
+        lastModified: new Date(),
+      },
+    ];
+    const sitemapIndexXML = await buildSitemap(sitemaps);
+    return new NextResponse(sitemapIndexXML, {
+      headers: {
+        "Content-Type": "application/xml",
+        "Content-Length": Buffer.byteLength(sitemapIndexXML).toString(),
+      },
+    });
+  } catch (error) {
+    console.error("Error generating sitemap index:", error);
+    return NextResponse.error;
+  }
+}
 
+async function buildSitemap(sitemaps) {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-  sitemaps.forEach((sitemapItem) => {
-    xml += `
-        <url>
-            <loc>${sitemapItem.url}</loc>
-            <lastmod>${sitemapItem.lastModified.toISOString()}</lastmod>
-            <changefreq>${sitemapItem.changeFrequency}</changefreq>
-            <priority>${sitemapItem.priority.toFixed(1)}</priority>
-        </url>`;
-  });
-  xml += "</urlset>";
+  xml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-  return new NextResponse(xml, {
-    headers: {
-      "Content-Type": "application/xml",
-    },
-  });
+  for (const sitemapItem of sitemaps) {
+    (xml += "<sitemap>"), (xml += `<loc>${sitemapItem.url}</loc>`);
+    xml += `<lastmod>${sitemapItem.lastModified.toISOString()}</lastmod>`;
+    xml += "</sitemap>";
+  }
+  xml += "</sitemapindex>";
+  return xml;
 }
