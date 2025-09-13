@@ -23,14 +23,14 @@ export default function OverviewBlueprintProgramSVP() {
           <div className="section-content flex flex-col text-center items-center gap-6 lg:text-left lg:items-start">
             <div className="section-title-desc flex flex-col w-full items-center gap-3 z-10">
               <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl max-w-[598px] sm:text-3xl lg:text-4xl lg:max-w-full">
-                Idemu bisa brilian. Tapi bisnis tanpa <i>strategic execution</i>
-                , semua bisa runtuh.
+                Punya ide bisnis brilian tapi nggak tahu mulai dari mana?
               </h2>
               <p className="section-desc text-sm font-bodycopy text-white max-w-[598px] sm:text-base lg:max-w-full lg:text-xl">
-                <b>Sevenpreneur Business Blueprint Program</b> is a proven
-                roadmap based on real business cases. With clear strategies and
-                structured execution, it helps you build a business that’s
-                sustainable, scalable, and ready to lead.
+                Sevenpreneur Business Blueprint Program memberikan panduan{" "}
+                <b>step-by-step membangun bisnis</b>. Dengan roadmap yang
+                terstruktur, kamu bisa membangun bisnis yang scalable dan siap
+                tumbuh tanpa bingung harus mulai dari mana atau harus tanya
+                siapa.
               </p>
             </div>
 
@@ -45,7 +45,7 @@ export default function OverviewBlueprintProgramSVP() {
                     <Check color="#FFFFFF" className="w-3.5 h-auto lg:w-5" />
                   </div>
                   <p className="audience-item text-sm font-bodycopy sm:text-base lg:text-xl">
-                    Pengusaha pemula yang sedang memulai bisnis
+                    <b>Pengusaha pemula</b> yang mulai berbisnis
                   </p>
                 </div>
                 <div className="audience-list flex bg-[#1C1C1C] p-3 text-white text-left font-bodycopy items-center gap-3 rounded-md max-w-[598px] lg:p-4">
@@ -53,8 +53,7 @@ export default function OverviewBlueprintProgramSVP() {
                     <Check color="#FFFFFF" className="w-3.5 h-auto lg:w-5" />
                   </div>
                   <p className="audience-item text-sm font-bodycopy sm:text-base lg:text-xl">
-                    Profesional yang ingin membangun side-business di samping
-                    rutinitas korporat.
+                    <b>Karyawan korporasi</b> dengan side-business
                   </p>
                 </div>
                 <div className="audience-list flex bg-[#1C1C1C] p-3 text-white text-left font-bodycopy items-center gap-3 rounded-md max-w-[598px] lg:p-4">
@@ -62,8 +61,7 @@ export default function OverviewBlueprintProgramSVP() {
                     <Check color="#FFFFFF" className="w-3.5 h-auto lg:w-5" />
                   </div>
                   <p className="audience-item text-sm font-bodycopy sm:text-base lg:text-xl">
-                    Business owner yang ingin naik level dan mempercepat
-                    pertumbuhan bisnis.
+                    <b>Business owner</b> yang stuck & ingin level up
                   </p>
                 </div>
               </div>

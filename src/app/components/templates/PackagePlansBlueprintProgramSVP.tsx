@@ -29,13 +29,13 @@ export default function PackagePlansBlueprintProgramSVP({
         <div className="section-container flex flex-col w-full items-center p-5 py-10 gap-8 z-10 lg:px-0 lg:gap-[64px] lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
           {/* Section Title & Desc */}
           <div className="section-title-desc flex flex-col w-full text-center items-center gap-3 z-10">
-            <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl lg:text-4xl">
+            <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl sm:text-3xl lg:text-4xl">
               Find the Plan That Works Best for You
             </h2>
-            <p className="section-desc text-sm font-bodycopy text-white max-w-[326px] lg:text-xl lg:max-w-[712px]">
+            <p className="section-desc text-sm font-bodycopy text-white max-w-[326px] sm:text-base sm:max-w-[400px] lg:text-xl lg:max-w-[712px]">
               Dua opsi sesuai kebutuhanmu. Pilih Reguler untuk pelajari
               kurikulum 7 Framework lengkap, atau upgrade ke VIP untuk
-              pengalaman eksklusif dan manfaat premium.
+              pengalaman lebih eksklusif.
             </p>
           </div>
 

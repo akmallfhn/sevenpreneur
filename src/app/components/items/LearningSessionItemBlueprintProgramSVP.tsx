@@ -84,17 +84,17 @@ export default function LearningSessionItemBlueprintProgramSVP({
   return (
     <div className="learning-session-outline flex w-full h-full max-w-[380px] p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-md lg:max-w-none lg:rounded-lg">
       <div
-        className={`learning-session-container relative flex flex-col w-full h-full text-white p-5 justify-between aspect-[340/170] lg:aspect-[624/302] lg:w-[594px] ${backgroundColor} rounded-md overflow-hidden lg:rounded-lg`}
+        className={`learning-session-container relative flex flex-col w-full h-full text-white p-5 justify-between aspect-[340/170] lg:aspect-[624/302] rounded-md overflow-hidden lg:rounded-lg ${backgroundColor}`}
       >
         <div className="learning-session-content flex flex-col z-40">
           {sessionNumber && (
-            <h4 className="session-chapter font-bold font-brand text-2xl lg:text-[48px]">
+            <h4 className="session-chapter font-bold font-brand text-2xl lg:text-3xl xl:text-[48px]">
               {sessionNumber}
             </h4>
           )}
           {!sessionNumber && (
             <Image
-              className="flex max-w-[52px] pb-1 opacity-70 lg:max-w-[92px] lg:pb-3"
+              className="flex max-w-[52px] pb-1 opacity-70 lg:max-w-[72px] lg:pb-3 xl:max-w-[92px]"
               src={
                 "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/founder-series-logo.svg"
               }
@@ -103,11 +103,11 @@ export default function LearningSessionItemBlueprintProgramSVP({
               height={300}
             />
           )}
-          <h3 className="session-title font-bold font-brand max-w-[184px] leading-tight text-transparent bg-clip-text bg-gradient-to-b from-0% from-[#D1CDCD] via-50% via-white to-100% to-[#D1CDCD] line-clamp-3 lg:text-2xl lg:max-w-[336px]">
+          <h3 className="session-title font-bold font-brand max-w-[184px] leading-tight text-transparent bg-clip-text bg-gradient-to-b from-0% from-[#D1CDCD] via-50% via-white to-100% to-[#D1CDCD] line-clamp-3 lg:max-w-[292px] lg:text-xl xl:max-w-[336px] xl:text-2xl">
             {sessionName}
           </h3>
           {sessionDescription && (
-            <p className="session-desc font-bodycopy text-[10px] max-w-[184px] lg:text-lg lg:max-w-[332px]">
+            <p className="session-desc font-bodycopy text-[10px] max-w-[184px] lg:max-w-[292px] lg:text-base xl:max-w-[332px] xl:text-lg">
               {sessionDescription}
             </p>
           )}
@@ -158,7 +158,7 @@ export default function LearningSessionItemBlueprintProgramSVP({
           height={200}
         />
         {/* Speakers Image */}
-        <div className="session-speaker-image absolute flex aspect-square w-[160px] bottom-0 -right-4 z-30 lg:w-[272px]">
+        <div className="session-speaker-image absolute flex aspect-square w-[160px] bottom-0 -right-4 z-30 lg:w-[220px] xl:w-[272px]">
           <Image
             className="object-cover w-full h-full"
             src={sessionEducatorAvatar}

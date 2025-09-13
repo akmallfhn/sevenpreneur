@@ -40,7 +40,7 @@ export default function FAQItemBlueprintProgramSVP({
             isOpen ? "max-h-[500px] opacity-100 mt-2" : "max-h-0 opacity-0"
           }`}
         >
-          <p className="text-white/50 text-sm font-bodycopy lg:text-base">
+          <p className="text-white/70 text-sm font-bodycopy lg:text-base">
             {answer}
           </p>
         </div>

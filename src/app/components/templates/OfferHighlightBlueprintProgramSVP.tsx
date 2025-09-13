@@ -7,15 +7,10 @@ export default function OfferHighlightBlueprintProgramSVP() {
     <div className="section-root relative flex items-center justify-center bg-black overflow-hidden">
       <div className="section-container flex flex-col w-full items-center gap-8 p-5 py-10 z-20 lg:px-0 lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         {/* Section Title & Desc */}
-        <div className="section-title-desc flex flex-col w-full text-center items-center gap-3 z-10">
-          <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-center text-2xl sm:max-w-[662px] sm:text-3xl lg:text-4xl ">
-            Its Not a Business Class <br /> Its a Tools for Entrepreneur
-          </h2>
-          {/* <p className="section-desc text-sm font-bodycopy text-white max-w-[326px] lg:text-xl lg:max-w-[672px]">
-            Sevenpreneur membuka akses ke strategi, eksekusi, dan insight nyata
-            yang bisa langsung mengangkat bisnis kamu ke level berikutnya.
-          </p> */}
-        </div>
+        <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-center text-2xl sm:max-w-[662px] sm:text-3xl lg:max-w-[788px] lg:text-4xl ">
+          Not Just a Business Class. <br /> It’s The Perfect Ecosystem for
+          Entrepreneurs.
+        </h2>
 
         {/* Offer List */}
         <div className="offers flex flex-col items-center gap-4 lg:gap-6">
@@ -50,7 +45,7 @@ export default function OfferHighlightBlueprintProgramSVP() {
             <OfferItemBlueprintProgramSVP
               className="lg:order-1"
               offerTitle="Modul, Tools &  Framework"
-              offerDescription="Pelajari bisnis secara menyeluruh lewat 20+ Modul, Tools & Framework praktis."
+              offerDescription="Praktis, aplikatif, dan bisa dipakai langsung di bisnismu"
               offerBackground="bg-[#CC446A]"
               offerIcon="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon-tools.svg"
             />

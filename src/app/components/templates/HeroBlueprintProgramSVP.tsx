@@ -48,17 +48,17 @@ export default function HeroBlueprintProgramSVP({
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[52px] xl:max-w-[698px]">
-              <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] truncate">
-                Don’t Just Start a Business.
+            <div className="hero-title flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] sm:text-3xl lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[52px] xl:max-w-[720px]">
+              <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0]">
+                Start & Grow Your Business.
               </h2>
               <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-90% to-secondary">
                 Build a Blueprint.
               </h2>
             </div>
-            <p className="w-[317px] italic text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
-              End-to-end business mastery with proven frameworks and top-tier
-              coaching.
+            <p className="hero-description w-[317px] text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
+              Fast-Track Entrepreneurial Program with{" "}
+              <b>End-to-End Frameworks</b> & <b>Top-Tier Coaching</b>
             </p>
             <div className="scorecards flex gap-4">
               <ScorecardItemSVP
@@ -77,7 +77,7 @@ export default function HeroBlueprintProgramSVP({
                 isMoreValue
               />
               <ScorecardItemSVP
-                scorecardValue={3000}
+                scorecardValue={5000}
                 scorecardName="Program Alumnee"
                 isMoreValue
               />
