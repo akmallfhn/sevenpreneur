@@ -33,9 +33,9 @@ export default function PackagePlansBlueprintProgramSVP({
               Find the Plan That Works Best for You
             </h2>
             <p className="section-desc text-sm font-bodycopy text-white max-w-[326px] lg:text-xl lg:max-w-[712px]">
-              Dua paket sesuai kebutuhanmu. Pilih Reguler untuk pelajari
-              kurikulum 7 Framework lengkap, atau naik ke VIP untuk pengalaman
-              eksklusif dan manfaat premium.
+              Dua opsi sesuai kebutuhanmu. Pilih Reguler untuk pelajari
+              kurikulum 7 Framework lengkap, atau upgrade ke VIP untuk
+              pengalaman eksklusif dan manfaat premium.
             </p>
           </div>
 
@@ -110,11 +110,12 @@ export default function PackagePlansBlueprintProgramSVP({
                       Taftazani.
                     </>,
                     <>
-                      <b>2 sesi eksklusif</b> bersama Tom Lembong & Ahok
+                      <b>2 sesi eksklusif</b> bersama Tom Lembong & Basuki T.
+                      Purnama (Ahok)
                     </>,
                     <>
-                      <b>Intimate Dinner & Networking</b> bersama Ahok, Tom
-                      Lembong & para business leader visioner.
+                      <b>Intimate Dinner & Networking</b> bersama Tom Lembong,
+                      Basuki T. Purnama (Ahok), & para business leader visioner.
                     </>,
                     <>
                       <b>Mentoring privat 1-on-1</b> dengan business coach
