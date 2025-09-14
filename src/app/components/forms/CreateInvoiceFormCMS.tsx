@@ -337,7 +337,7 @@ export default function CreateInvoiceFormCMS({
         createInvoiceCohort.mutate(
           {
             // Mandatory fields:
-            user_id: "f1d27a50-00f1-48c0-9265-c516ae1f532a",
+            user_id: formData.invoiceUserId,
             payment_channel_id: Number(formData.paymentChannelId),
             cohort_price_id: Number(formData.invoiceProductItem),
 
