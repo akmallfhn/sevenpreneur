@@ -318,7 +318,7 @@ export default function CreateInvoiceFormCMS({
         createInvoicePlaylist.mutate(
           {
             // Mandatory fields:
-            user_id: formData.invoiceUserId,
+            user_id: formData.invoiceUserId.trim(),
             payment_channel_id: Number(formData.paymentChannelId),
             playlist_id: Number(formData.invoiceProductItem),
 
