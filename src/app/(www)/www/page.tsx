@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "Sevenpreneur",
     images: [
       {
-        url: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohort/hero-sbbp-desktop.webp",
+        url: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/meta-og-image-sevenpreneur-1.webp",
         width: 800,
         height: 600,
       },
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     description:
       "All-in-one business learning platform untuk founder dan entrepreneur. Dapatkan roadmap, modul praktis, dan strategi eksekusi agar bisnismu bisa level up.",
     images:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohort/hero-sbbp-desktop.webp",
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/meta-og-image-sevenpreneur-1.webp",
   },
   robots: {
     index: true,

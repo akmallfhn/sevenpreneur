@@ -388,7 +388,7 @@ export default function CheckoutCohortFormSVP({
                       />
                     ))}
                 </PaymentChannelGroupSVP>
-                {/* <PaymentChannelGroupSVP groupPaymentName="Credit Card">
+                <PaymentChannelGroupSVP groupPaymentName="Credit Card">
                   {paymentMethodData
                     .filter(
                       (post: PaymentMethodItem) => post.method === "CREDIT_CARD"
@@ -403,7 +403,7 @@ export default function CheckoutCohortFormSVP({
                         onChange={setSelectedPaymentChannel}
                       />
                     ))}
-                </PaymentChannelGroupSVP> */}
+                </PaymentChannelGroupSVP>
                 <PaymentChannelGroupSVP groupPaymentName="Paylater">
                   {paymentMethodData
                     .filter(

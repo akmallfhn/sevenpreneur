@@ -308,22 +308,22 @@ export default function CheckoutPlaylistFormSVP({
                     />
                   ))}
               </PaymentChannelGroupSVP>
-              {/* <PaymentChannelGroupSVP groupPaymentName="Credit Card">
-                  {paymentMethodData
-                    .filter(
-                      (post: PaymentMethodItem) => post.method === "CREDIT_CARD"
-                    )
-                    .map((post: PaymentMethodItem, index: number) => (
-                      <RadioBoxPaymentChannelSVP
-                        key={index}
-                        paymentChannelName={post.label}
-                        paymentIcon={post.image}
-                        value={post.code}
-                        selectedValue={selectedPaymentChannel}
-                        onChange={setSelectedPaymentChannel}
-                      />
-                    ))}
-                </PaymentChannelGroupSVP> */}
+              <PaymentChannelGroupSVP groupPaymentName="Credit Card">
+                {paymentMethodData
+                  .filter(
+                    (post: PaymentMethodItem) => post.method === "CREDIT_CARD"
+                  )
+                  .map((post: PaymentMethodItem, index: number) => (
+                    <RadioBoxPaymentChannelSVP
+                      key={index}
+                      paymentChannelName={post.label}
+                      paymentIcon={post.image}
+                      value={post.code}
+                      selectedValue={selectedPaymentChannel}
+                      onChange={setSelectedPaymentChannel}
+                    />
+                  ))}
+              </PaymentChannelGroupSVP>
               <PaymentChannelGroupSVP groupPaymentName="Paylater">
                 {paymentMethodData
                   .filter(
