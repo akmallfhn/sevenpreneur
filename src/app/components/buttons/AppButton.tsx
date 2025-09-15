@@ -13,6 +13,7 @@ type VariantType =
   | "link"
   | "dark"
   | "surfaceDark"
+  | "destructive"
   | "semiDestructive"
   | "cmsPrimary"
   | "cmsPrimaryLight"
@@ -95,6 +96,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         "bg-transparent border border-white text-white overflow-hidden transition-all duration-300 before:absolute before:inset-0 before:bg-green-500 before:-translate-x-full before:transition-transform before:duration-300 hover:before:translate-x-0 hover:border-transparent before:-z-10",
       link: "text-primary hover:underline active:underline underline-offset-4",
       dark: "bg-[#202020] text-white hover:bg-black active:bg-black",
+      destructive:
+        "text-white bg-destructive hover:bg-[#D62012] active:bg-[#D62012]",
       surfaceDark:
         "bg-[#27292E] text-[#9498A1] hover:bg-[#242529] active:bg-[#242529]",
       semiDestructive:
