@@ -409,7 +409,7 @@ export default function TransactionStatusDetailsSVP({
         </div>
       </div>
 
-      {/* --- Delete Confirmation */}
+      {/* --- Cancel Confirmation */}
       {isOpenCancelConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Cancel Payment?"

@@ -13,6 +13,10 @@ import UserItemCMS from "../items/UserItemCMS";
 import AppButton from "../buttons/AppButton";
 import { useClipboard } from "@/lib/use-clipboard";
 import { toast } from "sonner";
+import { useState } from "react";
+import { CancelPaymentXendit } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import AppAlertConfirmDialog from "./AppAlertConfirmDialog";
 
 interface TransactionDetailsCMSProps {
   transactionId: string | null;
@@ -25,7 +29,12 @@ export default function TransactionDetailsCMS({
   isOpen,
   onClose,
 }: TransactionDetailsCMSProps) {
+  const [loadingCancelInvoice, setLoadingCancelInvoice] = useState(false);
+  const [isOpenCancelConfirmation, setIsOpenCancelConfirmation] =
+    useState(false);
   const { copy, copied } = useClipboard();
+  const router = useRouter();
+  const utils = trpc.useUtils();
 
   if (!transactionId) return;
 
@@ -34,6 +43,7 @@ export default function TransactionDetailsCMS({
     { enabled: !!transactionId }
   );
   const transactionDetails = data?.transaction;
+  const isPending = transactionDetails?.status === "PENDING";
 
   let productName = "";
   if (transactionDetails?.category === "COHORT") {
@@ -47,6 +57,31 @@ export default function TransactionDetailsCMS({
     if (transactionDetails?.invoice_url) {
       copy(transactionDetails.invoice_url);
       toast.success("Invoice URL copied to clipboard");
+    }
+  };
+
+  // Cancel Invoice on Xendit
+  const handleCancelation = async () => {
+    if (!transactionId) {
+      toast.error("The transaction could not be found");
+      return;
+    }
+    setLoadingCancelInvoice(true);
+    try {
+      const cancelPayment = await CancelPaymentXendit({
+        transactionId,
+      });
+      if (cancelPayment.status === 200) {
+        utils.read.transaction.invalidate();
+        utils.list.transactions.invalidate();
+      } else {
+        toast.error("Cancellation failed. Please try again");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred during cancellation");
+    } finally {
+      setLoadingCancelInvoice(false);
     }
   };
 
@@ -200,6 +235,39 @@ export default function TransactionDetailsCMS({
             />
           </div>
         </div>
+      )}
+
+      {/* CTA Cancel Invoice */}
+      {isPending && (
+        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+          <AppButton
+            className="w-full"
+            variant="destructive"
+            onClick={() => setIsOpenCancelConfirmation(true)}
+            disabled={loadingCancelInvoice}
+          >
+            {loadingCancelInvoice && (
+              <Loader2 className="animate-spin size-4" />
+            )}
+            Cancel Invoice
+          </AppButton>
+        </div>
+      )}
+
+      {/* Cancel Invoice Confirmation */}
+      {isOpenCancelConfirmation && (
+        <AppAlertConfirmDialog
+          alertDialogHeader="Cancel Invoice?"
+          alertDialogMessage="Are you sure you want to cancel this invoice? This action cannot be undone."
+          alertCancelLabel="Go Back"
+          alertConfirmLabel="Cancel Invoice"
+          isOpen={isOpenCancelConfirmation}
+          onClose={() => setIsOpenCancelConfirmation(false)}
+          onConfirm={() => {
+            handleCancelation();
+            setIsOpenCancelConfirmation(false);
+          }}
+        />
       )}
     </AppSheet>
   );
