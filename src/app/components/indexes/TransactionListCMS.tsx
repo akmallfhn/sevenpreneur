@@ -18,6 +18,7 @@ import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import { useRouter, useSearchParams } from "next/navigation";
 import TransactionDetailsCMS from "../modals/TransactionDetailsCMS";
 import CreateInvoiceFormCMS from "../forms/CreateInvoiceFormCMS";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 dayjs.extend(localizedFormat);
 
@@ -28,11 +29,14 @@ interface TransactionListCMSProps {
 export default function TransactionListCMS({
   sessionToken,
 }: TransactionListCMSProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const selectedId = searchParams.get("id");
   const [isOpenDetails, setIsOpenDetails] = useState(false);
   const [isOpenCreateInvoice, setIsOpenCreateInvoice] = useState(false);
+  const router = useRouter();
+  const pageSize = 20;
+  const searchParam = useSearchParams();
+  const selectedId = searchParam.get("id");
+  const pageParam = searchParam.get("page");
+  const currentPage = Number(pageParam) || 1;
 
   // Set token for API
   useEffect(() => {
@@ -57,9 +61,9 @@ export default function TransactionListCMS({
     router.push("/transactions", { scroll: false });
   };
 
-  // tRPC Transactions List
+  // Fetch tRPC Transaction List
   const { data, isLoading, isError } = trpc.list.transactions.useQuery(
-    {},
+    { page: currentPage, page_size: pageSize },
     { enabled: !!sessionToken }
   );
   const transactionList = data?.list;
@@ -157,7 +161,9 @@ export default function TransactionListCMS({
                     className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
                     key={index}
                   >
-                    <TableCellCMS>{index + 1}</TableCellCMS>
+                    <TableCellCMS>
+                      {(currentPage - 1) * pageSize + (index + 1)}
+                    </TableCellCMS>
                     <TableCellCMS>{post.id}</TableCellCMS>
                     <TableCellCMS>
                       {post.cohort_name ? post.cohort_name : post.playlist_name}
@@ -194,6 +200,16 @@ export default function TransactionListCMS({
               </tbody>
             </table>
           </>
+        )}
+        {/* Pagination */}
+        {!isLoading && !isError && (
+          <div className="pagination-container flex flex-col w-full items-center gap-3">
+            <AppNumberPagination
+              currentPage={currentPage}
+              totalPages={data?.metapaging.total_page ?? 1}
+            />
+            <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} transactions`}</p>
+          </div>
         )}
       </div>
 
