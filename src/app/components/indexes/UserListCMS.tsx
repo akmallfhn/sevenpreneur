@@ -99,7 +99,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
     };
   }, []);
 
-  // Return data from tRPC
+  // Fetch tRPC User List
   const { data, isLoading, isError } = trpc.list.users.useQuery(
     { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
     { enabled: !!sessionToken }
@@ -321,11 +321,12 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
               currentPage={currentPage}
               totalPages={data?.metapaging.total_page ?? 1}
             />
-            <p className="text-sm text-alternative text-center italic font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
+            <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
           </div>
         )}
       </div>
 
+      {/* Open Delete User */}
       {isOpenDeleteConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"
