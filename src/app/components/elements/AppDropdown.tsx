@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { HTMLAttributes, useEffect, useRef, useState } from "react";
 
-interface AppDropdownProps {
+interface AppDropdownProps extends HTMLAttributes<HTMLDivElement> {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -17,6 +17,8 @@ export default function AppDropdown({
   alignMobile = "center",
   alignDesktop = "center",
   anchorEl = null,
+  className = "",
+  ...rest
 }: AppDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [placement, setPlacement] = useState<"top" | "bottom">("bottom");
@@ -71,9 +73,10 @@ export default function AppDropdown({
   return (
     <div
       ref={dropdownRef}
-      className={`dropdown-container absolute flex flex-col w-max bg-white p-3 shadow-[0px_0px_14px_rgba(0,0,0,0.15)] rounded-md z-30 overflow-hidden dark:bg-surface-black  ${
+      className={`dropdown-container absolute flex flex-col w-max h-max ${className} bg-white p-3 shadow-[0px_0px_14px_rgba(0,0,0,0.15)] rounded-md z-30 overflow-hidden dark:bg-surface-black  ${
         placement === "bottom" ? "mt-2 top-full" : "mb-2 bottom-full"
       } ${mobileAlignmentClass} ${desktopAlignmentClass}`}
+      {...rest}
     >
       {children}
     </div>

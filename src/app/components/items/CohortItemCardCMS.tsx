@@ -106,9 +106,9 @@ export default function CohortItemCardCMS({
             </h3>
             <div className="cohort-participant flex gap-2 items-center text-alternative">
               <FontAwesomeIcon icon={faUser} className="size-3" />
-              <p className="font-bodycopy font-medium text-sm">
+              {/* <p className="font-bodycopy font-medium text-sm">
                 1,934 students joined
-              </p>
+              </p> */}
             </div>
             <div className="cohort-timeline flex gap-2 items-center text-alternative">
               <FontAwesomeIcon icon={faCalendar} className="size-3" />

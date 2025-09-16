@@ -11,7 +11,7 @@ export type OptionType = {
 
 interface SelectCMSProps {
   selectId: string;
-  selectName: string;
+  selectName?: string;
   selectIcon?: React.ReactNode;
   selectPlaceholder: string;
   value: any;
@@ -19,6 +19,7 @@ interface SelectCMSProps {
   disabled?: boolean;
   required?: boolean;
   options?: OptionType[];
+  onOpenChange?: (open: boolean) => void;
 }
 
 export default function SelectCMS({
@@ -31,12 +32,18 @@ export default function SelectCMS({
   disabled,
   required,
   options = [],
+  onOpenChange,
 }: SelectCMSProps) {
-  // --- State for Select
+  // State for Select
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // --- Handle click outside container
+  // Sent open state to parent
+  useEffect(() => {
+    onOpenChange?.(isOpen);
+  }, [isOpen, onOpenChange]);
+
+  // Handle click outside container
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -52,7 +59,7 @@ export default function SelectCMS({
     };
   }, []);
 
-  // --- Finding selected value in Array dropdown
+  // Finding selected value in Array dropdown
   const selectedOption = options.find((opt) => opt.value === value);
 
   return (
@@ -60,16 +67,18 @@ export default function SelectCMS({
       className="select-group-component flex flex-col gap-1"
       ref={containerRef}
     >
-      {/* --- Label */}
-      <label
-        htmlFor={selectId}
-        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-      >
-        {selectName}
-        {required && <span className="text-destructive">*</span>}
-      </label>
+      {/* Label */}
+      {selectName && (
+        <label
+          htmlFor={selectId}
+          className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        >
+          {selectName}
+          {required && <span className="text-destructive">*</span>}
+        </label>
+      )}
 
-      {/* --- Select Placeholder */}
+      {/* Select Placeholder */}
       <div
         className={`select relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
           isOpen
@@ -82,7 +91,7 @@ export default function SelectCMS({
           if (!disabled) setIsOpen((prev) => !prev);
         }}
       >
-        {/* -- Icon Select */}
+        {/* Icon Select */}
         {selectIcon && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-alternative">
             {selectIcon}
@@ -111,14 +120,14 @@ export default function SelectCMS({
           </span>
         </div>
 
-        {/* -- Icon Dropdown */}
+        {/* Icon Dropdown */}
         {!disabled && (
           <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#616F86]">
             <ChevronDown className="size-5" />
           </div>
         )}
 
-        {/* --- Dropdown options */}
+        {/* Dropdown options */}
         {isOpen && !disabled && (
           <div className="absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden">
             <ul className="flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">

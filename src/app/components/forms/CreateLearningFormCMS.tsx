@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
-import { LearningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
+import { LearningSessionVariant } from "../labels/LearningSessionIconCMS";
 
 interface CreateLearningFormCMSProps {
   sessionToken: string;

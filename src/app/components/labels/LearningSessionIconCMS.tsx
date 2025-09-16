@@ -1,5 +1,4 @@
 "use client";
-
 import { GalleryHorizontalEnd, MapPinned, Video } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -30,10 +29,9 @@ interface LearningSessionIconLabelCMSProps {
   variants: LearningSessionVariant;
 }
 
-export default function LearningSessionIconLabelCMS({
+export default function LearningSessionIconCMS({
   variants,
 }: LearningSessionIconLabelCMSProps) {
-  // --- Variant declaration
   const { iconColor, iconLabel } = variantStyles[variants];
 
   return (

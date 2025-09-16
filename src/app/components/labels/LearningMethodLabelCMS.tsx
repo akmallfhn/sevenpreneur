@@ -1,5 +1,5 @@
 "use client";
-import { LearningSessionVariant } from "./LearningSessionIconLabelCMS";
+import { LearningSessionVariant } from "./LearningSessionIconCMS";
 
 const variantStyles: Record<
   LearningSessionVariant,
