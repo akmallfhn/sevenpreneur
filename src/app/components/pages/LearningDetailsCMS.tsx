@@ -21,7 +21,7 @@ import { getMeetingPlatformVariantFromURL } from "@/lib/meeting-platform-variant
 import MaterialListCMS from "../indexes/MaterialListCMS";
 import UserBadgeCMS from "../buttons/UserBadgeCMS";
 import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
-import { LearningSessionVariant } from "../labels/LearningSessionIconLabelCMS";
+import { LearningSessionVariant } from "../labels/LearningSessionIconCMS";
 import LocationItemCMS from "../items/LocationItemCMS";
 import MeetingPlatformItemCMS, {
   MeetingPlatformVariant,

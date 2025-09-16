@@ -7,9 +7,9 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
 import { ChevronRight, EllipsisVertical, Trash2, Video } from "lucide-react";
 import AppButton from "../buttons/AppButton";
-import LearningSessionIconLabelCMS, {
+import LearningSessionIconCMS, {
   LearningSessionVariant,
-} from "../labels/LearningSessionIconLabelCMS";
+} from "../labels/LearningSessionIconCMS";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
@@ -96,7 +96,7 @@ export default function LearningSessionItemCMS({
           href={`/cohorts/${cohortId}/learnings/${sessionLearningId}`}
           className="flex w-[calc(87%)] gap-3 items-center"
         >
-          <LearningSessionIconLabelCMS
+          <LearningSessionIconCMS
             variants={sessionMethod as LearningSessionVariant}
           />
           <div className="attribute-data flex flex-col gap-2.5">
