@@ -4,14 +4,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
-import {
-  MakePaymentCohortXendit,
-  MakePaymentEventXenditProps,
-} from "@/lib/actions";
+import { MakePaymentEventXenditProps } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
-import RadioBoxProgramTierSVP from "../fields/RadioBoxProgramTierSVP";
+import RadioBoxPriceTierSVP from "../fields/RadioBoxProgramTierSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
@@ -73,8 +70,8 @@ export default function CheckoutEventFormSVP({
     userPhoneNumber: initialUserPhone || "",
   });
 
-  // --- Validating params ticketId based on Cohort Data
-  // --- ticketId not included on Cohort Data will be fallback to Programs Tier Form
+  // --- Validating params ticketId based on Event Data
+  // --- ticketId not included on Event Data will be fallback to Programs Tier Form
   const isValidTicketId = useMemo(() => {
     const ticketId = parseInt(ticketIdParams || "");
     return (
@@ -240,19 +237,19 @@ export default function CheckoutEventFormSVP({
           <div className="programs-tier-box flex p-5 pt-8">
             <div className="programs-tier flex flex-col gap-4 bg-white p-4 rounded-md shadow-sm z-10">
               <div className="flex flex-col font-bodycopy">
-                <h1 className="font-bold text-black">Programs Package</h1>
+                <h1 className="font-bold text-black">Event Pass</h1>
                 <p className="font-medium text-alternative text-sm">
-                  Get the most out of your learning. Choose the package that
-                  suits you best.
+                  Make the most of the event. Choose the pass that works best
+                  for you.
                 </p>
               </div>
               <div className="flex flex-col gap-3">
                 {ticketListData.map((post, index) => (
-                  <RadioBoxProgramTierSVP
+                  <RadioBoxPriceTierSVP
                     key={index}
-                    programTierName={post.name}
-                    programTierCohortName={eventName}
-                    programTierPrice={post.amount}
+                    priceTierName={post.name}
+                    productName={eventName}
+                    priceTierAmount={post.amount}
                     value={post.id}
                     selectedValue={selectedPriceTierId}
                     onChange={setSelectedPriceTierId}
@@ -427,23 +424,23 @@ export default function CheckoutEventFormSVP({
             </div>
 
             {/* Promo Discount */}
-            <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
-              {/* Discount Gateway */}
-              {!discount && (
+            {/* <div className="discount-promo flex bg-white p-5 dark:bg-coal-black"> */}
+            {/* Discount Gateway */}
+            {/* {!discount && (
                 <ApplyDiscountGatewaySVP
                   onClick={() => setOpenDiscount(true)}
                 />
-              )}
-              {/* Applied Discount */}
-              {discount && (
+              )} */}
+            {/* Applied Discount */}
+            {/* {discount && (
                 <AppliedDiscountCardSVP
                   discountName={discount.name || ""}
                   discountRate={discount.calc_percent || 0}
                   discountCode={discount.code || ""}
                   onClose={() => setDiscount(null)}
                 />
-              )}
-            </div>
+              )} */}
+            {/* </div> */}
 
             {/* Payment Details */}
             <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">

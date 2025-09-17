@@ -1,23 +1,23 @@
 "use client";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 
-interface RadioBoxProgramTierSVPProps {
-  programTierName: string;
-  programTierCohortName: string;
-  programTierPrice: number;
+interface RadioBoxPriceTierSVPProps {
+  productName: string;
+  priceTierName: string;
+  priceTierAmount: number;
   value: number;
   selectedValue: number;
   onChange: (value: number) => void;
 }
 
-export default function RadioBoxProgramTierSVP({
-  programTierName,
-  programTierCohortName,
-  programTierPrice,
+export default function RadioBoxPriceTierSVP({
+  productName,
+  priceTierName,
+  priceTierAmount,
   value,
   selectedValue,
   onChange,
-}: RadioBoxProgramTierSVPProps) {
+}: RadioBoxPriceTierSVPProps) {
   const isSelected = selectedValue === value;
 
   return (
@@ -33,14 +33,12 @@ export default function RadioBoxProgramTierSVP({
               isSelected ? "text-primary" : "text-black"
             }`}
           >
-            {programTierName}
+            {priceTierName}
           </p>
-          <p className="text-alternative font-medium">
-            {programTierCohortName}
-          </p>
+          <p className="text-alternative font-medium">{productName}</p>
         </div>
         <p className="text-secondary font-bold">
-          {rupiahCurrency(programTierPrice)}
+          {rupiahCurrency(priceTierAmount)}
         </p>
       </div>
       <input

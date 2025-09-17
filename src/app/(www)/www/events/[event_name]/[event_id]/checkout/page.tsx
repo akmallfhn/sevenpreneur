@@ -1,4 +1,3 @@
-import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP";
 import CheckoutEventFormSVP from "@/app/components/forms/CheckoutEventFormSVP";
 import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
@@ -10,60 +9,60 @@ interface CheckoutEventPageProps {
   params: Promise<{ event_name: string; event_id: string }>;
 }
 
-// export async function generateMetadata({
-//   params,
-// }: CheckoutCohortPageProps): Promise<Metadata> {
-//   const cookieStore = await cookies();
-//   const sessionToken = cookieStore.get("session_token")?.value;
+export async function generateMetadata({
+  params,
+}: CheckoutEventPageProps): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
 
-//   const { cohort_id } = await params;
-//   const cohortId = parseInt(cohort_id);
+  const { event_id } = await params;
+  const eventId = parseInt(event_id);
 
-//   // --- Get Data
-//   setSessionToken(sessionToken!);
-//   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
+  // --- Get Data
+  setSessionToken(sessionToken!);
+  const eventData = (await trpc.read.event({ id: eventId })).event;
 
-//   return {
-//     title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
-//     description:
-//       "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
-//     authors: [{ name: "Sevenpreneur" }],
-//     publisher: "Sevenpreneur",
-//     referrer: "origin-when-cross-origin",
-//     alternates: {
-//       canonical: `/cohorts/${cohortData.slug_url}/${cohortData.id}/checkout`,
-//     },
-//     openGraph: {
-//       title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
-//       description:
-//         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
-//       url: `/cohorts/${cohortData.slug_url}/${cohortData.id}/checkout`,
-//       siteName: "Sevenpreneur",
-//       images: [
-//         {
-//           url: cohortData.image,
-//           width: 800,
-//           height: 600,
-//         },
-//       ],
-//     },
-//     twitter: {
-//       card: "summary_large_image",
-//       title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
-//       description:
-//         "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
-//       images: cohortData.image,
-//     },
-//     robots: {
-//       index: false,
-//       follow: false,
-//       googleBot: {
-//         index: false,
-//         follow: false,
-//       },
-//     },
-//   };
-// }
+  return {
+    title: `Checkout ${eventData.name} - Event | Sevenpreneur`,
+    description:
+      "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+    authors: [{ name: "Sevenpreneur" }],
+    publisher: "Sevenpreneur",
+    referrer: "origin-when-cross-origin",
+    alternates: {
+      canonical: `/events/${eventData.slug_url}/${eventData.id}/checkout`,
+    },
+    openGraph: {
+      title: `Checkout ${eventData.name} - Event | Sevenpreneur`,
+      description:
+        "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+      url: `/events/${eventData.slug_url}/${eventData.id}/checkout`,
+      siteName: "Sevenpreneur",
+      images: [
+        {
+          url: eventData.image,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Checkout ${eventData.name} - Event | Sevenpreneur`,
+      description:
+        "Lengkapi proses pembelian dengan aman dan cepat di halaman checkout kami. Dapatkan ringkasan pesanan dan pilih metode pembayaran terbaik.",
+      images: eventData.image,
+    },
+    robots: {
+      index: false,
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
+  };
+}
 
 export default async function CheckoutEventPage({
   params,
@@ -113,7 +112,7 @@ export default async function CheckoutEventPage({
   // --- Auto Correction Slug
   const correctSlug = eventData.slug_url;
   if (event_name !== correctSlug) {
-    redirect(`/cohorts/${correctSlug}/${eventId}/checkout`);
+    redirect(`/events/${correctSlug}/${eventId}/checkout`);
   }
 
   return (

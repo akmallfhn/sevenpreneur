@@ -8,7 +8,7 @@ import { MakePaymentCohortXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
-import RadioBoxProgramTierSVP from "../fields/RadioBoxProgramTierSVP";
+import RadioBoxPriceTierSVP from "../fields/RadioBoxProgramTierSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
@@ -245,11 +245,11 @@ export default function CheckoutCohortFormSVP({
               </div>
               <div className="flex flex-col gap-3">
                 {ticketListData.map((post, index) => (
-                  <RadioBoxProgramTierSVP
+                  <RadioBoxPriceTierSVP
                     key={index}
-                    programTierName={post.name}
-                    programTierCohortName={cohortName}
-                    programTierPrice={post.amount}
+                    priceTierName={post.name}
+                    productName={cohortName}
+                    priceTierAmount={post.amount}
                     value={post.id}
                     selectedValue={selectedPriceTierId}
                     onChange={setSelectedPriceTierId}
