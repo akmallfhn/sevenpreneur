@@ -39,7 +39,7 @@ export default async function EventDetailsPage({
   // Auto Correction Slug
   const correctSlug = eventData.slug_url;
   if (event_name !== correctSlug) {
-    redirect(`/playlists/${correctSlug}/${eventData.id}`);
+    redirect(`/events/${correctSlug}/${eventData.id}`);
   }
 
   return (
