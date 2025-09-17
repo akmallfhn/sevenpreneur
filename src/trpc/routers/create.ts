@@ -346,6 +346,70 @@ export const createRouter = createTRPCRouter({
       };
     }),
 
+  event: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        image: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+        slug_url: stringNotBlank().optional(),
+        start_date: stringIsTimestampTz(),
+        end_date: stringIsTimestampTz(),
+        published_at: stringIsTimestampTz().optional(),
+        event_prices: z
+          .array(
+            z.object({
+              name: stringNotBlank(),
+              amount: z.number(),
+              status: z.nativeEnum(StatusEnum),
+            })
+          )
+          .min(1),
+      })
+    )
+    .mutation(async (opts) => {
+      const slugUrl =
+        typeof opts.input.slug_url !== "undefined"
+          ? opts.input.slug_url
+          : createSlugFromTitle(opts.input.name);
+      const createdEvent = await opts.ctx.prisma.event.create({
+        data: {
+          name: opts.input.name,
+          description: opts.input.description,
+          image: opts.input.image,
+          status: opts.input.status,
+          slug_url: slugUrl,
+          start_date: opts.input.start_date,
+          end_date: opts.input.end_date,
+          published_at: opts.input.published_at,
+          event_prices: {
+            create: opts.input.event_prices,
+          },
+        },
+      });
+      const theEvent = await opts.ctx.prisma.event.findFirst({
+        include: {
+          event_prices: true,
+        },
+        where: {
+          id: createdEvent.id,
+          deleted_at: null,
+        },
+      });
+      if (!theEvent) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new cohort.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        event: theEvent,
+      };
+    }),
+
   playlist: administratorProcedure
     .input(
       z.object({

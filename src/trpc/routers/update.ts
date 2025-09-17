@@ -404,6 +404,52 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
+  event: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        image: stringNotBlank().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+        slug_url: stringNotBlank().optional(),
+        start_date: stringIsTimestampTz().optional(),
+        end_date: stringIsTimestampTz().optional(),
+        published_at: stringIsTimestampTz().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedEvent = await opts.ctx.prisma.event.updateManyAndReturn({
+        data: {
+          name: opts.input.name,
+          description: opts.input.description,
+          image: opts.input.image,
+          status: opts.input.status,
+          slug_url: opts.input.slug_url,
+          start_date: opts.input.start_date,
+          end_date: opts.input.end_date,
+          published_at: opts.input.published_at,
+        },
+        where: {
+          id: opts.input.id,
+          deleted_at: null,
+        },
+      });
+      if (updatedEvent.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected event is not found.",
+        });
+      } else if (updatedEvent.length > 1) {
+        console.error("update.event: More-than-one event are updated at once.");
+      }
+      return {
+        status: 200,
+        message: "Success",
+        event: updatedEvent[0],
+      };
+    }),
+
   playlist: administratorProcedure
     .input(
       z.object({
