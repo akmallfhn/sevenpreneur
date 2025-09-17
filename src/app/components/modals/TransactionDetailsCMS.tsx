@@ -50,6 +50,8 @@ export default function TransactionDetailsCMS({
     productName = transactionDetails.cohort_name ?? "";
   } else if (transactionDetails?.category === "PLAYLIST") {
     productName = transactionDetails.playlist_name ?? "";
+  } else if (transactionDetails?.category === "EVENT") {
+    productName = transactionDetails.event_name ?? "";
   }
 
   // Handle Copy URL

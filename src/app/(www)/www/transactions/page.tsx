@@ -101,6 +101,11 @@ export default async function TransactionsPage() {
               cohortName={post.cohort_name}
               cohortSlug={post.cohort_slug}
               cohortPriceName={post.cohort_price_name}
+              eventId={post.event_id}
+              eventName={post.event_name}
+              eventImage={post.event_image}
+              eventSlug={post.event_slug}
+              eventPriceName={post.event_price_name}
               totalTransactionAmount={post.amount}
               invoiceURL={post.invoice_url}
             />

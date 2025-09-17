@@ -29,6 +29,7 @@ import AppNumberPagination from "../navigations/AppNumberPagination";
 import SelectCMS from "../fields/SelectCMS";
 import FilterLabelCMS from "../labels/FilterLabelCMS";
 import AppDropdown from "../elements/AppDropdown";
+import { ProductCategory } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 
@@ -54,7 +55,7 @@ export default function TransactionListCMS({
   // Beginning State
   const [filterData, setFilterData] = useState<{
     productId: number | string;
-    productType: "PLAYLIST" | "COHORT" | "EVENT" | "";
+    productType: ProductCategory | "";
   }>({
     productId: "",
     productType: "",
@@ -282,11 +283,10 @@ export default function TransactionListCMS({
         {/* Table */}
         <div className="table-group flex flex-col">
           {filterData.productId && (
-            <div className="active-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
+            <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
               <p className="text-sm text-alternative font-medium font-bodycopy">
                 Active filter:
               </p>
-
               <FilterLabelCMS
                 filterName={
                   `Product: ${
@@ -304,8 +304,7 @@ export default function TransactionListCMS({
               />
             </div>
           )}
-
-          <table className="relative w-full overflow-hidden">
+          <table className="table-component relative w-full overflow-hidden">
             <thead className="bg-[#FAFAFA] text-alternative/70">
               <tr>
                 <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
@@ -332,7 +331,9 @@ export default function TransactionListCMS({
                     </TableCellCMS>
                     <TableCellCMS>{post.id}</TableCellCMS>
                     <TableCellCMS>
-                      {post.cohort_name ? post.cohort_name : post.playlist_name}
+                      {post.cohort_name ||
+                        post.playlist_name ||
+                        post.event_name}
                     </TableCellCMS>
                     <TableCellCMS>
                       <ProductCategoryLabelCMS variants={post.category} />

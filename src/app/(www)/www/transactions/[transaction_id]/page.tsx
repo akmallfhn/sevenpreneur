@@ -118,6 +118,11 @@ export default async function TransactionDetailsPage({
       cohortImage={transactionDetailsData.cohort_image}
       cohortSlug={transactionDetailsData.cohort_slug}
       cohortPriceName={transactionDetailsData.cohort_price_name}
+      eventId={transactionDetailsData.event_id}
+      eventName={transactionDetailsData.event_name}
+      eventImage={transactionDetailsData.event_image}
+      eventSlug={transactionDetailsData.event_slug}
+      eventPriceName={transactionDetailsData.event_price_name}
       paymentChannelName={transactionDetailsData.payment_channel_name}
       paymentChannelImage={transactionDetailsData.payment_channel_image}
       userName={transactionDetailsData.user_full_name}

@@ -31,6 +31,17 @@ type CohortBadgeWithPrice = CohortBadge & {
   priceName: string | undefined;
 };
 
+type EventBadge = {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  slugUrl: string | undefined;
+};
+
+type EventBadgeWithPrice = EventBadge & {
+  priceName: string | undefined;
+};
+
 type PlaylistBadge = {
   id: number | undefined;
   name: string | undefined;
@@ -624,6 +635,67 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  event: publicProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      let whereClause = {
+        id: opts.input.id,
+        deleted_at: null,
+      };
+      if (!opts.ctx.user) {
+        Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+        });
+      }
+      const theEvent = await opts.ctx.prisma.event.findFirst({
+        include: {
+          event_prices: true,
+        },
+        where: whereClause,
+      });
+      if (!theEvent) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The event with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        event: theEvent,
+      };
+    }),
+
+  eventPrice: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theEventPrice) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The event price with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        cohortPrice: theEventPrice,
+      };
+    }),
+
   discount: administratorProcedure
     .input(
       z.object({
@@ -787,6 +859,23 @@ export const readRouter = createTRPCRouter({
         }
       }
 
+      let eventBadge: EventBadgeWithPrice | undefined;
+      if (theTransaction.category === CategoryEnum.EVENT) {
+        const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+          include: { event: true },
+          where: { id: theTransaction.item_id },
+        });
+        if (theEventPrice) {
+          eventBadge = {
+            id: theEventPrice.event.id,
+            name: theEventPrice.event.name,
+            image: theEventPrice.event.image,
+            slugUrl: theEventPrice.event.slug_url,
+            priceName: theEventPrice.name,
+          };
+        }
+      }
+
       let playlistBadge: PlaylistBadge | undefined;
       if (theTransaction.category === CategoryEnum.PLAYLIST) {
         const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
@@ -831,6 +920,11 @@ export const readRouter = createTRPCRouter({
           cohort_image: cohortBadge?.image,
           cohort_slug: cohortBadge?.slugUrl,
           cohort_price_name: cohortBadge?.priceName,
+          event_id: eventBadge?.id,
+          event_name: eventBadge?.name,
+          event_image: eventBadge?.image,
+          event_slug: eventBadge?.slugUrl,
+          event_price_name: eventBadge?.priceName,
           playlist_id: playlistBadge?.id,
           playlist_name: playlistBadge?.name,
           playlist_image: playlistBadge?.image,

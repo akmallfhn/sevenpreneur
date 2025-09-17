@@ -309,6 +309,69 @@ export const purchaseRouter = createTRPCRouter({
       };
     }),
 
+  event: loggedInProcedure
+    .input(
+      z.object({
+        user_id: stringIsUUID().optional(),
+        phone_country_id: numberIsID().nullable().optional(),
+        phone_number: stringNotBlank().nullable().optional(),
+        event_price_id: numberIsID(),
+        payment_channel_id: numberIsID(),
+        discount_code: stringNotBlank().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      let currentRole = opts.ctx.user.role.name;
+      let selectedUserId = opts.ctx.user.id;
+      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+        if (opts.input.user_id) {
+          selectedUserId = opts.input.user_id;
+        }
+      }
+
+      const selectedEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+        include: {
+          event: true,
+        },
+        where: { id: opts.input.event_price_id },
+      });
+      if (!selectedEventPrice) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The event price with the given ID is not found.",
+        });
+      }
+
+      const { transactionId, invoiceUrl } = await createTransaction(
+        opts.ctx.prisma,
+        selectedUserId,
+        CategoryEnum.EVENT,
+        {
+          id: selectedEventPrice.id,
+          name: `${selectedEventPrice.event.name} (${selectedEventPrice.name})`,
+          amount: selectedEventPrice.amount,
+        },
+        opts.input.payment_channel_id,
+        opts.input.discount_code
+      );
+
+      if (opts.input.phone_country_id && opts.input.phone_number) {
+        await changePhoneNumber(
+          opts.ctx.prisma,
+          selectedUserId,
+          opts.input.phone_country_id,
+          opts.input.phone_number
+        );
+      }
+
+      return {
+        status: 200,
+        message: "Success",
+        transaction_id: transactionId,
+        invoice_url: invoiceUrl,
+      };
+    }),
+
   playlist: loggedInProcedure
     .input(
       z.object({

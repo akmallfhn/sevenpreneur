@@ -62,6 +62,11 @@ interface TransactionStatusDetailsSVPProps {
   cohortImage: string | undefined;
   cohortSlug: string | undefined;
   cohortPriceName: string | undefined;
+  eventId: number | undefined;
+  eventName: string | undefined;
+  eventImage: string | undefined;
+  eventSlug: string | undefined;
+  eventPriceName: string | undefined;
   paymentChannelName: string | undefined;
   paymentChannelImage: string | undefined;
   userName: string;
@@ -90,6 +95,11 @@ export default function TransactionStatusDetailsSVP({
   cohortImage,
   cohortSlug,
   cohortPriceName,
+  eventId,
+  eventName,
+  eventImage,
+  eventSlug,
+  eventPriceName,
   paymentChannelName,
   paymentChannelImage,
   userName,
@@ -109,8 +119,9 @@ export default function TransactionStatusDetailsSVP({
   const isFailed = transactionStatus === "FAILED";
   const isCohort = productCategory === "COHORT";
   const isPlaylist = productCategory === "PLAYLIST";
+  const isEvent = productCategory === "EVENT";
 
-  // --- Refresh data without full page reload
+  // Refresh data without full page reload
   const handleRefresh = () => {
     setLoadingRefresh(true);
     router.refresh();
@@ -119,11 +130,11 @@ export default function TransactionStatusDetailsSVP({
     }, 600);
   };
 
-  // --- Set Max Payment Deadline
+  // Set Max Payment Deadline
   const paymentDeadline = dayjs(createTransactionAt).add(12, "hour");
   const countdown = useCountdownHours(paymentDeadline);
 
-  // --- Cancel Payment on Xendit
+  // Cancel Payment on Xendit
   const handleCancelation = async () => {
     if (!transactionId) {
       toast.error("The transaction could not be found");
@@ -146,6 +157,44 @@ export default function TransactionStatusDetailsSVP({
       setLoadingCancelation(false);
     }
   };
+
+  // Product Conditional Rendering
+  let productImage =
+    "https://www.jport.co/Editor/image/4721055615600659_empty.png";
+  if (isCohort && cohortImage) {
+    productImage = cohortImage;
+  } else if (isEvent && eventImage) {
+    productImage = eventImage;
+  } else if (isPlaylist && playlistImage) {
+    productImage = playlistImage;
+  }
+
+  let productName = "-";
+  if (isCohort && cohortName) {
+    productName = cohortName;
+  } else if (isEvent && eventName) {
+    productName = eventName;
+  } else if (isPlaylist && playlistName) {
+    productName = playlistName;
+  }
+
+  let productTier = "-";
+  if (isCohort && cohortPriceName) {
+    productTier = cohortPriceName;
+  } else if (isEvent && eventPriceName) {
+    productTier = eventPriceName;
+  } else if (isPlaylist && playlistTotalVideo) {
+    productTier = `Learning Series - ${playlistTotalVideo} episodes`;
+  }
+
+  let productPage = "/";
+  if (isCohort && cohortSlug && cohortId) {
+    productPage = `/cohorts/${cohortSlug}/${cohortId}/checkout`;
+  } else if (isEvent && eventSlug && eventId) {
+    productPage = `/events/${eventSlug}/${eventId}/checkout`;
+  } else if (isPlaylist && playlistSlug && playlistId) {
+    productPage = `/playlist/${playlistSlug}/${playlistId}/checkout`;
+  }
 
   return (
     <React.Fragment>
@@ -268,32 +317,22 @@ export default function TransactionStatusDetailsSVP({
           </div>
         </div>
         <div className="flex flex-col gap-1 lg:flex-2 lg:gap-3">
-          {/* Program Metadata */}
-          <div className="program-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
-            <div className="program-image aspect-square size-16 rounded-md overflow-hidden">
+          {/* Product Metadata */}
+          <div className="product-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
+            <div className="product-image aspect-square size-16 rounded-md overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
-                src={
-                  productCategory === "PLAYLIST"
-                    ? playlistImage ||
-                      "https://www.jport.co/Editor/image/4721055615600659_empty.png"
-                    : cohortImage ||
-                      "https://www.jport.co/Editor/image/4721055615600659_empty.png"
-                }
+                src={productImage}
                 alt="Product Image"
                 height={400}
                 width={400}
               />
             </div>
             <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
-              <p className="program-name font-bold line-clamp-2">
-                {productCategory === "COHORT" ? cohortName : playlistName}
+              <p className="product-name font-bold line-clamp-2">
+                {productName}
               </p>
-              <p className="program-price-tier text-sm line-clamp-1">
-                {productCategory === "COHORT"
-                  ? cohortPriceName
-                  : `${playlistTotalVideo} video course episodes`}
-              </p>
+              <p className="product-tier text-sm line-clamp-1">{productTier}</p>
             </div>
           </div>
           {/* Transaction Metadata */}
@@ -387,13 +426,7 @@ export default function TransactionStatusDetailsSVP({
               </>
             )}
             {isFailed && (
-              <Link
-                href={
-                  productCategory === "COHORT"
-                    ? `/cohorts/${cohortSlug}/${cohortId}`
-                    : `/playlists/${playlistSlug}/${playlistId}`
-                }
-              >
+              <Link href={productPage}>
                 <AppButton
                   size="defaultRounded"
                   className="w-full lg:w-[240px]"
