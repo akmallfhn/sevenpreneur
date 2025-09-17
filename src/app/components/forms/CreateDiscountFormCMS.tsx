@@ -7,10 +7,10 @@ import { setSessionToken, trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
-import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import dayjs from "dayjs";
-import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 import { Switch } from "@/components/ui/switch";
+import { ProductCategory, StatusType } from "@/lib/app-types";
 
 interface CreateDiscountFormCMSProps {
   sessionToken: string;
@@ -37,7 +37,7 @@ export default function CreateDiscountFormCMS({
     discountRate: string;
     discountStartDate: string;
     discountEndDate: string;
-    discountStatus: StatusVariant;
+    discountStatus: StatusType;
     productCategory: ProductCategory | null;
     productItem: number;
   }>({

@@ -8,9 +8,7 @@ import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import InputCMS from "@/app/components/fields/InputCMS";
 import SelectCMS from "@/app/components/fields/SelectCMS";
-import StatusLabelCMS, {
-  StatusVariant,
-} from "@/app/components/labels/StatusLabelCMS";
+import StatusLabelCMS from "@/app/components/labels/StatusLabelCMS";
 import TextAreaCMS from "@/app/components/fields/TextAreaCMS";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
@@ -30,6 +28,7 @@ import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
+import { StatusType } from "@/lib/app-types";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -356,9 +355,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                         )
                       }
                     />
-                    <StatusLabelCMS
-                      variants={formData.status as StatusVariant}
-                    />
+                    <StatusLabelCMS variants={formData.status as StatusType} />
                   </div>
                 </div>
               </div>

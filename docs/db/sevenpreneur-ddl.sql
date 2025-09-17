@@ -281,6 +281,12 @@ CREATE TABLE users_cohorts (
   PRIMARY KEY (user_id, cohort_id)
 );
 
+CREATE TABLE users_events (
+  user_id    UUID     NOT NULL,
+  event_id  INTEGER  NOT NULL,
+  PRIMARY KEY (user_id, event_id)
+);
+
 CREATE TABLE users_playlists (
   user_id      UUID     NOT NULL,
   playlist_id  INTEGER  NOT NULL,

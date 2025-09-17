@@ -1,13 +1,13 @@
 "use client";
+import { StatusType } from "@/lib/app-types";
 import PackageItemBlueprintProgramSVP from "../items/PackageItemBlueprintProgramSVP";
 import PackageLabelBlueprintProgramSVP from "../labels/PackageLabelBlueprintProgramSVP";
-import { StatusVariant } from "../labels/StatusLabelCMS";
 
 export type PackageItem = {
   id: number;
   name: string;
   amount: number;
-  status: StatusVariant;
+  status: StatusType;
 };
 
 interface PackagePlanBlueprintProgramSVPProps {

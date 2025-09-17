@@ -1,9 +1,8 @@
 "use client";
-
-export type StatusVariant = "ACTIVE" | "INACTIVE";
+import { StatusType } from "@/lib/app-types";
 
 const variantStyles: Record<
-  StatusVariant,
+  StatusType,
   {
     backgroundColor: string;
     labelColor: string;
@@ -27,7 +26,7 @@ const variantStyles: Record<
 
 interface StatusLabelCMSProps {
   labelName?: string;
-  variants: StatusVariant;
+  variants: StatusType;
 }
 
 export default function StatusLabelCMS({

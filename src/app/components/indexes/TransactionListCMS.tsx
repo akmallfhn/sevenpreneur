@@ -54,7 +54,7 @@ export default function TransactionListCMS({
   // Beginning State
   const [filterData, setFilterData] = useState<{
     productId: number | string;
-    productType: "PLAYLIST" | "COHORT" | "";
+    productType: "PLAYLIST" | "COHORT" | "EVENT" | "";
   }>({
     productId: "",
     productType: "",

@@ -12,11 +12,11 @@ import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
-import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
 import { encodeSHA256 } from "@/lib/encode";
+import { ProductCategory } from "@/lib/app-types";
 
 export type PaymentMethodItem = {
   id: number;
