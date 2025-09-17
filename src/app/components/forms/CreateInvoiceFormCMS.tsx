@@ -8,11 +8,11 @@ import AppSheet from "../modals/AppSheet";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
-import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { DiscountType } from "./CheckoutPlaylistFormSVP";
 import MultipleSelectUser from "../fields/SelectWithSearchCMS";
+import { ProductCategory } from "@/lib/app-types";
 
 interface CreateInvoiceFormCMSProps {
   sessionToken: string;

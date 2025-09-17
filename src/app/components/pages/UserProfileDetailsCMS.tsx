@@ -7,7 +7,7 @@ import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
 import AppButton from "../buttons/AppButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -27,6 +27,7 @@ import {
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
+import { StatusType } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -228,8 +229,7 @@ export default function UserProfileDetailsCMS({
                   <StatusLabelCMS
                     labelName={userDetailData?.user.status ?? "INACTIVE"}
                     variants={
-                      (userDetailData?.user.status ??
-                        "INACTIVE") as StatusVariant
+                      (userDetailData?.user.status ?? "INACTIVE") as StatusType
                     }
                   />
                 </div>

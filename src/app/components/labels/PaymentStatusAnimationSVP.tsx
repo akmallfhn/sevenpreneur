@@ -1,6 +1,6 @@
 "use client";
+import { TransactionStatus } from "@/lib/app-types";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { TransactionStatus } from "../items/TransactionCardItemSVP";
 
 const variantStyles: Record<
   TransactionStatus,

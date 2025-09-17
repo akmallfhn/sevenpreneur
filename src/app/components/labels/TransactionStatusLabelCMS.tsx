@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode } from "react";
-import { TransactionStatus } from "../items/TransactionCardItemSVP";
 import { Check, ClockFading, X } from "lucide-react";
+import { TransactionStatus } from "@/lib/app-types";
 
 const variantStyles: Record<
   TransactionStatus,

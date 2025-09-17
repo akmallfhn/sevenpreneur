@@ -21,7 +21,7 @@ import TableCellCMS from "../elements/TableCellCMS";
 import Image from "next/image";
 import RolesLabelCMS, { RolesVariant } from "../labels/RolesLabelCMS";
 import { toCamelCase } from "@/lib/camel-case";
-import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 import dayjs from "dayjs";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
@@ -30,6 +30,7 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import InputCMS from "../fields/InputCMS";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppNumberPagination from "../navigations/AppNumberPagination";
+import { StatusType } from "@/lib/app-types";
 
 interface UserListCMSProps {
   sessionToken: string;
@@ -247,7 +248,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                   <TableCellCMS>
                     <StatusLabelCMS
                       labelName={post.status}
-                      variants={post.status as StatusVariant}
+                      variants={post.status as StatusType}
                     />
                   </TableCellCMS>
 

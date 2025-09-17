@@ -7,7 +7,6 @@ import AppButton from "../buttons/AppButton";
 import { ChevronDown, Loader2, RefreshCcw, Timer } from "lucide-react";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import PaymentStatusAnimationSVP from "../labels/PaymentStatusAnimationSVP";
-import { TransactionStatus } from "../items/TransactionCardItemSVP";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { useCountdownHours } from "@/lib/countdown-hours";
@@ -16,7 +15,7 @@ import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { useTheme } from "next-themes";
 import { toSnakeCase } from "@/lib/snake-case";
-import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
+import { ProductCategory, TransactionStatus } from "@/lib/app-types";
 
 const variantStyles: Record<
   TransactionStatus,

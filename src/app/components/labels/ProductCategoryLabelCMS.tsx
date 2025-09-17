@@ -6,8 +6,7 @@ import {
   faPersonChalkboard,
   faPlay,
 } from "@fortawesome/free-solid-svg-icons";
-
-export type ProductCategory = "COHORT" | "PLAYLIST" | "AI";
+import { ProductCategory } from "@/lib/app-types";
 
 const variantStyles: Record<
   ProductCategory,
@@ -35,6 +34,12 @@ const variantStyles: Record<
     labelColor: "text-[#0A4F2D]",
     labelIcon: <FontAwesomeIcon icon={faPenNib} className="size-3" />,
     labelName: "AI",
+  },
+  EVENT: {
+    backgroundColor: "bg-[#ECFDF3]",
+    labelColor: "text-[#0A4F2D]",
+    labelIcon: <FontAwesomeIcon icon={faPenNib} className="size-3" />,
+    labelName: "EVENT",
   },
 };
 

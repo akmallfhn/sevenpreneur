@@ -22,11 +22,12 @@ import EditCohortFormCMS from "../forms/EditCohortFormCMS";
 import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
-import StatusLabelCMS, { StatusVariant } from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { notFound } from "next/navigation";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
+import { StatusType } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 
@@ -126,7 +127,7 @@ export default function CohortDetailsCMS({
                 <div className="absolute top-4 left-4 z-20">
                   <StatusLabelCMS
                     labelName={cohortDetailsData?.cohort.status || ""}
-                    variants={cohortDetailsData?.cohort.status as StatusVariant}
+                    variants={cohortDetailsData?.cohort.status as StatusType}
                   />
                 </div>
                 {/* Button Edit */}

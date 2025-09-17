@@ -5,8 +5,9 @@ import { Loader2, X } from "lucide-react";
 import { CheckDiscountCohort, CheckDiscountPlaylist } from "@/lib/actions";
 import { toast } from "sonner";
 import { DiscountType } from "../forms/CheckoutPlaylistFormSVP";
-import { ProductCategory } from "../labels/ProductCategoryLabelCMS";
+
 import InputSVP from "../fields/InputSVP";
+import { ProductCategory } from "@/lib/app-types";
 
 interface ApplyDiscountModalSVPProps {
   playlistId?: number;
