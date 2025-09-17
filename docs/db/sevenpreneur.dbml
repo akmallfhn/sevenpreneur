@@ -22,6 +22,7 @@ enum category_enum {
   cohort
   playlist
   ai
+  event
 }
 
 // Enumeration for the transactions table (t_*)
@@ -127,6 +128,30 @@ Table cohort_prices {
   created_at  timestamptz
 }
 
+Table events {
+  id            integer      [primary key, ref: <> users.id]
+  name          varchar
+  description   varchar
+  image         varchar
+  status        status_enum
+  slug_url      varchar
+  start_date    timestamptz
+  end_date      timestamptz
+  published_at  timestamptz
+  updated_at    timestamptz
+  deleted_at    timestamptz
+  deleted_by    uuid         [ref: > users.id]
+}
+
+Table event_prices {
+  id          integer         [primary key]
+  event_id  integer         [ref: > events.id]
+  name        varchar
+  amount      decimal(12,2)
+  status      status_enum
+  created_at  timestamptz
+}
+
 Table modules {
   id            integer      [primary key]
   cohort_id     integer      [ref: > cohorts.id]
@@ -220,7 +245,7 @@ Table discounts {
   name          varchar
   code          varchar
   category      category_enum
-  item_id       integer        [note: 'item's ID based on category']
+  item_id       integer        [note: 'items ID based on category']
   calc_percent  decimal(6,4)
   status        status_enum
   start_date    timestamptz
@@ -233,7 +258,7 @@ Table transactions {
   id               char(21)       [primary key, note: 'default nanoid()']
   user_id          uuid           [ref: > users.id]
   category         category_enum
-  item_id          integer        [note: 'item's ID based on category']
+  item_id          integer        [note: 'items ID based on category']
   amount           decimal(12,2)
   discount_id      integer
   discount_amount  decimal(12,2)

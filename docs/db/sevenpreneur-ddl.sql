@@ -18,7 +18,8 @@ CREATE TYPE learning_method_enum AS ENUM (
 CREATE TYPE category_enum AS ENUM (
   'cohort',
   'playlist',
-  'ai'
+  'ai',
+  'event'
 );
 
 -- Enumeration for the transactions table (t_*)
@@ -212,6 +213,30 @@ CREATE TABLE videos (
   external_video_id  VARCHAR   NOT NULL
 );
 
+CREATE TABLE events (
+  id            SERIAL       PRIMARY KEY,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR      NOT NULL,
+  image         VARCHAR      NOT NULL,
+  status        status_enum  NOT NULL,
+  slug_url      VARCHAR      NOT NULL  UNIQUE,
+  start_date    TIMESTAMPTZ  NOT NULL,
+  end_date      TIMESTAMPTZ  NOT NULL,
+  published_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  deleted_at    TIMESTAMPTZ      NULL,
+  deleted_by    UUID             NULL
+);
+
+CREATE TABLE event_prices (
+  id          SERIAL          PRIMARY KEY,
+  event_id   INTEGER         NOT NULL,
+  name        VARCHAR         NOT NULL,
+  amount      DECIMAL(12, 2)  NOT NULL,
+  status      status_enum     NOT NULL,
+  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE discounts (
   id            SERIAL         PRIMARY KEY,
   name          VARCHAR        NOT NULL,
@@ -287,6 +312,9 @@ ALTER TABLE cohorts
 ALTER TABLE cohort_prices
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
 
+ALTER TABLE event_prices
+  ADD FOREIGN KEY (event_id) REFERENCES events(id);
+
 ALTER TABLE modules
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
 
@@ -354,6 +382,11 @@ CREATE TRIGGER update_users_updated_at_trigger
 
 CREATE TRIGGER update_cohorts_updated_at_trigger
   BEFORE UPDATE ON cohorts
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_cohorts_updated_at_trigger
+  BEFORE UPDATE ON events
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
