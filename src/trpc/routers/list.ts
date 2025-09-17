@@ -56,13 +56,17 @@ function calculatePage(
 async function fetchItems(
   prisma: PrismaClient,
   list: { category: CategoryEnum; item_id: number }[],
-  useCohortPrice: boolean
+  useCohortPrice: boolean,
+  useEventPrice: boolean
 ) {
   const cohortIdList: Set<number> = new Set();
+  const eventIdList: Set<number> = new Set();
   const playlistIdList: Set<number> = new Set();
   list.forEach((entry) => {
     if (entry.category === CategoryEnum.COHORT) {
       cohortIdList.add(entry.item_id);
+    } else if (entry.category === CategoryEnum.EVENT) {
+      eventIdList.add(entry.item_id);
     } else if (entry.category === CategoryEnum.PLAYLIST) {
       playlistIdList.add(entry.item_id);
     }
@@ -89,6 +93,25 @@ async function fetchItems(
     cohortPriceMap = new Map(cohortPriceList.map((entry) => [entry.id, entry]));
   }
 
+  type Event = Prisma.EventGetPayload<{}>;
+  let eventMap: Map<number, Event> | undefined;
+  if (!useEventPrice) {
+    const eventList = await prisma.event.findMany({
+      where: { id: { in: Array.from(eventIdList) } },
+    });
+    eventMap = new Map(eventList.map((entry) => [entry.id, entry]));
+  }
+
+  type EventPrice = Prisma.EventPriceGetPayload<{ include: { event: true } }>;
+  let eventPriceMap: Map<number, EventPrice> | undefined;
+  if (useEventPrice) {
+    const eventPriceList = await prisma.eventPrice.findMany({
+      include: { event: true },
+      where: { id: { in: Array.from(eventIdList) } },
+    });
+    eventPriceMap = new Map(eventPriceList.map((entry) => [entry.id, entry]));
+  }
+
   const playlistList = await prisma.playlist.findMany({
     where: { id: { in: Array.from(playlistIdList) } },
   });
@@ -109,7 +132,7 @@ async function fetchItems(
     })
   );
 
-  return { cohortMap, cohortPriceMap, playlistMap };
+  return { cohortMap, cohortPriceMap, eventMap, eventPriceMap, playlistMap };
 }
 
 type CohortBadge = {
@@ -120,6 +143,17 @@ type CohortBadge = {
 };
 
 type CohortBadgeWithPrice = CohortBadge & {
+  priceName: string | undefined;
+};
+
+type EventBadge = {
+  id: number | undefined;
+  name: string | undefined;
+  image: string | undefined;
+  slugUrl: string | undefined;
+};
+
+type EventBadgeWithPrice = EventBadge & {
   priceName: string | undefined;
 };
 
@@ -849,10 +883,11 @@ export const listRouter = createTRPCRouter({
         take: paging.prisma.take,
       });
 
-      const { cohortMap, playlistMap } = await fetchItems(
+      const { cohortMap, playlistMap, eventMap } = await fetchItems(
         opts.ctx.prisma,
         discountList,
-        false // uses cohort ID
+        false, // uses cohort ID
+        false
       );
 
       const returnedList = discountList.map((entry) => {
@@ -919,6 +954,7 @@ export const listRouter = createTRPCRouter({
         user_id: stringIsUUID().optional(),
         cohort_id: numberIsID().optional(),
         playlist_id: numberIsID().optional(),
+        event_id: numberIsID().optional(),
         start_date: z.string().date().optional(),
         end_date: z.string().date().optional(),
         page: numberIsPositive().optional(),
@@ -945,10 +981,16 @@ export const listRouter = createTRPCRouter({
         created_at: {},
       };
 
-      if (opts.input.cohort_id && opts.input.playlist_id) {
+      const providedFilters = [
+        opts.input.cohort_id,
+        opts.input.playlist_id,
+        opts.input.event_id,
+      ].filter(Boolean);
+
+      if (providedFilters.length > 1) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Provide either cohort_id only or playlist_id only.",
+          message: "Provide only one of cohort_id, playlist_id, or event_id.",
         });
       }
 
@@ -956,6 +998,12 @@ export const listRouter = createTRPCRouter({
         Object.assign(whereClause, {
           category: CategoryEnum.COHORT,
           item_id: opts.input.cohort_id,
+        });
+      }
+      if (opts.input.event_id) {
+        Object.assign(whereClause, {
+          category: CategoryEnum.EVENT,
+          item_id: opts.input.event_id,
         });
       }
       if (opts.input.playlist_id) {
@@ -995,10 +1043,11 @@ export const listRouter = createTRPCRouter({
         take: paging.prisma.take,
       });
 
-      const { cohortPriceMap, playlistMap } = await fetchItems(
+      const { cohortPriceMap, playlistMap, eventPriceMap } = await fetchItems(
         opts.ctx.prisma,
         transactionsList,
-        true // uses cohort price ID
+        true, // uses cohort price ID
+        true
       );
 
       let checkoutPrefix = "https://checkout.xendit.co/web/";
@@ -1022,6 +1071,20 @@ export const listRouter = createTRPCRouter({
               image: selectedCohortPrice.cohort.image,
               slugUrl: selectedCohortPrice.cohort.slug_url,
               priceName: selectedCohortPrice.name,
+            };
+          }
+        }
+
+        let eventBadge: EventBadgeWithPrice | undefined;
+        if (entry.category === CategoryEnum.EVENT) {
+          const selectedEventPrice = eventPriceMap!.get(entry.item_id);
+          if (selectedEventPrice) {
+            eventBadge = {
+              id: selectedEventPrice.event.id,
+              name: selectedEventPrice.event.name,
+              image: selectedEventPrice.event.image,
+              slugUrl: selectedEventPrice.event.slug_url,
+              priceName: selectedEventPrice.name,
             };
           }
         }
@@ -1059,6 +1122,11 @@ export const listRouter = createTRPCRouter({
           cohort_image: cohortBadge?.image,
           cohort_slug: cohortBadge?.slugUrl,
           cohort_price_name: cohortBadge?.priceName,
+          event_id: eventBadge?.id,
+          event_name: eventBadge?.name,
+          event_image: eventBadge?.image,
+          event_slug: eventBadge?.slugUrl,
+          event_price_name: eventBadge?.priceName,
           playlist_id: playlistBadge?.id,
           playlist_name: playlistBadge?.name,
           playlist_image: playlistBadge?.image,

@@ -33,7 +33,7 @@ export async function DeleteSession() {
   return { status: 401, message: "Logout failed" };
 }
 
-// MAKE PAYMENT AT XENDIT
+// MAKE PAYMENT COHORT AT XENDIT
 interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
   paymentChannelId: number;
@@ -67,25 +67,37 @@ export async function MakePaymentCohortXendit({
   };
 }
 
-// CANCEL PAYMENT AT XENDIT
-interface CancelPaymentXenditProps {
-  transactionId: string;
+// MAKE PAYMENT EVENT AT XENDIT
+interface MakePaymentEventXenditProps {
+  eventPriceId: number;
+  paymentChannelId: number;
+  phoneNumber?: string | null | undefined;
+  discountCode?: string | undefined;
 }
-export async function CancelPaymentXendit({
-  transactionId,
-}: CancelPaymentXenditProps) {
+export async function MakePaymentEventXenditProps({
+  eventPriceId,
+  paymentChannelId,
+  phoneNumber,
+  discountCode,
+}: MakePaymentEventXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
     return { status: 401, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
-  const cancelResponse = await trpc.purchase.cancel({
-    id: transactionId,
+  const paymentResponse = await trpc.purchase.event({
+    event_price_id: eventPriceId,
+    payment_channel_id: paymentChannelId,
+    phone_country_id: 1,
+    phone_number: phoneNumber,
+    discount_code: discountCode,
   });
   return {
-    status: cancelResponse.status,
-    message: cancelResponse.message,
+    status: paymentResponse.status,
+    message: paymentResponse.message,
+    invoice_url: paymentResponse.invoice_url,
+    transaction_id: paymentResponse.transaction_id,
   };
 }
 
@@ -190,5 +202,27 @@ export async function CheckDiscountCohort({
     status: checkDiscount.status,
     message: checkDiscount.message,
     data: discountData,
+  };
+}
+
+// CANCEL PAYMENT AT XENDIT
+interface CancelPaymentXenditProps {
+  transactionId: string;
+}
+export async function CancelPaymentXendit({
+  transactionId,
+}: CancelPaymentXenditProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+  const cancelResponse = await trpc.purchase.cancel({
+    id: transactionId,
+  });
+  return {
+    status: cancelResponse.status,
+    message: cancelResponse.message,
   };
 }

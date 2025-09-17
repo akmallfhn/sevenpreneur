@@ -111,6 +111,26 @@ export async function POST(req: NextRequest) {
       } catch (e) {
         // The row might already exists.
       }
+    } else if (theTransaction.category === CategoryEnum.EVENT) {
+      const theEventPrice = await prisma.eventPrice.findFirst({
+        where: { id: theTransaction.item_id },
+      });
+      if (!theEventPrice) {
+        console.error("xendit.webhook: The selected event price is not found.");
+        return new NextResponse("The selected event price is not found.", {
+          status: 404,
+        });
+      }
+      try {
+        await prisma.userEvent.create({
+          data: {
+            user_id: theTransaction.user_id,
+            event_id: theEventPrice.event_id,
+          },
+        });
+      } catch (e) {
+        // The row might already exists.
+      }
     } else if (theTransaction.category === CategoryEnum.PLAYLIST) {
       const thePlaylist = await prisma.playlist.findFirst({
         where: { id: theTransaction.item_id },

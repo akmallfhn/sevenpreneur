@@ -39,7 +39,7 @@ const variantStyles: Record<
     backgroundColor: "bg-[#ECFDF3]",
     labelColor: "text-[#0A4F2D]",
     labelIcon: <FontAwesomeIcon icon={faPenNib} className="size-3" />,
-    labelName: "EVENT",
+    labelName: "Event",
   },
 };
 

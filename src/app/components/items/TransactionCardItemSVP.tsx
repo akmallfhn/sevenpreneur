@@ -45,6 +45,11 @@ interface TransactionCardItemSVPProps {
   cohortName: string | undefined;
   cohortSlug: string | undefined;
   cohortPriceName: string | undefined;
+  eventId: number | undefined;
+  eventName: string | undefined;
+  eventImage: string | undefined;
+  eventSlug: string | undefined;
+  eventPriceName: string | undefined;
   totalTransactionAmount: number;
   invoiceURL: string | undefined;
 }
@@ -64,6 +69,11 @@ export default function TransactionCardItemSVP({
   cohortName,
   cohortSlug,
   cohortPriceName,
+  eventId,
+  eventName,
+  eventImage,
+  eventSlug,
+  eventPriceName,
   totalTransactionAmount,
   invoiceURL,
 }: TransactionCardItemSVPProps) {
@@ -71,6 +81,47 @@ export default function TransactionCardItemSVP({
   const isPaid = transactionStatus === "PAID";
   const isPending = transactionStatus === "PENDING";
   const isFailed = transactionStatus === "FAILED";
+  const isCohort = productCategory === "COHORT";
+  const isPlaylist = productCategory === "PLAYLIST";
+  const isEvent = productCategory === "EVENT";
+
+  // Product Conditional Rendering
+  let productImage =
+    "https://www.jport.co/Editor/image/4721055615600659_empty.png";
+  if (isCohort && cohortImage) {
+    productImage = cohortImage;
+  } else if (isEvent && eventImage) {
+    productImage = eventImage;
+  } else if (isPlaylist && playlistImage) {
+    productImage = playlistImage;
+  }
+
+  let productName = "-";
+  if (isCohort && cohortName) {
+    productName = cohortName;
+  } else if (isEvent && eventName) {
+    productName = eventName;
+  } else if (isPlaylist && playlistName) {
+    productName = playlistName;
+  }
+
+  let productTier = "-";
+  if (isCohort && cohortPriceName) {
+    productTier = cohortPriceName;
+  } else if (isEvent && eventPriceName) {
+    productTier = eventPriceName;
+  } else if (isPlaylist && playlistTotalVideo) {
+    productTier = `Learning Series - ${playlistTotalVideo} episodes`;
+  }
+
+  let productPage = "/";
+  if (isCohort && cohortSlug && cohortId) {
+    productPage = `/cohorts/${cohortSlug}/${cohortId}/checkout`;
+  } else if (isEvent && eventSlug && eventId) {
+    productPage = `/events/${eventSlug}/${eventId}/checkout`;
+  } else if (isPlaylist && playlistSlug && playlistId) {
+    productPage = `/playlist/${playlistSlug}/${playlistId}/checkout`;
+  }
 
   return (
     <div className="transaction-item flex flex-col p-4 gap-3 bg-white rounded-md shadow-md dark:bg-surface-black">
@@ -89,33 +140,21 @@ export default function TransactionCardItemSVP({
       {/* Metadata */}
       <Link
         href={`/transactions/${transactionId}`}
-        className="transaction-metadata flex gap-3 items-center"
+        className="product-metadata flex gap-3 items-center"
       >
-        <div className="transaction-image aspect-square size-16 rounded-md overflow-hidden">
+        <div className="product-image aspect-square size-16 rounded-md overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={
-              productCategory === "COHORT"
-                ? cohortImage ||
-                  "https://www.jport.co/Editor/image/4721055615600659_empty.png"
-                : playlistImage ||
-                  "https://www.jport.co/Editor/image/4721055615600659_empty.png"
-            }
+            src={productImage}
             alt="Product Image"
             height={400}
             width={400}
           />
         </div>
         <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
-          <p className="transaction-name font-bold line-clamp-2">
-            {productCategory === "COHORT"
-              ? cohortName || "-"
-              : playlistName || "-"}
-          </p>
-          <p className="transaction-price-tier text-sm line-clamp-1 dark:text-alternative">
-            {productCategory === "COHORT"
-              ? cohortPriceName
-              : `${playlistTotalVideo} video course episodes`}
+          <p className="product-name font-bold line-clamp-2">{productName}</p>
+          <p className="product-tier text-sm line-clamp-1 dark:text-alternative">
+            {productTier}
           </p>
         </div>
       </Link>
@@ -141,13 +180,7 @@ export default function TransactionCardItemSVP({
           </a>
         )}
         {isFailed && (
-          <Link
-            href={
-              productCategory === "COHORT"
-                ? `/cohorts/${cohortSlug}/${cohortId}`
-                : `/playlists/${playlistSlug}/${playlistId}`
-            }
-          >
+          <Link href={productPage}>
             <AppButton
               className="w-[120px]"
               variant="primary"
