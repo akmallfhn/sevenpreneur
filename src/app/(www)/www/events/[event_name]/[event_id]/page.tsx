@@ -1,7 +1,6 @@
 import EventDetailsSVP from "@/app/components/pages/EventDetailsSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
-import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
 
 interface EventDetailsPageProps {
@@ -100,6 +99,8 @@ export default async function EventDetailsPage({
   // Sanitize Data from not supported format
   const eventData = {
     ...eventDataRaw,
+    start_date: eventDataRaw.start_date.toISOString(),
+    end_date: eventDataRaw.end_date.toISOString(),
     event_prices: eventDataRaw.event_prices.map((price) => ({
       ...price,
       amount: Number(price.amount),
@@ -118,6 +119,8 @@ export default async function EventDetailsPage({
       eventName={eventData.name}
       eventDescription={eventData.description}
       eventImage={eventData.image}
+      eventStartDate={eventData.start_date}
+      eventEndDate={eventData.end_date}
       eventSlug={eventData.slug_url}
       eventPrice={eventData.event_prices}
     />
