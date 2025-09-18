@@ -139,7 +139,7 @@ export default function HeaderNavbarSVP({
                 />
                 <HeaderNavbarItemSVP
                   menuTitle="Event"
-                  menuUrl="/events/restart-conference"
+                  menuUrl="/events/sevenpreneur-business-network/1"
                   // activeUrls={["/cohorts", "/playlists", "/events"]}
                 />
                 <HeaderNavbarItemSVP menuTitle="About Us" menuUrl="/company" />
