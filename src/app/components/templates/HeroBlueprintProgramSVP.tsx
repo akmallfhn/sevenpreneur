@@ -130,7 +130,7 @@ export default function HeroBlueprintProgramSVP({
                   metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
-                  <p className="text-base lg:text-lg">Konsultasi Gratis</p>
+                  <p className="text-base lg:text-lg">Bantuan Registrasi</p>
                 </AppButton>
               </div>
               <div className="hidden lg:flex">
@@ -153,7 +153,7 @@ export default function HeroBlueprintProgramSVP({
                   metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
-                  <p className="text-base lg:text-lg">Konsultasi Gratis</p>
+                  <p className="text-base lg:text-lg">Bantuan Registrasi</p>
                 </AppButton>
               </div>
             </a>

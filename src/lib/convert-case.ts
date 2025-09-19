@@ -14,3 +14,12 @@ export function toCamelCase(input: string): string {
     .toLowerCase()
     .replace(/ (.)/g, (_, char) => char.toUpperCase()); // kapitalisasi kata ke-2 dst
 }
+
+export function toPascalCase(input: string): string {
+  return input
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2") // pisahkan camelCase → camel Case
+    .replace(/[_\-\s]+/g, " ") // ubah underscore/dash/spasi jadi spasi tunggal
+    .toLowerCase()
+    .replace(/(^\w|\s\w)/g, (match) => match.toUpperCase()) // kapitalisasi setiap kata
+    .replace(/\s+/g, ""); // hapus spasi → gabungkan jadi PascalCase
+}

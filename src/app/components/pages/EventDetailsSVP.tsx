@@ -192,6 +192,7 @@ export default function EventDetailsSVP({
           >
             <AppButton
               size="defaultRounded"
+              // GTM
               featureName="add_to_cart_event"
               featureId={String(eventId)}
               featureProductCategory="EVENT"
@@ -199,6 +200,14 @@ export default function EventDetailsSVP({
               featureProductAmount={eventPrice[0].amount}
               featurePagePoint="Product Detail Page"
               featurePlacement="floating-panel-mobile"
+              // Meta Pixel
+              metaEventName="AddToCart"
+              metaContentIds={[String(eventId)]}
+              metaContentType="event"
+              metaContentName={`${eventName} - ${eventPrice[0].name}`}
+              metaContentCategory="Business Event"
+              metaCurrency="IDR"
+              metaValue={eventPrice[0].amount}
             >
               <ShieldCheck className="size-5" />
               Pay & Get Access

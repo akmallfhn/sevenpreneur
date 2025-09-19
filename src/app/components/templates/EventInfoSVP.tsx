@@ -80,6 +80,7 @@ export default function EventInfoSVP({
             <AppButton
               size="defaultRounded"
               className="w-full"
+              // GTM
               featureName="add_to_cart_event"
               featureId={String(eventId)}
               featureProductCategory="EVENT"
@@ -87,6 +88,14 @@ export default function EventInfoSVP({
               featureProductAmount={eventPrice[0].id}
               featurePagePoint="Product Detail Page"
               featurePlacement="aside-panel-desktop"
+              // Meta Pixel
+              metaEventName="AddToCart"
+              metaContentIds={[String(eventId)]}
+              metaContentType="event"
+              metaContentName={`${eventName} - ${eventPrice[0].name}`}
+              metaContentCategory="Business Event"
+              metaCurrency="IDR"
+              metaValue={eventPrice[0].amount}
             >
               Pay & Get Access
             </AppButton>
