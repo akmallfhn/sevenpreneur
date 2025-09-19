@@ -10,7 +10,6 @@ import { toast } from "sonner";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import { DiscountType } from "./CheckoutPlaylistFormSVP";
-import MultipleSelectUser from "../fields/SelectWithSearchCMS";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
 
@@ -28,6 +27,7 @@ export default function CreateInvoiceFormCMS({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createInvoicePlaylist = trpc.purchase.playlist.useMutation();
   const createInvoiceCohort = trpc.purchase.cohort.useMutation();
+  const createInvoiceEvent = trpc.purchase.event.useMutation();
   const [itemOptions, setItemOptions] = useState<
     { label: string; value: number; price: number }[]
   >([]);
@@ -75,9 +75,9 @@ export default function CreateInvoiceFormCMS({
 
   // Fetch tRPC for Product Item
   const {
-    data: playlistData,
-    isLoading: isLoadingPlaylistData,
-    isError: isErrorPlaylistData,
+    data: playlistsData,
+    isLoading: isLoadingPlaylistsData,
+    isError: isErrorPlaylistsData,
   } = trpc.list.playlists.useQuery(
     {},
     {
@@ -85,15 +85,25 @@ export default function CreateInvoiceFormCMS({
     }
   );
   const {
-    data: cohortData,
-    isLoading: isLoadingCohortData,
-    isError: isErrorCohortData,
+    data: cohortsData,
+    isLoading: isLoadingCohortsData,
+    isError: isErrorCohortsData,
   } = trpc.list.cohorts.useQuery(
     {},
     { enabled: formData.invoiceProductCategory === "COHORT" && !!sessionToken }
   );
-  const isLoadingProduct = isLoadingCohortData || isLoadingPlaylistData;
-  const isErrorProduct = isErrorCohortData || isErrorPlaylistData;
+  const {
+    data: eventsData,
+    isLoading: isLoadingEventsData,
+    isError: isErrorEventsData,
+  } = trpc.list.events.useQuery(
+    {},
+    { enabled: formData.invoiceProductCategory === "EVENT" && !!sessionToken }
+  );
+  const isLoadingProduct =
+    isLoadingCohortsData || isLoadingPlaylistsData || isLoadingEventsData;
+  const isErrorProduct =
+    isErrorCohortsData || isErrorPlaylistsData || isLoadingEventsData;
 
   // Fetch tRPC for Checking Discount
   const checkDiscountQuery = trpc.purchase.checkDiscount.useQuery(
@@ -118,7 +128,7 @@ export default function CreateInvoiceFormCMS({
   useEffect(() => {
     if (formData.invoiceProductCategory === "PLAYLIST") {
       setItemOptions(
-        playlistData?.list.map((post: any) => ({
+        playlistsData?.list.map((post: any) => ({
           label: post.name,
           value: post.id,
           price: post.price,
@@ -126,7 +136,17 @@ export default function CreateInvoiceFormCMS({
       );
     } else if (formData.invoiceProductCategory === "COHORT") {
       setItemOptions(
-        cohortData?.list.flatMap((post: any) =>
+        cohortsData?.list.flatMap((post: any) =>
+          post.prices.map((price: any) => ({
+            label: `${price.name} - ${post.name}`,
+            value: price.id,
+            price: price.amount,
+          }))
+        ) || []
+      );
+    } else if (formData.invoiceProductCategory === "EVENT") {
+      setItemOptions(
+        eventsData?.list.flatMap((post: any) =>
           post.prices.map((price: any) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
@@ -135,7 +155,7 @@ export default function CreateInvoiceFormCMS({
         ) || []
       );
     }
-  }, [formData.invoiceProductCategory, playlistData, cohortData]);
+  }, [formData.invoiceProductCategory, playlistsData, cohortsData, eventsData]);
 
   // Get product data based on selected product id / ticket id
   const chosenProduct = useMemo(() => {
@@ -312,7 +332,7 @@ export default function CreateInvoiceFormCMS({
       },
     };
 
-    // -- POST to Database
+    // POST to Database
     try {
       if (formData.invoiceProductCategory === "PLAYLIST") {
         createInvoicePlaylist.mutate(
@@ -340,6 +360,25 @@ export default function CreateInvoiceFormCMS({
             user_id: formData.invoiceUserId,
             payment_channel_id: Number(formData.paymentChannelId),
             cohort_price_id: Number(formData.invoiceProductItem),
+
+            // Optional fields:
+            phone_country_id: 1,
+            phone_number: formData.invoiceUserPhone.trim()
+              ? formData.invoiceUserPhone
+              : null,
+            discount_code: formData.paymentDiscount?.trim()
+              ? formData.paymentDiscount
+              : undefined,
+          },
+          onMutationResult
+        );
+      } else if (formData.invoiceProductCategory === "EVENT") {
+        createInvoiceEvent.mutate(
+          {
+            // Mandatory fields:
+            user_id: formData.invoiceUserId,
+            payment_channel_id: Number(formData.paymentChannelId),
+            event_price_id: Number(formData.invoiceProductItem),
 
             // Optional fields:
             phone_country_id: 1,
@@ -425,6 +464,10 @@ export default function CreateInvoiceFormCMS({
                     {
                       label: "Playlist",
                       value: "PLAYLIST",
+                    },
+                    {
+                      label: "Event",
+                      value: "EVENT",
                     },
                   ]}
                 />

@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 import {
+  faFlag,
   faPenNib,
   faPersonChalkboard,
   faPlay,
@@ -38,7 +39,7 @@ const variantStyles: Record<
   EVENT: {
     backgroundColor: "bg-[#ECFDF3]",
     labelColor: "text-[#0A4F2D]",
-    labelIcon: <FontAwesomeIcon icon={faPenNib} className="size-3" />,
+    labelIcon: <FontAwesomeIcon icon={faFlag} className="size-3" />,
     labelName: "Event",
   },
 };

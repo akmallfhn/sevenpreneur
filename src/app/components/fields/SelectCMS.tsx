@@ -131,9 +131,9 @@ export default function SelectCMS({
         {isOpen && !disabled && (
           <div className="absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden">
             <ul className="flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
-              {options.map((opt) => (
+              {options.map((opt, index) => (
                 <div
-                  key={opt.value}
+                  key={index}
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange?.(opt.value);

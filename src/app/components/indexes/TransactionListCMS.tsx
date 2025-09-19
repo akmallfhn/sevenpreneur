@@ -78,10 +78,16 @@ export default function TransactionListCMS({
   const playlists = playlistsData?.list;
   const {
     data: cohortsData,
-    isLoading: isLoadingCohortData,
+    isLoading: isLoadingCohortsData,
     isError: isErrorCohortsData,
   } = trpc.list.cohorts.useQuery({}, { enabled: !!sessionToken });
   const cohortList = cohortsData?.list;
+  const {
+    data: eventsData,
+    isLoading: isLoadingEventsData,
+    isError: isErrorEventsData,
+  } = trpc.list.events.useQuery({}, { enabled: !!sessionToken });
+  const eventList = eventsData?.list;
 
   // Join Product Options
   const productOptions = useMemo(() => {
@@ -93,13 +99,20 @@ export default function TransactionListCMS({
           type: "COHORT",
         }))
       ) || []),
+      ...(eventList?.flatMap((post) =>
+        post.prices.map((price: any) => ({
+          value: price.id,
+          label: `Event - ${post.name} ${price.name}`,
+          type: "EVENT",
+        }))
+      ) || []),
       ...(playlists?.map((post) => ({
         value: post.id,
         label: `Playlist - ${post.name}`,
         type: "PLAYLIST",
       })) || []),
     ];
-  }, [playlists, cohortList]);
+  }, [playlists, cohortList, eventList]);
 
   // Handle Product Type
   useEffect(() => {
@@ -109,7 +122,7 @@ export default function TransactionListCMS({
     if (selectedOption) {
       setFilterData((prev) => ({
         ...prev,
-        productType: selectedOption.type as "PLAYLIST" | "COHORT",
+        productType: selectedOption.type as ProductCategory,
       }));
     }
   }, [filterData.productId, productOptions]);
@@ -169,6 +182,10 @@ export default function TransactionListCMS({
           : undefined,
       cohort_id:
         filterData.productType === "COHORT"
+          ? Number(filterData.productId)
+          : undefined,
+      event_id:
+        filterData.productType === "EVENT"
           ? Number(filterData.productId)
           : undefined,
     },
@@ -258,7 +275,7 @@ export default function TransactionListCMS({
           >
             <div
               className={`flex flex-col w-96 gap-3 ${
-                isSelectOpen ? "h-[264px]" : ""
+                isSelectOpen ? "h-[321px]" : ""
               }`}
             >
               <p className="font-bold font-bodycopy text-sm pl-1">
@@ -272,6 +289,9 @@ export default function TransactionListCMS({
                 onChange={(value) => {
                   handleInputChange("productId")(value);
                   setIsOpenFilter(false);
+                  const params = new URLSearchParams(searchParam.toString());
+                  params.set("page", "1");
+                  router.push(`?${params.toString()}`);
                 }}
                 options={productOptions}
                 onOpenChange={(open) => setIsSelectOpen(open)}
@@ -289,11 +309,9 @@ export default function TransactionListCMS({
               </p>
               <FilterLabelCMS
                 filterName={
-                  `Product: ${
-                    productOptions.find(
-                      (post) => post.value === filterData.productId
-                    )?.label
-                  }` || ""
+                  productOptions.find(
+                    (post) => post.value === filterData.productId
+                  )?.label || ""
                 }
                 removeFilter={() =>
                   setFilterData({
