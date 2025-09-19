@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
+getRupiahCurrency;
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -17,6 +17,7 @@ import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
 import { encodeSHA256 } from "@/lib/encode";
 import { ProductCategory } from "@/lib/app-types";
+import { getRupiahCurrency } from "@/lib/currency";
 
 export type PaymentMethodItem = {
   id: number;
@@ -370,32 +371,36 @@ export default function CheckoutPlaylistFormSVP({
               />
               <ReceiptLineItemSVP
                 receiptName="Learning Series Price"
-                receiptValue={rupiahCurrency(programPrice)}
+                receiptValue={getRupiahCurrency(programPrice)}
               />
               {discount?.calc_percent && (
                 <ReceiptLineItemSVP
                   receiptName={`Discount (${discount.calc_percent}%)`}
-                  receiptValue={`- ${rupiahCurrency(programPrice - subtotal)}`}
+                  receiptValue={`- ${getRupiahCurrency(
+                    programPrice - subtotal
+                  )}`}
                   isDiscount
                 />
               )}
               <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
               <ReceiptLineItemSVP
                 receiptName="Subtotal"
-                receiptValue={rupiahCurrency(subtotal)}
+                receiptValue={getRupiahCurrency(subtotal)}
               />
               <ReceiptLineItemSVP
                 receiptName="Admin Fee"
-                receiptValue={rupiahCurrency(paymentCalculation.adminFee)}
+                receiptValue={getRupiahCurrency(paymentCalculation.adminFee)}
               />
               <ReceiptLineItemSVP
                 receiptName="VAT"
-                receiptValue={rupiahCurrency(paymentCalculation.valueAddedTax)}
+                receiptValue={getRupiahCurrency(
+                  paymentCalculation.valueAddedTax
+                )}
               />
               <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
               <ReceiptLineItemSVP
                 receiptName="Total Amount"
-                receiptValue={rupiahCurrency(paymentCalculation.totalAmount)}
+                receiptValue={getRupiahCurrency(paymentCalculation.totalAmount)}
                 isGrandTotal
               />
             </div>
@@ -436,7 +441,7 @@ export default function CheckoutPlaylistFormSVP({
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">
-              {rupiahCurrency(paymentCalculation.totalAmount)}
+              {getRupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
           <AppButton

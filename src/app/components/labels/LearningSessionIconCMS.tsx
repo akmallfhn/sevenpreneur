@@ -1,11 +1,10 @@
 "use client";
+import { SessionMethod } from "@/lib/app-types";
 import { GalleryHorizontalEnd, MapPinned, Video } from "lucide-react";
 import { ReactNode } from "react";
 
-export type LearningSessionVariant = "ONLINE" | "ONSITE" | "HYBRID";
-
 const variantStyles: Record<
-  LearningSessionVariant,
+  SessionMethod,
   {
     iconColor: string;
     iconLabel: ReactNode;
@@ -26,7 +25,7 @@ const variantStyles: Record<
 };
 
 interface LearningSessionIconLabelCMSProps {
-  variants: LearningSessionVariant;
+  variants: SessionMethod;
 }
 
 export default function LearningSessionIconCMS({

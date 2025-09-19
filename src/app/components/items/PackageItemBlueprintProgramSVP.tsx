@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { toSnakeCase } from "@/lib/snake-case";
+import { toSnakeCase } from "@/lib/convert-case";
 import { FeatureTrackingProps } from "@/lib/feature-tracking";
 
 interface PackageItemBlueprintProgramSVPProps extends FeatureTrackingProps {

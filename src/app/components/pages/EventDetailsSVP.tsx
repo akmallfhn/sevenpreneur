@@ -5,11 +5,11 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
 import { ChevronDown, ChevronUp, LockKeyhole, ShieldCheck } from "lucide-react";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import EventInfoSVP from "../templates/EventInfoSVP";
+import { getRupiahCurrency } from "@/lib/currency";
 
 dayjs.extend(localizedFormat);
 
@@ -183,7 +183,9 @@ export default function EventDetailsSVP({
         <div className="flex  items-center justify-between">
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
-            <p className="font-bold">{rupiahCurrency(eventPrice[0].amount)}</p>
+            <p className="font-bold">
+              {getRupiahCurrency(eventPrice[0].amount)}
+            </p>
           </div>
           <Link
             href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}

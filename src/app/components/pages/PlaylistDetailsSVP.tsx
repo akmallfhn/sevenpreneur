@@ -20,10 +20,9 @@ import VideoCoursePlaylistSVP, {
 import HeroVideoCourseSVP, {
   EducatorItem,
 } from "../templates/HeroVideoCourseSVP";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { toSnakeCase } from "@/lib/snake-case";
+import { getRupiahCurrency } from "@/lib/currency";
 
 dayjs.extend(localizedFormat);
 
@@ -202,7 +201,7 @@ export default function PlaylistDetailsSVP({
         <div className="flex  items-center justify-between">
           <div className="flex flex-col font-ui">
             <p className="text-sm">Total Amount</p>
-            <p className="font-bold">{rupiahCurrency(playlistPrice)}</p>
+            <p className="font-bold">{getRupiahCurrency(playlistPrice)}</p>
           </div>
           <Link href={`/playlists/${playlistSlug}/${playlistId}/checkout`}>
             <AppButton

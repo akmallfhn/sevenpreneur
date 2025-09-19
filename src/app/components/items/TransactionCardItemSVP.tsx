@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import Link from "next/link";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import { ProductCategory, TransactionStatus } from "@/lib/app-types";
+import { getRupiahCurrency } from "@/lib/currency";
 
 const variantStyles: Record<
   TransactionStatus,
@@ -163,7 +163,7 @@ export default function TransactionCardItemSVP({
         <div className="flex flex-col font-ui text-sm">
           <p>Total Amount</p>
           <p className="font-bold">
-            {rupiahCurrency(Math.round(totalTransactionAmount))}
+            {getRupiahCurrency(Math.round(totalTransactionAmount))}
           </p>
         </div>
         {isPending && (

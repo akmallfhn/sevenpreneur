@@ -9,10 +9,10 @@ import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { DiscountType } from "./CheckoutPlaylistFormSVP";
 import MultipleSelectUser from "../fields/SelectWithSearchCMS";
 import { ProductCategory } from "@/lib/app-types";
+import { getRupiahCurrency } from "@/lib/currency";
 
 interface CreateInvoiceFormCMSProps {
   sessionToken: string;
@@ -525,12 +525,12 @@ export default function CreateInvoiceFormCMS({
                   </h5>
                   <ReceiptLineItemCMS
                     receiptName="Price"
-                    receiptValue={rupiahCurrency(Math.round(programPrice))}
+                    receiptValue={getRupiahCurrency(Math.round(programPrice))}
                   />
                   {discount && (
                     <ReceiptLineItemCMS
                       receiptName="Discount"
-                      receiptValue={`-${rupiahCurrency(
+                      receiptValue={`-${getRupiahCurrency(
                         Math.round(Number(programPrice - subtotal))
                       )}`}
                       isDiscount
@@ -538,20 +538,20 @@ export default function CreateInvoiceFormCMS({
                   )}
                   <ReceiptLineItemCMS
                     receiptName="Admin Fee"
-                    receiptValue={rupiahCurrency(
+                    receiptValue={getRupiahCurrency(
                       Math.round(paymentCalculation.adminFee)
                     )}
                   />
                   <ReceiptLineItemCMS
                     receiptName="Value Added Tax"
-                    receiptValue={rupiahCurrency(
+                    receiptValue={getRupiahCurrency(
                       Math.round(paymentCalculation.valueAddedTax)
                     )}
                   />
                   <hr className="border-t border-outline" />
                   <ReceiptLineItemCMS
                     receiptName="Total Amount"
-                    receiptValue={rupiahCurrency(
+                    receiptValue={getRupiahCurrency(
                       Math.round(paymentCalculation.totalAmount)
                     )}
                     isGrandTotal

@@ -3,7 +3,7 @@ import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { Star, Volume2, VolumeOff } from "lucide-react";
-import { toSnakeCase } from "@/lib/snake-case";
+import { toSnakeCase } from "@/lib/convert-case";
 import { useRef, useState } from "react";
 
 export type EducatorItem = {

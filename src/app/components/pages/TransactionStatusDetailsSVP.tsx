@@ -2,20 +2,19 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import AppButton from "../buttons/AppButton";
 import { ChevronDown, Loader2, RefreshCcw, Timer } from "lucide-react";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import PaymentStatusAnimationSVP from "../labels/PaymentStatusAnimationSVP";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import { useCountdownHours } from "@/lib/countdown-hours";
 import { CancelPaymentXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { useTheme } from "next-themes";
-import { toSnakeCase } from "@/lib/snake-case";
 import { ProductCategory, TransactionStatus } from "@/lib/app-types";
+import { useCountdownHours } from "@/lib/date-time-manipulation";
+import { getRupiahCurrency } from "@/lib/currency";
 
 const variantStyles: Record<
   TransactionStatus,
@@ -276,12 +275,12 @@ export default function TransactionStatusDetailsSVP({
               <div className="amount-details flex flex-col gap-2">
                 <ReceiptLineItemSVP
                   receiptName="Program Price"
-                  receiptValue={rupiahCurrency(productPrice)}
+                  receiptValue={getRupiahCurrency(productPrice)}
                 />
                 {productDiscount !== 0 && (
                   <ReceiptLineItemSVP
                     receiptName="Discount"
-                    receiptValue={`-${rupiahCurrency(
+                    receiptValue={`-${getRupiahCurrency(
                       Math.round(productDiscount)
                     )}`}
                     isDiscount
@@ -289,11 +288,11 @@ export default function TransactionStatusDetailsSVP({
                 )}
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
-                  receiptValue={rupiahCurrency(Math.round(productAdminFee))}
+                  receiptValue={getRupiahCurrency(Math.round(productAdminFee))}
                 />
                 <ReceiptLineItemSVP
                   receiptName="VAT"
-                  receiptValue={rupiahCurrency(Math.round(productVAT))}
+                  receiptValue={getRupiahCurrency(Math.round(productVAT))}
                 />
                 <hr className="border-t border-outline border-dashed dark:border-outline-dark" />
               </div>
@@ -305,7 +304,7 @@ export default function TransactionStatusDetailsSVP({
               <div className="amount flex flex-col font-ui text-sm">
                 <p>Total Amount</p>
                 <p className="font-bold">
-                  {rupiahCurrency(Math.round(productTotalAmount))}
+                  {getRupiahCurrency(Math.round(productTotalAmount))}
                 </p>
               </div>
               <ChevronDown

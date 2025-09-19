@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
 import TableCellCMS from "../elements/TableCellCMS";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
+import { getRupiahCurrency } from "@/lib/currency";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
 import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
@@ -209,7 +209,7 @@ export default function TransactionListCMS({
             scorecardName="Total Revenue"
             scorecardValue={
               transactionsData?.metapaging.total_revenue
-                ? rupiahCurrency(
+                ? getRupiahCurrency(
                     Number(transactionsData?.metapaging.total_revenue)
                   )
                 : 0
@@ -339,7 +339,7 @@ export default function TransactionListCMS({
                       <ProductCategoryLabelCMS variants={post.category} />
                     </TableCellCMS>
                     <TableCellCMS>
-                      {rupiahCurrency(Math.round(Number(post.net_amount)))}
+                      {getRupiahCurrency(Math.round(Number(post.net_amount)))}
                     </TableCellCMS>
                     <TableCellCMS>
                       <TransactionStatusLabelCMS variants={post.status} />

@@ -20,7 +20,6 @@ import TableHeadCMS from "../elements/TableHeadCMS";
 import TableCellCMS from "../elements/TableCellCMS";
 import Image from "next/image";
 import RolesLabelCMS, { RolesVariant } from "../labels/RolesLabelCMS";
-import { toCamelCase } from "@/lib/camel-case";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import dayjs from "dayjs";
 import AppDropdown from "../elements/AppDropdown";
@@ -31,6 +30,7 @@ import InputCMS from "../fields/InputCMS";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import { StatusType } from "@/lib/app-types";
+import { toCamelCase } from "@/lib/convert-case";
 
 interface UserListCMSProps {
   sessionToken: string;

@@ -3,12 +3,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { MakePaymentCohortXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
-import RadioBoxPriceTierSVP from "../fields/RadioBoxProgramTierSVP";
+import RadioBoxPriceTierSVP from "../fields/RadioBoxPriceTierSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
@@ -18,6 +17,7 @@ import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
 import { DiscountType, PaymentMethodItem } from "./CheckoutPlaylistFormSVP";
 import { encodeSHA256 } from "@/lib/encode";
+import { getRupiahCurrency } from "@/lib/currency";
 
 interface PriceItem {
   id: number;
@@ -452,12 +452,12 @@ export default function CheckoutCohortFormSVP({
                 />
                 <ReceiptLineItemSVP
                   receiptName="Program Price"
-                  receiptValue={rupiahCurrency(programPrice)}
+                  receiptValue={getRupiahCurrency(programPrice)}
                 />
                 {discount?.calc_percent && (
                   <ReceiptLineItemSVP
                     receiptName={`Discount (${discount.calc_percent}%)`}
-                    receiptValue={`- ${rupiahCurrency(
+                    receiptValue={`- ${getRupiahCurrency(
                       Math.round(programPrice - subtotal)
                     )}`}
                     isDiscount
@@ -466,22 +466,24 @@ export default function CheckoutCohortFormSVP({
                 <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
                 <ReceiptLineItemSVP
                   receiptName="Subtotal"
-                  receiptValue={rupiahCurrency(subtotal)}
+                  receiptValue={getRupiahCurrency(subtotal)}
                 />
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
-                  receiptValue={rupiahCurrency(paymentCalculation.adminFee)}
+                  receiptValue={getRupiahCurrency(paymentCalculation.adminFee)}
                 />
                 <ReceiptLineItemSVP
                   receiptName="VAT"
-                  receiptValue={rupiahCurrency(
+                  receiptValue={getRupiahCurrency(
                     paymentCalculation.valueAddedTax
                   )}
                 />
                 <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
                 <ReceiptLineItemSVP
                   receiptName="Total Amount"
-                  receiptValue={rupiahCurrency(paymentCalculation.totalAmount)}
+                  receiptValue={getRupiahCurrency(
+                    paymentCalculation.totalAmount
+                  )}
                 />
               </div>
             </div>
@@ -524,7 +526,7 @@ export default function CheckoutCohortFormSVP({
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">
-              {rupiahCurrency(paymentCalculation.totalAmount)}
+              {getRupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
           <AppButton

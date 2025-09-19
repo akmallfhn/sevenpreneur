@@ -1,10 +1,10 @@
 "use client";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
+import { getRupiahCurrency } from "@/lib/currency";
 import { CalendarFold, LockKeyhole, MapPin, Wine } from "lucide-react";
 import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 import { EventPrice } from "../pages/EventDetailsSVP";
-import { formatEventDateTime } from "@/lib/event-date-time";
+import { getDateTimeRange } from "@/lib/date-time-manipulation";
 
 interface EventInfoSVP {
   eventId: number;
@@ -23,7 +23,7 @@ export default function EventInfoSVP({
   eventPrice,
   eventSlug,
 }: EventInfoSVP) {
-  const { dateString, timeString } = formatEventDateTime({
+  const { dateString, timeString } = getDateTimeRange({
     startDate: eventStartDate,
     endDate: eventEndDate,
   });
@@ -69,7 +69,7 @@ export default function EventInfoSVP({
       <div className="add-to-cart hidden flex-col gap-3 lg:flex">
         <div className="price-info flex flex-col font-bodycopy">
           <h3 className="font-bold text-black text-xl dark:text-white">
-            {rupiahCurrency(eventPrice[0].amount)}
+            {getRupiahCurrency(eventPrice[0].amount)}
           </h3>
         </div>
         <div className="flex flex-col items-center gap-3 font-bodycopy">

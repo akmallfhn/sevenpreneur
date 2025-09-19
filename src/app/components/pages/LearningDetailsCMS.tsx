@@ -21,7 +21,6 @@ import { getMeetingPlatformVariantFromURL } from "@/lib/meeting-platform-variant
 import MaterialListCMS from "../indexes/MaterialListCMS";
 import UserBadgeCMS from "../buttons/UserBadgeCMS";
 import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
-import { LearningSessionVariant } from "../labels/LearningSessionIconCMS";
 import LocationItemCMS from "../items/LocationItemCMS";
 import MeetingPlatformItemCMS, {
   MeetingPlatformVariant,
@@ -29,6 +28,7 @@ import MeetingPlatformItemCMS, {
 import EditLearningFormCMS from "../forms/EditLearningFormCMS";
 import UpdateVideoRecordingFormCMS from "../forms/UpdateVideoRecordingForm";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
+import { SessionMethod } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 
@@ -111,8 +111,7 @@ export default function LearningDetailsCMS({
                   <LearningMethodLabelCMS
                     labelName={learningDetailsData?.learning.method || ""}
                     variants={
-                      learningDetailsData?.learning
-                        .method as LearningSessionVariant
+                      learningDetailsData?.learning.method as SessionMethod
                     }
                   />
                 </div>

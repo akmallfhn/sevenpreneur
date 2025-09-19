@@ -2,7 +2,6 @@
 import { Copy, Loader2 } from "lucide-react";
 import AppSheet from "./AppSheet";
 import { trpc } from "@/trpc/client";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import Image from "next/image";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
@@ -17,6 +16,7 @@ import { useState } from "react";
 import { CancelPaymentXendit } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import AppAlertConfirmDialog from "./AppAlertConfirmDialog";
+import { getRupiahCurrency } from "@/lib/currency";
 
 interface TransactionDetailsCMSProps {
   transactionId: string | null;
@@ -202,14 +202,14 @@ export default function TransactionDetailsCMS({
             <h5 className="font-bodycopy font-bold text-sm">Payment Details</h5>
             <ReceiptLineItemCMS
               receiptName="Price"
-              receiptValue={rupiahCurrency(
+              receiptValue={getRupiahCurrency(
                 Math.round(Number(transactionDetails?.product_price))
               )}
             />
             {transactionDetails?.product_discount !== "0" && (
               <ReceiptLineItemCMS
                 receiptName="Discount"
-                receiptValue={`-${rupiahCurrency(
+                receiptValue={`-${getRupiahCurrency(
                   Math.round(Number(transactionDetails?.product_discount))
                 )}`}
                 isDiscount
@@ -217,20 +217,20 @@ export default function TransactionDetailsCMS({
             )}
             <ReceiptLineItemCMS
               receiptName="Admin Fee"
-              receiptValue={rupiahCurrency(
+              receiptValue={getRupiahCurrency(
                 Math.round(Number(transactionDetails?.product_admin_fee))
               )}
             />
             <ReceiptLineItemCMS
               receiptName="Value Added Tax"
-              receiptValue={rupiahCurrency(
+              receiptValue={getRupiahCurrency(
                 Math.round(Number(transactionDetails?.product_vat))
               )}
             />
             <hr className="border-t border-outline" />
             <ReceiptLineItemCMS
               receiptName="Total Amount"
-              receiptValue={rupiahCurrency(
+              receiptValue={getRupiahCurrency(
                 Math.round(Number(transactionDetails?.product_total_amount))
               )}
               isGrandTotal

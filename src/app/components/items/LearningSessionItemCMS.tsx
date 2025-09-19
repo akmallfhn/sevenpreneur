@@ -5,16 +5,15 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import { ChevronRight, EllipsisVertical, Trash2, Video } from "lucide-react";
+import { EllipsisVertical, Trash2, Video } from "lucide-react";
 import AppButton from "../buttons/AppButton";
-import LearningSessionIconCMS, {
-  LearningSessionVariant,
-} from "../labels/LearningSessionIconCMS";
+import LearningSessionIconCMS from "../labels/LearningSessionIconCMS";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
+import { SessionMethod } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 
@@ -96,9 +95,7 @@ export default function LearningSessionItemCMS({
           href={`/cohorts/${cohortId}/learnings/${sessionLearningId}`}
           className="flex w-[calc(87%)] gap-3 items-center"
         >
-          <LearningSessionIconCMS
-            variants={sessionMethod as LearningSessionVariant}
-          />
+          <LearningSessionIconCMS variants={sessionMethod as SessionMethod} />
           <div className="attribute-data flex flex-col gap-2.5">
             <div className="flex flex-col gap-0.5">
               <h3 className="session-name font-bodycopy font-bold line-clamp-1 ">

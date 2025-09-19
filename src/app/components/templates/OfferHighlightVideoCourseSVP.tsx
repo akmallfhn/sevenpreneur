@@ -8,10 +8,9 @@ import {
 } from "lucide-react";
 import SectionTitleSVP from "../titles/SectionTitleSVP";
 import AppButton from "../buttons/AppButton";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
+import { getRupiahCurrency } from "@/lib/currency";
 import Link from "next/link";
-import { toSnakeCase } from "@/lib/snake-case";
-import { getRoundedHourFromSeconds } from "@/lib/rounded-hour-from-second";
+import { getRoundedHourFromSeconds } from "@/lib/date-time-manipulation";
 
 interface OfferHighlightVideoCourseSVPProps {
   playlistId: number;
@@ -78,11 +77,11 @@ export default function OfferHighlightVideoCourseSVP({
       <div className="hidden flex-col gap-3 lg:flex">
         <div className="price-information flex flex-col font-ui">
           <p className="text-alternative font-medium text-sm">
-            <s>{rupiahCurrency(basePrice)}</s>
+            <s>{getRupiahCurrency(basePrice)}</s>
           </p>
           <div className="flex items-center gap-1">
             <h3 className="font-bold text-black text-2xl dark:text-white">
-              {rupiahCurrency(discountPrice)}
+              {getRupiahCurrency(discountPrice)}
             </h3>
             <p className="bg-secondary w-fit font-bold text-white text-[10px] px-1.5 py-0.5 rounded-sm lg:text-xs">
               {discountRate}% OFF

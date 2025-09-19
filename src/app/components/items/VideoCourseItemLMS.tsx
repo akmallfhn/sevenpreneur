@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import { durationFromSeconds } from "@/lib/duration-from-seconds";
 import { Loader2 } from "lucide-react";
+import { getDurationFromSeconds } from "@/lib/date-time-manipulation";
 
 interface VideoCourseItemLMSProps {
   index: number;
@@ -34,7 +34,7 @@ export default function VideoCourseItemLMS({
           height={500}
         />
         <p className="absolute bottom-1 right-1 p-1 bg-black/60 text-white text-[10px] font-ui rounded-sm z-20">
-          {durationFromSeconds(videoDuration)}
+          {getDurationFromSeconds(videoDuration)}
         </p>
         {isLoading && (
           <>

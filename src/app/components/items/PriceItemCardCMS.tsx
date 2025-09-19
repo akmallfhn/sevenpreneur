@@ -1,5 +1,6 @@
 "use client";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
+
+import { getRupiahCurrency } from "@/lib/currency";
 import Image from "next/image";
 
 interface PriceItemCardCMSProps {
@@ -38,7 +39,7 @@ export default function PriceItemCardCMS({
       </div>
       <div className="price-amount flex w-full h-1/4 z-10">
         <p className="px-5 font-bodycopy text-sm font-semibold text-cms-primary line-clamp-2">
-          {rupiahCurrency(priceAmount)}
+          {getRupiahCurrency(priceAmount)}
         </p>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
-import { LearningSessionVariant } from "../labels/LearningSessionIconCMS";
+import { SessionMethod } from "@/lib/app-types";
 
 interface EditLearningFormCMSProps {
   sessionToken: string;
@@ -53,7 +53,7 @@ export default function EditLearningFormCMS({
       ? dayjs(initialData.meeting_date).format("YYYY-MM-DDTHH:mm")
       : "",
     learningMethod: initialData.method
-      ? (initialData.method as LearningSessionVariant)
+      ? (initialData.method as SessionMethod)
       : "",
     learningURL: initialData.meeting_url ? initialData.meeting_url : "",
     learningLocation: initialData.location_name
@@ -190,7 +190,7 @@ export default function EditLearningFormCMS({
           status: "ACTIVE",
           description: formData.learningDescription.trim(),
           meeting_date: new Date(formData.learningDate).toISOString(),
-          method: formData.learningMethod as LearningSessionVariant,
+          method: formData.learningMethod as SessionMethod,
 
           // Optional fields:
           meeting_url: formData.learningURL.trim()

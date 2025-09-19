@@ -1,8 +1,8 @@
 "use client";
-import { LearningSessionVariant } from "./LearningSessionIconCMS";
+import { SessionMethod } from "@/lib/app-types";
 
 const variantStyles: Record<
-  LearningSessionVariant,
+  SessionMethod,
   {
     themeColor: string;
   }
@@ -20,7 +20,7 @@ const variantStyles: Record<
 
 interface LearningMethodCMSProps {
   labelName: string;
-  variants: LearningSessionVariant;
+  variants: SessionMethod;
 }
 
 export default function LearningMethodLabelCMS({

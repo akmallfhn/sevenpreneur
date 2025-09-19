@@ -23,7 +23,6 @@ import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import { rupiahCurrency } from "@/lib/rupiah-currency";
 import { notFound } from "next/navigation";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";

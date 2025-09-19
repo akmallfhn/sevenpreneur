@@ -1,4 +1,4 @@
-export function rupiahCurrency(value: number): string {
+export function getRupiahCurrency(value: number): string {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
