@@ -48,6 +48,7 @@ export default function TransactionListCMS({
   const router = useRouter();
   const pageSize = 20;
   const searchParam = useSearchParams();
+  const params = new URLSearchParams(searchParam.toString());
   const selectedId = searchParam.get("id");
   const pageParam = searchParam.get("page");
   const currentPage = Number(pageParam) || 1;
@@ -94,22 +95,25 @@ export default function TransactionListCMS({
     return [
       ...(cohortList?.flatMap((post) =>
         post.prices.map((price: any) => ({
-          value: price.id,
+          value: `COHORT-${price.id}`,
           label: `Cohort - ${post.name} ${price.name}`,
           type: "COHORT",
+          raw_id: price.id,
         }))
       ) || []),
       ...(eventList?.flatMap((post) =>
         post.prices.map((price: any) => ({
-          value: price.id,
+          value: `EVENT-${price.id}`,
           label: `Event - ${post.name} ${price.name}`,
           type: "EVENT",
+          raw_id: price.id,
         }))
       ) || []),
       ...(playlists?.map((post) => ({
-        value: post.id,
+        value: `PLAYLIST-${post.id}`,
         label: `Playlist - ${post.name}`,
         type: "PLAYLIST",
+        raw_id: post.id,
       })) || []),
     ];
   }, [playlists, cohortList, eventList]);
@@ -153,7 +157,8 @@ export default function TransactionListCMS({
 
   // Push Parameter to URL
   const viewTransactionDetails = (transactionId: string) => {
-    router.push(`/transactions?id=${transactionId}`, { scroll: false });
+    params.set("id", transactionId);
+    router.push(`/transactions?${params.toString()}`, { scroll: false });
   };
 
   // Open modal when has id
@@ -164,7 +169,8 @@ export default function TransactionListCMS({
   // Close modal when close
   const handleClose = () => {
     setIsOpenDetails(false);
-    router.push("/transactions", { scroll: false });
+    params.delete("id");
+    router.push(`/transactions?${params.toString()}`, { scroll: false });
   };
 
   // Fetch tRPC Transaction List
@@ -178,15 +184,24 @@ export default function TransactionListCMS({
       page_size: pageSize,
       playlist_id:
         filterData.productType === "PLAYLIST"
-          ? Number(filterData.productId)
+          ? Number(
+              productOptions.find((opt) => opt.value === filterData.productId)
+                ?.raw_id
+            )
           : undefined,
       cohort_id:
         filterData.productType === "COHORT"
-          ? Number(filterData.productId)
+          ? Number(
+              productOptions.find((opt) => opt.value === filterData.productId)
+                ?.raw_id
+            )
           : undefined,
       event_id:
         filterData.productType === "EVENT"
-          ? Number(filterData.productId)
+          ? Number(
+              productOptions.find((opt) => opt.value === filterData.productId)
+                ?.raw_id
+            )
           : undefined,
     },
     { enabled: !!sessionToken }
@@ -289,7 +304,6 @@ export default function TransactionListCMS({
                 onChange={(value) => {
                   handleInputChange("productId")(value);
                   setIsOpenFilter(false);
-                  const params = new URLSearchParams(searchParam.toString());
                   params.set("page", "1");
                   router.push(`?${params.toString()}`);
                 }}

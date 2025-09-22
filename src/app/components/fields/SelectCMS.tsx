@@ -3,11 +3,11 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 
-export type OptionType = {
+export interface OptionType {
   label: string;
   value: any;
   image?: string;
-};
+}
 
 interface SelectCMSProps {
   selectId: string;
@@ -91,14 +91,14 @@ export default function SelectCMS({
           if (!disabled) setIsOpen((prev) => !prev);
         }}
       >
-        {/* Icon Select */}
+        {/* Icon */}
         {selectIcon && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-alternative">
             {selectIcon}
           </div>
         )}
 
-        {/* -- Selected Value or Placeholder */}
+        {/* Selected Value or Placeholder */}
         <div className="flex items-center gap-2 truncate">
           {selectedOption?.image && (
             <div className="flex aspect-square size-5 rounded-full overflow-hidden">
