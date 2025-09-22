@@ -26,8 +26,8 @@ export default function BlueprintProgramSVP({
     <div className="root relative items-center">
       <HeroBlueprintProgramSVP cohortId={cohortId} />
       <OverviewBlueprintProgramSVP />
-      {/* <BatchScheduleBlueprintProgramSVP /> */}
       <OfferHighlightBlueprintProgramSVP />
+      <BatchScheduleBlueprintProgramSVP />
       <CuriculumSessionsBlueprintProgramSVP />
       <PackagePlansBlueprintProgramSVP
         cohortId={cohortId}
