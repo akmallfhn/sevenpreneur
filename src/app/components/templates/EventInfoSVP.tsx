@@ -28,7 +28,7 @@ export default function EventInfoSVP({
     endDate: eventEndDate,
   });
   return (
-    <div className="container-info flex flex-col gap-3 bg-white  rounded-md dark:bg-surface-black lg:border lg:border-outline lg:p-5 lg:sticky lg:top-24 lg:dark:border-outline-dark">
+    <div className="container-info flex flex-col gap-3 bg-white  rounded-md dark:bg-coal-black lg:dark:bg-surface-black lg:border lg:border-outline lg:p-5 lg:sticky lg:top-24 lg:dark:border-outline-dark">
       <h1 className="event-title font-brand font-bold text-2xl leading-tight">
         {eventName}
       </h1>

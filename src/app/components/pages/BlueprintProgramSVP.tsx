@@ -1,4 +1,5 @@
 "use client";
+import BatchScheduleBlueprintProgramSVP from "../templates/BatchScheduleBlueprintProgramSVP";
 import CuriculumSessionsBlueprintProgramSVP from "../templates/CuriculumSessionsBlueprintProgramSVP";
 import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
 import HeroBlueprintProgramSVP from "../templates/HeroBlueprintProgramSVP";
@@ -25,6 +26,7 @@ export default function BlueprintProgramSVP({
     <div className="root relative items-center">
       <HeroBlueprintProgramSVP cohortId={cohortId} />
       <OverviewBlueprintProgramSVP />
+      {/* <BatchScheduleBlueprintProgramSVP /> */}
       <OfferHighlightBlueprintProgramSVP />
       <CuriculumSessionsBlueprintProgramSVP />
       <PackagePlansBlueprintProgramSVP
