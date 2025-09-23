@@ -73,33 +73,39 @@ export default function EventInfoSVP({
           </h3>
         </div>
         <div className="flex flex-col items-center gap-3 font-bodycopy">
-          <Link
-            href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
-            className="add-to-cart-button w-full"
-          >
-            <AppButton
-              size="defaultRounded"
-              className="w-full"
-              // GTM
-              featureName="add_to_cart_event"
-              featureId={String(eventId)}
-              featureProductCategory="EVENT"
-              featureProductName={eventName}
-              featureProductAmount={eventPrice[0].id}
-              featurePagePoint="Product Detail Page"
-              featurePlacement="aside-panel-desktop"
-              // Meta Pixel
-              metaEventName="AddToCart"
-              metaContentIds={[String(eventId)]}
-              metaContentType="event"
-              metaContentName={`${eventName} - ${eventPrice[0].name}`}
-              metaContentCategory="Business Event"
-              metaCurrency="IDR"
-              metaValue={eventPrice[0].amount}
+          {eventPrice[0].status === "ACTIVE" ? (
+            <Link
+              href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
+              className="add-to-cart-button w-full"
             >
-              Pay & Get Access
+              <AppButton
+                size="defaultRounded"
+                className="w-full"
+                // GTM
+                featureName="add_to_cart_event"
+                featureId={String(eventId)}
+                featureProductCategory="EVENT"
+                featureProductName={eventName}
+                featureProductAmount={eventPrice[0].id}
+                featurePagePoint="Product Detail Page"
+                featurePlacement="aside-panel-desktop"
+                // Meta Pixel
+                metaEventName="AddToCart"
+                metaContentIds={[String(eventId)]}
+                metaContentType="event"
+                metaContentName={`${eventName} - ${eventPrice[0].name}`}
+                metaContentCategory="Business Event"
+                metaCurrency="IDR"
+                metaValue={eventPrice[0].amount}
+              >
+                Pay & Get Access
+              </AppButton>
+            </Link>
+          ) : (
+            <AppButton size="defaultRounded" className="w-full" disabled>
+              Sold Out
             </AppButton>
-          </Link>
+          )}
           <div className="flex items-center gap-1 text-alternative">
             <LockKeyhole className="size-3" />
             <p className="text-xs text-center">
