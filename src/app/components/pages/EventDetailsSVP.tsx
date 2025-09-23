@@ -10,6 +10,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import EventInfoSVP from "../templates/EventInfoSVP";
 import { getRupiahCurrency } from "@/lib/currency";
+import { StatusType } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 
@@ -17,6 +18,7 @@ export interface EventPrice {
   id: number;
   name: string;
   amount: number;
+  status: StatusType;
 }
 
 interface EventDetailsSVPProps {
@@ -187,32 +189,38 @@ export default function EventDetailsSVP({
               {getRupiahCurrency(eventPrice[0].amount)}
             </p>
           </div>
-          <Link
-            href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
-          >
-            <AppButton
-              size="defaultRounded"
-              // GTM
-              featureName="add_to_cart_event"
-              featureId={String(eventId)}
-              featureProductCategory="EVENT"
-              featureProductName={eventName}
-              featureProductAmount={eventPrice[0].amount}
-              featurePagePoint="Product Detail Page"
-              featurePlacement="floating-panel-mobile"
-              // Meta Pixel
-              metaEventName="AddToCart"
-              metaContentIds={[String(eventId)]}
-              metaContentType="event"
-              metaContentName={`${eventName} - ${eventPrice[0].name}`}
-              metaContentCategory="Business Event"
-              metaCurrency="IDR"
-              metaValue={eventPrice[0].amount}
+          {eventPrice[0].status === "ACTIVE" ? (
+            <Link
+              href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
             >
-              <ShieldCheck className="size-5" />
-              Pay & Get Access
+              <AppButton
+                size="defaultRounded"
+                // GTM
+                featureName="add_to_cart_event"
+                featureId={String(eventId)}
+                featureProductCategory="EVENT"
+                featureProductName={eventName}
+                featureProductAmount={eventPrice[0].amount}
+                featurePagePoint="Product Detail Page"
+                featurePlacement="floating-panel-mobile"
+                // Meta Pixel
+                metaEventName="AddToCart"
+                metaContentIds={[String(eventId)]}
+                metaContentType="event"
+                metaContentName={`${eventName} - ${eventPrice[0].name}`}
+                metaContentCategory="Business Event"
+                metaCurrency="IDR"
+                metaValue={eventPrice[0].amount}
+              >
+                <ShieldCheck className="size-5" />
+                Pay & Get Access
+              </AppButton>
+            </Link>
+          ) : (
+            <AppButton size="defaultRounded" disabled>
+              Tickets Sold Out
             </AppButton>
-          </Link>
+          )}
         </div>
         <div className="flex w-full text-center justify-center items-center gap-1 text-alternative">
           <LockKeyhole className="size-3" />
