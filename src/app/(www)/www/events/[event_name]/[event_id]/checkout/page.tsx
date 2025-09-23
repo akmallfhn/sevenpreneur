@@ -1,5 +1,6 @@
 import CheckoutEventFormSVP from "@/app/components/forms/CheckoutEventFormSVP";
 import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
+import NotFoundComponent from "@/app/components/state/404NotFound";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const { event_id } = await params;
   const eventId = parseInt(event_id);
 
-  // --- Get Data
+  // Get Data
   setSessionToken(sessionToken!);
   const eventData = (await trpc.read.event({ id: eventId })).event;
 
@@ -79,7 +80,7 @@ export default async function CheckoutEventPage({
     );
   }
 
-  // --- Get Data
+  // Get Data
   setSessionToken(sessionToken);
   const checkUser = (await trpc.auth.checkSession()).user;
   let eventData;
@@ -109,7 +110,7 @@ export default async function CheckoutEventPage({
         : post.calc_flat,
   }));
 
-  // --- Auto Correction Slug
+  // Auto Correction Slug
   const correctSlug = eventData.slug_url;
   if (event_name !== correctSlug) {
     redirect(`/events/${correctSlug}/${eventId}/checkout`);
@@ -117,22 +118,27 @@ export default async function CheckoutEventPage({
 
   return (
     <div className="flex w-full min-h-screen bg-section-background">
-      <div className="flex flex-col max-w-md w-full mx-auto h-screen">
-        <CheckoutHeaderSVP />
-        <div className="flex-1 overflow-y-auto">
-          <CheckoutEventFormSVP
-            eventId={eventData.id}
-            eventName={eventData.name}
-            eventImage={eventData.image}
-            initialUserId={checkUser.id}
-            initialUserName={checkUser.full_name}
-            initialUserEmail={checkUser.email}
-            initialUserPhone={checkUser.phone_number}
-            ticketListData={ticketList}
-            paymentMethodData={paymentMethodList}
-          />
+      {eventData.event_prices.filter((post) => post.status === "ACTIVE")
+        .length > 0 ? (
+        <div className="flex flex-col max-w-md w-full mx-auto h-screen">
+          <CheckoutHeaderSVP />
+          <div className="flex-1 overflow-y-auto">
+            <CheckoutEventFormSVP
+              eventId={eventData.id}
+              eventName={eventData.name}
+              eventImage={eventData.image}
+              initialUserId={checkUser.id}
+              initialUserName={checkUser.full_name}
+              initialUserEmail={checkUser.email}
+              initialUserPhone={checkUser.phone_number}
+              ticketListData={ticketList}
+              paymentMethodData={paymentMethodList}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <NotFoundComponent />
+      )}
     </div>
   );
 }

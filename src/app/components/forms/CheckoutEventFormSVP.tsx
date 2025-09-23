@@ -24,6 +24,7 @@ interface PriceItem {
   name: string;
   amount: number;
   event_id: number;
+  status: string;
 }
 
 interface CheckoutEventFormSVPProps {
@@ -244,17 +245,19 @@ export default function CheckoutEventFormSVP({
                 </p>
               </div>
               <div className="flex flex-col gap-3">
-                {ticketListData.map((post, index) => (
-                  <RadioBoxPriceTierSVP
-                    key={index}
-                    priceTierName={post.name}
-                    productName={eventName}
-                    priceTierAmount={post.amount}
-                    value={post.id}
-                    selectedValue={selectedPriceTierId}
-                    onChange={setSelectedPriceTierId}
-                  />
-                ))}
+                {ticketListData
+                  .filter((post) => post.status === "ACTIVE")
+                  .map((post, index) => (
+                    <RadioBoxPriceTierSVP
+                      key={index}
+                      priceTierName={post.name}
+                      productName={eventName}
+                      priceTierAmount={post.amount}
+                      value={post.id}
+                      selectedValue={selectedPriceTierId}
+                      onChange={setSelectedPriceTierId}
+                    />
+                  ))}
               </div>
               <div className="pt-10">
                 <AppButton

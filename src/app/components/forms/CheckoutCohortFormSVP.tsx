@@ -24,6 +24,7 @@ interface PriceItem {
   name: string;
   amount: number;
   cohort_id: number;
+  status: string;
 }
 
 interface CheckoutCohortFormSVPProps {
@@ -244,17 +245,19 @@ export default function CheckoutCohortFormSVP({
                 </p>
               </div>
               <div className="flex flex-col gap-3">
-                {ticketListData.map((post, index) => (
-                  <RadioBoxPriceTierSVP
-                    key={index}
-                    priceTierName={post.name}
-                    productName={cohortName}
-                    priceTierAmount={post.amount}
-                    value={post.id}
-                    selectedValue={selectedPriceTierId}
-                    onChange={setSelectedPriceTierId}
-                  />
-                ))}
+                {ticketListData
+                  .filter((post) => post.status === "ACTIVE")
+                  .map((post, index) => (
+                    <RadioBoxPriceTierSVP
+                      key={index}
+                      priceTierName={post.name}
+                      productName={cohortName}
+                      priceTierAmount={post.amount}
+                      value={post.id}
+                      selectedValue={selectedPriceTierId}
+                      onChange={setSelectedPriceTierId}
+                    />
+                  ))}
               </div>
               <div className="pt-10">
                 <AppButton

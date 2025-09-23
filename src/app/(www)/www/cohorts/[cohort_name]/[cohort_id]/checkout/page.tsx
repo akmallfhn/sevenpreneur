@@ -1,5 +1,6 @@
 import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP";
 import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
+import NotFoundComponent from "@/app/components/state/404NotFound";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
 
-  // --- Get Data
+  // Get Data
   setSessionToken(sessionToken!);
   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
 
@@ -72,14 +73,14 @@ export default async function CheckoutCohortPage({
   const { cohort_name, cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
 
-  // --- Redirect if not login
+  // Redirect if not login
   if (!sessionToken) {
     redirect(
       `/auth/login?redirectTo=/cohorts/${cohort_name}/${cohort_id}/checkout`
     );
   }
 
-  // --- Get Data
+  // Get Data
   setSessionToken(sessionToken);
   const checkUser = (await trpc.auth.checkSession()).user;
   let cohortData;
@@ -109,7 +110,7 @@ export default async function CheckoutCohortPage({
         : post.calc_flat,
   }));
 
-  // --- Auto Correction Slug
+  // Auto Correction Slug
   const correctSlug = cohortData.slug_url;
   if (cohort_name !== correctSlug) {
     redirect(`/cohorts/${correctSlug}/${cohortId}/checkout`);
@@ -117,22 +118,27 @@ export default async function CheckoutCohortPage({
 
   return (
     <div className="flex w-full min-h-screen bg-section-background">
-      <div className="flex flex-col max-w-md w-full mx-auto h-screen">
-        <CheckoutHeaderSVP />
-        <div className="flex-1 overflow-y-auto">
-          <CheckoutCohortFormSVP
-            cohortId={cohortData.id}
-            cohortName={cohortData.name}
-            cohortImage={cohortData.image}
-            initialUserId={checkUser.id}
-            initialUserName={checkUser.full_name}
-            initialUserEmail={checkUser.email}
-            initialUserPhone={checkUser.phone_number}
-            ticketListData={ticketList}
-            paymentMethodData={paymentMethodList}
-          />
+      {cohortData.cohort_prices.filter((post) => post.status === "ACTIVE")
+        .length > 0 ? (
+        <div className="flex flex-col max-w-md w-full mx-auto h-screen">
+          <CheckoutHeaderSVP />
+          <div className="flex-1 overflow-y-auto">
+            <CheckoutCohortFormSVP
+              cohortId={cohortData.id}
+              cohortName={cohortData.name}
+              cohortImage={cohortData.image}
+              initialUserId={checkUser.id}
+              initialUserName={checkUser.full_name}
+              initialUserEmail={checkUser.email}
+              initialUserPhone={checkUser.phone_number}
+              ticketListData={ticketList}
+              paymentMethodData={paymentMethodList}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <NotFoundComponent />
+      )}
     </div>
   );
 }
