@@ -758,9 +758,7 @@ export const listRouter = createTRPCRouter({
           start_date: true,
           end_date: true,
           method: true,
-          meeting_url: true,
           location_name: true,
-          location_url: true,
           event_prices: {
             select: {
               id: true,
