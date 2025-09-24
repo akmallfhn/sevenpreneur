@@ -128,30 +128,6 @@ Table cohort_prices {
   created_at  timestamptz
 }
 
-Table events {
-  id            integer      [primary key, ref: <> users.id]
-  name          varchar
-  description   varchar
-  image         varchar
-  status        status_enum
-  slug_url      varchar
-  start_date    timestamptz
-  end_date      timestamptz
-  published_at  timestamptz
-  updated_at    timestamptz
-  deleted_at    timestamptz
-  deleted_by    uuid         [ref: > users.id]
-}
-
-Table event_prices {
-  id          integer         [primary key]
-  event_id  integer         [ref: > events.id]
-  name        varchar
-  amount      decimal(12,2)
-  status      status_enum
-  created_at  timestamptz
-}
-
 Table modules {
   id            integer      [primary key]
   cohort_id     integer      [ref: > cohorts.id]
@@ -211,6 +187,34 @@ Table submissions {
   comment       text
   created_at    timestamptz
   updated_at    timestamptz
+}
+
+Table events {
+  id            integer      [primary key, ref: <> users.id]
+  name          varchar
+  description   varchar
+  image         varchar
+  status        status_enum
+  slug_url      varchar
+  start_date    timestamptz
+  end_date      timestamptz
+  method         learning_method_enum
+  meeting_url    varchar
+  location_name  varchar
+  location_url   varchar
+  published_at  timestamptz
+  updated_at    timestamptz
+  deleted_at    timestamptz
+  deleted_by    uuid         [ref: > users.id]
+}
+
+Table event_prices {
+  id          integer         [primary key]
+  event_id  integer         [ref: > events.id]
+  name        varchar
+  amount      decimal(12,2)
+  status      status_enum
+  created_at  timestamptz
 }
 
 Table playlists {

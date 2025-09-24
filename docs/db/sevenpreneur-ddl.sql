@@ -186,6 +186,34 @@ CREATE TABLE submissions (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE events (
+  id            SERIAL       PRIMARY KEY,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR      NOT NULL,
+  image         VARCHAR      NOT NULL,
+  status        status_enum  NOT NULL,
+  slug_url      VARCHAR      NOT NULL  UNIQUE,
+  start_date    TIMESTAMPTZ  NOT NULL,
+  end_date      TIMESTAMPTZ  NOT NULL,
+  method         learning_method_enum  NOT NULL,
+  meeting_url    VARCHAR                   NULL,
+  location_name  VARCHAR                   NULL,
+  location_url   VARCHAR                   NULL,
+  published_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  deleted_at    TIMESTAMPTZ      NULL,
+  deleted_by    UUID             NULL
+);
+
+CREATE TABLE event_prices (
+  id          SERIAL          PRIMARY KEY,
+  event_id   INTEGER         NOT NULL,
+  name        VARCHAR         NOT NULL,
+  amount      DECIMAL(12, 2)  NOT NULL,
+  status      status_enum     NOT NULL,
+  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE playlists (
   id                 SERIAL          PRIMARY KEY,
   name               VARCHAR         NOT NULL,
@@ -211,30 +239,6 @@ CREATE TABLE videos (
   video_url          VARCHAR   NOT NULL,
   num_order          SMALLINT  NOT NULL  DEFAULT 0,
   external_video_id  VARCHAR   NOT NULL
-);
-
-CREATE TABLE events (
-  id            SERIAL       PRIMARY KEY,
-  name          VARCHAR      NOT NULL,
-  description   VARCHAR      NOT NULL,
-  image         VARCHAR      NOT NULL,
-  status        status_enum  NOT NULL,
-  slug_url      VARCHAR      NOT NULL  UNIQUE,
-  start_date    TIMESTAMPTZ  NOT NULL,
-  end_date      TIMESTAMPTZ  NOT NULL,
-  published_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  deleted_at    TIMESTAMPTZ      NULL,
-  deleted_by    UUID             NULL
-);
-
-CREATE TABLE event_prices (
-  id          SERIAL          PRIMARY KEY,
-  event_id   INTEGER         NOT NULL,
-  name        VARCHAR         NOT NULL,
-  amount      DECIMAL(12, 2)  NOT NULL,
-  status      status_enum     NOT NULL,
-  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE discounts (
