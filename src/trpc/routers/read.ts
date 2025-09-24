@@ -448,6 +448,67 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  event: publicProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      let whereClause = {
+        id: opts.input.id,
+        deleted_at: null,
+      };
+      if (!opts.ctx.user) {
+        Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+        });
+      }
+      const theEvent = await opts.ctx.prisma.event.findFirst({
+        include: {
+          event_prices: true,
+        },
+        where: whereClause,
+      });
+      if (!theEvent) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The event with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        event: theEvent,
+      };
+    }),
+
+  eventPrice: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theEventPrice) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The event price with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        cohortPrice: theEventPrice,
+      };
+    }),
+
   playlist: publicProcedure
     .input(
       z.object({
@@ -632,67 +693,6 @@ export const readRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         video: theVideo,
-      };
-    }),
-
-  event: publicProcedure
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      let whereClause = {
-        id: opts.input.id,
-        deleted_at: null,
-      };
-      if (!opts.ctx.user) {
-        Object.assign(whereClause, {
-          status: StatusEnum.ACTIVE,
-        });
-      }
-      const theEvent = await opts.ctx.prisma.event.findFirst({
-        include: {
-          event_prices: true,
-        },
-        where: whereClause,
-      });
-      if (!theEvent) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "The event with the given ID is not found.",
-        });
-      }
-      return {
-        status: 200,
-        message: "Success",
-        event: theEvent,
-      };
-    }),
-
-  eventPrice: loggedInProcedure
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
-        where: {
-          id: opts.input.id,
-          // deleted_at: null,
-        },
-      });
-      if (!theEventPrice) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "The event price with the given ID is not found.",
-        });
-      }
-      return {
-        status: 200,
-        message: "Success",
-        cohortPrice: theEventPrice,
       };
     }),
 

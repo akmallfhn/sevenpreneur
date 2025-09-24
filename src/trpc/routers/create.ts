@@ -356,6 +356,10 @@ export const createRouter = createTRPCRouter({
         slug_url: stringNotBlank().optional(),
         start_date: stringIsTimestampTz(),
         end_date: stringIsTimestampTz(),
+        method: z.nativeEnum(LearningMethodEnum),
+        meeting_url: stringNotBlank().nullable().optional(),
+        location_name: stringNotBlank().nullable().optional(),
+        location_url: stringNotBlank().nullable().optional(),
         published_at: stringIsTimestampTz().optional(),
         event_prices: z
           .array(
@@ -382,6 +386,10 @@ export const createRouter = createTRPCRouter({
           slug_url: slugUrl,
           start_date: opts.input.start_date,
           end_date: opts.input.end_date,
+          method: opts.input.method,
+          meeting_url: opts.input.meeting_url,
+          location_name: opts.input.location_name,
+          location_url: opts.input.location_url,
           published_at: opts.input.published_at,
           event_prices: {
             create: opts.input.event_prices,
