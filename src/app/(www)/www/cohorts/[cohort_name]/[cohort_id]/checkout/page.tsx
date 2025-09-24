@@ -2,6 +2,7 @@ import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP"
 import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
 import NotFoundComponent from "@/app/components/state/404NotFound";
 import { setSessionToken, trpc } from "@/trpc/server";
+import dayjs from "dayjs";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
@@ -110,6 +111,15 @@ export default async function CheckoutCohortPage({
         : post.calc_flat,
   }));
 
+  // Redirect 404 if has no active ticket & expired cohort
+  const hasActiveTicket = cohortData.cohort_prices.some(
+    (post) => post.status === "ACTIVE"
+  );
+  const expiredCohort = dayjs().isAfter(cohortData.end_date);
+  if (!hasActiveTicket || expiredCohort) {
+    return notFound();
+  }
+
   // Auto Correction Slug
   const correctSlug = cohortData.slug_url;
   if (cohort_name !== correctSlug) {
@@ -118,27 +128,22 @@ export default async function CheckoutCohortPage({
 
   return (
     <div className="flex w-full min-h-screen bg-section-background">
-      {cohortData.cohort_prices.filter((post) => post.status === "ACTIVE")
-        .length > 0 ? (
-        <div className="flex flex-col max-w-md w-full mx-auto h-screen">
-          <CheckoutHeaderSVP />
-          <div className="flex-1 overflow-y-auto">
-            <CheckoutCohortFormSVP
-              cohortId={cohortData.id}
-              cohortName={cohortData.name}
-              cohortImage={cohortData.image}
-              initialUserId={checkUser.id}
-              initialUserName={checkUser.full_name}
-              initialUserEmail={checkUser.email}
-              initialUserPhone={checkUser.phone_number}
-              ticketListData={ticketList}
-              paymentMethodData={paymentMethodList}
-            />
-          </div>
+      <div className="flex flex-col max-w-md w-full mx-auto h-screen">
+        <CheckoutHeaderSVP />
+        <div className="flex-1 overflow-y-auto">
+          <CheckoutCohortFormSVP
+            cohortId={cohortData.id}
+            cohortName={cohortData.name}
+            cohortImage={cohortData.image}
+            initialUserId={checkUser.id}
+            initialUserName={checkUser.full_name}
+            initialUserEmail={checkUser.email}
+            initialUserPhone={checkUser.phone_number}
+            ticketListData={ticketList}
+            paymentMethodData={paymentMethodList}
+          />
         </div>
-      ) : (
-        <NotFoundComponent />
-      )}
+      </div>
     </div>
   );
 }

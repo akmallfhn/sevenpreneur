@@ -1,10 +1,11 @@
 "use client";
 import { getRupiahCurrency } from "@/lib/currency";
-import { CalendarFold, LockKeyhole, MapPin, Wine } from "lucide-react";
+import { CalendarFold, Clock3, LockKeyhole, MapPin, Wine } from "lucide-react";
 import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 import { EventPrice } from "../pages/EventDetailsSVP";
 import { getDateTimeRange } from "@/lib/date-time-manipulation";
+import dayjs from "dayjs";
 
 interface EventInfoSVP {
   eventId: number;
@@ -23,6 +24,8 @@ export default function EventInfoSVP({
   eventPrice,
   eventSlug,
 }: EventInfoSVP) {
+  const expiredEvent = dayjs().isAfter(eventEndDate);
+
   const { dateString, timeString } = getDateTimeRange({
     startDate: eventStartDate,
     endDate: eventEndDate,
@@ -41,7 +44,7 @@ export default function EventInfoSVP({
         </div>
         <div className="event-time flex gap-1 items-center font-bodycopy">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
-            <CalendarFold className="size-5 text-alternative" />
+            <Clock3 className="size-5 text-alternative" />
           </div>
           <p className="text-[15px] font-medium">{timeString}</p>
         </div>
@@ -73,7 +76,7 @@ export default function EventInfoSVP({
           </h3>
         </div>
         <div className="flex flex-col items-center gap-3 font-bodycopy">
-          {eventPrice[0].status === "ACTIVE" ? (
+          {eventPrice[0].status === "ACTIVE" || expiredEvent ? (
             <Link
               href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
               className="add-to-cart-button w-full"

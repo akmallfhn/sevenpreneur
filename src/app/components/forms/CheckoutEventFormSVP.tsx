@@ -92,11 +92,9 @@ export default function CheckoutEventFormSVP({
     }
   }, [isValidTicketId, ticketIdParams]);
 
-  // --- Set default payment channel to MANDIRI
+  // --- Set default payment channel to QRIS
   const defaultPaymentChannel = useMemo(() => {
-    return (
-      paymentMethodData.find((item) => item.code === "MANDIRI")?.code ?? ""
-    );
+    return paymentMethodData.find((item) => item.code === "QRIS")?.code ?? "";
   }, [paymentMethodData]);
   useEffect(() => {
     if (!selectedPaymentChannel && defaultPaymentChannel) {
@@ -359,7 +357,10 @@ export default function CheckoutEventFormSVP({
                       />
                     ))}
                 </PaymentChannelGroupSVP>
-                <PaymentChannelGroupSVP groupPaymentName="Instant Payment">
+                <PaymentChannelGroupSVP
+                  groupPaymentName="Instant Payment"
+                  defaultState
+                >
                   {paymentMethodData
                     .filter(
                       (post: PaymentMethodItem) => post.method === "QR_CODE"

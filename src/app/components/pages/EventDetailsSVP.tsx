@@ -48,6 +48,7 @@ export default function EventDetailsSVP({
   const { theme } = useTheme();
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const expiredEvent = dayjs().isAfter(eventEndDate);
 
   // Checking height content description
   useEffect(() => {
@@ -98,7 +99,7 @@ export default function EventDetailsSVP({
                 height={1200}
               />
             </div>
-            <div className="event info flex lg:hidden">
+            <div className="event-info flex lg:hidden">
               <EventInfoSVP
                 eventId={eventId}
                 eventName={eventName}
@@ -189,7 +190,7 @@ export default function EventDetailsSVP({
               {getRupiahCurrency(eventPrice[0].amount)}
             </p>
           </div>
-          {eventPrice[0].status === "ACTIVE" ? (
+          {eventPrice[0].status === "ACTIVE" || expiredEvent ? (
             <Link
               href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
             >
