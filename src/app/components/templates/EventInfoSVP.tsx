@@ -76,7 +76,11 @@ export default function EventInfoSVP({
           </h3>
         </div>
         <div className="flex flex-col items-center gap-3 font-bodycopy">
-          {eventPrice[0].status === "ACTIVE" || expiredEvent ? (
+          {eventPrice[0].status === "INACTIVE" || expiredEvent ? (
+            <AppButton size="defaultRounded" className="w-full" disabled>
+              Sold Out
+            </AppButton>
+          ) : (
             <Link
               href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
               className="add-to-cart-button w-full"
@@ -104,10 +108,6 @@ export default function EventInfoSVP({
                 Pay & Get Access
               </AppButton>
             </Link>
-          ) : (
-            <AppButton size="defaultRounded" className="w-full" disabled>
-              Sold Out
-            </AppButton>
           )}
           <div className="flex items-center gap-1 text-alternative">
             <LockKeyhole className="size-3" />

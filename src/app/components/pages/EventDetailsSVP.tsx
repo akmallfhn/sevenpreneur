@@ -190,7 +190,11 @@ export default function EventDetailsSVP({
               {getRupiahCurrency(eventPrice[0].amount)}
             </p>
           </div>
-          {eventPrice[0].status === "ACTIVE" || expiredEvent ? (
+          {eventPrice[0].status === "INACTIVE" || expiredEvent ? (
+            <AppButton size="defaultRounded" disabled>
+              Tickets Sold Out
+            </AppButton>
+          ) : (
             <Link
               href={`/events/${eventSlug}/${eventId}/checkout?ticketId=${eventPrice[0].id}`}
             >
@@ -217,10 +221,6 @@ export default function EventDetailsSVP({
                 Pay & Get Access
               </AppButton>
             </Link>
-          ) : (
-            <AppButton size="defaultRounded" disabled>
-              Tickets Sold Out
-            </AppButton>
           )}
         </div>
         <div className="flex w-full text-center justify-center items-center gap-1 text-alternative">
