@@ -1,4 +1,5 @@
 import { encodeSHA256 } from "@/lib/encode";
+import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
 import { XenditInvoiceCallback } from "@/lib/xendit";
 import { CategoryEnum, TStatusEnum } from "@prisma/client";
@@ -100,6 +101,42 @@ export async function POST(req: NextRequest) {
       } catch (error) {
         console.error("Failed to response Meta API:", error);
       }
+
+      try {
+        await sendEmail({
+          mailRecipients: [theTransaction.user.email],
+          mailSubject:
+            "You’re In! Here’s What’s Next for Business Blueprint Program 🎉",
+          mailBody:
+            `Hi ${theTransaction.user.full_name},\n\n` +
+            "Welcome aboard! 🎉\n" +
+            "Terima kasih sudah melakukan checkout dan resmi bergabung di Sevenpreneur Business Blueprint Program Batch 7.\n\n" +
+            "Di program ini, kamu akan mendapatkan:\n" +
+            "✅ 7 sesi blueprint membahas Seven Framework, dipandu oleh Professional Business Coach\n" +
+            "✅ Akses ke komunitas entrepreneur inspiratif\n" +
+            "✅ Insight & strategi langsung dari para praktisi\n" +
+            "✅ Pembelajaran bisnis dengan integrasi penggunaan AI\n\n" +
+            "✨ Jika kamu terdaftar dalam paket VIP, kamu akan mendapatkan kesempatan untuk:\n" +
+            "🌟 Sesi offline di Jakarta\n" +
+            "🌟 Sesi eksklusif bersama Ahok, Tom Lembong, dan Wafa Taftazani\n" +
+            "🌟 Intimate Dinner & Networking\n" +
+            "🌟 Mentoring privat 1-on-1 dengan business coach\n\n" +
+            "📌 What’s Next?\n" +
+            "Kami akan segera mengirimkan detail akses LMS. Di LMS ini kamu bisa dapet:\n" +
+            "• Jadwal lengkap program\n" +
+            "• Materi & kurikulum terstruktur\n" +
+            "• Info sesi live & recording\n" +
+            "• Akses ke Q&A bersama mentor\n" +
+            "…dan banyak lagi!\n\n" +
+            "Sekali lagi, selamat datang di perjalanan bisnis bareng Sevenpreneur 🚀\n" +
+            "This is the beginning of something big!\n\n" +
+            "Cheers,\n" +
+            "Sevenpreneur Team",
+        });
+      } catch (error) {
+        console.error("Failed to response email", error);
+      }
+
       try {
         await prisma.userCohort.create({
           data: {
@@ -157,6 +194,7 @@ export async function POST(req: NextRequest) {
       } catch (error) {
         console.error("Failed to response Meta API:", error);
       }
+
       try {
         await prisma.userEvent.create({
           data: {
