@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setSecretKey, trpc } from "@/trpc/server";
 import HomeSVP from "@/app/components/pages/HomeSVP";
+import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
 
 export const metadata: Metadata = {
   title: "Sevenpreneur | All-in-One Business Learning Platform",
@@ -73,5 +74,15 @@ export default async function HomePage() {
     })),
   };
 
-  return <HomeSVP imageHero={cohortData.image} />;
+  return (
+    // <HomeSVP imageHero={cohortData.image} />
+
+    // Temp during sales period blueprint
+    <BlueprintProgramSVP
+      cohortId={cohortData.id}
+      cohortName={cohortData.name}
+      cohortSlug={cohortData.slug_url}
+      cohortPrices={cohortData.cohort_prices}
+    />
+  );
 }

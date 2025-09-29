@@ -106,14 +106,14 @@ export default function HeroBlueprintProgramSVP({
             </Link>
             <a
               href="https://wa.me/6282312492067?text=Halo%2C%20MinSeven!%20👋%0AAku%20tertarik%20untuk%20mengikuti%20*Sevenpreneur%20Business%20Blueprint%20Program%20Batch%207*%20dan%20mau%20konsultasi%20lebih%20lanjut.%20Berikut%20dataku%3A%0A•%20Nama%3A%20(isi%20di%20sini)%0A•%20Email%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%2C%20MinSeven%20🙏"
-              className="w-full"
+              className="w-full p-[1px]"
               target="_blank"
               rel="noopenner noreferrer"
             >
               <div className="flex lg:hidden">
                 <AppButton
                   size="defaultRounded"
-                  variant="hollowWhatsapp"
+                  variant="whatsapp"
                   className="w-full lg:w-fit"
                   // GTM
                   featureName="whatsapp_consultation"
@@ -130,7 +130,7 @@ export default function HeroBlueprintProgramSVP({
                   metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
-                  <p className="text-base lg:text-lg">Bantuan Registrasi</p>
+                  <p className="text-base lg:text-lg">Konsultasi Gratis</p>
                 </AppButton>
               </div>
               <div className="hidden lg:flex">
@@ -153,7 +153,7 @@ export default function HeroBlueprintProgramSVP({
                   metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
-                  <p className="text-base lg:text-lg">Bantuan Registrasi</p>
+                  <p className="text-base lg:text-lg">Konsultasi Gratis</p>
                 </AppButton>
               </div>
             </a>
