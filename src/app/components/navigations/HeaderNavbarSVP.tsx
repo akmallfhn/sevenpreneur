@@ -21,6 +21,7 @@ import { useTheme } from "next-themes";
 import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
 import SideMenuMobileSVP from "./SideMenuMobileSVP";
 import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
+import AnnouncementTickerSVP from "./AnnouncementTickerSVP";
 
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
@@ -104,129 +105,141 @@ export default function HeaderNavbarSVP({
   return (
     <React.Fragment>
       {!isDisallowedPage && (
-        <div className="navbar-root flex sticky w-full bg-white top-0 left-0 items-center justify-center shadow-md z-[90] dark:bg-black/40 dark:backdrop-blur-sm">
-          <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-            {/* LEFT SIDE */}
-            <Link href={"/"}>
-              {mounted && (
-                <Image
-                  className="max-w-[142px] lg:max-w-[168px]"
-                  src={
-                    theme === "dark"
-                      ? "https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"
-                      : "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//logo-sevenpreneur-main.svg"
-                  }
-                  alt="Logo Sevenpreneur"
-                  width={320}
-                  height={320}
-                />
-              )}
-            </Link>
+        <div className="navbar-group sticky flex flex-col top-0 left-0 z-[90] lg:flex-col-reverse">
+          <div className="navbar-root flex w-full bg-white items-center justify-center shadow-md dark:bg-black/40 dark:backdrop-blur-sm">
+            <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+              {/* LEFT SIDE */}
+              <Link href={"/"}>
+                {mounted && (
+                  <Image
+                    className="max-w-[142px] lg:max-w-[168px]"
+                    src={
+                      theme === "dark"
+                        ? "https://static.wixstatic.com/media/02a5b1_f73718a961f344cd80016aa1f5522fb6~mv2.webp"
+                        : "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//logo-sevenpreneur-main.svg"
+                    }
+                    alt="Logo Sevenpreneur"
+                    width={320}
+                    height={320}
+                  />
+                )}
+              </Link>
 
-            {/* CENTER SIDE */}
-            {/* Menu Desktop */}
-            <nav className="menu-container hidden lg:flex">
-              <ul className="menu-item-list flex items-center gap-10">
-                <HeaderNavbarItemSVP
-                  menuTitle="Program"
-                  menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
-                  // activeUrls={["/cohorts", "/playlists", "/events"]}
-                />
-                <HeaderNavbarItemSVP
-                  menuTitle="Learning Series"
-                  menuUrl="/playlists/restart-conference-2025/1"
-                  // activeUrls={["/cohorts", "/playlists", "/events"]}
-                />
-                <HeaderNavbarItemSVP
-                  menuTitle="Event"
-                  menuUrl="/events/sevenpreneur-business-network/1"
-                  // activeUrls={["/cohorts", "/playlists", "/events"]}
-                />
-                <HeaderNavbarItemSVP menuTitle="About Us" menuUrl="/company" />
-                <HeaderNavbarItemSVP
-                  menuTitle="Collab with Us"
-                  menuUrl="/collaboration"
-                />
-              </ul>
-            </nav>
+              {/* CENTER SIDE */}
+              {/* Menu Desktop */}
+              <nav className="menu-container hidden lg:flex">
+                <ul className="menu-item-list flex items-center gap-10">
+                  <HeaderNavbarItemSVP
+                    menuTitle="Program"
+                    menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
+                    // activeUrls={["/cohorts", "/playlists", "/events"]}
+                  />
+                  <HeaderNavbarItemSVP
+                    menuTitle="Learning Series"
+                    menuUrl="/playlists/restart-conference-2025/1"
+                    // activeUrls={["/cohorts", "/playlists", "/events"]}
+                  />
+                  <HeaderNavbarItemSVP
+                    menuTitle="Event"
+                    menuUrl="/events/sevenpreneur-business-network/1"
+                    // activeUrls={["/cohorts", "/playlists", "/events"]}
+                  />
+                  <HeaderNavbarItemSVP
+                    menuTitle="About Us"
+                    menuUrl="/company"
+                  />
+                  <HeaderNavbarItemSVP
+                    menuTitle="Collab with Us"
+                    menuUrl="/collaboration"
+                  />
+                </ul>
+              </nav>
 
-            {/* RIGHT SIDE */}
-            <div className="flex items-center gap-4">
-              {/* Theme Switcher */}
-              <div className="hidden lg:flex">
-                <AppThemeSwitcher />
-              </div>
+              {/* RIGHT SIDE */}
+              <div className="flex items-center gap-4">
+                {/* Theme Switcher */}
+                <div className="hidden lg:flex">
+                  <AppThemeSwitcher />
+                </div>
 
-              {/* User Navigation */}
-              {isLoggedIn ? (
-                <div
-                  className="user-menu relative flex hover:cursor-pointer"
-                  ref={wrapperRef}
-                  onClick={handleActionsDropdown}
-                >
-                  <AvatarBadgeSVP userAvatar={userAvatar} userName={nickName} />
-                  <AppDropdown
-                    isOpen={accountMenuOpen}
-                    onClose={() => setAccountMenuOpen(false)}
-                    alignMobile="right"
+                {/* User Navigation */}
+                {isLoggedIn ? (
+                  <div
+                    className="user-menu relative flex hover:cursor-pointer"
+                    ref={wrapperRef}
+                    onClick={handleActionsDropdown}
                   >
-                    {userRole !== 3 && (
-                      <Link href={`https://admin.${domain}`}>
+                    <AvatarBadgeSVP
+                      userAvatar={userAvatar}
+                      userName={nickName}
+                    />
+                    <AppDropdown
+                      isOpen={accountMenuOpen}
+                      onClose={() => setAccountMenuOpen(false)}
+                      alignMobile="right"
+                    >
+                      {userRole !== 3 && (
+                        <Link href={`https://admin.${domain}`}>
+                          <AppDropdownItemList
+                            menuIcon={<Blocks className="size-4" />}
+                            menuName="Dashboard Admin"
+                          />
+                        </Link>
+                      )}
+                      <Link href={`https://agora.${domain}`}>
                         <AppDropdownItemList
-                          menuIcon={<Blocks className="size-4" />}
-                          menuName="Dashboard Admin"
+                          menuIcon={<BookMarked className="size-4" />}
+                          menuName="My Learning"
                         />
                       </Link>
-                    )}
-                    <Link href={`https://agora.${domain}`}>
+                      <Link href={`/transactions`}>
+                        <AppDropdownItemList
+                          menuIcon={<Wallet className="size-4" />}
+                          menuName="Transaction"
+                        />
+                      </Link>
+                      <hr className="my-1" />
                       <AppDropdownItemList
-                        menuIcon={<BookMarked className="size-4" />}
-                        menuName="My Learning"
+                        menuIcon={<LogOut className="size-4" />}
+                        menuName="Sign out"
+                        isDestructive
+                        onClick={handleSignOut}
                       />
-                    </Link>
-                    <Link href={`/transactions`}>
-                      <AppDropdownItemList
-                        menuIcon={<Wallet className="size-4" />}
-                        menuName="Transaction"
-                      />
-                    </Link>
-                    <hr className="my-1" />
-                    <AppDropdownItemList
-                      menuIcon={<LogOut className="size-4" />}
-                      menuName="Sign out"
-                      isDestructive
-                      onClick={handleSignOut}
-                    />
-                  </AppDropdown>
-                </div>
-              ) : (
-                <Link href={`/auth/login?redirectTo=${pathname}`}>
-                  <div className="login-mobile flex lg:hidden">
-                    <AppButton variant="ghost" size="iconRounded">
-                      <UserCircle2 className="size-6" />
-                    </AppButton>
+                    </AppDropdown>
                   </div>
-                  <div className="login-desktop hidden lg:flex">
-                    <AppButton variant="primary" size="mediumRounded">
-                      <UserCircle2 className="size-5" />
-                      Login
-                    </AppButton>
-                  </div>
-                </Link>
-              )}
+                ) : (
+                  <Link href={`/auth/login?redirectTo=${pathname}`}>
+                    <div className="login-mobile flex lg:hidden">
+                      <AppButton variant="ghost" size="iconRounded">
+                        <UserCircle2 className="size-6" />
+                      </AppButton>
+                    </div>
+                    <div className="login-desktop hidden lg:flex">
+                      <AppButton variant="primary" size="mediumRounded">
+                        <UserCircle2 className="size-5" />
+                        Login
+                      </AppButton>
+                    </div>
+                  </Link>
+                )}
 
-              {/* Hamburger Button */}
-              <div className="flex lg:hidden">
-                <AppButton
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setMobileMenuOpen(true)}
-                >
-                  <AlignLeftIcon className="size-6" />
-                </AppButton>
+                {/* Hamburger Button */}
+                <div className="flex lg:hidden">
+                  <AppButton
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setMobileMenuOpen(true)}
+                  >
+                    <AlignLeftIcon className="size-6" />
+                  </AppButton>
+                </div>
               </div>
             </div>
           </div>
+          <AnnouncementTickerSVP
+            tickerText="Pre-Sale Blueprint Program up to 67% OFF — until 3 October 2025"
+            tickerAction="Reserve Now!"
+          />
         </div>
       )}
 
