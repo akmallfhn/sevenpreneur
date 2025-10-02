@@ -277,6 +277,17 @@ CREATE TABLE transactions (
   updated_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE ticker (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  title VARCHAR NOT NULL,
+  callout VARCHAR NULL,
+  target_url VARCHAR NOT NULL,
+  status status_enum NOT NULL,
+  start_date TIMESTAMPTZ NOT NULL,
+  end_date TIMESTAMPTZ NOT NULL
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (
@@ -439,3 +450,13 @@ CREATE TRIGGER update_transactions_updated_at_trigger
   BEFORE UPDATE ON transactions
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_ticker_updated_at_trigger
+BEFORE UPDATE ON ticker
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at()
+
+------------------
+-- Unique Index --
+------------------
+CREATE UNIQUE INDEX one_row_only ON ticker ((true));

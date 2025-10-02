@@ -2,17 +2,17 @@
 import Link from "next/link";
 
 interface AnnouncementTickerSVPProps {
-  tickerText: string;
-  tickerAction?: string;
+  tickerTitle: string;
+  tickerCallout?: string;
 }
 
 export default function AnnouncementTickerSVP({
-  tickerText,
-  tickerAction,
+  tickerTitle,
+  tickerCallout,
 }: AnnouncementTickerSVPProps) {
   const tickerData = {
-    text: tickerText,
-    action: tickerAction,
+    text: tickerTitle,
+    action: tickerCallout,
   };
   const tickerMessages = Array(8).fill(tickerData);
   const loopedMessages = [...tickerMessages, ...tickerMessages];
