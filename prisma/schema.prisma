@@ -419,3 +419,16 @@ model EducatorPlaylist {
   @@id([user_id, playlist_id])
   @@map("educators_playlists")
 }
+
+model Ticker {
+  id         Int        @id @default(1)
+  title      String     @db.VarChar()
+  callout    String?    @db.VarChar()
+  target_url String     @db.VarChar()
+  status     StatusEnum
+  start_date DateTime   @db.Timestamptz()
+  end_date   DateTime   @db.Timestamptz()
+  updated_at DateTime   @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("ticker")
+}

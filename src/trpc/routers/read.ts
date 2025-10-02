@@ -942,4 +942,29 @@ export const readRouter = createTRPCRouter({
         },
       };
     }),
+
+  ticker: publicProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theTicker = await opts.ctx.prisma.ticker.findUnique({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (!theTicker) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The ticker with the given ID is not found.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        ticker: theTicker,
+      };
+    }),
 });

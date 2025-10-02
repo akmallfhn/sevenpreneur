@@ -22,12 +22,22 @@ import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
 import SideMenuMobileSVP from "./SideMenuMobileSVP";
 import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
 import AnnouncementTickerSVP from "./AnnouncementTickerSVP";
+import { StatusType } from "@/lib/app-types";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+
+dayjs.extend(isBetween);
 
 interface HeaderNavbarSVPProps {
   isLoggedIn: boolean;
   userAvatar: string | null;
   userName: string | undefined;
   userRole: number | undefined;
+  tickerTitle: string;
+  tickerCallout?: string;
+  tickerStatus: StatusType;
+  tickerStartDate: string;
+  tickerEndDate: string;
 }
 
 export default function HeaderNavbarSVP({
@@ -35,6 +45,11 @@ export default function HeaderNavbarSVP({
   userAvatar,
   userName,
   userRole,
+  tickerTitle,
+  tickerCallout,
+  tickerStatus,
+  tickerStartDate,
+  tickerEndDate,
 }: HeaderNavbarSVPProps) {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,16 +66,6 @@ export default function HeaderNavbarSVP({
 
   //  Get Nickname
   const nickName = userName?.split(" ")[0];
-
-  // --- Detect screen size
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsDesktop(window.innerWidth >= 1024);
-  //   };
-  //   handleResize(); // Initial check
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -101,6 +106,14 @@ export default function HeaderNavbarSVP({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Validate Ticker Based on Start Date and End Date
+  const isValidTicker = dayjs().isBetween(
+    tickerStartDate,
+    tickerEndDate,
+    null,
+    "[]"
+  );
 
   return (
     <React.Fragment>
@@ -236,10 +249,12 @@ export default function HeaderNavbarSVP({
               </div>
             </div>
           </div>
-          <AnnouncementTickerSVP
-            tickerText="Pre-Sale Blueprint Program up to 67% OFF — until 3 October 2025"
-            tickerAction="Reserve Now!"
-          />
+          {tickerStatus === "ACTIVE" && isValidTicker && (
+            <AnnouncementTickerSVP
+              tickerTitle={tickerTitle}
+              tickerCallout={tickerCallout}
+            />
+          )}
         </div>
       )}
 

@@ -289,3 +289,13 @@ Table educators_playlists {
   user_id      uuid     [ref: > users.id]
   playlist_id  integer  [ref: > playlists.id]
 }
+
+Table ticker {
+  title varchar
+  callout varchar
+  target_url varchar
+  status status_enum
+  start_date timestamptz
+  end_date timestamptz
+  updated_at timestamptz
+}
