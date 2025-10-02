@@ -601,4 +601,47 @@ export const updateRouter = createTRPCRouter({
         discount: updatedDiscount[0],
       };
     }),
+  ticker: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        title: stringNotBlank().optional(),
+        callout: stringNotBlank().nullable().optional(),
+        target_url: stringNotBlank().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+        start_date: stringIsTimestampTz().optional(),
+        end_date: stringIsTimestampTz().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedTicker = await opts.ctx.prisma.ticker.updateManyAndReturn({
+        data: {
+          id: opts.input.id,
+          title: opts.input.title,
+          callout: opts.input.callout,
+          target_url: opts.input.target_url,
+          status: opts.input.status,
+          start_date: opts.input.start_date,
+          end_date: opts.input.end_date,
+        },
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (updatedTicker.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected ticker is not found.",
+        });
+      } else if (updatedTicker.length > 1) {
+        console.error(
+          "update.ticker: More-than-one ticker are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        ticker: updatedTicker[0],
+      };
+    }),
 });
