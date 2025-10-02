@@ -1,4 +1,5 @@
 "use client";
+import { RolesUser } from "@/lib/app-types";
 import {
   faBuildingUser,
   faChalkboardUser,
@@ -8,14 +9,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 
-export type RolesVariant =
-  | "administrator"
-  | "educator"
-  | "classManager"
-  | "generalUser";
-
 const variantStyles: Record<
-  RolesVariant,
+  RolesUser,
   {
     backgroundColor: string;
     labelColor: string;
@@ -46,7 +41,7 @@ const variantStyles: Record<
 
 interface RolesLabelCMSProps {
   labelName: string;
-  variants: RolesVariant;
+  variants: RolesUser;
 }
 
 export default function RolesLabelCMS({

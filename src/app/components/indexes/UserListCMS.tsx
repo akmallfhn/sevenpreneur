@@ -19,7 +19,7 @@ import {
 import TableHeadCMS from "../elements/TableHeadCMS";
 import TableCellCMS from "../elements/TableCellCMS";
 import Image from "next/image";
-import RolesLabelCMS, { RolesVariant } from "../labels/RolesLabelCMS";
+import RolesLabelCMS from "../labels/RolesLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import dayjs from "dayjs";
 import AppDropdown from "../elements/AppDropdown";
@@ -29,7 +29,7 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import InputCMS from "../fields/InputCMS";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppNumberPagination from "../navigations/AppNumberPagination";
-import { StatusType } from "@/lib/app-types";
+import { RolesUser, StatusType } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 
 interface UserListCMSProps {
@@ -240,7 +240,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                   <TableCellCMS>
                     <RolesLabelCMS
                       labelName={post.role_name}
-                      variants={toCamelCase(post.role_name) as RolesVariant}
+                      variants={toCamelCase(post.role_name) as RolesUser}
                     />
                   </TableCellCMS>
 

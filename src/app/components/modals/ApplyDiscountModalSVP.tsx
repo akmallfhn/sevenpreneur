@@ -4,10 +4,16 @@ import AppButton from "../buttons/AppButton";
 import { Loader2, X } from "lucide-react";
 import { CheckDiscountCohort, CheckDiscountPlaylist } from "@/lib/actions";
 import { toast } from "sonner";
-import { DiscountType } from "../forms/CheckoutPlaylistFormSVP";
-
 import InputSVP from "../fields/InputSVP";
 import { ProductCategory } from "@/lib/app-types";
+
+interface DiscountType {
+  name: string | undefined;
+  code: string | undefined;
+  calc_percent: number | undefined;
+  category: ProductCategory;
+  item_id: number | undefined;
+}
 
 interface ApplyDiscountModalSVPProps {
   playlistId?: number;

@@ -15,9 +15,28 @@ import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
-import { DiscountType, PaymentMethodItem } from "./CheckoutPlaylistFormSVP";
 import { encodeSHA256 } from "@/lib/encode";
 import { getRupiahCurrency } from "@/lib/currency";
+import { ProductCategory } from "@/lib/app-types";
+
+interface PaymentMethodItem {
+  id: number;
+  image: string;
+  label: string;
+  code: string;
+  method: string;
+  calc_percent: number;
+  calc_flat: number;
+  calc_vat: boolean;
+}
+
+interface DiscountType {
+  name: string | undefined;
+  code: string | undefined;
+  calc_percent: number | undefined;
+  category: ProductCategory;
+  item_id: number | undefined;
+}
 
 interface PriceItem {
   id: number;

@@ -19,7 +19,7 @@ import { encodeSHA256 } from "@/lib/encode";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
 
-export type PaymentMethodItem = {
+interface PaymentMethodItem {
   id: number;
   image: string;
   label: string;
@@ -28,15 +28,15 @@ export type PaymentMethodItem = {
   calc_percent: number;
   calc_flat: number;
   calc_vat: boolean;
-};
+}
 
-export type DiscountType = {
+interface DiscountType {
   name: string | undefined;
   code: string | undefined;
   calc_percent: number | undefined;
   category: ProductCategory;
   item_id: number | undefined;
-};
+}
 
 interface CheckoutPlaylistFormSVPProps {
   playlistId: number;

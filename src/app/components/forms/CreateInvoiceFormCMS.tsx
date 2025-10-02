@@ -9,9 +9,16 @@ import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
-import { DiscountType } from "./CheckoutPlaylistFormSVP";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
+
+interface DiscountType {
+  name: string | undefined;
+  code: string | undefined;
+  calc_percent: number | undefined;
+  category: ProductCategory;
+  item_id: number | undefined;
+}
 
 interface CreateInvoiceFormCMSProps {
   sessionToken: string;
