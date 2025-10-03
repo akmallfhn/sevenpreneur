@@ -164,7 +164,7 @@ export default function CohortListCMS({ sessionToken }: CohortListCMSProps) {
         )}
       </div>
 
-      {/* --- Form Create Cohort */}
+      {/* Form Create Cohort */}
       {createCohort && (
         <CreateCohortFormCMS
           isOpen={createCohort}

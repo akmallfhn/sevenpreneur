@@ -13,6 +13,7 @@ import {
   Loader2,
   Presentation,
   Tags,
+  Waypoints,
 } from "lucide-react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import SidebarMenuGroupCMS from "./SidebarMenuGroupCMS";
@@ -141,6 +142,13 @@ export default function SidebarCMS({
                 icon={<BanknoteArrowDown />}
               />
             </SidebarMenuGroupCMS>
+          )}
+          {isAdministrator && (
+            <SidebarMenuItemCMS
+              menuTitle="Web Marketing"
+              url="/marketing"
+              icon={<Waypoints />}
+            />
           )}
         </div>
       </div>
