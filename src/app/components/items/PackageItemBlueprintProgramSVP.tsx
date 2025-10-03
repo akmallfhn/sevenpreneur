@@ -3,8 +3,8 @@ import { Check } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { toSnakeCase } from "@/lib/convert-case";
 import { FeatureTrackingProps } from "@/lib/feature-tracking";
+import AppCountdownTimer from "../elements/AppCountdownTimer";
 
 interface PackageItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;
@@ -68,6 +68,10 @@ export default function PackageItemBlueprintProgramSVP({
             <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
           </div>
         </div>
+        <AppCountdownTimer
+          targetDateTime={"2025-10-03T23:59:00+07:00"}
+          isIncludeDimension={false}
+        />
         <div className="price-after-discount flex items-center gap-0.5 font-brand text-white">
           <p className="font-bold text-lg">Rp</p>
           <p className="font-bold text-4xl">
