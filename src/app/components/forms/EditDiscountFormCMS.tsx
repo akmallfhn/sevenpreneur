@@ -188,11 +188,6 @@ export default function EditDiscountFormCMS({
       setIsSubmitting(false);
       return;
     }
-    if (!formData.discountStartDate) {
-      toast.error("Pick a start date to kick things off");
-      setIsSubmitting(false);
-      return;
-    }
     if (!formData.discountEndDate) {
       toast.error("Define the expiry date.");
       setIsSubmitting(false);
