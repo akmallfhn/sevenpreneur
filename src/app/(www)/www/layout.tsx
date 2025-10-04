@@ -52,7 +52,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <div>
-      <ThemeProvider attribute="class" defaultTheme="dark">
+      <ThemeProvider attribute="class" defaultTheme="light">
         <HeaderNavbarSVP
           userName={userData?.full_name}
           userAvatar={userData?.avatar ?? null}

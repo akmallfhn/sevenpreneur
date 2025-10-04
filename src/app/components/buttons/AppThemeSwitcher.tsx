@@ -28,7 +28,7 @@ export default function AppThemeSwitcher({
   // Only set default once when theme is undefined or "system"
   useEffect(() => {
     if (mounted && theme !== "light" && theme !== "dark") {
-      setTheme("dark");
+      setTheme("light");
     }
   }, [mounted, theme, setTheme]);
 
