@@ -140,7 +140,7 @@ export default function EditTickerMarketingFormCMS({
 
   return (
     <AppSheet
-      sheetName="Edit Ticker"
+      sheetName="Edit Ticker Announcement"
       sheetDescription="Edit ticker to update quick announcements or live info."
       isOpen={isOpen}
       onClose={onClose}
