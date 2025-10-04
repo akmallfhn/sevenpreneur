@@ -196,16 +196,21 @@ export const purchaseRouter = createTRPCRouter({
         code: stringNotBlank(),
         cohort_id: numberIsID().optional(),
         playlist_id: numberIsID().optional(),
+        event_id: numberIsID().optional(),
       })
     )
     .query(async (opts) => {
-      if (
-        (opts.input.cohort_id && opts.input.playlist_id) || // both
-        (!opts.input.cohort_id && !opts.input.playlist_id) // none
-      ) {
+      const inputs = [
+        opts.input.cohort_id,
+        opts.input.playlist_id,
+        opts.input.event_id,
+      ];
+      const filledCount = inputs.filter(Boolean).length;
+      if (filledCount !== 1) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Provide either cohort_id only or playlist_id only.",
+          message:
+            "Provide exactly one of cohort_id, playlist_id, or event_id.",
         });
       }
 
@@ -218,6 +223,10 @@ export const purchaseRouter = createTRPCRouter({
       if (opts.input.playlist_id) {
         selectedCategory = CategoryEnum.PLAYLIST;
         selectedItemId = opts.input.playlist_id;
+      }
+      if (opts.input.event_id) {
+        selectedCategory = CategoryEnum.EVENT;
+        selectedItemId = opts.input.event_id;
       }
       const now = new Date();
       const theDiscount = await opts.ctx.prisma.discount.findFirst({

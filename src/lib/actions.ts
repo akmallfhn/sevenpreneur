@@ -205,6 +205,41 @@ export async function CheckDiscountCohort({
   };
 }
 
+// CHECK DISCOUNT EVENT
+interface CheckDiscountEventProps {
+  discountCode: string;
+  eventId: number;
+}
+export async function CheckDiscountEvent({
+  discountCode,
+  eventId,
+}: CheckDiscountEventProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { status: 401, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+  const checkDiscount = await trpc.purchase.checkDiscount({
+    code: discountCode,
+    event_id: eventId,
+  });
+  const discountDataRaw = checkDiscount?.discount;
+  const discountData = {
+    ...discountDataRaw,
+    calc_percent:
+      typeof discountDataRaw?.calc_percent === "object" &&
+      "toNumber" in discountDataRaw.calc_percent
+        ? discountDataRaw.calc_percent.toNumber()
+        : Number(discountDataRaw?.calc_percent ?? 0),
+  };
+  return {
+    status: checkDiscount.status,
+    message: checkDiscount.message,
+    data: discountData,
+  };
+}
+
 // CANCEL PAYMENT AT XENDIT
 interface CancelPaymentXenditProps {
   transactionId: string;

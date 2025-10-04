@@ -120,8 +120,17 @@ export default function EditDiscountFormCMS({
     {},
     { enabled: formData.productCategory === "COHORT" && !!sessionToken }
   );
-  const isLoading = isLoadingCohortData || isLoadingPlaylistData;
-  const isError = isErrorCohortData || isErrorPlaylistData;
+  const {
+    data: eventsData,
+    isLoading: isLoadingEventsData,
+    isError: isErrorEventsData,
+  } = trpc.list.events.useQuery(
+    {},
+    { enabled: formData.productCategory === "EVENT" && !!sessionToken }
+  );
+  const isLoading =
+    isLoadingCohortData || isLoadingPlaylistData || isLoadingEventsData;
+  const isError = isErrorCohortData || isErrorPlaylistData || isErrorEventsData;
 
   // Conditional Fetch Data Product Item
   useEffect(() => {
@@ -141,8 +150,17 @@ export default function EditDiscountFormCMS({
           }))
         ) || []
       );
+    } else if (formData.productCategory === "EVENT") {
+      setItemOptions(
+        eventsData?.list.flatMap((post: any) =>
+          post.prices.map((price: any) => ({
+            label: `${price.name} - ${post.name}`,
+            value: price.id,
+          }))
+        ) || []
+      );
     }
-  }, [formData.productCategory, playlistData, cohortData]);
+  }, [formData.productCategory, playlistData, cohortData, eventsData]);
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -369,6 +387,10 @@ export default function EditDiscountFormCMS({
                     {
                       label: "Playlist",
                       value: "PLAYLIST",
+                    },
+                    {
+                      label: "Event",
+                      value: "EVENT",
                     },
                   ]}
                 />

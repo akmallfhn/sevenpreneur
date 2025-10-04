@@ -30,7 +30,7 @@ export default function CreateDiscountFormCMS({
     { label: string; value: number }[]
   >([]);
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     discountName: string;
     discountCode: string;
@@ -70,36 +70,55 @@ export default function CreateDiscountFormCMS({
 
   // Fetch tRPC for Product Item
   const {
-    data: playlistData,
-    isLoading: isLoadingPlaylistData,
-    isError: isErrorPlaylistData,
+    data: playlistsData,
+    isLoading: isLoadingPlaylistsData,
+    isError: isErrorPlaylistsData,
   } = trpc.list.playlists.useQuery(
     {},
     { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken }
   );
   const {
-    data: cohortData,
-    isLoading: isLoadingCohortData,
-    isError: isErrorCohortData,
+    data: cohortsData,
+    isLoading: isLoadingCohortsData,
+    isError: isErrorCohortsData,
   } = trpc.list.cohorts.useQuery(
     {},
     { enabled: formData.productCategory === "COHORT" && !!sessionToken }
   );
-  const isLoading = isLoadingCohortData || isLoadingPlaylistData;
-  const isError = isErrorCohortData || isErrorPlaylistData;
+  const {
+    data: eventsData,
+    isLoading: isLoadingEventsData,
+    isError: isErrorEventsData,
+  } = trpc.list.events.useQuery(
+    {},
+    { enabled: formData.productCategory === "EVENT" && !!sessionToken }
+  );
+  const isLoading =
+    isLoadingCohortsData || isLoadingPlaylistsData || isLoadingEventsData;
+  const isError =
+    isErrorCohortsData || isErrorPlaylistsData || isErrorEventsData;
 
   // Conditional Fetch Data Product Item
   useEffect(() => {
     if (formData.productCategory === "PLAYLIST") {
       setItemOptions(
-        playlistData?.list.map((post: any) => ({
+        playlistsData?.list.map((post: any) => ({
           label: post.name,
           value: post.id,
         })) || []
       );
     } else if (formData.productCategory === "COHORT") {
       setItemOptions(
-        cohortData?.list.flatMap((post: any) =>
+        cohortsData?.list.flatMap((post: any) =>
+          post.prices.map((price: any) => ({
+            label: `${price.name} - ${post.name}`,
+            value: price.id,
+          }))
+        ) || []
+      );
+    } else if (formData.productCategory === "EVENT") {
+      setItemOptions(
+        eventsData?.list.flatMap((post: any) =>
           post.prices.map((price: any) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
@@ -107,7 +126,7 @@ export default function CreateDiscountFormCMS({
         ) || []
       );
     }
-  }, [formData.productCategory, playlistData, cohortData]);
+  }, [formData.productCategory, playlistsData, cohortsData, eventsData]);
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -322,6 +341,10 @@ export default function CreateDiscountFormCMS({
                   {
                     label: "Playlist",
                     value: "PLAYLIST",
+                  },
+                  {
+                    label: "Event",
+                    value: "EVENT",
                   },
                 ]}
               />

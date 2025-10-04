@@ -124,6 +124,10 @@ export default function CreateInvoiceFormCMS({
         formData.invoiceProductCategory === "PLAYLIST"
           ? Number(formData.invoiceProductItem)
           : undefined,
+      event_id:
+        formData.invoiceProductCategory === "EVENT"
+          ? Number(formData.invoiceProductItem)
+          : undefined,
     },
     {
       enabled: false,
