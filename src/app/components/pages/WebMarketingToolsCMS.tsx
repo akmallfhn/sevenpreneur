@@ -1,13 +1,22 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Cog, Loader2, Quote, Settings } from "lucide-react";
 import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBell,
+  faCalendarDay,
+  faPowerOff,
+  faQuoteLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import { StatusType } from "@/lib/app-types";
+import dayjs from "dayjs";
 
 interface WebMarketingToolsCMSProps {
   sessionToken: string;
@@ -18,9 +27,23 @@ export default function WebMarketingToolsCMS({
 }: WebMarketingToolsCMSProps) {
   const [editTicker, setEditTicker] = useState(false);
 
+  // Set Session Token to Header
+  useEffect(() => {
+    if (sessionToken) {
+      setSessionToken(sessionToken);
+    }
+  }, [sessionToken]);
+
   // Fetch tRPC Detail Ticker
-  const { data, isLoading, isError } = trpc.read.ticker.useQuery({ id: 1 });
-  const tickerData = data?.ticker;
+  const {
+    data: tickerData,
+    isLoading: isLoadingTickerData,
+    isError: isErrorTickerData,
+  } = trpc.read.ticker.useQuery({ id: 1 });
+  const tickerDetailsData = tickerData?.ticker;
+
+  const isLoading = isLoadingTickerData;
+  const isError = isErrorTickerData;
 
   return (
     <React.Fragment>
@@ -35,35 +58,116 @@ export default function WebMarketingToolsCMS({
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
             <TitleRevealCMS
-              titlePage={"Web Marketing"}
-              descPage={
-                "View and manage all registered users in one place, with quick access to actions like edit or delete."
-              }
+              titlePage="Web Marketing"
+              descPage="View and manage all registered users in one place, with quick access to actions like edit or delete."
             />
           </div>
         </div>
 
-        {/* TICKER TOOLS */}
-        <div className="flex items-center justify-between p-5 bg-section-background">
-          <div>
-            <p>{tickerData?.title}</p>
-            <p>{tickerData?.callout}</p>
-            <p>{tickerData?.start_date}</p>
-            <p>{tickerData?.end_date}</p>
+        {/* Loading & Error State */}
+        {isLoading && (
+          <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+            <Loader2 className="animate-spin size-5 " />
           </div>
-          <AppButton
-            variant="cmsPrimary"
-            size="medium"
-            onClick={() => setEditTicker(true)}
-          >
-            Edit
-          </AppButton>
-        </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+            No Data
+          </div>
+        )}
+
+        {/* TICKER TOOLS */}
+        {tickerDetailsData && !isLoadingTickerData && !isErrorTickerData && (
+          <div className="tools flex items-center justify-between p-5 bg-section-background/50 border border-outline rounded-md">
+            <div className="flex flex-col gap-2">
+              <div className="tools-name flex flex-col">
+                <h2 className="font-brand font-bold text-lg">
+                  Ticker Announcement
+                </h2>
+                <h3 className="text-black/40 font-bodycopy font-medium">
+                  a short running text at the top of the screen for quick
+                  updates.
+                </h3>
+              </div>
+              <div className="tools-data flex flex-col font-bodycopy text-[15px] gap-1.5">
+                <div className="ticker-title flex items-center">
+                  <div className="flex w-36 items-center gap-2 text-black/40">
+                    <FontAwesomeIcon
+                      icon={faQuoteLeft}
+                      className="size-4 shrink-0"
+                    />
+                    <p className="font-medium">Headline:</p>
+                  </div>
+                  <p className="font-medium ">{tickerDetailsData?.title}</p>
+                </div>
+                <div className="ticker-callout flex items-center">
+                  <div className="flex w-36 items-center gap-2 text-black/40">
+                    <FontAwesomeIcon
+                      icon={faBell}
+                      className="size-4 shrink-0"
+                    />
+                    <p className="font-medium">Callout (CTA):</p>
+                  </div>
+                  <p className="font-medium ">{tickerDetailsData?.callout}</p>
+                </div>
+                <div className="ticker-status flex items-center">
+                  <div className="flex w-36 items-center gap-2 text-black/40">
+                    <FontAwesomeIcon
+                      icon={faPowerOff}
+                      className="size-4 shrink-0"
+                    />
+                    <p className="font-medium">Status:</p>
+                  </div>
+                  <StatusLabelCMS
+                    variants={tickerDetailsData?.status as StatusType}
+                  />
+                </div>
+                <div className="ticker-start-date flex items-center">
+                  <div className="flex w-36 items-center gap-2 text-black/40">
+                    <FontAwesomeIcon
+                      icon={faCalendarDay}
+                      className="size-4 shrink-0"
+                    />
+                    <p className="font-medium">Available from:</p>
+                  </div>
+                  <p className="font-medium">
+                    {dayjs(tickerDetailsData?.start_date).format(
+                      "DD MMMM YYYY [at] HH:mm"
+                    )}
+                  </p>
+                </div>
+                <div className="ticker-end-date flex items-center">
+                  <div className="flex w-36 items-center gap-2 text-black/40">
+                    <FontAwesomeIcon
+                      icon={faCalendarDay}
+                      className="size-4 shrink-0"
+                    />
+                    <p className="font-medium">Valid until:</p>
+                  </div>
+                  <p className="font-medium">
+                    {dayjs(tickerDetailsData?.end_date).format(
+                      "DD MMMM YYYY [at] HH:mm"
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <AppButton
+              variant="cmsPrimary"
+              size="medium"
+              onClick={() => setEditTicker(true)}
+            >
+              <Settings className="size-4" />
+              Update Ticker
+            </AppButton>
+          </div>
+        )}
       </div>
 
+      {/* Open Edit Ticker */}
       {editTicker && (
         <EditTickerMarketingFormCMS
-          initialData={tickerData}
+          initialData={tickerDetailsData}
           isOpen={editTicker}
           onClose={() => setEditTicker(false)}
         />

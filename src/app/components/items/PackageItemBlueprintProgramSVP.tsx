@@ -69,7 +69,7 @@ export default function PackageItemBlueprintProgramSVP({
           </div>
         </div>
         <AppCountdownTimer
-          targetDateTime={"2025-10-03T23:59:00+07:00"}
+          targetDateTime={"2025-10-05T23:59:00+07:00"}
           isIncludeDimension={false}
         />
         <div className="price-after-discount flex items-center gap-0.5 font-brand text-white">
