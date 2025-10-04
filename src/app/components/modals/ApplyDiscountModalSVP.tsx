@@ -2,7 +2,11 @@
 import { FormEvent, useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import { Loader2, X } from "lucide-react";
-import { CheckDiscountCohort, CheckDiscountPlaylist } from "@/lib/actions";
+import {
+  CheckDiscountCohort,
+  CheckDiscountEvent,
+  CheckDiscountPlaylist,
+} from "@/lib/actions";
 import { toast } from "sonner";
 import InputSVP from "../fields/InputSVP";
 import { ProductCategory } from "@/lib/app-types";
@@ -18,6 +22,7 @@ interface DiscountType {
 interface ApplyDiscountModalSVPProps {
   playlistId?: number;
   cohortId?: number;
+  eventId?: number;
   isOpen: boolean;
   onClose: () => void;
   onApplyDiscount: (discount: DiscountType) => void;
@@ -26,6 +31,7 @@ interface ApplyDiscountModalSVPProps {
 export default function ApplyDiscountModalSVP({
   playlistId,
   cohortId,
+  eventId,
   isOpen,
   onClose,
   onApplyDiscount,
@@ -80,6 +86,11 @@ export default function ApplyDiscountModalSVP({
         responseDiscount = await CheckDiscountCohort({
           discountCode: discountCode.trim(),
           cohortId: cohortId,
+        });
+      } else if (eventId) {
+        responseDiscount = await CheckDiscountEvent({
+          discountCode: discountCode.trim(),
+          eventId: eventId,
         });
       }
       const discountData: DiscountType = {

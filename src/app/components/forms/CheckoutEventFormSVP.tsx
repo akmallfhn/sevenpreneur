@@ -447,23 +447,23 @@ export default function CheckoutEventFormSVP({
             </div>
 
             {/* Promo Discount */}
-            {/* <div className="discount-promo flex bg-white p-5 dark:bg-coal-black"> */}
-            {/* Discount Gateway */}
-            {/* {!discount && (
+            <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
+              {/* Discount Gateway */}
+              {!discount && (
                 <ApplyDiscountGatewaySVP
                   onClick={() => setOpenDiscount(true)}
                 />
-              )} */}
-            {/* Applied Discount */}
-            {/* {discount && (
+              )}
+              {/* Applied Discount */}
+              {discount && (
                 <AppliedDiscountCardSVP
                   discountName={discount.name || ""}
                   discountRate={discount.calc_percent || 0}
                   discountCode={discount.code || ""}
                   onClose={() => setDiscount(null)}
                 />
-              )} */}
-            {/* </div> */}
+              )}
+            </div>
 
             {/* Payment Details */}
             <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">
@@ -588,7 +588,7 @@ export default function CheckoutEventFormSVP({
 
       {/* Modal Discount */}
       <ApplyDiscountModalSVP
-        cohortId={selectedTicket?.id}
+        eventId={selectedTicket?.id}
         isOpen={openDiscount}
         onClose={() => setOpenDiscount(false)}
         onApplyDiscount={(discountData) => {
