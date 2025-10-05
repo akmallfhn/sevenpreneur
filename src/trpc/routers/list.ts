@@ -801,6 +801,32 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  eventPrices: loggedInProcedure
+    .input(
+      z.object({
+        event_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const eventPricesList = await opts.ctx.prisma.eventPrice.findMany({
+        where: { event_id: opts.input.event_id },
+        orderBy: [{ amount: "asc" }, { created_at: "asc" }],
+      });
+      const returnedList = eventPricesList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          amount: entry.amount,
+          status: entry.status,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   playlists: publicProcedure
     .input(
       z.object({

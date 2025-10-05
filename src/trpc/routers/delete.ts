@@ -211,6 +211,29 @@ export const deleteRouter = createTRPCRouter({
       };
     }),
 
+  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedEventPrice = await opts.ctx.prisma.eventPrice.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedEventPrice.count > 1) {
+        console.error(
+          "delete.eventPrice: More-than-one event prices are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
+
   playlist: administratorProcedure
     .input(
       z.object({

@@ -458,6 +458,47 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
+  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+        event_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        amount: z.number().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedEventPrice =
+        await opts.ctx.prisma.eventPrice.updateManyAndReturn({
+          data: {
+            event_id: opts.input.event_id,
+            name: opts.input.name,
+            amount: opts.input.amount,
+            status: opts.input.status,
+          },
+          where: {
+            id: opts.input.id,
+            // deleted_at: null,
+          },
+        });
+      if (updatedEventPrice.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected cohort price is not found.",
+        });
+      } else if (updatedEventPrice.length > 1) {
+        console.error(
+          "update.cohortPrice: More-than-one cohort prices are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        event: updatedEventPrice[0],
+      };
+    }),
+
   playlist: administratorProcedure
     .input(
       z.object({
