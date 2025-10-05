@@ -418,6 +418,43 @@ export const createRouter = createTRPCRouter({
       };
     }),
 
+  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        event_id: numberIsID(),
+        name: stringNotBlank(),
+        amount: z.number(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdEventPrice = await opts.ctx.prisma.eventPrice.create({
+        data: {
+          event_id: opts.input.event_id,
+          name: opts.input.name,
+          amount: opts.input.amount,
+          status: opts.input.status,
+        },
+      });
+      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+        where: {
+          id: createdEventPrice.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theEventPrice) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new cohort price.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        eventPrice: theEventPrice,
+      };
+    }),
+
   playlist: administratorProcedure
     .input(
       z.object({
