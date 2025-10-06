@@ -36,7 +36,7 @@ export async function GET(req: Request, { params }: VideoStreamProps) {
     kid: CLOUDFLARE_SIGNING_KEY,
   };
 
-  // Create Unsigned JWT
+  // Create unsigned JWT
   const unsignedToken = `${encodeBase64Url(header)}.${encodeBase64Url(
     payload
   )}`;
