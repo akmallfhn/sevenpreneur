@@ -29,7 +29,7 @@ export default function AppVideoPlayer({
       }
 
       try {
-        const response = await fetch(`api/stream/url/${videoId}`);
+        const response = await fetch(`/api/stream/url/${videoId}`);
         const data = await response.json();
         const url = new URL(data.signed_url);
         const tokenFromURL = url.searchParams.get("token");
