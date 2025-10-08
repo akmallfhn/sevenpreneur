@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Stream } from "@cloudflare/stream-react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface AppVideoPlayerProps {
   videoId: string;
@@ -58,10 +59,29 @@ export default function AppVideoPlayer({
     };
   }, [videoId]);
 
-  if (isLoading) return <p>Loading video...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full items-center justify-center bg-black">
+        <DotLottieReact
+          src="/animation/loading-spinner.lottie"
+          loop
+          autoplay
+          speed={1}
+          style={{ width: 240 }}
+        />
+      </div>
+    );
+  }
 
-  if (!signedToken || hasError)
-    return <p>Video unavailable. Please refresh the page.</p>;
+  if (!signedToken || hasError) {
+    return (
+      <div className="flex w-full h-full items-center justify-center bg-black">
+        <p className="font-bodycopy text-white">
+          Video unavailable. Please refresh the page.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div key={refreshKey}>
