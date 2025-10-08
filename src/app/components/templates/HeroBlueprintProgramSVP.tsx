@@ -52,8 +52,8 @@ export default function HeroBlueprintProgramSVP({
               </h2>
             </div>
             <p className="hero-description w-[317px] text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
-              Fast-Track Entrepreneurial Program with{" "}
-              <b>End-to-End Frameworks</b> & <b>Top-Tier Coaching</b>
+              Entrepreneurship Bootcamp with <b>End-to-End Frameworks</b> &{" "}
+              <b>Top-Tier Coaching</b>
             </p>
             <div className="scorecards flex gap-4">
               <ScorecardItemSVP

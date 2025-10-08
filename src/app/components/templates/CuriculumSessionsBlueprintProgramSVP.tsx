@@ -45,21 +45,21 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_description:
         "Start validating, so the idea stands on real ground.",
       session_educator: "Yusuf Arezany",
-      session_educator_title: "Researcher Govtech Procurement",
+      session_educator_title: "Market Researcher Consultant",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-yusuf-arezany.webp",
       session_variant: "frameworkPrimary",
     },
-    // {
-    //   session_number: "",
-    //   session_name: "Research Case",
-    //   session_description: "",
-    //   session_educator: "Inu",
-    //   session_educator_title: "BMI Research",
-    //   session_educator_avatar:
-    //     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-raymond.webp",
-    //   session_variant: "founderSeries",
-    // },
+    {
+      session_number: "",
+      session_name: "Turning Market Research Into Business Strategies",
+      session_description: "",
+      session_educator: "Inu Ranuatmadja",
+      session_educator_title: "Research Head BMI Research",
+      session_educator_avatar:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-inu.webp",
+      session_variant: "founderSeries",
+    },
     {
       session_number: "04.",
       session_name: "Product & Offer",
