@@ -1,7 +1,6 @@
 import "@/app/globals.css";
-import HeaderNavbarLMS from "@/app/components/navigations/HeaderNavbarLMS";
+import HeaderNavbarLMS from "@/app/components/navigations/HeaderPageLMS";
 import SidebarLMS from "@/app/components/navigations/SidebarLMS";
-import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -37,28 +36,11 @@ interface AgoraLayoutProps {
 }
 
 export default async function AgoraLayout({ children }: AgoraLayoutProps) {
-  // Get Token for Header Navbar
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
-
-  let baseURL = "https://api.sevenpreneur.com/trpc";
-  if (process.env.DOMAIN_MODE === "local")
-    baseURL = "https://api.example.com:3000/trpc";
-
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
-
-  const userData = (await trpc.auth.checkSession()).user;
-
   return (
-    <ThemeProvider attribute="class" defaultTheme="light">
-      <div className="root relative w-full min-h-screen bg-[#F0E5F2]">
-        <SidebarLMS />
-        {children}
-        <Toaster richColors position="top-center" />
-      </div>
-    </ThemeProvider>
+    <div className="root relative w-full min-h-screen bg-[#F0E5F2]">
+      <SidebarLMS />
+      {children}
+      <Toaster richColors position="top-center" />
+    </div>
   );
 }

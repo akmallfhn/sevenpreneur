@@ -18,7 +18,7 @@ export default function AvatarBadgeSVP({
           className="object-cover w-full h-full"
           src={
             userAvatar ||
-            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//avatar-akmal.webp"
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
           }
           alt="Homepage"
           width={320}

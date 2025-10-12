@@ -43,7 +43,7 @@ export default function SidebarMenuItemLMS({
 
       {/* Active State */}
       {isActive && (
-        <div className="bg-secondary w-2 h-1/2 absolute right-0 rounded-full" />
+        <div className="absolute bg-secondary w-2 h-1/2  right-0 rounded-full" />
       )}
     </Link>
   );
