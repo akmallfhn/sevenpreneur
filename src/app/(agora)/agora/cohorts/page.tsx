@@ -1,20 +1,28 @@
-import CohortItemCardLMS from "@/app/components/items/CohortItemCardLMS";
+import CohortListLMS from "@/app/components/indexes/CohortListLMS";
+import { setSessionToken, trpc } from "@/trpc/server";
+import { cookies } from "next/headers";
 
-export default function CohortsPageLMS() {
+export default async function CohortsPageLMS() {
+  // Get Token for Header Navbar
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+  if (!sessionToken) return null;
+
+  if (sessionToken) {
+    setSessionToken(sessionToken);
+  }
+
+  // Fetch tRPC User Data
+  const userData = (await trpc.auth.checkSession()).user;
+
   return (
-    <div className="root-page hidden w-full h-full justify-center py-8 lg:flex lg:pl-64">
-      <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        <div className="grid gap-4 items-center lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-          <CohortItemCardLMS />
-        </div>
-      </div>
-    </div>
+    <CohortListLMS
+      userName={userData.full_name}
+      userAvatar={
+        userData.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+      }
+      userRole={userData.role_id}
+    />
   );
 }

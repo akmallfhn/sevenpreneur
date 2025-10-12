@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { DeleteSession } from "@/lib/actions";
@@ -7,15 +7,12 @@ import {
   BotMessageSquare,
   BowArrow,
   CirclePlay,
-  HouseIcon,
   LayoutDashboard,
   Loader2,
   LogOut,
   Presentation,
-  Tags,
 } from "lucide-react";
 import SidebarMenuItemLMS from "./SidebarMenuItemLMS";
-import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
 
 export default function SidebarLMS() {
   const router = useRouter();
@@ -39,9 +36,8 @@ export default function SidebarLMS() {
   };
 
   return (
-    <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-white/50 dark:bg-surface-black z-50 lg:flex lg:flex-col">
-      {/* TOP AREA */}
-      <div className="sidebar-cms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
+    <div className="sidebar-lms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-white/50 backdrop-blur-md z-50 dark:bg-surface-black lg:flex lg:flex-col">
+      <div className="sidebar-lms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
         <div className="platform-logo flex w-full p-2 px-2.5">
           <Image
             className="object-cover w-full h-full text-black dark:text-white"
@@ -68,7 +64,7 @@ export default function SidebarLMS() {
           />
           <SidebarMenuItemLMS
             menuTitle="Business Templates"
-            url="/template"
+            url="/templates"
             icon={<BowArrow />}
           />
           <SidebarMenuItemLMS
@@ -78,16 +74,15 @@ export default function SidebarLMS() {
           />
           <SidebarMenuItemLMS
             menuTitle="Learning Series"
-            url="/playlists/1"
+            url="/playlists"
             icon={<CirclePlay />}
           />
         </div>
       </div>
 
-      <div className="sidebar-cms-bottom flex flex-col max-w-[224px] mx-auto w-full gap-4">
-        <AppThemeSwitcher style="switch" />
+      <div className="sidebar-lms-bottom flex flex-col max-w-[224px] mx-auto w-full gap-4">
         <div
-          className={`logout-button flex w-full items-center p-2 px-2.5 gap-4 bg-[#E50A3E] text-white text-sm font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#BE0E22] active:bg-[#BE0E22] active:scale-95 ${
+          className={`logout-button flex w-full items-center p-2 px-2.5 gap-4 text-[#BE0E22] text-sm font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-semi-destructive active:bg-semi-destructive active:scale-95 ${
             isLoadingButton ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onClick={handleLogout}

@@ -1,5 +1,3 @@
-import CohortItemCardLMS from "@/app/components/items/CohortItemCardLMS";
-
-export default async function HomePageLMS() {
+export default async function DashboardPageLMS() {
   return <></>;
 }
