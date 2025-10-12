@@ -39,13 +39,13 @@ export default function CohortItemCardCMS({
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // --- Open and close dropdown
+  // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Close dropdown outside
+  // Close dropdown outside
   useEffect(() => {
     const handleClickOutside = (
       event: MouseEvent | (MouseEvent & { target: Node })
@@ -63,7 +63,7 @@ export default function CohortItemCardCMS({
     };
   }, []);
 
-  // --- Function to delete user
+  // Function to delete cohort
   const deleteUser = trpc.delete.cohort.useMutation();
   const handleDelete = () => {
     deleteUser.mutate(

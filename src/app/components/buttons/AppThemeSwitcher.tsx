@@ -61,7 +61,9 @@ export default function AppThemeSwitcher({
             checked={theme === "dark"}
             onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
           />
-          <label>{menuName}</label>
+          <label className="text-sm font-bodycopy font-medium">
+            {menuName}
+          </label>
         </div>
       )}
       {isDropdownItem && (

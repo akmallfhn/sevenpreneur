@@ -1,4 +1,7 @@
+import "@/app/globals.css";
 import HeaderNavbarLMS from "@/app/components/navigations/HeaderNavbarLMS";
+import SidebarLMS from "@/app/components/navigations/SidebarLMS";
+import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -6,7 +9,7 @@ import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 
-// --- Metadata
+// Metadata
 export const metadata: Metadata = {
   title: {
     template: "%s | Agora Learning Sevenpreneur",
@@ -34,31 +37,28 @@ interface AgoraLayoutProps {
 }
 
 export default async function AgoraLayout({ children }: AgoraLayoutProps) {
-  // --- Get Token for Header Navbar
+  // Get Token for Header Navbar
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
+  if (!sessionToken) return null;
 
-  // --- Check User Session for Header Navbar
-  let userData:
-    | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
-    | null = null;
+  let baseURL = "https://api.sevenpreneur.com/trpc";
+  if (process.env.DOMAIN_MODE === "local")
+    baseURL = "https://api.example.com:3000/trpc";
+
   if (sessionToken) {
     setSessionToken(sessionToken);
-    const checkUser = await trpc.auth.checkSession();
-    userData = checkUser.user;
   }
+
+  const userData = (await trpc.auth.checkSession()).user;
+
   return (
-    <div>
-      <ThemeProvider attribute="class" defaultTheme="dark">
-        <HeaderNavbarLMS
-          userName={userData?.full_name}
-          userAvatar={userData?.avatar ?? null}
-          userRole={userData?.role_id}
-          isLoggedIn={!!userData}
-        />
+    <ThemeProvider attribute="class" defaultTheme="light">
+      <div className="root relative w-full min-h-screen bg-[#F0E5F2]">
+        <SidebarLMS />
         {children}
         <Toaster richColors position="top-center" />
-      </ThemeProvider>
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
