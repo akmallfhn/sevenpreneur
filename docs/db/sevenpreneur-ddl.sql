@@ -164,6 +164,24 @@ CREATE TABLE materials (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE discussion_starters (
+  id           SERIAL       PRIMARY KEY,
+  user_id      UUID         NOT NULL,
+  learning_id  INTEGER      NOT NULL,
+  message      TEXT         NOT NULL,
+  created_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE discussion_replies (
+  id           SERIAL       PRIMARY KEY,
+  user_id      UUID         NOT NULL,
+  starter_id   INTEGER      NOT NULL,
+  message      TEXT         NOT NULL,
+  created_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE projects (
   id            SERIAL       PRIMARY KEY,
   cohort_id     INTEGER      NOT NULL,
@@ -345,6 +363,14 @@ ALTER TABLE learnings
 
 ALTER TABLE materials
   ADD FOREIGN KEY (learning_id) REFERENCES learnings (id);
+
+ALTER TABLE discussion_starters
+  ADD FOREIGN KEY (user_id)     REFERENCES users (id),
+  ADD FOREIGN KEY (learning_id) REFERENCES learnings (id);
+
+ALTER TABLE discussion_replies
+  ADD FOREIGN KEY (user_id)    REFERENCES users (id),
+  ADD FOREIGN KEY (starter_id) REFERENCES learnings (id);
 
 ALTER TABLE projects
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
