@@ -122,6 +122,15 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators and Class Manager have write access to all cohort prices' data.
 - Logged-in users can see all cohort prices given the cohort ID.
 
+### Enrolled Cohorts 🎓
+
+| Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.enrolledCohorts` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.enrolledCohort`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:** Logged-in users can see all their own paid/enrolled cohorts.
+
 ## Modules 📕
 
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
