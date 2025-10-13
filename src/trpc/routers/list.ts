@@ -423,6 +423,86 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  enrolledCohorts: loggedInProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const whereClause = {
+        user_id: opts.ctx.user.id,
+        cohort: {
+          deleted_at: null,
+        },
+      };
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause.cohort, {
+          name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.userCohort.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const cohortList = await opts.ctx.prisma.userCohort.findMany({
+        select: {
+          cohort: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              status: true,
+              slug_url: true,
+              start_date: true,
+              end_date: true,
+            },
+          },
+        },
+        orderBy: [
+          { cohort: { end_date: "desc" } },
+          { cohort: { start_date: "desc" } },
+          { cohort: { published_at: "desc" } },
+        ],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+      const returnedList = cohortList.map((entry) => {
+        return {
+          id: entry.cohort.id,
+          name: entry.cohort.name,
+          image: entry.cohort.image,
+          status: entry.cohort.status,
+          slug_url: entry.cohort.slug_url,
+          start_date: entry.cohort.start_date,
+          end_date: entry.cohort.end_date,
+        };
+      });
+
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
+
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+        metapaging: returnedMetapaging,
+      };
+    }),
+
   cohortMembers: loggedInProcedure
     .input(
       z.object({

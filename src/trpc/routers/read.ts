@@ -229,6 +229,56 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  enrolledCohort: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theCohort = await opts.ctx.prisma.userCohort.findFirst({
+        include: {
+          cohort: true,
+        },
+        where: {
+          user_id: opts.ctx.user.id,
+          cohort_id: opts.input.id,
+        },
+      });
+      if (!theCohort) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The cohort with the given ID is not found.",
+        });
+      }
+      const learningsCount = await opts.ctx.prisma.learning.count({
+        where: {
+          cohort_id: opts.input.id,
+        },
+      });
+      const modulesCount = await opts.ctx.prisma.module.count({
+        where: {
+          cohort_id: opts.input.id,
+        },
+      });
+      const materialsCount = await opts.ctx.prisma.material.count({
+        where: {
+          learning: {
+            cohort_id: opts.input.id,
+          },
+        },
+      });
+      const theCohortWithCounts = Object.assign({}, theCohort, {
+        total_learning_session: learningsCount,
+        total_materials: modulesCount + materialsCount,
+      });
+      return {
+        status: 200,
+        message: "Success",
+        cohort: theCohortWithCounts,
+      };
+    }),
+
   cohortPrice: loggedInProcedure
     .input(
       z.object({
