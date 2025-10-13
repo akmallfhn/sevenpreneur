@@ -37,7 +37,7 @@ interface AgoraLayoutProps {
 
 export default async function AgoraLayout({ children }: AgoraLayoutProps) {
   return (
-    <div className="root relative w-full min-h-screen bg-[#F0E5F2]">
+    <div className="root relative w-full min-h-screen bg-section-background">
       <SidebarLMS />
       {children}
       <Toaster richColors position="top-center" />

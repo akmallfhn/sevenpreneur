@@ -36,7 +36,7 @@ export default function SidebarLMS() {
   };
 
   return (
-    <div className="sidebar-lms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-white/50 backdrop-blur-md z-50 dark:bg-surface-black lg:flex lg:flex-col">
+    <div className="sidebar-lms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-white/70 backdrop-blur-md z-50 dark:bg-surface-black lg:flex lg:flex-col">
       <div className="sidebar-lms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
         <div className="platform-logo flex w-full p-2 px-2.5">
           <Image
