@@ -1,21 +1,25 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import isBetween from "dayjs/plugin/isBetween";
 import "dayjs/locale/en";
+import { getDateTimeRange } from "@/lib/date-time-manipulation";
+import { ScheduleStatus } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
+dayjs.extend(isBetween);
 
 interface CohortItemCardLMSProps {
-  cohortId?: number;
-  cohortName?: string;
-  cohortImage?: string;
-  cohortStartDate?: string;
-  cohortEndDate?: string;
+  cohortId: number;
+  cohortName: string;
+  cohortImage: string;
+  cohortStartDate: string;
+  cohortEndDate: string;
 }
 
 export default function CohortItemCardLMS({
@@ -25,40 +29,58 @@ export default function CohortItemCardLMS({
   cohortStartDate,
   cohortEndDate,
 }: CohortItemCardLMSProps) {
+  const [scheduleStatus, setScheduleStatus] = useState<ScheduleStatus | null>(
+    null
+  );
+
+  const { dateString } = getDateTimeRange({
+    startDate: cohortStartDate,
+    endDate: cohortEndDate,
+  });
+
+  useEffect(() => {
+    if (dayjs().isBefore(cohortStartDate)) {
+      setScheduleStatus("UPCOMING");
+    } else if (dayjs().isBetween(cohortStartDate, cohortEndDate, null, "[]")) {
+      setScheduleStatus("ON GOING");
+    } else if (dayjs().isAfter(cohortEndDate)) {
+      setScheduleStatus("FINISHED");
+    }
+  }, [cohortStartDate, cohortEndDate]);
+
   return (
     <React.Fragment>
-      <div className="card-container relative">
-        <Link
-          href={`/cohorts/${32}`}
-          className="flex flex-col w-full bg-white shadow-md rounded-md overflow-hidden"
-        >
-          {/* Thumbnail */}
-          <div className="image-thumbnail flex w-full aspect-thumbnail overflow-hidden">
-            <Image
-              className="object-cover w-full h-full"
-              src={
-                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/session-zaki-angga%20(1).webp"
-              }
-              alt="thumbnail"
-              width={500}
-              height={500}
-            />
-          </div>
-          {/* Metadata */}
-          <div className="metadata relative flex flex-col p-3 gap-2 h-[112px]">
-            <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2">
-              {"Sevenpreneur Business Blueprint Program"}
-            </h3>
-            <div className="cohort-timeline flex gap-2 items-center text-alternative">
-              <FontAwesomeIcon icon={faCalendar} className="size-3" />
-              <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
-                <span>{dayjs(cohortStartDate).format("ll")}</span> -{" "}
-                <span>{dayjs(cohortEndDate).format("ll")}</span>
-              </div>
+      <Link
+        href={`/cohorts/${cohortId}`}
+        className="card-container flex flex-col w-full p-3 gap-3 bg-white border border-outline/40 rounded-lg overflow-hidden"
+      >
+        <div className="cohort-image relative flex w-full aspect-thumbnail rounded-md overflow-hidden">
+          <Image
+            className="object-cover w-full h-full"
+            src={cohortImage}
+            alt="cohort-image"
+            width={500}
+            height={500}
+          />
+          <p className="cohort-schedule-status absolute flex w-fit px-2 py-0.5 top-2 right-2 bg-[#DAF2F0] text-[#419B91] text-[10px] font-bodycopy font-semibold rounded-full">
+            {scheduleStatus}
+          </p>
+        </div>
+        <div className="metadata relative flex flex-col gap-2 h-[112px]">
+          <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2">
+            {cohortName}
+          </h3>
+          <p className="cohort-sessions flex w-fit px-2 py-1 bg-primary-light/50 text-primary text-xs font-bodycopy font-semibold rounded-full">
+            10-13 sessions
+          </p>
+          <div className="cohort-timeline flex gap-1.5 items-center text-alternative">
+            <FontAwesomeIcon icon={faCalendar} className="size-3" />
+            <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
+              {dateString}
             </div>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     </React.Fragment>
   );
 }

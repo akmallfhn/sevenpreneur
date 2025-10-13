@@ -12,8 +12,16 @@ export default async function CohortsPageLMS() {
     setSessionToken(sessionToken);
   }
 
-  // Fetch tRPC User Data
+  // Fetch tRPC
   const userData = (await trpc.auth.checkSession()).user;
+  const enrolledCohortData = (await trpc.list.enrolledCohorts({})).list;
+
+  const enrolledCohortList = enrolledCohortData.map((variable) => ({
+    ...variable,
+    start_date: variable.start_date ? variable.start_date.toISOString() : "",
+    end_date: variable.end_date ? variable.end_date.toISOString() : "",
+  }));
+  console.log("data:", enrolledCohortList);
 
   return (
     <CohortListLMS
@@ -23,6 +31,7 @@ export default async function CohortsPageLMS() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       userRole={userData.role_id}
+      cohortList={enrolledCohortList}
     />
   );
 }
