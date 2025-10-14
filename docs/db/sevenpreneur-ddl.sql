@@ -34,10 +34,14 @@ CREATE TYPE t_status_enum AS ENUM (
 -- Tables --
 ------------
 
-CREATE TABLE industries (
-  id             SMALLSERIAL  PRIMARY KEY,
-  industry_name  VARCHAR      NOT NULL  UNIQUE,
-  created_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+-- Lookup tables
+
+CREATE TABLE roles (
+  id          SMALLSERIAL  PRIMARY KEY,
+  name        VARCHAR      NOT NULL  UNIQUE,
+  permission  SMALLINT     NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE entrepreneur_stages (
@@ -46,12 +50,10 @@ CREATE TABLE entrepreneur_stages (
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE roles (
-  id          SMALLSERIAL  PRIMARY KEY,
-  name        VARCHAR      NOT NULL  UNIQUE,
-  permission  SMALLINT     NOT NULL,
-  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE industries (
+  id             SMALLSERIAL  PRIMARY KEY,
+  industry_name  VARCHAR      NOT NULL  UNIQUE,
+  created_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE phone_country_codes (
@@ -62,7 +64,7 @@ CREATE TABLE phone_country_codes (
 );
 
 CREATE TABLE payment_channels (
-  id            SMALLSERIAL  PRIMARY KEY,
+  id            SMALLSERIAL    PRIMARY KEY,
   label         VARCHAR        NOT NULL,
   code          VARCHAR        NOT NULL  UNIQUE,
   method        VARCHAR        NOT NULL,
@@ -72,6 +74,8 @@ CREATE TABLE payment_channels (
   calc_flat     DECIMAL(5, 0)  NOT NULL,
   calc_vat      BOOLEAN        NOT NULL
 );
+
+-- User data
 
 CREATE TABLE users (
   id                  UUID         PRIMARY KEY  DEFAULT gen_random_uuid(),
@@ -100,6 +104,8 @@ CREATE TABLE tokens (
   token       TEXT         NOT NULL  UNIQUE,
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
+
+-- LMS-related
 
 CREATE TABLE cohorts (
   id            SERIAL       PRIMARY KEY,
@@ -174,12 +180,12 @@ CREATE TABLE discussion_starters (
 );
 
 CREATE TABLE discussion_replies (
-  id           SERIAL       PRIMARY KEY,
-  user_id      UUID         NOT NULL,
-  starter_id   INTEGER      NOT NULL,
-  message      TEXT         NOT NULL,
-  created_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  id          SERIAL       PRIMARY KEY,
+  user_id     UUID         NOT NULL,
+  starter_id  INTEGER      NOT NULL,
+  message     TEXT         NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE projects (
@@ -204,33 +210,7 @@ CREATE TABLE submissions (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE events (
-  id            SERIAL       PRIMARY KEY,
-  name          VARCHAR      NOT NULL,
-  description   VARCHAR      NOT NULL,
-  image         VARCHAR      NOT NULL,
-  status        status_enum  NOT NULL,
-  slug_url      VARCHAR      NOT NULL  UNIQUE,
-  start_date    TIMESTAMPTZ  NOT NULL,
-  end_date      TIMESTAMPTZ  NOT NULL,
-  method         learning_method_enum  NOT NULL  DEFAULT 'onsite',
-  meeting_url    VARCHAR                   NULL,
-  location_name  VARCHAR                   NULL,
-  location_url   VARCHAR                   NULL,
-  published_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  deleted_at    TIMESTAMPTZ      NULL,
-  deleted_by    UUID             NULL
-);
-
-CREATE TABLE event_prices (
-  id          SERIAL          PRIMARY KEY,
-  event_id   INTEGER         NOT NULL,
-  name        VARCHAR         NOT NULL,
-  amount      DECIMAL(12, 2)  NOT NULL,
-  status      status_enum     NOT NULL,
-  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
-);
+-- Playlist-related
 
 CREATE TABLE playlists (
   id                 SERIAL          PRIMARY KEY,
@@ -259,6 +239,38 @@ CREATE TABLE videos (
   external_video_id  VARCHAR   NOT NULL
 );
 
+-- Event-related
+
+CREATE TABLE events (
+  id             SERIAL                PRIMARY KEY,
+  name           VARCHAR               NOT NULL,
+  description    VARCHAR               NOT NULL,
+  image          VARCHAR               NOT NULL,
+  status         status_enum           NOT NULL,
+  slug_url       VARCHAR               NOT NULL  UNIQUE,
+  start_date     TIMESTAMPTZ           NOT NULL,
+  end_date       TIMESTAMPTZ           NOT NULL,
+  method         learning_method_enum  NOT NULL  DEFAULT 'onsite',
+  meeting_url    VARCHAR                   NULL,
+  location_name  VARCHAR                   NULL,
+  location_url   VARCHAR                   NULL,
+  published_at   TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at     TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  deleted_at     TIMESTAMPTZ               NULL,
+  deleted_by     UUID                      NULL
+);
+
+CREATE TABLE event_prices (
+  id          SERIAL          PRIMARY KEY,
+  event_id    INTEGER         NOT NULL,
+  name        VARCHAR         NOT NULL,
+  amount      DECIMAL(12, 2)  NOT NULL,
+  status      status_enum     NOT NULL,
+  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Transaction-related
+
 CREATE TABLE discounts (
   id            SERIAL         PRIMARY KEY,
   name          VARCHAR        NOT NULL,
@@ -272,8 +284,6 @@ CREATE TABLE discounts (
   created_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, category, item_id);
 
 CREATE TABLE transactions (
   id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
@@ -295,15 +305,17 @@ CREATE TABLE transactions (
   updated_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tickers
+
 CREATE TABLE ticker (
-  id INTEGER PRIMARY KEY DEFAULT 1,
-  title VARCHAR NOT NULL,
-  callout VARCHAR NULL,
-  target_url VARCHAR NOT NULL,
-  status status_enum NOT NULL,
-  start_date TIMESTAMPTZ NOT NULL,
-  end_date TIMESTAMPTZ NOT NULL,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id          INTEGER      PRIMARY KEY  DEFAULT 1,
+  title       VARCHAR      NOT NULL,
+  callout     VARCHAR          NULL,
+  target_url  VARCHAR      NOT NULL,
+  status      status_enum  NOT NULL,
+  start_date  TIMESTAMPTZ  NOT NULL,
+  end_date    TIMESTAMPTZ  NOT NULL,
+  updated_at  TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Relation Tables --
@@ -315,7 +327,7 @@ CREATE TABLE users_cohorts (
 );
 
 CREATE TABLE users_events (
-  user_id    UUID     NOT NULL,
+  user_id   UUID     NOT NULL,
   event_id  INTEGER  NOT NULL,
   PRIMARY KEY (user_id, event_id)
 );
@@ -338,6 +350,8 @@ CREATE TABLE educators_playlists (
 -- References --
 ----------------
 
+-- User data
+
 ALTER TABLE users
   ADD FOREIGN KEY (phone_country_id)   REFERENCES phone_country_codes (id),
   ADD FOREIGN KEY (role_id)            REFERENCES roles (id),
@@ -347,17 +361,13 @@ ALTER TABLE users
 ALTER TABLE tokens
   ADD FOREIGN KEY (user_id) REFERENCES users (id);
 
+-- LMS-related
+
 ALTER TABLE cohorts
   ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
 
 ALTER TABLE cohort_prices
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
-
-ALTER TABLE events
-  ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
-
-ALTER TABLE event_prices
-  ADD FOREIGN KEY (event_id) REFERENCES events(id);
 
 ALTER TABLE modules
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
@@ -384,15 +394,29 @@ ALTER TABLE submissions
   ADD FOREIGN KEY (project_id)   REFERENCES projects (id),
   ADD FOREIGN KEY (submitter_id) REFERENCES users (id);
 
+-- Playlist-related
+
 ALTER TABLE playlists
   ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
 
 ALTER TABLE videos
   ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
 
+-- Event-related
+
+ALTER TABLE events
+  ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
+
+ALTER TABLE event_prices
+  ADD FOREIGN KEY (event_id) REFERENCES events(id);
+
+-- Transaction-related
+
 ALTER TABLE transactions
   ADD FOREIGN KEY (user_id) REFERENCES users (id),
   ADD FOREIGN KEY (discount_id) REFERENCES discounts (id);
+
+-- Relation Tables --
 
 ALTER TABLE users_cohorts
   ADD FOREIGN KEY (user_id)   REFERENCES users (id),
@@ -426,15 +450,21 @@ $$ LANGUAGE plpgsql;
 -- Triggers --
 --------------
 
+-- Lookup tables
+
 CREATE TRIGGER update_roles_updated_at_trigger
   BEFORE UPDATE ON roles
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
+-- User data
+
 CREATE TRIGGER update_users_updated_at_trigger
   BEFORE UPDATE ON users
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
+
+-- LMS-related
 
 CREATE TRIGGER update_cohorts_updated_at_trigger
   BEFORE UPDATE ON cohorts
@@ -476,15 +506,21 @@ CREATE TRIGGER update_submissions_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
-CREATE TRIGGER update_events_updated_at_trigger
-  BEFORE UPDATE ON events
-  FOR EACH ROW
-    EXECUTE FUNCTION update_updated_at();
+-- Playlist-related
 
 CREATE TRIGGER update_playlists_updated_at_trigger
   BEFORE UPDATE ON playlists
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
+
+-- Event-related
+
+CREATE TRIGGER update_events_updated_at_trigger
+  BEFORE UPDATE ON events
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+-- Transaction-related
 
 CREATE TRIGGER update_discounts_updated_at_trigger
   BEFORE UPDATE ON discounts
@@ -496,6 +532,8 @@ CREATE TRIGGER update_transactions_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
+-- Tickers
+
 CREATE TRIGGER update_ticker_updated_at_trigger
   BEFORE UPDATE ON ticker
   FOR EACH ROW
@@ -504,5 +542,11 @@ CREATE TRIGGER update_ticker_updated_at_trigger
 ------------------
 -- Unique Index --
 ------------------
+
+-- Transaction-related
+
+CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, category, item_id);
+
+-- Tickers
 
 CREATE UNIQUE INDEX one_row_only ON ticker ((true));
