@@ -233,7 +233,7 @@ export default function CheckoutCohortFormSVP({
         // Optional fields
         discountCode: discount?.code,
       });
-      if (makePayment.status === 200) {
+      if (makePayment.code === "CREATED") {
         window.open(makePayment.invoice_url, "_blank");
         router.replace(`/transactions/${makePayment.transaction_id}`);
       } else {

@@ -70,7 +70,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         user: theUser,
       };
@@ -134,7 +134,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         cohort: theCohort,
       };
@@ -171,7 +171,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         cohortPrice: theCohortPrice,
       };
@@ -222,7 +222,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         learning: theLearning,
       };
@@ -261,7 +261,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         material: theMaterial,
       };
@@ -296,7 +296,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         module: theDiscussionStarter,
       };
@@ -331,7 +331,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         module: theDiscussionReply,
       };
@@ -370,7 +370,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         module: theModule,
       };
@@ -411,7 +411,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         project: theProject,
       };
@@ -483,7 +483,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         event: theEvent,
       };
@@ -520,7 +520,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         eventPrice: theEventPrice,
       };
@@ -587,7 +587,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         playlist: thePlaylist,
       };
@@ -622,7 +622,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         educatorPlaylist: theEducatorPlaylist,
       };
@@ -664,7 +664,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         video: theVideo,
       };
@@ -698,7 +698,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         submission: theSubmission,
       };
@@ -743,7 +743,7 @@ export const createRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         discount: theDiscount,
       };

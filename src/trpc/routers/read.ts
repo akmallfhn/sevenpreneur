@@ -88,7 +88,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         industry: theIndustry,
       };
@@ -112,7 +112,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         entrepreneur_stage: theEntrepreneurStage,
       };
@@ -135,7 +135,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         role: theRole,
       };
@@ -167,7 +167,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         user: theUser,
       };
@@ -223,7 +223,7 @@ export const readRouter = createTRPCRouter({
         total_materials: modulesCount + materialsCount,
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         cohort: theCohortWithCounts,
       };
@@ -273,7 +273,7 @@ export const readRouter = createTRPCRouter({
         total_materials: modulesCount + materialsCount,
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         cohort: theCohortWithCounts,
       };
@@ -299,7 +299,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         cohortPrice: theCohortPrice,
       };
@@ -328,7 +328,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         learning: theLearning,
       };
@@ -372,7 +372,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         material: theMaterial,
       };
@@ -416,7 +416,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         module: theModule,
       };
@@ -460,7 +460,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         project: theProject,
       };
@@ -492,7 +492,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         submission: theSubmission,
       };
@@ -527,7 +527,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         event: theEvent,
       };
@@ -553,7 +553,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         cohortPrice: theEventPrice,
       };
@@ -619,7 +619,7 @@ export const readRouter = createTRPCRouter({
         total_user_enrolled: usersCount,
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         playlist: thePlaylistWithCounts,
       };
@@ -688,7 +688,7 @@ export const readRouter = createTRPCRouter({
         total_user_enrolled: usersCount,
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         playlist: thePlaylistWithCounts,
       };
@@ -740,7 +740,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         video: theVideo,
       };
@@ -802,7 +802,7 @@ export const readRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         discount: {
           id: theDiscount.id,
@@ -947,7 +947,7 @@ export const readRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         transaction: {
           id: theTransaction.id,
@@ -1012,7 +1012,7 @@ export const readRouter = createTRPCRouter({
         });
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         ticker: theTicker,
       };

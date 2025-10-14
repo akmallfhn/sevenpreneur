@@ -144,7 +144,7 @@ export default function TransactionStatusDetailsSVP({
       const cancelPayment = await CancelPaymentXendit({
         transactionId,
       });
-      if (cancelPayment.status === 200) {
+      if (cancelPayment.code === "NO_CONTENT") {
         router.refresh();
       } else {
         toast.error("Cancellation failed. Please try again");
