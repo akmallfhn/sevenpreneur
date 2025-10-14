@@ -21,7 +21,6 @@ export default async function CohortsPageLMS() {
     start_date: variable.start_date ? variable.start_date.toISOString() : "",
     end_date: variable.end_date ? variable.end_date.toISOString() : "",
   }));
-  console.log("data:", enrolledCohortList);
 
   return (
     <CohortListLMS
