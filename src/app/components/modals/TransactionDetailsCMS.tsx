@@ -73,7 +73,7 @@ export default function TransactionDetailsCMS({
       const cancelPayment = await CancelPaymentXendit({
         transactionId,
       });
-      if (cancelPayment.status === 200) {
+      if (cancelPayment.code === "NO_CONTENT") {
         utils.read.transaction.invalidate();
         utils.list.transactions.invalidate();
       } else {

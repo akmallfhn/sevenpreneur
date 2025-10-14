@@ -67,7 +67,7 @@ export const updateRouter = createTRPCRouter({
         console.error("update.user: More-than-one users are updated at once.");
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         user: updatedUser[0],
       };
@@ -115,7 +115,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         cohort: updatedCohort[0],
       };
@@ -156,7 +156,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         cohort: updatedCohortPrice[0],
       };
@@ -211,7 +211,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         learning: updatedLearning[0],
       };
@@ -254,7 +254,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         material: updatedMaterial[0],
       };
@@ -289,7 +289,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         discussion: updatedDiscussionStarter[0],
       };
@@ -324,7 +324,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         discussion: updatedDiscussionReply[0],
       };
@@ -366,7 +366,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         module: updatedModule[0],
       };
@@ -410,7 +410,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         project: updatedProject[0],
       };
@@ -434,10 +434,10 @@ export const updateRouter = createTRPCRouter({
       }
 
       if (theDocumentUrl === undefined && theComment === undefined) {
-        return {
-          status: 400,
+        throw new TRPCError({
+          code: "BAD_REQUEST",
           message: "Bad request",
-        };
+        });
       }
 
       let selectedUserId: string | undefined = undefined;
@@ -469,7 +469,7 @@ export const updateRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         submission: updatedSubmission[0],
       };
@@ -523,7 +523,7 @@ export const updateRouter = createTRPCRouter({
         console.error("update.event: More-than-one event are updated at once.");
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         event: updatedEvent[0],
       };
@@ -564,7 +564,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         event: updatedEventPrice[0],
       };
@@ -615,7 +615,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         playlist: updatedPlaylist[0],
       };
@@ -660,7 +660,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         video: updatedVideo[0],
       };
@@ -708,7 +708,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         discount: updatedDiscount[0],
       };
@@ -751,7 +751,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         ticker: updatedTicker[0],
       };

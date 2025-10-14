@@ -90,6 +90,7 @@ export const authRouter = createTRPCRouter({
       });
 
       return {
+        code: "OK",
         message: "Success",
         token: createdToken,
         registered_user: registeredUser,
@@ -99,6 +100,7 @@ export const authRouter = createTRPCRouter({
   checkSession: loggedInProcedure.query((opts) => {
     const theUser = opts.ctx.user;
     return {
+      code: "OK",
       message: "Success",
       user: {
         id: theUser.id,
@@ -131,8 +133,8 @@ export const authRouter = createTRPCRouter({
       }
 
       return {
-        code: "SUCCESS",
-        message: "Successfully logout",
+        code: "NO_CONTENT",
+        message: "Successfully logged out",
       };
     }),
 });

@@ -197,7 +197,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      status: 200,
+      code: "OK",
       message: "Success",
       list: returnedList,
     };
@@ -214,7 +214,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      status: 200,
+      code: "OK",
       message: "Success",
       list: returnedList,
     };
@@ -231,7 +231,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      status: 200,
+      code: "OK",
       message: "Success",
       list: returnedList,
     };
@@ -248,7 +248,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      status: 200,
+      code: "OK",
       message: "Success",
       list: returnedList,
     };
@@ -264,7 +264,7 @@ export const listRouter = createTRPCRouter({
         },
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: channelList,
       };
@@ -328,7 +328,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -416,7 +416,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -496,7 +496,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -534,7 +534,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -560,7 +560,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -593,7 +593,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -623,7 +623,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -668,7 +668,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -730,7 +730,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -792,7 +792,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -827,7 +827,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -863,7 +863,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -909,7 +909,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -998,7 +998,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -1025,7 +1025,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -1089,7 +1089,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -1154,7 +1154,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -1178,7 +1178,7 @@ export const listRouter = createTRPCRouter({
         return entry.user;
       });
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
       };
@@ -1261,7 +1261,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: paging.metapaging,
@@ -1497,7 +1497,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
