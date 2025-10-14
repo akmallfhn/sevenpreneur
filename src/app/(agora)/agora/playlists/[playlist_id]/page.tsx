@@ -1,5 +1,5 @@
 import ZTemporaryPlaylistLMS from "@/app/components/pages/ZTemporaryPlaylistLMS";
-import EmptyPlaylistsLMS from "@/app/components/state/EmptyPlaylistsLMS";
+import EmptyPlaylistsLMS from "@/app/components/state/EmptyItemLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -24,11 +24,7 @@ export default async function PlaylistDetailsPageLMS({
       await trpc.read.enrolledPlaylist({ id: playlistId })
     ).playlist.playlist;
   } catch (error) {
-    return (
-      <div className="flex pt-10 lg:pt-24">
-        <EmptyPlaylistsLMS />
-      </div>
-    );
+    return <div className="flex pt-10 lg:pt-24"></div>;
   }
 
   return <ZTemporaryPlaylistLMS playlistVideos={enrolledPlaylistData.videos} />;
