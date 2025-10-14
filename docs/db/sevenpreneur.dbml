@@ -39,19 +39,19 @@ enum t_status_enum {
 
 Table industries {
   id             smallint     [primary key]
-  industry_name  varchar      [note: 'e.g. Information Technology']
+  industry_name  varchar      [note: 'unique, e.g. Information Technology']
   created_at     timestamptz
 }
 
 Table entrepreneur_stages {
   id          smallint     [primary key]
-  stage_name  varchar      [note: 'e.g. Growth']
+  stage_name  varchar      [note: 'unique, e.g. Growth']
   created_at  timestamptz
 }
 
 Table roles {
   id          smallint     [primary key]
-  name        varchar      [note: 'e.g. Administrator']
+  name        varchar      [note: 'unique, e.g. Administrator']
   permission  smallint
   created_at  timestamptz
   updated_at  timestamptz
@@ -70,7 +70,7 @@ Table payment_channels {
   code          varchar       [note: 'unique']
   method        varchar       [note: 'e.g. virtual account, e-wallet, QR, etc.']
   image         varchar
-  status        status_enum
+  status        status_enum   [note: 'default active']
   calc_percent  decimal(6,4)
   calc_flat     decimal(5,0)
   calc_vat      boolean
@@ -83,13 +83,13 @@ Table users {
   phone_country_id    smallint     [ref: > phone_country_codes.id]
   phone_number        varchar
   avatar              varchar
-  role_id             smallint     [ref: > roles.id]
-  status              status_enum
+  role_id             smallint     [ref: > roles.id, note: 'default 3']
+  status              status_enum  [note: 'default active']
   date_of_birth       date
   learning_goal       varchar
-  entrepreneur_stage  smallint
+  entrepreneur_stage  smallint     [ref: > entrepreneur_stages.id]
   business_name       varchar
-  industry_id         smallint
+  industry_id         smallint     [ref: > industries.id]
   created_at          timestamptz
   updated_at          timestamptz
   last_login          timestamptz
@@ -165,6 +165,24 @@ Table materials {
   status        status_enum
   created_at    timestamptz
   updated_at    timestamptz
+}
+
+Table discussion_starters {
+  id           integer      [primary key]
+  user_id      uuid
+  learning_id  integer      [ref: > learnings.id]
+  message      text
+  created_at   timestamptz
+  updated_at   timestamptz
+}
+
+Table discussion_replies {
+  id           integer      [primary key]
+  user_id      uuid
+  starter_id   integer      [ref: > discussion_starters.id]
+  message      text
+  created_at   timestamptz
+  updated_at   timestamptz
 }
 
 Table projects {
@@ -264,7 +282,7 @@ Table transactions {
   category         category_enum
   item_id          integer        [note: 'items ID based on category']
   amount           decimal(12,2)
-  discount_id      integer
+  discount_id      integer        [ref: > discounts.id]
   discount_amount  decimal(12,2)
   admin_fee        decimal(12,2)
   vat              decimal(12,2)
@@ -291,11 +309,12 @@ Table educators_playlists {
 }
 
 Table ticker {
-  title varchar
-  callout varchar
-  target_url varchar
-  status status_enum
-  start_date timestamptz
-  end_date timestamptz
-  updated_at timestamptz
+  id          integer [primary key, note: 'default 1']
+  title       varchar
+  callout     varchar
+  target_url  varchar
+  status      status_enum
+  start_date  timestamptz
+  end_date    timestamptz
+  updated_at  timestamptz
 }
