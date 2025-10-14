@@ -3,7 +3,15 @@ import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 
-export default function EmptyPlaylistsLMS() {
+interface EmptyItemLMSProps {
+  stateTitle: string;
+  stateDescription: string;
+}
+
+export default function EmptyItemLMS({
+  stateTitle,
+  stateDescription,
+}: EmptyItemLMSProps) {
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
@@ -18,21 +26,18 @@ export default function EmptyPlaylistsLMS() {
             src={
               "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//no-content.svg"
             }
-            alt="empty-playlists-lms"
+            alt="empty-lms"
             width={500}
             height={400}
           />
         </div>
         <h2 className="flex font-bold font-brand text-center tracking-tight text-2xl text-neutral-black">
-          No Playlists Purchased Yet
+          {stateTitle}
         </h2>
         <p className="font-bodycopy text-center font-medium text-alternative">
-          Looks like you haven’t bought any playlists. Explore our collections
-          and start learning something new today!
+          {stateDescription}
         </p>
-        <Link
-          href={`https://www.${domain}/playlists/restart-conference-2025/1`}
-        >
+        <Link href={`https://www.${domain}`}>
           <AppButton>Discover Playlists</AppButton>
         </Link>
       </div>
