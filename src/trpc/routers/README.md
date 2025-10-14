@@ -194,7 +194,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrator can see all discussion starters.
 - Logged-in users can post a discussion starter.
 - Logged-in users can see all discussions given the learning ID which the users are enrolled.
-- Logged-in users can only delete their own discussion starters.
+- Logged-in users can only update and delete their own discussion starters.
+- Administrator can delete all discussion starters.
 
 ### Discussion Replies 🗪
 
@@ -210,7 +211,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrator can see all discussion replies.
 - Logged-in users can post a discussion reply.
 - Logged-in users can see all discussions given the learning ID which the users are enrolled.
-- Logged-in users can only delete their own discussion replies.
+- Logged-in users can only update and delete their own discussion replies.
+- Administrator can delete all discussion replies.
 
 ## Projects 🗂️
 
