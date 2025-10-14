@@ -124,11 +124,15 @@ export const deleteRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      let selectedUserId: string | undefined = opts.ctx.user.id;
+      if (opts.ctx.user.role.name === "Administrator") {
+        selectedUserId = undefined;
+      }
       const deletedDiscussionStarter =
         await opts.ctx.prisma.discussionStarter.deleteMany({
           where: {
             id: opts.input.id,
-            user_id: opts.ctx.user.id,
+            user_id: selectedUserId,
           },
         });
       if (deletedDiscussionStarter.count > 1) {
@@ -149,11 +153,15 @@ export const deleteRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
+      let selectedUserId: string | undefined = opts.ctx.user.id;
+      if (opts.ctx.user.role.name === "Administrator") {
+        selectedUserId = undefined;
+      }
       const deletedDiscussionReply =
         await opts.ctx.prisma.discussionReply.deleteMany({
           where: {
             id: opts.input.id,
-            user_id: opts.ctx.user.id,
+            user_id: selectedUserId,
           },
         });
       if (deletedDiscussionReply.count > 1) {
