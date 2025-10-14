@@ -22,7 +22,7 @@ export const deleteRouter = createTRPCRouter({
         console.error("delete.user: More-than-one users are deleted at once.");
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -43,7 +43,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -66,7 +66,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -89,7 +89,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -112,7 +112,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -141,7 +141,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -170,7 +170,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -193,7 +193,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -216,7 +216,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -244,7 +244,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -265,7 +265,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -288,7 +288,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -309,7 +309,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -335,7 +335,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -358,7 +358,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
@@ -381,7 +381,7 @@ export const deleteRouter = createTRPCRouter({
         );
       }
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),

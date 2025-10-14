@@ -27,7 +27,7 @@ export default function SidebarLMS() {
     setIsLoadingButton(true);
     const result = await DeleteSession();
     // Redirect to login page
-    if (result.code === "SUCCESS") {
+    if (result.code === "NO_CONTENT") {
       router.push(`https://www.${domain}/auth/login`);
     } else {
       console.error("Logout failed");

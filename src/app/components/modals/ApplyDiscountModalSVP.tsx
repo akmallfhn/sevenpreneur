@@ -100,7 +100,7 @@ export default function ApplyDiscountModalSVP({
         category: responseDiscount?.data?.category as ProductCategory,
         item_id: responseDiscount?.data?.item_id,
       };
-      if (responseDiscount?.status === 200) {
+      if (responseDiscount?.code === "OK") {
         onApplyDiscount?.(discountData);
         onClose();
       } else {

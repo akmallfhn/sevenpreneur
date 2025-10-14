@@ -249,7 +249,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "OK",
         message: "Success",
         discount: theDiscount,
       };
@@ -311,7 +311,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         transaction_id: transactionId,
         invoice_url: invoiceUrl,
@@ -374,7 +374,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         transaction_id: transactionId,
         invoice_url: invoiceUrl,
@@ -434,7 +434,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "CREATED",
         message: "Success",
         transaction_id: transactionId,
         invoice_url: invoiceUrl,
@@ -457,7 +457,7 @@ export const purchaseRouter = createTRPCRouter({
       });
       if (!theTransaction) {
         return {
-          status: 200,
+          code: "NO_CONTENT",
           message: "Success",
         };
       }
@@ -494,7 +494,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        status: 200,
+        code: "NO_CONTENT",
         message: "Success",
       };
     }),
