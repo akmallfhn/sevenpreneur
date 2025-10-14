@@ -432,11 +432,6 @@ CREATE TRIGGER update_cohorts_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
-CREATE TRIGGER update_cohorts_updated_at_trigger
-  BEFORE UPDATE ON events
-  FOR EACH ROW
-    EXECUTE FUNCTION update_updated_at();
-
 CREATE TRIGGER update_modules_updated_at_trigger
   BEFORE UPDATE ON modules
   FOR EACH ROW
@@ -452,6 +447,16 @@ CREATE TRIGGER update_materials_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
+CREATE TRIGGER update_discussion_starters_updated_at_trigger
+  BEFORE UPDATE ON discussion_starters
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_discussion_replies_updated_at_trigger
+  BEFORE UPDATE ON discussion_replies
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
 CREATE TRIGGER update_projects_updated_at_trigger
   BEFORE UPDATE ON projects
   FOR EACH ROW
@@ -459,6 +464,11 @@ CREATE TRIGGER update_projects_updated_at_trigger
 
 CREATE TRIGGER update_submissions_updated_at_trigger
   BEFORE UPDATE ON submissions
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_events_updated_at_trigger
+  BEFORE UPDATE ON events
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
@@ -478,11 +488,12 @@ CREATE TRIGGER update_transactions_updated_at_trigger
     EXECUTE FUNCTION update_updated_at();
 
 CREATE TRIGGER update_ticker_updated_at_trigger
-BEFORE UPDATE ON ticker
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at()
+  BEFORE UPDATE ON ticker
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
 
 ------------------
 -- Unique Index --
 ------------------
+
 CREATE UNIQUE INDEX one_row_only ON ticker ((true));
