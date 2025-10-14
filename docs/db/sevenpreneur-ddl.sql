@@ -370,7 +370,7 @@ ALTER TABLE discussion_starters
 
 ALTER TABLE discussion_replies
   ADD FOREIGN KEY (user_id)    REFERENCES users (id),
-  ADD FOREIGN KEY (starter_id) REFERENCES learnings (id);
+  ADD FOREIGN KEY (starter_id) REFERENCES discussion_starters (id);
 
 ALTER TABLE projects
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
