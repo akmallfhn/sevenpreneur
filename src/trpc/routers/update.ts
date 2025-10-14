@@ -1,6 +1,7 @@
 import {
   administratorProcedure,
   createTRPCRouter,
+  loggedInProcedure,
   roleBasedProcedure,
 } from "@/trpc/init";
 import { stringToDate } from "@/trpc/utils/string_date";
@@ -256,6 +257,76 @@ export const updateRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         material: updatedMaterial[0],
+      };
+    }),
+
+  discussionStarter: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        message: stringNotBlank().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedDiscussionStarter =
+        await opts.ctx.prisma.discussionStarter.updateManyAndReturn({
+          data: {
+            message: opts.input.message,
+          },
+          where: {
+            id: opts.input.id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+      if (updatedDiscussionStarter.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected discussion starter is not found.",
+        });
+      } else if (updatedDiscussionStarter.length > 1) {
+        console.error(
+          "update.discussionStarter: More-than-one discussion starters are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        discussion: updatedDiscussionStarter[0],
+      };
+    }),
+
+  discussionReply: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        message: stringNotBlank().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedDiscussionReply =
+        await opts.ctx.prisma.discussionReply.updateManyAndReturn({
+          data: {
+            message: opts.input.message,
+          },
+          where: {
+            id: opts.input.id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+      if (updatedDiscussionReply.length < 1) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "The selected discussion reply is not found.",
+        });
+      } else if (updatedDiscussionReply.length > 1) {
+        console.error(
+          "update.discussionReply: More-than-one discussion replies are updated at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+        discussion: updatedDiscussionReply[0],
       };
     }),
 
