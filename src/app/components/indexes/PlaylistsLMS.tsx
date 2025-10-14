@@ -1,31 +1,30 @@
 "use client";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import CohortItemCardLMS from "../items/CohortItemCardLMS";
+import PlaylistItemLMS from "../items/PlaylistItemLMS";
 import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 
-interface CohortList {
+interface Playlists {
   id: number;
   name: string;
-  image: string;
-  start_date: string;
-  end_date: string;
+  tagline: string;
+  image_url: string;
 }
 
-interface CohortListLMSProps extends AvatarBadgeLMSProps {
+interface PlaylistsLMSProps extends AvatarBadgeLMSProps {
   userRole: number;
-  cohortList: CohortList[];
+  playlists: Playlists[];
 }
 
-export default function CohortListLMS({
+export default function PlaylistsLMS({
   userName,
   userRole,
   userAvatar,
-  cohortList,
-}: CohortListLMSProps) {
+  playlists,
+}: PlaylistsLMSProps) {
   return (
     <div className="root-page hidden w-full h-full gap-4 items-center justify-center pb-8 lg:flex lg:flex-col lg:pl-64">
       <HeaderNavbarLMS
-        headerTitle="Bootcamp Programs"
+        headerTitle="Learning Series"
         headerDescription="View all bootcamps you’ve purchased and enrolled in."
         userRole={userRole}
         userName={userName}
@@ -33,14 +32,13 @@ export default function CohortListLMS({
       />
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
         <div className="grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-          {cohortList.map((post, index) => (
-            <CohortItemCardLMS
+          {playlists.map((post, index) => (
+            <PlaylistItemLMS
               key={index}
-              cohortId={post.id}
-              cohortName={post.name}
-              cohortImage={post.image}
-              cohortStartDate={post.start_date}
-              cohortEndDate={post.end_date}
+              playlistId={post.id}
+              playlistName={post.name}
+              playlistTagline={post.tagline}
+              playlistImage={post.image_url}
             />
           ))}
         </div>

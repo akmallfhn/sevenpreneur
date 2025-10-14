@@ -52,7 +52,7 @@ export default function CohortItemCardLMS({
     <React.Fragment>
       <Link
         href={`/cohorts/${cohortId}`}
-        className="card-container flex flex-col w-full p-3 gap-3 bg-white border border-outline/40 rounded-lg overflow-hidden"
+        className="card-container flex flex-col w-full p-3 gap-2 bg-white border border-outline/40 rounded-lg overflow-hidden transition transform active:scale-95"
       >
         <div className="cohort-image relative flex w-full aspect-thumbnail rounded-md overflow-hidden">
           <Image
@@ -67,15 +67,15 @@ export default function CohortItemCardLMS({
           </p>
         </div>
         <div className="metadata relative flex flex-col gap-2 h-[112px]">
-          <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2">
+          <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2 xl:text-lg">
             {cohortName}
           </h3>
           <p className="cohort-sessions flex w-fit px-2 py-1 bg-primary-light/50 text-primary text-xs font-bodycopy font-semibold rounded-full">
             10-13 sessions
           </p>
           <div className="cohort-timeline flex gap-1.5 items-center text-alternative">
-            <FontAwesomeIcon icon={faCalendar} className="size-3" />
-            <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
+            <FontAwesomeIcon icon={faCalendar} size="xs" />
+            <div className="flex font-bodycopy font-medium text-[13px] items-center gap-1">
               {dateString}
             </div>
           </div>
