@@ -55,7 +55,7 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE phone_country_codes (
-  id            SMALLSERIAL  PRIMARY KEY,
+  id            SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   country_name  VARCHAR  NOT NULL,
   phone_code    VARCHAR  NOT NULL  UNIQUE,
   emoji         VARCHAR  NOT NULL
@@ -213,7 +213,7 @@ CREATE TABLE events (
   slug_url      VARCHAR      NOT NULL  UNIQUE,
   start_date    TIMESTAMPTZ  NOT NULL,
   end_date      TIMESTAMPTZ  NOT NULL,
-  method         learning_method_enum  NOT NULL,
+  method         learning_method_enum  NOT NULL  DEFAULT 'onsite',
   meeting_url    VARCHAR                   NULL,
   location_name  VARCHAR                   NULL,
   location_url   VARCHAR                   NULL,
@@ -302,7 +302,7 @@ CREATE TABLE ticker (
   target_url VARCHAR NOT NULL,
   status status_enum NOT NULL,
   start_date TIMESTAMPTZ NOT NULL,
-  end_date TIMESTAMPTZ NOT NULL
+  end_date TIMESTAMPTZ NOT NULL,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -339,8 +339,10 @@ CREATE TABLE educators_playlists (
 ----------------
 
 ALTER TABLE users
-  ADD FOREIGN KEY (phone_country_id) REFERENCES phone_country_codes (id),
-  ADD FOREIGN KEY (role_id)          REFERENCES roles (id);
+  ADD FOREIGN KEY (phone_country_id)   REFERENCES phone_country_codes (id),
+  ADD FOREIGN KEY (role_id)            REFERENCES roles (id),
+  ADD FOREIGN KEY (entrepreneur_stage) REFERENCES entrepreneur_stages (id),
+  ADD FOREIGN KEY (industry_id)        REFERENCES industries (id);
 
 ALTER TABLE tokens
   ADD FOREIGN KEY (user_id) REFERENCES users (id);
@@ -350,6 +352,9 @@ ALTER TABLE cohorts
 
 ALTER TABLE cohort_prices
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+
+ALTER TABLE events
+  ADD FOREIGN KEY (deleted_by) REFERENCES users (id);
 
 ALTER TABLE event_prices
   ADD FOREIGN KEY (event_id) REFERENCES events(id);
@@ -392,6 +397,10 @@ ALTER TABLE transactions
 ALTER TABLE users_cohorts
   ADD FOREIGN KEY (user_id)   REFERENCES users (id),
   ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+
+ALTER TABLE users_events
+  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (event_id)  REFERENCES events (id);
 
 ALTER TABLE users_playlists
   ADD FOREIGN KEY (user_id)   REFERENCES users (id),
