@@ -37,10 +37,14 @@ enum t_status_enum {
 // Tables //
 ////////////
 
-Table industries {
-  id             smallint     [primary key]
-  industry_name  varchar      [note: 'unique, e.g. Information Technology']
-  created_at     timestamptz
+// Lookup tables
+
+Table roles {
+  id          smallint     [primary key]
+  name        varchar      [note: 'unique, e.g. Administrator']
+  permission  smallint
+  created_at  timestamptz
+  updated_at  timestamptz
 }
 
 Table entrepreneur_stages {
@@ -49,12 +53,10 @@ Table entrepreneur_stages {
   created_at  timestamptz
 }
 
-Table roles {
-  id          smallint     [primary key]
-  name        varchar      [note: 'unique, e.g. Administrator']
-  permission  smallint
-  created_at  timestamptz
-  updated_at  timestamptz
+Table industries {
+  id             smallint     [primary key]
+  industry_name  varchar      [note: 'unique, e.g. Information Technology']
+  created_at     timestamptz
 }
 
 Table phone_country_codes {
@@ -75,6 +77,8 @@ Table payment_channels {
   calc_flat     decimal(5,0)
   calc_vat      boolean
 }
+
+// User data
 
 Table users {
   id                  uuid         [primary key]
@@ -103,6 +107,8 @@ Table tokens {
   token       text         [note: 'unique']
   created_at  timestamptz
 }
+
+// LMS-related
 
 Table cohorts {
   id            integer      [primary key, ref: <> users.id]
@@ -207,6 +213,37 @@ Table submissions {
   updated_at    timestamptz
 }
 
+// Playlist-related
+
+Table playlists {
+  id                 integer        [primary key]
+  name               varchar
+  tagline            varchar
+  description        text
+  video_preview_url  varchar
+  image_url          varchar
+  price              decimal(12,2)
+  status             status_enum
+  slug_url           varchar
+  published_at       timestamptz
+  updated_at         timestamptz
+  deleted_at         timestamptz
+  deleted_by         uuid           [ref: > users.id]
+}
+
+Table videos {
+  id                 integer   [primary key]
+  playlist_id        integer   [ref: > playlists.id]
+  name               varchar
+  duration           integer
+  image_url          varchar
+  video_url          varchar
+  num_order          smallint  [note: 'default 0']
+  external_video_id  varchar
+}
+
+// Event-related
+
 Table events {
   id            integer      [primary key, ref: <> users.id]
   name          varchar
@@ -235,32 +272,7 @@ Table event_prices {
   created_at  timestamptz
 }
 
-Table playlists {
-  id                 integer        [primary key]
-  name               varchar
-  tagline            varchar
-  description        text
-  video_preview_url  varchar
-  image_url          varchar
-  price              decimal(12,2)
-  status             status_enum
-  slug_url           varchar
-  published_at       timestamptz
-  updated_at         timestamptz
-  deleted_at         timestamptz
-  deleted_by         uuid           [ref: > users.id]
-}
-
-Table videos {
-  id                 integer   [primary key]
-  playlist_id        integer   [ref: > playlists.id]
-  name               varchar
-  duration           integer
-  image_url          varchar
-  video_url          varchar
-  num_order          smallint  [note: 'default 0']
-  external_video_id  varchar
-}
+// Transaction-related
 
 Table discounts {
   id            integer        [primary key]
@@ -296,17 +308,7 @@ Table transactions {
   updated_at       timestamptz
 }
 
-Table users_playlists {
-  user_id      uuid     [ref: > users.id]
-  playlist_id  integer  [ref: > playlists.id]
-  rating       integer
-  review       varchar
-}
-
-Table educators_playlists {
-  user_id      uuid     [ref: > users.id]
-  playlist_id  integer  [ref: > playlists.id]
-}
+// Tickers
 
 Table ticker {
   id          integer [primary key, note: 'default 1']
@@ -317,4 +319,18 @@ Table ticker {
   start_date  timestamptz
   end_date    timestamptz
   updated_at  timestamptz
+}
+
+// Relation Tables //
+
+Table users_playlists {
+  user_id      uuid     [ref: > users.id]
+  playlist_id  integer  [ref: > playlists.id]
+  rating       integer
+  review       varchar
+}
+
+Table educators_playlists {
+  user_id      uuid     [ref: > users.id]
+  playlist_id  integer  [ref: > playlists.id]
 }

@@ -6,6 +6,52 @@
 
 SET TIMEZONE = 'Asia/Jakarta'; -- For these queries in this transaction
 
+-----------
+-- Roles --
+-----------
+
+-- The permission column can store at most 15 features (SMALLINT).
+-- If more features are needed, we need to change its data type.
+
+INSERT INTO roles VALUES (
+  /* id         */ 0,
+  /* name       */ 'Administrator',
+  /* permission */ 32767, -- bit: 0111 1111 1111 1111
+  /* created_at */ '2025-05-27 09:00:00+07:00',
+  /* updated_at */ '2025-05-27 09:00:00+07:00'
+);
+INSERT INTO roles (name, permission, created_at, updated_at)
+VALUES (
+  /* id            1 (automatic) */
+  /* name       */ 'Educator',
+  /* permission */ 255, -- bit: 0000 0000 1111 1111
+  /* created_at */ '2025-05-27 09:00:00+07:00',
+  /* updated_at */ '2025-05-27 09:00:00+07:00'
+), (
+  /* id            2 (automatic) */
+  /* name       */ 'Class Manager',
+  /* permission */ 63, -- bit: 0000 0000 0011 1111
+  /* created_at */ '2025-05-27 09:00:00+07:00',
+  /* updated_at */ '2025-05-27 09:00:00+07:00'
+), (
+  /* id            3 (automatic) */
+  /* name       */ 'General User',
+  /* permission */ 7, -- bit: 0000 0000 0000 0111
+  /* created_at */ '2025-05-27 09:00:00+07:00',
+  /* updated_at */ '2025-05-27 09:00:00+07:00'
+);
+
+------------------------
+-- Entrepreneur Stage --
+------------------------
+
+INSERT INTO entrepreneur_stages (stage_name, created_at) VALUES
+  ('Ideation',             '2025-05-27 09:00:00+07:00'),
+  ('Feasibility Analysis', '2025-05-27 09:00:00+07:00'),
+  ('Business Planning',    '2025-05-27 09:00:00+07:00'),
+  ('Execution',            '2025-05-27 09:00:00+07:00'),
+  ('Growth',               '2025-05-27 09:00:00+07:00');
+
 ----------------
 -- Industries --
 ----------------
@@ -46,53 +92,6 @@ INSERT INTO industries (industry_name, created_at) VALUES
   ('Textiles',                     '2025-05-27 09:00:00+07:00'),
   ('Tourism',                      '2025-05-27 09:00:00+07:00'),
   ('Utilities',                    '2025-05-27 09:00:00+07:00');
-
-------------------------
--- Entrepreneur Stage --
-------------------------
-
-INSERT INTO entrepreneur_stages (stage_name, created_at) VALUES
-  ('Ideation',             '2025-05-27 09:00:00+07:00'),
-  ('Feasibility Analysis', '2025-05-27 09:00:00+07:00'),
-  ('Business Planning',    '2025-05-27 09:00:00+07:00'),
-  ('Execution',            '2025-05-27 09:00:00+07:00'),
-  ('Growth',               '2025-05-27 09:00:00+07:00');
-
------------
--- Roles --
------------
-
--- The permission column can store at most 15 features (SMALLINT).
--- If more features are needed, we need to change its data type.
-
-INSERT INTO roles VALUES (
-  /* id         */ 0,
-  /* name       */ 'Administrator',
-  /* permission */ 32767, -- bit: 0111 1111 1111 1111
-  /* created_at */ '2025-05-27 09:00:00+07:00',
-  /* updated_at */ '2025-05-27 09:00:00+07:00'
-);
-INSERT INTO roles (name, permission, created_at, updated_at)
-VALUES (
-  /* id            1 (automatic) */
-  /* name       */ 'Educator',
-  /* permission */ 255, -- bit: 0000 0000 1111 1111
-  /* created_at */ '2025-05-27 09:00:00+07:00',
-  /* updated_at */ '2025-05-27 09:00:00+07:00'
-), (
-  /* id            2 (automatic) */
-  /* name       */ 'Class Manager',
-  /* permission */ 63, -- bit: 0000 0000 0011 1111
-  /* created_at */ '2025-05-27 09:00:00+07:00',
-  /* updated_at */ '2025-05-27 09:00:00+07:00'
-), (
-  /* id            3 (automatic) */
-  /* name       */ 'General User',
-  /* permission */ 7, -- bit: 0000 0000 0000 0111
-  /* created_at */ '2025-05-27 09:00:00+07:00',
-  /* updated_at */ '2025-05-27 09:00:00+07:00'
-);
-
 
 -----------------------------
 -- Telephone Country Codes --
@@ -203,21 +202,30 @@ INSERT INTO phone_country_codes (country_name, phone_code, emoji) VALUES
 
 -- https://archive.developers.xendit.co/api-reference/#create-invoice
 -- https://dashboard.xendit.co/settings/billings#fee-structure
-INSERT INTO payment_channels (label, code, method, image, calc_percent, calc_flat, calc_vat) VALUES
+INSERT INTO payment_channels (id, label, code, method, image, status, calc_percent, calc_flat, calc_vat) VALUES
   -- Bank Transfer (Virtual Account)
-  ('BCA Virtual Account',               'BCA',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('BRI Virtual Account',               'BRI',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('BNI Virtual Account',               'BNI',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('Mandiri Virtual Account',           'MANDIRI',           'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('Neobank Virtual Account',           'BNC',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('Sahabat Sampoerna Virtual Account', 'SAHABAT_SAMPOERNA', 'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('BSI Virtual Account',               'BSI',               'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
-  ('Permata Bank Virtual Account',      'PERMATA',           'BANK_TRANSFER', '', 0.00, 4000., TRUE ),
+  (2,  'BRI Virtual Account',               'BRI',               'BANK_TRANSFER', '', 'active',   0.00, 4000., TRUE ),
+  (3,  'BNI Virtual Account',               'BNI',               'BANK_TRANSFER', '', 'active',   0.00, 4000., TRUE ),
+  (4,  'Mandiri Virtual Account',           'MANDIRI',           'BANK_TRANSFER', '', 'active',   0.00, 4000., TRUE ),
+  (7,  'BSI Virtual Account',               'BSI',               'BANK_TRANSFER', '', 'active',   0.00, 4000., TRUE ),
+  (8,  'Permata Bank Virtual Account',      'PERMATA',           'BANK_TRANSFER', '', 'active',   0.00, 4000., TRUE ),
+  (19, 'CIMB Niaga Virtual Account',        'CIMB',              'BANK_TRANSFER', '', 'active',   0.00, 4000., TRUE ),
   -- E-wallet
-  ('DANA',                              'DANA',              'EWALLET',       '', 1.50,    0., TRUE ),
-  ('Jenius Pay',                        'JENIUSPAY',         'EWALLET',       '', 2.00,    0., TRUE ),
-  ('OVO',                               'OVO',               'EWALLET',       '', 2.73,    0., TRUE ),
-  ('ShopeePay',                         'SHOPEEPAY',         'EWALLET',       '', 4.00,    0., FALSE),
-  ('Link Aja',                          'LINKAJA',           'EWALLET',       '', 2.70,    0., TRUE ),
+  (13, 'Link Aja',                          'LINKAJA',           'EWALLET',       '', 'active',   1.50,    0., TRUE ),
+  (15, 'AstraPay',                          'ASTRAPAY',          'EWALLET',       '', 'active',   1.50,    0., TRUE ),
   -- QR Code
-  ('QRIS',                              'QRIS',              'QR_CODE',       '', 0.70,    0., FALSE);
+  (14, 'QRIS',                              'QRIS',              'QR_CODE',       '', 'active',   0.70,    0., FALSE),
+  -- Paylater/Debt
+  (17, 'Akulaku',                           'AKULAKU',           'PAYLATER',      '', 'active',   1.70,    0., TRUE ),
+  -- Credit Card
+  (18, 'Credit Card',                       'CREDIT_CARD',       'CREDIT_CARD',   '', 'active',   2.90, 2000., TRUE ),
+  -- Inactive channels
+  (1,  'BCA Virtual Account',               'BCA',               'BANK_TRANSFER', '', 'inactive', 0.00, 4000., TRUE ),
+  (5,  'Neobank Virtual Account',           'BNC',               'BANK_TRANSFER', '', 'inactive', 0.00, 4000., TRUE ),
+  (6,  'Sahabat Sampoerna Virtual Account', 'SAHABAT_SAMPOERNA', 'BANK_TRANSFER', '', 'inactive', 0.00, 4000., TRUE ),
+  (9,  'DANA',                              'DANA',              'EWALLET',       '', 'inactive', 1.50,    0., TRUE ),
+  (10, 'Jenius Pay',                        'JENIUSPAY',         'EWALLET',       '', 'inactive', 2.00,    0., TRUE ),
+  (11, 'OVO',                               'OVO',               'EWALLET',       '', 'inactive', 2.73,    0., TRUE ),
+  (12, 'ShopeePay',                         'SHOPEEPAY',         'EWALLET',       '', 'inactive', 4.00,    0., FALSE);
+
+ALTER SEQUENCE payment_channels_id_seq RESTART WITH 19;
