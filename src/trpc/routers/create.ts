@@ -1,6 +1,7 @@
 import {
   administratorProcedure,
   createTRPCRouter,
+  loggedInProcedure,
   roleBasedProcedure,
 } from "@/trpc/init";
 import { createSlugFromTitle } from "@/trpc/utils/slug";
@@ -263,6 +264,76 @@ export const createRouter = createTRPCRouter({
         status: 200,
         message: "Success",
         material: theMaterial,
+      };
+    }),
+
+  discussionStarter: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+        message: stringNotBlank(),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdDiscussionStarter =
+        await opts.ctx.prisma.discussionStarter.create({
+          data: {
+            user_id: opts.ctx.user.id,
+            learning_id: opts.input.learning_id,
+            message: opts.input.message,
+          },
+        });
+      const theDiscussionStarter =
+        await opts.ctx.prisma.discussionStarter.findFirst({
+          where: {
+            id: createdDiscussionStarter.id,
+          },
+        });
+      if (!theDiscussionStarter) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new discussion starter.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        module: theDiscussionStarter,
+      };
+    }),
+
+  discussionReply: loggedInProcedure
+    .input(
+      z.object({
+        starter_id: numberIsID(),
+        message: stringNotBlank(),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdDiscussionReply =
+        await opts.ctx.prisma.discussionReply.create({
+          data: {
+            user_id: opts.ctx.user.id,
+            starter_id: opts.input.starter_id,
+            message: opts.input.message,
+          },
+        });
+      const theDiscussionReply =
+        await opts.ctx.prisma.discussionReply.findFirst({
+          where: {
+            id: createdDiscussionReply.id,
+          },
+        });
+      if (!theDiscussionReply) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create a new discussion reply.",
+        });
+      }
+      return {
+        status: 200,
+        message: "Success",
+        module: theDiscussionReply,
       };
     }),
 

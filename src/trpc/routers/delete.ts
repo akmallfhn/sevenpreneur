@@ -1,6 +1,7 @@
 import {
   administratorProcedure,
   createTRPCRouter,
+  loggedInProcedure,
   roleBasedProcedure,
 } from "@/trpc/init";
 import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
@@ -108,6 +109,56 @@ export const deleteRouter = createTRPCRouter({
       if (deletedMaterial.count > 1) {
         console.error(
           "delete.material: More-than-one materials are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
+
+  discussionStarter: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedDiscussionStarter =
+        await opts.ctx.prisma.discussionStarter.deleteMany({
+          where: {
+            id: opts.input.id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+      if (deletedDiscussionStarter.count > 1) {
+        console.error(
+          "delete.discussionStarter: More-than-one discussion starters are deleted at once."
+        );
+      }
+      return {
+        status: 200,
+        message: "Success",
+      };
+    }),
+
+  discussionReply: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedDiscussionReply =
+        await opts.ctx.prisma.discussionReply.deleteMany({
+          where: {
+            id: opts.input.id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+      if (deletedDiscussionReply.count > 1) {
+        console.error(
+          "delete.discussionReply: More-than-one discussion replies are deleted at once."
         );
       }
       return {
