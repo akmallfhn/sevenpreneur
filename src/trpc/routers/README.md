@@ -180,6 +180,38 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators, Educators, and Class Managers can see all materials given the learning ID.
 - General Users can see all materials given the learning ID which the users are enrolled.
 
+### Discussion Starters 💬
+
+| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.discussionStarter` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.discussionStarters`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.discussionStarter` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `delete.discussionStarter` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrator can see all discussion starters.
+- Logged-in users can post a discussion starter.
+- Logged-in users can see all discussions given the learning ID which the users are enrolled.
+- Logged-in users can only delete their own discussion starters.
+
+### Discussion Replies 🗪
+
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.discussionReply` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.discussionReplies` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.discussionReply` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `delete.discussionReply` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrator can see all discussion replies.
+- Logged-in users can post a discussion reply.
+- Logged-in users can see all discussions given the learning ID which the users are enrolled.
+- Logged-in users can only delete their own discussion replies.
+
 ## Projects 🗂️
 
 | Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |

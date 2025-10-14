@@ -674,6 +674,130 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  discussionStarters: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const theLearning = await opts.ctx.prisma.learning.findFirst({
+          select: { cohort_id: true },
+          where: { id: opts.input.learning_id },
+        });
+        if (!theLearning) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The learning with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          theLearning.cohort_id,
+          "You're not allowed to read learning discussions of a cohort which you aren't enrolled."
+        );
+      }
+      const discussionStartersList =
+        await opts.ctx.prisma.discussionStarter.findMany({
+          include: {
+            user: {
+              select: {
+                full_name: true,
+                avatar: true,
+              },
+            },
+            _count: {
+              select: {
+                replies: true,
+              },
+            },
+          },
+          where: { learning_id: opts.input.learning_id },
+          orderBy: [{ created_at: "desc" }],
+        });
+      const returnedList = discussionStartersList.map((entry) => {
+        return {
+          id: entry.id,
+          learning_id: entry.learning_id,
+          full_name: entry.user.full_name,
+          avatar: entry.user.avatar,
+          message: entry.message,
+          reply_count: entry._count.replies,
+          created_at: entry.created_at,
+          updated_at: entry.updated_at,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  discussionReplies: loggedInProcedure
+    .input(
+      z.object({
+        starter_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const theLearning = await opts.ctx.prisma.learning.findFirst({
+          select: { cohort_id: true },
+          where: {
+            discussions: {
+              some: {
+                id: opts.input.starter_id,
+              },
+            },
+          },
+        });
+        if (!theLearning) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "The learning with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          theLearning.cohort_id,
+          "You're not allowed to read learning discussions of a cohort which you aren't enrolled."
+        );
+      }
+      const discussionRepliesList =
+        await opts.ctx.prisma.discussionReply.findMany({
+          include: {
+            user: {
+              select: {
+                full_name: true,
+                avatar: true,
+              },
+            },
+          },
+          where: { starter_id: opts.input.starter_id },
+          orderBy: [{ created_at: "desc" }],
+        });
+      const returnedList = discussionRepliesList.map((entry) => {
+        return {
+          id: entry.id,
+          starter_id: entry.starter_id,
+          full_name: entry.user.full_name,
+          avatar: entry.user.avatar,
+          message: entry.message,
+          created_at: entry.created_at,
+          updated_at: entry.updated_at,
+        };
+      });
+      return {
+        status: 200,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   modules: loggedInProcedure
     .input(
       z.object({
