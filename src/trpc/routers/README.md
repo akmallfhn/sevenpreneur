@@ -301,6 +301,41 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators, Educators, and Class Managers can see all videos given the playlist ID.
 - General Users can see all videos given the playlist ID which the users are enrolled.
 
+## Events 📅
+
+| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.event` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `list.events`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| `read.event`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| `update.event` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.event` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Administrators and Class Manager have write access to all events' data.
+- `list.events`:
+  - Administrators can see all events.
+  - Non-Administrators can only see active events.
+- `read.event`:
+  - Logged-in users can read all events given the event ID.
+  - Non-logged-in users can only read active events.
+
+### Event Prices 💵
+
+| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.eventPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `list.eventPrices`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.eventPrice`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.eventPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| `delete.eventPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Administrators and Class Manager have write access to all event prices' data.
+- Logged-in users can see all event prices given the event ID.
+
 ## Discounts 🪙
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -320,6 +355,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `purchase.checkDiscount` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `purchase.cohort`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `purchase.playlist`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `purchase.event`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `purchase.cancel`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.transactions`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.transaction`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
