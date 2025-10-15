@@ -366,3 +366,15 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrator and Class Manager can purchase items for other users.
 - Logged-in users can purchase items for their own.
 - Logged-in users can see all their own transactions.
+
+## Tickers 🚨
+
+| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `read.ticker`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| `update.ticker` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Only Administrators can update tickers.
+- Non-Administrators can only read tickers.
