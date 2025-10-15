@@ -1,4 +1,10 @@
 import {
+  STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
+  STATUS_NO_CONTENT,
+  STATUS_OK,
+} from "@/lib/status_code";
+import {
   createTRPCRouter,
   loggedInProcedure,
   publicProcedure,
@@ -21,7 +27,7 @@ export const authRouter = createTRPCRouter({
       const userInfo = await GoogleTokenVerifier(opts.input.accessToken);
       if (!userInfo) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: STATUS_BAD_REQUEST,
           message: "The given credential is not valid.",
         });
       }
@@ -44,12 +50,12 @@ export const authRouter = createTRPCRouter({
         registeredUser = createdUser;
       } else if (findUser.status === StatusEnum.INACTIVE) {
         throw new TRPCError({
-          code: "FORBIDDEN",
+          code: STATUS_FORBIDDEN,
           message: "Your account has been inactivated.",
         });
       } else if (findUser.deleted_at !== null) {
         throw new TRPCError({
-          code: "FORBIDDEN",
+          code: STATUS_FORBIDDEN,
           message: `Your account has been deleted (${findUser.deleted_at}).`,
         });
       } else {
@@ -90,7 +96,7 @@ export const authRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         token: createdToken,
         registered_user: registeredUser,
@@ -100,7 +106,7 @@ export const authRouter = createTRPCRouter({
   checkSession: loggedInProcedure.query((opts) => {
     const theUser = opts.ctx.user;
     return {
-      code: "OK",
+      code: STATUS_OK,
       message: "Success",
       user: {
         id: theUser.id,
@@ -133,7 +139,7 @@ export const authRouter = createTRPCRouter({
       }
 
       return {
-        code: "NO_CONTENT",
+        code: STATUS_NO_CONTENT,
         message: "Successfully logged out",
       };
     }),
