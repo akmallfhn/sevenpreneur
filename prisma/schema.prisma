@@ -449,16 +449,6 @@ model UserCohort {
   @@map("users_cohorts")
 }
 
-model UserEvent {
-  user     User   @relation(fields: [user_id], references: [id])
-  user_id  String @db.Uuid
-  event    Event  @relation(fields: [event_id], references: [id])
-  event_id Int    @db.Integer
-
-  @@id([user_id, event_id])
-  @@map("users_events")
-}
-
 model UserPlaylist {
   user        User     @relation("watch_playlist", fields: [user_id], references: [id])
   user_id     String   @db.Uuid
@@ -479,4 +469,14 @@ model EducatorPlaylist {
 
   @@id([user_id, playlist_id])
   @@map("educators_playlists")
+}
+
+model UserEvent {
+  user     User   @relation(fields: [user_id], references: [id])
+  user_id  String @db.Uuid
+  event    Event  @relation(fields: [event_id], references: [id])
+  event_id Int    @db.Integer
+
+  @@id([user_id, event_id])
+  @@map("users_events")
 }
