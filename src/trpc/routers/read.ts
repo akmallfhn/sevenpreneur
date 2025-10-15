@@ -1,4 +1,9 @@
 import {
+  STATUS_FORBIDDEN,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
+import {
   administratorProcedure,
   createTRPCRouter,
   loggedInProcedure,
@@ -64,7 +69,7 @@ async function isEnrolledCohort(
   });
   if (!theEnrolledCohort) {
     throw new TRPCError({
-      code: "FORBIDDEN",
+      code: STATUS_FORBIDDEN,
       message: error_message,
     });
   }
@@ -83,12 +88,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theIndustry) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The industry with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         industry: theIndustry,
       };
@@ -107,12 +112,12 @@ export const readRouter = createTRPCRouter({
         });
       if (!theEntrepreneurStage) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The entrepreneur stage with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         entrepreneur_stage: theEntrepreneurStage,
       };
@@ -130,12 +135,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theRole) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The role with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         role: theRole,
       };
@@ -162,12 +167,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theUser) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The user with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         user: theUser,
       };
@@ -197,7 +202,7 @@ export const readRouter = createTRPCRouter({
       });
       if (!theCohort) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The cohort with the given ID is not found.",
         });
       }
@@ -223,7 +228,7 @@ export const readRouter = createTRPCRouter({
         total_materials: modulesCount + materialsCount,
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         cohort: theCohortWithCounts,
       };
@@ -247,7 +252,7 @@ export const readRouter = createTRPCRouter({
       });
       if (!theCohort) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The cohort with the given ID is not found.",
         });
       }
@@ -273,7 +278,7 @@ export const readRouter = createTRPCRouter({
         total_materials: modulesCount + materialsCount,
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         cohort: theCohortWithCounts,
       };
@@ -294,12 +299,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theCohortPrice) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The cohort price with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         cohortPrice: theCohortPrice,
       };
@@ -323,12 +328,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theLearning) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The learning with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         learning: theLearning,
       };
@@ -348,7 +353,7 @@ export const readRouter = createTRPCRouter({
         });
         if (!checkMaterial) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The material with the given ID is not found.",
           });
         }
@@ -367,12 +372,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theMaterial) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The material with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         material: theMaterial,
       };
@@ -392,7 +397,7 @@ export const readRouter = createTRPCRouter({
         });
         if (!checkModule) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The module with the given ID is not found.",
           });
         }
@@ -411,12 +416,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theModule) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The module with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         module: theModule,
       };
@@ -436,7 +441,7 @@ export const readRouter = createTRPCRouter({
         });
         if (!checkProject) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The project with the given ID is not found.",
           });
         }
@@ -455,12 +460,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theProject) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The project with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         project: theProject,
       };
@@ -487,12 +492,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theSubmission) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The submission with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         submission: theSubmission,
       };
@@ -522,12 +527,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theEvent) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The event with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         event: theEvent,
       };
@@ -548,12 +553,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theEventPrice) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The event price with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         cohortPrice: theEventPrice,
       };
@@ -592,7 +597,7 @@ export const readRouter = createTRPCRouter({
       });
       if (!thePlaylist) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The playlist with the given ID is not found.",
         });
       }
@@ -619,7 +624,7 @@ export const readRouter = createTRPCRouter({
         total_user_enrolled: usersCount,
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         playlist: thePlaylistWithCounts,
       };
@@ -661,7 +666,7 @@ export const readRouter = createTRPCRouter({
       });
       if (!thePlaylist) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The playlist with the given ID is not found.",
         });
       }
@@ -688,7 +693,7 @@ export const readRouter = createTRPCRouter({
         total_user_enrolled: usersCount,
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         playlist: thePlaylistWithCounts,
       };
@@ -708,7 +713,7 @@ export const readRouter = createTRPCRouter({
         });
         if (!checkVideo) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The video with the given ID is not found.",
           });
         }
@@ -721,7 +726,7 @@ export const readRouter = createTRPCRouter({
           });
         if (!theEnrolledPlaylist) {
           throw new TRPCError({
-            code: "FORBIDDEN",
+            code: STATUS_FORBIDDEN,
             message:
               "You're not allowed to read videos of a playlist which you aren't enrolled.",
           });
@@ -735,12 +740,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theVideo) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The video with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         video: theVideo,
       };
@@ -761,7 +766,7 @@ export const readRouter = createTRPCRouter({
       });
       if (!theDiscount) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The discount with the given ID is not found.",
         });
       }
@@ -802,7 +807,7 @@ export const readRouter = createTRPCRouter({
       }
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         discount: {
           id: theDiscount.id,
@@ -855,7 +860,7 @@ export const readRouter = createTRPCRouter({
       });
       if (!theTransaction) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The transaction with the given ID is not found.",
         });
       }
@@ -947,7 +952,7 @@ export const readRouter = createTRPCRouter({
       }
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         transaction: {
           id: theTransaction.id,
@@ -1007,12 +1012,12 @@ export const readRouter = createTRPCRouter({
       });
       if (!theTicker) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The ticker with the given ID is not found.",
         });
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         ticker: theTicker,
       };

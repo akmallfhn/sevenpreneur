@@ -1,4 +1,9 @@
 import {
+  STATUS_BAD_REQUEST,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
+import {
   administratorProcedure,
   createTRPCRouter,
   loggedInProcedure,
@@ -60,14 +65,14 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedUser.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected user is not found.",
         });
       } else if (updatedUser.length > 1) {
         console.error("update.user: More-than-one users are updated at once.");
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         user: updatedUser[0],
       };
@@ -106,7 +111,7 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedCohort.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected cohort is not found.",
         });
       } else if (updatedCohort.length > 1) {
@@ -115,7 +120,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         cohort: updatedCohort[0],
       };
@@ -147,7 +152,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedCohortPrice.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected cohort price is not found.",
         });
       } else if (updatedCohortPrice.length > 1) {
@@ -156,7 +161,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         cohort: updatedCohortPrice[0],
       };
@@ -202,7 +207,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedLearning.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected learning is not found.",
         });
       } else if (updatedLearning.length > 1) {
@@ -211,7 +216,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         learning: updatedLearning[0],
       };
@@ -245,7 +250,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedMaterial.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected material is not found.",
         });
       } else if (updatedMaterial.length > 1) {
@@ -254,7 +259,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         material: updatedMaterial[0],
       };
@@ -280,7 +285,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedDiscussionStarter.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected discussion starter is not found.",
         });
       } else if (updatedDiscussionStarter.length > 1) {
@@ -289,7 +294,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         discussion: updatedDiscussionStarter[0],
       };
@@ -315,7 +320,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedDiscussionReply.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected discussion reply is not found.",
         });
       } else if (updatedDiscussionReply.length > 1) {
@@ -324,7 +329,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         discussion: updatedDiscussionReply[0],
       };
@@ -357,7 +362,7 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedModule.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected module is not found.",
         });
       } else if (updatedModule.length > 1) {
@@ -366,7 +371,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         module: updatedModule[0],
       };
@@ -401,7 +406,7 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedProject.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected project is not found.",
         });
       } else if (updatedProject.length > 1) {
@@ -410,7 +415,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         project: updatedProject[0],
       };
@@ -435,7 +440,7 @@ export const updateRouter = createTRPCRouter({
 
       if (theDocumentUrl === undefined && theComment === undefined) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: STATUS_BAD_REQUEST,
           message: "Bad request",
         });
       }
@@ -459,7 +464,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedSubmission.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected submission is not found.",
         });
       } else if (updatedSubmission.length > 1) {
@@ -469,7 +474,7 @@ export const updateRouter = createTRPCRouter({
       }
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         submission: updatedSubmission[0],
       };
@@ -516,14 +521,14 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedEvent.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected event is not found.",
         });
       } else if (updatedEvent.length > 1) {
         console.error("update.event: More-than-one event are updated at once.");
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         event: updatedEvent[0],
       };
@@ -555,7 +560,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedEventPrice.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected cohort price is not found.",
         });
       } else if (updatedEventPrice.length > 1) {
@@ -564,7 +569,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         event: updatedEventPrice[0],
       };
@@ -606,7 +611,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedPlaylist.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected playlist is not found.",
         });
       } else if (updatedPlaylist.length > 1) {
@@ -615,7 +620,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         playlist: updatedPlaylist[0],
       };
@@ -651,7 +656,7 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedVideo.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected video is not found.",
         });
       } else if (updatedVideo.length > 1) {
@@ -660,7 +665,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         video: updatedVideo[0],
       };
@@ -699,7 +704,7 @@ export const updateRouter = createTRPCRouter({
         });
       if (updatedDiscount.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected discount is not found.",
         });
       } else if (updatedDiscount.length > 1) {
@@ -708,7 +713,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         discount: updatedDiscount[0],
       };
@@ -742,7 +747,7 @@ export const updateRouter = createTRPCRouter({
       });
       if (updatedTicker.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected ticker is not found.",
         });
       } else if (updatedTicker.length > 1) {
@@ -751,7 +756,7 @@ export const updateRouter = createTRPCRouter({
         );
       }
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         ticker: updatedTicker[0],
       };

@@ -1,6 +1,7 @@
 "use server";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
+import { STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND } from "./status_code";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -8,7 +9,7 @@ export async function DeleteSession() {
   const sessionData = cookieStore.get("session_token");
 
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
 
   // --- Request Backend Delete Token Database
@@ -30,7 +31,7 @@ export async function DeleteSession() {
     return { code: loggedOut.code, message: loggedOut.message };
   }
 
-  return { code: "INTERNAL_SERVER_ERROR", message: "Logout failed" };
+  return { code: STATUS_INTERNAL_SERVER_ERROR, message: "Logout failed" };
 }
 
 // MAKE PAYMENT COHORT AT XENDIT
@@ -49,7 +50,7 @@ export async function MakePaymentCohortXendit({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const paymentResponse = await trpc.purchase.cohort({
@@ -83,7 +84,7 @@ export async function MakePaymentEventXenditProps({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const paymentResponse = await trpc.purchase.event({
@@ -117,7 +118,7 @@ export async function MakePaymentPlaylistXendit({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const paymentResponse = await trpc.purchase.playlist({
@@ -147,7 +148,7 @@ export async function CheckDiscountPlaylist({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const checkDiscount = await trpc.purchase.checkDiscount({
@@ -182,7 +183,7 @@ export async function CheckDiscountCohort({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const checkDiscount = await trpc.purchase.checkDiscount({
@@ -217,7 +218,7 @@ export async function CheckDiscountEvent({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const checkDiscount = await trpc.purchase.checkDiscount({
@@ -250,7 +251,7 @@ export async function CancelPaymentXendit({
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
-    return { code: "NOT_FOUND", message: "No session token found" };
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
   setSessionToken(sessionData.value);
   const cancelResponse = await trpc.purchase.cancel({
