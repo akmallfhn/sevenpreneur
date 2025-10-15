@@ -1,5 +1,13 @@
 import { calculateFinalPrice } from "@/lib/price-calc";
 import {
+  STATUS_BAD_REQUEST,
+  STATUS_CREATED,
+  STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_NO_CONTENT,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
+import {
   XenditInvoiceResponse,
   xenditRequestCreateInvoice,
   xenditRequestExpireInvoice,
@@ -39,7 +47,7 @@ async function createTransaction(
   });
   if (!selectedPayment) {
     throw new TRPCError({
-      code: "NOT_FOUND",
+      code: STATUS_NOT_FOUND,
       message: "The payment channel with the given ID is not found.",
     });
   }
@@ -57,7 +65,7 @@ async function createTransaction(
     });
     if (!selectedDiscount) {
       throw new TRPCError({
-        code: "NOT_FOUND",
+        code: STATUS_NOT_FOUND,
         message: "The discount with the given code is not found.",
       });
     }
@@ -66,7 +74,7 @@ async function createTransaction(
       selectedDiscount.item_id != item.id
     ) {
       throw new TRPCError({
-        code: "BAD_REQUEST",
+        code: STATUS_BAD_REQUEST,
         message:
           "The discount with the given code does not apply to this item.",
       });
@@ -100,7 +108,7 @@ async function createTransaction(
   });
   if (!theTransaction) {
     throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
+      code: STATUS_INTERNAL_SERVER_ERROR,
       message: "Failed to create a new transaction.",
     });
   }
@@ -140,7 +148,7 @@ async function createTransaction(
     }
     // Rethrow error using TRPCError
     throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
+      code: STATUS_INTERNAL_SERVER_ERROR,
       message: "Failed to create a new invoice.",
     });
   }
@@ -153,7 +161,7 @@ async function createTransaction(
   });
   if (updatedTransaction.length < 1) {
     throw new TRPCError({
-      code: "NOT_FOUND",
+      code: STATUS_NOT_FOUND,
       message: "The selected transaction is not found.",
     });
   } else if (updatedTransaction.length > 1) {
@@ -181,7 +189,7 @@ async function changePhoneNumber(
   });
   if (updatedUser.length < 1) {
     throw new TRPCError({
-      code: "NOT_FOUND",
+      code: STATUS_NOT_FOUND,
       message: "The selected user is not found.",
     });
   } else if (updatedUser.length > 1) {
@@ -208,7 +216,7 @@ export const purchaseRouter = createTRPCRouter({
       const filledCount = inputs.filter(Boolean).length;
       if (filledCount !== 1) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: STATUS_BAD_REQUEST,
           message:
             "Provide exactly one of cohort_id, playlist_id, or event_id.",
         });
@@ -243,13 +251,13 @@ export const purchaseRouter = createTRPCRouter({
 
       if (!theDiscount) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The discount with the given code and item ID is not found.",
         });
       }
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         discount: theDiscount,
       };
@@ -283,7 +291,7 @@ export const purchaseRouter = createTRPCRouter({
       });
       if (!selectedCohortPrice) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The cohort price with the given ID is not found.",
         });
       }
@@ -311,7 +319,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         transaction_id: transactionId,
         invoice_url: invoiceUrl,
@@ -346,7 +354,7 @@ export const purchaseRouter = createTRPCRouter({
       });
       if (!selectedEventPrice) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The event price with the given ID is not found.",
         });
       }
@@ -374,7 +382,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         transaction_id: transactionId,
         invoice_url: invoiceUrl,
@@ -406,7 +414,7 @@ export const purchaseRouter = createTRPCRouter({
       });
       if (!selectedPlaylist) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The playlist with the given ID is not found.",
         });
       }
@@ -434,7 +442,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         transaction_id: transactionId,
         invoice_url: invoiceUrl,
@@ -457,7 +465,7 @@ export const purchaseRouter = createTRPCRouter({
       });
       if (!theTransaction) {
         return {
-          code: "NO_CONTENT",
+          code: STATUS_NO_CONTENT,
           message: "Success",
         };
       }
@@ -470,7 +478,7 @@ export const purchaseRouter = createTRPCRouter({
       } catch (e) {
         // Rethrow error using TRPCError
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to cancel an invoice.",
         });
       }
@@ -484,7 +492,7 @@ export const purchaseRouter = createTRPCRouter({
         });
       if (updatedTransaction.length < 1) {
         throw new TRPCError({
-          code: "NOT_FOUND",
+          code: STATUS_NOT_FOUND,
           message: "The selected transaction is not found.",
         });
       } else if (updatedTransaction.length > 1) {
@@ -494,7 +502,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       return {
-        code: "NO_CONTENT",
+        code: STATUS_NO_CONTENT,
         message: "Success",
       };
     }),

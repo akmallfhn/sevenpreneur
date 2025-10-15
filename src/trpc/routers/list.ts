@@ -1,10 +1,17 @@
 import {
+  STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
+import {
   administratorProcedure,
   createTRPCRouter,
   loggedInProcedure,
   publicProcedure,
   roleBasedProcedure,
 } from "@/trpc/init";
+import { stringToDate } from "@/trpc/utils/string_date";
 import {
   numberIsID,
   numberIsPositive,
@@ -21,7 +28,6 @@ import {
 } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { stringToDate } from "../utils/string_date";
 
 function calculatePage(
   input: { page?: number; page_size?: number },
@@ -179,7 +185,7 @@ async function isEnrolledCohort(
   });
   if (!theEnrolledCohort) {
     throw new TRPCError({
-      code: "FORBIDDEN",
+      code: STATUS_FORBIDDEN,
       message: error_message,
     });
   }
@@ -197,7 +203,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      code: "OK",
+      code: STATUS_OK,
       message: "Success",
       list: returnedList,
     };
@@ -214,7 +220,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      code: "OK",
+      code: STATUS_OK,
       message: "Success",
       list: returnedList,
     };
@@ -231,7 +237,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      code: "OK",
+      code: STATUS_OK,
       message: "Success",
       list: returnedList,
     };
@@ -248,7 +254,7 @@ export const listRouter = createTRPCRouter({
       };
     });
     return {
-      code: "OK",
+      code: STATUS_OK,
       message: "Success",
       list: returnedList,
     };
@@ -264,7 +270,7 @@ export const listRouter = createTRPCRouter({
         },
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: channelList,
       };
@@ -328,7 +334,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -416,7 +422,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -496,7 +502,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -534,7 +540,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -560,7 +566,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -593,7 +599,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -623,7 +629,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -643,7 +649,7 @@ export const listRouter = createTRPCRouter({
         });
         if (!theLearning) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The learning with the given ID is not found.",
           });
         }
@@ -668,7 +674,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -688,7 +694,7 @@ export const listRouter = createTRPCRouter({
         });
         if (!theLearning) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The learning with the given ID is not found.",
           });
         }
@@ -730,7 +736,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -756,7 +762,7 @@ export const listRouter = createTRPCRouter({
         });
         if (!theLearning) {
           throw new TRPCError({
-            code: "NOT_FOUND",
+            code: STATUS_NOT_FOUND,
             message: "The learning with the given ID is not found.",
           });
         }
@@ -792,7 +798,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -827,7 +833,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -863,7 +869,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -884,7 +890,7 @@ export const listRouter = createTRPCRouter({
         }
         if (opts.ctx.user.id !== selectedUserId) {
           throw new TRPCError({
-            code: "FORBIDDEN",
+            code: STATUS_FORBIDDEN,
             message:
               "You're not allowed to read another user's submissions list.",
           });
@@ -909,7 +915,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -998,7 +1004,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -1025,7 +1031,7 @@ export const listRouter = createTRPCRouter({
         };
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -1089,7 +1095,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -1154,7 +1160,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,
@@ -1178,7 +1184,7 @@ export const listRouter = createTRPCRouter({
         return entry.user;
       });
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
       };
@@ -1261,7 +1267,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: paging.metapaging,
@@ -1289,7 +1295,7 @@ export const listRouter = createTRPCRouter({
         }
         if (opts.ctx.user.id !== selectedUserId) {
           throw new TRPCError({
-            code: "FORBIDDEN",
+            code: STATUS_FORBIDDEN,
             message:
               "You're not allowed to read another user's transactions list.",
           });
@@ -1309,7 +1315,7 @@ export const listRouter = createTRPCRouter({
 
       if (providedFilters.length > 1) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
+          code: STATUS_BAD_REQUEST,
           message: "Provide only one of cohort_id, playlist_id, or event_id.",
         });
       }
@@ -1497,7 +1503,7 @@ export const listRouter = createTRPCRouter({
       });
 
       return {
-        code: "OK",
+        code: STATUS_OK,
         message: "Success",
         list: returnedList,
         metapaging: returnedMetapaging,

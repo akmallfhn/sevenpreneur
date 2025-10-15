@@ -1,4 +1,8 @@
 import {
+  STATUS_CREATED,
+  STATUS_INTERNAL_SERVER_ERROR,
+} from "@/lib/status_code";
+import {
   administratorProcedure,
   createTRPCRouter,
   loggedInProcedure,
@@ -65,12 +69,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theUser) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new user.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         user: theUser,
       };
@@ -129,12 +133,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theCohort) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new cohort.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         cohort: theCohort,
       };
@@ -166,12 +170,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theCohortPrice) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new cohort price.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         cohortPrice: theCohortPrice,
       };
@@ -217,12 +221,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theLearning) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new learning.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         learning: theLearning,
       };
@@ -256,12 +260,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theMaterial) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new material.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         material: theMaterial,
       };
@@ -291,12 +295,12 @@ export const createRouter = createTRPCRouter({
         });
       if (!theDiscussionStarter) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new discussion starter.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         module: theDiscussionStarter,
       };
@@ -326,12 +330,12 @@ export const createRouter = createTRPCRouter({
         });
       if (!theDiscussionReply) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new discussion reply.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         module: theDiscussionReply,
       };
@@ -365,12 +369,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theModule) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new module.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         module: theModule,
       };
@@ -406,12 +410,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theProject) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new project.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         project: theProject,
       };
@@ -478,12 +482,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theEvent) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new cohort.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         event: theEvent,
       };
@@ -515,12 +519,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theEventPrice) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new cohort price.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         eventPrice: theEventPrice,
       };
@@ -582,12 +586,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!thePlaylist) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new playlist.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         playlist: thePlaylist,
       };
@@ -617,12 +621,12 @@ export const createRouter = createTRPCRouter({
         });
       if (!theEducatorPlaylist) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new educator playlist.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         educatorPlaylist: theEducatorPlaylist,
       };
@@ -659,12 +663,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theVideo) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new video.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         video: theVideo,
       };
@@ -693,12 +697,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theSubmission) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new submission.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         submission: theSubmission,
       };
@@ -738,12 +742,12 @@ export const createRouter = createTRPCRouter({
       });
       if (!theDiscount) {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
+          code: STATUS_INTERNAL_SERVER_ERROR,
           message: "Failed to create a new discount.",
         });
       }
       return {
-        code: "CREATED",
+        code: STATUS_CREATED,
         message: "Success",
         discount: theDiscount,
       };
