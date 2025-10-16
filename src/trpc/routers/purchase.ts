@@ -198,6 +198,8 @@ async function changePhoneNumber(
 }
 
 export const purchaseRouter = createTRPCRouter({
+  // Discounts //
+
   checkDiscount: loggedInProcedure
     .input(
       z.object({
@@ -263,6 +265,8 @@ export const purchaseRouter = createTRPCRouter({
       };
     }),
 
+  // Products //
+
   cohort: loggedInProcedure
     .input(
       z.object({
@@ -304,6 +308,66 @@ export const purchaseRouter = createTRPCRouter({
           id: selectedCohortPrice.id,
           name: `${selectedCohortPrice.cohort.name} (${selectedCohortPrice.name})`,
           amount: selectedCohortPrice.amount,
+        },
+        opts.input.payment_channel_id,
+        opts.input.discount_code
+      );
+
+      if (opts.input.phone_country_id && opts.input.phone_number) {
+        await changePhoneNumber(
+          opts.ctx.prisma,
+          selectedUserId,
+          opts.input.phone_country_id,
+          opts.input.phone_number
+        );
+      }
+
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        transaction_id: transactionId,
+        invoice_url: invoiceUrl,
+      };
+    }),
+
+  playlist: loggedInProcedure
+    .input(
+      z.object({
+        user_id: stringIsUUID().optional(),
+        phone_country_id: numberIsID().nullable().optional(),
+        phone_number: stringNotBlank().nullable().optional(),
+        playlist_id: numberIsID(),
+        payment_channel_id: numberIsID(),
+        discount_code: stringNotBlank().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      let currentRole = opts.ctx.user.role.name;
+      let selectedUserId = opts.ctx.user.id;
+      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+        if (opts.input.user_id) {
+          selectedUserId = opts.input.user_id;
+        }
+      }
+
+      const selectedPlaylist = await opts.ctx.prisma.playlist.findFirst({
+        where: { id: opts.input.playlist_id },
+      });
+      if (!selectedPlaylist) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The playlist with the given ID is not found.",
+        });
+      }
+
+      const { transactionId, invoiceUrl } = await createTransaction(
+        opts.ctx.prisma,
+        selectedUserId,
+        CategoryEnum.PLAYLIST,
+        {
+          id: selectedPlaylist.id,
+          name: selectedPlaylist.name,
+          amount: selectedPlaylist.price,
         },
         opts.input.payment_channel_id,
         opts.input.discount_code
@@ -389,65 +453,7 @@ export const purchaseRouter = createTRPCRouter({
       };
     }),
 
-  playlist: loggedInProcedure
-    .input(
-      z.object({
-        user_id: stringIsUUID().optional(),
-        phone_country_id: numberIsID().nullable().optional(),
-        phone_number: stringNotBlank().nullable().optional(),
-        playlist_id: numberIsID(),
-        payment_channel_id: numberIsID(),
-        discount_code: stringNotBlank().optional(),
-      })
-    )
-    .mutation(async (opts) => {
-      let currentRole = opts.ctx.user.role.name;
-      let selectedUserId = opts.ctx.user.id;
-      if (currentRole === "Administrator" || currentRole === "Class Manager") {
-        if (opts.input.user_id) {
-          selectedUserId = opts.input.user_id;
-        }
-      }
-
-      const selectedPlaylist = await opts.ctx.prisma.playlist.findFirst({
-        where: { id: opts.input.playlist_id },
-      });
-      if (!selectedPlaylist) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The playlist with the given ID is not found.",
-        });
-      }
-
-      const { transactionId, invoiceUrl } = await createTransaction(
-        opts.ctx.prisma,
-        selectedUserId,
-        CategoryEnum.PLAYLIST,
-        {
-          id: selectedPlaylist.id,
-          name: selectedPlaylist.name,
-          amount: selectedPlaylist.price,
-        },
-        opts.input.payment_channel_id,
-        opts.input.discount_code
-      );
-
-      if (opts.input.phone_country_id && opts.input.phone_number) {
-        await changePhoneNumber(
-          opts.ctx.prisma,
-          selectedUserId,
-          opts.input.phone_country_id,
-          opts.input.phone_number
-        );
-      }
-
-      return {
-        code: STATUS_CREATED,
-        message: "Success",
-        transaction_id: transactionId,
-        invoice_url: invoiceUrl,
-      };
-    }),
+  // Cancellation //
 
   cancel: loggedInProcedure
     .input(

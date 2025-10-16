@@ -23,6 +23,8 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const updateRouter = createTRPCRouter({
+  // User Data //
+
   user: administratorProcedure
     .input(
       z.object({
@@ -77,6 +79,8 @@ export const updateRouter = createTRPCRouter({
         user: updatedUser[0],
       };
     }),
+
+  // LMS-related //
 
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
@@ -164,6 +168,48 @@ export const updateRouter = createTRPCRouter({
         code: STATUS_OK,
         message: "Success",
         cohort: updatedCohortPrice[0],
+      };
+    }),
+
+  module: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+        cohort_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().nullable().optional(),
+        document_url: stringNotBlank().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedModule = await opts.ctx.prisma.module.updateManyAndReturn({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          status: opts.input.status,
+        },
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (updatedModule.length < 1) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The selected module is not found.",
+        });
+      } else if (updatedModule.length > 1) {
+        console.error(
+          "update.module: More-than-one modules are updated at once."
+        );
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        module: updatedModule[0],
       };
     }),
 
@@ -335,48 +381,6 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  module: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        id: numberIsID(),
-        cohort_id: numberIsID().optional(),
-        name: stringNotBlank().optional(),
-        description: stringNotBlank().nullable().optional(),
-        document_url: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
-      })
-    )
-    .mutation(async (opts) => {
-      const updatedModule = await opts.ctx.prisma.module.updateManyAndReturn({
-        data: {
-          cohort_id: opts.input.cohort_id,
-          name: opts.input.name,
-          description: opts.input.description,
-          document_url: opts.input.document_url,
-          status: opts.input.status,
-        },
-        where: {
-          id: opts.input.id,
-          // deleted_at: null,
-        },
-      });
-      if (updatedModule.length < 1) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The selected module is not found.",
-        });
-      } else if (updatedModule.length > 1) {
-        console.error(
-          "update.module: More-than-one modules are updated at once."
-        );
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        module: updatedModule[0],
-      };
-    }),
-
   project: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
@@ -480,100 +484,7 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
-  event: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        id: numberIsID(),
-        name: stringNotBlank().optional(),
-        description: stringNotBlank().optional(),
-        image: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
-        slug_url: stringNotBlank().optional(),
-        start_date: stringIsTimestampTz().optional(),
-        end_date: stringIsTimestampTz().optional(),
-        method: z.nativeEnum(LearningMethodEnum).optional(),
-        meeting_url: stringNotBlank().nullable().optional(),
-        location_name: stringNotBlank().nullable().optional(),
-        location_url: stringNotBlank().nullable().optional(),
-        published_at: stringIsTimestampTz().optional(),
-      })
-    )
-    .mutation(async (opts) => {
-      const updatedEvent = await opts.ctx.prisma.event.updateManyAndReturn({
-        data: {
-          name: opts.input.name,
-          description: opts.input.description,
-          image: opts.input.image,
-          status: opts.input.status,
-          slug_url: opts.input.slug_url,
-          start_date: opts.input.start_date,
-          end_date: opts.input.end_date,
-          method: opts.input.method,
-          meeting_url: opts.input.meeting_url,
-          location_name: opts.input.location_name,
-          location_url: opts.input.location_url,
-          published_at: opts.input.published_at,
-        },
-        where: {
-          id: opts.input.id,
-          deleted_at: null,
-        },
-      });
-      if (updatedEvent.length < 1) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The selected event is not found.",
-        });
-      } else if (updatedEvent.length > 1) {
-        console.error("update.event: More-than-one event are updated at once.");
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        event: updatedEvent[0],
-      };
-    }),
-
-  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        id: numberIsID(),
-        event_id: numberIsID().optional(),
-        name: stringNotBlank().optional(),
-        amount: z.number().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
-      })
-    )
-    .mutation(async (opts) => {
-      const updatedEventPrice =
-        await opts.ctx.prisma.eventPrice.updateManyAndReturn({
-          data: {
-            event_id: opts.input.event_id,
-            name: opts.input.name,
-            amount: opts.input.amount,
-            status: opts.input.status,
-          },
-          where: {
-            id: opts.input.id,
-            // deleted_at: null,
-          },
-        });
-      if (updatedEventPrice.length < 1) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The selected cohort price is not found.",
-        });
-      } else if (updatedEventPrice.length > 1) {
-        console.error(
-          "update.cohortPrice: More-than-one cohort prices are updated at once."
-        );
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        event: updatedEventPrice[0],
-      };
-    }),
+  // Playlist-related //
 
   playlist: administratorProcedure
     .input(
@@ -671,6 +582,105 @@ export const updateRouter = createTRPCRouter({
       };
     }),
 
+  // Event-related //
+
+  event: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+        name: stringNotBlank().optional(),
+        description: stringNotBlank().optional(),
+        image: stringNotBlank().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+        slug_url: stringNotBlank().optional(),
+        start_date: stringIsTimestampTz().optional(),
+        end_date: stringIsTimestampTz().optional(),
+        method: z.nativeEnum(LearningMethodEnum).optional(),
+        meeting_url: stringNotBlank().nullable().optional(),
+        location_name: stringNotBlank().nullable().optional(),
+        location_url: stringNotBlank().nullable().optional(),
+        published_at: stringIsTimestampTz().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedEvent = await opts.ctx.prisma.event.updateManyAndReturn({
+        data: {
+          name: opts.input.name,
+          description: opts.input.description,
+          image: opts.input.image,
+          status: opts.input.status,
+          slug_url: opts.input.slug_url,
+          start_date: opts.input.start_date,
+          end_date: opts.input.end_date,
+          method: opts.input.method,
+          meeting_url: opts.input.meeting_url,
+          location_name: opts.input.location_name,
+          location_url: opts.input.location_url,
+          published_at: opts.input.published_at,
+        },
+        where: {
+          id: opts.input.id,
+          deleted_at: null,
+        },
+      });
+      if (updatedEvent.length < 1) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The selected event is not found.",
+        });
+      } else if (updatedEvent.length > 1) {
+        console.error("update.event: More-than-one event are updated at once.");
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        event: updatedEvent[0],
+      };
+    }),
+
+  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+        event_id: numberIsID().optional(),
+        name: stringNotBlank().optional(),
+        amount: z.number().optional(),
+        status: z.nativeEnum(StatusEnum).optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedEventPrice =
+        await opts.ctx.prisma.eventPrice.updateManyAndReturn({
+          data: {
+            event_id: opts.input.event_id,
+            name: opts.input.name,
+            amount: opts.input.amount,
+            status: opts.input.status,
+          },
+          where: {
+            id: opts.input.id,
+            // deleted_at: null,
+          },
+        });
+      if (updatedEventPrice.length < 1) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The selected cohort price is not found.",
+        });
+      } else if (updatedEventPrice.length > 1) {
+        console.error(
+          "update.cohortPrice: More-than-one cohort prices are updated at once."
+        );
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        event: updatedEventPrice[0],
+      };
+    }),
+
+  // Transaction-related //
+
   discount: administratorProcedure
     .input(
       z.object({
@@ -718,6 +728,9 @@ export const updateRouter = createTRPCRouter({
         discount: updatedDiscount[0],
       };
     }),
+
+  // Tickers //
+
   ticker: administratorProcedure
     .input(
       z.object({

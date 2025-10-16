@@ -23,6 +23,8 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const createRouter = createTRPCRouter({
+  // User Data //
+
   user: administratorProcedure
     .input(
       z.object({
@@ -79,6 +81,8 @@ export const createRouter = createTRPCRouter({
         user: theUser,
       };
     }),
+
+  // LMS-related //
 
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
@@ -178,6 +182,45 @@ export const createRouter = createTRPCRouter({
         code: STATUS_CREATED,
         message: "Success",
         cohortPrice: theCohortPrice,
+      };
+    }),
+
+  module: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank().nullable().optional(),
+        document_url: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdModule = await opts.ctx.prisma.module.create({
+        data: {
+          cohort_id: opts.input.cohort_id,
+          name: opts.input.name,
+          description: opts.input.description,
+          document_url: opts.input.document_url,
+          status: opts.input.status,
+        },
+      });
+      const theModule = await opts.ctx.prisma.module.findFirst({
+        where: {
+          id: createdModule.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theModule) {
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to create a new module.",
+        });
+      }
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        module: theModule,
       };
     }),
 
@@ -341,45 +384,6 @@ export const createRouter = createTRPCRouter({
       };
     }),
 
-  module: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        cohort_id: numberIsID(),
-        name: stringNotBlank(),
-        description: stringNotBlank().nullable().optional(),
-        document_url: stringNotBlank(),
-        status: z.nativeEnum(StatusEnum),
-      })
-    )
-    .mutation(async (opts) => {
-      const createdModule = await opts.ctx.prisma.module.create({
-        data: {
-          cohort_id: opts.input.cohort_id,
-          name: opts.input.name,
-          description: opts.input.description,
-          document_url: opts.input.document_url,
-          status: opts.input.status,
-        },
-      });
-      const theModule = await opts.ctx.prisma.module.findFirst({
-        where: {
-          id: createdModule.id,
-          // deleted_at: null,
-        },
-      });
-      if (!theModule) {
-        throw new TRPCError({
-          code: STATUS_INTERNAL_SERVER_ERROR,
-          message: "Failed to create a new module.",
-        });
-      }
-      return {
-        code: STATUS_CREATED,
-        message: "Success",
-        module: theModule,
-      };
-    }),
-
   project: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
@@ -421,114 +425,41 @@ export const createRouter = createTRPCRouter({
       };
     }),
 
-  event: roleBasedProcedure(["Administrator", "Class Manager"])
+  submission: roleBasedProcedure(["Administrator", "General User"])
     .input(
       z.object({
-        name: stringNotBlank(),
-        description: stringNotBlank(),
-        image: stringNotBlank(),
-        status: z.nativeEnum(StatusEnum),
-        slug_url: stringNotBlank().optional(),
-        start_date: stringIsTimestampTz(),
-        end_date: stringIsTimestampTz(),
-        method: z.nativeEnum(LearningMethodEnum),
-        meeting_url: stringNotBlank().nullable().optional(),
-        location_name: stringNotBlank().nullable().optional(),
-        location_url: stringNotBlank().nullable().optional(),
-        published_at: stringIsTimestampTz().optional(),
-        event_prices: z
-          .array(
-            z.object({
-              name: stringNotBlank(),
-              amount: z.number(),
-              status: z.nativeEnum(StatusEnum),
-            })
-          )
-          .min(1),
+        project_id: numberIsID(),
+        document_url: stringNotBlank().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
-      const slugUrl =
-        typeof opts.input.slug_url !== "undefined"
-          ? opts.input.slug_url
-          : createSlugFromTitle(opts.input.name);
-      const createdEvent = await opts.ctx.prisma.event.create({
+      const createdSubmission = await opts.ctx.prisma.submission.create({
         data: {
-          name: opts.input.name,
-          description: opts.input.description,
-          image: opts.input.image,
-          status: opts.input.status,
-          slug_url: slugUrl,
-          start_date: opts.input.start_date,
-          end_date: opts.input.end_date,
-          method: opts.input.method,
-          meeting_url: opts.input.meeting_url,
-          location_name: opts.input.location_name,
-          location_url: opts.input.location_url,
-          published_at: opts.input.published_at,
-          event_prices: {
-            create: opts.input.event_prices,
-          },
+          project_id: opts.input.project_id,
+          submitter_id: opts.ctx.user.id,
+          document_url: opts.input.document_url,
         },
       });
-      const theEvent = await opts.ctx.prisma.event.findFirst({
-        include: {
-          event_prices: true,
-        },
+      const theSubmission = await opts.ctx.prisma.submission.findFirst({
         where: {
-          id: createdEvent.id,
-          deleted_at: null,
-        },
-      });
-      if (!theEvent) {
-        throw new TRPCError({
-          code: STATUS_INTERNAL_SERVER_ERROR,
-          message: "Failed to create a new cohort.",
-        });
-      }
-      return {
-        code: STATUS_CREATED,
-        message: "Success",
-        event: theEvent,
-      };
-    }),
-
-  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        event_id: numberIsID(),
-        name: stringNotBlank(),
-        amount: z.number(),
-        status: z.nativeEnum(StatusEnum),
-      })
-    )
-    .mutation(async (opts) => {
-      const createdEventPrice = await opts.ctx.prisma.eventPrice.create({
-        data: {
-          event_id: opts.input.event_id,
-          name: opts.input.name,
-          amount: opts.input.amount,
-          status: opts.input.status,
-        },
-      });
-      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
-        where: {
-          id: createdEventPrice.id,
+          id: createdSubmission.id,
           // deleted_at: null,
         },
       });
-      if (!theEventPrice) {
+      if (!theSubmission) {
         throw new TRPCError({
           code: STATUS_INTERNAL_SERVER_ERROR,
-          message: "Failed to create a new cohort price.",
+          message: "Failed to create a new submission.",
         });
       }
       return {
         code: STATUS_CREATED,
         message: "Success",
-        eventPrice: theEventPrice,
+        submission: theSubmission,
       };
     }),
+
+  // Playlist-related //
 
   playlist: administratorProcedure
     .input(
@@ -674,39 +605,118 @@ export const createRouter = createTRPCRouter({
       };
     }),
 
-  submission: roleBasedProcedure(["Administrator", "General User"])
+  // Event-related //
+
+  event: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
-        project_id: numberIsID(),
-        document_url: stringNotBlank().nullable().optional(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        image: stringNotBlank(),
+        status: z.nativeEnum(StatusEnum),
+        slug_url: stringNotBlank().optional(),
+        start_date: stringIsTimestampTz(),
+        end_date: stringIsTimestampTz(),
+        method: z.nativeEnum(LearningMethodEnum),
+        meeting_url: stringNotBlank().nullable().optional(),
+        location_name: stringNotBlank().nullable().optional(),
+        location_url: stringNotBlank().nullable().optional(),
+        published_at: stringIsTimestampTz().optional(),
+        event_prices: z
+          .array(
+            z.object({
+              name: stringNotBlank(),
+              amount: z.number(),
+              status: z.nativeEnum(StatusEnum),
+            })
+          )
+          .min(1),
       })
     )
     .mutation(async (opts) => {
-      const createdSubmission = await opts.ctx.prisma.submission.create({
+      const slugUrl =
+        typeof opts.input.slug_url !== "undefined"
+          ? opts.input.slug_url
+          : createSlugFromTitle(opts.input.name);
+      const createdEvent = await opts.ctx.prisma.event.create({
         data: {
-          project_id: opts.input.project_id,
-          submitter_id: opts.ctx.user.id,
-          document_url: opts.input.document_url,
+          name: opts.input.name,
+          description: opts.input.description,
+          image: opts.input.image,
+          status: opts.input.status,
+          slug_url: slugUrl,
+          start_date: opts.input.start_date,
+          end_date: opts.input.end_date,
+          method: opts.input.method,
+          meeting_url: opts.input.meeting_url,
+          location_name: opts.input.location_name,
+          location_url: opts.input.location_url,
+          published_at: opts.input.published_at,
+          event_prices: {
+            create: opts.input.event_prices,
+          },
         },
       });
-      const theSubmission = await opts.ctx.prisma.submission.findFirst({
+      const theEvent = await opts.ctx.prisma.event.findFirst({
+        include: {
+          event_prices: true,
+        },
         where: {
-          id: createdSubmission.id,
-          // deleted_at: null,
+          id: createdEvent.id,
+          deleted_at: null,
         },
       });
-      if (!theSubmission) {
+      if (!theEvent) {
         throw new TRPCError({
           code: STATUS_INTERNAL_SERVER_ERROR,
-          message: "Failed to create a new submission.",
+          message: "Failed to create a new cohort.",
         });
       }
       return {
         code: STATUS_CREATED,
         message: "Success",
-        submission: theSubmission,
+        event: theEvent,
       };
     }),
+
+  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        event_id: numberIsID(),
+        name: stringNotBlank(),
+        amount: z.number(),
+        status: z.nativeEnum(StatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdEventPrice = await opts.ctx.prisma.eventPrice.create({
+        data: {
+          event_id: opts.input.event_id,
+          name: opts.input.name,
+          amount: opts.input.amount,
+          status: opts.input.status,
+        },
+      });
+      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+        where: {
+          id: createdEventPrice.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theEventPrice) {
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to create a new cohort price.",
+        });
+      }
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        eventPrice: theEventPrice,
+      };
+    }),
+
+  // Transaction-related //
 
   discount: administratorProcedure
     .input(

@@ -192,14 +192,16 @@ async function isEnrolledCohort(
 }
 
 export const listRouter = createTRPCRouter({
-  industries: loggedInProcedure.query(async (opts) => {
-    const industryList = await opts.ctx.prisma.industry.findMany({
-      orderBy: [{ industry_name: "asc" }, { id: "asc" }],
+  // Lookup Tables //
+
+  roles: loggedInProcedure.query(async (opts) => {
+    const roleList = await opts.ctx.prisma.role.findMany({
+      orderBy: [{ id: "asc" }],
     });
-    const returnedList = industryList.map((entry) => {
+    const returnedList = roleList.map((entry) => {
       return {
         id: entry.id,
-        name: entry.industry_name,
+        name: entry.name,
       };
     });
     return {
@@ -226,14 +228,14 @@ export const listRouter = createTRPCRouter({
     };
   }),
 
-  roles: loggedInProcedure.query(async (opts) => {
-    const roleList = await opts.ctx.prisma.role.findMany({
-      orderBy: [{ id: "asc" }],
+  industries: loggedInProcedure.query(async (opts) => {
+    const industryList = await opts.ctx.prisma.industry.findMany({
+      orderBy: [{ industry_name: "asc" }, { id: "asc" }],
     });
-    const returnedList = roleList.map((entry) => {
+    const returnedList = industryList.map((entry) => {
       return {
         id: entry.id,
-        name: entry.name,
+        name: entry.industry_name,
       };
     });
     return {
@@ -275,6 +277,8 @@ export const listRouter = createTRPCRouter({
         list: channelList,
       };
     }),
+
+  // User Data //
 
   users: roleBasedProcedure(["Administrator", "Educator", "Class Manager"])
     .input(
@@ -340,6 +344,8 @@ export const listRouter = createTRPCRouter({
         metapaging: returnedMetapaging,
       };
     }),
+
+  // LMS-related //
 
   cohorts: publicProcedure
     .input(
@@ -429,6 +435,69 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
+  cohortPrices: loggedInProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const cohortPricesList = await opts.ctx.prisma.cohortPrice.findMany({
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ amount: "asc" }, { created_at: "asc" }],
+      });
+      const returnedList = cohortPricesList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          amount: entry.amount,
+          status: entry.status,
+        };
+      });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  cohortMembers: loggedInProcedure
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          opts.input.cohort_id,
+          "You're not allowed to read members of a cohort which you aren't enrolled."
+        );
+      }
+      const cohortMemberList = await opts.ctx.prisma.userCohort.findMany({
+        include: { user: { include: { phone_country: true } } },
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ user: { role_id: "asc" } }, { user: { full_name: "asc" } }],
+      });
+      const returnedList = cohortMemberList.map((entry) => {
+        return {
+          id: entry.user_id,
+          full_name: entry.user.full_name,
+          email: entry.user.email,
+          phone_country: entry.user.phone_country,
+          phone_number: entry.user.phone_number,
+          avatar: entry.user.avatar,
+        };
+      });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
   enrolledCohorts: loggedInProcedure
     .input(
       z.object({
@@ -509,7 +578,7 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  cohortMembers: loggedInProcedure
+  modules: loggedInProcedure
     .input(
       z.object({
         cohort_id: numberIsID(),
@@ -521,47 +590,19 @@ export const listRouter = createTRPCRouter({
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.cohort_id,
-          "You're not allowed to read members of a cohort which you aren't enrolled."
+          "You're not allowed to read modules of a cohort which you aren't enrolled."
         );
       }
-      const cohortMemberList = await opts.ctx.prisma.userCohort.findMany({
-        include: { user: { include: { phone_country: true } } },
+      const modulesList = await opts.ctx.prisma.module.findMany({
         where: { cohort_id: opts.input.cohort_id },
-        orderBy: [{ user: { role_id: "asc" } }, { user: { full_name: "asc" } }],
+        orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
       });
-      const returnedList = cohortMemberList.map((entry) => {
-        return {
-          id: entry.user_id,
-          full_name: entry.user.full_name,
-          email: entry.user.email,
-          phone_country: entry.user.phone_country,
-          phone_number: entry.user.phone_number,
-          avatar: entry.user.avatar,
-        };
-      });
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: returnedList,
-      };
-    }),
-
-  cohortPrices: loggedInProcedure
-    .input(
-      z.object({
-        cohort_id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      const cohortPricesList = await opts.ctx.prisma.cohortPrice.findMany({
-        where: { cohort_id: opts.input.cohort_id },
-        orderBy: [{ amount: "asc" }, { created_at: "asc" }],
-      });
-      const returnedList = cohortPricesList.map((entry) => {
+      const returnedList = modulesList.map((entry) => {
         return {
           id: entry.id,
+          cohort_id: entry.cohort_id,
           name: entry.name,
-          amount: entry.amount,
+          document_url: entry.document_url,
           status: entry.status,
         };
       });
@@ -804,41 +845,6 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  modules: loggedInProcedure
-    .input(
-      z.object({
-        cohort_id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
-        await isEnrolledCohort(
-          opts.ctx.prisma,
-          opts.ctx.user.id,
-          opts.input.cohort_id,
-          "You're not allowed to read modules of a cohort which you aren't enrolled."
-        );
-      }
-      const modulesList = await opts.ctx.prisma.module.findMany({
-        where: { cohort_id: opts.input.cohort_id },
-        orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
-      });
-      const returnedList = modulesList.map((entry) => {
-        return {
-          id: entry.id,
-          cohort_id: entry.cohort_id,
-          name: entry.name,
-          document_url: entry.document_url,
-          status: entry.status,
-        };
-      });
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: returnedList,
-      };
-    }),
-
   projects: loggedInProcedure
     .input(
       z.object({
@@ -920,6 +926,163 @@ export const listRouter = createTRPCRouter({
         list: returnedList,
       };
     }),
+
+  // Playlist-related //
+
+  playlists: publicProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const whereClause = { deleted_at: null };
+
+      if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
+        Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+        });
+      }
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause, {
+          name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.playlist.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const playlistList = await opts.ctx.prisma.playlist.findMany({
+        orderBy: [{ published_at: "desc" }],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+      const returnedList = playlistList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          tagline: entry.tagline,
+          image_url: entry.image_url,
+          price: entry.price,
+          status: entry.status,
+          slug_url: entry.slug_url,
+          published_at: entry.published_at,
+        };
+      });
+
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+        metapaging: returnedMetapaging,
+      };
+    }),
+
+  educatorsPlaylist: loggedInProcedure
+    .input(
+      z.object({
+        playlist_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const educatorsPlaylistList =
+        await opts.ctx.prisma.educatorPlaylist.findMany({
+          include: { user: true },
+          where: { playlist_id: opts.input.playlist_id },
+          orderBy: [{ user_id: "asc" }],
+        });
+      const returnedList = educatorsPlaylistList.map((entry) => {
+        return entry.user;
+      });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  enrolledPlaylists: loggedInProcedure
+    .input(
+      z.object({
+        page: numberIsPositive().optional(),
+        page_size: numberIsPositive().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const whereClause = {
+        user_id: opts.ctx.user.id,
+        playlist: {
+          deleted_at: null,
+        },
+      };
+
+      if (opts.input.keyword !== undefined) {
+        Object.assign(whereClause.playlist, {
+          name: {
+            contains: opts.input.keyword,
+            mode: "insensitive",
+          },
+        });
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.userPlaylist.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const playlistList = await opts.ctx.prisma.userPlaylist.findMany({
+        include: { playlist: true },
+        orderBy: [{ playlist: { published_at: "desc" } }],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+      const returnedList = playlistList.map((entry) => {
+        return {
+          id: entry.playlist.id,
+          name: entry.playlist.name,
+          tagline: entry.playlist.tagline,
+          image_url: entry.playlist.image_url,
+          price: entry.playlist.price,
+          status: entry.playlist.status,
+          slug_url: entry.playlist.slug_url,
+          published_at: entry.playlist.published_at,
+        };
+      });
+
+      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+        keyword: opts.input.keyword,
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+        metapaging: returnedMetapaging,
+      };
+    }),
+
+  // Event-related //
 
   events: publicProcedure
     .input(
@@ -1037,158 +1200,7 @@ export const listRouter = createTRPCRouter({
       };
     }),
 
-  playlists: publicProcedure
-    .input(
-      z.object({
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
-        keyword: stringNotBlank().optional(),
-      })
-    )
-    .query(async (opts) => {
-      const whereClause = { deleted_at: null };
-
-      if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
-        Object.assign(whereClause, {
-          status: StatusEnum.ACTIVE,
-        });
-      }
-
-      if (opts.input.keyword !== undefined) {
-        Object.assign(whereClause, {
-          name: {
-            contains: opts.input.keyword,
-            mode: "insensitive",
-          },
-        });
-      }
-
-      const paging = calculatePage(
-        opts.input,
-        await opts.ctx.prisma.playlist.aggregate({
-          _count: true,
-          where: whereClause,
-        })
-      );
-
-      const playlistList = await opts.ctx.prisma.playlist.findMany({
-        orderBy: [{ published_at: "desc" }],
-        where: whereClause,
-        skip: paging.prisma.skip,
-        take: paging.prisma.take,
-      });
-      const returnedList = playlistList.map((entry) => {
-        return {
-          id: entry.id,
-          name: entry.name,
-          tagline: entry.tagline,
-          image_url: entry.image_url,
-          price: entry.price,
-          status: entry.status,
-          slug_url: entry.slug_url,
-          published_at: entry.published_at,
-        };
-      });
-
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
-        keyword: opts.input.keyword,
-      });
-
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: returnedList,
-        metapaging: returnedMetapaging,
-      };
-    }),
-
-  enrolledPlaylists: loggedInProcedure
-    .input(
-      z.object({
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
-        keyword: stringNotBlank().optional(),
-      })
-    )
-    .query(async (opts) => {
-      const whereClause = {
-        user_id: opts.ctx.user.id,
-        playlist: {
-          deleted_at: null,
-        },
-      };
-
-      if (opts.input.keyword !== undefined) {
-        Object.assign(whereClause.playlist, {
-          name: {
-            contains: opts.input.keyword,
-            mode: "insensitive",
-          },
-        });
-      }
-
-      const paging = calculatePage(
-        opts.input,
-        await opts.ctx.prisma.userPlaylist.aggregate({
-          _count: true,
-          where: whereClause,
-        })
-      );
-
-      const playlistList = await opts.ctx.prisma.userPlaylist.findMany({
-        include: { playlist: true },
-        orderBy: [{ playlist: { published_at: "desc" } }],
-        where: whereClause,
-        skip: paging.prisma.skip,
-        take: paging.prisma.take,
-      });
-      const returnedList = playlistList.map((entry) => {
-        return {
-          id: entry.playlist.id,
-          name: entry.playlist.name,
-          tagline: entry.playlist.tagline,
-          image_url: entry.playlist.image_url,
-          price: entry.playlist.price,
-          status: entry.playlist.status,
-          slug_url: entry.playlist.slug_url,
-          published_at: entry.playlist.published_at,
-        };
-      });
-
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
-        keyword: opts.input.keyword,
-      });
-
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: returnedList,
-        metapaging: returnedMetapaging,
-      };
-    }),
-
-  educatorsPlaylist: loggedInProcedure
-    .input(
-      z.object({
-        playlist_id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      const educatorsPlaylistList =
-        await opts.ctx.prisma.educatorPlaylist.findMany({
-          include: { user: true },
-          where: { playlist_id: opts.input.playlist_id },
-          orderBy: [{ user_id: "asc" }],
-        });
-      const returnedList = educatorsPlaylistList.map((entry) => {
-        return entry.user;
-      });
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: returnedList,
-      };
-    }),
+  // Transaction-related //
 
   discounts: administratorProcedure
     .input(
