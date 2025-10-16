@@ -9,6 +9,8 @@ import { numberIsID, stringIsUUID } from "@/trpc/utils/validation";
 import { z } from "zod";
 
 export const deleteRouter = createTRPCRouter({
+  // User Data //
+
   user: administratorProcedure
     .input(
       z.object({
@@ -27,6 +29,8 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  // LMS-related //
 
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
@@ -64,6 +68,29 @@ export const deleteRouter = createTRPCRouter({
       if (deletedCohortPrice.count > 1) {
         console.error(
           "delete.cohortPrice: More-than-one cohort prices are deleted at once."
+        );
+      }
+      return {
+        code: STATUS_NO_CONTENT,
+        message: "Success",
+      };
+    }),
+
+  module: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedModule = await opts.ctx.prisma.module.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedModule.count > 1) {
+        console.error(
+          "delete.module: More-than-one modules are deleted at once."
         );
       }
       return {
@@ -176,29 +203,6 @@ export const deleteRouter = createTRPCRouter({
       };
     }),
 
-  module: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .mutation(async (opts) => {
-      const deletedModule = await opts.ctx.prisma.module.deleteMany({
-        where: {
-          id: opts.input.id,
-        },
-      });
-      if (deletedModule.count > 1) {
-        console.error(
-          "delete.module: More-than-one modules are deleted at once."
-        );
-      }
-      return {
-        code: STATUS_NO_CONTENT,
-        message: "Success",
-      };
-    }),
-
   project: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(
       z.object({
@@ -250,49 +254,7 @@ export const deleteRouter = createTRPCRouter({
       };
     }),
 
-  event: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .mutation(async (opts) => {
-      // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
-      const deletedEvent: number = await opts.ctx.prisma
-        .$executeRaw`UPDATE events SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
-      if (deletedEvent > 1) {
-        console.error(
-          "delete.event: More-than-one events are deleted at once."
-        );
-      }
-      return {
-        code: STATUS_NO_CONTENT,
-        message: "Success",
-      };
-    }),
-
-  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .mutation(async (opts) => {
-      const deletedEventPrice = await opts.ctx.prisma.eventPrice.deleteMany({
-        where: {
-          id: opts.input.id,
-        },
-      });
-      if (deletedEventPrice.count > 1) {
-        console.error(
-          "delete.eventPrice: More-than-one event prices are deleted at once."
-        );
-      }
-      return {
-        code: STATUS_NO_CONTENT,
-        message: "Success",
-      };
-    }),
+  // Playlist-related //
 
   playlist: administratorProcedure
     .input(
@@ -363,6 +325,54 @@ export const deleteRouter = createTRPCRouter({
         message: "Success",
       };
     }),
+
+  // Event-related //
+
+  event: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
+      const deletedEvent: number = await opts.ctx.prisma
+        .$executeRaw`UPDATE events SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
+      if (deletedEvent > 1) {
+        console.error(
+          "delete.event: More-than-one events are deleted at once."
+        );
+      }
+      return {
+        code: STATUS_NO_CONTENT,
+        message: "Success",
+      };
+    }),
+
+  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedEventPrice = await opts.ctx.prisma.eventPrice.deleteMany({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (deletedEventPrice.count > 1) {
+        console.error(
+          "delete.eventPrice: More-than-one event prices are deleted at once."
+        );
+      }
+      return {
+        code: STATUS_NO_CONTENT,
+        message: "Success",
+      };
+    }),
+
+  // Transaction-related //
 
   discount: administratorProcedure
     .input(
