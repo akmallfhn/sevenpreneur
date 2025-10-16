@@ -34,3 +34,8 @@ export function numberIsPositive(): z.ZodNumber {
   // Number should be 1 or bigger
   return z.number().finite().min(1);
 }
+
+export function objectHasOnlyID() {
+  // Object only has one property which is ID
+  return z.object({ id: numberIsID() });
+}
