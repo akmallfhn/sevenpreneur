@@ -18,14 +18,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:** `auth.checkSession`: All logged-in users only have read access to their own user data.
 
-## Industries 🏭
+## Roles 👥
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.industries` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.industry`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.roles`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.role`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
-**Scopes:** All logged-in users have read access to all industries.
+**Scopes:** All logged-in users have read access to all roles.
 
 ## Entrepreneur Stages 📈
 
@@ -36,14 +36,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:** All logged-in users have read access to all entrepreneur stages.
 
-## Roles 👥
+## Industries 🏭
 
-| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.roles`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.role`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.industries` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.industry`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
-**Scopes:** All logged-in users have read access to all roles.
+**Scopes:** All logged-in users have read access to all industries.
 
 ## Phone Country Codes ☎️
 
@@ -96,17 +96,6 @@ These table below shows all routes/endpoints/procedures, categorized by object t
   - Logged-in users can read all cohorts given the cohort ID.
   - Non-logged-in users can only read active cohorts.
 
-### Cohort Members 👥
-
-| Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.cohortMembers` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-
-**Scopes:**
-
-- Administrators, Educators, and Class Managers can see all cohort members given the cohort ID.
-- General Users can see all cohort members given the cohort ID which the users are enrolled.
-
 ### Cohort Prices 💵
 
 | Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -121,6 +110,17 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators and Class Manager have write access to all cohort prices' data.
 - Logged-in users can see all cohort prices given the cohort ID.
+
+### Cohort Members 👥
+
+| Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.cohortMembers` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrators, Educators, and Class Managers can see all cohort members given the cohort ID.
+- General Users can see all cohort members given the cohort ID which the users are enrolled.
 
 ### Enrolled Cohorts 🎓
 
@@ -191,11 +191,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:**
 
-- Administrator can see all discussion starters.
+- Administrators can see all discussion starters.
 - Logged-in users can post a discussion starter.
 - Logged-in users can see all discussions given the learning ID which the users are enrolled.
 - Logged-in users can only update and delete their own discussion starters.
-- Administrator can delete all discussion starters.
+- Administrators can delete all discussion starters.
 
 ### Discussion Replies 🗪
 
@@ -208,11 +208,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:**
 
-- Administrator can see all discussion replies.
+- Administrators can see all discussion replies.
 - Logged-in users can post a discussion reply.
 - Logged-in users can see all discussions given the learning ID which the users are enrolled.
 - Logged-in users can only update and delete their own discussion replies.
-- Administrator can delete all discussion replies.
+- Administrators can delete all discussion replies.
 
 ## Projects 🗂️
 
@@ -362,8 +362,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:**
 
-- Administrator can see all transactions.
-- Administrator and Class Manager can purchase items for other users.
+- Administrators can see all transactions.
+- Administrators and Class Manager can purchase items for other users.
 - Logged-in users can purchase items for their own.
 - Logged-in users can see all their own transactions.
 

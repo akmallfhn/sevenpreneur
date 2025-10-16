@@ -76,26 +76,28 @@ async function isEnrolledCohort(
 }
 
 export const readRouter = createTRPCRouter({
-  industry: loggedInProcedure
+  // Lookup Tables //
+
+  role: loggedInProcedure
     .input(
       z.object({
-        id: z.number().finite().gt(0),
+        id: z.number().finite().gte(0),
       })
     )
     .query(async (opts) => {
-      const theIndustry = await opts.ctx.prisma.industry.findFirst({
+      const theRole = await opts.ctx.prisma.role.findFirst({
         where: { id: opts.input.id },
       });
-      if (!theIndustry) {
+      if (!theRole) {
         throw new TRPCError({
           code: STATUS_NOT_FOUND,
-          message: "The industry with the given ID is not found.",
+          message: "The role with the given ID is not found.",
         });
       }
       return {
         code: STATUS_OK,
         message: "Success",
-        industry: theIndustry,
+        role: theRole,
       };
     }),
 
@@ -123,28 +125,30 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
-  role: loggedInProcedure
+  industry: loggedInProcedure
     .input(
       z.object({
-        id: z.number().finite().gte(0),
+        id: z.number().finite().gt(0),
       })
     )
     .query(async (opts) => {
-      const theRole = await opts.ctx.prisma.role.findFirst({
+      const theIndustry = await opts.ctx.prisma.industry.findFirst({
         where: { id: opts.input.id },
       });
-      if (!theRole) {
+      if (!theIndustry) {
         throw new TRPCError({
           code: STATUS_NOT_FOUND,
-          message: "The role with the given ID is not found.",
+          message: "The industry with the given ID is not found.",
         });
       }
       return {
         code: STATUS_OK,
         message: "Success",
-        role: theRole,
+        industry: theIndustry,
       };
     }),
+
+  // User Data //
 
   user: roleBasedProcedure(["Administrator", "Educator", "Class Manager"])
     .input(
@@ -178,6 +182,8 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
+  // LMS-related //
+
   cohort: publicProcedure
     .input(
       z.object({
@@ -199,56 +205,6 @@ export const readRouter = createTRPCRouter({
           cohort_prices: true,
         },
         where: whereClause,
-      });
-      if (!theCohort) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The cohort with the given ID is not found.",
-        });
-      }
-      const learningsCount = await opts.ctx.prisma.learning.count({
-        where: {
-          cohort_id: opts.input.id,
-        },
-      });
-      const modulesCount = await opts.ctx.prisma.module.count({
-        where: {
-          cohort_id: opts.input.id,
-        },
-      });
-      const materialsCount = await opts.ctx.prisma.material.count({
-        where: {
-          learning: {
-            cohort_id: opts.input.id,
-          },
-        },
-      });
-      const theCohortWithCounts = Object.assign({}, theCohort, {
-        total_learning_session: learningsCount,
-        total_materials: modulesCount + materialsCount,
-      });
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        cohort: theCohortWithCounts,
-      };
-    }),
-
-  enrolledCohort: loggedInProcedure
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      const theCohort = await opts.ctx.prisma.userCohort.findFirst({
-        include: {
-          cohort: true,
-        },
-        where: {
-          user_id: opts.ctx.user.id,
-          cohort_id: opts.input.id,
-        },
       });
       if (!theCohort) {
         throw new TRPCError({
@@ -307,6 +263,100 @@ export const readRouter = createTRPCRouter({
         code: STATUS_OK,
         message: "Success",
         cohortPrice: theCohortPrice,
+      };
+    }),
+
+  enrolledCohort: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theCohort = await opts.ctx.prisma.userCohort.findFirst({
+        include: {
+          cohort: true,
+        },
+        where: {
+          user_id: opts.ctx.user.id,
+          cohort_id: opts.input.id,
+        },
+      });
+      if (!theCohort) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The cohort with the given ID is not found.",
+        });
+      }
+      const learningsCount = await opts.ctx.prisma.learning.count({
+        where: {
+          cohort_id: opts.input.id,
+        },
+      });
+      const modulesCount = await opts.ctx.prisma.module.count({
+        where: {
+          cohort_id: opts.input.id,
+        },
+      });
+      const materialsCount = await opts.ctx.prisma.material.count({
+        where: {
+          learning: {
+            cohort_id: opts.input.id,
+          },
+        },
+      });
+      const theCohortWithCounts = Object.assign({}, theCohort, {
+        total_learning_session: learningsCount,
+        total_materials: modulesCount + materialsCount,
+      });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        cohort: theCohortWithCounts,
+      };
+    }),
+
+  module: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name == "General User") {
+        const checkModule = await opts.ctx.prisma.module.findFirst({
+          select: { cohort_id: true },
+          where: { id: opts.input.id },
+        });
+        if (!checkModule) {
+          throw new TRPCError({
+            code: STATUS_NOT_FOUND,
+            message: "The module with the given ID is not found.",
+          });
+        }
+        await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          checkModule.cohort_id,
+          "You're not allowed to read modules of a cohort which you aren't enrolled."
+        );
+      }
+      const theModule = await opts.ctx.prisma.module.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theModule) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The module with the given ID is not found.",
+        });
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        module: theModule,
       };
     }),
 
@@ -380,50 +430,6 @@ export const readRouter = createTRPCRouter({
         code: STATUS_OK,
         message: "Success",
         material: theMaterial,
-      };
-    }),
-
-  module: loggedInProcedure
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
-        const checkModule = await opts.ctx.prisma.module.findFirst({
-          select: { cohort_id: true },
-          where: { id: opts.input.id },
-        });
-        if (!checkModule) {
-          throw new TRPCError({
-            code: STATUS_NOT_FOUND,
-            message: "The module with the given ID is not found.",
-          });
-        }
-        await isEnrolledCohort(
-          opts.ctx.prisma,
-          opts.ctx.user.id,
-          checkModule.cohort_id,
-          "You're not allowed to read modules of a cohort which you aren't enrolled."
-        );
-      }
-      const theModule = await opts.ctx.prisma.module.findFirst({
-        where: {
-          id: opts.input.id,
-          // deleted_at: null,
-        },
-      });
-      if (!theModule) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The module with the given ID is not found.",
-        });
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        module: theModule,
       };
     }),
 
@@ -503,66 +509,7 @@ export const readRouter = createTRPCRouter({
       };
     }),
 
-  event: publicProcedure
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      let whereClause = {
-        id: opts.input.id,
-        deleted_at: null,
-      };
-      if (!opts.ctx.user) {
-        Object.assign(whereClause, {
-          status: StatusEnum.ACTIVE,
-        });
-      }
-      const theEvent = await opts.ctx.prisma.event.findFirst({
-        include: {
-          event_prices: true,
-        },
-        where: whereClause,
-      });
-      if (!theEvent) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The event with the given ID is not found.",
-        });
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        event: theEvent,
-      };
-    }),
-
-  eventPrice: loggedInProcedure
-    .input(
-      z.object({
-        id: numberIsID(),
-      })
-    )
-    .query(async (opts) => {
-      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
-        where: {
-          id: opts.input.id,
-          // deleted_at: null,
-        },
-      });
-      if (!theEventPrice) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The event price with the given ID is not found.",
-        });
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        cohortPrice: theEventPrice,
-      };
-    }),
+  // Playlist-related //
 
   playlist: publicProcedure
     .input(
@@ -750,6 +697,71 @@ export const readRouter = createTRPCRouter({
         video: theVideo,
       };
     }),
+
+  // Event-related //
+
+  event: publicProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      let whereClause = {
+        id: opts.input.id,
+        deleted_at: null,
+      };
+      if (!opts.ctx.user) {
+        Object.assign(whereClause, {
+          status: StatusEnum.ACTIVE,
+        });
+      }
+      const theEvent = await opts.ctx.prisma.event.findFirst({
+        include: {
+          event_prices: true,
+        },
+        where: whereClause,
+      });
+      if (!theEvent) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The event with the given ID is not found.",
+        });
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        event: theEvent,
+      };
+    }),
+
+  eventPrice: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
+        where: {
+          id: opts.input.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theEventPrice) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "The event price with the given ID is not found.",
+        });
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        cohortPrice: theEventPrice,
+      };
+    }),
+
+  // Transaction-related //
 
   discount: administratorProcedure
     .input(
@@ -997,6 +1009,8 @@ export const readRouter = createTRPCRouter({
         },
       };
     }),
+
+  // Tickers //
 
   ticker: publicProcedure
     .input(
