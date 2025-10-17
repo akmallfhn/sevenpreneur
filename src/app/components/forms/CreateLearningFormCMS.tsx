@@ -342,7 +342,7 @@ export default function CreateLearningFormCMS({
               />
             </div>
           </div>
-          <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+          <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
               variant="cmsPrimary"
