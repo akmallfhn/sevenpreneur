@@ -51,7 +51,7 @@ export default function SidebarLMS() {
         </div>
 
         <div className="sidebar-menu flex flex-col h-full gap-2">
-          <SidebarMenuItemLMS
+          {/* <SidebarMenuItemLMS
             menuTitle="Dashboard"
             url="/"
             icon={<LayoutDashboard />}
@@ -71,7 +71,7 @@ export default function SidebarLMS() {
             menuTitle="AI"
             url="/ai"
             icon={<BotMessageSquare />}
-          />
+          /> */}
           <SidebarMenuItemLMS
             menuTitle="Learning Series"
             url="/playlists"

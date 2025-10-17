@@ -6,13 +6,13 @@ import SectionTitleSVP from "../titles/SectionTitleSVP";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 
-interface ZTemporaryPlaylistLMSProps {
+interface PlaylistDetailsLMSProps {
   playlistVideos: VideoItem[];
 }
 
-export default function ZTemporaryPlaylistLMS({
+export default function PlaylistDetailsLMS({
   playlistVideos,
-}: ZTemporaryPlaylistLMSProps) {
+}: PlaylistDetailsLMSProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
@@ -50,7 +50,7 @@ export default function ZTemporaryPlaylistLMS({
   }, [searchParams]);
 
   return (
-    <div className="flex w-full h-full items-center justify-center lg:hidden">
+    <div className="hidden lg:flex w-full h-full items-center justify-center">
       <div className="flex flex-col gap-5 pb-24 lg:pt-8 lg:pl-64 lg:max-w-[calc(100%-4rem)] w-full">
         <div className="flex flex-col w-full gap-4 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px] lg:text-lg">
           <div className="relative w-full h-auto aspect-video overflow-hidden md:rounded-md lg:max-w-[768px]">
