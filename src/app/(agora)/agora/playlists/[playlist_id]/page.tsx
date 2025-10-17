@@ -1,5 +1,4 @@
-import ZTemporaryPlaylistLMS from "@/app/components/pages/ZTemporaryPlaylistLMS";
-import EmptyPlaylistsLMS from "@/app/components/state/EmptyItemLMS";
+import PlaylistDetailsLMS from "@/app/components/pages/PlaylistDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -27,5 +26,5 @@ export default async function PlaylistDetailsPageLMS({
     return <div className="flex pt-10 lg:pt-24"></div>;
   }
 
-  return <ZTemporaryPlaylistLMS playlistVideos={enrolledPlaylistData.videos} />;
+  return <PlaylistDetailsLMS playlistVideos={enrolledPlaylistData.videos} />;
 }
