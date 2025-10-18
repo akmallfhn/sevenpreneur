@@ -25,7 +25,7 @@ export const createPlaylist = {
         video_preview_url: stringNotBlank(),
         image_url: stringNotBlank(),
         price: z.number(),
-        status: z.nativeEnum(StatusEnum),
+        status: z.enum(StatusEnum),
         slug_url: stringNotBlank().optional(),
         published_at: stringIsTimestampTz().optional(),
         educators: z.array(stringIsUUID()).optional(),

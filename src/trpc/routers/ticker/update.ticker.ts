@@ -17,7 +17,7 @@ export const updateTicker = {
         title: stringNotBlank().optional(),
         callout: stringNotBlank().nullable().optional(),
         target_url: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
         start_date: stringIsTimestampTz().optional(),
         end_date: stringIsTimestampTz().optional(),
       })

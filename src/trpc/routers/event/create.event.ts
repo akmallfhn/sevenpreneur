@@ -20,11 +20,11 @@ export const createEvent = {
         name: stringNotBlank(),
         description: stringNotBlank(),
         image: stringNotBlank(),
-        status: z.nativeEnum(StatusEnum),
+        status: z.enum(StatusEnum),
         slug_url: stringNotBlank().optional(),
         start_date: stringIsTimestampTz(),
         end_date: stringIsTimestampTz(),
-        method: z.nativeEnum(LearningMethodEnum),
+        method: z.enum(LearningMethodEnum),
         meeting_url: stringNotBlank().nullable().optional(),
         location_name: stringNotBlank().nullable().optional(),
         location_url: stringNotBlank().nullable().optional(),
@@ -34,7 +34,7 @@ export const createEvent = {
             z.object({
               name: stringNotBlank(),
               amount: z.number(),
-              status: z.nativeEnum(StatusEnum),
+              status: z.enum(StatusEnum),
             })
           )
           .min(1),
@@ -92,7 +92,7 @@ export const createEvent = {
         event_id: numberIsID(),
         name: stringNotBlank(),
         amount: z.number(),
-        status: z.nativeEnum(StatusEnum),
+        status: z.enum(StatusEnum),
       })
     )
     .mutation(async (opts) => {

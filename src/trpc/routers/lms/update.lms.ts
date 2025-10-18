@@ -18,7 +18,7 @@ export const updateLMS = {
         name: stringNotBlank().optional(),
         description: stringNotBlank().optional(),
         image: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
         slug_url: stringNotBlank().optional(),
         start_date: stringIsTimestampTz().optional(),
         end_date: stringIsTimestampTz().optional(),
@@ -57,7 +57,7 @@ export const updateLMS = {
         cohort_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
         amount: z.number().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -95,7 +95,7 @@ export const updateLMS = {
         name: stringNotBlank().optional(),
         description: stringNotBlank().nullable().optional(),
         document_url: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -127,14 +127,14 @@ export const updateLMS = {
         cohort_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
         description: stringNotBlank().optional(),
-        method: z.nativeEnum(LearningMethodEnum).optional(),
+        method: z.enum(LearningMethodEnum).optional(),
         meeting_date: stringIsTimestampTz().optional(),
         meeting_url: stringNotBlank().nullable().optional(),
         location_name: stringNotBlank().nullable().optional(),
         location_url: stringNotBlank().nullable().optional(),
         speaker_id: stringNotBlank().nullable().optional(),
         recording_url: stringNotBlank().nullable().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -174,7 +174,7 @@ export const updateLMS = {
         name: stringNotBlank().optional(),
         description: stringNotBlank().nullable().optional(),
         document_url: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -271,7 +271,7 @@ export const updateLMS = {
         description: stringNotBlank().optional(),
         document_url: stringNotBlank().nullable().optional(),
         deadline_at: stringIsTimestampTz().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {

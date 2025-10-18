@@ -17,11 +17,11 @@ export const updateEvent = {
         name: stringNotBlank().optional(),
         description: stringNotBlank().optional(),
         image: stringNotBlank().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
         slug_url: stringNotBlank().optional(),
         start_date: stringIsTimestampTz().optional(),
         end_date: stringIsTimestampTz().optional(),
-        method: z.nativeEnum(LearningMethodEnum).optional(),
+        method: z.enum(LearningMethodEnum).optional(),
         meeting_url: stringNotBlank().nullable().optional(),
         location_name: stringNotBlank().nullable().optional(),
         location_url: stringNotBlank().nullable().optional(),
@@ -64,7 +64,7 @@ export const updateEvent = {
         event_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
         amount: z.number().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {

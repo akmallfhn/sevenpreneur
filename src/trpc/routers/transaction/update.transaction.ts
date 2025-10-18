@@ -16,10 +16,10 @@ export const updateTransaction = {
         id: numberIsID(),
         name: stringNotBlank().optional(),
         code: stringNotBlank().optional(),
-        category: z.nativeEnum(CategoryEnum).optional(),
+        category: z.enum(CategoryEnum).optional(),
         item_id: numberIsID().optional(),
         calc_percent: z.number().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
         start_date: stringIsTimestampTz().optional(),
         end_date: stringIsTimestampTz().optional(),
       })
