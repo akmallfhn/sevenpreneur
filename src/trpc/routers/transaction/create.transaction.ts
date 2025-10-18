@@ -18,10 +18,10 @@ export const createTransaction = {
       z.object({
         name: stringNotBlank(),
         code: stringNotBlank(),
-        category: z.nativeEnum(CategoryEnum),
+        category: z.enum(CategoryEnum),
         item_id: numberIsID(),
         calc_percent: z.number(),
-        status: z.nativeEnum(StatusEnum),
+        status: z.enum(StatusEnum),
         start_date: stringIsTimestampTz(),
         end_date: stringIsTimestampTz(),
       })

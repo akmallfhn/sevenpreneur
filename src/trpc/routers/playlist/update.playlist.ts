@@ -21,7 +21,7 @@ export const updatePlaylist = {
         video_preview_url: stringNotBlank().optional(),
         image_url: stringNotBlank().optional(),
         price: z.number().optional(),
-        status: z.nativeEnum(StatusEnum).optional(),
+        status: z.enum(StatusEnum).optional(),
         slug_url: stringNotBlank().optional(),
         published_at: stringIsTimestampTz().optional(),
       })

@@ -200,8 +200,8 @@ export const listTransaction = {
         cohort_id: numberIsID().optional(),
         playlist_id: numberIsID().optional(),
         event_id: numberIsID().optional(),
-        start_date: z.string().date().optional(),
-        end_date: z.string().date().optional(),
+        start_date: z.iso.date().optional(),
+        end_date: z.iso.date().optional(),
         page: numberIsPositive().optional(),
         page_size: numberIsPositive().optional(),
       })
