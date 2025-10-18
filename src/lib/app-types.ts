@@ -8,3 +8,12 @@ export type RolesUser =
   | "educator"
   | "classManager"
   | "generalUser";
+export type FileVariant =
+  | "DOCX"
+  | "XLSX"
+  | "PPTX"
+  | "PDF"
+  | "FILE"
+  | "FIGMADESIGN"
+  | "FIGJAM"
+  | "UNKNOWN";

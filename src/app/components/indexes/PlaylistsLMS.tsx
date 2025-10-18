@@ -2,7 +2,7 @@
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import PlaylistItemLMS from "../items/PlaylistItemLMS";
 import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
-import EmptyItemLMS from "../state/EmptyItemLMS";
+import EmptyListLMS from "../state/EmptyListLMS";
 
 interface Playlists {
   id: number;
@@ -46,10 +46,11 @@ export default function PlaylistsLMS({
           </div>
         )}
         {playlists.length < 1 && (
-          <EmptyItemLMS
+          <EmptyListLMS
             stateTitle="No Series Purchased Yet"
             stateDescription="Looks like you haven’t bought any learning series. Explore our collections
           and start learning something new today!"
+            stateAction="Explore Series"
           />
         )}
       </div>

@@ -12,65 +12,8 @@ import EditMaterialFormCMS from "../forms/EditMaterialFormCMS";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-
-export type FileVariant =
-  | "DOCX"
-  | "XLSX"
-  | "PPTX"
-  | "PDF"
-  | "FILE"
-  | "FIGMADESIGN"
-  | "FIGJAM"
-  | "UNKNOWN";
-
-const variantStyles: Record<
-  FileVariant,
-  {
-    fileIcon: string;
-    fileType: string;
-  }
-> = {
-  DOCX: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/docx-icon.webp",
-    fileType: "DOCX",
-  },
-  XLSX: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/xlsx-icon.webp",
-    fileType: "XLSX",
-  },
-  PPTX: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pptx-icon.webp",
-    fileType: "PPTX",
-  },
-  PDF: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pdf-icon.webp",
-    fileType: "PDF",
-  },
-  FILE: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/drive-icon.webp",
-    fileType: "DRIVE FILE",
-  },
-  FIGMADESIGN: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
-    fileType: "FIGMA DESIGN",
-  },
-  FIGJAM: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
-    fileType: "FIGMA JAM",
-  },
-  UNKNOWN: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/unknown-file-icon.webp",
-    fileType: "UNKNOWN FORMAT",
-  },
-};
+import { FileVariant } from "@/lib/app-types";
+import { getFileIconAndType } from "@/lib/file-variants";
 
 interface FileItemCMSProps {
   sessionToken: string;
@@ -93,10 +36,9 @@ export default function FileItemCMS({
   variants,
   onDeleteSuccess,
 }: FileItemCMSProps) {
-  // --- Variant declarations
-  const { fileIcon, fileType } = variantStyles[variants];
+  const { fileIcon, fileType } = getFileIconAndType(variants);
 
-  // --- State
+  // State
   const [editFile, setEditFile] = useState(false);
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -105,13 +47,13 @@ export default function FileItemCMS({
   const pathname = usePathname();
   const isLearningDetailsPage = pathname.includes("/learnings/");
 
-  // --- Open and close dropdown
+  // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Close dropdown outside
+  // Close dropdown outside
   useEffect(() => {
     const handleClickOutside = (
       event: MouseEvent | (MouseEvent & { target: Node })
@@ -129,7 +71,7 @@ export default function FileItemCMS({
     };
   }, []);
 
-  // --- Function to delete module
+  // Function to delete module
   const deleteModule = trpc.delete.module.useMutation();
   const deleteMaterial = trpc.delete.material.useMutation();
   const handleDelete = () => {
@@ -168,14 +110,14 @@ export default function FileItemCMS({
 
   return (
     <React.Fragment>
-      <div className="module-item flex items-center justify-between bg-white gap-2 p-1 rounded-md">
+      <div className="file-container flex items-center justify-between bg-white gap-2 p-1 rounded-md">
         <Link
           href={fileURL}
           className="flex items-center w-[calc(87%)]"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="icon aspect-square flex size-14 p-1 items-center">
+          <div className="file-icon aspect-square flex size-14 p-1 items-center">
             <Image
               className="object-cover w-full h-full"
               src={fileIcon}
@@ -184,11 +126,11 @@ export default function FileItemCMS({
               height={200}
             />
           </div>
-          <div className="attribute-data flex flex-col">
-            <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
+          <div className="file-attribute flex flex-col">
+            <h3 className="file-name font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
               {fileName}
             </h3>
-            <p className="font-bodycopy font-medium text-alternative text-sm">
+            <p className="file-type font-bodycopy font-medium text-alternative text-sm">
               {fileType}
             </p>
           </div>
@@ -224,7 +166,7 @@ export default function FileItemCMS({
         </div>
       </div>
 
-      {/* --- Delete Confirmation */}
+      {/* Delete Confirmation */}
       {isOpenDeleteConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"

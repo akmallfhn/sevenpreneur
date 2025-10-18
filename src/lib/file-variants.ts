@@ -1,4 +1,4 @@
-import { FileVariant } from "@/app/components/items/FileItemCMS";
+import { FileVariant } from "./app-types";
 
 export function getFileVariantFromURL(url: string): FileVariant {
   if (url.includes("docs.google.com/document")) return "DOCX";
@@ -9,4 +9,57 @@ export function getFileVariantFromURL(url: string): FileVariant {
   if (url.includes("figma.com/board")) return "FIGJAM";
   if (url.toLowerCase().endsWith(".pdf")) return "PDF";
   return "UNKNOWN";
+}
+
+const fileVariant: Record<
+  FileVariant,
+  {
+    fileIcon: string;
+    fileType: string;
+  }
+> = {
+  DOCX: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/docx-icon.webp",
+    fileType: "DOCX",
+  },
+  XLSX: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/xlsx-icon.webp",
+    fileType: "XLSX",
+  },
+  PPTX: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pptx-icon.webp",
+    fileType: "PPTX",
+  },
+  PDF: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pdf-icon.webp",
+    fileType: "PDF",
+  },
+  FILE: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/drive-icon.webp",
+    fileType: "DRIVE FILE",
+  },
+  FIGMADESIGN: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
+    fileType: "FIGMA DESIGN",
+  },
+  FIGJAM: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
+    fileType: "FIGMA JAM",
+  },
+  UNKNOWN: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/unknown-file-icon.webp",
+    fileType: "UNKNOWN FORMAT",
+  },
+};
+
+export function getFileIconAndType(variant: FileVariant) {
+  return fileVariant[variant] || fileVariant.UNKNOWN;
 }

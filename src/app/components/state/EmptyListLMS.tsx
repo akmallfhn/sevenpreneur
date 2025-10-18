@@ -3,15 +3,17 @@ import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 
-interface EmptyItemLMSProps {
+interface EmptyListLMSProps {
   stateTitle: string;
   stateDescription: string;
+  stateAction: string;
 }
 
-export default function EmptyItemLMS({
+export default function EmptyListLMS({
   stateTitle,
   stateDescription,
-}: EmptyItemLMSProps) {
+  stateAction,
+}: EmptyListLMSProps) {
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
@@ -24,7 +26,7 @@ export default function EmptyItemLMS({
           <Image
             className="object-cover w-full h-full"
             src={
-              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/no-result-found.svg"
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//no-content.svg"
             }
             alt="empty-lms"
             width={500}
@@ -32,13 +34,16 @@ export default function EmptyItemLMS({
           />
         </div>
         <div className="state-captions flex flex-col gap-1 items-center">
-          <h2 className="flex font-bold font-bodycopy text-center tracking-tight text-xl text-neutral-black">
+          <h2 className="state-title flex font-bold font-bodycopy text-center tracking-tight text-2xl text-neutral-black">
             {stateTitle}
           </h2>
-          <p className="font-bodycopy text-center font-medium text-alternative">
+          <p className="state-description font-bodycopy text-center font-medium text-alternative">
             {stateDescription}
           </p>
         </div>
+        <Link href={`https://www.${domain}`}>
+          <AppButton>{stateAction}</AppButton>
+        </Link>
       </div>
     </div>
   );

@@ -4,12 +4,14 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import CohortDetailsTabsLMS, {
   LearningSessionList,
+  ModuleList,
 } from "../tabs/CohortDetailsTabsLMS";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   userRole: number;
   cohortName: string;
   learningList: LearningSessionList[];
+  moduleList: ModuleList[];
 }
 
 export default function CohortDetailsLMS({
@@ -18,6 +20,7 @@ export default function CohortDetailsLMS({
   userRole,
   cohortName,
   learningList,
+  moduleList,
 }: CohortDetailsLMSProps) {
   return (
     <div className="root-page hidden w-full h-full gap-4 items-center justify-center pb-8 lg:flex lg:flex-col lg:pl-64">
@@ -47,7 +50,10 @@ export default function CohortDetailsLMS({
         </div>
         <div className="flex justify-between gap-4">
           <main className="main flex flex-col flex-[2.5] w-full">
-            <CohortDetailsTabsLMS learningList={learningList} />
+            <CohortDetailsTabsLMS
+              learningList={learningList}
+              moduleList={moduleList}
+            />
           </main>
           <aside className="aside relative flex flex-col flex-1 w-full">
             <div className="present sticky top-20 w-full h-40 bg-white rounded-lg">
