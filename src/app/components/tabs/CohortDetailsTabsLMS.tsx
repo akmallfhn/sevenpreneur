@@ -35,7 +35,7 @@ export default function CohortDetailsTabsLMS({
   ];
 
   return (
-    <div className="cohort-tabs w-full bg-white/70 backdrop-blur-md rounded-lg overflow-hidden">
+    <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg overflow-hidden">
       <div className="tab-options flex border-b border-outline justify-around">
         {tabOptions.map((post) => (
           <div className="tab-item relative w-full" key={post.id}>
@@ -57,32 +57,35 @@ export default function CohortDetailsTabsLMS({
       </div>
 
       {activeTab === "learnings" && (
-        <div className="tab-content">
-          <div className="flex flex-col p-4 gap-3">
-            {learningList
-              .sort(
-                (a, b) =>
-                  new Date(a.meeting_date).getTime() -
-                  new Date(b.meeting_date).getTime()
-              )
-              .map((post, index) => (
-                <LearningSessionItemLMS
-                  key={index}
-                  learningSessionId={post.id}
-                  learningSessionName={post.name}
-                  learningSessionMethod={post.method}
-                  learningSessionEducatorName={
-                    post.speaker?.full_name || "Sevenpreneur Educator"
-                  }
-                  learningSessionEducatorAvatar={
-                    post.speaker?.avatar ||
-                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                  }
-                  learningSessionDate={post.meeting_date}
-                  learningSessionPlace={post.location_name || "To Be Announced"}
-                />
-              ))}
-          </div>
+        <div className="tab-content flex flex-col p-4 gap-3">
+          {learningList
+            .sort(
+              (a, b) =>
+                new Date(a.meeting_date).getTime() -
+                new Date(b.meeting_date).getTime()
+            )
+            .map((post, index) => (
+              <LearningSessionItemLMS
+                key={index}
+                learningSessionId={post.id}
+                learningSessionName={post.name}
+                learningSessionMethod={post.method}
+                learningSessionEducatorName={
+                  post.speaker?.full_name || "Sevenpreneur Educator"
+                }
+                learningSessionEducatorAvatar={
+                  post.speaker?.avatar ||
+                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                }
+                learningSessionDate={post.meeting_date}
+                learningSessionPlace={post.location_name || "To Be Announced"}
+              />
+            ))}
+          {learningList.length === 0 && (
+            <div className="flex w-full h-full items-center justify-center">
+              Kosong
+            </div>
+          )}
         </div>
       )}
       {activeTab === "projects" && <div className="w-full h-80"></div>}
