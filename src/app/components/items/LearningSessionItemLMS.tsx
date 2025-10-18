@@ -36,7 +36,7 @@ export default function LearningSessionItemLMS({
   return (
     <Link
       href={`/cohorts/learnings/E${learningSessionId}`}
-      className="session-box flex w-full bg-section-background p-4 items-center justify-between font-bodycopy border border-outline/30 rounded-md hover:cursor-pointer active:scale-95 transform transition"
+      className="session-box flex w-full bg-section-background p-3.5 items-center justify-between font-bodycopy border border-outline/30 rounded-md hover:cursor-pointer active:scale-95 transform transition"
     >
       <div className="session-container flex items-center gap-4">
         <div className="session-date flex flex-col items-center aspect-square w-14">
