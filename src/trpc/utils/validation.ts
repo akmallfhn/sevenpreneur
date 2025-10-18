@@ -5,8 +5,8 @@ export function stringNotBlank(): z.ZodString {
   return z.string().trim().min(1);
 }
 
-export function stringIsTimestampTz(): z.ZodString {
-  return z.string().datetime({ offset: true, local: false });
+export function stringIsTimestampTz(): z.ZodISODateTime {
+  return z.iso.datetime({ offset: true, local: false });
 }
 
 export function stringIsUUID(): z.ZodString {
