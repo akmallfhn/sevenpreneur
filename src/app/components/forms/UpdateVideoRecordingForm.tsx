@@ -24,14 +24,14 @@ export default function UpdateVideoRecordingFormCMS({
   const editLearning = trpc.update.learning.useMutation();
   const utils = trpc.useUtils();
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     learningRecordingURL: string;
   }>({
     learningRecordingURL: initialData.recording_url || "",
   });
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -42,7 +42,7 @@ export default function UpdateVideoRecordingFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -50,12 +50,12 @@ export default function UpdateVideoRecordingFormCMS({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Validation URL
+    // Validation URL
     if (!formData.learningRecordingURL.startsWith("https://youtu.be/")) {
       toast.error(
         "Unsupported link format. The recording must be hosted on YouTube"
@@ -64,7 +64,7 @@ export default function UpdateVideoRecordingFormCMS({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       editLearning.mutate(
         {
@@ -111,7 +111,7 @@ export default function UpdateVideoRecordingFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+        <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
             <InputCMS
               inputId="learning-recording-url"
@@ -124,7 +124,7 @@ export default function UpdateVideoRecordingFormCMS({
             />
           </div>
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"

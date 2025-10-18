@@ -39,14 +39,14 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   const router = useRouter();
   const utils = trpc.useUtils();
 
-  // --- Set session token to client
+  // Set session token to client
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
 
-  // --- Return data from tRPC
+  // Return data from tRPC
   const {
     data: rolesData,
     isLoading: isLoadingRoles,
@@ -65,7 +65,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     enabled: !!sessionToken,
   });
 
-  // --- Beginning State
+  // Beginning State
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<{
     fullName: string;
@@ -93,7 +93,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     entrepreneurStage: "",
   });
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -104,11 +104,11 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     };
   }, []);
 
-  // --- Extract variable
+  // Extract variable
   const isLoading = isLoadingRoles || isLoadingIndustries || isLoadingStages;
   const isError = isErrorRoles || isErrorIndustries || isErrorStages;
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -122,12 +122,12 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.fullName) {
       toast.error("Oops! Something's missing.", {
         description: "Please complete user full name before submitting.",
@@ -150,7 +150,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       createUser.mutate(
         {
@@ -276,18 +276,18 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
       )}
       {!isLoading && !isError && (
         <div className="flex flex-col w-full gap-8 pb-20">
-          {/* --- Personal Information */}
+          {/* Personal Information */}
           <div className="personal-information-container flex flex-col w-full gap-5">
             <h2 className="label-name text-xl text-black font-brand font-bold">
               Personal Information
             </h2>
 
-            {/* --- Upload Avatar */}
+            {/* Upload Avatar */}
             <UploadAvatarUserCMS onUpload={handleImageForm} />
 
             {/* Personal Information Data */}
             <div className="personal-information-data flex gap-5">
-              {/* --- Data 1 */}
+              {/* Data 1 */}
               <div className="data-1 flex flex-col w-full gap-4">
                 {/* Full Name */}
                 <InputCMS
@@ -360,7 +360,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                 </div>
               </div>
 
-              {/* --- Data 2 */}
+              {/* Data 2 */}
               <div className="data-2 flex flex-col w-full gap-4">
                 {/* Date of Birth */}
                 <InputCMS
@@ -384,7 +384,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
             </div>
           </div>
 
-          {/* --- Business Information */}
+          {/* Business Information */}
           <div className="business-information-container flex flex-col w-full gap-5">
             <h2 className="label-name text-xl text-black font-brand font-bold">
               Business Information

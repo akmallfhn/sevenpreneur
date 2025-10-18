@@ -46,7 +46,7 @@ export default function CreateCohortFormCMS({
     ],
   });
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -57,7 +57,7 @@ export default function CreateCohortFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -71,12 +71,12 @@ export default function CreateCohortFormCMS({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.cohortName) {
       toast.error("Don't leave your cohort nameless");
       setIsSubmitting(false);
@@ -118,7 +118,7 @@ export default function CreateCohortFormCMS({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       createCohort.mutate(
         {
@@ -166,7 +166,7 @@ export default function CreateCohortFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="form-container flex flex-col px-6 pb-68 gap-5 overflow-y-auto">
+        <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
             <UploadThumbnailCohortCMS
               value={formData.cohortImage}
@@ -220,7 +220,7 @@ export default function CreateCohortFormCMS({
             }
           />
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"

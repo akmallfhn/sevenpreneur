@@ -432,7 +432,7 @@ export default function CreateInvoiceFormCMS({
           </div>
         )}
         {!isLoading && !isError && (
-          <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+          <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
               {/* User */}
               <InputCMS
@@ -615,7 +615,7 @@ export default function CreateInvoiceFormCMS({
             </div>
           </div>
         )}
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"

@@ -149,7 +149,7 @@ export default function EditTickerMarketingFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+        <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
           {initialData && (
             <div className="group-input flex flex-col gap-4">
               <TextAreaCMS
@@ -219,7 +219,7 @@ export default function EditTickerMarketingFormCMS({
             </div>
           )}
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"

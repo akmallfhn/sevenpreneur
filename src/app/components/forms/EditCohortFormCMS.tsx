@@ -31,7 +31,7 @@ export default function EditCohortFormCMS({
   const deleteCohortPrices = trpc.delete.cohortPrice.useMutation();
   const utils = trpc.useUtils();
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     cohortName: string;
     cohortImage: string;
@@ -58,7 +58,7 @@ export default function EditCohortFormCMS({
     ),
   });
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -69,7 +69,7 @@ export default function EditCohortFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -83,12 +83,12 @@ export default function EditCohortFormCMS({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.cohortName) {
       toast.error("Don't leave your cohort nameless");
       setIsSubmitting(false);
@@ -130,7 +130,7 @@ export default function EditCohortFormCMS({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       // Update Cohort
       await editCohort.mutateAsync({
@@ -214,7 +214,7 @@ export default function EditCohortFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="form-container flex flex-col px-6 pb-68 gap-5 overflow-y-auto">
+        <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
             <UploadThumbnailCohortCMS
               onUpload={handleImageForm}
@@ -268,7 +268,7 @@ export default function EditCohortFormCMS({
             }
           />
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"

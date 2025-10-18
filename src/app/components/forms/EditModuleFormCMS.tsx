@@ -33,14 +33,14 @@ export default function EditModuleFormCMS({
   const editModule = trpc.update.module.useMutation();
   const utils = trpc.useUtils();
 
-  // --- Return initial data
+  // Return initial data
   const {
     data: initialDataModule,
     isLoading,
     isError,
   } = trpc.read.module.useQuery({ id: moduleId }, { enabled: !!sessionToken });
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     moduleName: string;
     moduleDescription: string;
@@ -51,7 +51,7 @@ export default function EditModuleFormCMS({
     moduleURL: initialDataModule?.module.document_url || "",
   });
 
-  // --- Iterate initial data (so it doesn't get lost)
+  // Iterate initial data (so it doesn't get lost)
   useEffect(() => {
     if (!initialDataModule) return;
     const url = initialDataModule.module.document_url || "";
@@ -69,7 +69,7 @@ export default function EditModuleFormCMS({
     setHasInitializedUploadMethod(true);
   }, [initialDataModule]);
 
-  // --- Reset only if user switched method manually (not first load)
+  // Reset only if user switched method manually (not first load)
   useEffect(() => {
     if (!hasInitializedUploadMethod) return;
     // Checking previously have method?
@@ -86,7 +86,7 @@ export default function EditModuleFormCMS({
     prevUploadMethod.current = selectedUploadMethod;
   }, [selectedUploadMethod, hasInitializedUploadMethod]);
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -97,7 +97,7 @@ export default function EditModuleFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -105,12 +105,12 @@ export default function EditModuleFormCMS({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.moduleName) {
       toast.error("Let’s give this document a proper title before saving.");
       setIsSubmitting(false);
@@ -122,7 +122,7 @@ export default function EditModuleFormCMS({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       editModule.mutate(
         {
@@ -185,7 +185,7 @@ export default function EditModuleFormCMS({
           className="relative w-full h-full flex flex-col"
           onSubmit={handleSubmit}
         >
-          <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+          <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
               <InputCMS
                 inputId="module-name"
@@ -248,7 +248,7 @@ export default function EditModuleFormCMS({
               </div>
             </div>
           </div>
-          <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+          <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
               variant="cmsPrimary"

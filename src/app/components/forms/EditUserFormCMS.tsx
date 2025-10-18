@@ -42,14 +42,14 @@ export default function EditUserForm({
   const editUser = trpc.update.user.useMutation();
   const router = useRouter();
 
-  // --- Set session token to client
+  // Set session token to client
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
 
-  // --- Return initial data
+  // Return initial data
   const {
     data: initialData,
     isLoading: isLoadingInitial,
@@ -73,7 +73,7 @@ export default function EditUserForm({
     enabled: !!sessionToken,
   });
 
-  // --- Beginning State
+  // Beginning State
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<{
     fullName: string;
@@ -103,7 +103,7 @@ export default function EditUserForm({
     entrepreneurStage: initialData?.user.entrepreneur_stage_id || "",
   });
 
-  // --- Iterate initial data (so it doesn't get lost)
+  // Iterate initial data (so it doesn't get lost)
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -126,7 +126,7 @@ export default function EditUserForm({
     }
   }, [initialData]);
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -137,7 +137,7 @@ export default function EditUserForm({
     };
   }, []);
 
-  // --- Extract variable
+  // Extract variable
   const isLoading =
     isLoadingInitial ||
     isLoadingRoles ||
@@ -146,7 +146,7 @@ export default function EditUserForm({
   const isError =
     isErrorInitial || isErrorRoles || isErrorIndustries || isErrorStages;
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -160,12 +160,12 @@ export default function EditUserForm({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.fullName) {
       toast.error("Oops! Something's missing.", {
         description: "Please complete user full name before submitting.",
@@ -188,7 +188,7 @@ export default function EditUserForm({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       editUser.mutate(
         {
@@ -305,13 +305,13 @@ export default function EditUserForm({
 
       {!isLoading && !isError && (
         <div className="flex flex-col w-full gap-8 pb-20">
-          {/* --- Personal Information */}
+          {/* Personal Information */}
           <div className="personal-information-container flex flex-col w-full gap-5">
             <h2 className="label-name text-xl text-black font-brand font-bold">
               Personal Information
             </h2>
 
-            {/* --- Upload Avatar */}
+            {/* Upload Avatar */}
             <UploadAvatarUserCMS
               onUpload={handleImageForm}
               value={formData.avatar}
@@ -319,9 +319,9 @@ export default function EditUserForm({
 
             {/* Personal Information Data */}
             <div className="personal-information-data flex gap-5">
-              {/* --- Data 1 */}
+              {/* Data 1 */}
               <div className="data-1 flex flex-col w-full gap-4">
-                {/* -- Full Name */}
+                {/* Full Name */}
                 <InputCMS
                   inputId={"full-name"}
                   inputName={"Full Name"}
@@ -332,7 +332,7 @@ export default function EditUserForm({
                   onInputChange={handleInputChange("fullName")}
                   required
                 />
-                {/* -- Email */}
+                {/* Email */}
                 <InputCMS
                   inputId={"email"}
                   inputName={"Email"}
@@ -343,7 +343,7 @@ export default function EditUserForm({
                   onInputChange={handleInputChange("email")}
                   required
                 />
-                {/* -- Phone Number */}
+                {/* Phone Number */}
                 <InternationalPhoneNumberInputSVP
                   inputId={"phone-number"}
                   inputName={"Phone Number"}
@@ -353,7 +353,7 @@ export default function EditUserForm({
                   value={formData.phoneNumber}
                   onInputChange={handleInputChange("phoneNumber")}
                 />
-                {/* -- Role */}
+                {/* Role */}
                 <SelectCMS
                   selectId={"role"}
                   selectName={"Role"}
@@ -369,7 +369,7 @@ export default function EditUserForm({
                     })) || []
                   }
                 />
-                {/* -- Status */}
+                {/* Status */}
                 <div className="select-group-component flex flex-col gap-1">
                   <label
                     htmlFor={"status"}
@@ -395,9 +395,9 @@ export default function EditUserForm({
                 </div>
               </div>
 
-              {/* --- Data 2 */}
+              {/* Data 2 */}
               <div className="data-2 flex flex-col w-full gap-4">
-                {/* -- Date of Birth */}
+                {/* Date of Birth */}
                 <InputCMS
                   inputId={"date-of-birth"}
                   inputName={"Date of Birth"}
@@ -406,7 +406,7 @@ export default function EditUserForm({
                   value={formData.dateOfBirth}
                   onInputChange={handleInputChange("dateOfBirth")}
                 />
-                {/* -- Learning Goals */}
+                {/* Learning Goals */}
                 <TextAreaCMS
                   textAreaId={"learning-goal"}
                   textAreaName={"Learning Goal"}
@@ -419,13 +419,13 @@ export default function EditUserForm({
             </div>
           </div>
 
-          {/* --- Business Information */}
+          {/* Business Information */}
           <div className="business-information-container flex flex-col w-full gap-5">
             <h2 className="label-name text-xl text-black font-brand font-bold">
               Business Information
             </h2>
             <div className="data flex flex-col w-full gap-4">
-              {/* -- Business Name */}
+              {/* Business Name */}
               <InputCMS
                 inputId={"business-name"}
                 inputName={"Business Name"}

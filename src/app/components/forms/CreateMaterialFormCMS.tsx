@@ -26,7 +26,7 @@ export default function CreateMaterialFormCMS({
   const createMaterial = trpc.create.material.useMutation();
   const utils = trpc.useUtils();
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     materialName: string;
     materialDescription: string;
@@ -37,7 +37,7 @@ export default function CreateMaterialFormCMS({
     materialURL: "",
   });
 
-  // --- Reset materialURL every time upload method is changed
+  // Reset materialURL every time upload method is changed
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
@@ -45,7 +45,7 @@ export default function CreateMaterialFormCMS({
     }));
   }, [selectedUploadMethod]);
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -56,7 +56,7 @@ export default function CreateMaterialFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -64,12 +64,12 @@ export default function CreateMaterialFormCMS({
     }));
   };
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.materialName) {
       toast.error("Let’s give this document a proper title before saving.");
       setIsSubmitting(false);
@@ -81,7 +81,7 @@ export default function CreateMaterialFormCMS({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       createMaterial.mutate(
         {
@@ -131,7 +131,7 @@ export default function CreateMaterialFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+        <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
             <InputCMS
               inputId="material-name"
@@ -194,7 +194,7 @@ export default function CreateMaterialFormCMS({
             </div>
           </div>
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"

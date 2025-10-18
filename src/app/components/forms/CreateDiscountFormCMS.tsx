@@ -141,7 +141,7 @@ export default function CreateDiscountFormCMS({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.discountName) {
       toast.error("Oops! Don’t forget to give your discount a name.");
       setIsSubmitting(false);
@@ -202,7 +202,7 @@ export default function CreateDiscountFormCMS({
       return;
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       createDiscount.mutate(
         {
@@ -248,7 +248,7 @@ export default function CreateDiscountFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="form-container flex flex-col h-full px-6 pb-68 gap-5 overflow-y-auto">
+        <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
             <InputCMS
               inputId="discount-name"
@@ -372,7 +372,7 @@ export default function CreateDiscountFormCMS({
             </div>
           </div>
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"
