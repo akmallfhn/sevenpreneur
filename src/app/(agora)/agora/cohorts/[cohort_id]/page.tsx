@@ -44,6 +44,7 @@ export default async function CohortDetailsPageLMS({
     ...item,
     meeting_date: item.meeting_date ? item.meeting_date.toISOString() : "",
   }));
+  const moduleList = (await trpc.list.modules({ cohort_id: cohortId })).list;
 
   return (
     <CohortDetailsLMS
@@ -55,6 +56,7 @@ export default async function CohortDetailsPageLMS({
       userRole={userData.role_id}
       cohortName={enrolledCohortDetails.cohort.cohort.name}
       learningList={learningList}
+      moduleList={moduleList}
     />
   );
 }

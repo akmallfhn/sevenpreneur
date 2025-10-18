@@ -2,7 +2,7 @@
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import CohortItemCardLMS from "../items/CohortItemCardLMS";
 import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
-import EmptyItemLMS from "../state/EmptyItemLMS";
+import EmptyListLMS from "../state/EmptyListLMS";
 
 interface CohortList {
   id: number;
@@ -48,10 +48,11 @@ export default function CohortListLMS({
           </div>
         )}
         {cohortList.length < 1 && (
-          <EmptyItemLMS
+          <EmptyListLMS
             stateTitle="No Program Purchased Yet"
             stateDescription="Looks like you haven’t bought any bootcamp programs. Explore our collections
                     and start learning something new today!"
+            stateAction="Explore our Program"
           />
         )}
       </div>
