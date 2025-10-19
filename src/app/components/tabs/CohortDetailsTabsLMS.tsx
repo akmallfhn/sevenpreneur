@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
 import LearningSessionItemLMS from "../items/LearningSessionItemLMS";
-import { SessionMethod } from "@/lib/app-types";
+import { SessionMethod, StatusType } from "@/lib/app-types";
 import EmptyItemLMS from "../state/EmptyItemLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import { getFileVariantFromURL } from "@/lib/file-variants";
+import UserItemLMS from "../items/UserItemLMS";
+import { Project } from "@prisma/client";
+import ProjectItemLMS from "../items/ProjectItemLMS";
 
 export interface LearningSessionEducator {
   full_name: string;
@@ -25,33 +28,55 @@ export interface ModuleList {
   document_url: string;
 }
 
+export interface ProjectList {
+  id: number;
+  name: string;
+  deadline_at: string;
+  status: StatusType;
+}
+
+export interface UserList {
+  id: string;
+  full_name: string;
+  avatar: string | null;
+  email: string;
+}
+
 interface CohortDetailsTabsLMSProps {
+  sessionUserId: string;
+  cohortId: number;
   learningList: LearningSessionList[];
   moduleList: ModuleList[];
+  projectList: ProjectList[];
+  userList: UserList[];
 }
 
 export default function CohortDetailsTabsLMS({
+  sessionUserId,
+  cohortId,
   learningList,
   moduleList,
+  projectList,
+  userList,
 }: CohortDetailsTabsLMSProps) {
   const [activeTab, setActiveTab] = useState("learnings");
 
   const tabOptions = [
     { id: "learnings", label: "Sessions" },
-    { id: "projects", label: "Assignments" },
     { id: "modules", label: "Modules" },
-    { id: "members", label: "Members" },
+    { id: "projects", label: "Assignments" },
+    { id: "members", label: "Network" },
   ];
 
   return (
-    <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg overflow-hidden">
-      <div className="tab-options flex border-b border-outline justify-around">
+    <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg border overflow-hidden">
+      <div className="tab-options flex border-b justify-around">
         {tabOptions.map((post) => (
           <div className="tab-item relative w-full" key={post.id}>
             <div
               className={`tab-item w-full p-3 text-center text-sm font-bodycopy transform transition hover:cursor-pointer ${
                 activeTab === post.id
-                  ? "bg-primary-light/40 text-primary font-bold"
+                  ? "bg-gradient-to-t from-0% from-primary-light/50 to-60% to-primary-light/0 text-primary font-bold"
                   : "bg-white font-medium"
               }`}
               onClick={() => setActiveTab(post.id)}
@@ -76,6 +101,7 @@ export default function CohortDetailsTabsLMS({
             .map((post, index) => (
               <LearningSessionItemLMS
                 key={index}
+                cohortId={cohortId}
                 learningSessionId={post.id}
                 learningSessionName={post.name}
                 learningSessionMethod={post.method}
@@ -91,7 +117,7 @@ export default function CohortDetailsTabsLMS({
               />
             ))}
           {learningList.length === 0 && (
-            <div className="flex w-full h-full items-center justify-center">
+            <div className="flex w-full h-full items-center">
               <EmptyItemLMS
                 stateTitle="No Sessions Available"
                 stateDescription="There are no learning sessions scheduled right now. Please check back later or contact your program coordinator for updates."
@@ -100,8 +126,6 @@ export default function CohortDetailsTabsLMS({
           )}
         </div>
       )}
-
-      {activeTab === "projects" && <div className="w-full min-h-96"></div>}
 
       {activeTab === "modules" && (
         <div className="tab-area w-full min-h-96">
@@ -118,15 +142,66 @@ export default function CohortDetailsTabsLMS({
           {learningList.length === 0 && (
             <div className="flex w-full h-full items-center justify-center">
               <EmptyItemLMS
-                stateTitle="No Modules Available"
-                stateDescription="There are no learning sessions scheduled right now. Please check back later or contact your program coordinator for updates."
+                stateTitle="Modules Coming Soon"
+                stateDescription="We’re working on something great! New modules will be ready soon"
               />
             </div>
           )}
         </div>
       )}
 
-      {activeTab === "members" && <div className="w-full h-80"></div>}
+      {activeTab === "projects" && (
+        <div className="tab-area w-full min-h-96">
+          <div className="tab-content flex flex-col p-4 gap-3">
+            {projectList.map((post, index) => (
+              <ProjectItemLMS
+                key={index}
+                cohortId={cohortId}
+                projectId={post.id}
+                projectName={post.name}
+                projectDescription="Menentukan penyusunan halaman berdasarkan Global Index dan local Index yang telah dibuat sebelumnya. Serta mengatur navigasi antar halaman agar sesuai dengan alur yang telah direncanakan. Mengambil referensi dari berbagai sumber untuk memastikan bahwa struktur halaman yang dibuat"
+                projectDeadline={post.deadline_at}
+              />
+            ))}
+          </div>
+          {projectList.length === 0 && (
+            <div className="flex w-full h-full items-center">
+              <EmptyItemLMS
+                stateTitle="No Assignments Yet"
+                stateDescription="You don’t have any tasks or assignments right now. New tasks will appear here once they’re ready!"
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === "members" && (
+        <div className="tab-area w-full min-h-96">
+          <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
+            {userList.map((post, index) => (
+              <UserItemLMS
+                key={index}
+                sessionUserId={sessionUserId}
+                userId={post.id}
+                userName={post.full_name}
+                userAvatar={
+                  post.avatar ||
+                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                }
+                userEmail={post.email}
+              />
+            ))}
+          </div>
+          {userList.length === 0 && (
+            <div className="flex w-full h-full items-center">
+              <EmptyItemLMS
+                stateTitle="No Members Have Joined So Far."
+                stateDescription="Looks like no one’s joined this cohort just yet. Once members enroll, you’ll see them listed right here!"
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

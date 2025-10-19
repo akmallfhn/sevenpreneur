@@ -20,9 +20,9 @@ export default function UserItemCMS({
   isShowWhatsapp = false,
 }: UserItemCMSProps) {
   return (
-    <div className="user-item flex items-center justify-between">
-      <div className="flex gap-3 items-center">
-        <div className="size-8 rounded-full overflow-hidden">
+    <div className="user-container flex items-center justify-between">
+      <div className="user-metadata flex gap-3 items-center">
+        <div className="user-avatar size-8 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
             src={
@@ -34,7 +34,7 @@ export default function UserItemCMS({
             height={80}
           />
         </div>
-        <div className="flex flex-col text-sm font-bodycopy leading-snug">
+        <div className="user-attributes flex flex-col text-sm font-bodycopy leading-snug">
           <p className="user-name text-black font-semibold line-clamp-1">
             {userName}
           </p>

@@ -23,12 +23,12 @@ export default async function PlaylistsPageLMS() {
 
   return (
     <PlaylistsLMS
-      userName={userData.full_name}
-      userRole={userData.role_id}
-      userAvatar={
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
         userData.avatar ||
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
+      sessionUserRole={userData.role_id}
       playlists={enrolledPlaylists}
     />
   );

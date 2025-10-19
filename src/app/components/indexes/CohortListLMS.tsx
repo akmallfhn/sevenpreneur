@@ -13,14 +13,14 @@ interface CohortList {
 }
 
 interface CohortListLMSProps extends AvatarBadgeLMSProps {
-  userRole: number;
+  sessionUserRole: number;
   cohortList: CohortList[];
 }
 
 export default function CohortListLMS({
-  userName,
-  userRole,
-  userAvatar,
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
   cohortList,
 }: CohortListLMSProps) {
   return (
@@ -28,9 +28,9 @@ export default function CohortListLMS({
       <HeaderNavbarLMS
         headerTitle="Bootcamp Programs"
         headerDescription="View all bootcamps you’ve purchased and enrolled in."
-        userRole={userRole}
-        userName={userName}
-        userAvatar={userAvatar}
+        sessionUserRole={sessionUserRole}
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
       />
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
         {cohortList.length > 0 && (

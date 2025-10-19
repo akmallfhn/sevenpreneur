@@ -8,6 +8,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 
 export interface LearningSessionItemLMSProps {
+  cohortId: number;
   learningSessionId: number;
   learningSessionName: string;
   learningSessionMethod: SessionMethod;
@@ -18,6 +19,7 @@ export interface LearningSessionItemLMSProps {
 }
 
 export default function LearningSessionItemLMS({
+  cohortId,
   learningSessionId,
   learningSessionName,
   learningSessionMethod,
@@ -35,8 +37,8 @@ export default function LearningSessionItemLMS({
 
   return (
     <Link
-      href={`/cohorts/learnings/E${learningSessionId}`}
-      className="session-box flex w-full bg-section-background p-3.5 items-center justify-between font-bodycopy border border-outline/30 rounded-md hover:cursor-pointer active:scale-95 transform transition"
+      href={`/cohorts/${cohortId}/learnings/${learningSessionId}`}
+      className="session-box flex w-full bg-section-background p-3.5 items-center justify-between font-bodycopy rounded-md  transform transition hover:cursor-pointer active:scale-95 hover:bg-[#EDF0F6]"
     >
       <div className="session-container flex items-center gap-4">
         <div className="session-date flex flex-col items-center aspect-square w-14">
@@ -73,7 +75,7 @@ export default function LearningSessionItemLMS({
             />
           </div>
           <div className="session-title flex flex-col">
-            <h2 className="session-title font-bold line-clamp-1">
+            <h2 className="session-title text-[15px] font-bold line-clamp-1">
               {learningSessionName}
             </h2>
             <p className="session-educator font-medium text-sm text-[#333333]">

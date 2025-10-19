@@ -45,18 +45,30 @@ export default async function CohortDetailsPageLMS({
     meeting_date: item.meeting_date ? item.meeting_date.toISOString() : "",
   }));
   const moduleList = (await trpc.list.modules({ cohort_id: cohortId })).list;
+  const userList = (await trpc.list.cohortMembers({ cohort_id: cohortId }))
+    .list;
+  const projectListRaw = (await trpc.list.projects({ cohort_id: cohortId }))
+    .list;
+  const projectList = projectListRaw.map((item) => ({
+    ...item,
+    deadline_at: item.deadline_at ? item.deadline_at.toISOString() : "",
+  }));
 
   return (
     <CohortDetailsLMS
-      userName={userData.full_name}
-      userAvatar={
+      sessionUserId={userData.id}
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
         userData.avatar ||
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
-      userRole={userData.role_id}
+      sessionUserRole={userData.role_id}
+      cohortId={enrolledCohortDetails.cohort.cohort_id}
       cohortName={enrolledCohortDetails.cohort.cohort.name}
       learningList={learningList}
       moduleList={moduleList}
+      projectList={projectList}
+      userList={userList}
     />
   );
 }
