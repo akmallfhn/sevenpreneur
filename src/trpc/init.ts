@@ -1,5 +1,4 @@
 import GetPrismaClient from "@/lib/prisma";
-import { StatusEnum } from "@prisma/client";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
 
@@ -42,22 +41,6 @@ export async function createTRPCContext(
       return null;
     }
 
-    if (!tokenObj.is_active) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Your session has been logged out.",
-      });
-    }
-
-    const tokenDurationMs = 12 * 60 * 60 * 1000; // 12 hours
-    const expiredAt = tokenObj.created_at.getTime() + tokenDurationMs;
-    if (expiredAt < new Date().getTime()) {
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Your session is expired.",
-      });
-    }
-
     return tokenObj.user;
   }
 
@@ -79,24 +62,6 @@ export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
 
-function checkActiveUser(user: {
-  status: StatusEnum;
-  deleted_at: Date | null;
-}) {
-  if (user.status === StatusEnum.INACTIVE) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: "Your account has been inactivated.",
-    });
-  }
-  if (user.deleted_at !== null) {
-    throw new TRPCError({
-      code: "FORBIDDEN",
-      message: `Your account has been deleted (${user.deleted_at}).`,
-    });
-  }
-}
-
 export const publicProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;
   if (!ctx.user) {
@@ -106,8 +71,6 @@ export const publicProcedure = t.procedure.use(async (opts) => {
     if (ctx.secret !== process.env.SECRET_KEY_PUBLIC_API!) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
-  } else {
-    checkActiveUser(ctx.user);
   }
   return opts.next(opts);
 });
@@ -117,7 +80,6 @@ export const loggedInProcedure = t.procedure.use(async (opts) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  checkActiveUser(ctx.user);
   return opts.next({
     ctx: {
       prisma: ctx.prisma,
@@ -131,7 +93,6 @@ export const administratorProcedure = t.procedure.use(async (opts) => {
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  checkActiveUser(ctx.user);
   if (ctx.user.role.name !== "Administrator") {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
@@ -149,7 +110,6 @@ export const roleBasedProcedure = (roleList: string[]) => {
     if (!ctx.user) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
-    checkActiveUser(ctx.user);
     if (!roleList.includes(ctx.user.role.name)) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }

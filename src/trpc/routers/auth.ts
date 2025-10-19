@@ -129,18 +129,13 @@ export const authRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      const inactivatedTokens = await opts.ctx.prisma.token.updateMany({
-        data: {
-          is_active: false,
-        },
+      const deletedTokens = await opts.ctx.prisma.token.deleteMany({
         where: {
           token: opts.input.token,
         },
       });
-      if (inactivatedTokens.count > 1) {
-        console.error(
-          "auth.logout: More-than-one tokens are inactivated at once."
-        );
+      if (deletedTokens.count > 1) {
+        console.error("auth.logout: More-than-one tokens are removed at once.");
       }
 
       return {
