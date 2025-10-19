@@ -24,12 +24,12 @@ export default async function CohortsPageLMS() {
 
   return (
     <CohortListLMS
-      userName={userData.full_name}
-      userAvatar={
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
         userData.avatar ||
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
-      userRole={userData.role_id}
+      sessionUserRole={userData.role_id}
       cohortList={enrolledCohortList}
     />
   );

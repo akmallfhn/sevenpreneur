@@ -12,14 +12,14 @@ interface Playlists {
 }
 
 interface PlaylistsLMSProps extends AvatarBadgeLMSProps {
-  userRole: number;
+  sessionUserRole: number;
   playlists: Playlists[];
 }
 
 export default function PlaylistsLMS({
-  userName,
-  userRole,
-  userAvatar,
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
   playlists,
 }: PlaylistsLMSProps) {
   return (
@@ -27,9 +27,9 @@ export default function PlaylistsLMS({
       <HeaderNavbarLMS
         headerTitle="Learning Series"
         headerDescription="View all bootcamps you’ve purchased and enrolled in."
-        userRole={userRole}
-        userName={userName}
-        userAvatar={userAvatar}
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
+        sessionUserRole={sessionUserRole}
       />
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
         {playlists.length > 0 && (

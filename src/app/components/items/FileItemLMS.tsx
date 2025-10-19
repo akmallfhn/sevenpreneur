@@ -19,11 +19,11 @@ export default function FileItemLMS({
   return (
     <Link
       href={fileURL}
-      className="file-container flex w-full h-fit items-center bg-white gap-2 p-1 border border-outline rounded-md transform transition hover:bg-section-background"
+      className="file-container flex w-full h-fit items-center gap-2 p-2 bg-section-background rounded-md transform transition hover:bg-[#EDF0F6]"
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className="file-icon aspect-square flex size-14 p-1 items-center">
+      <div className="file-icon aspect-square flex size-14 p-1 items-center shrink-0">
         <Image
           className="object-cover w-full h-full"
           src={fileIcon}

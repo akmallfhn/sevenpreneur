@@ -5,31 +5,41 @@ import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import CohortDetailsTabsLMS, {
   LearningSessionList,
   ModuleList,
+  ProjectList,
+  UserList,
 } from "../tabs/CohortDetailsTabsLMS";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
-  userRole: number;
+  sessionUserId: string;
+  sessionUserRole: number;
+  cohortId: number;
   cohortName: string;
   learningList: LearningSessionList[];
   moduleList: ModuleList[];
+  projectList: ProjectList[];
+  userList: UserList[];
 }
 
 export default function CohortDetailsLMS({
-  userName,
-  userAvatar,
-  userRole,
+  sessionUserId,
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
+  cohortId,
   cohortName,
   learningList,
   moduleList,
+  projectList,
+  userList,
 }: CohortDetailsLMSProps) {
   return (
     <div className="root-page hidden w-full h-full gap-4 items-center justify-center pb-8 lg:flex lg:flex-col lg:pl-64">
       <HeaderNavbarLMS
         headerTitle="Bootcamp Details"
         headerDescription="View all bootcamps you’ve purchased and enrolled in."
-        userRole={userRole}
-        userName={userName}
-        userAvatar={userAvatar}
+        sessionUserRole={sessionUserRole}
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
       />
       <div className="body-cohort max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 rounded-xl">
         <div className="header-cohort relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
@@ -51,8 +61,12 @@ export default function CohortDetailsLMS({
         <div className="flex justify-between gap-4">
           <main className="main flex flex-col flex-[2.5] w-full">
             <CohortDetailsTabsLMS
+              sessionUserId={sessionUserId}
+              cohortId={cohortId}
               learningList={learningList}
               moduleList={moduleList}
+              projectList={projectList}
+              userList={userList}
             />
           </main>
           <aside className="aside relative flex flex-col flex-1 w-full">

@@ -17,15 +17,15 @@ import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 export interface HeaderNavbarLMSProps extends AvatarBadgeLMSProps {
   headerTitle: string;
   headerDescription: string;
-  userRole: number;
+  sessionUserRole: number;
 }
 
 export default function HeaderNavbarLMS({
   headerTitle,
   headerDescription,
-  userAvatar,
-  userName,
-  userRole,
+  sessionUserAvatar,
+  sessionUserName,
+  sessionUserRole,
 }: HeaderNavbarLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -89,15 +89,15 @@ export default function HeaderNavbarLMS({
             onClick={handleActionsDropdown}
           >
             <AvatarBadgeLMS
-              userAvatar={userAvatar}
-              userName={userName || "Unknown"}
+              sessionUserAvatar={sessionUserAvatar}
+              sessionUserName={sessionUserName || "Unknown"}
             />
             <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
               alignMobile="right"
             >
-              {userRole !== 3 && (
+              {sessionUserRole !== 3 && (
                 <Link href={`https://admin.${domain}`}>
                   <AppDropdownItemList
                     menuIcon={<Blocks className="size-4" />}
