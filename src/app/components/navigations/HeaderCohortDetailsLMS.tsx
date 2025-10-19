@@ -1,0 +1,113 @@
+"use client";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AppDropdown from "../elements/AppDropdown";
+import Link from "next/link";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import { Blocks, Compass, Slash, Wallet } from "lucide-react";
+import AppBreadcrumb from "./AppBreadcrumb";
+import AppBreadcrumbItem from "./AppBreadcrumbItem";
+
+interface HeaderCohortDetailsLMSProps extends AvatarBadgeLMSProps {
+  sessionUserRole: number;
+}
+
+export default function HeaderCohortDetailsLMS({
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
+}: HeaderCohortDetailsLMSProps) {
+  const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Open and close dropdown
+  const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setIsActionsOpened((prev) => !prev);
+  };
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (
+      event: MouseEvent | (MouseEvent & { target: Node })
+    ) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsActionsOpened(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Domain Logic
+  let domain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
+
+  return (
+    <div className="header-cohort relative flex w-full aspect-[1626/494] overflow-hidden">
+      <Image
+        className="object-cover w-full h-full"
+        src={
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/banner-sbbp-batch7.webp"
+        }
+        alt="Header Banner Cohort"
+        fill
+      />
+      <div className="overlay-top absolute inset-0 bg-linear-to-b from-0% from-black to-40% to-transparent z-10" />
+      <div className="overlay-bottom absolute inset-0 bg-linear-to-t from-0% from-black to-30% to-transparent z-10" />
+
+      <div className="header-container absolute flex w-full max-w-[calc(100%-4rem)] top-4 left-1/2 -translate-x-1/2 items-center justify-between px-0 py-4 z-20">
+        <div className="header-breadcrumb flex items-center gap-4">
+          <AppBreadcrumb>
+            <p className="slash text-alternative font-bodycopy">/</p>
+            <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
+          </AppBreadcrumb>
+        </div>
+        <div
+          className="header-user-menu relative flex hover:cursor-pointer"
+          ref={wrapperRef}
+          onClick={handleActionsDropdown}
+        >
+          <AvatarBadgeLMS
+            sessionUserAvatar={sessionUserAvatar}
+            sessionUserName={sessionUserName || "Unknown"}
+          />
+          <AppDropdown
+            isOpen={isActionsOpened}
+            onClose={() => setIsActionsOpened(false)}
+            alignMobile="right"
+          >
+            {sessionUserRole !== 3 && (
+              <Link href={`https://admin.${domain}`}>
+                <AppDropdownItemList
+                  menuIcon={<Blocks className="size-4" />}
+                  menuName="Dashboard Admin"
+                />
+              </Link>
+            )}
+            <Link href={`https://www.${domain}`}>
+              <AppDropdownItemList
+                menuIcon={<Compass className="size-4" />}
+                menuName="Discovery"
+              />
+            </Link>
+            <Link href={`https://www.${domain}/transactions`}>
+              <AppDropdownItemList
+                menuIcon={<Wallet className="size-4" />}
+                menuName="Transaction"
+              />
+            </Link>
+          </AppDropdown>
+        </div>
+      </div>
+    </div>
+  );
+}
