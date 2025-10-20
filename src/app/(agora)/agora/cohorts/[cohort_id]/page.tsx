@@ -38,17 +38,23 @@ export default async function CohortDetailsPageLMS({
     return notFound();
   }
 
-  const learningListRaw = (await trpc.list.learnings({ cohort_id: cohortId }))
-    .list;
+  const [learningListRest, moduleListRes, userListRes, projectListRes] =
+    await Promise.all([
+      trpc.list.learnings({ cohort_id: cohortId }),
+      trpc.list.modules({ cohort_id: cohortId }),
+      trpc.list.cohortMembers({ cohort_id: cohortId }),
+      trpc.list.projects({ cohort_id: cohortId }),
+    ]);
+
+  const learningListRaw = learningListRest.list;
+  const moduleList = moduleListRes.list;
+  const userList = userListRes.list;
+  const projectListRaw = projectListRes.list;
+
   const learningList = learningListRaw.map((item) => ({
     ...item,
     meeting_date: item.meeting_date ? item.meeting_date.toISOString() : "",
   }));
-  const moduleList = (await trpc.list.modules({ cohort_id: cohortId })).list;
-  const userList = (await trpc.list.cohortMembers({ cohort_id: cohortId }))
-    .list;
-  const projectListRaw = (await trpc.list.projects({ cohort_id: cohortId }))
-    .list;
   const projectList = projectListRaw.map((item) => ({
     ...item,
     deadline_at: item.deadline_at ? item.deadline_at.toISOString() : "",

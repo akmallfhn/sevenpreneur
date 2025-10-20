@@ -21,11 +21,13 @@ export interface LearningSessionList {
   meeting_date: string;
   location_name: string | null;
   speaker: LearningSessionEducator | null;
+  status: StatusType;
 }
 
 export interface ModuleList {
   name: string;
   document_url: string;
+  status: StatusType;
 }
 
 export interface ProjectList {
@@ -93,6 +95,7 @@ export default function CohortDetailsTabsLMS({
       {activeTab === "learnings" && (
         <div className="tab-content flex flex-col p-4 gap-3 w-full min-h-96">
           {learningList
+            .filter((post) => post.status === "ACTIVE")
             .sort(
               (a, b) =>
                 new Date(a.meeting_date).getTime() -
@@ -130,14 +133,16 @@ export default function CohortDetailsTabsLMS({
       {activeTab === "modules" && (
         <div className="tab-area w-full min-h-96">
           <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
-            {moduleList.map((post, index) => (
-              <FileItemLMS
-                key={index}
-                fileName={post.name}
-                fileURL={post.document_url}
-                variants={getFileVariantFromURL(post.document_url)}
-              />
-            ))}
+            {moduleList
+              .filter((post) => post.status === "ACTIVE")
+              .map((post, index) => (
+                <FileItemLMS
+                  key={index}
+                  fileName={post.name}
+                  fileURL={post.document_url}
+                  variants={getFileVariantFromURL(post.document_url)}
+                />
+              ))}
           </div>
           {learningList.length === 0 && (
             <div className="flex w-full h-full items-center justify-center">
@@ -153,16 +158,17 @@ export default function CohortDetailsTabsLMS({
       {activeTab === "projects" && (
         <div className="tab-area w-full min-h-96">
           <div className="tab-content flex flex-col p-4 gap-3">
-            {projectList.map((post, index) => (
-              <ProjectItemLMS
-                key={index}
-                cohortId={cohortId}
-                projectId={post.id}
-                projectName={post.name}
-                projectDescription="Menentukan penyusunan halaman berdasarkan Global Index dan local Index yang telah dibuat sebelumnya. Serta mengatur navigasi antar halaman agar sesuai dengan alur yang telah direncanakan. Mengambil referensi dari berbagai sumber untuk memastikan bahwa struktur halaman yang dibuat"
-                projectDeadline={post.deadline_at}
-              />
-            ))}
+            {projectList
+              .filter((post) => post.status === "ACTIVE")
+              .map((post, index) => (
+                <ProjectItemLMS
+                  key={index}
+                  cohortId={cohortId}
+                  projectId={post.id}
+                  projectName={post.name}
+                  projectDeadline={post.deadline_at}
+                />
+              ))}
           </div>
           {projectList.length === 0 && (
             <div className="flex w-full h-full items-center">
