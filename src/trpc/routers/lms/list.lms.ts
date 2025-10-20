@@ -559,14 +559,19 @@ export const listLMS = {
           where: { cohort_id: opts.input.cohort_id },
         });
         const returnedList = projectsList.map((entry) => {
+          const submissionPercentage =
+            (100 * entry._count.submissions) / memberCount._count;
+          const submissionPercentageRounded =
+            submissionPercentage > 50
+              ? Math.floor(submissionPercentage) // Avoid 100% if there is still a missing submission
+              : Math.ceil(submissionPercentage); // Avoid 0% if there is still a submission
           return {
             id: entry.id,
             cohort_id: entry.cohort_id,
             name: entry.name,
             deadline_at: entry.deadline_at,
             status: entry.status,
-            submission_percentage:
-              (100 * entry._count.submissions) / memberCount._count,
+            submission_percentage: submissionPercentageRounded,
           };
         });
         return {
