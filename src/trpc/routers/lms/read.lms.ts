@@ -1,8 +1,10 @@
-import { STATUS_OK } from "@/lib/status_code";
+import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
-import { objectHasOnlyID } from "@/trpc/utils/validation";
+import { numberIsID, objectHasOnlyID } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import z from "zod";
 import { isEnrolledCohort } from "./util.lms";
 
 export const readLMS = {
@@ -253,4 +255,32 @@ export const readLMS = {
       submission: theSubmission,
     };
   }),
+
+  submissionByProject: loggedInProcedure
+    .input(
+      z.object({
+        project_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theSubmission = await opts.ctx.prisma.submission.findFirst({
+        include: { submitter: true },
+        where: {
+          project_id: opts.input.project_id,
+          submitter_id: opts.ctx.user.id,
+          // deleted_at: null,
+        },
+      });
+      if (!theSubmission) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: `The submission with the given project ID and user is not found.`,
+        });
+      }
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        submission: theSubmission,
+      };
+    }),
 };
