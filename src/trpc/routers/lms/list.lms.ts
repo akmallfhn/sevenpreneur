@@ -529,26 +529,52 @@ export const listLMS = {
           opts.input.cohort_id,
           "You're not allowed to read projects of a cohort which you aren't enrolled."
         );
-      }
-      const projectsList = await opts.ctx.prisma.project.findMany({
-        where: { cohort_id: opts.input.cohort_id },
-        orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
-      });
-      const returnedList = projectsList.map((entry) => {
+        const projectsList = await opts.ctx.prisma.project.findMany({
+          where: { cohort_id: opts.input.cohort_id },
+          orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
+        });
+        const returnedList = projectsList.map((entry) => {
+          return {
+            id: entry.id,
+            cohort_id: entry.cohort_id,
+            name: entry.name,
+            deadline_at: entry.deadline_at,
+            status: entry.status,
+            submission_percentage: 0,
+          };
+        });
         return {
-          id: entry.id,
-          cohort_id: entry.cohort_id,
-          name: entry.name,
-          deadline_at: entry.deadline_at,
-          status: entry.status,
-          submission_percentage: Math.round(Math.random() * 100), // TODO: Use the actual data
+          code: STATUS_OK,
+          message: "Success",
+          list: returnedList,
         };
-      });
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: returnedList,
-      };
+      } else {
+        const projectsList = await opts.ctx.prisma.project.findMany({
+          include: { _count: { select: { submissions: true } } },
+          where: { cohort_id: opts.input.cohort_id },
+          orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
+        });
+        const memberCount = await opts.ctx.prisma.userCohort.aggregate({
+          _count: true,
+          where: { cohort_id: opts.input.cohort_id },
+        });
+        const returnedList = projectsList.map((entry) => {
+          return {
+            id: entry.id,
+            cohort_id: entry.cohort_id,
+            name: entry.name,
+            deadline_at: entry.deadline_at,
+            status: entry.status,
+            submission_percentage:
+              (100 * entry._count.submissions) / memberCount._count,
+          };
+        });
+        return {
+          code: STATUS_OK,
+          message: "Success",
+          list: returnedList,
+        };
+      }
     }),
 
   submissions: loggedInProcedure
