@@ -28,6 +28,7 @@ export const readRouter = createTRPCRouter({
   material: readLMS.material,
   project: readLMS.project,
   submission: readLMS.submission,
+  submissionByProject: readLMS.submissionByProject,
 
   // Playlist-related //
 
