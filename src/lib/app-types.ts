@@ -3,6 +3,7 @@ export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
 export type StatusType = "ACTIVE" | "INACTIVE";
 export type SessionMethod = "ONLINE" | "ONSITE" | "HYBRID";
 export type ScheduleStatus = "UPCOMING" | "ON GOING" | "FINISHED";
+export type SubmissionStatus = "SUBMITTED" | "NOT_SUBMITTED";
 export type RolesUser =
   | "administrator"
   | "educator"
@@ -16,4 +17,5 @@ export type FileVariant =
   | "FILE"
   | "FIGMADESIGN"
   | "FIGJAM"
+  | "PDF"
   | "UNKNOWN";

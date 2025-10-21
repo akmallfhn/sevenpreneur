@@ -7,6 +7,14 @@ import HeaderProjectDetailsLMS from "../navigations/HeaderProjectDetailsLMS";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
+import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
+import { SubmissionStatus } from "@/lib/app-types";
+import UploadFilesCMS from "../fields/UploadFilesCMS";
+import UploadSubmissionLMS from "../fields/UploadSubmissionLMS";
+import InputCMS from "../fields/InputCMS";
+import AppButton from "../buttons/AppButton";
+import { Loader2 } from "lucide-react";
+import CreateSubmissionFormLMS from "../forms/CreateSubmissionFormLMS";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -14,11 +22,16 @@ dayjs.extend(relativeTime);
 interface ProjectDetailsLMS extends AvatarBadgeLMSProps {
   cohortId: number;
   cohortName: string;
+  sessionUserRole: number;
+  projectId: number;
   projectName: string;
   projectDescription: string;
   projectDocumentURL: string | null;
   projectDeadline: string;
-  sessionUserRole: number;
+  submissionDocumentURL: string | null;
+  submissionComment: string | null;
+  submissionCreatedAt: string | null;
+  submissionUpdatedAt: string | null;
 }
 
 export default function ProjectDetailsLMS({
@@ -27,12 +40,24 @@ export default function ProjectDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  projectId,
   projectName,
   projectDescription,
   projectDocumentURL,
   projectDeadline,
+  submissionDocumentURL,
+  submissionComment,
+  submissionCreatedAt,
+  submissionUpdatedAt,
 }: ProjectDetailsLMS) {
   const [deadlineStatus, setDeadlineStatus] = useState("");
+  const [submissionStatus, setSubmissionStatus] =
+    useState<SubmissionStatus>("NOT_SUBMITTED");
+
+  // Update submission status
+  useEffect(() => {
+    setSubmissionStatus(submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED");
+  }, [submissionDocumentURL]);
 
   useEffect(() => {
     const updateDeadlineStatus = () => {
@@ -80,8 +105,8 @@ export default function ProjectDetailsLMS({
         headerDescription="Test your knowledge and skills by completing the assignment below."
       />
       <div className="body-project max-w-[calc(100%-4rem)] w-full flex gap-4 rounded-xl">
-        <main className="w-full flex flex-col flex-2">
-          <div className="flex flex-col w-full gap-3 p-4 bg-white border rounded-lg">
+        <main className="w-full flex flex-col flex-2 gap-4">
+          <div className="project-attributes flex flex-col w-full gap-3 p-4 bg-white border rounded-lg">
             <h2 className="project-name font-bodycopy font-bold text-2xl">
               {projectName}
             </h2>
@@ -92,14 +117,35 @@ export default function ProjectDetailsLMS({
               <p className="font-bodycopy text-[15px]">{projectDescription}</p>
             </div>
             {projectDocumentURL && (
+              <FileItemLMS
+                fileName="Guideline Document"
+                fileURL={projectDocumentURL}
+                variants={getFileVariantFromURL(projectDocumentURL)}
+              />
+            )}
+          </div>
+
+          <div className="flex flex-col w-full bg-white p-4 gap-3 border rounded-xl">
+            <div className="flex flex-col">
+              <h2 className="font-bold font-bodycopy">Submission</h2>
+              <p className="text-alternative text-sm font-medium font-bodycopy">
+                Upload your finalized task file to complete your submission.
+                Once submitted, your document will be reviewed as part of the
+                assessment process.
+              </p>
+            </div>
+            {!submissionDocumentURL && (
+              <CreateSubmissionFormLMS projectId={projectId} />
+            )}
+            {submissionDocumentURL && (
               <div className="project-document flex flex-col gap-2">
                 <p className="font-bold font-bodycopy text-[15px]">
-                  Project Document
+                  Submitted File
                 </p>
                 <FileItemLMS
                   fileName="Project Document"
-                  fileURL={projectDocumentURL}
-                  variants={getFileVariantFromURL(projectDocumentURL)}
+                  fileURL={submissionDocumentURL}
+                  variants={getFileVariantFromURL(submissionDocumentURL)}
                 />
               </div>
             )}
@@ -111,11 +157,9 @@ export default function ProjectDetailsLMS({
               <div
                 className={`flex size-2.5 m-1.5 justify-center items-center rounded-full bg-[#D99E00]`}
               />
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-1">
                 <p className="font-bold font-bodycopy text-[15px]">Status</p>
-                <p className="font-medium font-bodycopy text-sm">
-                  Not Submitted
-                </p>
+                <SubmissionStatusLabelLMS variant={submissionStatus} />
               </div>
             </div>
             <div className="submission-deadline-at flex gap-1">
@@ -137,7 +181,11 @@ export default function ProjectDetailsLMS({
                 <p className="font-bold font-bodycopy text-[15px]">
                   Submitted at
                 </p>
-                <p className="font-medium font-bodycopy text-sm">-</p>
+                <p className="font-medium font-bodycopy text-sm">
+                  {dayjs(submissionCreatedAt).format(
+                    "DD MMM YYYY [at] HH:mm"
+                  ) || "-"}
+                </p>
                 <p className="font-medium font-bodycopy text-sm">
                   {deadlineStatus}
                 </p>

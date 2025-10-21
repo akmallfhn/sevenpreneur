@@ -388,7 +388,6 @@ export default function EditUserForm({
                       }
                     />
                     <StatusLabelCMS
-                      labelName={formData.status}
                       variants={formData.status as "ACTIVE" | "INACTIVE"}
                     />
                   </div>

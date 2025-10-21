@@ -12,17 +12,16 @@ export async function DeleteSession() {
     return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
 
-  // --- Request Backend Delete Token Database
+  // Request Backend Delete Token Database
   setSecretKey(process.env.SECRET_KEY_PUBLIC_API!);
   const loggedOut = await trpc.auth.logout({ token: sessionData.value });
 
-  // --- Delete token on Cookie
+  // Delete token on Cookie
   if (loggedOut.code === "NO_CONTENT") {
     let domain = "sevenpreneur.com";
     if (process.env.DOMAIN_MODE === "local") {
       domain = "example.com";
     }
-    // cookieStore.delete("session_token");
     cookieStore.set("session_token", "", {
       domain: domain,
       path: "/",
@@ -260,5 +259,31 @@ export async function CancelPaymentXendit({
   return {
     code: cancelResponse.code,
     message: cancelResponse.message,
+  };
+}
+
+// CREATE SUBMISSION LMS
+interface CreateSubmissionProps {
+  projectId: number;
+  submissionDocumentUrl: string;
+}
+export async function CreateSubmission({
+  projectId,
+  submissionDocumentUrl,
+}: CreateSubmissionProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const createSubmission = await trpc.create.submission({
+    project_id: projectId,
+    document_url: submissionDocumentUrl,
+  });
+  return {
+    code: createSubmission.code,
+    message: createSubmission.message,
   };
 }

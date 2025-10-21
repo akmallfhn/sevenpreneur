@@ -18,29 +18,29 @@ export default function UploadThumbnailCohortCMS({
   value,
 }: UploadThumbnailCohortCMSProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false); // -- State upload to Supabase
-  const [loaded, setLoaded] = useState(false); // -- State rendering in browser
+  const [isUploading, setIsUploading] = useState(false); // State upload to Supabase
+  const [loaded, setLoaded] = useState(false); // State rendering in browser
 
-  // --- Iteration render
+  // Iteration render
   useEffect(() => {
     setLoaded(false);
   }, [value]);
 
-  // --- Trigger input via button
+  // Trigger input via button
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
-  // --- Define format that allowed
+  // Define format that allowed
   const allowedFormat = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 
-  // --- Upload File to Supabase
+  // Upload File to Supabase
   const handleUploadFiles = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
 
-    // -- File validation
+    // File validation
     if (!file) return;
     if (file?.size < 1) return;
     if (file?.size > 1024 * 1024 * 2) {
@@ -52,7 +52,7 @@ export default function UploadThumbnailCohortCMS({
       return;
     }
 
-    // -- Create unique name and extra validation on format
+    // Create unique name and extra validation on format
     const allowedExtensions = ["jpg", "jpeg", "png", "webp", "avif"];
     const fileExt = file.name.split(".").pop()?.toLowerCase();
     if (!fileExt || !allowedExtensions.includes(fileExt)) {
@@ -62,7 +62,7 @@ export default function UploadThumbnailCohortCMS({
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `cohort/${fileName}`;
 
-    // -- Upload to Supabase
+    // Upload to Supabase
     try {
       setIsUploading(true);
       const { data: uploadData, error: uploadError } = await supabase.storage
@@ -89,7 +89,7 @@ export default function UploadThumbnailCohortCMS({
     }
   };
 
-  // --- Remove image
+  // Remove image
   const handleRemoveImage = () => {
     onUpload(null);
   };
@@ -100,7 +100,7 @@ export default function UploadThumbnailCohortCMS({
         className="upload-photo-container flex relative aspect-thumbnail bg-white w-full h-full border border-dashed border-outline cursor-pointer rounded-md overflow-hidden"
         onClick={handleUploadClick}
       >
-        {/* --- Upload message */}
+        {/* Upload message */}
         {!value && (
           <div className="upload-helper flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">
             <div className="flex max-w-[86px] aspect-square">
@@ -126,7 +126,7 @@ export default function UploadThumbnailCohortCMS({
           </div>
         )}
 
-        {/* --- Display image */}
+        {/* Display image */}
         {value && (
           <div className="absolute inset-0 z-0">
             <Image
@@ -142,7 +142,7 @@ export default function UploadThumbnailCohortCMS({
           </div>
         )}
 
-        {/* --- Remove photo button */}
+        {/* Remove photo button */}
         {value && !isUploading && (
           <div
             className="remove-photo absolute right-2 top-2 p-1 bg-semi-destructive rounded-full cursor-pointer z-20"

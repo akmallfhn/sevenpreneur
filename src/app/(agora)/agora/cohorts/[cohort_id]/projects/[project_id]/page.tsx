@@ -18,14 +18,14 @@ export default async function ProjectDetailsPageLMS({
     setSessionToken(sessionToken);
   }
 
-  // Fetch tRPC
   const { cohort_id, project_id } = await params;
   const cohortId = parseInt(cohort_id, 10);
   const projectId = parseInt(project_id, 10);
+
+  // Fetch tRPC
   const userData = (await trpc.auth.checkSession()).user;
 
   let projectDetailsRaw;
-  let submissionDetails;
   try {
     projectDetailsRaw = await trpc.read.project({
       id: projectId,
@@ -41,6 +41,24 @@ export default async function ProjectDetailsPageLMS({
       : "",
   };
 
+  let submissionUserRaw;
+  try {
+    submissionUserRaw = (
+      await trpc.read.submissionByProject({ project_id: projectId })
+    ).submission;
+  } catch (error) {
+    console.error;
+  }
+  const submissionUser = {
+    ...submissionUserRaw,
+    created_at: submissionUserRaw?.created_at
+      ? submissionUserRaw.created_at.toISOString()
+      : "",
+    updated_at: submissionUserRaw?.updated_at
+      ? submissionUserRaw.updated_at.toISOString()
+      : "",
+  };
+
   return (
     <ProjectDetailsLMS
       cohortId={cohortId}
@@ -51,10 +69,15 @@ export default async function ProjectDetailsPageLMS({
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
+      projectId={projectDetails.id}
       projectName={projectDetails.name}
       projectDescription={projectDetails.description}
       projectDocumentURL={projectDetails.document_url}
       projectDeadline={projectDetails.deadline_at}
+      submissionDocumentURL={submissionUser?.document_url || ""}
+      submissionComment={submissionUser?.comment || ""}
+      submissionCreatedAt={submissionUser.created_at}
+      submissionUpdatedAt={submissionUser.updated_at}
     />
   );
 }

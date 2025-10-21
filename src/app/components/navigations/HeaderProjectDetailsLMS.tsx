@@ -68,7 +68,7 @@ export default function HeaderProjectDetailsLMS({
 
   return (
     <React.Fragment>
-      <div className="header-root flex sticky w-full top-2 left-0 items-center justify-center bg-section-background z-40">
+      <div className="header-root flex sticky w-full top-0 left-0 pt-2 items-center justify-center bg-section-background z-40">
         <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between py-3 px-5 lg:px-0 lg:py-4">
           <div className="header-page-data flex flex-col gap-1">
             <div className="header-breadcrumb flex items-center gap-4">

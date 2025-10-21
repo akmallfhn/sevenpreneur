@@ -33,11 +33,6 @@ const fileVariant: Record<
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pptx-icon.webp",
     fileType: "PPTX",
   },
-  PDF: {
-    fileIcon:
-      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/pdf-icon.webp",
-    fileType: "PDF",
-  },
   FILE: {
     fileIcon:
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/drive-icon.webp",
@@ -52,6 +47,11 @@ const fileVariant: Record<
     fileIcon:
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/figma-icon.webp",
     fileType: "FIGMA JAM",
+  },
+  PDF: {
+    fileIcon:
+      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//pdf-icon.webp",
+    fileType: "PDF",
   },
   UNKNOWN: {
     fileIcon:

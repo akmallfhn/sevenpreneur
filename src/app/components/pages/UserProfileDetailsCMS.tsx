@@ -227,7 +227,6 @@ export default function UserProfileDetailsCMS({
                     Status <span className="text-red-700">*</span>{" "}
                   </label>
                   <StatusLabelCMS
-                    labelName={userDetailData?.user.status ?? "INACTIVE"}
                     variants={
                       (userDetailData?.user.status ?? "INACTIVE") as StatusType
                     }

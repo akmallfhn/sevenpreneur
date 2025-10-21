@@ -125,7 +125,6 @@ export default function CohortDetailsCMS({
                 {/* Status */}
                 <div className="absolute top-4 left-4 z-20">
                   <StatusLabelCMS
-                    labelName={cohortDetailsData?.cohort.status || ""}
                     variants={cohortDetailsData?.cohort.status as StatusType}
                   />
                 </div>

@@ -246,10 +246,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
 
                   {/* Status */}
                   <TableCellCMS>
-                    <StatusLabelCMS
-                      labelName={post.status}
-                      variants={post.status as StatusType}
-                    />
+                    <StatusLabelCMS variants={post.status as StatusType} />
                   </TableCellCMS>
 
                   {/* Last Login */}

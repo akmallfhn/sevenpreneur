@@ -25,15 +25,10 @@ const variantStyles: Record<
 };
 
 interface StatusLabelCMSProps {
-  labelName?: string;
   variants: StatusType;
 }
 
-export default function StatusLabelCMS({
-  labelName,
-  variants,
-}: StatusLabelCMSProps) {
-  // --- Variant declarations
+export default function StatusLabelCMS({ variants }: StatusLabelCMSProps) {
   const { backgroundColor, labelColor, signColor, label } =
     variantStyles[variants];
 
