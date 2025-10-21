@@ -53,8 +53,8 @@ export default function CohortDetailsLMS({
             />
           </main>
           <aside className="aside relative flex flex-col flex-1 w-full">
-            <div className="present sticky top-20 w-full h-40 bg-white rounded-lg">
-              Attendance
+            <div className="present sticky top-7 w-full h-40 bg-white p-4 border rounded-lg">
+              <p className="font-bold font-bodycopy">Attendance</p>
             </div>
           </aside>
         </div>

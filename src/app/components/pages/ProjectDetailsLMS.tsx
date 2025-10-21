@@ -60,6 +60,7 @@ export default function ProjectDetailsLMS({
 }: ProjectDetailsLMS) {
   const router = useRouter();
   const [deadlineStatus, setDeadlineStatus] = useState("");
+  const [submittedTime, setSubmittedTime] = useState("");
   const [submissionStatus, setSubmissionStatus] =
     useState<SubmissionStatus>("NOT_SUBMITTED");
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -67,47 +68,66 @@ export default function ProjectDetailsLMS({
   const [isOpenEditForm, setIsOpenEditForm] = useState(false);
 
   const now = dayjs();
-  const deadline = dayjs(projectDeadline);
-  const isOverdue = now.isAfter(deadline);
+  const deadlineAt = dayjs(projectDeadline);
+  const submittedAt = dayjs(submissionCreatedAt);
+  const isOverdue = now.isAfter(deadlineAt);
 
-  // Update submission status
+  // Update Submission status
   useEffect(() => {
     setSubmissionStatus(submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED");
   }, [submissionDocumentURL]);
 
+  // Update Deadline status
   useEffect(() => {
-    const updateDeadlineStatus = () => {
-      const now = dayjs();
-      const deadline = dayjs(projectDeadline);
-      const differentMilisecond = deadline.diff(now);
-      const absoluteDiff = Math.abs(differentMilisecond);
-      const d = dayjs.duration(absoluteDiff);
+    const differentMilisecond = deadlineAt.diff(now);
+    const isRemaining = differentMilisecond > 0;
+    const absoluteDiff = Math.abs(differentMilisecond);
+    const d = dayjs.duration(absoluteDiff);
 
-      // Time Calculations
-      const years = Math.floor(d.asYears());
-      const months = Math.floor(d.asMonths() % 12);
-      const days = Math.floor(d.asDays() % 30);
-      const hours = d.hours();
+    // Time Calculations
+    const days = Math.floor(d.asDays());
+    const hours = d.hours();
+    const parts = [];
+    if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+    if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
 
-      const parts = [];
-      if (years > 0) parts.push(`${years} year${years > 1 ? "s" : ""}`);
-      if (months > 0) parts.push(`${months} month${months > 1 ? "s" : ""}`);
-      if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
-      if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+    const formatted = parts.join(" ");
 
-      const formatted = parts.join(" ");
+    if (isRemaining) {
+      setDeadlineStatus(`${formatted || "less than an hour"} remaining`);
+    } else {
+      setDeadlineStatus(`Overdue ${formatted || "less than an hour"}`);
+    }
+  });
 
-      if (differentMilisecond > 0) {
-        setDeadlineStatus(`Time remaining ${formatted || "less than an hour"}`);
-      } else {
-        setDeadlineStatus(`Overdue ${formatted || "less than an hour"}`);
-      }
-    };
+  // Update Submission Time
+  useEffect(() => {
+    if (!submissionCreatedAt) return;
 
-    updateDeadlineStatus();
-    const interval = setInterval(updateDeadlineStatus, 60_000);
-    return () => clearInterval(interval);
-  }, [projectDeadline]);
+    const differentMilisecond = submittedAt.diff(deadlineAt);
+    const isEarly = differentMilisecond < 0;
+    const absoluteDiff = Math.abs(differentMilisecond);
+    const d = dayjs.duration(absoluteDiff);
+
+    // Time Calculations
+    const days = Math.floor(d.asDays());
+    const hours = d.hours();
+    const parts = [];
+    if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+    if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+
+    const formatted = parts.join(" ");
+
+    if (isEarly) {
+      setSubmittedTime(
+        `Assignment was submitted ${formatted || "less than an hour"} early`
+      );
+    } else {
+      setSubmittedTime(
+        `Assignment was submitted ${formatted || "less than an hour"} late`
+      );
+    }
+  }, [submissionCreatedAt]);
 
   const handleDelete = async () => {
     if (!submissionId) return;
@@ -266,7 +286,7 @@ export default function ProjectDetailsLMS({
                       : "-"}
                   </p>
                   <p className="font-medium font-bodycopy text-sm">
-                    {deadlineStatus}
+                    {submissionDocumentURL ? submittedTime : deadlineStatus}
                   </p>
                 </div>
               </div>
