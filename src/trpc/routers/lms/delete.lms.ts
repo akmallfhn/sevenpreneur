@@ -1,7 +1,8 @@
-import { STATUS_NO_CONTENT } from "@/lib/status_code";
+import { STATUS_FORBIDDEN, STATUS_NO_CONTENT } from "@/lib/status_code";
 import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
-import { checkDeleteResult } from "@/trpc/utils/errors";
+import { checkDeleteResult, readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
+import { TRPCError } from "@trpc/server";
 
 export const deleteLMS = {
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])
@@ -149,17 +150,44 @@ export const deleteLMS = {
   submission: roleBasedProcedure(["Administrator", "General User"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
-      let selectedUser: string | undefined = undefined;
+      let selectedUserId: string | undefined = undefined;
       if (opts.ctx.user.role.name === "General User") {
-        selectedUser = opts.ctx.user.id;
+        selectedUserId = opts.ctx.user.id;
+
+        const theSubmissionDeadline =
+          await opts.ctx.prisma.submission.findFirst({
+            select: {
+              project: {
+                select: {
+                  deadline_at: true,
+                },
+              },
+            },
+            where: {
+              id: opts.input.id,
+              submitter_id: selectedUserId,
+            },
+          });
+        if (!theSubmissionDeadline) {
+          throw readFailedNotFound("submission");
+        }
+        if (theSubmissionDeadline.project.deadline_at.getTime() < Date.now()) {
+          throw new TRPCError({
+            code: STATUS_FORBIDDEN,
+            message:
+              "The project relating the submission has passed the deadline.",
+          });
+        }
       }
+
       const deletedSubmission = await opts.ctx.prisma.submission.deleteMany({
         where: {
           id: opts.input.id,
-          submitter_id: selectedUser,
+          submitter_id: selectedUserId,
         },
       });
       checkDeleteResult(deletedSubmission.count, "submissions", "submission");
+
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
