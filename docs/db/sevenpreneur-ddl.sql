@@ -543,6 +543,10 @@ CREATE TRIGGER update_ticker_updated_at_trigger
 -- Unique Index --
 ------------------
 
+-- LMS-related
+
+CREATE UNIQUE INDEX idx_submissions_unique_per_project ON submissions (project_id, submitter_id);
+
 -- Transaction-related
 
 CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, category, item_id);
