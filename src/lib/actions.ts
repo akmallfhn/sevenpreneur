@@ -288,6 +288,36 @@ export async function CreateSubmission({
   };
 }
 
+// UPDATE SUBMISSION LMS
+interface EditSubmissionProps {
+  submissionId: number;
+  submissionDocumentUrl?: string | null;
+  submissionComment?: string | null;
+}
+export async function EditSubmission({
+  submissionId,
+  submissionDocumentUrl,
+  submissionComment,
+}: EditSubmissionProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const editSubmission = await trpc.update.submission({
+    id: submissionId,
+    document_url: submissionDocumentUrl,
+    comment: submissionComment,
+  });
+
+  return {
+    code: editSubmission.code,
+    message: editSubmission.message,
+  };
+}
+
 // DELETE SUBMISSION LMS
 interface DeleteSubmissionProps {
   submissionId: number;

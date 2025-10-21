@@ -79,6 +79,7 @@ export default async function ProjectDetailsPageLMS({
       submissionComment={submissionUser?.comment || ""}
       submissionCreatedAt={submissionUser.created_at}
       submissionUpdatedAt={submissionUser.updated_at}
+      initialData={submissionUser}
     />
   );
 }

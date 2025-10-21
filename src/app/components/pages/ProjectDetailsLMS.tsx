@@ -16,6 +16,9 @@ import { DeleteSubmission } from "@/lib/actions";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import EditSubmissionFormLMS, {
+  InitialData,
+} from "../forms/EditSubmissionFormLMS";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -34,6 +37,7 @@ interface ProjectDetailsLMS extends AvatarBadgeLMSProps {
   submissionComment: string | null;
   submissionCreatedAt: string | null;
   submissionUpdatedAt: string | null;
+  initialData: InitialData;
 }
 
 export default function ProjectDetailsLMS({
@@ -52,6 +56,7 @@ export default function ProjectDetailsLMS({
   submissionComment,
   submissionCreatedAt,
   submissionUpdatedAt,
+  initialData,
 }: ProjectDetailsLMS) {
   const router = useRouter();
   const [deadlineStatus, setDeadlineStatus] = useState("");
@@ -59,6 +64,7 @@ export default function ProjectDetailsLMS({
     useState<SubmissionStatus>("NOT_SUBMITTED");
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
+  const [isOpenEditForm, setIsOpenEditForm] = useState(false);
 
   const now = dayjs();
   const deadline = dayjs(projectDeadline);
@@ -170,10 +176,13 @@ export default function ProjectDetailsLMS({
                   assessment process.
                 </p>
               </div>
+              {/* Create Form */}
               {!submissionDocumentURL && (
                 <CreateSubmissionFormLMS projectId={projectId} />
               )}
-              {submissionDocumentURL && (
+
+              {/* Details Submission */}
+              {submissionDocumentURL && !isOpenEditForm && (
                 <div className="project flex flex-col w-full gap-3">
                   <div className="project-document flex flex-col gap-2">
                     <p className="font-bold font-bodycopy text-[15px]">
@@ -185,7 +194,7 @@ export default function ProjectDetailsLMS({
                       variants={getFileVariantFromURL(submissionDocumentURL)}
                     />
                   </div>
-                  {!isOverdue && (
+                  {!isOverdue && !isOpenEditForm && (
                     <div className="submit flex w-full justify-end items-center gap-3">
                       <AppButton
                         size="medium"
@@ -195,13 +204,25 @@ export default function ProjectDetailsLMS({
                         <Trash2 className="size-4" />
                         Delete
                       </AppButton>
-                      <AppButton size="medium" variant="outline">
+                      <AppButton
+                        size="medium"
+                        variant="outline"
+                        onClick={() => setIsOpenEditForm(true)}
+                      >
                         <Pencil className="size-4" />
                         Change
                       </AppButton>
                     </div>
                   )}
                 </div>
+              )}
+
+              {/* Edit Form */}
+              {isOpenEditForm && (
+                <EditSubmissionFormLMS
+                  initialData={initialData}
+                  onClose={() => setIsOpenEditForm(false)}
+                />
               )}
             </div>
           </main>
