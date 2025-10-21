@@ -287,3 +287,26 @@ export async function CreateSubmission({
     message: createSubmission.message,
   };
 }
+
+// DELETE SUBMISSION LMS
+interface DeleteSubmissionProps {
+  submissionId: number;
+}
+export async function DeleteSubmission({
+  submissionId,
+}: DeleteSubmissionProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const deleteSubmission = await trpc.delete.submission({
+    id: submissionId,
+  });
+  return {
+    code: deleteSubmission.code,
+    message: deleteSubmission.message,
+  };
+}

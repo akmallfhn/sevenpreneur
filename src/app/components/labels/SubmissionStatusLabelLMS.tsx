@@ -29,7 +29,7 @@ export default function SubmissionStatusLabelLMS({
 
   return (
     <span
-      className={`w-fit text-xs  font-bodycopy font-semibold px-2 py-0.5 rounded-full ${labelColor}`}
+      className={`w-fit text-xs font-bodycopy font-semibold px-2 py-0.5 rounded-full ${labelColor}`}
     >
       {labelText}
     </span>

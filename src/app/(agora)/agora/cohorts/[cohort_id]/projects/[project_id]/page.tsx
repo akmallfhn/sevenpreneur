@@ -74,6 +74,7 @@ export default async function ProjectDetailsPageLMS({
       projectDescription={projectDetails.description}
       projectDocumentURL={projectDetails.document_url}
       projectDeadline={projectDetails.deadline_at}
+      submissionId={submissionUser.id || null}
       submissionDocumentURL={submissionUser?.document_url || ""}
       submissionComment={submissionUser?.comment || ""}
       submissionCreatedAt={submissionUser.created_at}
