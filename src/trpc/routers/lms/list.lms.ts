@@ -1,9 +1,6 @@
-import {
-  STATUS_FORBIDDEN,
-  STATUS_NOT_FOUND,
-  STATUS_OK,
-} from "@/lib/status_code";
+import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
+import { readFailedNotFound } from "@/trpc/utils/errors";
 import { calculatePage } from "@/trpc/utils/paging";
 import {
   numberIsID,
@@ -14,7 +11,7 @@ import {
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
-import { isEnrolledCohort } from "./util.lms";
+import { isEnrolledCohort, isEnrolledLearning } from "./util.lms";
 
 export const listLMS = {
   cohorts: publicProcedure
@@ -354,21 +351,11 @@ export const listLMS = {
     )
     .query(async (opts) => {
       if (opts.ctx.user.role.name == "General User") {
-        const theLearning = await opts.ctx.prisma.learning.findFirst({
-          select: { cohort_id: true },
-          where: { id: opts.input.learning_id },
-        });
-        if (!theLearning) {
-          throw new TRPCError({
-            code: STATUS_NOT_FOUND,
-            message: "The learning with the given ID is not found.",
-          });
-        }
-        await isEnrolledCohort(
+        await isEnrolledLearning(
           opts.ctx.prisma,
           opts.ctx.user.id,
-          theLearning.cohort_id,
-          "You're not allowed to read materials of a cohort which you aren't enrolled."
+          opts.input.learning_id,
+          "You're not allowed to read materials of a cohort/learning which you aren't enrolled."
         );
       }
       const materialsList = await opts.ctx.prisma.material.findMany({
@@ -399,21 +386,11 @@ export const listLMS = {
     )
     .query(async (opts) => {
       if (opts.ctx.user.role.name == "General User") {
-        const theLearning = await opts.ctx.prisma.learning.findFirst({
-          select: { cohort_id: true },
-          where: { id: opts.input.learning_id },
-        });
-        if (!theLearning) {
-          throw new TRPCError({
-            code: STATUS_NOT_FOUND,
-            message: "The learning with the given ID is not found.",
-          });
-        }
-        await isEnrolledCohort(
+        await isEnrolledLearning(
           opts.ctx.prisma,
           opts.ctx.user.id,
-          theLearning.cohort_id,
-          "You're not allowed to read learning discussions of a cohort which you aren't enrolled."
+          opts.input.learning_id,
+          "You're not allowed to read learning discussions of a cohort/learning which you aren't enrolled."
         );
       }
       const discussionStartersList =
@@ -461,27 +438,21 @@ export const listLMS = {
     )
     .query(async (opts) => {
       if (opts.ctx.user.role.name == "General User") {
-        const theLearning = await opts.ctx.prisma.learning.findFirst({
-          select: { cohort_id: true },
-          where: {
-            discussions: {
-              some: {
-                id: opts.input.starter_id,
-              },
+        const theDiscussionStarter =
+          await opts.ctx.prisma.discussionStarter.findFirst({
+            select: { learning_id: true },
+            where: {
+              id: opts.input.starter_id,
             },
-          },
-        });
-        if (!theLearning) {
-          throw new TRPCError({
-            code: STATUS_NOT_FOUND,
-            message: "The learning with the given ID is not found.",
           });
+        if (!theDiscussionStarter) {
+          throw readFailedNotFound("discussion starter");
         }
-        await isEnrolledCohort(
+        await isEnrolledLearning(
           opts.ctx.prisma,
           opts.ctx.user.id,
-          theLearning.cohort_id,
-          "You're not allowed to read learning discussions of a cohort which you aren't enrolled."
+          theDiscussionStarter.learning_id,
+          "You're not allowed to read learning discussions of a cohort/learning which you aren't enrolled."
         );
       }
       const discussionRepliesList =

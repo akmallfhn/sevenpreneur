@@ -142,6 +142,7 @@ export async function POST(req: NextRequest) {
           data: {
             user_id: theTransaction.user_id,
             cohort_id: theCohortPrice.cohort_id,
+            cohort_price_id: theCohortPrice.id,
           },
         });
       } catch (e) {
