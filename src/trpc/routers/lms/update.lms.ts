@@ -1,6 +1,10 @@
-import { STATUS_BAD_REQUEST, STATUS_OK } from "@/lib/status_code";
+import {
+  STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
+  STATUS_OK,
+} from "@/lib/status_code";
 import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
-import { checkUpdateResult } from "@/trpc/utils/errors";
+import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
 import {
   numberIsID,
   stringIsTimestampTz,
@@ -306,7 +310,8 @@ export const updateLMS = {
       })
     )
     .mutation(async (opts) => {
-      let theDocumentUrl, theComment: string | null | undefined;
+      let theDocumentUrl: string | null | undefined;
+      let theComment: string | null | undefined;
       if (opts.ctx.user.role.name !== "Educator") {
         theDocumentUrl = opts.input.document_url;
       }
@@ -324,6 +329,33 @@ export const updateLMS = {
       let selectedUserId: string | undefined = undefined;
       if (opts.ctx.user.role.name === "General User") {
         selectedUserId = opts.ctx.user.id;
+      }
+
+      if (opts.ctx.user.role.name === "General User") {
+        const theSubmissionDeadline =
+          await opts.ctx.prisma.submission.findFirst({
+            select: {
+              project: {
+                select: {
+                  deadline_at: true,
+                },
+              },
+            },
+            where: {
+              id: opts.input.id,
+              submitter_id: selectedUserId,
+            },
+          });
+        if (!theSubmissionDeadline) {
+          throw readFailedNotFound("submission");
+        }
+        if (theSubmissionDeadline.project.deadline_at.getTime() < Date.now()) {
+          throw new TRPCError({
+            code: STATUS_FORBIDDEN,
+            message:
+              "The project relating the submission has passed the deadline.",
+          });
+        }
       }
 
       const updatedSubmission =
