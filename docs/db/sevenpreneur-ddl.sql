@@ -154,6 +154,7 @@ CREATE TABLE learnings (
   location_url   VARCHAR                   NULL,
   speaker_id     UUID                      NULL,
   recording_url  VARCHAR                   NULL,
+  price_id       INTEGER                   NULL,
   status         status_enum           NOT NULL,
   created_at     TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at     TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
@@ -321,8 +322,9 @@ CREATE TABLE ticker (
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (
-  user_id    UUID     NOT NULL,
-  cohort_id  INTEGER  NOT NULL,
+  user_id          UUID     NOT NULL,
+  cohort_id        INTEGER  NOT NULL,
+  cohort_price_id  INTEGER  NOT NULL,
   PRIMARY KEY (user_id, cohort_id)
 );
 
@@ -374,7 +376,8 @@ ALTER TABLE modules
 
 ALTER TABLE learnings
   ADD FOREIGN KEY (cohort_id)  REFERENCES cohorts (id),
-  ADD FOREIGN KEY (speaker_id) REFERENCES users (id);
+  ADD FOREIGN KEY (speaker_id) REFERENCES users (id),
+  ADD FOREIGN KEY (price_id)   REFERENCES cohort_prices (id);
 
 ALTER TABLE materials
   ADD FOREIGN KEY (learning_id) REFERENCES learnings (id);
@@ -419,8 +422,9 @@ ALTER TABLE transactions
 -- Relation Tables --
 
 ALTER TABLE users_cohorts
-  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
-  ADD FOREIGN KEY (cohort_id) REFERENCES cohorts (id);
+  ADD FOREIGN KEY (user_id)         REFERENCES users (id),
+  ADD FOREIGN KEY (cohort_id)       REFERENCES cohorts (id),
+  ADD FOREIGN KEY (cohort_price_id) REFERENCES cohort_prices (id);
 
 ALTER TABLE users_events
   ADD FOREIGN KEY (user_id)   REFERENCES users (id),

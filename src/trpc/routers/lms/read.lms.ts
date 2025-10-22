@@ -5,7 +5,7 @@ import { numberIsID, objectHasOnlyID } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
-import { isEnrolledCohort } from "./util.lms";
+import { isEnrolledCohort, isEnrolledLearning } from "./util.lms";
 
 export const readLMS = {
   cohort: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
@@ -172,17 +172,17 @@ export const readLMS = {
   material: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
     if (opts.ctx.user.role.name == "General User") {
       const checkMaterial = await opts.ctx.prisma.material.findFirst({
-        select: { learning: { select: { cohort_id: true } } },
+        select: { learning_id: true },
         where: { id: opts.input.id },
       });
       if (!checkMaterial) {
         throw readFailedNotFound("material");
       }
-      await isEnrolledCohort(
+      await isEnrolledLearning(
         opts.ctx.prisma,
         opts.ctx.user.id,
-        checkMaterial.learning.cohort_id,
-        "You're not allowed to read materials of a cohort which you aren't enrolled."
+        checkMaterial.learning_id,
+        "You're not allowed to read materials of a cohort/learning which you aren't enrolled."
       );
     }
     const theMaterial = await opts.ctx.prisma.material.findFirst({
