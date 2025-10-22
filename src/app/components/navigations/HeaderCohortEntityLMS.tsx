@@ -16,7 +16,7 @@ import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 import AppBreadcrumb from "./AppBreadcrumb";
 import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
-export interface HeaderProjectDetailsLMSProps extends AvatarBadgeLMSProps {
+export interface HeaderCohortEntityLMSProps extends AvatarBadgeLMSProps {
   cohortId: number;
   cohortName: string;
   headerTitle: string;
@@ -24,7 +24,7 @@ export interface HeaderProjectDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
 }
 
-export default function HeaderProjectDetailsLMS({
+export default function HeaderCohortEntityLMS({
   cohortId,
   cohortName,
   sessionUserName,
@@ -32,7 +32,7 @@ export default function HeaderProjectDetailsLMS({
   sessionUserRole,
   headerTitle,
   headerDescription,
-}: HeaderProjectDetailsLMSProps) {
+}: HeaderCohortEntityLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -72,12 +72,12 @@ export default function HeaderProjectDetailsLMS({
         <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between py-3 px-5 lg:px-0 lg:py-4">
           <div className="header-page-data flex flex-col gap-1">
             <div className="header-breadcrumb flex items-center gap-4">
-              <AppBreadcrumb>
-                <p className="slash text-alternative font-bodycopy">/</p>
+              <AppBreadcrumb className="text-[#333333]/90">
+                <p className="slash font-bodycopy">/</p>
                 <AppBreadcrumbItem href="/cohorts">
                   Bootcamp Program
                 </AppBreadcrumbItem>
-                <p className="slash text-alternative font-bodycopy">/</p>
+                <p className="slash font-bodycopy">/</p>
                 <AppBreadcrumbItem href={`/cohorts/${cohortId}`}>
                   {cohortName}
                 </AppBreadcrumbItem>

@@ -3,15 +3,20 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { ChevronRight } from "lucide-react";
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
-interface AppBreadcrumbProps {
+interface AppBreadcrumbProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
-export default function AppBreadcrumb({ children }: AppBreadcrumbProps) {
+export default function AppBreadcrumb({
+  children,
+  className,
+}: AppBreadcrumbProps) {
   return (
-    <div className="breadcrumb flex text-alternative text-sm font-bodycopy font-medium gap-1.5 items-center">
+    <div
+      className={`breadcrumb flex text-sm font-bodycopy font-medium gap-1.5 items-center ${className}`}
+    >
       <Link href={"/"} className="flex items-center gap-1.5">
         <FontAwesomeIcon icon={faHome} className="size-3" />
         <p>Home</p>

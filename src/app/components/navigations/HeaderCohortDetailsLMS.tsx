@@ -66,8 +66,8 @@ export default function HeaderCohortDetailsLMS({
 
       <div className="header-container absolute flex w-full max-w-[calc(100%-4rem)] top-4 left-1/2 -translate-x-1/2 items-center justify-between px-0 py-4 z-20">
         <div className="header-breadcrumb flex items-center gap-4">
-          <AppBreadcrumb>
-            <p className="slash text-alternative font-bodycopy">/</p>
+          <AppBreadcrumb className="text-white">
+            <p className="slash font-bodycopy">/</p>
             <AppBreadcrumbItem href="/cohorts">
               Bootcamp Programs
             </AppBreadcrumbItem>

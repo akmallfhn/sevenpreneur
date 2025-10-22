@@ -11,7 +11,6 @@ interface CohortDetailsPageLMSProps {
 export default async function CohortDetailsPageLMS({
   params,
 }: CohortDetailsPageLMSProps) {
-  // Get Token for Header Navbar
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
@@ -20,9 +19,9 @@ export default async function CohortDetailsPageLMS({
     setSessionToken(sessionToken);
   }
 
-  // Fetch tRPC
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id, 10);
+
   const userData = (await trpc.auth.checkSession()).user;
 
   let enrolledCohortDetails;

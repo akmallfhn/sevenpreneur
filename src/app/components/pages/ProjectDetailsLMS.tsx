@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { getFileVariantFromURL } from "@/lib/file-variants";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import FileItemLMS from "../items/FileItemLMS";
-import HeaderProjectDetailsLMS from "../navigations/HeaderProjectDetailsLMS";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -19,6 +18,7 @@ import { useRouter } from "next/navigation";
 import EditSubmissionFormLMS, {
   InitialData,
 } from "../forms/EditSubmissionFormLMS";
+import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -155,7 +155,7 @@ export default function ProjectDetailsLMS({
   return (
     <React.Fragment>
       <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
-        <HeaderProjectDetailsLMS
+        <HeaderCohortEntityLMS
           cohortId={cohortId}
           cohortName={cohortName}
           sessionUserName={sessionUserName}
@@ -164,7 +164,7 @@ export default function ProjectDetailsLMS({
           headerTitle="Assignment Overview"
           headerDescription="Test your knowledge and skills by completing the assignment below."
         />
-        <div className="body-project max-w-[calc(100%-4rem)] w-full flex gap-4 rounded-xl">
+        <div className="body-project max-w-[calc(100%-4rem)] w-full flex gap-4">
           <main className="w-full flex flex-col flex-2 gap-4">
             <div className="project-attributes flex flex-col w-full gap-3 p-4 bg-white border rounded-lg">
               <h2 className="project-name font-bodycopy font-bold text-2xl">
