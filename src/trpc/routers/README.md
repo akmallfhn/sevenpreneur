@@ -336,6 +336,17 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators and Class Manager have write access to all event prices' data.
 - Logged-in users can see all event prices given the event ID.
 
+## Templates 📊
+
+| Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :--------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.templates` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrators, Educators, and Class Managers can see all templates.
+- General Users can see all templates if the user is in the enrolled list.
+
 ## Discounts 🪙
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
