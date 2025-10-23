@@ -3,6 +3,7 @@ import { listEvent } from "./event/list.event";
 import { listLMS } from "./lms/list.lms";
 import { listLookup } from "./lookup/list.lookup";
 import { listPlaylist } from "./playlist/list.playlist";
+import { listTemplate } from "./templates/templates";
 import { listTransaction } from "./transaction/list.transaction";
 import { listUserData } from "./userdata/list.userdata";
 
@@ -44,6 +45,10 @@ export const listRouter = createTRPCRouter({
 
   events: listEvent.events,
   eventPrices: listEvent.eventPrices,
+
+  // Template-related //
+
+  templates: listTemplate.templates,
 
   // Transaction-related //
 
