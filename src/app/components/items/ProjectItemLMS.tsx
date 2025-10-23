@@ -23,10 +23,10 @@ export default function ProjectItemLMS({
       className="project-box flex items-center justify-between p-4 bg-section-background rounded-lg transform transition hover:bg-[#EDF0F6]"
     >
       <div className="project-container flex items-center gap-3">
-        <div className="project-icon size-10 shrink-0 overflow-hidden">
+        <div className="project-icon size-12 rounded-md shrink-0 overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/customer-service-icon.svg"
+            src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/project-icon.svg"
             alt={projectName}
             width={80}
             height={80}

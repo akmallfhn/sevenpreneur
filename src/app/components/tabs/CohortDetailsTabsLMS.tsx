@@ -144,7 +144,7 @@ export default function CohortDetailsTabsLMS({
 
       {activeTab === "modules" && (
         <div className="tab-area w-full min-h-96">
-          {activeModules.length === 0 ? (
+          {activeModules.length > 0 ? (
             <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
               {activeModules.map((post, index) => (
                 <FileItemLMS
