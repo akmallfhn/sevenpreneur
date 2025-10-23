@@ -238,28 +238,22 @@ export default function EditCohortFormCMS({
               onInputChange={handleInputChange("cohortDescription")}
               required
             />
-            <div className="date flex flex-1 w-full gap-4">
-              <div className="w-full">
-                <InputCMS
-                  inputId="start-date"
-                  inputName="Program Starts"
-                  inputType="datetime-local"
-                  value={formData.cohortStartDate}
-                  onInputChange={handleInputChange("cohortStartDate")}
-                  required
-                />
-              </div>
-              <div className="w-full">
-                <InputCMS
-                  inputId="end-date"
-                  inputName="Program Ends"
-                  inputType="datetime-local"
-                  value={formData.cohortEndDate}
-                  onInputChange={handleInputChange("cohortEndDate")}
-                  required
-                />
-              </div>
-            </div>
+            <InputCMS
+              inputId="start-date"
+              inputName="Program Starts"
+              inputType="datetime-local"
+              value={formData.cohortStartDate}
+              onInputChange={handleInputChange("cohortStartDate")}
+              required
+            />
+            <InputCMS
+              inputId="end-date"
+              inputName="Program Ends"
+              inputType="datetime-local"
+              value={formData.cohortEndDate}
+              onInputChange={handleInputChange("cohortEndDate")}
+              required
+            />
           </div>
           <PriceTierStepperCMS
             tiers={formData.cohortPriceTiers}

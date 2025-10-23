@@ -217,6 +217,7 @@ export default function EditProjectFormCMS({
                 textAreaName="Project Brief"
                 textAreaPlaceholder="Outline the project objectives, deliverables, and any specific instructions."
                 textAreaHeight="h-36"
+                characterLength={1000}
                 value={formData.projectDescription}
                 onInputChange={handleInputChange("projectDescription")}
                 required
