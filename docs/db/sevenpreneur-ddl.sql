@@ -270,6 +270,18 @@ CREATE TABLE event_prices (
   created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Template-related
+
+CREATE TABLE templates (
+  id            SERIAL       PRIMARY KEY,
+  name          VARCHAR      NOT NULL,
+  description   VARCHAR          NULL,
+  image         VARCHAR      NOT NULL,
+  document_url  VARCHAR      NOT NULL,
+  created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Transaction-related
 
 CREATE TABLE discounts (
@@ -347,6 +359,9 @@ CREATE TABLE users_events (
   event_id  INTEGER  NOT NULL,
   PRIMARY KEY (user_id, event_id)
 );
+
+CREATE VIEW users_templates AS
+  SELECT user_id FROM users_cohorts;
 
 ----------------
 -- References --
@@ -521,6 +536,13 @@ CREATE TRIGGER update_playlists_updated_at_trigger
 
 CREATE TRIGGER update_events_updated_at_trigger
   BEFORE UPDATE ON events
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+-- Template-related
+
+CREATE TRIGGER update_templates_updated_at_trigger
+  BEFORE UPDATE ON templates
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
