@@ -17,18 +17,15 @@ import AppButton from "../buttons/AppButton";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import { getMeetingPlatformVariantFromURL } from "@/lib/meeting-platform-variants";
 import MaterialListCMS from "../indexes/MaterialListCMS";
 import UserBadgeCMS from "../buttons/UserBadgeCMS";
 import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
 import LocationItemCMS from "../items/LocationItemCMS";
-import MeetingPlatformItemCMS, {
-  MeetingPlatformVariant,
-} from "../items/MeetingPlatformItemCMS";
 import EditLearningFormCMS from "../forms/EditLearningFormCMS";
 import UpdateVideoRecordingFormCMS from "../forms/UpdateVideoRecordingForm";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { SessionMethod } from "@/lib/app-types";
+import ConferenceItemCMS from "../items/ConferenceItemCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -266,14 +263,9 @@ export default function LearningDetailsCMS({
                     )}
                   {/* Meeting Link */}
                   {learningDetailsData?.learning.meeting_url && (
-                    <MeetingPlatformItemCMS
-                      meetingURL={
+                    <ConferenceItemCMS
+                      conferenceURL={
                         learningDetailsData?.learning.meeting_url || ""
-                      }
-                      variant={
-                        getMeetingPlatformVariantFromURL(
-                          learningDetailsData?.learning.meeting_url || ""
-                        ) as MeetingPlatformVariant
                       }
                     />
                   )}

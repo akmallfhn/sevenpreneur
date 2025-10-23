@@ -2,13 +2,10 @@
 import Image from "next/image";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
-import HeaderProjectDetailsLMS from "../navigations/HeaderCohortEntityLMS";
 import dayjs from "dayjs";
 import AppButton from "../buttons/AppButton";
 import { MapPinned, Video } from "lucide-react";
 import { SessionMethod } from "@/lib/app-types";
-import MeetingPlatformItemCMS from "../items/MeetingPlatformItemCMS";
-import { getMeetingPlatformVariantFromURL } from "@/lib/meeting-platform-variants";
 import {
   getConferenceAttributes,
   getConferenceVariantFromURL,

@@ -1,7 +1,5 @@
 "use client";
-import Image from "next/image";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import CohortDetailsTabsLMS, {
   LearningSessionList,
   ModuleList,
