@@ -6,6 +6,7 @@ import { SessionMethod, StatusType } from "@/lib/app-types";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 import FileItemLMS from "../items/FileItemLMS";
 import HeroLearningDetailsLMS from "../templates/HeroLearningDetailsLMS";
+import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 
 export interface MaterialList {
   name: string;
@@ -26,6 +27,7 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningLocationName: string;
   learningEducatorName: string;
   learningEducatorAvatar: string;
+  learningVideoRecording: string;
   materialList: MaterialList[];
 }
 
@@ -44,8 +46,13 @@ export default function LearningDetailsLMS({
   learningLocationName,
   learningEducatorName,
   learningEducatorAvatar,
+  learningVideoRecording,
   materialList,
 }: LearningDetailsLMSProps) {
+  const activeMaterials = materialList.filter(
+    (material) => material.status === "ACTIVE"
+  );
+
   return (
     <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
       <HeaderCohortEntityLMS
@@ -80,9 +87,10 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 Live Class Recording
               </h3>
-              <div className="video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
+              {!learningVideoRecording && <EmptyRecordingLMS />}
+              {/* <div className="video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
                 <AppVideoPlayer videoId={"d929af5a12b4d3fbe74215e9678b1b58"} />
-              </div>
+              </div> */}
             </div>
           </main>
           <aside className="w-full flex flex-col flex-1 gap-4">
@@ -114,17 +122,22 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 Materials
               </h3>
-              <div className="material-list flex flex-col gap-2">
-                {materialList
-                  .filter((material) => material.status === "ACTIVE")
-                  .map((post, index) => (
+              {activeMaterials.length > 0 ? (
+                <div className="material-list flex flex-col gap-2">
+                  {activeMaterials.map((post, index) => (
                     <FileItemLMS
                       key={index}
                       fileName={post.name}
                       fileURL={post.document_url}
                     />
                   ))}
-              </div>
+                </div>
+              ) : (
+                <p className="text-alternative text-sm font-bodycopy">
+                  The session materials are being prepared and will be available
+                  soon.
+                </p>
+              )}
             </div>
           </aside>
         </div>

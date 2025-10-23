@@ -26,6 +26,7 @@ import UpdateVideoRecordingFormCMS from "../forms/UpdateVideoRecordingForm";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { SessionMethod } from "@/lib/app-types";
 import ConferenceItemCMS from "../items/ConferenceItemCMS";
+import EmptyRecordingCMS from "../state/EmptyRecordingCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -43,14 +44,13 @@ export default function LearningDetailsCMS({
   const [editLearning, setEditLearning] = useState(false);
   const [updateRecording, setUpdateRecording] = useState(false);
 
-  // --- Set token for API
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
 
-  // --- Call data from tRPC
+  // Fetch tRPC Data
   const {
     data: learningDetailsData,
     isLoading,
@@ -80,8 +80,7 @@ export default function LearningDetailsCMS({
   return (
     <React.Fragment>
       <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-        {/* --- PAGE HEADER */}
-        <div className="page-header flex flex-col gap-3">
+        <div className="header-cms flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
             <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
@@ -98,13 +97,19 @@ export default function LearningDetailsCMS({
             </AppBreadcrumbItem>
           </AppBreadcrumb>
 
-          {/* --- DETAILS */}
-          <div className="flex flex-col gap-5">
-            {/* --- LEADERBOARD HEADER */}
-            <div className="container-leaderboard-learning relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
-              {/* Metadata */}
-              <div className="metadata-leaderboard-learning flex flex-col max-w-[528px] pl-8 gap-4 z-10 ">
-                <div className="flex w-fit">
+          <div className="body-learning flex flex-col gap-5">
+            <div className="hero-learning relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
+              <Image
+                className="hero-background object-cover w-full h-full inset-0 z-0"
+                src={
+                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//leaderboard-wallpaper.jpeg"
+                }
+                alt="Header Learnings"
+                width={800}
+                height={800}
+              />
+              <div className="learning-attributes absolute flex flex-col max-w-[528px] top-1/2 -translate-y-1/2 left-8 gap-3 z-10">
+                <div className="learning-method flex w-fit">
                   <LearningMethodLabelCMS
                     labelName={learningDetailsData?.learning.method || ""}
                     variants={
@@ -112,20 +117,20 @@ export default function LearningDetailsCMS({
                     }
                   />
                 </div>
-                <h1 className="font-brand font-bold text-2xl text-white">
+                <h1 className="learning-name font-brand font-bold text-2xl text-white">
                   {learningDetailsData?.learning.name}
                 </h1>
-                <div className="date flex w-fit gap-2 items-center bg-black/15 text-white rounded-md p-2">
+                <div className="learning-date flex w-fit gap-2 items-center bg-black/15 text-white rounded-md p-2">
                   <CalendarFold className="size-5" />
                   <p className="flex font-bodycopy font-medium text-sm">
                     {dayjs(learningDetailsData?.learning.meeting_date).format(
-                      "lll"
+                      "ddd[,] DD MMM YYYY [-] HH:mm"
                     )}
                   </p>
                 </div>
               </div>
-              {/* Edit */}
-              <div className="absolute flex top-4 right-4 z-10">
+              {/* Edit Learning*/}
+              <div className="edit-learning absolute flex top-4 right-4 z-10">
                 <AppButton
                   variant="outline"
                   size="small"
@@ -135,29 +140,17 @@ export default function LearningDetailsCMS({
                   Edit Learning Session
                 </AppButton>
               </div>
-              {/* Background */}
-              <Image
-                className="object-cover w-full h-full"
-                src={
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//leaderboard-wallpaper.jpeg"
-                }
-                alt="Header Learnings"
-                fill
-              />
             </div>
-            <div className="body-container flex gap-5">
-              {/* MAIN */}
+            <div className="body-contents flex gap-5">
               <main className="flex flex-col flex-[2] w-0 min-w-0 gap-5">
-                {/* Materials */}
                 <MaterialListCMS
                   sessionToken={sessionToken}
                   learningId={learningId}
                 />
-                {/* Recording File */}
-                <div className="description flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                <div className="video-recording flex flex-col gap-3 p-3 bg-section-background rounded-md">
                   <div className="section-name flex justify-between items-center">
                     <h2 className="font-brand font-bold text-black">
-                      Recording Sessions
+                      Video Recording
                     </h2>
                     {learningDetailsData?.learning.recording_url && (
                       <AppButton
@@ -185,60 +178,30 @@ export default function LearningDetailsCMS({
                     </div>
                   )}
                   {!learningDetailsData?.learning.recording_url && (
-                    <div className="flex flex-col w-full pb-4 gap-5 items-center">
-                      <div className="flex flex-col gap-0 text-center items-center">
-                        <div className="flex max-w-[180px]">
-                          <Image
-                            src={
-                              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//video-recording-null.webp"
-                            }
-                            alt="No Video"
-                            width={500}
-                            height={500}
-                          />
-                        </div>
-                        <h4 className="font-bodycopy font-bold text-black/70">
-                          This session currently has no recording
-                        </h4>
-                        <p className="font-bodycopy font-medium text-sm text-alternative">
-                          You can upload one to complete the archive.
-                        </p>
-                      </div>
-                      <div className="flex w-fit">
-                        <AppButton
-                          variant="cmsPrimary"
-                          size="small"
-                          onClick={() => setUpdateRecording(true)}
-                        >
-                          <Disc2 className="size-4" />
-                          Add Video Recording
-                        </AppButton>
-                      </div>
-                    </div>
+                    <EmptyRecordingCMS
+                      actionClick={() => setUpdateRecording(true)}
+                    />
                   )}
                 </div>
               </main>
 
-              {/* ASIDE */}
-              <aside className="flex flex-col flex-[1] w-full gap-5">
-                {/* Description */}
-                <div className="description flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="font-brand font-bold text-black">
-                    About this sessions
+              <aside className="aside-contents flex flex-col flex-[1] w-full gap-5">
+                <div className="learning-description flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                  <h2 className="section-name font-brand font-bold text-black">
+                    What&apos;s on this sessions?
                   </h2>
-                  <p className="font-bodycopy font-medium text-sm text-black/50 bg-white p-3 rounded-md">
+                  <p className="font-bodycopy font-medium text-sm text-black/50 bg-white p-3 rounded-md whitespace-pre-line">
                     {learningDetailsData?.learning.description}
                   </p>
                 </div>
-                {/* Speakers */}
-                <div className="description flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="font-brand font-bold text-black">
-                    Facilitated by
+                <div className="learning-educator flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                  <h2 className="section-name font-brand font-bold text-black">
+                    Lectured by
                   </h2>
                   <UserBadgeCMS
                     userName={
                       learningDetailsData?.learning.speaker?.full_name ||
-                      "Sevenpreneur Team"
+                      "Sevenpreneur Educator"
                     }
                     userRole="EDUCATOR"
                     userAvatar={
@@ -247,8 +210,8 @@ export default function LearningDetailsCMS({
                     }
                   />
                 </div>
-                <div className="description flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="font-brand font-bold text-black">
+                <div className="learning-location-conference flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                  <h2 className="section-name font-brand font-bold text-black">
                     Place and Access
                   </h2>
                   {/* Location */}
@@ -276,7 +239,7 @@ export default function LearningDetailsCMS({
         </div>
       </div>
 
-      {/* Form Edit Cohort */}
+      {/* Form Edit Learning */}
       {editLearning && (
         <EditLearningFormCMS
           sessionToken={sessionToken}

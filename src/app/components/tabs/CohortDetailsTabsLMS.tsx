@@ -68,6 +68,16 @@ export default function CohortDetailsTabsLMS({
     { id: "members", label: "Network" },
   ];
 
+  const activeLearnings = learningList.filter(
+    (learning) => learning.status === "ACTIVE"
+  );
+  const activeModules = moduleList.filter(
+    (module) => module.status === "ACTIVE"
+  );
+  const activeProject = projectList.filter(
+    (project) => project.status === "ACTIVE"
+  );
+
   return (
     <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg border overflow-hidden">
       <div className="tab-options flex border-b justify-around">
@@ -92,33 +102,37 @@ export default function CohortDetailsTabsLMS({
 
       {activeTab === "learnings" && (
         <div className="tab-content flex flex-col p-4 gap-3 w-full min-h-96">
-          {learningList
-            .filter((post) => post.status === "ACTIVE")
-            .sort(
-              (a, b) =>
-                new Date(a.meeting_date).getTime() -
-                new Date(b.meeting_date).getTime()
-            )
-            .map((post, index) => (
-              <LearningSessionItemLMS
-                key={index}
-                cohortId={cohortId}
-                learningSessionId={post.id}
-                learningSessionName={post.name}
-                learningSessionMethod={post.method}
-                learningSessionEducatorName={
-                  post.speaker?.full_name || "Sevenpreneur Educator"
-                }
-                learningSessionEducatorAvatar={
-                  post.speaker?.avatar ||
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                }
-                learningSessionDate={post.meeting_date}
-                learningSessionPlace={post.location_name || "To Be Announced"}
-              />
-            ))}
-          {learningList.length === 0 && (
-            <div className="flex w-full h-full items-center">
+          {activeLearnings.length > 0 ? (
+            <>
+              {activeLearnings
+                .sort(
+                  (a, b) =>
+                    new Date(a.meeting_date).getTime() -
+                    new Date(b.meeting_date).getTime()
+                )
+                .map((post, index) => (
+                  <LearningSessionItemLMS
+                    key={index}
+                    cohortId={cohortId}
+                    learningSessionId={post.id}
+                    learningSessionName={post.name}
+                    learningSessionMethod={post.method}
+                    learningSessionEducatorName={
+                      post.speaker?.full_name || "Sevenpreneur Educator"
+                    }
+                    learningSessionEducatorAvatar={
+                      post.speaker?.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                    }
+                    learningSessionDate={post.meeting_date}
+                    learningSessionPlace={
+                      post.location_name || "To Be Announced"
+                    }
+                  />
+                ))}
+            </>
+          ) : (
+            <div className="flex w-full h-full items-center p-4">
               <EmptyItemLMS
                 stateTitle="No Sessions Available"
                 stateDescription="There are no learning sessions scheduled right now. Please check back later or contact your program coordinator for updates."
@@ -130,19 +144,18 @@ export default function CohortDetailsTabsLMS({
 
       {activeTab === "modules" && (
         <div className="tab-area w-full min-h-96">
-          <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
-            {moduleList
-              .filter((post) => post.status === "ACTIVE")
-              .map((post, index) => (
+          {activeModules.length === 0 ? (
+            <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
+              {activeModules.map((post, index) => (
                 <FileItemLMS
                   key={index}
                   fileName={post.name}
                   fileURL={post.document_url}
                 />
               ))}
-          </div>
-          {learningList.length === 0 && (
-            <div className="flex w-full h-full items-center justify-center">
+            </div>
+          ) : (
+            <div className="flex w-full h-full items-center justify-center p-4">
               <EmptyItemLMS
                 stateTitle="Modules Coming Soon"
                 stateDescription="We’re working on something great! New modules will be ready soon"
@@ -154,10 +167,9 @@ export default function CohortDetailsTabsLMS({
 
       {activeTab === "projects" && (
         <div className="tab-area w-full min-h-96">
-          <div className="tab-content flex flex-col p-4 gap-3">
-            {projectList
-              .filter((post) => post.status === "ACTIVE")
-              .map((post, index) => (
+          {activeProject.length > 0 ? (
+            <div className="tab-content flex flex-col p-4 gap-3">
+              {activeProject.map((post, index) => (
                 <ProjectItemLMS
                   key={index}
                   cohortId={cohortId}
@@ -166,9 +178,9 @@ export default function CohortDetailsTabsLMS({
                   projectDeadline={post.deadline_at}
                 />
               ))}
-          </div>
-          {projectList.length === 0 && (
-            <div className="flex w-full h-full items-center">
+            </div>
+          ) : (
+            <div className="flex w-full h-full items-center p-4">
               <EmptyItemLMS
                 stateTitle="No Assignments Yet"
                 stateDescription="You don’t have any tasks or assignments right now. New tasks will appear here once they’re ready!"
