@@ -55,10 +55,7 @@ export default function ZTemporaryPlaylistLMS({
         <div className="flex flex-col w-full gap-4 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px] lg:text-lg">
           <div className="relative w-full h-auto aspect-video overflow-hidden md:rounded-md lg:max-w-[768px]">
             {selectedVideoData ? (
-              <AppVideoPlayer
-                videoId={selectedVideoData.external_video_id}
-                videoImage={selectedVideoData.image_url}
-              />
+              <AppVideoPlayer videoId={selectedVideoData.external_video_id} />
             ) : (
               <iframe
                 width="100%"

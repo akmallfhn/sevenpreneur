@@ -51,11 +51,19 @@ export default async function LearningsDetailsPageLMS({
       }
       sessionUserRole={userData.role_id}
       learningSessionName={learningDetails.name}
+      learningSessionDescription={learningDetails.description}
       learningSessionDate={learningDetails.meeting_date}
       learningSessionMethod={learningDetails.method}
       learningSessionURL={learningDetails.meeting_url || ""}
       learningLocationURL={learningDetails.location_url || ""}
       learningLocationName={learningDetails.location_name || ""}
+      learningEducatorName={
+        learningDetails.speaker?.full_name || "Sevenpreneur Educator"
+      }
+      learningEducatorAvatar={
+        learningDetails.speaker?.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+      }
     />
   );
 }

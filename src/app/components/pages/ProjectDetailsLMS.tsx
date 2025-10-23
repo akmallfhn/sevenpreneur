@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getFileVariantFromURL } from "@/lib/file-variants";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import dayjs from "dayjs";
@@ -98,7 +97,7 @@ export default function ProjectDetailsLMS({
     } else {
       setDeadlineStatus(`Overdue ${formatted || "less than an hour"}`);
     }
-  });
+  }, [deadlineAt, now]);
 
   // Update Submission Time
   useEffect(() => {
@@ -127,7 +126,7 @@ export default function ProjectDetailsLMS({
         `Assignment was submitted ${formatted || "less than an hour"} late`
       );
     }
-  }, [submissionCreatedAt]);
+  }, [submissionCreatedAt, submittedAt, deadlineAt]);
 
   const handleDelete = async () => {
     if (!submissionId) return;
@@ -182,7 +181,6 @@ export default function ProjectDetailsLMS({
                 <FileItemLMS
                   fileName="Guideline Document"
                   fileURL={projectDocumentURL}
-                  variants={getFileVariantFromURL(projectDocumentURL)}
                 />
               )}
             </div>
@@ -211,7 +209,6 @@ export default function ProjectDetailsLMS({
                     <FileItemLMS
                       fileName="Project Document"
                       fileURL={submissionDocumentURL}
-                      variants={getFileVariantFromURL(submissionDocumentURL)}
                     />
                   </div>
                   {!isOverdue && !isOpenEditForm && (

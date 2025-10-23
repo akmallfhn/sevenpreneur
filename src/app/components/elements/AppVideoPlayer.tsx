@@ -5,13 +5,9 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface AppVideoPlayerProps {
   videoId: string;
-  videoImage: string;
 }
 
-export default function AppVideoPlayer({
-  videoId,
-  videoImage,
-}: AppVideoPlayerProps) {
+export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
   const [signedToken, setSignedToken] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(false);

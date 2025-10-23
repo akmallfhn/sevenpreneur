@@ -4,9 +4,7 @@ import LearningSessionItemLMS from "../items/LearningSessionItemLMS";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import EmptyItemLMS from "../state/EmptyItemLMS";
 import FileItemLMS from "../items/FileItemLMS";
-import { getFileVariantFromURL } from "@/lib/file-variants";
 import UserItemLMS from "../items/UserItemLMS";
-import { Project } from "@prisma/client";
 import ProjectItemLMS from "../items/ProjectItemLMS";
 
 export interface LearningSessionEducator {
@@ -140,7 +138,6 @@ export default function CohortDetailsTabsLMS({
                   key={index}
                   fileName={post.name}
                   fileURL={post.document_url}
-                  variants={getFileVariantFromURL(post.document_url)}
                 />
               ))}
           </div>

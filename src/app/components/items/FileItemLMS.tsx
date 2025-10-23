@@ -1,21 +1,17 @@
 "use client";
-import { FileVariant } from "@/lib/app-types";
-import { getFileIconAndType } from "@/lib/file-variants";
+import { getFileIconAndType, getFileVariantFromURL } from "@/lib/file-variants";
 import Image from "next/image";
 import Link from "next/link";
 
 interface FileItemLMSProps {
   fileName: string;
   fileURL: string;
-  variants: FileVariant;
 }
 
-export default function FileItemLMS({
-  fileName,
-  fileURL,
-  variants,
-}: FileItemLMSProps) {
-  const { fileIcon, fileType } = getFileIconAndType(variants);
+export default function FileItemLMS({ fileName, fileURL }: FileItemLMSProps) {
+  const fileVariant = getFileVariantFromURL(fileURL);
+  const { fileIcon, fileType } = getFileIconAndType(fileVariant);
+
   return (
     <Link
       href={fileURL}
