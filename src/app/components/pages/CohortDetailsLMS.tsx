@@ -6,7 +6,7 @@ import CohortDetailsTabsLMS, {
   ProjectList,
   UserList,
 } from "../tabs/CohortDetailsTabsLMS";
-import HeaderCohortDetailsLMS from "../navigations/HeaderCohortDetailsLMS";
+import HeroCohortDetailsLMS from "../templates/HeroCohortDetailsLMS";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
@@ -33,7 +33,7 @@ export default function CohortDetailsLMS({
 }: CohortDetailsLMSProps) {
   return (
     <div className="root-page hidden w-full h-full gap-7 items-center justify-center pb-8 lg:flex lg:flex-col lg:pl-64">
-      <HeaderCohortDetailsLMS
+      <HeroCohortDetailsLMS
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}

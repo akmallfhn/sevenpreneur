@@ -35,10 +35,20 @@ export default async function LearningsDetailsPageLMS({
     return notFound();
   }
 
+  if (!learningDetailsRaw) {
+    return notFound();
+  }
+
   const learningDetails = {
     ...learningDetailsRaw,
     meeting_date: learningDetailsRaw.meeting_date.toISOString(),
   };
+
+  const materialList = (
+    await trpc.list.materials({
+      learning_id: learningDetails.id,
+    })
+  ).list;
 
   return (
     <LearningDetailsLMS
@@ -64,6 +74,7 @@ export default async function LearningsDetailsPageLMS({
         learningDetails.speaker?.avatar ||
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
+      materialList={materialList}
     />
   );
 }

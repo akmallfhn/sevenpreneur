@@ -5,19 +5,19 @@ import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppDropdown from "../elements/AppDropdown";
 import Link from "next/link";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import { Blocks, Compass, Slash, Wallet } from "lucide-react";
-import AppBreadcrumb from "./AppBreadcrumb";
-import AppBreadcrumbItem from "./AppBreadcrumbItem";
+import { Blocks, Compass, Wallet } from "lucide-react";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
-interface HeaderCohortDetailsLMSProps extends AvatarBadgeLMSProps {
+interface HeroCohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
 }
 
-export default function HeaderCohortDetailsLMS({
+export default function HeroCohortDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
-}: HeaderCohortDetailsLMSProps) {
+}: HeroCohortDetailsLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
