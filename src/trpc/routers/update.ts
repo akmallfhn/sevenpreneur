@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { updateEvent } from "./event/update.event";
 import { updateLMS } from "./lms/update.lms";
 import { updatePlaylist } from "./playlist/update.playlist";
+import { updateTemplate } from "./templates/templates";
 import { updateTicker } from "./ticker/update.ticker";
 import { updateTransaction } from "./transaction/update.transaction";
 import { updateUserData } from "./userdata/update.userdata";
@@ -32,6 +33,10 @@ export const updateRouter = createTRPCRouter({
 
   event: updateEvent.event,
   eventPrice: updateEvent.eventPrice,
+
+  // Template-related //
+
+  template: updateTemplate.template,
 
   // Transaction-related //
 

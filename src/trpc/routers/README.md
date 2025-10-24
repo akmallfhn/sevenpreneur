@@ -338,12 +338,17 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Templates 📊
 
-| Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.templates` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.template` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `list.templates`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.template`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.template` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| `delete.template` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
 **Scopes:**
 
+- Only Administrators have write access to all templates' data.
 - Administrators, Educators, and Class Managers can see all templates.
 - General Users can see all templates if the user is in the enrolled list.
 
