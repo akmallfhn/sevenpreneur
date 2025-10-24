@@ -33,7 +33,7 @@ export default function PlaylistsLMS({
       />
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
         {playlists.length > 0 && (
-          <div className="grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
             {playlists.map((post, index) => (
               <PlaylistItemLMS
                 key={index}

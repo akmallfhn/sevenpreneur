@@ -3,7 +3,6 @@ import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
 export default async function CohortsPageLMS() {
-  // Get Token for Header Navbar
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
@@ -12,7 +11,6 @@ export default async function CohortsPageLMS() {
     setSessionToken(sessionToken);
   }
 
-  // Fetch tRPC
   const userData = (await trpc.auth.checkSession()).user;
   const enrolledCohortData = (await trpc.list.enrolledCohorts({})).list;
 

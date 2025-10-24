@@ -52,7 +52,7 @@ export default function CohortItemCardLMS({
     <React.Fragment>
       <Link
         href={`/cohorts/${cohortId}`}
-        className="card-container flex flex-col w-full p-3 gap-2 bg-white border border-outline/40 rounded-lg overflow-hidden transition transform active:scale-95"
+        className="cohort-container flex flex-col w-full p-3 gap-2 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
       >
         <div className="cohort-image relative flex w-full aspect-thumbnail rounded-md overflow-hidden">
           <Image
@@ -66,7 +66,7 @@ export default function CohortItemCardLMS({
             {scheduleStatus}
           </p>
         </div>
-        <div className="metadata relative flex flex-col gap-2 h-[112px]">
+        <div className="cohort-attributes relative flex flex-col gap-2 h-[112px]">
           <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2 xl:text-lg">
             {cohortName}
           </h3>
