@@ -1,4 +1,8 @@
-import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
+import {
+  STATUS_FORBIDDEN,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { numberIsID, objectHasOnlyID } from "@/trpc/utils/validation";
@@ -161,6 +165,24 @@ export const readLMS = {
     });
     if (!theLearning) {
       throw readFailedNotFound("learning");
+    }
+    if (opts.ctx.user.role.name == "General User") {
+      const theEnrolledCohort = await isEnrolledCohort(
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        theLearning.cohort_id,
+        "You're not allowed to read learnings of a cohort which you aren't enrolled."
+      );
+      if (
+        theLearning.price_id != null &&
+        theLearning.price_id != theEnrolledCohort.cohort_price_id
+      ) {
+        throw new TRPCError({
+          code: STATUS_FORBIDDEN,
+          message:
+            "You're not allowed to read this special learning which you aren't paid.",
+        });
+      }
     }
     return {
       code: STATUS_OK,
