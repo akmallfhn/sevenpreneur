@@ -1,59 +1,103 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import VideoCoursePlaylistLMS from "../indexes/VideoCoursePlaylistLMS";
-import { VideoItem } from "../indexes/VideoCoursePlaylistSVP";
-import SectionTitleSVP from "../titles/SectionTitleSVP";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
+import HeroPlaylistDetailsLMS from "../templates/HeroPlaylistDetailsLMS";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import VideoListItemLMS from "../items/VideoListItemLMS";
+import { StatusType } from "@/lib/app-types";
 
-interface PlaylistDetailsLMSProps {
+export interface VideoItem {
+  id: number;
+  name: string;
+  image_url: string;
+  duration: number;
+  video_url?: string;
+  external_video_id: string;
+  // status: StatusType;
+}
+
+interface PlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
+  sessionUserRole: number;
+  playlistId: number;
   playlistVideos: VideoItem[];
 }
 
 export default function PlaylistDetailsLMS({
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
+  playlistId,
   playlistVideos,
 }: PlaylistDetailsLMSProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const videoIdParams = searchParams.get("videoId");
   const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
   const [isLoadingVideo, setIsLoadingVideo] = useState<number | null>(null);
-  const videoIdParams = searchParams.get("videoId");
 
-  // --- Handle Sync URL param to selectedVideoId
+  const activeVideos = playlistVideos;
+
+  // Handle Sync URL param to selectedVideoId
   useEffect(() => {
     if (videoIdParams) {
-      const parsed = parseInt(videoIdParams);
-      if (!isNaN(parsed)) {
-        setSelectedVideoId(parsed);
-      }
-    }
-  }, [videoIdParams]);
+      const videoId = parseInt(videoIdParams);
 
-  // --- Get Data from selected Video ID
+      // if not number, then delete param
+      if (isNaN(videoId)) {
+        router.replace(`/playlists/${playlistId}`, { scroll: false });
+        return;
+      }
+
+      // if id not exist, then delete param
+      const exists = activeVideos.some((video) => Number(video.id) === videoId);
+      if (!exists) {
+        router.replace(`/playlists/${playlistId}`, { scroll: false });
+        return;
+      }
+
+      // if valid, update to state
+      setSelectedVideoId(videoId);
+    } else {
+      setSelectedVideoId(null);
+    }
+  }, [videoIdParams, activeVideos, playlistId, router]);
+
+  // Get Data from selected Video ID
   const selectedVideoData = useMemo(() => {
-    return playlistVideos.find(
+    return activeVideos.find(
       (item) => Number(item.id) === Number(selectedVideoId)
     );
-  }, [selectedVideoId, playlistVideos]);
+  }, [selectedVideoId, activeVideos]);
 
-  // --- Handle Query Params Video ID
+  // Handle Query Params Video ID
   const handleParamsQuery = (videoId: number) => {
     if (videoId !== selectedVideoId) {
       setSelectedVideoId(videoId);
       setIsLoadingVideo(videoId);
-      router.push(`?videoId=${videoId}`);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      const params = new URLSearchParams(searchParams);
+      params.set("videoId", videoId.toString());
+      router.replace(`/playlists/${playlistId}?${params.toString()}`, {
+        scroll: false,
+      });
     }
   };
+
   useEffect(() => {
     setIsLoadingVideo(null);
-  }, [searchParams]);
+  }, [selectedVideoId]);
 
   return (
-    <div className="hidden lg:flex w-full h-full items-center justify-center">
-      <div className="flex flex-col gap-5 pb-24 lg:pt-8 lg:pl-64 lg:max-w-[calc(100%-4rem)] w-full">
-        <div className="flex flex-col w-full gap-4 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px] lg:text-lg">
-          <div className="relative w-full h-auto aspect-video overflow-hidden md:rounded-md lg:max-w-[768px]">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
+      <HeroPlaylistDetailsLMS
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
+        sessionUserRole={sessionUserRole}
+      />
+      <div className="body-playlist max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
+        <main className="main flex flex-col flex-2 w-full gap-4">
+          <div className="video-player relative w-full aspect-video bg-[#E1E5EF] rounded-lg overflow-hidden">
             {selectedVideoData ? (
               <AppVideoPlayer videoId={selectedVideoData.external_video_id} />
             ) : (
@@ -69,20 +113,33 @@ export default function PlaylistDetailsLMS({
               ></iframe>
             )}
           </div>
-          <h1 className="font-brand font-bold w-full text-sm px-5 lg:px-0 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px] lg:text-lg">
+          <h1 className="video-name font-bodycopy font-bold w-full text-xl">
             {selectedVideoData
               ? selectedVideoData.name
-              : "RE:START Conference 2025"}
+              : "Teaser RE:START Conference 2025"}
           </h1>
-        </div>
-        <div className="other-video flex flex-col gap-3 px-5 lg:px-0 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
-          <SectionTitleSVP sectionTitle="Other Video" />
-          <VideoCoursePlaylistLMS
-            playlistVideos={playlistVideos}
-            onClick={handleParamsQuery}
-            isLoading={isLoadingVideo}
-          />
-        </div>
+          <p></p>
+        </main>
+        <aside className="aside flex flex-col flex-1 w-full gap-3">
+          <div className="flex flex-col bg-white border p-4 gap-3 rounded-lg">
+            <h2 className="section-title font-bodycopy font-bold">
+              Playlist Videos
+            </h2>
+            <div className="playlist-video flex flex-col w-full gap-3">
+              {activeVideos.map((post, index) => (
+                <VideoListItemLMS
+                  key={index}
+                  videoEpisode={index + 1}
+                  videoName={post.name}
+                  videoImage={post.image_url}
+                  videoDuration={post.duration}
+                  onClick={() => handleParamsQuery(post.id)}
+                  isLoading={isLoadingVideo === post.id}
+                />
+              ))}
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );

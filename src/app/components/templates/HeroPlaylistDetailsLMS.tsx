@@ -9,15 +9,15 @@ import { Blocks, Compass, Wallet } from "lucide-react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
-interface HeroCohortDetailsLMSProps extends AvatarBadgeLMSProps {
+interface HeroPlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
 }
 
-export default function HeroCohortDetailsLMS({
+export default function HeroPlaylistDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
-}: HeroCohortDetailsLMSProps) {
+}: HeroPlaylistDetailsLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -52,13 +52,13 @@ export default function HeroCohortDetailsLMS({
   }
 
   return (
-    <div className="hero-cohort relative flex w-full aspect-[1626/494] overflow-hidden">
+    <div className="hero-playlist relative flex w-full aspect-[1626/494] overflow-hidden">
       <Image
         className="object-cover w-full h-full"
         src={
-          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/banner-sbbp-batch7.webp"
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/hero-restart-vod.webp"
         }
-        alt="Hero Banner Cohort"
+        alt="Hero Banner Playlist"
         fill
       />
       <div className="overlay-top absolute inset-0 bg-linear-to-b from-0% from-black to-40% to-transparent z-10" />
@@ -68,8 +68,8 @@ export default function HeroCohortDetailsLMS({
         <div className="hero-breadcrumb flex items-center gap-4">
           <AppBreadcrumb className="text-white">
             <p className="slash font-bodycopy">/</p>
-            <AppBreadcrumbItem href="/cohorts">
-              Bootcamp Programs
+            <AppBreadcrumbItem href="/playlists">
+              Learning Series
             </AppBreadcrumbItem>
           </AppBreadcrumb>
         </div>

@@ -62,7 +62,7 @@ export default function LearningDetailsLMS({
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}
         headerTitle="Learning Session"
-        headerDescription="Test your knowledge and skills by completing the assignment below."
+        headerDescription="Everything you need for your session. Learn, watch, and discuss in one place."
       />
       <div className="body-learning max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         <HeroLearningDetailsLMS

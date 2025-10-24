@@ -1,4 +1,5 @@
 "use client";
+import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import CohortItemCardLMS from "../items/CohortItemCardLMS";
 import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
@@ -10,6 +11,7 @@ interface CohortList {
   image: string;
   start_date: string;
   end_date: string;
+  status: StatusType;
 }
 
 interface CohortListLMSProps extends AvatarBadgeLMSProps {
@@ -23,6 +25,10 @@ export default function CohortListLMS({
   sessionUserRole,
   cohortList,
 }: CohortListLMSProps) {
+  const activeCohorts = cohortList.filter(
+    (cohort) => cohort.status === "ACTIVE"
+  );
+
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
       <HeaderNavbarLMS
@@ -33,9 +39,9 @@ export default function CohortListLMS({
         sessionUserAvatar={sessionUserAvatar}
       />
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
-        {cohortList.length > 0 && (
+        {activeCohorts.length > 0 ? (
           <div className="cohort-list grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
-            {cohortList.map((post, index) => (
+            {activeCohorts.map((post, index) => (
               <CohortItemCardLMS
                 key={index}
                 cohortId={post.id}
@@ -46,8 +52,7 @@ export default function CohortListLMS({
               />
             ))}
           </div>
-        )}
-        {cohortList.length < 1 && (
+        ) : (
           <EmptyListLMS
             stateTitle="No Program Purchased Yet"
             stateDescription="Looks like you haven’t bought any bootcamp programs. Explore our collections

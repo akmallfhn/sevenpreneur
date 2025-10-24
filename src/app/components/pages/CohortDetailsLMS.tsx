@@ -41,25 +41,23 @@ export default function CohortDetailsLMS({
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}
       />
-      <div className="body-cohort max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 rounded-xl">
-        <div className="flex justify-between gap-4">
-          <main className="main flex flex-col flex-[2.5] w-full">
-            <CohortDetailsTabsLMS
-              sessionUserId={sessionUserId}
-              cohortId={cohortId}
-              learningList={learningList}
-              moduleList={moduleList}
-              projectList={projectList}
-              userList={userList}
-            />
-          </main>
-          <aside className="aside relative flex flex-col flex-1 w-full gap-4">
-            <div className="sticky top-4 flex flex-col w-full gap-4">
-              <AttendanceProgressBarLMS />
-              <NearestScheduleCardLMS learningList={learningList} />
-            </div>
-          </aside>
-        </div>
+      <div className="body-cohort max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
+        <main className="main flex flex-col flex-[2.5] w-full">
+          <CohortDetailsTabsLMS
+            sessionUserId={sessionUserId}
+            cohortId={cohortId}
+            learningList={learningList}
+            moduleList={moduleList}
+            projectList={projectList}
+            userList={userList}
+          />
+        </main>
+        <aside className="aside relative flex flex-col flex-1 w-full gap-4">
+          <div className="sticky top-4 flex flex-col w-full gap-4">
+            <AttendanceProgressBarLMS />
+            <NearestScheduleCardLMS learningList={learningList} />
+          </div>
+        </aside>
       </div>
     </div>
   );
