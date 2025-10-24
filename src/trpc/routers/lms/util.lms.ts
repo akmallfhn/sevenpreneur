@@ -20,6 +20,7 @@ export async function isEnrolledCohort(
       message: error_message,
     });
   }
+  return theEnrolledCohort;
 }
 
 export async function isEnrolledLearning(

@@ -287,9 +287,25 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
+      let whereOr: { price_id: any }[] | undefined = undefined;
+      if (opts.ctx.user.role.name == "General User") {
+        const theEnrolledCohort = await isEnrolledCohort(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          opts.input.cohort_id,
+          "You're not allowed to read learnings of a cohort which you aren't enrolled."
+        );
+        whereOr = [
+          { price_id: null },
+          { price_id: theEnrolledCohort.cohort_price_id },
+        ];
+      }
       const learningsList = await opts.ctx.prisma.learning.findMany({
         include: { speaker: true },
-        where: { cohort_id: opts.input.cohort_id },
+        where: {
+          cohort_id: opts.input.cohort_id,
+          OR: whereOr,
+        },
         orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
       });
       const returnedList = learningsList.map((entry) => {
