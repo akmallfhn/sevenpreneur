@@ -1,4 +1,5 @@
 "use client";
+import { Progress } from "@/components/ui/progress";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import CohortDetailsTabsLMS, {
   LearningSessionList,
@@ -7,6 +8,8 @@ import CohortDetailsTabsLMS, {
   UserList,
 } from "../tabs/CohortDetailsTabsLMS";
 import HeroCohortDetailsLMS from "../templates/HeroCohortDetailsLMS";
+import AttendanceProgressBarLMS from "../items/AttendanceProgressBarLMS";
+import NearestScheduleCardLMS from "../items/NearestScheduleCardLMS";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
@@ -32,7 +35,7 @@ export default function CohortDetailsLMS({
   userList,
 }: CohortDetailsLMSProps) {
   return (
-    <div className="root-page hidden w-full h-full gap-7 items-center justify-center pb-8 lg:flex lg:flex-col lg:pl-64">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
       <HeroCohortDetailsLMS
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
@@ -50,9 +53,10 @@ export default function CohortDetailsLMS({
               userList={userList}
             />
           </main>
-          <aside className="aside relative flex flex-col flex-1 w-full">
-            <div className="present sticky top-7 w-full h-40 bg-white p-4 border rounded-lg">
-              <p className="font-bold font-bodycopy">Attendance</p>
+          <aside className="aside relative flex flex-col flex-1 w-full gap-4">
+            <div className="sticky top-4 flex flex-col w-full gap-4">
+              <AttendanceProgressBarLMS />
+              <NearestScheduleCardLMS learningList={learningList} />
             </div>
           </aside>
         </div>

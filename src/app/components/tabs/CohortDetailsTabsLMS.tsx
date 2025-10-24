@@ -20,6 +20,8 @@ export interface LearningSessionList {
   location_name: string | null;
   speaker: LearningSessionEducator | null;
   status: StatusType;
+  meeting_url: string | null;
+  location_url: string | null;
 }
 
 export interface ModuleList {
