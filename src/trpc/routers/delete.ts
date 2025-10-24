@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { deleteEvent } from "./event/delete.event";
 import { deleteLMS } from "./lms/delete.lms";
 import { deletePlaylist } from "./playlist/delete.playlist";
+import { deleteTemplate } from "./templates/templates";
 import { deleteTransaction } from "./transaction/delete.transaction";
 import { deleteUserData } from "./userdata/delete.userdata";
 
@@ -32,6 +33,10 @@ export const deleteRouter = createTRPCRouter({
 
   event: deleteEvent.event,
   eventPrice: deleteEvent.eventPrice,
+
+  // Template-related //
+
+  template: deleteTemplate.template,
 
   // Transaction-related //
 
