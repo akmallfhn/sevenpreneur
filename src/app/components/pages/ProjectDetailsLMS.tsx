@@ -18,6 +18,7 @@ import EditSubmissionFormLMS, {
   InitialData,
 } from "../forms/EditSubmissionFormLMS";
 import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
+import Image from "next/image";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -243,7 +244,7 @@ export default function ProjectDetailsLMS({
               )}
             </div>
           </main>
-          <aside className="w-full flex flex-col flex-1">
+          <aside className="aside-contents w-full flex flex-col flex-1 gap-4">
             <div className="submission-attributes flex flex-col w-full p-4 bg-white border gap-3 rounded-lg">
               <div className="submission-status flex gap-1">
                 <div
@@ -287,6 +288,38 @@ export default function ProjectDetailsLMS({
                   </p>
                 </div>
               </div>
+            </div>
+            <div className="submission-comment flex flex-col w-full p-4 bg-white border gap-3 rounded-lg">
+              <h3 className="section-name font-bodycopy font-bold text-[15px]">
+                Feedback from us
+              </h3>
+              {submissionComment ? (
+                <div className="comment-container flex flex-col-reverse gap-2">
+                  <div className="comment-author flex items-center gap-2">
+                    <div className="comment-author-image w-6 aspect-square rounded-full overflow-hidden">
+                      <Image
+                        className="object-cover w-full h-full"
+                        src={
+                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square.svg"
+                        }
+                        alt="Comment Author"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                    <p className="font-semibold font-bodycopy text-sm">
+                      Sevenpreneur Team
+                    </p>
+                  </div>
+                  <p className="text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
+                    {submissionComment}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
+                  Feedback will show up here once it’s ready!
+                </p>
+              )}
             </div>
           </aside>
         </div>

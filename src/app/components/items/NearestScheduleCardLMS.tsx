@@ -16,9 +16,17 @@ interface NearestScheduleCardLMSProps {
 export default function NearestScheduleCardLMS({
   learningList,
 }: NearestScheduleCardLMSProps) {
+  const activeLearnings = learningList.filter(
+    (learning) => learning.status === "ACTIVE"
+  );
+
+  if (activeLearnings.length === 0) {
+    return;
+  }
+
   const now = dayjs().tz("Asia/Jakarta");
 
-  const upcomingSchedule = learningList
+  const upcomingSchedule = activeLearnings
     .filter((learning) =>
       dayjs(learning.meeting_date).add(2, "hour").isAfter(now)
     )
