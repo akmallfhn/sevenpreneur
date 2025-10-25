@@ -52,6 +52,7 @@ export const listTemplate = {
       return {
         id: entry.id,
         name: entry.name,
+        description: entry.description,
         image: entry.image,
         document_url: entry.document_url,
       };

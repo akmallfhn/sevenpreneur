@@ -8,6 +8,7 @@ import EmptyListLMS from "../state/EmptyListLMS";
 interface TemplateList {
   id: number;
   name: string;
+  description?: string | null;
   image: string;
   document_url: string;
   // status: StatusType;
@@ -44,6 +45,7 @@ export default function TemplateListLMS({
                 <TemplateItemCardLMS
                   key={index}
                   templateName={post.name}
+                  templateTags={post.description ?? ""}
                   templateImage={post.image}
                   templateURL={post.document_url}
                 />
