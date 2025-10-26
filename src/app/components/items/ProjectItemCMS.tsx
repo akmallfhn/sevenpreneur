@@ -64,7 +64,7 @@ export default function ProjectItemCMS({
     };
   }, []);
 
-  // --- Function to delete project
+  // Function to delete project
   const deleteProject = trpc.delete.project.useMutation();
   const handleDelete = () => {
     deleteProject.mutate(

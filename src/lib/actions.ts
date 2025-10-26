@@ -371,3 +371,51 @@ export async function DiscussionReplyList({
     list: discussionReplies,
   };
 }
+
+// DELETE DISCUSSION STARTER
+interface DeleteDiscussionStarterProps {
+  discussionStarterId: number;
+}
+export async function DeleteDiscussionStarter({
+  discussionStarterId,
+}: DeleteDiscussionStarterProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const deleteDiscussionStarter = await trpc.delete.discussionStarter({
+    id: discussionStarterId,
+  });
+
+  return {
+    code: deleteDiscussionStarter.code,
+    message: deleteDiscussionStarter.message,
+  };
+}
+
+// DELETE DISCUSSION REPLY
+interface DeleteDiscussionReplyProps {
+  discussionReplyId: number;
+}
+export async function DeleteDiscussionReply({
+  discussionReplyId,
+}: DeleteDiscussionReplyProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const deleteDiscussionReply = await trpc.delete.discussionReply({
+    id: discussionReplyId,
+  });
+
+  return {
+    code: deleteDiscussionReply.code,
+    message: deleteDiscussionReply.message,
+  };
+}

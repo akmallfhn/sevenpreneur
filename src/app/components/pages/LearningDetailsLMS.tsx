@@ -8,6 +8,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import HeroLearningDetailsLMS from "../templates/HeroLearningDetailsLMS";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import AppDiscussionStarterItem from "../items/AppDiscussionStarterItem";
+import { useEffect, useState } from "react";
 
 export interface MaterialList {
   name: string;
@@ -64,9 +65,23 @@ export default function LearningDetailsLMS({
   materialList,
   discussionStarterList,
 }: LearningDetailsLMSProps) {
+  const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
+
   const activeMaterials = materialList.filter(
     (material) => material.status === "ACTIVE"
   );
+
+  // Update list discussion to state
+  useEffect(() => {
+    setDiscussion(discussionStarterList);
+  }, [discussionStarterList]);
+
+  // Remove deleted discussion on state
+  const handleDiscussionDeleted = (discussionId: number) => {
+    setDiscussion((prevDiscussions) =>
+      prevDiscussions.filter((discussion) => discussion.id !== discussionId)
+    );
+  };
 
   return (
     <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
@@ -112,7 +127,7 @@ export default function LearningDetailsLMS({
                 Discussions
               </h3>
               <div className="discussions-list flex flex-col gap-4">
-                {discussionStarterList.map((post, index) => (
+                {discussion.map((post, index) => (
                   <AppDiscussionStarterItem
                     key={index}
                     sessionUserId={sessionUserId}
@@ -127,6 +142,7 @@ export default function LearningDetailsLMS({
                     discussionMessage={post.message}
                     discussionReplies={post.reply_count}
                     discussionCreatedAt={post.created_at}
+                    onDiscussionDeleted={handleDiscussionDeleted}
                   />
                 ))}
               </div>
