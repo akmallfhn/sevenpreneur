@@ -44,16 +44,23 @@ export default async function LearningsDetailsPageLMS({
     meeting_date: learningDetailsRaw.meeting_date.toISOString(),
   };
 
-  const materialList = (
-    await trpc.list.materials({
-      learning_id: learningDetails.id,
-    })
-  ).list;
+  const [materialListRes, discussionStarterListRes] = await Promise.all([
+    trpc.list.materials({ learning_id: learningDetails.id }),
+    trpc.list.discussionStarters({ learning_id: learningDetails.id }),
+  ]);
+
+  const materialList = materialListRes.list;
+  const discussionStarterList = discussionStarterListRes.list.map((item) => ({
+    ...item,
+    created_at: item.created_at.toISOString(),
+    updated_at: item.updated_at.toISOString(),
+  }));
 
   return (
     <LearningDetailsLMS
       cohortId={cohortId}
       cohortName={"Sevenpreneur Business Blueprint Program Batch 7"}
+      sessionUserId={userData.id}
       sessionUserName={userData.full_name}
       sessionUserAvatar={
         userData.avatar ||
@@ -76,6 +83,7 @@ export default async function LearningsDetailsPageLMS({
       }
       learningVideoRecording={learningDetails.recording_url || ""}
       materialList={materialList}
+      discussionStarterList={discussionStarterList}
     />
   );
 }

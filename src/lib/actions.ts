@@ -340,3 +340,34 @@ export async function DeleteSubmission({
     message: deleteSubmission.message,
   };
 }
+
+// LIST DISCUSSION REPLIES
+interface DiscussionReplyListProps {
+  discussionStarterId: number;
+}
+export async function DiscussionReplyList({
+  discussionStarterId,
+}: DiscussionReplyListProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const discussionRepliesRes = await trpc.list.discussionReplies({
+    starter_id: discussionStarterId,
+  });
+
+  const discussionReplies = discussionRepliesRes.list.map((item) => ({
+    ...item,
+    created_at: item.created_at.toISOString(),
+    updated_at: item.updated_at.toISOString(),
+  }));
+
+  return {
+    code: discussionRepliesRes.code,
+    message: discussionRepliesRes.message,
+    list: discussionReplies,
+  };
+}

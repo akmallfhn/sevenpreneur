@@ -307,11 +307,11 @@ export default function ProjectDetailsLMS({
                         height={200}
                       />
                     </div>
-                    <p className="font-semibold font-bodycopy text-sm">
+                    <p className="comment-author-name font-semibold font-bodycopy text-sm">
                       Sevenpreneur Team
                     </p>
                   </div>
-                  <p className="text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
+                  <p className="comment text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
                     {submissionComment}
                   </p>
                 </div>

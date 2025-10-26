@@ -7,6 +7,7 @@ import AppVideoPlayer from "../elements/AppVideoPlayer";
 import FileItemLMS from "../items/FileItemLMS";
 import HeroLearningDetailsLMS from "../templates/HeroLearningDetailsLMS";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
+import AppDiscussionStarterItem from "../items/AppDiscussionStarterItem";
 
 export interface MaterialList {
   name: string;
@@ -14,9 +15,20 @@ export interface MaterialList {
   status: StatusType;
 }
 
+export interface DiscussionStarterList {
+  id: number;
+  full_name: string;
+  avatar: string | null;
+  message: string;
+  reply_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
 interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   cohortId: number;
   cohortName: string;
+  sessionUserId: string;
   sessionUserRole: number;
   learningSessionName: string;
   learningSessionDescription: string;
@@ -29,11 +41,13 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningEducatorAvatar: string;
   learningVideoRecording: string;
   materialList: MaterialList[];
+  discussionStarterList: DiscussionStarterList[];
 }
 
 export default function LearningDetailsLMS({
   cohortId,
   cohortName,
+  sessionUserId,
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
@@ -48,6 +62,7 @@ export default function LearningDetailsLMS({
   learningEducatorAvatar,
   learningVideoRecording,
   materialList,
+  discussionStarterList,
 }: LearningDetailsLMSProps) {
   const activeMaterials = materialList.filter(
     (material) => material.status === "ACTIVE"
@@ -90,6 +105,30 @@ export default function LearningDetailsLMS({
               {/* {!learningVideoRecording && <EmptyRecordingLMS />} */}
               <div className="video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
                 <AppVideoPlayer videoId={"d929af5a12b4d3fbe74215e9678b1b58"} />
+              </div>
+            </div>
+            <div className="learning-discussions flex flex-col gap-3 bg-white p-4 border rounded-lg">
+              <h3 className="section-title font-bold font-bodycopy">
+                Discussions
+              </h3>
+              <div className="discussions-list flex flex-col gap-4">
+                {discussionStarterList.map((post, index) => (
+                  <AppDiscussionStarterItem
+                    key={index}
+                    sessionUserId={sessionUserId}
+                    sessionUserRole={sessionUserRole}
+                    discussionId={post.id}
+                    // discussionAuthorId={post.user_id}
+                    discussionAuthorName={post.full_name}
+                    discussionAuthorAvatar={
+                      post.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                    }
+                    discussionMessage={post.message}
+                    discussionReplies={post.reply_count}
+                    discussionCreatedAt={post.created_at}
+                  />
+                ))}
               </div>
             </div>
           </main>
