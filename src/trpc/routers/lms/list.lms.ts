@@ -428,9 +428,11 @@ export const listLMS = {
           orderBy: [{ created_at: "desc" }],
         });
       const returnedList = discussionStartersList.map((entry) => {
+        const isOwner = entry.user_id === opts.ctx.user.id;
         return {
           id: entry.id,
           learning_id: entry.learning_id,
+          is_owner: isOwner,
           full_name: entry.user.full_name,
           avatar: entry.user.avatar,
           message: entry.message,
@@ -485,9 +487,11 @@ export const listLMS = {
           orderBy: [{ created_at: "desc" }],
         });
       const returnedList = discussionRepliesList.map((entry) => {
+        const isOwner = entry.user_id === opts.ctx.user.id;
         return {
           id: entry.id,
           starter_id: entry.starter_id,
+          is_owner: isOwner,
           full_name: entry.user.full_name,
           avatar: entry.user.avatar,
           message: entry.message,
