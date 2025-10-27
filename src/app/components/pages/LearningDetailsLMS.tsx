@@ -9,6 +9,7 @@ import HeroLearningDetailsLMS from "../templates/HeroLearningDetailsLMS";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import AppDiscussionStarterItem from "../items/AppDiscussionStarterItem";
 import { useEffect, useState } from "react";
+import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
 
 export interface MaterialList {
   name: string;
@@ -24,6 +25,7 @@ export interface DiscussionStarterList {
   reply_count: number;
   created_at: string;
   updated_at: string;
+  is_owner: boolean;
 }
 
 interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
@@ -126,26 +128,30 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 Discussions
               </h3>
-              <div className="discussions-list flex flex-col gap-4">
-                {discussion.map((post, index) => (
-                  <AppDiscussionStarterItem
-                    key={index}
-                    sessionUserId={sessionUserId}
-                    sessionUserRole={sessionUserRole}
-                    discussionId={post.id}
-                    // discussionAuthorId={post.user_id}
-                    discussionAuthorName={post.full_name}
-                    discussionAuthorAvatar={
-                      post.avatar ||
-                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                    }
-                    discussionMessage={post.message}
-                    discussionReplies={post.reply_count}
-                    discussionCreatedAt={post.created_at}
-                    onDiscussionDeleted={handleDiscussionDeleted}
-                  />
-                ))}
-              </div>
+              {discussion.length > 0 ? (
+                <div className="discussions-list flex flex-col gap-4">
+                  {discussion.map((post, index) => (
+                    <AppDiscussionStarterItem
+                      key={index}
+                      sessionUserId={sessionUserId}
+                      discussionId={post.id}
+                      // discussionAuthorId={post.user_id}
+                      discussionAuthorName={post.full_name}
+                      discussionAuthorAvatar={
+                        post.avatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                      }
+                      discussionMessage={post.message}
+                      discussionReplies={post.reply_count}
+                      discussionCreatedAt={post.created_at}
+                      discussionOwner={post.is_owner}
+                      onDiscussionDeleted={handleDiscussionDeleted}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyDiscussionLMS />
+              )}
             </div>
           </main>
           <aside className="w-full flex flex-col flex-1 gap-4">

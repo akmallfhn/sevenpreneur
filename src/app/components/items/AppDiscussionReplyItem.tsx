@@ -12,33 +12,30 @@ dayjs.extend(relativeTime);
 
 interface AppDiscussionReplyItemProps {
   sessionUserId: string;
-  sessionUserRole: number;
   replyId: number;
   replyAuthorId?: string;
   replyAuthorName: string;
   replyAuthorAvatar: string;
   replyMessage: string;
   replyCreatedAt: string;
+  replyOwner: boolean;
   onReplyDeleted: (replyId: number) => void;
 }
 
 export default function AppDiscussionReplyItem({
   sessionUserId,
-  sessionUserRole,
   replyId,
   replyAuthorId,
   replyAuthorName,
   replyAuthorAvatar,
   replyMessage,
   replyCreatedAt,
+  replyOwner,
   onReplyDeleted,
 }: AppDiscussionReplyItemProps) {
   const router = useRouter();
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
-
-  const isAdministrator = sessionUserRole === 0;
-  const isOwner = sessionUserId;
 
   const handleDelete = async () => {
     if (!replyId) return;
@@ -97,7 +94,7 @@ export default function AppDiscussionReplyItem({
             <p className="font-semibold text-primary hover:cursor-pointer ">
               Reply
             </p>
-            {isAdministrator && (
+            {replyOwner && (
               <p
                 className="font-semibold text-destructive hover:cursor-pointer"
                 onClick={() => setIsOpenDeleteConfirmation(true)}

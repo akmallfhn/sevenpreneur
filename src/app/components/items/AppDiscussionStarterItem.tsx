@@ -5,11 +5,10 @@ import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import React, { useState } from "react";
 import { DeleteDiscussionStarter, DiscussionReplyList } from "@/lib/actions";
-import AppDiscussionReplyItem from "./AppDiscussionReplyItemL";
+import AppDiscussionReplyItem from "./AppDiscussionReplyItem";
 import { ChevronDown, Loader2 } from "lucide-react";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 dayjs.extend(relativeTime);
 
@@ -20,11 +19,11 @@ export interface DiscussionReplyList {
   message: string;
   created_at: string;
   updated_at: string;
+  is_owner: boolean;
 }
 
 interface AppDiscussionStarterItemProps {
   sessionUserId: string;
-  sessionUserRole: number;
   discussionId: number;
   discussionAuthorId?: string;
   discussionAuthorName: string;
@@ -32,12 +31,12 @@ interface AppDiscussionStarterItemProps {
   discussionMessage: string;
   discussionReplies: number;
   discussionCreatedAt: string;
+  discussionOwner: boolean;
   onDiscussionDeleted: (discussionId: number) => void;
 }
 
 export default function AppDiscussionStarterItem({
   sessionUserId,
-  sessionUserRole,
   discussionId,
   discussionAuthorId,
   discussionAuthorName,
@@ -45,6 +44,7 @@ export default function AppDiscussionStarterItem({
   discussionMessage,
   discussionReplies,
   discussionCreatedAt,
+  discussionOwner,
   onDiscussionDeleted,
 }: AppDiscussionStarterItemProps) {
   const [isOpenReplies, setIsOpenReplies] = useState(false);
@@ -53,9 +53,6 @@ export default function AppDiscussionStarterItem({
   const [replies, setReplies] = useState<DiscussionReplyList[]>([]);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
-
-  const isAdministrator = sessionUserRole === 0;
-  const isOwner = sessionUserId;
 
   const handleViewReplies = async () => {
     if (!isOpenReplies) {
@@ -151,7 +148,7 @@ export default function AppDiscussionStarterItem({
             <p className="font-semibold text-primary hover:cursor-pointer">
               Reply
             </p>
-            {isAdministrator && (
+            {discussionOwner && (
               <p
                 className="font-semibold text-destructive hover:cursor-pointer"
                 onClick={() => setIsOpenDeleteConfirmation(true)}
@@ -186,7 +183,6 @@ export default function AppDiscussionStarterItem({
                     <AppDiscussionReplyItem
                       key={index}
                       sessionUserId={sessionUserId}
-                      sessionUserRole={sessionUserRole}
                       replyId={post.id}
                       replyAuthorName={post.full_name}
                       replyAuthorAvatar={
@@ -195,6 +191,7 @@ export default function AppDiscussionStarterItem({
                       }
                       replyMessage={post.message}
                       replyCreatedAt={post.created_at}
+                      replyOwner={post.is_owner}
                       onReplyDeleted={handleReplyDeleted}
                     />
                   ))}
