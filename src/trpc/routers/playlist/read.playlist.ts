@@ -125,7 +125,7 @@ export const readPlaylist = {
     }),
 
   video: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       const checkVideo = await opts.ctx.prisma.video.findFirst({
         select: { playlist_id: true },
         where: { id: opts.input.id },

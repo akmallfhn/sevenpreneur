@@ -122,7 +122,7 @@ export const readLMS = {
     }),
 
   module: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       const checkModule = await opts.ctx.prisma.module.findFirst({
         select: { cohort_id: true },
         where: { id: opts.input.id },
@@ -166,7 +166,7 @@ export const readLMS = {
     if (!theLearning) {
       throw readFailedNotFound("learning");
     }
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       const theEnrolledCohort = await isEnrolledCohort(
         opts.ctx.prisma,
         opts.ctx.user.id,
@@ -174,8 +174,8 @@ export const readLMS = {
         "You're not allowed to read learnings of a cohort which you aren't enrolled."
       );
       if (
-        theLearning.price_id != null &&
-        theLearning.price_id != theEnrolledCohort.cohort_price_id
+        theLearning.price_id !== null &&
+        theLearning.price_id !== theEnrolledCohort.cohort_price_id
       ) {
         throw new TRPCError({
           code: STATUS_FORBIDDEN,
@@ -192,7 +192,7 @@ export const readLMS = {
   }),
 
   material: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       const checkMaterial = await opts.ctx.prisma.material.findFirst({
         select: { learning_id: true },
         where: { id: opts.input.id },
@@ -224,7 +224,7 @@ export const readLMS = {
   }),
 
   project: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       const checkProject = await opts.ctx.prisma.project.findFirst({
         select: { cohort_id: true },
         where: { id: opts.input.id },

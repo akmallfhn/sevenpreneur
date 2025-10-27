@@ -135,7 +135,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -252,7 +252,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -288,7 +288,7 @@ export const listLMS = {
     )
     .query(async (opts) => {
       let whereOr: { price_id: any }[] | undefined = undefined;
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         const theEnrolledCohort = await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -366,7 +366,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         await isEnrolledLearning(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -401,7 +401,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         await isEnrolledLearning(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -453,7 +453,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         const theDiscussionStarter =
           await opts.ctx.prisma.discussionStarter.findFirst({
             select: { learning_id: true },
@@ -509,7 +509,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name == "General User") {
+      if (opts.ctx.user.role.name === "General User") {
         await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,

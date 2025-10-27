@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   const prisma = GetPrismaClient();
 
   const transactionStatus =
-    reqBody.status == "PAID" ? TStatusEnum.PAID : TStatusEnum.FAILED;
+    reqBody.status === "PAID" ? TStatusEnum.PAID : TStatusEnum.FAILED;
   const updatedTransaction = await prisma.transaction.updateManyAndReturn({
     data: {
       status: transactionStatus,
