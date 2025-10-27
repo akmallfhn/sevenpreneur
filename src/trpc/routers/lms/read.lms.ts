@@ -240,6 +240,9 @@ export const readLMS = {
       );
     }
     const theProject = await opts.ctx.prisma.project.findFirst({
+      include: {
+        cohort: { select: { name: true } },
+      },
       where: {
         id: opts.input.id,
         // deleted_at: null,
@@ -251,7 +254,18 @@ export const readLMS = {
     return {
       code: STATUS_OK,
       message: "Success",
-      project: theProject,
+      project: {
+        id: theProject.id,
+        cohort_id: theProject.cohort_id,
+        cohort_name: theProject.cohort.name,
+        name: theProject.name,
+        description: theProject.description,
+        document_url: theProject.document_url,
+        deadline_at: theProject.deadline_at,
+        status: theProject.status,
+        created_at: theProject.created_at,
+        updated_at: theProject.updated_at,
+      },
     };
   }),
 
