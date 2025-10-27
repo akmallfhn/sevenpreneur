@@ -154,7 +154,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         feature_position: featurePosition,
       };
       Object.keys(eventData).forEach(
-        (key) => eventData[key] == null && delete eventData[key]
+        (key) => eventData[key] === null && delete eventData[key]
       );
       window.dataLayer?.push(eventData);
 
@@ -178,7 +178,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
           em: metaEmail,
         };
         Object.keys(fbqData).forEach(
-          (key) => fbqData[key] == null && delete fbqData[key]
+          (key) => fbqData[key] === null && delete fbqData[key]
         );
         (window as any).fbq("track", metaEventName, fbqData);
       }

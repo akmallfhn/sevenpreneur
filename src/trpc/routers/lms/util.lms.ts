@@ -43,7 +43,7 @@ export async function isEnrolledLearning(
   let cohortId = theEnrolledLearning.cohort_id;
   let cohortPriceId: number | undefined = undefined;
   if (
-    theEnrolledLearning.price_id != null &&
+    theEnrolledLearning.price_id !== null &&
     theEnrolledLearning.price !== null
   ) {
     cohortId = theEnrolledLearning.price.cohort_id;

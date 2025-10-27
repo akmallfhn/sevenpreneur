@@ -70,8 +70,8 @@ async function createTransaction(
       });
     }
     if (
-      selectedDiscount.category != category ||
-      selectedDiscount.item_id != item.id
+      selectedDiscount.category !== category ||
+      selectedDiscount.item_id !== item.id
     ) {
       throw new TRPCError({
         code: STATUS_BAD_REQUEST,

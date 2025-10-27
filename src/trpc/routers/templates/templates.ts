@@ -38,7 +38,7 @@ async function isEnrolledTemplate(
 
 export const listTemplate = {
   templates: loggedInProcedure.query(async (opts) => {
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
         opts.ctx.prisma,
         opts.ctx.user.id,
@@ -67,7 +67,7 @@ export const listTemplate = {
 
 export const readTemplate = {
   template: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name == "General User") {
+    if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
         opts.ctx.prisma,
         opts.ctx.user.id,
