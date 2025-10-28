@@ -89,18 +89,25 @@ export const deleteLMS = {
       if (opts.ctx.user.role.name === "Administrator") {
         selectedUserId = undefined;
       }
-      const deletedDiscussionStarter =
-        await opts.ctx.prisma.discussionStarter.deleteMany({
+      await opts.ctx.prisma.$transaction(async (tx) => {
+        await opts.ctx.prisma.discussionReply.deleteMany({
           where: {
-            id: opts.input.id,
-            user_id: selectedUserId,
+            starter_id: opts.input.id,
           },
         });
-      checkDeleteResult(
-        deletedDiscussionStarter.count,
-        "discussion starters",
-        "discussionStarter"
-      );
+        const deletedDiscussionStarter =
+          await opts.ctx.prisma.discussionStarter.deleteMany({
+            where: {
+              id: opts.input.id,
+              user_id: selectedUserId,
+            },
+          });
+        checkDeleteResult(
+          deletedDiscussionStarter.count,
+          "discussion starters",
+          "discussionStarter"
+        );
+      });
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
