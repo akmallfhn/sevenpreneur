@@ -230,14 +230,16 @@ CREATE TABLE playlists (
 );
 
 CREATE TABLE videos (
-  id                 SERIAL    PRIMARY KEY,
-  playlist_id        INTEGER   NOT NULL,
-  name               VARCHAR   NOT NULL,
-  duration           INTEGER   NOT NULL,
-  image_url          VARCHAR   NOT NULL,
-  video_url          VARCHAR   NOT NULL,
-  num_order          SMALLINT  NOT NULL  DEFAULT 0,
-  external_video_id  VARCHAR   NOT NULL
+  id                 SERIAL       PRIMARY KEY,
+  playlist_id        INTEGER      NOT NULL,
+  name               VARCHAR      NOT NULL,
+  description        TEXT             NULL,
+  duration           INTEGER      NOT NULL,
+  image_url          VARCHAR      NOT NULL,
+  video_url          VARCHAR      NOT NULL,
+  num_order          SMALLINT     NOT NULL  DEFAULT 0,
+  external_video_id  VARCHAR      NOT NULL,
+  status             status_enum  NOT NULL
 );
 
 -- Event-related
@@ -278,6 +280,8 @@ CREATE TABLE templates (
   description   VARCHAR          NULL,
   image         VARCHAR      NOT NULL,
   document_url  VARCHAR      NOT NULL,
+  status        status_enum  NOT NULL,
+  tags          VARCHAR      NOT NULL  DEFAULT '',
   created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );

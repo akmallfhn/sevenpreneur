@@ -2,10 +2,31 @@ import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
+import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export const readPlaylist = {
   playlist: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
+    const whereClause = {
+      id: opts.input.id,
+      deleted_at: null,
+    };
+    const videoWhereClause = {};
+    const countVideoWhereClause = {
+      playlist_id: opts.input.id,
+    };
+    if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
+      Object.assign(whereClause, {
+        status: StatusEnum.ACTIVE,
+      });
+      Object.assign(videoWhereClause, {
+        status: StatusEnum.ACTIVE,
+      });
+      Object.assign(countVideoWhereClause, {
+        status: StatusEnum.ACTIVE,
+      });
+    }
+
     const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
       include: {
         educators: {
@@ -19,30 +40,25 @@ export const readPlaylist = {
             external_video_id: true,
           },
           orderBy: [{ num_order: "asc" }, { id: "asc" }],
+          where: videoWhereClause,
         },
       },
       omit: {
         deleted_at: true,
         deleted_by_id: true,
       },
-      where: {
-        id: opts.input.id,
-        // deleted_at: null,
-      },
+      where: whereClause,
     });
     if (!thePlaylist) {
       throw readFailedNotFound("playlist");
     }
+
     const videosCount = await opts.ctx.prisma.video.count({
-      where: {
-        playlist_id: opts.input.id,
-      },
+      where: countVideoWhereClause,
     });
     const durationsSumAggregate = await opts.ctx.prisma.video.aggregate({
       _sum: { duration: true },
-      where: {
-        playlist_id: opts.input.id,
-      },
+      where: countVideoWhereClause,
     });
     const durationsTotal = durationsSumAggregate._sum.duration;
     const usersCount = await opts.ctx.prisma.userPlaylist.count({
@@ -50,6 +66,7 @@ export const readPlaylist = {
         playlist_id: opts.input.id,
       },
     });
+
     const thePlaylistWithCounts = Object.assign({}, thePlaylist, {
       total_video: videosCount,
       total_duration: durationsTotal,
@@ -77,6 +94,9 @@ export const readPlaylist = {
               },
               videos: {
                 omit: { playlist_id: true },
+                where: {
+                  status: StatusEnum.ACTIVE,
+                },
                 orderBy: [{ num_order: "asc" }, { id: "asc" }],
               },
             },
@@ -89,12 +109,15 @@ export const readPlaylist = {
         where: {
           user_id: opts.ctx.user.id,
           playlist_id: opts.input.id,
-          // deleted_at: null,
+          playlist: {
+            deleted_at: null,
+          },
         },
       });
       if (!thePlaylist) {
         throw readFailedNotFound("playlist");
       }
+
       const videosCount = await opts.ctx.prisma.video.count({
         where: {
           playlist_id: opts.input.id,
@@ -112,6 +135,7 @@ export const readPlaylist = {
           playlist_id: opts.input.id,
         },
       });
+
       const thePlaylistWithCounts = Object.assign({}, thePlaylist, {
         total_video: videosCount,
         total_duration: durationsTotal,
@@ -128,7 +152,10 @@ export const readPlaylist = {
     if (opts.ctx.user.role.name === "General User") {
       const checkVideo = await opts.ctx.prisma.video.findFirst({
         select: { playlist_id: true },
-        where: { id: opts.input.id },
+        where: {
+          id: opts.input.id,
+          status: StatusEnum.ACTIVE,
+        },
       });
       if (!checkVideo) {
         throw readFailedNotFound("video");
@@ -150,7 +177,6 @@ export const readPlaylist = {
     const theVideo = await opts.ctx.prisma.video.findFirst({
       where: {
         id: opts.input.id,
-        // deleted_at: null,
       },
     });
     if (!theVideo) {
