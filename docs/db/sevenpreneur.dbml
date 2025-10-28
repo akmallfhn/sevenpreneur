@@ -111,7 +111,7 @@ Table tokens {
 // LMS-related
 
 Table cohorts {
-  id            integer      [primary key, ref: <> users.id]
+  id            integer      [primary key, ref: > users_cohorts.id]
   name          varchar
   description   varchar
   image         varchar
@@ -157,6 +157,7 @@ Table learnings {
   location_url   varchar
   speaker_id     uuid                  [ref: > users.id]
   recording_url  varchar
+  price_id       integer               [ref: > cohort_prices.id]
   status         status_enum
   created_at     timestamptz
   updated_at     timestamptz
@@ -235,11 +236,13 @@ Table videos {
   id                 integer   [primary key]
   playlist_id        integer   [ref: > playlists.id]
   name               varchar
+  description        text
   duration           integer
   image_url          varchar
   video_url          varchar
   num_order          smallint  [note: 'default 0']
   external_video_id  varchar
+  status             status_enum
 }
 
 // Event-related
@@ -270,6 +273,20 @@ Table event_prices {
   amount      decimal(12,2)
   status      status_enum
   created_at  timestamptz
+}
+
+// Template-related
+
+Table templates {
+  id            serial       [primary key]
+  name          varchar
+  description   varchar
+  image         varchar
+  document_url  varchar
+  status        status_enum
+  tags          varchar      [note: 'comma-separated list']
+  created_at    timestamptz
+  updated_at    timestamptz
 }
 
 // Transaction-related
@@ -323,6 +340,12 @@ Table ticker {
 
 // Relation Tables //
 
+Table users_cohorts {
+  user_id          uuid     [ref: > users.id]
+  cohort_id        integer  [ref: > cohorts.id]
+  cohort_price_id  integer  [ref: > cohort_prices.id]
+}
+
 Table users_playlists {
   user_id      uuid     [ref: > users.id]
   playlist_id  integer  [ref: > playlists.id]
@@ -333,4 +356,8 @@ Table users_playlists {
 Table educators_playlists {
   user_id      uuid     [ref: > users.id]
   playlist_id  integer  [ref: > playlists.id]
+}
+
+Table users_templates {
+  user_id  uuid  [ref: > users.id]
 }
