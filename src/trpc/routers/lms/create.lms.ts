@@ -275,7 +275,7 @@ export const createLMS = {
       return {
         code: STATUS_CREATED,
         message: "Success",
-        module: theDiscussionStarter,
+        discussion: theDiscussionStarter,
       };
     }),
 
@@ -310,7 +310,7 @@ export const createLMS = {
       return {
         code: STATUS_CREATED,
         message: "Success",
-        module: theDiscussionReply,
+        discussion: theDiscussionReply,
       };
     }),
 
