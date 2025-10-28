@@ -59,11 +59,13 @@ export const updatePlaylist = {
         id: numberIsID(),
         playlist_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
+        description: stringNotBlank().nullable().optional(),
         duration: numberIsPositive().optional(),
         image_url: stringNotBlank().optional(),
         video_url: stringNotBlank().optional(),
         num_order: z.number().optional(),
         external_video_id: stringNotBlank().optional(),
+        status: z.enum(StatusEnum).optional(),
       })
     )
     .mutation(async (opts) => {
@@ -71,11 +73,13 @@ export const updatePlaylist = {
         data: {
           playlist_id: opts.input.playlist_id,
           name: opts.input.name,
+          description: opts.input.description,
           duration: opts.input.duration,
           image_url: opts.input.image_url,
           video_url: opts.input.video_url,
           num_order: opts.input.num_order,
           external_video_id: opts.input.external_video_id,
+          status: opts.input.status,
         },
         where: {
           id: opts.input.id,

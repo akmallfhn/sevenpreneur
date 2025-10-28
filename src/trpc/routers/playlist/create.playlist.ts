@@ -123,11 +123,13 @@ export const createPlaylist = {
       z.object({
         playlist_id: numberIsID(),
         name: stringNotBlank(),
+        description: stringNotBlank().nullable().optional(),
         duration: numberIsPositive(),
         image_url: stringNotBlank(),
         video_url: stringNotBlank(),
         num_order: z.number().optional(),
         external_video_id: stringNotBlank(),
+        status: z.enum(StatusEnum),
       })
     )
     .mutation(async (opts) => {
@@ -135,11 +137,13 @@ export const createPlaylist = {
         data: {
           playlist_id: opts.input.playlist_id,
           name: opts.input.name,
+          description: opts.input.description,
           duration: opts.input.duration,
           image_url: opts.input.image_url,
           video_url: opts.input.video_url,
           num_order: opts.input.num_order,
           external_video_id: opts.input.external_video_id,
+          status: opts.input.status,
         },
       });
       const theVideo = await opts.ctx.prisma.video.findFirst({

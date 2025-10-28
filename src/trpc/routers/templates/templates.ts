@@ -12,7 +12,7 @@ import {
   objectHasOnlyID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
@@ -38,14 +38,19 @@ async function isEnrolledTemplate(
 
 export const listTemplate = {
   templates: loggedInProcedure.query(async (opts) => {
+    const whereClause = {};
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
         opts.ctx.prisma,
         opts.ctx.user.id,
         "You're not allowed to view templates."
       );
+      Object.assign(whereClause, {
+        status: StatusEnum.ACTIVE,
+      });
     }
     const templatesList = await opts.ctx.prisma.template.findMany({
+      where: whereClause,
       orderBy: [{ created_at: "desc" }, { updated_at: "desc" }],
     });
     const returnedList = templatesList.map((entry) => {
@@ -55,6 +60,7 @@ export const listTemplate = {
         description: entry.description,
         image: entry.image,
         document_url: entry.document_url,
+        status: entry.status,
       };
     });
     return {
@@ -67,17 +73,21 @@ export const listTemplate = {
 
 export const readTemplate = {
   template: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
+    const whereClause = {
+      id: opts.input.id,
+    };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
         opts.ctx.prisma,
         opts.ctx.user.id,
         "You're not allowed to view templates."
       );
+      Object.assign(whereClause, {
+        status: StatusEnum.ACTIVE,
+      });
     }
     const theTemplate = await opts.ctx.prisma.template.findFirst({
-      where: {
-        id: opts.input.id,
-      },
+      where: whereClause,
     });
     return {
       code: STATUS_OK,
@@ -97,6 +107,8 @@ export const createTemplate = {
         description: stringNotBlank().nullable().optional(),
         image: stringNotBlank(),
         document_url: stringNotBlank(),
+        status: z.enum(StatusEnum),
+        tags: stringNotBlank().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -106,6 +118,8 @@ export const createTemplate = {
           description: opts.input.description,
           image: opts.input.image,
           document_url: opts.input.document_url,
+          status: opts.input.status,
+          tags: opts.input.tags,
         },
       });
       const theTemplate = await opts.ctx.prisma.template.findFirst({
@@ -134,6 +148,8 @@ export const updateTemplate = {
         description: stringNotBlank().nullable().optional(),
         image: stringNotBlank().optional(),
         document_url: stringNotBlank().optional(),
+        status: z.enum(StatusEnum).optional(),
+        tags: stringNotBlank().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -144,6 +160,8 @@ export const updateTemplate = {
             description: opts.input.description,
             image: opts.input.image,
             document_url: opts.input.document_url,
+            status: opts.input.status,
+            tags: opts.input.tags,
           },
           where: {
             id: opts.input.id,

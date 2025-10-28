@@ -262,7 +262,9 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - `list.playlists`:
   - Administrators can see all playlists.
   - Non-Administrators can only see active playlists.
-- `read.playlist`: Everyone can read all playlists given the playlist ID.
+- `read.playlist`:
+  - Administrators can read all playlists.
+  - Non-Administrators can only read active playlists given the playlist ID.
 
 ### Educators Playlists 👥
 
@@ -299,7 +301,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Only Administrators have write access to all videos' data.
 - Administrators, Educators, and Class Managers can see all videos given the playlist ID.
-- General Users can see all videos given the playlist ID which the users are enrolled.
+- General Users can see all active videos given the playlist ID which the users are enrolled.
 
 ## Events 📅
 
@@ -350,7 +352,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Only Administrators have write access to all templates' data.
 - Administrators, Educators, and Class Managers can see all templates.
-- General Users can see all templates if the user is in the enrolled list.
+- General Users can see all active templates if the user is in the enrolled list.
 
 ## Discounts 🪙
 
