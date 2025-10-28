@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, TextareaHTMLAttributes } from "react";
 
-interface TextAreaCMSProps {
+interface TextAreaCMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaId: string;
   textAreaName: string;
   textAreaHeight?: string;
@@ -25,59 +25,73 @@ export default function TextAreaCMS({
   value: propValue,
   disabled,
   required,
+  ...rest
 }: TextAreaCMSProps) {
-  // --- Declaration state
   const [value, setValue] = useState(propValue);
-  const [error, setError] = useState("");
+  const [internalError, setInternalError] = useState("");
   const maxLength = characterLength ?? 520;
-  const errMsg = errorMessage ?? "Oops, you’ve reached the character limit.";
+  const characterLimitErrorMessage =
+    "Oops, you’ve reached the character limit.";
 
-  // --- Character Limitation on Input
-  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  // Character Limitation on Text Area
+  const handleTextAreaChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const newValue = event.target.value;
     if (newValue.length > maxLength) {
-      setError(errMsg);
-      setValue(newValue.slice(0, maxLength));
-      if (onInputChange) onInputChange(newValue.slice(0, maxLength));
+      setInternalError(characterLimitErrorMessage);
       return;
     } else {
-      setError("");
-      setValue(newValue);
-      if (onInputChange) onInputChange(newValue);
+      setInternalError("");
     }
+    setValue(newValue.slice(0, maxLength));
+    if (onInputChange) onInputChange(newValue.slice(0, maxLength));
   };
 
-  // --- Sync on value change
+  // Sync on value change
   useEffect(() => {
     setValue(propValue || "");
   }, [propValue]);
 
+  // Reset internalError if get any errorMessage from parent
+  useEffect(() => {
+    if (errorMessage) {
+      setInternalError("");
+    }
+  }, [errorMessage]);
+
+  // Compute error (parent > internal)
+  const computedError = errorMessage || internalError;
+
   return (
-    <div className="input-group-component flex flex-col gap-1">
-      {/* --- Label */}
+    <div className="text-area-box flex flex-col gap-1">
       <label
         htmlFor={textAreaId}
-        className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        className="label-text-area flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
       >
         {textAreaName}
-        {required && <span className="text-destructive">*</span>}
+        {required && <span className="label-required text-destructive">*</span>}
       </label>
 
-      {/* --- Input Placeholder */}
-      <div className="input-container relative">
+      <div className="text-area-container relative">
         <textarea
           id={textAreaId}
           placeholder={textAreaPlaceholder}
           disabled={disabled}
-          className={`flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md border resize-none transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
-            error
+          {...rest}
+          className={`text-area-placeholder flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md border resize-none transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
+            computedError
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-cms-primary"
           } `}
           value={value}
-          onChange={handleInputChange}
+          onChange={handleTextAreaChange}
         />
-        {error && <p className="inline-flex text-red-600 text-xs">{error}</p>}
+        {computedError && (
+          <p className="text-area-error-message inline-flex text-red-600 text-xs">
+            {computedError}
+          </p>
+        )}
       </div>
     </div>
   );

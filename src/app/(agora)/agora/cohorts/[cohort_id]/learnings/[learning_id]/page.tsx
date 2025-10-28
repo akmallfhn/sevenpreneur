@@ -67,6 +67,7 @@ export default async function LearningsDetailsPageLMS({
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
+      learningSessionId={learningDetails.id}
       learningSessionName={learningDetails.name}
       learningSessionDescription={learningDetails.description}
       learningSessionDate={learningDetails.meeting_date}

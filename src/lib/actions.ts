@@ -341,6 +341,74 @@ export async function DeleteSubmission({
   };
 }
 
+// CREATE DISCUSSION STARTER
+interface CreateDiscussionStarterProps {
+  learningSessionId: number;
+  discussionStarterMessage: string;
+}
+export async function CreateDiscussionStarter({
+  learningSessionId,
+  discussionStarterMessage,
+}: CreateDiscussionStarterProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const createDiscussionStarter = await trpc.create.discussionStarter({
+    learning_id: learningSessionId,
+    message: discussionStarterMessage,
+  });
+
+  const createdDiscussionStarter = {
+    ...createDiscussionStarter.discussion,
+    created_at: createDiscussionStarter.discussion.created_at.toISOString(),
+    updated_at: createDiscussionStarter.discussion.updated_at.toISOString(),
+  };
+
+  return {
+    code: createDiscussionStarter.code,
+    message: createDiscussionStarter.message,
+    discussion: createdDiscussionStarter,
+  };
+}
+
+// CREATE DISCUSSION REPLY
+interface CreateDiscussionReplyProps {
+  discussionStarterId: number;
+  discussionReplyMessage: string;
+}
+export async function CreateDiscussionReply({
+  discussionStarterId,
+  discussionReplyMessage,
+}: CreateDiscussionReplyProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const createDiscussionReply = await trpc.create.discussionReply({
+    starter_id: discussionStarterId,
+    message: discussionReplyMessage,
+  });
+
+  const createdDiscussionReply = {
+    ...createDiscussionReply.discussion,
+    created_at: createDiscussionReply.discussion.created_at.toISOString(),
+    updated_at: createDiscussionReply.discussion.updated_at.toISOString(),
+  };
+
+  return {
+    code: createDiscussionReply.code,
+    message: createDiscussionReply.message,
+    discussion: createdDiscussionReply,
+  };
+}
+
 // LIST DISCUSSION REPLIES
 interface DiscussionReplyListProps {
   discussionStarterId: number;

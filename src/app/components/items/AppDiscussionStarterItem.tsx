@@ -4,11 +4,17 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import React, { useState } from "react";
-import { DeleteDiscussionStarter, DiscussionReplyList } from "@/lib/actions";
+import {
+  CreateDiscussionReply,
+  DeleteDiscussionStarter,
+  DiscussionReplyList,
+} from "@/lib/actions";
 import AppDiscussionReplyItem from "./AppDiscussionReplyItem";
 import { ChevronDown, Loader2 } from "lucide-react";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import AppDiscussionTextArea from "../fields/AppDiscussionTextArea";
 
 dayjs.extend(relativeTime);
 
@@ -24,36 +30,99 @@ export interface DiscussionReplyList {
 
 interface AppDiscussionStarterItemProps {
   sessionUserId: string;
-  discussionId: number;
-  discussionAuthorId?: string;
-  discussionAuthorName: string;
-  discussionAuthorAvatar: string;
-  discussionMessage: string;
-  discussionReplies: number;
-  discussionCreatedAt: string;
-  discussionOwner: boolean;
+  sessionUserName: string;
+  sessionUserAvatar: string;
+  discussionStarterId: number;
+  discussionStarterAuthorName: string;
+  discussionStarterAuthorAvatar: string;
+  discussionStarterMessage: string;
+  discussionStarterTotalReplies: number;
+  discussionStarterCreatedAt: string;
+  discussionStarterOwner: boolean;
   onDiscussionDeleted: (discussionId: number) => void;
 }
 
 export default function AppDiscussionStarterItem({
   sessionUserId,
-  discussionId,
-  discussionAuthorId,
-  discussionAuthorName,
-  discussionAuthorAvatar,
-  discussionMessage,
-  discussionReplies,
-  discussionCreatedAt,
-  discussionOwner,
+  sessionUserName,
+  sessionUserAvatar,
+  discussionStarterId,
+  discussionStarterAuthorName,
+  discussionStarterAuthorAvatar,
+  discussionStarterMessage,
+  discussionStarterTotalReplies,
+  discussionStarterCreatedAt,
+  discussionStarterOwner,
   onDiscussionDeleted,
 }: AppDiscussionStarterItemProps) {
   const [isOpenReplies, setIsOpenReplies] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
   const [replies, setReplies] = useState<DiscussionReplyList[]>([]);
+  const [writeReply, setWriteReply] = useState(false);
+  const [textValue, setTextValue] = useState("");
+  const [isSendingReply, setIsSendingReply] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
 
+  const handleWriteReply = () => {
+    setWriteReply((prev) => !prev);
+  };
+
+  // Create discussion reply
+  const handleSubmitReply = async () => {
+    if (!textValue.trim()) {
+      return;
+    }
+    setIsSendingReply(true);
+
+    try {
+      const createReply = await CreateDiscussionReply({
+        discussionStarterId,
+        discussionReplyMessage: textValue,
+      });
+
+      if (createReply.code === "CREATED") {
+        setTextValue("");
+        setWriteReply(false);
+        toast.success("Reply Sent!");
+
+        // Make sure open replies
+        if (!isOpenReplies) {
+          setIsOpenReplies(true);
+        }
+
+        // Re-fetch replies
+        try {
+          setIsLoadingReplies(true);
+          const discussionReplies = await DiscussionReplyList({
+            discussionStarterId,
+          });
+
+          if (discussionReplies.code === "OK") {
+            setReplies(discussionReplies.list);
+            setIsFetched(true);
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsLoadingReplies(false);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to send reply. Please try again.");
+    } finally {
+      setIsSendingReply(false);
+    }
+  };
+
+  // Added new reply from thread reply item
+  const handleReplyCreated = (newReply: DiscussionReplyList) => {
+    setReplies((prev) => [newReply, ...prev]);
+  };
+
+  // View replies
   const handleViewReplies = async () => {
     if (!isOpenReplies) {
       // Open Replies without refetch
@@ -64,7 +133,7 @@ export default function AppDiscussionStarterItem({
         try {
           setIsLoadingReplies(true);
           const discussionReplies = await DiscussionReplyList({
-            discussionStarterId: discussionId,
+            discussionStarterId,
           });
 
           if (discussionReplies.code === "OK") {
@@ -83,17 +152,16 @@ export default function AppDiscussionStarterItem({
     }
   };
 
+  // Delete discussion starter
   const handleDelete = async () => {
-    if (!discussionId) return;
+    if (!discussionStarterId) return;
     try {
       const deleteDiscussion = await DeleteDiscussionStarter({
-        discussionStarterId: discussionId,
+        discussionStarterId,
       });
       if (deleteDiscussion.code === "NO_CONTENT") {
-        toast.success("Discussion Deleted", {
-          description: "Your discussion has been successfully removed.",
-        });
-        onDiscussionDeleted(discussionId);
+        toast.success("Discussion Deleted");
+        onDiscussionDeleted(discussionStarterId);
       } else {
         toast.error("Failed to Delete", {
           description: "We couldn’t delete your discussion. Please try again.",
@@ -118,48 +186,67 @@ export default function AppDiscussionStarterItem({
   return (
     <React.Fragment>
       <section
-        id={`discussion-${discussionId}`}
+        id={`discussion-${discussionStarterId}`}
         className="discussion-starter-container flex gap-3"
       >
-        <div className="discussion-author-avatar flex size-8 aspect-square shrink-0 rounded-full overflow-hidden">
+        <div className="discussion-starter-author-avatar flex size-8 aspect-square shrink-0 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={discussionAuthorAvatar}
-            alt={discussionAuthorName}
+            src={discussionStarterAuthorAvatar}
+            alt={discussionStarterAuthorName}
             width={300}
             height={300}
           />
         </div>
-        <div className="discussion flex flex-col gap-3">
+        <div className="discussion-starter-item flex flex-col gap-3 w-full">
           <div className="flex flex-col">
-            <div className="discussion-attributes flex items-center gap-2 font-bodycopy text-sm">
-              <p className="discussion-author-name font-bold">
-                {discussionAuthorName}
+            <div className="discussion-starter-attributes flex items-center gap-2 font-bodycopy text-sm">
+              <p className="discussion-starter-author-name font-bold">
+                {discussionStarterAuthorName}
               </p>
-              <p className="discussion-created-at text-alternative">
-                {dayjs(discussionCreatedAt).fromNow()}
+              <p className="discussion-starter-created-at text-alternative">
+                {dayjs(discussionStarterCreatedAt).fromNow()}
               </p>
             </div>
-            <p className="discussion-message font-bodycopy text-sm whitespace-pre-line">
-              {discussionMessage}
+            <p className="discussion-starter-message font-bodycopy text-sm whitespace-pre-line">
+              {discussionStarterMessage}
             </p>
           </div>
-          <div className="discussion-action flex font-bodycopy text-sm items-center gap-3">
-            <p className="font-semibold text-primary hover:cursor-pointer">
-              Reply
+          <div className="discussion-starter-action flex font-bodycopy text-sm items-center gap-3">
+            <p
+              className="discussion-starter-reply font-semibold text-primary hover:cursor-pointer"
+              onClick={() => handleWriteReply()}
+            >
+              {writeReply ? "Cancel" : "Reply"}
             </p>
-            {discussionOwner && (
+            {discussionStarterOwner && (
               <p
-                className="font-semibold text-destructive hover:cursor-pointer"
+                className="discussion-starter-delete font-semibold text-destructive hover:cursor-pointer"
                 onClick={() => setIsOpenDeleteConfirmation(true)}
               >
                 Delete
               </p>
             )}
           </div>
-          {discussionReplies > 0 && (
+          <div
+            className={`discussion-write-reply flex w-full transition-all duration-300 ease-in-out overflow-hidden ${
+              writeReply ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
+            }`}
+          >
+            <AppDiscussionTextArea
+              sessionUserName={sessionUserName}
+              sessionUserAvatar={sessionUserAvatar}
+              textAreaId="reply"
+              textAreaPlaceholder="Let's discuss about this learning"
+              onTextAreaChange={(value) => setTextValue(value)}
+              value={textValue}
+              onSubmit={handleSubmitReply}
+              isLoadingSubmit={isSendingReply}
+            />
+          </div>
+          {discussionStarterTotalReplies > 0 && (
             <AppButton
-              className="w-fit"
+              className="discussion-starter-view-replies w-fit"
               size="small"
               variant="outline"
               onClick={handleViewReplies}
@@ -169,29 +256,32 @@ export default function AppDiscussionStarterItem({
                   isOpenReplies ? "rotate-180" : "rotate-0"
                 }`}
               />
-              View {discussionReplies} replies
+              View {discussionStarterTotalReplies} replies
             </AppButton>
           )}
 
           {isOpenReplies && (
-            <div className="replies-container w-full py-2">
+            <div className="discussion-replies-container w-full py-2">
               {isLoadingReplies ? (
-                <Loader2 className="loading-replies size-4 animate-spin text-alternative" />
+                <Loader2 className="discussion-loading-replies size-4 animate-spin text-alternative" />
               ) : (
-                <div className="reply-list flex flex-col gap-4">
-                  {replies.map((post, index) => (
+                <div className="discsussion-replies flex flex-col gap-4">
+                  {replies.map((post) => (
                     <AppDiscussionReplyItem
-                      key={index}
-                      sessionUserId={sessionUserId}
-                      replyId={post.id}
-                      replyAuthorName={post.full_name}
-                      replyAuthorAvatar={
+                      key={post.id}
+                      sessionUserName={sessionUserName}
+                      sessionUserAvatar={sessionUserAvatar}
+                      discussionStarterId={discussionStarterId}
+                      discussionReplyId={post.id}
+                      discussionReplyAuthorName={post.full_name}
+                      discussionReplyAuthorAvatar={
                         post.avatar ||
                         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
                       }
-                      replyMessage={post.message}
-                      replyCreatedAt={post.created_at}
-                      replyOwner={post.is_owner}
+                      discussionReplyMessage={post.message}
+                      discussionReplyCreatedAt={post.created_at}
+                      discussionReplyOwner={post.is_owner}
+                      onReplyCreated={handleReplyCreated}
                       onReplyDeleted={handleReplyDeleted}
                     />
                   ))}

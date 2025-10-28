@@ -10,6 +10,10 @@ import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import AppDiscussionStarterItem from "../items/AppDiscussionStarterItem";
 import { useEffect, useState } from "react";
 import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
+import AppDiscussionTextArea from "../fields/AppDiscussionTextArea";
+import { CreateDiscussionStarter } from "@/lib/actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export interface MaterialList {
   name: string;
@@ -33,6 +37,7 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   cohortName: string;
   sessionUserId: string;
   sessionUserRole: number;
+  learningSessionId: number;
   learningSessionName: string;
   learningSessionDescription: string;
   learningSessionDate: string;
@@ -54,6 +59,7 @@ export default function LearningDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  learningSessionId,
   learningSessionName,
   learningSessionDescription,
   learningSessionDate,
@@ -67,7 +73,10 @@ export default function LearningDetailsLMS({
   materialList,
   discussionStarterList,
 }: LearningDetailsLMSProps) {
+  const router = useRouter();
   const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
+  const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
+  const [textValue, setTextValue] = useState("");
 
   const activeMaterials = materialList.filter(
     (material) => material.status === "ACTIVE"
@@ -77,6 +86,43 @@ export default function LearningDetailsLMS({
   useEffect(() => {
     setDiscussion(discussionStarterList);
   }, [discussionStarterList]);
+
+  // Create discussion
+  const handleSubmitDiscussion = async () => {
+    if (!textValue.trim()) {
+      return;
+    }
+    setIsSendingDiscussion(true);
+
+    try {
+      const createDiscussion = await CreateDiscussionStarter({
+        learningSessionId,
+        discussionStarterMessage: textValue,
+      });
+
+      if (createDiscussion.code === "CREATED") {
+        const newDiscussion = {
+          id: createDiscussion.discussion.id,
+          full_name: sessionUserName,
+          avatar: sessionUserAvatar,
+          message: createDiscussion.discussion.message,
+          reply_count: 0,
+          created_at: createDiscussion.discussion.created_at,
+          updated_at: createDiscussion.discussion.updated_at,
+          is_owner: true,
+        };
+
+        setTextValue("");
+        toast.success("Discussion Sent!");
+        setDiscussion((prev) => [newDiscussion, ...prev]);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to send discussion. Please try again.");
+    } finally {
+      setIsSendingDiscussion(false);
+    }
+  };
 
   // Remove deleted discussion on state
   const handleDiscussionDeleted = (discussionId: number) => {
@@ -128,30 +174,46 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 Discussions
               </h3>
-              {discussion.length > 0 ? (
-                <div className="discussions-list flex flex-col gap-4">
-                  {discussion.map((post, index) => (
-                    <AppDiscussionStarterItem
-                      key={index}
-                      sessionUserId={sessionUserId}
-                      discussionId={post.id}
-                      // discussionAuthorId={post.user_id}
-                      discussionAuthorName={post.full_name}
-                      discussionAuthorAvatar={
-                        post.avatar ||
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                      }
-                      discussionMessage={post.message}
-                      discussionReplies={post.reply_count}
-                      discussionCreatedAt={post.created_at}
-                      discussionOwner={post.is_owner}
-                      onDiscussionDeleted={handleDiscussionDeleted}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <EmptyDiscussionLMS />
-              )}
+              <div className="discussions-box flex flex-col gap-6">
+                <AppDiscussionTextArea
+                  sessionUserName={sessionUserName}
+                  sessionUserAvatar={sessionUserAvatar}
+                  textAreaId="discussion"
+                  textAreaPlaceholder="Let's discuss about this learning"
+                  onTextAreaChange={(value) => setTextValue(value)}
+                  value={textValue}
+                  onSubmit={handleSubmitDiscussion}
+                  isLoadingSubmit={isSendingDiscussion}
+                />
+                {discussion.length > 0 ? (
+                  <div className="discussions-list flex flex-col gap-4">
+                    {discussion.map((post) => (
+                      <AppDiscussionStarterItem
+                        key={post.id}
+                        sessionUserId={sessionUserId}
+                        sessionUserName={sessionUserName}
+                        sessionUserAvatar={
+                          sessionUserAvatar ||
+                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                        }
+                        discussionStarterId={post.id}
+                        discussionStarterAuthorName={post.full_name}
+                        discussionStarterAuthorAvatar={
+                          post.avatar ||
+                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                        }
+                        discussionStarterMessage={post.message}
+                        discussionStarterTotalReplies={post.reply_count}
+                        discussionStarterCreatedAt={post.created_at}
+                        discussionStarterOwner={post.is_owner}
+                        onDiscussionDeleted={handleDiscussionDeleted}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyDiscussionLMS />
+                )}
+              </div>
             </div>
           </main>
           <aside className="w-full flex flex-col flex-1 gap-4">
