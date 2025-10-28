@@ -36,7 +36,7 @@ export default function EditLearningFormCMS({
     isError,
   } = trpc.list.users.useQuery({ role_id: 1 }, { enabled: !!sessionToken });
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     learningName: string;
     learningDescription: string;
@@ -65,7 +65,7 @@ export default function EditLearningFormCMS({
     learningSpeaker: initialData.speaker_id ? initialData.speaker_id : "",
   });
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -76,7 +76,7 @@ export default function EditLearningFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -84,7 +84,7 @@ export default function EditLearningFormCMS({
     }));
   };
 
-  // --- Reset fields based on learning method change
+  // Reset fields based on learning method change
   useEffect(() => {
     if (formData.learningMethod === "ONSITE") {
       setFormData((prev) => ({
@@ -109,12 +109,12 @@ export default function EditLearningFormCMS({
     }
   }, [formData.learningMethod]);
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.learningName) {
       toast.error("Don’t leave the session untitled");
       setIsSubmitting(false);
@@ -180,7 +180,7 @@ export default function EditLearningFormCMS({
       }
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       editLearning.mutate(
         {
@@ -255,6 +255,7 @@ export default function EditLearningFormCMS({
               textAreaName="Session Description"
               textAreaPlaceholder="Give a short overview of what will be covered."
               textAreaHeight="h-32"
+              characterLength={4000}
               value={formData.learningDescription}
               onInputChange={handleInputChange("learningDescription")}
               required
@@ -342,6 +343,9 @@ export default function EditLearningFormCMS({
                 onChange={handleInputChange("learningSpeaker")}
                 options={
                   educatorUserList.list.map((post) => ({
+                    image:
+                      post.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png",
                     label: post.full_name,
                     value: post.id,
                   })) || []

@@ -165,10 +165,10 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 Live Class Recording
               </h3>
-              {/* {!learningVideoRecording && <EmptyRecordingLMS />} */}
-              <div className="video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
+              {!learningVideoRecording && <EmptyRecordingLMS />}
+              {/* <div className="video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
                 <AppVideoPlayer videoId={"d929af5a12b4d3fbe74215e9678b1b58"} />
-              </div>
+              </div> */}
             </div>
             <div className="learning-discussions flex flex-col gap-3 bg-white p-4 border rounded-lg">
               <h3 className="section-title font-bold font-bodycopy">

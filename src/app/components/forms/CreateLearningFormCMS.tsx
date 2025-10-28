@@ -34,7 +34,7 @@ export default function CreateLearningFormCMS({
     isError,
   } = trpc.list.users.useQuery({ role_id: 1 }, { enabled: !!sessionToken });
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     learningName: string;
     learningDescription: string;
@@ -55,7 +55,7 @@ export default function CreateLearningFormCMS({
     learningSpeaker: "",
   });
 
-  // --- Add event listener to prevent page refresh
+  // Add event listener to prevent page refresh
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -66,7 +66,7 @@ export default function CreateLearningFormCMS({
     };
   }, []);
 
-  // --- Handle data changes
+  // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
     setFormData((prev) => ({
       ...prev,
@@ -74,7 +74,7 @@ export default function CreateLearningFormCMS({
     }));
   };
 
-  // --- Reset fields based on learning method change
+  // Reset fields based on learning method change
   useEffect(() => {
     if (formData.learningMethod === "ONSITE") {
       setFormData((prev) => ({
@@ -99,12 +99,12 @@ export default function CreateLearningFormCMS({
     }
   }, [formData.learningMethod]);
 
-  // --- Handle form submit
+  // Handle form submit
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // -- Required field checking
+    // Required field checking
     if (!formData.learningName) {
       toast.error("Don’t leave the session untitled");
       setIsSubmitting(false);
@@ -168,7 +168,7 @@ export default function CreateLearningFormCMS({
       }
     }
 
-    // -- POST to Database
+    // POST to Database
     try {
       createLearning.mutate(
         {
@@ -256,6 +256,7 @@ export default function CreateLearningFormCMS({
                 textAreaName="Session Description"
                 textAreaPlaceholder="Give a short overview of what will be covered."
                 textAreaHeight="h-32"
+                characterLength={4000}
                 value={formData.learningDescription}
                 onInputChange={handleInputChange("learningDescription")}
                 required

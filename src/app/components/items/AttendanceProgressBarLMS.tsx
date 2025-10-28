@@ -1,9 +1,23 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
+import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
+import dayjs from "dayjs";
 
-export default function AttendanceProgressBarLMS() {
-  const totalSessions = 13;
-  const attendedSessions = 2;
+interface AttendanceProgressBarLMSProps {
+  learningList: LearningSessionList[];
+}
+
+export default function AttendanceProgressBarLMS({
+  learningList,
+}: AttendanceProgressBarLMSProps) {
+  if (learningList.length === 0) {
+    return;
+  }
+
+  const totalSessions = learningList.length;
+  const attendedSessions = learningList.filter((learning) =>
+    dayjs(learning.meeting_date).isBefore(dayjs(), "day")
+  ).length;
   const attendedRate = Math.round((attendedSessions / totalSessions) * 100);
 
   return (

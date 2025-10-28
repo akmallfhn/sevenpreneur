@@ -97,7 +97,7 @@ export default function LearningDetailsCMS({
             </AppBreadcrumbItem>
           </AppBreadcrumb>
 
-          <div className="body-learning flex flex-col gap-5">
+          <div className="body-learning flex flex-col w-full gap-4">
             <div className="hero-learning relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
               <Image
                 className="hero-background object-cover w-full h-full inset-0 z-0"
@@ -129,7 +129,6 @@ export default function LearningDetailsCMS({
                   </p>
                 </div>
               </div>
-              {/* Edit Learning*/}
               <div className="edit-learning absolute flex top-4 right-4 z-10">
                 <AppButton
                   variant="outline"
@@ -141,12 +140,16 @@ export default function LearningDetailsCMS({
                 </AppButton>
               </div>
             </div>
-            <div className="body-contents flex gap-5">
-              <main className="flex flex-col flex-[2] w-0 min-w-0 gap-5">
-                <MaterialListCMS
-                  sessionToken={sessionToken}
-                  learningId={learningId}
-                />
+            <div className="body-contents flex w-full justify-between gap-4">
+              <main className="flex flex-col flex-2 min-w-0 shrink-0 gap-4">
+                <div className="learning-description flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                  <h2 className="section-name font-brand font-bold text-black">
+                    What&apos;s on this sessions?
+                  </h2>
+                  <p className="font-bodycopy font-medium text-sm text-[#333333] bg-white p-3 rounded-md whitespace-pre-line">
+                    {learningDetailsData?.learning.description}
+                  </p>
+                </div>
                 <div className="video-recording flex flex-col gap-3 p-3 bg-section-background rounded-md">
                   <div className="section-name flex justify-between items-center">
                     <h2 className="font-brand font-bold text-black">
@@ -185,15 +188,7 @@ export default function LearningDetailsCMS({
                 </div>
               </main>
 
-              <aside className="aside-contents flex flex-col flex-[1] w-full gap-5">
-                <div className="learning-description flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="section-name font-brand font-bold text-black">
-                    What&apos;s on this sessions?
-                  </h2>
-                  <p className="font-bodycopy font-medium text-sm text-black/50 bg-white p-3 rounded-md whitespace-pre-line">
-                    {learningDetailsData?.learning.description}
-                  </p>
-                </div>
+              <aside className="aside-contents flex flex-col flex-1 min-w-0 gap-4">
                 <div className="learning-educator flex flex-col gap-3 p-3 bg-section-background rounded-md">
                   <h2 className="section-name font-brand font-bold text-black">
                     Lectured by
@@ -210,6 +205,10 @@ export default function LearningDetailsCMS({
                     }
                   />
                 </div>
+                <MaterialListCMS
+                  sessionToken={sessionToken}
+                  learningId={learningId}
+                />
                 <div className="learning-location-conference flex flex-col gap-3 p-3 bg-section-background rounded-md">
                   <h2 className="section-name font-brand font-bold text-black">
                     Place and Access

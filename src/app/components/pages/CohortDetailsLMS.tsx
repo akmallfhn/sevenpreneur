@@ -54,7 +54,7 @@ export default function CohortDetailsLMS({
         </main>
         <aside className="aside relative flex flex-col flex-1 w-full gap-4">
           <div className="sticky top-4 flex flex-col w-full gap-4">
-            <AttendanceProgressBarLMS />
+            <AttendanceProgressBarLMS learningList={learningList} />
             <NearestScheduleCardLMS learningList={learningList} />
           </div>
         </aside>
