@@ -12,7 +12,7 @@ export default function EnrolledUserListCMS({
   sessionToken,
   cohortId,
 }: EnrolledUserListCMSProps) {
-  // --- Call data from tRPC
+  // Call data from tRPC
   const {
     data: enrolledUser,
     isError,
@@ -41,7 +41,7 @@ export default function EnrolledUserListCMS({
           No Data
         </div>
       )}
-      <div className="user-list flex flex-col gap-4 bg-white rounded-md p-4 max-h-[320px] overflow-y-auto">
+      <div className="user-list flex flex-col w-full gap-4 bg-white rounded-md p-4 max-h-[320px] overflow-y-auto">
         {enrolledUserList?.map((post, index) => (
           <UserItemCMS
             key={index}

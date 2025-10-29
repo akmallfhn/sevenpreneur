@@ -5,54 +5,62 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import { EllipsisVertical, Trash2, Video } from "lucide-react";
+import { EllipsisVertical, Pen, PenLine, Trash2, Video } from "lucide-react";
 import AppButton from "../buttons/AppButton";
-import LearningSessionIconCMS from "../labels/LearningSessionIconCMS";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import { SessionMethod } from "@/lib/app-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import EditLearningFormCMS from "../forms/EditLearningFormCMS";
 
 dayjs.extend(localizedFormat);
 
 interface LearningSessionItemCMSProps {
   cohortId: number;
-  sessionLearningId: number;
-  sessionName: string;
-  sessionEducatorName?: string;
-  sessionEducatorAvatar?: string | null;
-  sessionMethod: string;
-  sessionDate: string;
-  sessionMeetingURL?: string | null;
+  learningSessionId: number;
+  learningSessionName: string;
+  learningSessionEducatorName: string;
+  learningSessionEducatorAvatar: string;
+  learningSessionMethod: string;
+  learningSessionDate: string;
+  learningSessionPlace?: string;
   onDeleteSuccess?: () => void;
 }
 
 export default function LearningSessionItemCMS({
   cohortId,
-  sessionLearningId,
-  sessionName,
-  sessionEducatorName,
-  sessionEducatorAvatar,
-  sessionMethod,
-  sessionDate,
-  sessionMeetingURL,
+  learningSessionId,
+  learningSessionName,
+  learningSessionEducatorName,
+  learningSessionEducatorAvatar,
+  learningSessionMethod,
+  learningSessionDate,
+  learningSessionPlace,
   onDeleteSuccess,
 }: LearningSessionItemCMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
+  const [editLearning, setEditLearning] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const externalLinkRef = useRef<HTMLAnchorElement | null>(null);
 
-  // --- Open and close dropdown
+  let learningLocation;
+  if (learningSessionMethod === "ONLINE") {
+    learningLocation = "Online";
+  } else if (learningSessionPlace) {
+    learningLocation = learningSessionPlace;
+  }
+
+  // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsActionsOpened((prev) => !prev);
   };
 
-  // --- Close dropdown outside
+  // Close dropdown outside
   useEffect(() => {
     const handleClickOutside = (
       event: MouseEvent | (MouseEvent & { target: Node })
@@ -70,11 +78,11 @@ export default function LearningSessionItemCMS({
     };
   }, []);
 
-  // --- Function to delete learning
+  // Delete learning
   const deleteLearning = trpc.delete.learning.useMutation();
   const handleDelete = () => {
     deleteLearning.mutate(
-      { id: sessionLearningId },
+      { id: learningSessionId },
       {
         onSuccess: () => {
           toast.success("Delete success");
@@ -90,64 +98,58 @@ export default function LearningSessionItemCMS({
   };
   return (
     <React.Fragment>
-      <div className="session-item flex items-center justify-between bg-white gap-2 p-3 rounded-md">
+      <div className="session-item flex items-center justify-between bg-white gap-2 rounded-md hover:cursor-pointer hover:bg-[#F2F4FA]">
         <Link
-          href={`/cohorts/${cohortId}/learnings/${sessionLearningId}`}
-          className="flex w-[calc(87%)] gap-3 items-center"
+          href={`/cohorts/${cohortId}/learnings/${learningSessionId}`}
+          className="session-box flex w-full p-3.5 max-w-[calc(90%)] items-center font-bodycopy"
         >
-          <LearningSessionIconCMS variants={sessionMethod as SessionMethod} />
-          <div className="attribute-data flex flex-col gap-2.5">
-            <div className="flex flex-col gap-0.5">
-              <h3 className="session-name font-bodycopy font-bold line-clamp-1 ">
-                {sessionName}
-              </h3>
-              <div className="flex gap-3 items-center">
-                <div className="session-educator flex gap-2 items-center">
-                  <div className="avatar size-[29px] rounded-full overflow-hidden">
-                    <Image
-                      className="object-cover w-full h-full"
-                      src={
-                        sessionEducatorAvatar ??
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                      }
-                      alt="Avatar User"
-                      width={80}
-                      height={80}
-                    />
-                  </div>
-                  <div className="flex flex-col text-[13px] leading-snug font-bodycopy font-medium text-black/50">
-                    <p className="educator-name">
-                      by{" "}
-                      <span className="text-black font-semibold">
-                        {sessionEducatorName || "Sevenpreneur Team"}
-                      </span>
-                    </p>
-                    <p className="date-time">
-                      {dayjs(sessionDate).format("llll")}
-                    </p>
-                  </div>
-                </div>
-                {sessionMethod !== "ONSITE" && sessionMeetingURL && (
-                  <AppButton
-                    variant="outline"
-                    size="small"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      externalLinkRef.current?.click();
-                    }}
-                  >
-                    <Video className="size-4" />
-                    Launch meeting
-                  </AppButton>
-                )}
+          <div className="session-container flex items-center gap-4">
+            <div className="session-date flex flex-col w-14 items-center aspect-square shrink-0">
+              <p className="session-day font-medium text-sm">
+                {dayjs(learningSessionDate).format("ddd")}
+              </p>
+              <p className="session-date font-brand font-semibold text-3xl">
+                {dayjs(learningSessionDate).format("D")}
+              </p>
+            </div>
+            <div className="divider w-[1px] self-stretch bg-outline" />
+            <div className="session-schedule flex flex-col w-30 text-sm gap-1 font-medium text-[#333333] shrink-0">
+              <div className="session-time flex items-center gap-2">
+                <FontAwesomeIcon icon={faClock} className="text-alternative" />
+                <p>{dayjs(learningSessionDate).format("HH:mm")}</p>
+              </div>
+              <div className="session-place flex items-center gap-2">
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className="text-alternative shrink-0"
+                />
+                <p className="line-clamp-1">{learningLocation}</p>
+              </div>
+            </div>
+            <div className="divider w-[1px] self-stretch bg-outline" />
+            <div className="session-metadata flex items-center gap-3">
+              <div className="session-educator-avatar aspect-square size-9 shrink-0 rounded-full overflow-hidden">
+                <Image
+                  className="object-cover w-full h-full"
+                  src={learningSessionEducatorAvatar}
+                  alt={learningSessionEducatorName}
+                  width={600}
+                  height={600}
+                />
+              </div>
+              <div className="session-title flex flex-col">
+                <h2 className="session-title text-[15px] font-bold line-clamp-1">
+                  {learningSessionName}
+                </h2>
+                <p className="session-educator font-medium text-sm text-[#333333]">
+                  {learningSessionEducatorName}
+                </p>
               </div>
             </div>
           </div>
         </Link>
         {/* Button action */}
-        <div className="actions-button flex relative" ref={wrapperRef}>
+        <div className="actions-button flex relative p-1" ref={wrapperRef}>
           <AppButton
             variant="ghost"
             size="small"
@@ -161,9 +163,14 @@ export default function LearningSessionItemCMS({
             isOpen={isActionsOpened}
             onClose={() => setIsActionsOpened(false)}
           >
+            {/* <AppDropdownItemList
+              menuIcon={<PenLine className="size-4" />}
+              menuName="Edit session"
+              onClick={() => setEditLearning(true)}
+            /> */}
             <AppDropdownItemList
               menuIcon={<Trash2 className="size-4" />}
-              menuName="Delete"
+              menuName="Delete session"
               isDestructive
               onClick={() => setIsOpenDeleteConfirmation(true)}
             />
@@ -171,20 +178,22 @@ export default function LearningSessionItemCMS({
         </div>
       </div>
 
-      {/* --- Redirect link meeting */}
-      <a
-        href={sessionMeetingURL!}
-        ref={externalLinkRef}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hidden"
-      />
+      {/* Edit Learning */}
+      {/* {editLearning && (
+        <EditLearningFormCMS
+          sessionToken={sessionToken}
+          learningId={learningSessionId}
+          initialData={learningDetailsData?.learning}
+          isOpen={editLearning}
+          onClose={() => setEditLearning(false)}
+        />
+      )} */}
 
-      {/* --- Delete Confirmation */}
+      {/* Delete Learning*/}
       {isOpenDeleteConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"
-          alertDialogMessage={`Are you sure you want to delete ${sessionName}? This action cannot be undone.`}
+          alertDialogMessage={`Are you sure you want to delete ${learningSessionName}? This action cannot be undone.`}
           alertCancelLabel="Cancel"
           alertConfirmLabel="Delete"
           isOpen={isOpenDeleteConfirmation}

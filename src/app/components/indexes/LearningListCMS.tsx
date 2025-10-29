@@ -79,13 +79,20 @@ export default function LearningListCMS({
                   <LearningSessionItemCMS
                     key={index}
                     cohortId={cohortId}
-                    sessionLearningId={post.id}
-                    sessionName={post.name}
-                    sessionEducatorName={post.speaker?.full_name}
-                    sessionEducatorAvatar={post.speaker?.avatar}
-                    sessionMethod={post.method}
-                    sessionDate={post.meeting_date}
-                    sessionMeetingURL={post.meeting_url}
+                    learningSessionId={post.id}
+                    learningSessionName={post.name}
+                    learningSessionEducatorName={
+                      post.speaker?.full_name || "Sevenpreneur Educator"
+                    }
+                    learningSessionEducatorAvatar={
+                      post.speaker?.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                    }
+                    learningSessionMethod={post.method}
+                    learningSessionDate={post.meeting_date}
+                    learningSessionPlace={
+                      post.location_name || "To Be Announced"
+                    }
                     onDeleteSuccess={() => utils.list.learnings.invalidate()}
                   />
                 ))}
@@ -112,13 +119,20 @@ export default function LearningListCMS({
                   <LearningSessionItemCMS
                     key={index}
                     cohortId={cohortId}
-                    sessionLearningId={post.id}
-                    sessionName={post.name}
-                    sessionEducatorName={post.speaker?.full_name}
-                    sessionEducatorAvatar={post.speaker?.avatar}
-                    sessionMethod={post.method}
-                    sessionDate={post.meeting_date}
-                    sessionMeetingURL={post.meeting_url}
+                    learningSessionId={post.id}
+                    learningSessionName={post.name}
+                    learningSessionEducatorName={
+                      post.speaker?.full_name || "Sevenpreneur Educator"
+                    }
+                    learningSessionEducatorAvatar={
+                      post.speaker?.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                    }
+                    learningSessionMethod={post.method}
+                    learningSessionDate={post.meeting_date}
+                    learningSessionPlace={
+                      post.location_name || "To Be Announced"
+                    }
                     onDeleteSuccess={() => utils.list.learnings.invalidate()}
                   />
                 ))}
@@ -145,13 +159,20 @@ export default function LearningListCMS({
                   <LearningSessionItemCMS
                     key={index}
                     cohortId={cohortId}
-                    sessionLearningId={post.id}
-                    sessionName={post.name}
-                    sessionEducatorName={post.speaker?.full_name}
-                    sessionEducatorAvatar={post.speaker?.avatar}
-                    sessionMethod={post.method}
-                    sessionDate={post.meeting_date}
-                    sessionMeetingURL={post.meeting_url}
+                    learningSessionId={post.id}
+                    learningSessionName={post.name}
+                    learningSessionEducatorName={
+                      post.speaker?.full_name || "Sevenpreneur Educator"
+                    }
+                    learningSessionEducatorAvatar={
+                      post.speaker?.avatar ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                    }
+                    learningSessionMethod={post.method}
+                    learningSessionDate={post.meeting_date}
+                    learningSessionPlace={
+                      post.location_name || "To Be Announced"
+                    }
                     onDeleteSuccess={() => utils.list.learnings.invalidate()}
                   />
                 ))}

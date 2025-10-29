@@ -4,7 +4,6 @@ import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppButton from "../buttons/AppButton";
 import {
-  Calendar,
   CalendarFoldIcon,
   ChevronDown,
   ChevronRight,
@@ -100,11 +99,10 @@ export default function CohortDetailsCMS({
           </AppBreadcrumb>
         </div>
 
-        <div className="body-container flex gap-5">
-          <main className="flex flex-col flex-[2] w-0 min-w-0 gap-5">
-            {/* Cohort Detail */}
-            <div className="flex flex-col bg-white border border-outline rounded-md overflow-hidden">
-              <div className="image-thumbnail relative flex aspect-thumbnail overflow-hidden">
+        <div className="body-container flex gap-4">
+          <main className="main-contents flex flex-col flex-2 min-w-0 gap-4">
+            <div className="cohort-attributes flex flex-col bg-white border border-outline rounded-md overflow-hidden">
+              <div className="cohort-image relative flex aspect-thumbnail overflow-hidden">
                 <Image
                   className="object-cover w-full h-full"
                   src={cohortDetailsData?.cohort.image || ""}
@@ -112,21 +110,18 @@ export default function CohortDetailsCMS({
                   width={1200}
                   height={1200}
                 />
-                {/* Overlay */}
                 <div
                   className={`overlay absolute inset-0 z-10 bg-linear-to-b from-0% from-black to-30% to-black/20`}
                 />
                 <div
                   className={`overlay absolute inset-0 z-10 bg-linear-to-t from-0% from-black/50 to-20% to-black/0`}
                 />
-                {/* Status */}
-                <div className="absolute top-4 left-4 z-20">
+                <div className="cohort-status absolute top-4 left-4 z-20">
                   <StatusLabelCMS
                     variants={cohortDetailsData?.cohort.status as StatusType}
                   />
                 </div>
-                {/* Button Edit */}
-                <div className="absolute top-4 right-4 z-20">
+                <div className="edit-cohort absolute top-4 right-4 z-20">
                   <AppButton
                     variant="outline"
                     size="small"
@@ -137,12 +132,10 @@ export default function CohortDetailsCMS({
                   </AppButton>
                 </div>
               </div>
-              <div className="relative flex flex-col mt-[-20px] gap-3 p-4 bg-white text-black z-20 rounded-md">
-                {/* Title */}
+              <div className="cohort-attributes relative flex flex-col mt-[-20px] gap-3 p-4 bg-white text-black z-20 rounded-md">
                 <h1 className="cohort-title font-brand font-bold text-2xl line-clamp-2">
                   {cohortDetailsData?.cohort.name}
                 </h1>
-                {/* Learning Period */}
                 <div className="cohort-timeline flex w-fit gap-4 items-center bg-white rounded-md p-2 px-3.5 border border-outline">
                   <CalendarFoldIcon className="size-6 text-alternative" />
                   <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
@@ -156,15 +149,14 @@ export default function CohortDetailsCMS({
                   <div className="w-[1px] h-full bg-outline" />
                   <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
                     <p className="text-black font-semibold">
-                      Program Wrap-up Date
+                      Program Finish Date
                     </p>
                     <p>
                       {dayjs(cohortDetailsData?.cohort.end_date).format("ll")}
                     </p>
                   </div>
                 </div>
-                {/* Description */}
-                <div className="description relative flex flex-col">
+                <div className="cohort-description relative flex flex-col">
                   <p
                     className={`font-bodycopy font-medium text-sm text-black/50 transition-all ${
                       !isExpanded && "line-clamp-3"
@@ -200,11 +192,10 @@ export default function CohortDetailsCMS({
                 )}
               </div>
             </div>
-            {/* Price Tiers */}
-            <div className="flex flex-col gap-3">
-              <h2 className="label-name font-brand font-bold">Price Tiers</h2>
+            <div className="cohort-prices flex flex-col gap-3">
+              <h2 className="section-name font-brand font-bold">Price Tiers</h2>
               <div className="w-full overflow-x-auto scroll-smooth">
-                <div className="price-tiers flex gap-4 w-fit max-w-full pb-4 snap-x snap-mandatory">
+                <div className="cohort-price-list flex gap-4 w-fit max-w-full pb-4 snap-x snap-mandatory">
                   {cohortDetailsData.cohort.cohort_prices.map((post, index) => (
                     <PriceItemCardCMS
                       key={index}
@@ -219,9 +210,9 @@ export default function CohortDetailsCMS({
             <LearningListCMS sessionToken={sessionToken} cohortId={cohortId} />
           </main>
 
-          <aside className="aside-contents flex flex-col flex-[1] w-full gap-5">
+          <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
             {/* Stats */}
-            <div className="stats flex flex-col gap-3">
+            <div className="cohort-stats flex flex-col gap-3">
               <ScorecardItemCMS
                 scorecardName="Total Learning Sessions"
                 scorecardValue={cohortDetailsData.cohort.total_learning_session}

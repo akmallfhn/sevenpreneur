@@ -41,7 +41,7 @@ export default function LearningSessionItemLMS({
       className="session-box flex w-full bg-section-background p-3.5 items-center justify-between font-bodycopy rounded-md  transform transition hover:cursor-pointer active:scale-95 hover:bg-[#EDF0F6]"
     >
       <div className="session-container flex items-center gap-4">
-        <div className="session-date flex flex-col items-center aspect-square w-14">
+        <div className="session-date flex flex-col w-14 items-center aspect-square shrink-0">
           <p className="session-day font-medium text-sm">
             {dayjs(learningSessionDate).format("ddd")}
           </p>
@@ -50,7 +50,7 @@ export default function LearningSessionItemLMS({
           </p>
         </div>
         <div className="divider w-[1px] self-stretch bg-outline" />
-        <div className="session-schedule flex flex-col text-sm gap-1 font-medium text-[#333333] shrink-0">
+        <div className="session-schedule flex flex-col w-30 text-sm gap-1 font-medium text-[#333333] shrink-0">
           <div className="session-time flex items-center gap-2">
             <FontAwesomeIcon icon={faClock} className="text-alternative" />
             <p>{dayjs(learningSessionDate).format("HH:mm")}</p>
@@ -58,9 +58,9 @@ export default function LearningSessionItemLMS({
           <div className="session-place flex items-center gap-2">
             <FontAwesomeIcon
               icon={faLocationDot}
-              className="text-alternative"
+              className="text-alternative shrink-0"
             />
-            <p>{learningLocation}</p>
+            <p className="line-clamp-1">{learningLocation}</p>
           </div>
         </div>
         <div className="divider w-[1px] self-stretch bg-outline" />
