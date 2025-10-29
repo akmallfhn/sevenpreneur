@@ -20,6 +20,7 @@ export interface VideoItem {
 interface PlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   playlistId: number;
+  playlistName: string;
   playlistVideos: VideoItem[];
 }
 
@@ -28,6 +29,7 @@ export default function PlaylistDetailsLMS({
   sessionUserAvatar,
   sessionUserRole,
   playlistId,
+  playlistName,
   playlistVideos,
 }: PlaylistDetailsLMSProps) {
   const searchParams = useSearchParams();
@@ -94,6 +96,7 @@ export default function PlaylistDetailsLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}
+        playlistName={playlistName}
       />
       <div className="body-playlist max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
         <main className="main flex flex-col flex-2 w-full gap-4">

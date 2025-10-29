@@ -81,6 +81,10 @@ export default function HeaderCohortEntityLMS({
                 <AppBreadcrumbItem href={`/cohorts/${cohortId}`}>
                   {cohortName}
                 </AppBreadcrumbItem>
+                <p className="slash font-bodycopy">/</p>
+                <AppBreadcrumbItem isCurrentPage>
+                  {headerTitle}
+                </AppBreadcrumbItem>
               </AppBreadcrumb>
             </div>
             <div className="header-information flex items-center gap-2">

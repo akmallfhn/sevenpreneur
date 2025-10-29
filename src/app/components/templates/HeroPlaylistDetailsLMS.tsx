@@ -11,12 +11,14 @@ import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 interface HeroPlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
+  playlistName: string;
 }
 
 export default function HeroPlaylistDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  playlistName,
 }: HeroPlaylistDetailsLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -71,6 +73,8 @@ export default function HeroPlaylistDetailsLMS({
             <AppBreadcrumbItem href="/playlists">
               Learning Series
             </AppBreadcrumbItem>
+            <p className="slash font-bodycopy">/</p>
+            <AppBreadcrumbItem isCurrentPage>{playlistName}</AppBreadcrumbItem>
           </AppBreadcrumb>
         </div>
         <div

@@ -11,12 +11,14 @@ import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 interface HeroCohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
+  cohortName: string;
 }
 
 export default function HeroCohortDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  cohortName,
 }: HeroCohortDetailsLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -71,6 +73,8 @@ export default function HeroCohortDetailsLMS({
             <AppBreadcrumbItem href="/cohorts">
               Bootcamp Programs
             </AppBreadcrumbItem>
+            <p className="slash font-bodycopy">/</p>
+            <AppBreadcrumbItem isCurrentPage>{cohortName}</AppBreadcrumbItem>
           </AppBreadcrumb>
         </div>
         <div

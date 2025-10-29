@@ -1,5 +1,4 @@
 "use client";
-import { Progress } from "@/components/ui/progress";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import CohortDetailsTabsLMS, {
   LearningSessionList,
@@ -40,6 +39,7 @@ export default function CohortDetailsLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}
+        cohortName={cohortName}
       />
       <div className="body-cohort max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
         <main className="main flex flex-col flex-[2.5] w-full">

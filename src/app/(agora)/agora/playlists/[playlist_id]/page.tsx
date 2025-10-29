@@ -40,7 +40,8 @@ export default async function PlaylistDetailsPageLMS({
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
-      playlistId={playlistId}
+      playlistId={enrolledPlaylistData.id}
+      playlistName={enrolledPlaylistData.name}
       playlistVideos={enrolledPlaylistData.videos}
     />
   );
