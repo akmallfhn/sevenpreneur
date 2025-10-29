@@ -10,6 +10,9 @@ import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface CreateCohortFormCMSProps {
   isOpen: boolean;
@@ -24,13 +27,14 @@ export default function CreateCohortFormCMS({
   const createCohort = trpc.create.cohort.useMutation();
   const utils = trpc.useUtils();
 
-  // --- Beginning State
+  // Beginning State
   const [formData, setFormData] = useState<{
     cohortName: string;
     cohortImage: string;
     cohortDescription: string;
     cohortStartDate: string;
     cohortEndDate: string;
+    cohortStatus: StatusType;
     cohortPriceTiers: PriceTier[];
   }>({
     cohortName: "",
@@ -38,6 +42,7 @@ export default function CreateCohortFormCMS({
     cohortDescription: "",
     cohortStartDate: "",
     cohortEndDate: "",
+    cohortStatus: "ACTIVE",
     cohortPriceTiers: [
       {
         name: "",
@@ -124,7 +129,7 @@ export default function CreateCohortFormCMS({
         {
           name: formData.cohortName.trim(),
           description: formData.cohortDescription.trim(),
-          status: "ACTIVE",
+          status: formData.cohortStatus,
           image: formData.cohortImage,
           start_date: new Date(formData.cohortStartDate).toISOString(),
           end_date: new Date(formData.cohortEndDate).toISOString(),
@@ -190,6 +195,28 @@ export default function CreateCohortFormCMS({
               onInputChange={handleInputChange("cohortDescription")}
               required
             />
+            <div className="cohort-status flex flex-col gap-1">
+              <label
+                htmlFor={"cohort-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.cohortStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("cohortStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                {formData.cohortStatus && (
+                  <StatusLabelCMS variants={formData.cohortStatus} />
+                )}
+              </div>
+            </div>
             <InputCMS
               inputId="start-date"
               inputName="Program Starts"

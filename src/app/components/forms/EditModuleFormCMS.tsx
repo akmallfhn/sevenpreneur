@@ -9,6 +9,9 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditModuleFormCMSProps {
   sessionToken: string;
@@ -45,10 +48,12 @@ export default function EditModuleFormCMS({
     moduleName: string;
     moduleDescription: string;
     moduleURL: string;
+    moduleStatus: StatusType;
   }>({
     moduleName: initialDataModule?.module.name || "",
     moduleDescription: initialDataModule?.module.description || "",
     moduleURL: initialDataModule?.module.document_url || "",
+    moduleStatus: initialDataModule?.module.status as StatusType,
   });
 
   // Iterate initial data (so it doesn't get lost)
@@ -62,6 +67,7 @@ export default function EditModuleFormCMS({
       moduleName: initialDataModule.module.name || "",
       moduleDescription: initialDataModule.module.description || "",
       moduleURL: url,
+      moduleStatus: initialDataModule.module.status,
     });
 
     // Set upload method (auto-select radio)
@@ -110,7 +116,6 @@ export default function EditModuleFormCMS({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Required field checking
     if (!formData.moduleName) {
       toast.error("Let’s give this document a proper title before saving.");
       setIsSubmitting(false);
@@ -122,7 +127,6 @@ export default function EditModuleFormCMS({
       return;
     }
 
-    // POST to Database
     try {
       editModule.mutate(
         {
@@ -130,7 +134,7 @@ export default function EditModuleFormCMS({
           cohort_id: cohortId,
           id: moduleId,
           name: formData.moduleName.trim(),
-          status: "ACTIVE",
+          status: formData.moduleStatus,
           document_url: formData.moduleURL,
 
           // Optional fields:
@@ -165,7 +169,7 @@ export default function EditModuleFormCMS({
 
   return (
     <AppSheet
-      sheetName="Edit File"
+      sheetName="Edit Module File"
       sheetDescription="Update the document's title, description, or access link to keep your cohort resources up to date."
       isOpen={isOpen}
       onClose={onClose}
@@ -204,6 +208,28 @@ export default function EditModuleFormCMS({
                 value={formData.moduleDescription}
                 onInputChange={handleInputChange("moduleDescription")}
               />
+              <div className="module-status flex flex-col gap-1">
+                <label
+                  htmlFor={"module-status"}
+                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                >
+                  Status <span className="text-red-700">*</span>
+                </label>
+                <div className="switch-button flex pl-1 gap-2">
+                  <Switch
+                    className="data-[state=checked]:bg-cms-primary"
+                    checked={formData.moduleStatus === "ACTIVE"}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("moduleStatus")(
+                        checked ? "ACTIVE" : "INACTIVE"
+                      )
+                    }
+                  />
+                  {formData.moduleStatus && (
+                    <StatusLabelCMS variants={formData.moduleStatus} />
+                  )}
+                </div>
+              </div>
               <div className="flex flex-col gap-5 pt-4">
                 <div className="flex flex-col">
                   <h3 className="font-bold font-brand">Upload Document</h3>

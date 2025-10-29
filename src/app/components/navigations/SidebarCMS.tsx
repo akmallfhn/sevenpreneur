@@ -63,10 +63,8 @@ export default function SidebarCMS({
 
   return (
     <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">
-      {/* TOP AREA */}
       <div className="sidebar-cms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
-        {/* Logo & Platform */}
-        <div className="platform-and-logo flex w-full items-center gap-4">
+        <div className="brand-logo-platform flex w-full items-center gap-4">
           <div className="logo size-14 aspect-square rounded-md overflow-hidden">
             <Image
               className="object-cover w-full h-full"
@@ -84,7 +82,6 @@ export default function SidebarCMS({
           </div>
         </div>
 
-        {/* Conditional Rendering */}
         {isLoading && (
           <div className="flex w-full h-full items-center justify-center text-alternative">
             <Loader2 className="animate-spin size-5 " />
@@ -96,7 +93,6 @@ export default function SidebarCMS({
           </div>
         )}
 
-        {/* User & Roles */}
         {!isLoading && !isError && (
           <UserBadgeCMS
             userName={data?.user.full_name || ""}
@@ -108,7 +104,6 @@ export default function SidebarCMS({
           />
         )}
 
-        {/* Sidebar Menu */}
         <div className="sidebar-menu flex flex-col h-full gap-1">
           <SidebarMenuItemCMS
             menuTitle="Dashboard"
@@ -121,11 +116,6 @@ export default function SidebarCMS({
               menuTitle="Cohorts"
               url="/cohorts"
               icon={<Presentation />}
-            />
-            <SidebarMenuItemCMS
-              menuTitle="Discounts"
-              url="/discounts"
-              icon={<Tags />}
             />
           </SidebarMenuGroupCMS>
 
@@ -144,11 +134,18 @@ export default function SidebarCMS({
             </SidebarMenuGroupCMS>
           )}
           {isAdministrator && (
-            <SidebarMenuItemCMS
-              menuTitle="Web Marketing"
-              url="/marketing"
-              icon={<Waypoints />}
-            />
+            <SidebarMenuGroupCMS title="Promo">
+              <SidebarMenuItemCMS
+                menuTitle="Web Marketing"
+                url="/marketing"
+                icon={<Waypoints />}
+              />
+              <SidebarMenuItemCMS
+                menuTitle="Discounts"
+                url="/discounts"
+                icon={<Tags />}
+              />
+            </SidebarMenuGroupCMS>
           )}
         </div>
       </div>

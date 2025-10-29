@@ -10,6 +10,9 @@ import { Loader2 } from "lucide-react";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
 import dayjs from "dayjs";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditProjectFormCMSProps {
   projectId: number;
@@ -40,6 +43,7 @@ export default function EditProjectFormCMS({
     projectDescription: string;
     projectDeadline: string;
     projectURL: string;
+    projectStatus: StatusType;
   }>({
     projectName: initialData?.name.trim() ? initialData.name : "",
     projectDescription: initialData?.description.trim()
@@ -51,6 +55,7 @@ export default function EditProjectFormCMS({
     projectURL: initialData?.document_url?.trim()
       ? initialData?.document_url
       : "",
+    projectStatus: initialData?.status as StatusType,
   });
 
   // Update formData if initialData changes
@@ -71,6 +76,7 @@ export default function EditProjectFormCMS({
         projectURL: initialData?.document_url?.trim()
           ? initialData?.document_url
           : "",
+        projectStatus: initialData.status,
       });
     }
 
@@ -149,7 +155,7 @@ export default function EditProjectFormCMS({
         {
           // Mandatory fields:
           id: projectId,
-          status: "ACTIVE",
+          status: formData.projectStatus,
           name: formData.projectName.trim(),
           description: formData.projectDescription.trim(),
           deadline_at: new Date(formData.projectDeadline).toISOString(),
@@ -217,11 +223,33 @@ export default function EditProjectFormCMS({
                 textAreaName="Project Brief"
                 textAreaPlaceholder="Outline the project objectives, deliverables, and any specific instructions."
                 textAreaHeight="h-36"
-                characterLength={1000}
+                characterLength={4000}
                 value={formData.projectDescription}
                 onInputChange={handleInputChange("projectDescription")}
                 required
               />
+              <div className="project-status flex flex-col gap-1">
+                <label
+                  htmlFor={"project-status"}
+                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                >
+                  Status <span className="text-red-700">*</span>
+                </label>
+                <div className="switch-button flex pl-1 gap-2">
+                  <Switch
+                    className="data-[state=checked]:bg-cms-primary"
+                    checked={formData.projectStatus === "ACTIVE"}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("projectStatus")(
+                        checked ? "ACTIVE" : "INACTIVE"
+                      )
+                    }
+                  />
+                  {formData.projectStatus && (
+                    <StatusLabelCMS variants={formData.projectStatus} />
+                  )}
+                </div>
+              </div>
               <InputCMS
                 inputId="project-deadline"
                 inputName="Submission Deadline"

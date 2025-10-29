@@ -9,6 +9,9 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface CreateModuleFormCMSProps {
   cohortId: number;
@@ -31,10 +34,12 @@ export default function CreateModuleFormCMS({
     moduleName: string;
     moduleDescription: string;
     moduleURL: string;
+    moduleStatus: StatusType;
   }>({
     moduleName: "",
     moduleDescription: "",
     moduleURL: "",
+    moduleStatus: "ACTIVE",
   });
 
   // Reset moduleURL every time upload method is changed
@@ -88,7 +93,7 @@ export default function CreateModuleFormCMS({
           // Mandatory fields:
           cohort_id: cohortId,
           name: formData.moduleName.trim(),
-          status: "ACTIVE",
+          status: formData.moduleStatus,
           document_url: formData.moduleURL,
 
           // Optional fields:
@@ -122,7 +127,7 @@ export default function CreateModuleFormCMS({
 
   return (
     <AppSheet
-      sheetName="Add Learning Kit"
+      sheetName="Add Module File"
       sheetDescription="Upload essential learning documents to support this cohort"
       isOpen={isOpen}
       onClose={onClose}
@@ -150,6 +155,28 @@ export default function CreateModuleFormCMS({
               value={formData.moduleDescription}
               onInputChange={handleInputChange("moduleDescription")}
             />
+            <div className="module-status flex flex-col gap-1">
+              <label
+                htmlFor={"module-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.moduleStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("moduleStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                {formData.moduleStatus && (
+                  <StatusLabelCMS variants={formData.moduleStatus} />
+                )}
+              </div>
+            </div>
             <div className="flex flex-col gap-5 pt-4">
               <div className="flex flex-col">
                 <h3 className="font-bold font-brand">Upload Document</h3>

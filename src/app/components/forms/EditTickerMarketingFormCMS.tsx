@@ -195,7 +195,7 @@ export default function EditTickerMarketingFormCMS({
                 onInputChange={handleInputChange("tickerEndDate")}
                 required
               />
-              <div className="status flex flex-col gap-1">
+              <div className="ticker-status flex flex-col gap-1">
                 <label
                   htmlFor={"ticker-status"}
                   className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"

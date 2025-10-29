@@ -9,7 +9,9 @@ import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
-import { SessionMethod } from "@/lib/app-types";
+import { SessionMethod, StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditLearningFormCMSProps {
   sessionToken: string;
@@ -46,6 +48,7 @@ export default function EditLearningFormCMS({
     learningLocation: string;
     learningLocationURL: string;
     learningSpeaker: string;
+    learningStatus: StatusType;
   }>({
     learningName: initialData.name || "",
     learningDescription: initialData.description || "",
@@ -63,6 +66,7 @@ export default function EditLearningFormCMS({
       ? initialData.location_url
       : "",
     learningSpeaker: initialData.speaker_id ? initialData.speaker_id : "",
+    learningStatus: initialData.status as StatusType,
   });
 
   // Add event listener to prevent page refresh
@@ -187,7 +191,7 @@ export default function EditLearningFormCMS({
           // Mandatory fields:
           id: learningId,
           name: formData.learningName.trim(),
-          status: "ACTIVE",
+          status: formData.learningStatus,
           description: formData.learningDescription.trim(),
           meeting_date: new Date(formData.learningDate).toISOString(),
           method: formData.learningMethod as SessionMethod,
@@ -260,6 +264,28 @@ export default function EditLearningFormCMS({
               onInputChange={handleInputChange("learningDescription")}
               required
             />
+            <div className="learning-status flex flex-col gap-1">
+              <label
+                htmlFor={"learning-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.learningStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("learningStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                {formData.learningStatus && (
+                  <StatusLabelCMS variants={formData.learningStatus} />
+                )}
+              </div>
+            </div>
             <InputCMS
               inputId="learning-date"
               inputName="Session Schedule"

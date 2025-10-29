@@ -44,21 +44,21 @@ export default function CohortDetailsCMS({
   const [isOverflowing, setIsOverflowing] = useState(false);
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
 
-  // --- Set token for API
+  // Set token for API
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
 
-  // --- Call data from tRPC
+  // Call data from tRPC
   const {
     data: cohortDetailsData,
     isLoading,
     isError,
   } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
 
-  // --- Checking height content description
+  // Checking height content description
   useEffect(() => {
     if (paragraphRef.current && cohortDetailsData?.cohort.description) {
       const el = paragraphRef.current;
@@ -67,7 +67,7 @@ export default function CohortDetailsCMS({
     }
   }, [cohortDetailsData?.cohort.description]);
 
-  // --- Extract variable
+  // Extract variable
   if (isLoading) {
     return (
       <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -89,7 +89,6 @@ export default function CohortDetailsCMS({
   return (
     <React.Fragment>
       <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-        {/* --- PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -101,9 +100,7 @@ export default function CohortDetailsCMS({
           </AppBreadcrumb>
         </div>
 
-        {/* --- DETAILS */}
         <div className="body-container flex gap-5">
-          {/* -- Main */}
           <main className="flex flex-col flex-[2] w-0 min-w-0 gap-5">
             {/* Cohort Detail */}
             <div className="flex flex-col bg-white border border-outline rounded-md overflow-hidden">
@@ -222,8 +219,7 @@ export default function CohortDetailsCMS({
             <LearningListCMS sessionToken={sessionToken} cohortId={cohortId} />
           </main>
 
-          {/* -- Aside */}
-          <aside className="flex flex-col flex-[1] w-full gap-5">
+          <aside className="aside-contents flex flex-col flex-[1] w-full gap-5">
             {/* Stats */}
             <div className="stats flex flex-col gap-3">
               <ScorecardItemCMS

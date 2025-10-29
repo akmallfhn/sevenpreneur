@@ -10,6 +10,9 @@ import { toast } from "sonner";
 import { FormEvent, useEffect, useState } from "react";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditCohortFormCMSProps {
   cohortId: number;
@@ -38,6 +41,7 @@ export default function EditCohortFormCMS({
     cohortDescription: string;
     cohortStartDate: string;
     cohortEndDate: string;
+    cohortStatus: StatusType;
     cohortPriceTiers: PriceTier[];
   }>({
     cohortName: initialData.name || "",
@@ -49,6 +53,7 @@ export default function EditCohortFormCMS({
     cohortEndDate: initialData.end_date
       ? dayjs(initialData.end_date).format("YYYY-MM-DDTHH:mm")
       : "",
+    cohortStatus: initialData.status as StatusType,
     cohortPriceTiers: initialData.cohort_prices.map(
       (post: { id: number; name: string; amount: number }) => ({
         id: post.id,
@@ -130,14 +135,12 @@ export default function EditCohortFormCMS({
       return;
     }
 
-    // POST to Database
     try {
-      // Update Cohort
       await editCohort.mutateAsync({
         id: cohortId,
         name: formData.cohortName.trim(),
         description: formData.cohortDescription.trim(),
-        status: "ACTIVE",
+        status: formData.cohortStatus,
         image: formData.cohortImage,
         start_date: new Date(formData.cohortStartDate).toISOString(),
         end_date: new Date(formData.cohortEndDate).toISOString(),
@@ -238,6 +241,28 @@ export default function EditCohortFormCMS({
               onInputChange={handleInputChange("cohortDescription")}
               required
             />
+            <div className="cohort-status flex flex-col gap-1">
+              <label
+                htmlFor={"cohort-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.cohortStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("cohortStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                {formData.cohortStatus && (
+                  <StatusLabelCMS variants={formData.cohortStatus} />
+                )}
+              </div>
+            </div>
             <InputCMS
               inputId="start-date"
               inputName="Program Starts"

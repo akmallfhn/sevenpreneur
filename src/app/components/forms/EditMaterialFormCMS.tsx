@@ -9,6 +9,9 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditMaterialFormCMSProps {
   sessionToken: string;
@@ -48,10 +51,12 @@ export default function EditMaterialFormCMS({
     materialName: string;
     materialDescription: string;
     materialURL: string;
+    materialStatus: StatusType;
   }>({
     materialName: initialDataMaterial?.material.name || "",
     materialDescription: initialDataMaterial?.material.description || "",
     materialURL: initialDataMaterial?.material.document_url || "",
+    materialStatus: initialDataMaterial?.material.status as StatusType,
   });
 
   // Iterate initial data (so it doesn't get lost)
@@ -65,6 +70,7 @@ export default function EditMaterialFormCMS({
       materialName: initialDataMaterial.material.name || "",
       materialDescription: initialDataMaterial.material.description || "",
       materialURL: url,
+      materialStatus: initialDataMaterial.material.status as StatusType,
     });
 
     // Set upload method (auto-select radio)
@@ -113,7 +119,6 @@ export default function EditMaterialFormCMS({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Required field checking
     if (!formData.materialName) {
       toast.error("Let’s give this document a proper title before saving.");
       setIsSubmitting(false);
@@ -125,7 +130,6 @@ export default function EditMaterialFormCMS({
       return;
     }
 
-    // POST to Database
     try {
       editMaterial.mutate(
         {
@@ -133,7 +137,7 @@ export default function EditMaterialFormCMS({
           learning_id: learningId,
           id: materialId,
           name: formData.materialName.trim(),
-          status: "ACTIVE",
+          status: formData.materialStatus,
           document_url: formData.materialURL,
 
           // Optional fields:
@@ -207,6 +211,28 @@ export default function EditMaterialFormCMS({
                 value={formData.materialDescription}
                 onInputChange={handleInputChange("materialDescription")}
               />
+              <div className="material-status flex flex-col gap-1">
+                <label
+                  htmlFor={"material-status"}
+                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                >
+                  Status <span className="text-red-700">*</span>
+                </label>
+                <div className="switch-button flex pl-1 gap-2">
+                  <Switch
+                    className="data-[state=checked]:bg-cms-primary"
+                    checked={formData.materialStatus === "ACTIVE"}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("materialStatus")(
+                        checked ? "ACTIVE" : "INACTIVE"
+                      )
+                    }
+                  />
+                  {formData.materialStatus && (
+                    <StatusLabelCMS variants={formData.materialStatus} />
+                  )}
+                </div>
+              </div>
               <div className="flex flex-col gap-5 pt-4">
                 <div className="flex flex-col">
                   <h3 className="font-bold font-brand">Upload Document</h3>

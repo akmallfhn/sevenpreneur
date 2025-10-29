@@ -9,6 +9,9 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
+import { StatusType } from "@/lib/app-types";
+import { Switch } from "@/components/ui/switch";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface CreateMaterialFormCMSProps {
   learningId: number;
@@ -31,10 +34,12 @@ export default function CreateMaterialFormCMS({
     materialName: string;
     materialDescription: string;
     materialURL: string;
+    materialStatus: StatusType;
   }>({
     materialName: "",
     materialDescription: "",
     materialURL: "",
+    materialStatus: "ACTIVE",
   });
 
   // Reset materialURL every time upload method is changed
@@ -88,7 +93,7 @@ export default function CreateMaterialFormCMS({
           // Mandatory fields:
           learning_id: learningId,
           name: formData.materialName.trim(),
-          status: "ACTIVE",
+          status: formData.materialStatus,
           document_url: formData.materialURL,
 
           // Optional fields:
@@ -150,6 +155,28 @@ export default function CreateMaterialFormCMS({
               value={formData.materialDescription}
               onInputChange={handleInputChange("materialDescription")}
             />
+            <div className="material-status flex flex-col gap-1">
+              <label
+                htmlFor={"material-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.materialStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("materialStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                {formData.materialStatus && (
+                  <StatusLabelCMS variants={formData.materialStatus} />
+                )}
+              </div>
+            </div>
             <div className="flex flex-col gap-5 pt-4">
               <div className="flex flex-col">
                 <h3 className="font-bold font-brand">Upload Document</h3>

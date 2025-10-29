@@ -18,7 +18,7 @@ export default function ModuleListCMS({
   const [createModule, setCreateModule] = useState(false);
   const utils = trpc.useUtils();
 
-  // --- Call data from tRPC
+  // Fetch tRPC Data
   const {
     data: moduleListData,
     isError,
@@ -32,7 +32,7 @@ export default function ModuleListCMS({
     <React.Fragment>
       <div className="modules flex flex-col gap-3 p-3 bg-section-background rounded-md">
         <div className="section-name flex justify-between items-center">
-          <h2 className="label-name font-brand font-bold">Learning Kit</h2>
+          <h2 className="label-name font-brand font-bold">Module File</h2>
           <AppButton
             variant="outline"
             size="small"
@@ -78,7 +78,7 @@ export default function ModuleListCMS({
       </p> */}
       </div>
 
-      {/* --- Form Create Module */}
+      {/* Form Create Module */}
       {createModule && (
         <CreateModuleFormCMS
           cohortId={cohortId}
