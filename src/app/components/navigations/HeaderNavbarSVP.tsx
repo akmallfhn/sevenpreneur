@@ -21,20 +21,20 @@ import { useTheme } from "next-themes";
 import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
 import SideMenuMobileSVP from "./SideMenuMobileSVP";
 import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
-import AnnouncementTickerSVP from "./AnnouncementTickerSVP";
+import AnnouncementTickerSVP, {
+  AnnouncementTickerSVPProps,
+} from "./AnnouncementTickerSVP";
 import { StatusType } from "@/lib/app-types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 
 dayjs.extend(isBetween);
 
-interface HeaderNavbarSVPProps {
+interface HeaderNavbarSVPProps extends AnnouncementTickerSVPProps {
   isLoggedIn: boolean;
   userAvatar: string | null;
   userName: string | undefined;
   userRole: number | undefined;
-  tickerTitle: string;
-  tickerCallout?: string;
   tickerStatus: StatusType;
   tickerStartDate: string;
   tickerEndDate: string;
@@ -47,6 +47,7 @@ export default function HeaderNavbarSVP({
   userRole,
   tickerTitle,
   tickerCallout,
+  tickerTargetURL,
   tickerStatus,
   tickerStartDate,
   tickerEndDate,
@@ -121,8 +122,7 @@ export default function HeaderNavbarSVP({
         <div className="navbar-group sticky flex flex-col top-0 left-0 z-[90] lg:flex-col-reverse">
           <div className="navbar-root flex w-full bg-white items-center justify-center shadow-md dark:bg-black/40 dark:backdrop-blur-sm">
             <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-              {/* LEFT SIDE */}
-              <Link href={"/"}>
+              <Link href={"/"} className="brand-logo-site">
                 {mounted && (
                   <Image
                     className="max-w-[142px] lg:max-w-[168px]"
@@ -138,9 +138,7 @@ export default function HeaderNavbarSVP({
                 )}
               </Link>
 
-              {/* CENTER SIDE */}
-              {/* Menu Desktop */}
-              <nav className="menu-container hidden lg:flex">
+              <nav className="desktop-menu hidden lg:flex">
                 <ul className="menu-item-list flex items-center gap-10">
                   <HeaderNavbarItemSVP
                     menuTitle="Program"
@@ -168,14 +166,11 @@ export default function HeaderNavbarSVP({
                 </ul>
               </nav>
 
-              {/* RIGHT SIDE */}
-              <div className="flex items-center gap-4">
-                {/* Theme Switcher */}
-                <div className="hidden lg:flex">
+              <div className="navigation-control flex items-center gap-4">
+                <div className="theme-switcher hidden lg:flex">
                   <AppThemeSwitcher />
                 </div>
 
-                {/* User Navigation */}
                 {isLoggedIn ? (
                   <div
                     className="user-menu relative flex hover:cursor-pointer"
@@ -235,9 +230,7 @@ export default function HeaderNavbarSVP({
                     </div>
                   </Link>
                 )}
-
-                {/* Hamburger Button */}
-                <div className="flex lg:hidden">
+                <div className="mobile-menu-button flex lg:hidden">
                   <AppButton
                     variant="ghost"
                     size="icon"
@@ -253,12 +246,12 @@ export default function HeaderNavbarSVP({
             <AnnouncementTickerSVP
               tickerTitle={tickerTitle}
               tickerCallout={tickerCallout}
+              tickerTargetURL={tickerTargetURL}
             />
           )}
         </div>
       )}
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <SideMenuMobileSVP
           isOpen={mobileMenuOpen}

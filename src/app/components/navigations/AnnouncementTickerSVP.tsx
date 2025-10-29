@@ -1,14 +1,16 @@
 "use client";
 import Link from "next/link";
 
-interface AnnouncementTickerSVPProps {
+export interface AnnouncementTickerSVPProps {
   tickerTitle: string;
   tickerCallout?: string;
+  tickerTargetURL: string;
 }
 
 export default function AnnouncementTickerSVP({
   tickerTitle,
   tickerCallout,
+  tickerTargetURL,
 }: AnnouncementTickerSVPProps) {
   const tickerData = {
     text: tickerTitle,
@@ -19,7 +21,7 @@ export default function AnnouncementTickerSVP({
 
   return (
     <Link
-      href="/cohorts/sevenpreneur-business-blueprint-program#package-plans"
+      href={tickerTargetURL}
       className="announcement-ticker relative w-full h-10 bg-[#DEEBFF] flex items-center overflow-hidden dark:bg-[#09003E]"
     >
       <div className="announcement-track flex gap-5 text-sm font-brand font-[350px] whitespace-nowrap z-10">

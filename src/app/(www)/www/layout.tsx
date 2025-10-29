@@ -60,6 +60,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
           isLoggedIn={!!userData}
           tickerTitle={tickerData?.title ?? ""}
           tickerCallout={tickerData?.callout ?? ""}
+          tickerTargetURL={tickerData.target_url ?? ""}
           tickerStatus={tickerData?.status as StatusType}
           tickerStartDate={tickerData?.start_date ?? ""}
           tickerEndDate={tickerData?.end_date ?? ""}

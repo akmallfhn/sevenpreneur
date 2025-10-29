@@ -113,6 +113,7 @@ export default function EditTickerMarketingFormCMS({
           callout: formData.tickerCallout.trim()
             ? formData.tickerCallout.trim()
             : "",
+          target_url: formData.tickerTargetUrl.trim(),
           status: formData.tickerStatus as StatusType,
           start_date: new Date(formData.tickerStartDate).toISOString(),
           end_date: new Date(formData.tickerEndDate).toISOString(),
@@ -175,7 +176,7 @@ export default function EditTickerMarketingFormCMS({
                 inputType="url"
                 inputPlaceholder="https://sevenpreneur.com/cohorts"
                 value={formData.tickerTargetUrl}
-                onInputChange={handleInputChange("tickerTargerUrl")}
+                onInputChange={handleInputChange("tickerTargetUrl")}
                 required
               />
               <InputCMS
