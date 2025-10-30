@@ -42,6 +42,7 @@ export default async function PlaylistDetailsPageLMS({
       sessionUserRole={userData.role_id}
       playlistId={enrolledPlaylistData.id}
       playlistName={enrolledPlaylistData.name}
+      playlistDescription={enrolledPlaylistData.description}
       playlistVideos={enrolledPlaylistData.videos}
     />
   );

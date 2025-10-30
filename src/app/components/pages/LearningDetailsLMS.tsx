@@ -256,7 +256,7 @@ export default function LearningDetailsLMS({
                   ))}
                 </div>
               ) : (
-                <p className="text-alternative text-sm font-bodycopy">
+                <p className="text-alternative text-[15px] font-bodycopy font-medium">
                   The session materials are being prepared and will be available
                   soon.
                 </p>

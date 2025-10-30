@@ -10,17 +10,19 @@ import { StatusType } from "@/lib/app-types";
 export interface VideoItem {
   id: number;
   name: string;
+  description: string | null;
   image_url: string;
   duration: number;
   video_url?: string;
   external_video_id: string;
-  // status: StatusType;
+  status: StatusType;
 }
 
 interface PlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   playlistId: number;
   playlistName: string;
+  playlistDescription: string;
   playlistVideos: VideoItem[];
 }
 
@@ -30,6 +32,7 @@ export default function PlaylistDetailsLMS({
   sessionUserRole,
   playlistId,
   playlistName,
+  playlistDescription,
   playlistVideos,
 }: PlaylistDetailsLMSProps) {
   const searchParams = useSearchParams();
@@ -100,28 +103,36 @@ export default function PlaylistDetailsLMS({
       />
       <div className="body-playlist max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
         <main className="main flex flex-col flex-2 w-full gap-4">
-          <div className="video-player relative w-full aspect-video bg-[#E1E5EF] rounded-lg overflow-hidden">
-            {selectedVideoData ? (
-              <AppVideoPlayer videoId={selectedVideoData.external_video_id} />
-            ) : (
-              <iframe
-                width="100%"
-                height="100%"
-                src={`https://www.youtube.com/embed/lw0Txg5_Dz4?si=s-l3xMWgaVnhWYoI&amp;controls=1`}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
-            )}
+          <div className="video-attributes flex flex-col w-full bg-white border gap-4 rounded-lg">
+            <div className="video-player relative w-full aspect-video bg-[#E1E5EF] rounded-lg overflow-hidden">
+              {selectedVideoData ? (
+                <AppVideoPlayer videoId={selectedVideoData.external_video_id} />
+              ) : (
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/lw0Txg5_Dz4?si=s-l3xMWgaVnhWYoI&amp;controls=1`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
+              )}
+            </div>
+            <div className="flex flex-col gap-4 px-4 pb-4">
+              <h1 className="video-name font-bodycopy font-bold w-full text-xl">
+                {selectedVideoData
+                  ? selectedVideoData.name
+                  : "Teaser RE:START Conference 2025"}
+              </h1>
+              <p className="video-description font-bodycopy text-[15px] text-[#333333] whitespace-pre-line">
+                {selectedVideoData
+                  ? selectedVideoData.description
+                  : playlistDescription}
+              </p>
+            </div>
           </div>
-          <h1 className="video-name font-bodycopy font-bold w-full text-xl">
-            {selectedVideoData
-              ? selectedVideoData.name
-              : "Teaser RE:START Conference 2025"}
-          </h1>
-          <p></p>
         </main>
         <aside className="aside flex flex-col flex-1 w-full gap-3">
           <div className="flex flex-col bg-white border p-4 gap-3 rounded-lg">

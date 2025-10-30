@@ -17,7 +17,7 @@ export default function EmptyDiscussionLMS() {
           />
         </div>
         <div className="state-captions flex flex-col gap-1 items-center">
-          <h2 className="state-title flex font-bold font-bodycopy text-center text-xl text-neutral-black">
+          <h2 className="state-title flex font-bold font-bodycopy text-center text-xl tracking-tight">
             Got something to say?
           </h2>
           <p className="state-description font-bodycopy text-center font-medium text-alternative text-[15px]">

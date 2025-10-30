@@ -25,10 +25,10 @@ export default function EmptyItemLMS({
           />
         </div>
         <div className="state-captions flex flex-col gap-1 items-center">
-          <h2 className="flex font-bold font-bodycopy text-center tracking-tight text-lg text-neutral-black">
+          <h2 className="flex font-bold font-bodycopy text-center tracking-tight text-xl text-neutral-black">
             {stateTitle}
           </h2>
-          <p className="font-bodycopy text-center font-medium text-alternative text-sm">
+          <p className="font-bodycopy text-center font-medium text-alternative text-[15px]">
             {stateDescription}
           </p>
         </div>
