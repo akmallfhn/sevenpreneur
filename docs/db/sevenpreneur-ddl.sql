@@ -286,6 +286,25 @@ CREATE TABLE templates (
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- AI-tool-related
+
+CREATE TABLE ai_tools (
+  id           SMALLSERIAL  PRIMARY KEY,
+  name         VARCHAR      NOT NULL,
+  description  VARCHAR          NULL,
+  slug_url     VARCHAR      NOT NULL,
+  status       status_enum  NOT NULL
+);
+
+CREATE TABLE ai_results (
+  id          SERIAL       PRIMARY KEY,
+  user_id     UUID         NOT NULL,
+  ai_tool_id  SMALLINT     NOT NULL,
+  name        VARCHAR      NOT NULL,
+  result      JSON         NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Transaction-related
 
 CREATE TABLE discounts (
@@ -367,6 +386,9 @@ CREATE TABLE users_events (
 CREATE VIEW users_templates AS
   SELECT user_id FROM users_cohorts;
 
+CREATE VIEW users_ai_tools AS
+  SELECT user_id FROM users_cohorts;
+
 ----------------
 -- References --
 ----------------
@@ -431,6 +453,12 @@ ALTER TABLE events
 
 ALTER TABLE event_prices
   ADD FOREIGN KEY (event_id) REFERENCES events(id);
+
+-- AI-tool-related
+
+ALTER TABLE ai_results
+  ADD FOREIGN KEY (user_id)    REFERENCES users (id),
+  ADD FOREIGN KEY (ai_tool_id) REFERENCES ai_tools (id);
 
 -- Transaction-related
 
