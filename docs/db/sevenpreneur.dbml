@@ -289,6 +289,25 @@ Table templates {
   updated_at    timestamptz
 }
 
+// AI-tool-related
+
+Table ai_tools {
+  id           smallserial  [primary key]
+  name         varchar
+  description  varchar
+  slug_url     varchar
+  status       status_enum
+}
+
+Table ai_results {
+  id          serial       [primary key]
+  user_id     uuid         [ref: > users.id]
+  ai_tool_id  smallint     [ref: > ai_tools.id]
+  name        varchar
+  result      json
+  created_at  timestamptz
+}
+
 // Transaction-related
 
 Table discounts {
@@ -359,5 +378,9 @@ Table educators_playlists {
 }
 
 Table users_templates {
+  user_id  uuid  [ref: > users.id]
+}
+
+Table users_ai_tools {
   user_id  uuid  [ref: > users.id]
 }
