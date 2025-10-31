@@ -1,3 +1,4 @@
+import { getDateTimeRange } from "@/lib/date-time-manipulation";
 import { encodeSHA256 } from "@/lib/encode";
 import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
@@ -122,7 +123,10 @@ export async function POST(req: NextRequest) {
             "🌟 Intimate Dinner & Networking\n" +
             "🌟 Mentoring privat 1-on-1 dengan business coach\n\n" +
             "📌 What’s Next?\n" +
-            "Kami akan segera mengirimkan detail akses LMS. Di LMS ini kamu bisa dapet:\n" +
+            "Klik link berikut untuk masuk ke LMS dan mulai akses materi:\n" +
+            "https://agora.sevenpreneur.com/cohorts\n" +
+            "Gunakan email ini untuk login ke LMS.\n\n" +
+            "Di LMS kamu bisa menemukan:\n" +
             "• Jadwal lengkap program\n" +
             "• Materi & kurikulum terstruktur\n" +
             "• Info sesi live & recording\n" +
@@ -151,6 +155,9 @@ export async function POST(req: NextRequest) {
     } else if (theTransaction.category === CategoryEnum.EVENT) {
       const theEventPrice = await prisma.eventPrice.findFirst({
         where: { id: theTransaction.item_id },
+      });
+      const theEvent = await prisma.event.findFirst({
+        where: { id: theEventPrice?.event_id },
       });
       if (!theEventPrice) {
         console.error("xendit.webhook: The selected event price is not found.");
@@ -197,6 +204,38 @@ export async function POST(req: NextRequest) {
       }
 
       try {
+        const { dateString, timeString } = getDateTimeRange({
+          startDate: theEvent?.start_date.toISOString() ?? "",
+          endDate: theEvent?.end_date.toISOString() ?? "",
+        });
+
+        await sendEmail({
+          mailRecipients: [theTransaction.user.email],
+          mailSubject: `You’re In! Your Spot for ${theEvent?.name} is Confirmed 🎟️`,
+          mailBody:
+            `Hi ${theTransaction.user.full_name},\n\n` +
+            `Kamu telah berhasil membeli tiket untuk event ${theEvent?.name} yang diselenggarakan oleh Sevenpreneur.\n` +
+            "Kami sangat senang kamu bergabung dalam perjalanan ini!\n\n" +
+            "Berikut informasi mengenai event:\n" +
+            `• Event: ${theEvent?.name}\n` +
+            (theEvent?.start_date
+              ? `• Tanggal/Waktu: ${dateString}, ${timeString}}\n`
+              : "") +
+            (theEvent?.location_name
+              ? `• Lokasi: ${theEvent.location_name}\n`
+              : "") +
+            "\n" +
+            "📌 What’s Next?\n" +
+            "Untuk pertanyaan seputar acara atau bantuan teknis, kamu dapat mengirim email ke event@sevenpreneur.com. 🙌\n\n" +
+            "Terima kasih sudah jadi bagian dari komunitas Sevenpreneur. See you at the event! 🚀\n\n" +
+            "Cheers,\n" +
+            "Sevenpreneur Team",
+        });
+      } catch (error) {
+        console.error("Failed to send email", error);
+      }
+
+      try {
         await prisma.userEvent.create({
           data: {
             user_id: theTransaction.user_id,
@@ -215,6 +254,31 @@ export async function POST(req: NextRequest) {
         return new NextResponse("The selected playlist is not found.", {
           status: 404,
         });
+      }
+
+      try {
+        await sendEmail({
+          mailRecipients: [theTransaction.user.email],
+          mailSubject: `You’re In! Access Your Learning Series: ${thePlaylist.name} 🎉`,
+          mailBody:
+            `Hi ${theTransaction.user.full_name},\n\n` +
+            "Congrats and welcome aboard! 🎉\n\n" +
+            `Kamu baru saja berhasil membeli Learning Series: "${thePlaylist.name}".\n` +
+            "Sekarang kamu bisa langsung mulai belajar dan menikmati video-on-demand (VOD) di platform LMS Sevenpreneur.\n\n" +
+            "Dalam Learning Series ini kamu akan mendapatkan:\n" +
+            "✅ Materi pembelajaran bisnis yang praktis & actionable\n" +
+            "✅ Insight dari para praktisi berpengalaman\n" +
+            "✅ Akses kapan pun tanpa batas waktu (on-demand)\n\n" +
+            "📌 What’s Next?\n" +
+            "Klik link berikut untuk mulai belajar di LMS:\n" +
+            "https://agora.sevenpreneur.com/playlists\n\n" +
+            "Gunakan email ini untuk login ke LMS Sevenpreneur\n\n" +
+            "Selamat belajar dan semoga materi ini membantu kamu bertumbuh sebagai entrepreneur yang lebih kuat 💪\n\n" +
+            "Cheers,\n" +
+            "Sevenpreneur Team",
+        });
+      } catch (error) {
+        console.error("Failed to response email", error);
       }
 
       try {
