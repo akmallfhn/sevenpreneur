@@ -1,4 +1,3 @@
-import { getDateTimeRange } from "@/lib/date-time-manipulation";
 import { encodeSHA256 } from "@/lib/encode";
 import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
@@ -204,11 +203,6 @@ export async function POST(req: NextRequest) {
       }
 
       try {
-        const { dateString, timeString } = getDateTimeRange({
-          startDate: theEvent?.start_date.toISOString() ?? "",
-          endDate: theEvent?.end_date.toISOString() ?? "",
-        });
-
         await sendEmail({
           mailRecipients: [theTransaction.user.email],
           mailSubject: `You’re In! Your Spot for ${theEvent?.name} is Confirmed 🎟️`,
@@ -219,7 +213,7 @@ export async function POST(req: NextRequest) {
             "Berikut informasi mengenai event:\n" +
             `• Event: ${theEvent?.name}\n` +
             (theEvent?.start_date
-              ? `• Tanggal/Waktu: ${dateString}, ${timeString}}\n`
+              ? `• Tanggal: ${theEvent.start_date}\n`
               : "") +
             (theEvent?.location_name
               ? `• Lokasi: ${theEvent.location_name}\n`
