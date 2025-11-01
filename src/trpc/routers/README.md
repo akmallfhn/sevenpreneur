@@ -361,7 +361,9 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.aiTools`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiResults`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.ai.ideaGeneration` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.marketSize`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.ideaGeneration`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.marketSize`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 **Scopes:**
 
