@@ -9,6 +9,9 @@ import { zodTextFormat } from "openai/helpers/zod";
 import { AutoParseableTextFormat } from "openai/lib/parser";
 import z from "zod";
 
+export const AI_TOOL_ID_IDEA_GEN = 1; // idea-gen
+export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
+
 export async function isEnrolledAITool(
   prisma: PrismaClient,
   user_id: string,

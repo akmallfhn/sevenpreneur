@@ -3,7 +3,11 @@ import { loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
 import { AIResultIdeaGeneration, AIResultMarketSize } from "./prompt.ai_tool";
-import { isEnrolledAITool } from "./util.ai_tool";
+import {
+  AI_TOOL_ID_IDEA_GEN,
+  AI_TOOL_ID_MARKET_SIZE,
+  isEnrolledAITool,
+} from "./util.ai_tool";
 
 export const readAIResult = {
   ideaGeneration: loggedInProcedure
@@ -22,7 +26,7 @@ export const readAIResult = {
         where: {
           id: opts.input.id,
           user_id: opts.ctx.user.id,
-          ai_tool_id: 1, // idea-gen
+          ai_tool_id: AI_TOOL_ID_IDEA_GEN,
         },
       });
       if (!theAIResult) {
@@ -54,7 +58,7 @@ export const readAIResult = {
       where: {
         id: opts.input.id,
         user_id: opts.ctx.user.id,
-        ai_tool_id: 2, // market-size
+        ai_tool_id: AI_TOOL_ID_MARKET_SIZE,
       },
     });
     if (!theAIResult) {
