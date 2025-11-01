@@ -1,4 +1,4 @@
-import SubmissionListCMS from "@/app/components/indexes/SubmissionListCMS";
+import ProjectDetailsCMS from "@/app/components/pages/ProjectDetailsCMS";
 import { cookies } from "next/headers";
 
 interface LearningDetailPageProps {
@@ -16,7 +16,7 @@ export default async function SubmissionsPageCMS({
 
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <SubmissionListCMS
+      <ProjectDetailsCMS
         sessionToken={sessionToken}
         cohortId={cohortId}
         projectId={projectId}

@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import duration from "dayjs/plugin/duration";
-import "dayjs/locale/id"; // biar bulan jadi bahasa Indonesia kalau perlu
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/id";
 
 dayjs.locale("id");
 dayjs.extend(duration);
-
-interface FormatEventDateTimeProps {
-  startDate: string;
-  endDate: string;
-}
+dayjs.extend(relativeTime);
 
 export function getDurationFromSeconds(seconds: number): string {
   const dur = dayjs.duration(seconds, "seconds");
@@ -66,6 +63,10 @@ export function getRoundedHourFromSeconds(seconds: number): number {
   return Math.ceil(totalHours);
 }
 
+interface FormatEventDateTimeProps {
+  startDate: string;
+  endDate: string;
+}
 export function getDateTimeRange({
   startDate,
   endDate,
@@ -93,4 +94,41 @@ export function getDateTimeRange({
   const timeString = `${start.format("HH.mm")} - ${end.format("HH.mm")}`;
 
   return { dateString, timeString };
+}
+
+export function getSubmissionTiming(
+  submittedDate?: string,
+  deadlineDate?: string
+) {
+  const submittedAt = dayjs(submittedDate);
+  const deadlineAt = dayjs(deadlineDate);
+
+  if (!submittedDate || !deadlineDate) {
+    return { isEarly: false, formatted: "", shortMessage: "Invalid date" };
+  }
+
+  const differentMilisecond = submittedAt.diff(dayjs(deadlineAt));
+  const isEarly = differentMilisecond < 0;
+  const absoluteDiff = Math.abs(differentMilisecond);
+  const d = dayjs.duration(absoluteDiff);
+
+  // Time Calculations
+  const days = Math.floor(d.asDays());
+  const hours = d.hours();
+  const parts = [];
+  if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+  if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+
+  const timeFormatted = parts.join(" ");
+  const timeDuration = timeFormatted || "less than an hour";
+  const shortMessage = `${timeDuration} ${isEarly ? "early" : "late"}`;
+  const longMessage = `Assignment was submitted ${timeDuration} ${
+    isEarly ? "early" : "late"
+  }`;
+
+  return {
+    isEarly,
+    shortMessage,
+    longMessage,
+  };
 }

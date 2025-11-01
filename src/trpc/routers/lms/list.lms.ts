@@ -610,6 +610,7 @@ export const listLMS = {
           full_name: entry.submitter.full_name,
           avatar: entry.submitter.avatar,
           created_at: entry.created_at,
+          comment: entry.comment,
         };
       });
       return {
