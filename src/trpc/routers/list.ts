@@ -1,5 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
-import { listAITool } from "./ai_tools/ai_tools";
+import { listAITool } from "./ai_tool/list.ai_tool";
 import { listEvent } from "./event/list.event";
 import { listLMS } from "./lms/list.lms";
 import { listLookup } from "./lookup/list.lookup";
@@ -54,6 +54,7 @@ export const listRouter = createTRPCRouter({
   // AI-tool-related //
 
   aiTools: listAITool.aiTools,
+  aiResults: listAITool.aiResults,
 
   // Transaction-related //
 

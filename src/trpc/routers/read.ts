@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
+import { readAIResult } from "./ai_tool/read.ai_tool";
 import { readEvent } from "./event/read.event";
 import { readLMS } from "./lms/read.lms";
 import { readLookup } from "./lookup/read.lookup";
@@ -45,6 +46,12 @@ export const readRouter = createTRPCRouter({
   // Template-related //
 
   template: readTemplate.template,
+
+  // AI-tool-related //
+
+  ai: {
+    ideaGeneration: readAIResult.ideaGeneration,
+  },
 
   // Transaction-related //
 

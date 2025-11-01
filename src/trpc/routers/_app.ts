@@ -7,6 +7,7 @@ import { listRouter } from "./list";
 import { purchaseRouter } from "./purchase";
 import { readRouter } from "./read";
 import { updateRouter } from "./update";
+import { useRouter } from "./use";
 
 export const appRouter = createTRPCRouter({
   hello: helloRouter,
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   read: readRouter,
   update: updateRouter,
   delete: deleteRouter,
+  use: useRouter,
   purchase: purchaseRouter,
 });
 
