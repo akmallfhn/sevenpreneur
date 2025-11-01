@@ -354,6 +354,20 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators, Educators, and Class Managers can see all templates.
 - General Users can see all active templates if the user is in the enrolled list.
 
+## AI Tools ✨
+
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `list.aiTools`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiResults`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.ideaGeneration` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.ideaGeneration`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Administrators, Educators, and Class Managers can use/read results from AI tools.
+- General Users can use/read results from AI tools if the user is in the enrolled list.
+
 ## Discounts 🪙
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
