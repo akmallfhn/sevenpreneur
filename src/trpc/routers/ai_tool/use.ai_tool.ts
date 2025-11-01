@@ -7,7 +7,13 @@ import {
   AIMarketSize_ProductType,
   aiToolPrompts,
 } from "./prompt.ai_tool";
-import { AIGenerate, AISaveResult, isEnrolledAITool } from "./util.ai_tool";
+import {
+  AI_TOOL_ID_IDEA_GEN,
+  AI_TOOL_ID_MARKET_SIZE,
+  AIGenerate,
+  AISaveResult,
+  isEnrolledAITool,
+} from "./util.ai_tool";
 
 export const useAITool = {
   ideaGeneration: loggedInProcedure
@@ -32,7 +38,7 @@ export const useAITool = {
       await AISaveResult(
         opts.ctx.prisma,
         opts.ctx.user.id,
-        1, // idea-gen
+        AI_TOOL_ID_IDEA_GEN,
         parsedResult.title,
         parsedResult.response
       );
@@ -81,7 +87,7 @@ export const useAITool = {
       await AISaveResult(
         opts.ctx.prisma,
         opts.ctx.user.id,
-        2, // market-size
+        AI_TOOL_ID_MARKET_SIZE,
         parsedResult.title,
         parsedResult.response
       );
