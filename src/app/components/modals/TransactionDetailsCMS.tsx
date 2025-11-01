@@ -5,7 +5,6 @@ import { trpc } from "@/trpc/client";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import Image from "next/image";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
-import TransactionDetailItemCMS from "../items/TransactionDetailItemCMS";
 import dayjs from "dayjs";
 import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import UserItemCMS from "../items/UserItemCMS";
@@ -14,9 +13,9 @@ import { useClipboard } from "@/lib/use-clipboard";
 import { toast } from "sonner";
 import { useState } from "react";
 import { CancelPaymentXendit } from "@/lib/actions";
-import { useRouter } from "next/navigation";
 import AppAlertConfirmDialog from "./AppAlertConfirmDialog";
 import { getRupiahCurrency } from "@/lib/currency";
+import SheetLineItemCMS from "../items/SheetLineItemCMS";
 
 interface TransactionDetailsCMSProps {
   transactionId: string | null;
@@ -33,7 +32,6 @@ export default function TransactionDetailsCMS({
   const [isOpenCancelConfirmation, setIsOpenCancelConfirmation] =
     useState(false);
   const { copy, copied } = useClipboard();
-  const router = useRouter();
   const utils = trpc.useUtils();
 
   if (!transactionId) return;
@@ -106,22 +104,17 @@ export default function TransactionDetailsCMS({
       )}
       {!isLoading && !isError && (
         <div className="container flex flex-col h-full px-6 pb-20 gap-5 overflow-y-auto">
-          {/* Product Name */}
-          <TransactionDetailItemCMS itemName="Product Name">
+          <SheetLineItemCMS itemName="Product Name">
             <p className="font-semibold">{productName}</p>
-          </TransactionDetailItemCMS>
-
-          {/* Product Category */}
-          <TransactionDetailItemCMS itemName="Product Category">
+          </SheetLineItemCMS>
+          <SheetLineItemCMS itemName="Product Category">
             {transactionDetails?.category && (
               <ProductCategoryLabelCMS
                 variants={transactionDetails?.category}
               />
             )}
-          </TransactionDetailItemCMS>
-
-          {/* Customer Details */}
-          <div className="flex flex-col gap-2 p-3 border border-outline rounded-md">
+          </SheetLineItemCMS>
+          <div className="customer-details flex flex-col gap-2 p-3 border border-outline rounded-md">
             <h5 className="font-bodycopy font-bold text-sm">
               Customer Details
             </h5>
@@ -136,10 +129,8 @@ export default function TransactionDetailsCMS({
               isShowWhatsapp
             />
           </div>
-
-          {/* Payment Status */}
-          <div className="flex flex-col gap-4 p-3 border border-outline rounded-md">
-            <TransactionDetailItemCMS itemName="Payment Method">
+          <div className="payment-status flex flex-col gap-4 p-3 border border-outline rounded-md">
+            <SheetLineItemCMS itemName="Payment Method">
               <div className="flex items-center gap-2">
                 {transactionDetails?.payment_channel_image && (
                   <div className="aspect-square size-6 rounded-full overflow-hidden">
@@ -156,26 +147,26 @@ export default function TransactionDetailsCMS({
                   {transactionDetails?.payment_channel_name || ""}
                 </p>
               </div>
-            </TransactionDetailItemCMS>
-            <TransactionDetailItemCMS itemName="Payment Status">
+            </SheetLineItemCMS>
+            <SheetLineItemCMS itemName="Payment Status">
               {transactionDetails?.status && (
                 <TransactionStatusLabelCMS
                   variants={transactionDetails.status}
                 />
               )}
-            </TransactionDetailItemCMS>
-            <TransactionDetailItemCMS itemName="Checkout at">
+            </SheetLineItemCMS>
+            <SheetLineItemCMS itemName="Checkout at">
               {dayjs(transactionDetails?.created_at).format(
                 "DD MMM YYYY HH:mm"
               )}
-            </TransactionDetailItemCMS>
-            <TransactionDetailItemCMS itemName="Paid at">
+            </SheetLineItemCMS>
+            <SheetLineItemCMS itemName="Paid at">
               {transactionDetails?.paid_at
                 ? dayjs(transactionDetails?.paid_at).format("DD MMM YYYY HH:mm")
                 : "-"}
-            </TransactionDetailItemCMS>
+            </SheetLineItemCMS>
             {transactionDetails?.invoice_url && (
-              <TransactionDetailItemCMS itemName="Invoice URL">
+              <SheetLineItemCMS itemName="Invoice URL">
                 <div className="flex items-center gap-1">
                   <a
                     className="line-clamp-1 hover:text-cms-primary hover:underline hover:underline-offset-2"
@@ -193,12 +184,10 @@ export default function TransactionDetailsCMS({
                     {copied ? "Copied!" : "Copy URL"}
                   </AppButton>
                 </div>
-              </TransactionDetailItemCMS>
+              </SheetLineItemCMS>
             )}
           </div>
-
-          {/* Payment Details */}
-          <div className="flex flex-col gap-2 p-3 border border-outline rounded-md">
+          <div className="payment-details flex flex-col gap-2 p-3 border border-outline rounded-md">
             <h5 className="font-bodycopy font-bold text-sm">Payment Details</h5>
             <ReceiptLineItemCMS
               receiptName="Price"
@@ -238,10 +227,8 @@ export default function TransactionDetailsCMS({
           </div>
         </div>
       )}
-
-      {/* CTA Cancel Invoice */}
       {isPending && (
-        <div className="sticky bottom-0 w-full p-4 bg-white z-10">
+        <div className="cancel-invoice sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
             variant="destructive"

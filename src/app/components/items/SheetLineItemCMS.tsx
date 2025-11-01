@@ -1,15 +1,15 @@
 "use client";
 import { ReactNode } from "react";
 
-interface TransactionDetailItemCMSProps {
+interface SheetLineItemCMSProps {
   itemName: string;
   children: ReactNode;
 }
 
-export default function TransactionDetailItemCMS({
+export default function SheetLineItemCMS({
   itemName,
   children,
-}: TransactionDetailItemCMSProps) {
+}: SheetLineItemCMSProps) {
   return (
     <div className="flex flex-col gap-1.5 font-bodycopy text-sm font-medium">
       <p className="text-alternative">{itemName}</p>

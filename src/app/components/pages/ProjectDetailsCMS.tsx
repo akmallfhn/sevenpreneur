@@ -13,6 +13,8 @@ import TableCellCMS from "../elements/TableCellCMS";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import { getSubmissionTiming } from "@/lib/date-time-manipulation";
+import { useRouter, useSearchParams } from "next/navigation";
+import SubmissionDetailsCMS from "../modals/SubmissionDetailsCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -27,11 +29,35 @@ export default function ProjectDetailsCMS({
   cohortId,
   projectId,
 }: ProjectDeyailsCMSProps) {
+  const searchParam = useSearchParams();
+  const params = new URLSearchParams(searchParam.toString());
+  const router = useRouter();
+  const [isOpenDetails, setIsOpenDetails] = useState(false);
+  const selectedId = searchParam.get("id");
+
   useEffect(() => {
     if (sessionToken) {
       setSessionToken(sessionToken);
     }
   }, [sessionToken]);
+
+  // Push Parameter to URL
+  const viewSubmissionDetails = (submissionId: string) => {
+    params.set("id", submissionId);
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
+  // Open modal when has id
+  useEffect(() => {
+    setIsOpenDetails(!!selectedId);
+  }, [selectedId]);
+
+  // Close modal when close
+  const handleClose = () => {
+    setIsOpenDetails(false);
+    params.delete("id");
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   // Fetch tRPC for Project Details
   const {
@@ -168,7 +194,11 @@ export default function ProjectDetailsCMS({
                       )}
                     </TableCellCMS>
                     <TableCellCMS>
-                      <AppButton variant="outline" size="small">
+                      <AppButton
+                        variant="outline"
+                        size="small"
+                        onClick={() => viewSubmissionDetails(String(post.id))}
+                      >
                         <Eye className="size-4" />
                         Preview
                       </AppButton>
@@ -179,6 +209,16 @@ export default function ProjectDetailsCMS({
             </table>
           </div>
         </div>
+      )}
+
+      {/* Open Submission Details */}
+      {isOpenDetails && (
+        <SubmissionDetailsCMS
+          projectDeadline={projectDetailsData?.deadline_at}
+          submissionId={Number(selectedId)}
+          isOpen={isOpenDetails}
+          onClose={handleClose}
+        />
       )}
     </React.Fragment>
   );
