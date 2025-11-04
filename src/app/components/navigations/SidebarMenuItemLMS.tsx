@@ -30,20 +30,19 @@ export default function SidebarMenuItemLMS({
   return (
     <Link
       href={url}
-      className={`sidebar-menu-item relative flex items-center p-2 px-2.5 gap-4 w-full rounded-md overflow-hidden transition transform active:scale-95
+      className={`sidebar-menu-item relative flex items-center p-2 px-2.5 gap-4 w-full rounded-md overflow-hidden transition transform shrink-0 active:scale-95
             ${
               isActive
                 ? "text-white bg-tertiary font-semibold"
                 : "text-black hover:bg-black/5 dark:text-white/50 dark:hover:bg-white/5 font-medium"
             }`}
     >
-      {/* Menu Title & Icons */}
-      <div className="flex size-5 items-center justify-center">{icon}</div>
-      <p className="font-bodycopy text-sm">{menuTitle}</p>
-
-      {/* Active State */}
+      <div className="menu-icon flex size-5 items-center justify-center shrink-0">
+        {icon}
+      </div>
+      <p className="menu-title font-bodycopy text-sm">{menuTitle}</p>
       {isActive && (
-        <div className="absolute bg-secondary w-2 h-1/2  right-0 rounded-full" />
+        <div className="active-state-menu absolute bg-secondary w-2 h-1/2  right-0 rounded-full" />
       )}
     </Link>
   );

@@ -2,61 +2,58 @@
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
-import TemplateItemCardLMS from "../items/TemplateItemCardLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
+import AIItemCardLMS from "../items/AIItemCardLMS";
 
-interface TemplateList {
+interface AIList {
   id: number;
   name: string;
-  description?: string | null;
-  image: string;
-  document_url: string;
+  description: string | null;
+  slug_url: string;
   status: StatusType;
 }
 
-interface TemplateListLMSProps extends AvatarBadgeLMSProps {
+interface AIListLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
-  templateList: TemplateList[];
+  aiList: AIList[];
 }
 
-export default function TemplateListLMS({
+export default function AIListLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
-  templateList,
-}: TemplateListLMSProps) {
-  const activeTemplates = templateList.filter(
-    (template) => template.status === "ACTIVE"
-  );
+  aiList,
+}: AIListLMSProps) {
+  const activeAI = aiList.filter((ai) => ai.status === "ACTIVE");
 
   return (
     <div className="root-page hidden flex-col pl-64  pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
       <HeaderNavbarLMS
-        headerTitle="Business Templates"
-        headerDescription="Ready-to-use templates to help you plan, analyze, and execute your business"
+        headerTitle="AI Business Tools"
+        headerDescription="Tools to helps you research, analyze, and plan your business faster and more accurately"
         sessionUserRole={sessionUserRole}
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
       />
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
-        {activeTemplates.length > 0 ? (
+        {activeAI.length > 0 ? (
           <div className="template-list grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
-            {activeTemplates
+            {activeAI
               .sort((a, b) => a.name.localeCompare(b.name))
-              .map((post, index) => (
-                <TemplateItemCardLMS
-                  key={index}
-                  templateName={post.name}
-                  templateTags={post.description ?? ""}
-                  templateImage={post.image}
-                  templateURL={post.document_url}
+              .map((post) => (
+                <AIItemCardLMS
+                  key={post.id}
+                  aiId={post.id}
+                  aiName={post.name}
+                  aiDescriptions={post.description ?? ""}
+                  aiSlug={post.slug_url}
                 />
               ))}
           </div>
         ) : (
           <EmptyListLMS
-            stateTitle="Business Templates Locked"
-            stateDescription="Looks like you’re not part of any Bootcamp Programs join one to unlock all business templates!"
+            stateTitle="AI Tools Locked"
+            stateDescription="Looks like you’re not part of any Bootcamp Programs join one to unlock all AI Tools!"
             stateAction="Explore our Program"
           />
         )}

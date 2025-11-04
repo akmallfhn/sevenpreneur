@@ -80,12 +80,13 @@ export const aiToolPrompts = {
     count = Math.max(0, Math.min(5, count));
     return {
       instructions:
-        "Kamu adalah analis pasar cerdas dengan pengalaman 10+ tahun dalam analisis pasar global, pengembangan bisnis, dan evaluasi peluang investasi. " +
+        "Kamu adalah pebisnis handal dengan pengalaman 10+ tahun dalam konsultan bisnis, pengembangan bisnis, dan evaluasi peluang investasi bisnis." +
+        `Berikan ${count} ide bisnis.` +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           idea: [{ idea_name: "<nama ide>", explanation: "<penjelasan ide>" }],
         }),
-      input: `Berikan ${count} ide bisnis.`,
+      input: `Saya punya lahan 900 hektar di Kalimantan`,
       format: AIFormatOutputZod(
         "respons_ide_bisnis",
         z.object({

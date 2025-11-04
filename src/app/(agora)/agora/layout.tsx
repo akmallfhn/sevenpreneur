@@ -8,7 +8,6 @@ import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 
-// Metadata
 export const metadata: Metadata = {
   title: {
     template: "%s | Agora Learning Sevenpreneur",
@@ -36,9 +35,19 @@ interface AgoraLayoutProps {
 }
 
 export default async function AgoraLayout({ children }: AgoraLayoutProps) {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+  if (!sessionToken) return null;
+
+  if (sessionToken) {
+    setSessionToken(sessionToken);
+  }
+
+  const aiResultList = (await trpc.list.aiResults({})).list;
+
   return (
     <div className="root relative w-full min-h-screen bg-section-background">
-      <SidebarLMS />
+      <SidebarLMS aiResultList={aiResultList} />
       {children}
       <Toaster richColors position="top-center" />
     </div>

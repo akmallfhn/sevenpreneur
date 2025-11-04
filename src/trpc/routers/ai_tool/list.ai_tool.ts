@@ -19,7 +19,13 @@ export const listAITool = {
       });
     }
     const aiToolsList = await opts.ctx.prisma.aITool.findMany({
-      select: { name: true, description: true, slug_url: true, status: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        slug_url: true,
+        status: true,
+      },
       where: whereClause,
       orderBy: [{ id: "desc" }],
     });
