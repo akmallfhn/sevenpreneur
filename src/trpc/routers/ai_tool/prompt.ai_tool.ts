@@ -119,11 +119,13 @@ export const aiToolPrompts = {
         "1. Analisis market_need: apakah produk ini essential, niche, atau luxury.\n" +
         "2. Analisis regulasi: apakah industri dibatasi hukum atau tidak.\n" +
         `3. Tentukan geografi pasar (lokal/regional/global) berdasarkan ${product_type}.\n` +
-        "4. Tentukan TAM size (besar/sedang/kecil) dan ARPU (average revenue per unit) (tinggi/sedang/rendah) berdasarkan tipe pelanggan, market_need, dan regulation\n" +
-        "5. Cantumkan TAM value berdasarkan deskripsi produk, market need, regulasi, dan geografi. Dapatkan dari sumber artikel paling kredibel.\n" +
-        "6. Buat remarks singkat terkait populasi, pasar, regulasi, atau strategi go-to-market.\n" +
-        "7. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
-        "8. Buat remarks tambahan untuk SAM yang menjelaskan pasar yang bisa dijangkau perusahaan dan strategi channel penjualan.\n" +
+        `4. Tentukan TAM size (besar/sedang/kecil) dan ARPU (average revenue per unit) (tinggi/sedang/rendah) berdasarkan ${customer_type}, market_need, dan regulation\n` +
+        "5. Cantumkan TAM value berdasarkan deskripsi produk, market need, regulasi, dan geografi. Dapatkan dari sumber artikel paling kredibel (Statista, IBISWorld, McKinsey, World Bank, laporan pemerintah, dsb).\n" +
+        "6. Tentukan confidence_level dalam skala 1-100 berdasarkan kualitas sumber, kejelasan data pasar, serta konsistensi antar variabel. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut." +
+        "7. Buat remarks singkat terkait populasi, pasar, regulasi, atau strategi go-to-market.\n" +
+        "8. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
+        "9. Buat remarks tambahan untuk SAM yang menjelaskan pasar yang bisa dijangkau perusahaan dan strategi channel penjualan.\n" +
+        "10. Validasi bahwa TAM ≥ SAM dan sesuaikan jika perlu." +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           market_need: "<essential/niche/luxury>",
@@ -133,7 +135,15 @@ export const aiToolPrompts = {
             TAM_size_estimate: "<kecil/sedang/besar>",
             ARPU_estimate: "<rendah/sedang/tinggi>",
             TAM_value: "<estimasi nilai TAM setahun dalam Rupiah>",
-            source_url: "<referensi artikel atau sumber data yang dipakai>",
+            sources: [
+              {
+                source_name:
+                  "<judul referensi artikel atau sumber data yang digunakan>",
+                source_url:
+                  "<url referensi artikel atau sumber data yang dipakai>",
+              },
+            ],
+            confidence_level: "<estimasi nilai kredibilitas sumber data>",
             remarks:
               "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market>",
           },
@@ -144,6 +154,10 @@ export const aiToolPrompts = {
               "<estimasi nilai SAM setahun dalam Rupiah berdasarkan TAM value, area operasi, dan sales channels>",
             remarks:
               "<catatan tambahan terkait pasar terjangkau perusahaan dan strategi channel penjualan>",
+          },
+          SOM_insight: {
+            remarks:
+              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi>",
           },
         }),
       input:
@@ -164,13 +178,22 @@ export const aiToolPrompts = {
             TAM_size_estimate: z.enum(AIMarketSize_SizeEstimate),
             ARPU_estimate: z.enum(AIMarketSize_ARPUEstimate),
             TAM_value: z.number(),
-            source_url: z.string(),
+            sources: z.array(
+              z.object({
+                source_name: z.string(),
+                source_url: z.string(),
+              })
+            ),
+            confidence_level: z.number(),
             remarks: z.string(),
           }),
           SAM_insight: z.object({
             SAM_size_estimate: z.enum(AIMarketSize_SizeEstimate),
             ARPU_estimate: z.enum(AIMarketSize_ARPUEstimate),
             SAM_value: z.number(),
+            remarks: z.string(),
+          }),
+          SOM_insight: z.object({
             remarks: z.string(),
           }),
         })

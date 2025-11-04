@@ -43,7 +43,6 @@ export default function AIListLMS({
               .map((post) => (
                 <AIItemCardLMS
                   key={post.id}
-                  aiId={post.id}
                   aiName={post.name}
                   aiDescriptions={post.description ?? ""}
                   aiSlug={post.slug_url}
