@@ -33,7 +33,7 @@ export const listAITool = {
   aiResults: loggedInProcedure
     .input(
       z.object({
-        ai_tool_slug: stringNotBlank(),
+        ai_tool_slug: stringNotBlank().optional(),
       })
     )
     .query(async (opts) => {
@@ -45,7 +45,17 @@ export const listAITool = {
         );
       }
       const aiResultsList = await opts.ctx.prisma.aIResult.findMany({
-        select: { id: true, name: true, created_at: true },
+        select: {
+          id: true,
+          name: true,
+          created_at: true,
+          ai_tool: {
+            select: {
+              name: true,
+              slug_url: true,
+            },
+          },
+        },
         where: {
           user_id: opts.ctx.user.id,
           ai_tool: {
@@ -54,10 +64,19 @@ export const listAITool = {
         },
         orderBy: [{ created_at: "desc" }],
       });
+      const formattedList = aiResultsList.map((entry) => {
+        return {
+          id: entry.id,
+          name: entry.name,
+          created_at: entry.created_at,
+          ai_tool_name: entry.ai_tool.name,
+          ai_tool_slug_url: entry.ai_tool.slug_url,
+        };
+      });
       return {
         code: STATUS_OK,
         message: "Success",
-        list: aiResultsList,
+        list: formattedList,
       };
     }),
 };
