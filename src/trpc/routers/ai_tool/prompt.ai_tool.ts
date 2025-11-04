@@ -62,13 +62,22 @@ export interface AIResultMarketSize extends JsonObject {
     TAM_size_estimate: AIMarketSize_SizeEstimate;
     ARPU_estimate: AIMarketSize_ARPUEstimate;
     TAM_value: number;
-    source_url: string;
+    sources: {
+      source_name: string;
+      source_url: string;
+      source_publisher: string;
+      source_year: number;
+    }[];
+    confidence_level: number;
     remarks: string;
   };
   SAM_insight: {
     SAM_size_estimate: AIMarketSize_SizeEstimate;
     ARPU_estimate: AIMarketSize_ARPUEstimate;
     SAM_value: number;
+    remarks: string;
+  };
+  SOM_insight: {
     remarks: string;
   };
 }
