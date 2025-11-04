@@ -18,6 +18,7 @@ import SidebarAIResultItemLMS from "./SidebarAIResultItemLMS";
 interface AIResultListProps {
   id: number;
   name: string;
+  ai_tool_slug_url: string;
 }
 
 interface SidebarLMSProps {
@@ -71,16 +72,16 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
             url="/cohorts"
             icon={<Presentation />}
           />
-          {/* <SidebarMenuItemLMS
+          <SidebarMenuItemLMS
             menuTitle="Business Templates"
             url="/templates"
             icon={<BowArrow />}
-          /> */}
-          {/* <SidebarMenuItemLMS
+          />
+          <SidebarMenuItemLMS
             menuTitle="AI"
             url="/ai"
             icon={<BotMessageSquare />}
-          /> */}
+          />
           <SidebarMenuItemLMS
             menuTitle="Learning Series"
             url="/playlists"
@@ -99,6 +100,7 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
               {aiResultList.map((post) => (
                 <SidebarAIResultItemLMS
                   key={post.id}
+                  aiToolSlug={post.ai_tool_slug_url}
                   aiResultId={post.id}
                   aiResultName={post.name}
                 />
