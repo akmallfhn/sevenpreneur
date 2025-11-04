@@ -34,6 +34,10 @@ export default async function AIMarketSizeResultLMS({
     <MarketSizeReportLMS
       tamValue={aiMarketSizeResultLMS.result.TAM_insight.TAM_value}
       samValue={aiMarketSizeResultLMS.result.SAM_insight.SAM_value}
+      confidenceLevel={80}
+      tamInsight={aiMarketSizeResultLMS.result.TAM_insight.remarks}
+      samInsight={aiMarketSizeResultLMS.result.SAM_insight.remarks}
+      // somInsight={aiMarketSizeResultLMS.result}
     />
   );
 }

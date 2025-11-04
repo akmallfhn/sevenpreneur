@@ -7,8 +7,8 @@ import CohortDetailsTabsLMS, {
   UserList,
 } from "../tabs/CohortDetailsTabsLMS";
 import HeroCohortDetailsLMS from "../templates/HeroCohortDetailsLMS";
-import AttendanceProgressBarLMS from "../items/AttendanceProgressBarLMS";
-import NearestScheduleCardLMS from "../items/NearestScheduleCardLMS";
+import AttendanceProgressBarLMS from "../elements/AttendanceProgressBarLMS";
+import NearestScheduleCardLMS from "../elements/NearestScheduleCardLMS";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
