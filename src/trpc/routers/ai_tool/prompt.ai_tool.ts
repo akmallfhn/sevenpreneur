@@ -141,6 +141,10 @@ export const aiToolPrompts = {
                   "<judul referensi artikel atau sumber data yang digunakan>",
                 source_url:
                   "<url referensi artikel atau sumber data yang dipakai>",
+                source_publisher:
+                  "<lembaga penerbit dari referensi artikel atau sumber data>",
+                source_year:
+                  "tahun diterbitkannya referensi artikel atau sumber data",
               },
             ],
             confidence_level: "<estimasi nilai kredibilitas sumber data>",
@@ -182,6 +186,8 @@ export const aiToolPrompts = {
               z.object({
                 source_name: z.string(),
                 source_url: z.string(),
+                source_publisher: z.string(),
+                source_year: z.number(),
               })
             ),
             confidence_level: z.number(),
