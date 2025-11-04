@@ -64,19 +64,19 @@ export const listAITool = {
         },
         orderBy: [{ created_at: "desc" }],
       });
-      const formattedList = aiResultsList.map((entry) => {
+      const returnedList = aiResultsList.map((entry) => {
         return {
           id: entry.id,
           name: entry.name,
-          created_at: entry.created_at,
           ai_tool_name: entry.ai_tool.name,
           ai_tool_slug_url: entry.ai_tool.slug_url,
+          created_at: entry.created_at,
         };
       });
       return {
         code: STATUS_OK,
         message: "Success",
-        list: formattedList,
+        list: returnedList,
       };
     }),
 };
