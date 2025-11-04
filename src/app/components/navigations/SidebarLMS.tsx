@@ -94,7 +94,7 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
           <hr />
           <div className="flex flex-col gap-1">
             <h2 className="m-2 mt-0 text-sm text-alternative font-bodycopy font-medium">
-              AI RESULT
+              GENERATED RESULT
             </h2>
             <div className="sidebar-ai-result flex flex-col h-full gap-2">
               {aiResultList.map((post) => (
