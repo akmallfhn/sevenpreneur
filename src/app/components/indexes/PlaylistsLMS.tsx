@@ -2,8 +2,8 @@
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import PlaylistItemLMS from "../items/PlaylistItemLMS";
-import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
+import HeaderListLMS from "../navigations/HeaderListLMS";
 
 interface Playlists {
   id: number;
@@ -30,7 +30,7 @@ export default function PlaylistsLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
-      <HeaderNavbarLMS
+      <HeaderListLMS
         headerTitle="Learning Series"
         headerDescription="View all bootcamps you’ve purchased and enrolled in."
         sessionUserName={sessionUserName}

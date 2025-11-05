@@ -1,9 +1,7 @@
 import "@/app/globals.css";
-import HeaderNavbarLMS from "@/app/components/navigations/HeaderPageLMS";
 import SidebarLMS from "@/app/components/navigations/SidebarLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";

@@ -1,32 +1,28 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Blocks, Compass, Wallet } from "lucide-react";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import AppBreadcrumb from "./AppBreadcrumb";
+import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
-export interface HeaderNavbarLMSProps extends AvatarBadgeLMSProps {
-  headerTitle: string;
-  headerDescription: string;
+export interface HeaderAIResultLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
+  headerResultName: string;
+  headerTitle: string;
+  // headerDescription: string;
 }
 
-export default function HeaderNavbarLMS({
-  headerTitle,
-  headerDescription,
-  sessionUserAvatar,
+export default function HeaderAIResultLMS({
   sessionUserName,
+  sessionUserAvatar,
   sessionUserRole,
-}: HeaderNavbarLMSProps) {
+  headerResultName,
+  headerTitle,
+}: // headerDescription,
+HeaderAIResultLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -62,26 +58,27 @@ export default function HeaderNavbarLMS({
 
   return (
     <React.Fragment>
-      <div className="header-root flex sticky w-full top-2 left-0 items-center justify-center bg-section-background z-40">
-        <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between py-3 px-5 lg:px-0 lg:py-4">
-          <div className="header-page-data flex items-center gap-2">
-            <h1 className="header-title font-brand font-bold text-2xl">
-              {headerTitle}
-            </h1>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <FontAwesomeIcon
-                  icon={faCircleQuestion}
-                  className="text-alternative hover:cursor-pointer"
-                  size="sm"
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="header-desc max-w-[120px] text-center font-bodycopy">
-                  {headerDescription}
-                </p>
-              </TooltipContent>
-            </Tooltip>
+      <div className="header-root flex sticky w-full top-0 left-0 px-0 py-5 items-center justify-center bg-section-background z-40">
+        <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between">
+          <div className="header-page-data flex flex-col gap-1">
+            <div className="header-breadcrumb flex items-center gap-4">
+              <AppBreadcrumb className="text-[#333333]/90">
+                <p className="slash font-bodycopy">/</p>
+                <AppBreadcrumbItem href="/ai">AI</AppBreadcrumbItem>
+                <p className="slash font-bodycopy">/</p>
+                <AppBreadcrumbItem isCurrentPage>
+                  {headerResultName}
+                </AppBreadcrumbItem>
+              </AppBreadcrumb>
+            </div>
+            <div className="header-information flex flex-col gap-2">
+              <h1 className="header-title font-brand font-bold text-2xl">
+                {headerTitle}
+              </h1>
+              {/* <p className="font-bodycopy text-[#333333]">
+                {headerDescription}
+              </p> */}
+            </div>
           </div>
           <div
             className="user-menu relative flex hover:cursor-pointer"

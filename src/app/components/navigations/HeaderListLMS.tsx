@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Blocks, Compass, Wallet } from "lucide-react";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
@@ -12,26 +13,20 @@ import {
 } from "@/components/ui/tooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
-import AppBreadcrumb from "./AppBreadcrumb";
-import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
-export interface HeaderCohortEntityLMSProps extends AvatarBadgeLMSProps {
-  cohortId: number;
-  cohortName: string;
+export interface HeaderListLMSProps extends AvatarBadgeLMSProps {
   headerTitle: string;
   headerDescription: string;
   sessionUserRole: number;
 }
 
-export default function HeaderCohortEntityLMS({
-  cohortId,
-  cohortName,
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
+export default function HeaderListLMS({
   headerTitle,
   headerDescription,
-}: HeaderCohortEntityLMSProps) {
+  sessionUserAvatar,
+  sessionUserName,
+  sessionUserRole,
+}: HeaderListLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -69,42 +64,24 @@ export default function HeaderCohortEntityLMS({
     <React.Fragment>
       <div className="header-root flex sticky w-full top-0 left-0 px-0 py-5 items-center justify-center bg-section-background z-40">
         <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between">
-          <div className="header-page-data flex flex-col gap-1">
-            <div className="header-breadcrumb flex items-center gap-4">
-              <AppBreadcrumb className="text-[#333333]/90">
-                <p className="slash font-bodycopy">/</p>
-                <AppBreadcrumbItem href="/cohorts">
-                  Bootcamp Program
-                </AppBreadcrumbItem>
-                <p className="slash font-bodycopy">/</p>
-                <AppBreadcrumbItem href={`/cohorts/${cohortId}`}>
-                  {cohortName}
-                </AppBreadcrumbItem>
-                <p className="slash font-bodycopy">/</p>
-                <AppBreadcrumbItem isCurrentPage>
-                  {headerTitle}
-                </AppBreadcrumbItem>
-              </AppBreadcrumb>
-            </div>
-            <div className="header-information flex items-center gap-2">
-              <h1 className="header-title font-brand font-bold text-2xl">
-                {headerTitle}
-              </h1>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <FontAwesomeIcon
-                    icon={faCircleQuestion}
-                    className="text-alternative hover:cursor-pointer"
-                    size="sm"
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="header-desc max-w-[120px] text-center font-bodycopy">
-                    {headerDescription}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
+          <div className="header-page-data flex items-center gap-2">
+            <h1 className="header-title font-brand font-bold text-2xl">
+              {headerTitle}
+            </h1>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className="text-alternative hover:cursor-pointer"
+                  size="sm"
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="header-desc max-w-[120px] text-center font-bodycopy">
+                  {headerDescription}
+                </p>
+              </TooltipContent>
+            </Tooltip>
           </div>
           <div
             className="user-menu relative flex hover:cursor-pointer"

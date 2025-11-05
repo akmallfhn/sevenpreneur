@@ -1,6 +1,8 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { getShortRupiahCurrency } from "@/lib/currency";
+import HeaderAIResultLMS from "../navigations/HeaderAIResultLMS";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 
 interface SourcesMarketSize {
   source_name: string;
@@ -9,7 +11,10 @@ interface SourcesMarketSize {
   source_year: number;
 }
 
-interface MarketSizeReportLMSProps {
+interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
+  sessionUserRole: number;
+  resultName: string;
+  // productName: string;
   tamValue: number;
   samValue: number;
   tamInsight: string;
@@ -20,6 +25,11 @@ interface MarketSizeReportLMSProps {
 }
 
 export default function MarketSizeReportLMS({
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
+  resultName,
+  // productName,
   tamValue,
   samValue,
   tamInsight,
@@ -42,8 +52,16 @@ export default function MarketSizeReportLMS({
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
-      <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4 pt-20">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-4 items-center justify-center lg:flex">
+      <HeaderAIResultLMS
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
+        sessionUserRole={sessionUserRole}
+        headerTitle="Market Size Estimation Result"
+        headerResultName={resultName}
+        // headerDescription={`for ${productName}`}
+      />
+      <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="market-analysis flex w-full gap-4">
           <div className="market-size-chart flex flex-col flex-2 items-center gap-8 w-full bg-white p-5 pb-10 rounded-lg border">
             <h2 className="section-title font-bold text-lg font-bodycopy">

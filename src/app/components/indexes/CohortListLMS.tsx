@@ -2,8 +2,8 @@
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import CohortItemCardLMS from "../items/CohortItemCardLMS";
-import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
+import HeaderListLMS from "../navigations/HeaderListLMS";
 
 interface CohortList {
   id: number;
@@ -31,7 +31,7 @@ export default function CohortListLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
-      <HeaderNavbarLMS
+      <HeaderListLMS
         headerTitle="Bootcamp Programs"
         headerDescription="View all bootcamps you’ve purchased and enrolled in."
         sessionUserRole={sessionUserRole}

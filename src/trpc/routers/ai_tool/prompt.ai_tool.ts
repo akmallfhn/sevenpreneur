@@ -135,7 +135,7 @@ export const aiToolPrompts = {
         "8. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
         "9. Buat remarks SAM terkait insight yang menjelaskan pasar yang bisa dijangkau perusahaan dan anjuran strategi channel penjualan.\n" +
         "10. Validasi bahwa TAM ≥ SAM dan sesuaikan jika perlu." +
-        "11. Buat remarks SOM terkait anjuran strategi menjalankan" +
+        "11. Buat remarks SOM terkait anjuran strategi kompetitif, kapasitas, atau tantangan penetrasi" +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           market_need: "<essential/niche/luxury>",
@@ -159,7 +159,7 @@ export const aiToolPrompts = {
             ],
             confidence_level: "<estimasi nilai kredibilitas sumber data>",
             remarks:
-              "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market>",
+              "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market. Beri spasi jika ingin membuat paragraf baru.>",
           },
           SAM_insight: {
             SAM_size_estimate: "<kecil/sedang/besar>",
@@ -167,11 +167,11 @@ export const aiToolPrompts = {
             SAM_value:
               "<estimasi nilai SAM setahun dalam Rupiah berdasarkan TAM value, area operasi, dan sales channels>",
             remarks:
-              "<catatan tambahan terkait pasar terjangkau perusahaan dan strategi channel penjualan>",
+              "<catatan tambahan terkait keterjangkauan pasar dan strategi channel penjualan. Beri spasi jika ingin membuat paragraf baru.>",
           },
           SOM_insight: {
             remarks:
-              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi>",
+              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi. Beri spasi jika ingin membuat paragraf baru.>",
           },
         }),
       input:
