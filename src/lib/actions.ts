@@ -2,6 +2,10 @@
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND } from "./status_code";
+import {
+  AIMarketSize_CustomerType,
+  AIMarketSize_ProductType,
+} from "@/trpc/routers/ai_tool/prompt.ai_tool";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -485,5 +489,45 @@ export async function DeleteDiscussionReply({
   return {
     code: deleteDiscussionReply.code,
     message: deleteDiscussionReply.message,
+  };
+}
+
+// AI MARKET SIZE
+interface GenerateAIMarketSize {
+  productName: string;
+  productDescription: string;
+  productType: AIMarketSize_ProductType;
+  customerType: AIMarketSize_CustomerType;
+  companyArea: string;
+  salesChannel: string;
+}
+export async function GenerateAIMarketSize({
+  productName,
+  productDescription,
+  productType,
+  customerType,
+  companyArea,
+  salesChannel,
+}: GenerateAIMarketSize) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const generateMarketSize = await trpc.use.ai.marketSize({
+    product_name: productName,
+    description: productDescription,
+    product_type: productType,
+    customer_type: customerType,
+    company_operating_area: companyArea,
+    sales_channel: salesChannel,
+  });
+
+  return {
+    code: generateMarketSize.code,
+    message: generateMarketSize.message,
+    result: generateMarketSize.result,
   };
 }
