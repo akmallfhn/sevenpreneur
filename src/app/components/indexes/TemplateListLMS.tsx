@@ -1,9 +1,9 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import TemplateItemCardLMS from "../items/TemplateItemCardLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
+import HeaderListLMS from "../navigations/HeaderListLMS";
 
 interface TemplateList {
   id: number;
@@ -31,7 +31,7 @@ export default function TemplateListLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64  pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
-      <HeaderNavbarLMS
+      <HeaderListLMS
         headerTitle="Business Templates"
         headerDescription="Ready-to-use templates to help you plan, analyze, and execute your business"
         sessionUserRole={sessionUserRole}

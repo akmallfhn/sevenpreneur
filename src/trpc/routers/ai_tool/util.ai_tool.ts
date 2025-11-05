@@ -62,7 +62,7 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   prompt: AIPrompt<T>
 ) {
   const generatedResult = await ChatGPTClient.responses.parse({
-    model: "gpt-5-nano",
+    model: "gpt-5-mini",
     reasoning: { effort: "low" },
     instructions: prompt.instructions,
     input: prompt.input,

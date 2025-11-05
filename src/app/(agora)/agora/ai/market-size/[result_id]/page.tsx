@@ -22,25 +22,32 @@ export default async function AIMarketSizeResultLMS({
   const resultId = parseInt(result_id, 10);
   const userData = (await trpc.auth.checkSession()).user;
 
-  let aiMarketSizeResultLMS;
+  let aiMarketSizeData;
   try {
-    aiMarketSizeResultLMS = (await trpc.read.ai.marketSize({ id: resultId }))
-      .result;
+    aiMarketSizeData = await trpc.read.ai.marketSize({ id: resultId });
   } catch (error) {
     return notFound();
   }
 
+  const aiMarketSizeResult = aiMarketSizeData.result;
+
   return (
     <MarketSizeReportLMS
-      tamValue={aiMarketSizeResultLMS.result.TAM_insight.TAM_value}
-      samValue={aiMarketSizeResultLMS.result.SAM_insight.SAM_value}
-      tamInsight={aiMarketSizeResultLMS.result.TAM_insight.remarks}
-      samInsight={aiMarketSizeResultLMS.result.SAM_insight.remarks}
-      somInsight={aiMarketSizeResultLMS.result.SOM_insight.remarks}
-      sources={aiMarketSizeResultLMS.result.TAM_insight.sources}
-      confidenceLevel={
-        aiMarketSizeResultLMS.result.TAM_insight.confidence_level
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
+        userData.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
+      sessionUserRole={userData.role_id}
+      resultName={aiMarketSizeResult.name}
+      // productName={aiMarketSizeResult.name}
+      tamValue={aiMarketSizeResult.result.TAM_insight.TAM_value}
+      samValue={aiMarketSizeResult.result.SAM_insight.SAM_value}
+      tamInsight={aiMarketSizeResult.result.TAM_insight.remarks}
+      samInsight={aiMarketSizeResult.result.SAM_insight.remarks}
+      somInsight={aiMarketSizeResult.result.SOM_insight.remarks}
+      sources={aiMarketSizeResult.result.TAM_insight.sources}
+      confidenceLevel={aiMarketSizeResult.result.TAM_insight.confidence_level}
     />
   );
 }

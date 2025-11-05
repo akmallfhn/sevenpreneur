@@ -1,9 +1,9 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderNavbarLMS from "../navigations/HeaderPageLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
+import HeaderListLMS from "../navigations/HeaderListLMS";
 
 interface AIList {
   id: number;
@@ -28,7 +28,7 @@ export default function AIListLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64  pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
-      <HeaderNavbarLMS
+      <HeaderListLMS
         headerTitle="AI Business Tools"
         headerDescription="Tools to helps you research, analyze, and plan your business faster and more accurately"
         sessionUserRole={sessionUserRole}

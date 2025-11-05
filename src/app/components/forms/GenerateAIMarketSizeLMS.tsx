@@ -29,7 +29,7 @@ export default function GenerateAIMarketSizeLMS() {
 
       if (aiMarketSizeResult.code === "OK") {
         toast.success("Success generate Market size report");
-        router.push(`/ai/market-size/${aiMarketSizeResult.message}`);
+        router.push(`/ai`);
       }
     } catch (error) {
       toast.error("Failed to generate market size report");
@@ -42,11 +42,16 @@ export default function GenerateAIMarketSizeLMS() {
     <div className="container pl-64 max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
       <AppButton onClick={handleAIGenerate} disabled={isGeneratingContents}>
         {isGeneratingContents ? (
-          <Loader2 className="size-5 animate-spin" />
+          <>
+            <Loader2 className="size-5 animate-spin" />
+            Please wait...
+          </>
         ) : (
-          <Sparkles fill="#FFFFFF" stroke="0" />
+          <>
+            <Sparkles fill="#FFFFFF" stroke="0" />
+            Generate Insight
+          </>
         )}
-        Generate Insight
       </AppButton>
     </div>
   );
