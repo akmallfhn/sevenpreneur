@@ -11,6 +11,7 @@ import {
   AI_TOOL_ID_IDEA_GEN,
   AI_TOOL_ID_MARKET_SIZE,
   AIGenerate,
+  AIModelName,
   AISaveResult,
   isEnrolledAITool,
 } from "./util.ai_tool";
@@ -19,6 +20,7 @@ export const useAITool = {
   ideaGeneration: loggedInProcedure
     .input(
       z.object({
+        model: z.enum(AIModelName),
         count: z.number().min(1).max(5),
       })
     )
@@ -32,6 +34,7 @@ export const useAITool = {
       }
 
       const parsedResult = await AIGenerate(
+        opts.input.model,
         aiToolPrompts.ideaGeneration(opts.input.count)
       );
 
@@ -54,6 +57,7 @@ export const useAITool = {
   marketSize: loggedInProcedure
     .input(
       z.object({
+        model: z.enum(AIModelName),
         additional_persona: stringNotBlank().optional(),
         product_name: stringNotBlank(),
         description: stringNotBlank(),
@@ -73,6 +77,7 @@ export const useAITool = {
       }
 
       const parsedResult = await AIGenerate(
+        opts.input.model,
         aiToolPrompts.marketSize(
           opts.input.additional_persona || "",
           opts.input.product_name,

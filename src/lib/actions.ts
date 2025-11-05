@@ -6,6 +6,7 @@ import {
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
 } from "@/trpc/routers/ai_tool/prompt.ai_tool";
+import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -517,6 +518,7 @@ export async function GenerateAIMarketSize({
   setSessionToken(sessionData.value);
 
   const generateMarketSize = await trpc.use.ai.marketSize({
+    model: AIModelName.GPT_5_MINI,
     product_name: productName,
     description: productDescription,
     product_type: productType,

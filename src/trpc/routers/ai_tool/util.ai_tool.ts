@@ -9,6 +9,12 @@ import { zodTextFormat } from "openai/helpers/zod";
 import { AutoParseableTextFormat } from "openai/lib/parser";
 import z from "zod";
 
+export enum AIModelName {
+  GPT_5 = "gpt-5",
+  GPT_5_MINI = "gpt-5-mini",
+  GPT_5_NANO = "gpt-5-nano",
+}
+
 export const AI_TOOL_ID_IDEA_GEN = 1; // idea-gen
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
 
@@ -59,10 +65,12 @@ export function AIFormatOutputZod<T extends z.ZodObject>(
 const ChatGPTClient = new OpenAI();
 
 export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
+  model: AIModelName,
   prompt: AIPrompt<T>
 ) {
   const generatedResult = await ChatGPTClient.responses.parse({
-    model: "gpt-5-mini",
+    model: model,
+    tools: [{ type: "web_search" }],
     reasoning: { effort: "low" },
     instructions: prompt.instructions,
     input: prompt.input,
