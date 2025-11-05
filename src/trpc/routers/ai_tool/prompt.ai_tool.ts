@@ -131,10 +131,11 @@ export const aiToolPrompts = {
         `4. Tentukan TAM size (besar/sedang/kecil) dan ARPU (average revenue per unit) (tinggi/sedang/rendah) berdasarkan ${customer_type}, market_need, dan regulation\n` +
         "5. Cantumkan TAM value berdasarkan deskripsi produk, market need, regulasi, dan geografi. Dapatkan dari sumber artikel paling kredibel (Statista, IBISWorld, McKinsey, World Bank, laporan pemerintah, dsb).\n" +
         "6. Tentukan confidence_level dalam skala 1-100 berdasarkan kualitas sumber, kejelasan data pasar, serta konsistensi antar variabel. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut." +
-        "7. Buat remarks singkat terkait populasi, pasar, regulasi, atau strategi go-to-market.\n" +
+        "7. Buat remarks TAM terkait insight populasi, pasar, regulasi, dan anjuran strategi go-to-market.\n" +
         "8. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
-        "9. Buat remarks tambahan untuk SAM yang menjelaskan pasar yang bisa dijangkau perusahaan dan strategi channel penjualan.\n" +
+        "9. Buat remarks SAM terkait insight yang menjelaskan pasar yang bisa dijangkau perusahaan dan anjuran strategi channel penjualan.\n" +
         "10. Validasi bahwa TAM ≥ SAM dan sesuaikan jika perlu." +
+        "11. Buat remarks SOM terkait anjuran strategi menjalankan" +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           market_need: "<essential/niche/luxury>",

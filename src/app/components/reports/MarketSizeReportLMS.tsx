@@ -14,9 +14,9 @@ interface MarketSizeReportLMSProps {
   samValue: number;
   tamInsight: string;
   samInsight: string;
-  somInsight?: string;
+  somInsight: string;
   confidenceLevel: number;
-  sources?: SourcesMarketSize[];
+  sources: SourcesMarketSize[];
 }
 
 export default function MarketSizeReportLMS({
@@ -88,42 +88,19 @@ export default function MarketSizeReportLMS({
             </div>
             <div className="sources-data flex flex-col gap-2 font-bodycopy">
               <p className="font-semibold">Sources</p>
-              <div className="source-item flex flex-col gap-0.5">
-                <a
-                  href="/"
-                  className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
-                >
-                  Proyeksi Penduduk Indonesia Tahun 2020-2045 (Estimasi
-                  2023/2024)
-                </a>
-                <p className="source-publisher text-sm text-alternative">
-                  Badan Pusat Statistik 2024
-                </p>
-              </div>
-              <div className="source-item flex flex-col gap-0.5">
-                <a
-                  href="/"
-                  className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
-                >
-                  Proyeksi Penduduk Indonesia Tahun 2020-2045 (Estimasi
-                  2023/2024)
-                </a>
-                <p className="source-publisher text-sm text-alternative">
-                  Badan Pusat Statistik 2024
-                </p>
-              </div>
-              <div className="source-item flex flex-col gap-0.5">
-                <a
-                  href="/"
-                  className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
-                >
-                  Proyeksi Penduduk Indonesia Tahun 2020-2045 (Estimasi
-                  2023/2024)
-                </a>
-                <p className="source-publisher text-sm text-alternative">
-                  Badan Pusat Statistik 2024
-                </p>
-              </div>
+              {sources.map((post, index) => (
+                <div className="source-item flex flex-col gap-0.5" key={index}>
+                  <a
+                    href={post.source_url}
+                    className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
+                  >
+                    {post.source_name}
+                  </a>
+                  <p className="source-publisher text-sm text-alternative">
+                    {`${post.source_publisher} ${post.source_year}`}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -181,10 +158,7 @@ export default function MarketSizeReportLMS({
               </div>
               <div className="som-insight flex flex-col gap-1">
                 <h3 className="text-lg font-bold">Insight</h3>
-                <p className="text-[#333333] text-[15px]">
-                  SOM adalah bagian dari SAM yang realistis untuk Anda dapatkan
-                  dalam 1-2 tahun pertama.
-                </p>
+                <p className="text-[#333333] text-[15px]">{somInsight}</p>
               </div>
             </div>
           </div>

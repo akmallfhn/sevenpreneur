@@ -1,3 +1,4 @@
+import GenerateAIMarketSizeLMS from "@/app/components/forms/GenerateAIMarketSizeLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -13,5 +14,5 @@ export default async function AIMarketSizePageLMS() {
 
   const userData = (await trpc.auth.checkSession()).user;
 
-  return <></>;
+  return <GenerateAIMarketSizeLMS />;
 }
