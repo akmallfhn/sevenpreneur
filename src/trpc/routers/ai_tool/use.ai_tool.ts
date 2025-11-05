@@ -100,6 +100,7 @@ export const useAITool = {
       return {
         code: STATUS_OK,
         message: "Success",
+        product_name: opts.input.product_name,
         title: parsedResult.title,
         result: parsedResult.response,
       };
