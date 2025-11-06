@@ -38,7 +38,7 @@ export const useAITool = {
         aiToolPrompts.ideaGeneration(opts.input.count)
       );
 
-      await AISaveResult(
+      const resultId = await AISaveResult(
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_IDEA_GEN,
@@ -49,6 +49,7 @@ export const useAITool = {
       return {
         code: STATUS_OK,
         message: "Success",
+        id: resultId,
         title: parsedResult.title,
         result: parsedResult.response,
       };
@@ -89,7 +90,7 @@ export const useAITool = {
         )
       );
 
-      await AISaveResult(
+      const resultId = await AISaveResult(
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_MARKET_SIZE,
@@ -100,7 +101,7 @@ export const useAITool = {
       return {
         code: STATUS_OK,
         message: "Success",
-        product_name: opts.input.product_name,
+        id: resultId,
         title: parsedResult.title,
         result: parsedResult.response,
       };
