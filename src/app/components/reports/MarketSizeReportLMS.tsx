@@ -38,7 +38,7 @@ export default function MarketSizeReportLMS({
   confidenceLevel,
   sources,
 }: MarketSizeReportLMSProps) {
-  const somValue = 0.05 * samValue;
+  const somValue = 0.01 * samValue;
   const conservativeScenario = 0.7 * somValue;
   const aggresiveScenario = 1.5 * somValue;
 
