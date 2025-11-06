@@ -55,6 +55,7 @@ export enum AIMarketSize_ARPUEstimate {
 }
 
 export interface AIResultMarketSize extends JsonObject {
+  product_name: string;
   market_need: AIMarketSize_MarketNeed;
   regulation: AIMarketSize_Regulation;
   TAM_insight: {

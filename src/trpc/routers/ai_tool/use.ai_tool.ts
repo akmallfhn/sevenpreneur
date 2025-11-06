@@ -90,12 +90,17 @@ export const useAITool = {
         )
       );
 
+      const formattedResult = {
+        product_name: opts.input.product_name,
+        ...parsedResult.response,
+      };
+
       const resultId = await AISaveResult(
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_MARKET_SIZE,
         parsedResult.title,
-        parsedResult.response
+        formattedResult
       );
 
       return {
@@ -103,7 +108,7 @@ export const useAITool = {
         message: "Success",
         id: resultId,
         title: parsedResult.title,
-        result: parsedResult.response,
+        result: formattedResult,
       };
     }),
 };
