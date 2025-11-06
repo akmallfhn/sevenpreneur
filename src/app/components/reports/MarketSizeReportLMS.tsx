@@ -14,7 +14,7 @@ interface SourcesMarketSize {
 interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   resultName: string;
-  // productName: string;
+  productName: string;
   tamValue: number;
   samValue: number;
   tamInsight: string;
@@ -29,7 +29,7 @@ export default function MarketSizeReportLMS({
   sessionUserAvatar,
   sessionUserRole,
   resultName,
-  // productName,
+  productName,
   tamValue,
   samValue,
   tamInsight,
@@ -52,14 +52,14 @@ export default function MarketSizeReportLMS({
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-4 items-center justify-center lg:flex">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
       <HeaderAIResultLMS
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}
         headerTitle="Market Size Estimation Result"
         headerResultName={resultName}
-        // headerDescription={`for ${productName}`}
+        headerDescription={`For ${productName}`}
       />
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="market-analysis flex w-full gap-4">

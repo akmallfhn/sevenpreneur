@@ -499,7 +499,7 @@ interface GenerateAIMarketSize {
   productDescription: string;
   productType: AIMarketSize_ProductType;
   customerType: AIMarketSize_CustomerType;
-  companyArea: string;
+  operatingArea: string;
   salesChannel: string;
 }
 export async function GenerateAIMarketSize({
@@ -507,7 +507,7 @@ export async function GenerateAIMarketSize({
   productDescription,
   productType,
   customerType,
-  companyArea,
+  operatingArea,
   salesChannel,
 }: GenerateAIMarketSize) {
   const cookieStore = await cookies();
@@ -518,18 +518,20 @@ export async function GenerateAIMarketSize({
   setSessionToken(sessionData.value);
 
   const generateMarketSize = await trpc.use.ai.marketSize({
-    model: AIModelName.GPT_5_MINI,
+    model: "gpt-5-mini" as AIModelName,
     product_name: productName,
     description: productDescription,
     product_type: productType,
     customer_type: customerType,
-    company_operating_area: companyArea,
+    company_operating_area: operatingArea,
     sales_channel: salesChannel,
   });
 
   return {
     code: generateMarketSize.code,
     message: generateMarketSize.message,
+    product_name: generateMarketSize.product_name,
+    title: generateMarketSize.title,
     result: generateMarketSize.result,
   };
 }

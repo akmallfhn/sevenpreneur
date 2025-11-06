@@ -40,7 +40,7 @@ export default async function AIMarketSizeResultLMS({
       }
       sessionUserRole={userData.role_id}
       resultName={aiMarketSizeResult.name}
-      // productName={aiMarketSizeResult.name}
+      productName={"Your Product"}
       tamValue={aiMarketSizeResult.result.TAM_insight.TAM_value}
       samValue={aiMarketSizeResult.result.SAM_insight.SAM_value}
       tamInsight={aiMarketSizeResult.result.TAM_insight.remarks}
