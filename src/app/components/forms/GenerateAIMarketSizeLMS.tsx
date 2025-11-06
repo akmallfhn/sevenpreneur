@@ -12,8 +12,19 @@ import { toast } from "sonner";
 import InputLMS from "../fields/InputLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import SelectLMS from "../fields/SelectLMS";
+import { Checkbox } from "@/components/ui/checkbox";
+import HeaderAIToolLMS from "../navigations/HeaderAIToolLMS";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 
-export default function GenerateAIMarketSizeLMS() {
+interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
+  sessionUserRole: number;
+}
+
+export default function GenerateAIMarketSizeLMS({
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
+}: GenerateAIMarketSizeLMSProps) {
   const router = useRouter();
   const [isGeneratingContents, setIsGeneratingContents] = useState(false);
 
@@ -24,15 +35,38 @@ export default function GenerateAIMarketSizeLMS() {
     productType: AIMarketSize_ProductType | null;
     customerType: AIMarketSize_CustomerType | null;
     operatingArea: string;
-    salesChannel: string;
+    salesChannel: string[];
   }>({
     productName: "",
     productDescription: "",
     productType: null,
     customerType: null,
     operatingArea: "",
-    salesChannel: "",
+    salesChannel: [],
   });
+
+  const salesChannelOptions = [
+    "Offline Store (Kios, Gerai, Toko, etc)",
+    "E-Commerce (Blibli, Shopee, Tiktok Shop, etc)",
+    "Social Media",
+    "Owned Platform (Aplikasi/Website)",
+    "Reseller/Distributor",
+    "Salesperson",
+  ];
+
+  // Handle Sales Channel Checkbox
+  const handleSalesChannelChange = (option: string, checked: boolean) => {
+    setFormData((prev) => {
+      const current = [...prev.salesChannel];
+      if (checked) {
+        if (!current.includes(option)) current.push(option);
+      } else {
+        const index = current.indexOf(option);
+        if (index !== -1) current.splice(index, 1);
+      }
+      return { ...prev, salesChannel: current };
+    });
+  };
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -79,7 +113,7 @@ export default function GenerateAIMarketSizeLMS() {
         productType: formData.productType as AIMarketSize_ProductType,
         customerType: formData.customerType as AIMarketSize_CustomerType,
         operatingArea: formData.operatingArea.trim(),
-        salesChannel: "pasar, ecommerce (Shopee, Tiktok, Tokopedia, Astro)",
+        salesChannel: formData.salesChannel.join(", "),
       });
 
       if (aiMarketSizeResult.code === "OK") {
@@ -90,9 +124,9 @@ export default function GenerateAIMarketSizeLMS() {
           productType: null,
           customerType: null,
           operatingArea: "",
-          salesChannel: "",
+          salesChannel: [],
         });
-        router.push(`/ai`);
+        router.push(`/ai/market-size/${aiMarketSizeResult.id}`);
       } else {
         toast.error(
           "AI couldn’t complete the market analysis. Please try again."
@@ -109,7 +143,14 @@ export default function GenerateAIMarketSizeLMS() {
   };
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+      <HeaderAIToolLMS
+        headerTitle="AI for Market Size Analysis"
+        headerDescription="View all bootcamps you’ve purchased and enrolled in."
+        sessionUserRole={sessionUserRole}
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
+      />
       <form
         className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
         onSubmit={handleAIGenerate}
@@ -161,7 +202,7 @@ export default function GenerateAIMarketSizeLMS() {
             ]}
           />
         </div>
-        <div className="bg-white w-full flex flex-col gap-4 p-5 border rounded-lg">
+        <div className="customer-targeting bg-white w-full flex flex-col gap-4 p-5 border rounded-lg">
           <h2 className="section-title font-bold font-bodycopy">
             Customer Targeting
           </h2>
@@ -196,6 +237,28 @@ export default function GenerateAIMarketSizeLMS() {
               },
             ]}
           />
+        </div>
+        <div className="sales-distribution bg-white w-full flex flex-col gap-4 p-5 border rounded-lg">
+          <h2 className="section-title font-bold font-bodycopy">
+            Sales & Distribution
+          </h2>
+          <div className="sales-channel-options grid grid-cols-3 gap-y-4">
+            {salesChannelOptions.map((item, index) => (
+              <div
+                className="checkbox-item flex gap-2 items-center font-bodycopy font-medium text-sm"
+                key={index}
+              >
+                <Checkbox
+                  checked={formData.salesChannel.includes(item)}
+                  onCheckedChange={(checked) =>
+                    handleSalesChannelChange(item, checked === true)
+                  }
+                  suppressHydrationWarning
+                />
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
         <AppButton
           className="w-fit"

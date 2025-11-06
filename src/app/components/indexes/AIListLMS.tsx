@@ -27,7 +27,7 @@ export default function AIListLMS({
   const activeAI = aiList.filter((ai) => ai.status === "ACTIVE");
 
   return (
-    <div className="root-page hidden flex-col pl-64  pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
       <HeaderListLMS
         headerTitle="AI Business Tools"
         headerDescription="Tools to helps you research, analyze, and plan your business faster and more accurately"

@@ -530,6 +530,7 @@ export async function GenerateAIMarketSize({
   return {
     code: generateMarketSize.code,
     message: generateMarketSize.message,
+    id: generateMarketSize.id,
     title: generateMarketSize.title,
     result: generateMarketSize.result,
   };

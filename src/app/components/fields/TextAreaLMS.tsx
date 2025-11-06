@@ -73,7 +73,7 @@ export default function TextAreaLMS({
     <div className="text-area-box flex flex-col gap-1">
       <label
         htmlFor={textAreaId}
-        className="label-text-area flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        className="label-text-area flex pl-1 gap-0.5 text-sm text-[#333333] font-bodycopy font-semibold"
       >
         {textAreaName}
         {required && <span className="label-required text-destructive">*</span>}
