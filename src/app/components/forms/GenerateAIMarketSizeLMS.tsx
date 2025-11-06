@@ -4,7 +4,7 @@ import AppButton from "../buttons/AppButton";
 import {
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
-} from "@/trpc/routers/ai_tool/prompt.ai_tool";
+} from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { Loader2, Sparkles } from "lucide-react";
@@ -110,8 +110,8 @@ export default function GenerateAIMarketSizeLMS({
       const aiMarketSizeResult = await GenerateAIMarketSize({
         productName: formData.productName.trim(),
         productDescription: formData.productDescription.trim(),
-        productType: formData.productType as AIMarketSize_ProductType,
-        customerType: formData.customerType as AIMarketSize_CustomerType,
+        productType: formData.productType,
+        customerType: formData.customerType,
         operatingArea: formData.operatingArea.trim(),
         salesChannel: formData.salesChannel.join(", "),
       });
@@ -188,16 +188,16 @@ export default function GenerateAIMarketSizeLMS({
               {
                 label:
                   "Fisik — produk atau layanan nyata yang bisa disentuh, dinikmati, atau dikonsumsi",
-                value: "fisik",
+                value: AIMarketSize_ProductType.FISIK,
               },
               {
                 label:
                   "Digital — produk atau layanan non-fisik yang diakses secara online",
-                value: "digital",
+                value: AIMarketSize_ProductType.DIGITAL,
               },
               {
                 label: "Gabungan — kombinasi fisik dan digital",
-                value: "hybrid",
+                value: AIMarketSize_ProductType.HYBRID,
               },
             ]}
           />
@@ -225,15 +225,15 @@ export default function GenerateAIMarketSizeLMS({
             options={[
               {
                 label: "B2C",
-                value: "B2C",
+                value: AIMarketSize_CustomerType.B2C,
               },
               {
                 label: "B2B",
-                value: "B2B",
+                value: AIMarketSize_CustomerType.B2B,
               },
               {
                 label: "Gabungan",
-                value: "hybrid",
+                value: AIMarketSize_CustomerType.HYBRID,
               },
             ]}
           />
