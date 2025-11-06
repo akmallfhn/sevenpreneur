@@ -416,7 +416,7 @@ model AITool {
 }
 
 model AIResult {
-  id         Int      @id @default(autoincrement()) @db.Integer
+  id         String   @id @default(nanoid()) @db.Char(21)
   user       User     @relation(fields: [user_id], references: [id])
   user_id    String   @db.Uuid
   ai_tool    AITool   @relation(fields: [ai_tool_id], references: [id])

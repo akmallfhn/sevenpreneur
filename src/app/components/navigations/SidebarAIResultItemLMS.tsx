@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 interface SidebarAIResultItemLMSProps {
   aiToolSlug: string;
-  aiResultId: number;
+  aiResultId: string;
   aiResultName: string;
 }
 
