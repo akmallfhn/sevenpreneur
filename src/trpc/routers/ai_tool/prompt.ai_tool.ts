@@ -47,6 +47,7 @@ export interface AIResultMarketSize extends JsonObject {
     remarks: string;
   };
   SOM_insight: {
+    SOM_value: string;
     remarks: string;
   };
 }
@@ -104,7 +105,8 @@ export const aiToolPrompts = {
         "8. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
         "9. Buat remarks SAM terkait insight yang menjelaskan pasar yang bisa dijangkau perusahaan dan anjuran strategi channel penjualan.\n" +
         "10. Validasi bahwa TAM ≥ SAM dan sesuaikan jika perlu." +
-        "11. Buat remarks SOM terkait anjuran strategi kompetitif, kapasitas, atau tantangan penetrasi" +
+        "11. Tentukan estimasi SOM_value yang nilainya sekitar 1-2% dari total nilai SAM" +
+        "12. Buat remarks SOM terkait anjuran strategi kompetitif, kapasitas, atau tantangan penetrasi" +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           market_need: "<essential/niche/luxury>",
@@ -139,6 +141,8 @@ export const aiToolPrompts = {
               "<catatan tambahan terkait keterjangkauan pasar dan strategi channel penjualan. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
           },
           SOM_insight: {
+            SOM_value:
+              "estimasi nilai SOM dalam Rupiah, berkisar antara 1-2% dari SAM_value",
             remarks:
               "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
           },
@@ -179,6 +183,7 @@ export const aiToolPrompts = {
             remarks: z.string(),
           }),
           SOM_insight: z.object({
+            SOM_value: z.number(),
             remarks: z.string(),
           }),
         })
