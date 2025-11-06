@@ -39,3 +39,8 @@ export function objectHasOnlyID() {
   // Object only has one property which is ID
   return z.object({ id: numberIsID() });
 }
+
+export function objectHasOnlyNanoid() {
+  // Object only has one property which is nano ID
+  return z.object({ id: stringIsNanoid() });
+}

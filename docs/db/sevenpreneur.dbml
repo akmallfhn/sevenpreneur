@@ -300,7 +300,7 @@ Table ai_tools {
 }
 
 Table ai_results {
-  id          serial       [primary key]
+  id          char(21)     [primary key, note: 'default nanoid()']
   user_id     uuid         [ref: > users.id]
   ai_tool_id  smallint     [ref: > ai_tools.id]
   name        varchar

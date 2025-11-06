@@ -19,12 +19,11 @@ export default async function AIMarketSizeResultLMS({
   }
 
   const { result_id } = await params;
-  const resultId = parseInt(result_id, 10);
   const userData = (await trpc.auth.checkSession()).user;
 
   let aiMarketSizeData;
   try {
-    aiMarketSizeData = await trpc.read.ai.marketSize({ id: resultId });
+    aiMarketSizeData = await trpc.read.ai.marketSize({ id: result_id });
   } catch (error) {
     return notFound();
   }

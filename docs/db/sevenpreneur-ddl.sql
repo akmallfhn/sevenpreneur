@@ -297,7 +297,7 @@ CREATE TABLE ai_tools (
 );
 
 CREATE TABLE ai_results (
-  id          SERIAL       PRIMARY KEY,
+  id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
   user_id     UUID         NOT NULL,
   ai_tool_id  SMALLINT     NOT NULL,
   name        VARCHAR      NOT NULL,
