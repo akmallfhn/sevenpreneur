@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect, InputHTMLAttributes } from "react";
 
-interface InputCMSProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputLMSProps extends InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
   inputName?: string;
   inputType: string;
-  inputIcon?: React.ReactNode;
   inputPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
@@ -15,11 +14,10 @@ interface InputCMSProps extends InputHTMLAttributes<HTMLInputElement> {
   required?: boolean;
 }
 
-export default function InputCMS({
+export default function InputLMS({
   inputId,
   inputName,
   inputType,
-  inputIcon,
   inputPlaceholder,
   characterLength,
   errorMessage,
@@ -28,7 +26,7 @@ export default function InputCMS({
   disabled,
   required,
   ...rest
-}: InputCMSProps) {
+}: InputLMSProps) {
   const [value, setValue] = useState(propValue);
   const [internalError, setInternalError] = useState("");
   const maxLength = characterLength ?? 128;
@@ -76,23 +74,16 @@ export default function InputCMS({
         </label>
       )}
 
-      <div className="input-container relative">
-        {inputIcon && (
-          <div className="input-icon absolute left-0 flex items-center p-[9px] pl-3 pointer-events-none text-alternative">
-            {inputIcon}
-          </div>
-        )}
+      <div className="input-container relative w-full" suppressHydrationWarning>
         <input
           id={inputId}
           type={inputType}
           placeholder={inputPlaceholder}
           disabled={disabled}
           {...rest}
-          className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
-            computedError
-              ? "border-destructive focus:outline-semi-destructive"
-              : "border-outline focus:outline-primary/15 focus:border-cms-primary"
-          } ${inputIcon ? "pl-10" : ""} `}
+          className={`input-placeholder w-full min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-[15px] border-b-2 resize-none transform transition-all overflow-hidden placeholder:text-alternative placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
+            computedError ? "border-destructive" : "border-outline"
+          }`}
           value={value}
           onChange={handleInputChange}
         />

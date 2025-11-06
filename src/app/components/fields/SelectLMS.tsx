@@ -9,7 +9,7 @@ export interface OptionType {
   image?: string;
 }
 
-interface SelectCMSProps {
+interface SelectLMSProps {
   selectId: string;
   selectName?: string;
   selectIcon?: React.ReactNode;
@@ -22,7 +22,7 @@ interface SelectCMSProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export default function SelectCMS({
+export default function SelectLMS({
   selectId,
   selectName,
   selectIcon,
@@ -33,7 +33,7 @@ export default function SelectCMS({
   required,
   options = [],
   onOpenChange,
-}: SelectCMSProps) {
+}: SelectLMSProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -76,22 +76,13 @@ export default function SelectCMS({
       )}
 
       <div
-        className={`select-container relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
-          isOpen
-            ? "border-cms-primary outline-4 outline-primary/15"
-            : "border-outline"
-        } ${selectIcon ? "pl-10" : ""} ${
-          disabled ? "cursor-not-allowed" : "cursor-pointer"
-        }`}
+        className={`select-container relative flex w-full p-2 pt-1 bg-white font-bodycopy font-medium text-[15px] border-b-2 transform transition-all ${
+          isOpen ? "border-primary-deep" : "border-outline"
+        }  ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         onClick={() => {
           if (!disabled) setIsOpen((prev) => !prev);
         }}
       >
-        {selectIcon && (
-          <div className="select-icon absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-alternative">
-            {selectIcon}
-          </div>
-        )}
         <div className="selected-value flex items-center gap-2 truncate">
           {selectedOption?.image && (
             <div className="select-option-image flex aspect-square size-5 rounded-full overflow-hidden">

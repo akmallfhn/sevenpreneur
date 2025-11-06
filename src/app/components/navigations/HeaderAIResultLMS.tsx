@@ -12,7 +12,7 @@ export interface HeaderAIResultLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   headerResultName: string;
   headerTitle: string;
-  // headerDescription: string;
+  headerDescription: string;
 }
 
 export default function HeaderAIResultLMS({
@@ -21,8 +21,8 @@ export default function HeaderAIResultLMS({
   sessionUserRole,
   headerResultName,
   headerTitle,
-}: // headerDescription,
-HeaderAIResultLMSProps) {
+  headerDescription,
+}: HeaderAIResultLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -60,24 +60,22 @@ HeaderAIResultLMSProps) {
     <React.Fragment>
       <div className="header-root flex sticky w-full top-0 left-0 px-0 py-5 items-center justify-center bg-section-background z-40">
         <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between">
-          <div className="header-page-data flex flex-col gap-1">
+          <div className="header-page-data flex flex-col gap-3">
             <div className="header-breadcrumb flex items-center gap-4">
               <AppBreadcrumb className="text-[#333333]/90">
                 <p className="slash font-bodycopy">/</p>
                 <AppBreadcrumbItem href="/ai">AI</AppBreadcrumbItem>
                 <p className="slash font-bodycopy">/</p>
-                <AppBreadcrumbItem isCurrentPage>
-                  {headerResultName}
-                </AppBreadcrumbItem>
+                <AppBreadcrumbItem isCurrentPage>Result</AppBreadcrumbItem>
               </AppBreadcrumb>
             </div>
             <div className="header-information flex flex-col gap-2">
               <h1 className="header-title font-brand font-bold text-2xl">
                 {headerTitle}
               </h1>
-              {/* <p className="font-bodycopy text-[#333333]">
+              <p className="font-bodycopy font-medium text-[#333333]">
                 {headerDescription}
-              </p> */}
+              </p>
             </div>
           </div>
           <div
