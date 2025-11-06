@@ -128,7 +128,7 @@ export const aiToolPrompts = {
             ],
             confidence_level: "<estimasi nilai kredibilitas sumber data>",
             remarks:
-              "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market. Beri spasi jika ingin membuat paragraf baru.>",
+              "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca.>",
           },
           SAM_insight: {
             SAM_size_estimate: "<kecil/sedang/besar>",
@@ -136,11 +136,11 @@ export const aiToolPrompts = {
             SAM_value:
               "<estimasi nilai SAM setahun dalam Rupiah berdasarkan TAM value, area operasi, dan sales channels>",
             remarks:
-              "<catatan tambahan terkait keterjangkauan pasar dan strategi channel penjualan. Beri spasi jika ingin membuat paragraf baru.>",
+              "<catatan tambahan terkait keterjangkauan pasar dan strategi channel penjualan. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca.>",
           },
           SOM_insight: {
             remarks:
-              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi. Beri spasi jika ingin membuat paragraf baru.>",
+              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca.>",
           },
         }),
       input:
