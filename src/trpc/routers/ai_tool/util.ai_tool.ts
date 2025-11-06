@@ -113,4 +113,5 @@ export async function AISaveResult(
       message: "Failed to save an AI result.",
     });
   }
+  return theResult.id;
 }
