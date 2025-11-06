@@ -1,5 +1,14 @@
 import { JsonObject } from "@prisma/client/runtime/library";
 import { z } from "zod";
+import {
+  AIMarketSize_ARPUEstimate,
+  AIMarketSize_CustomerType,
+  AIMarketSize_GeographyScope,
+  AIMarketSize_MarketNeed,
+  AIMarketSize_ProductType,
+  AIMarketSize_Regulation,
+  AIMarketSize_SizeEstimate,
+} from "./enum.ai_tool";
 import { AIFormatOutputText, AIFormatOutputZod } from "./util.ai_tool";
 
 // Idea Generation //
@@ -12,47 +21,6 @@ export interface AIResultIdeaGeneration extends JsonObject {
 }
 
 // Market Size //
-
-export enum AIMarketSize_ProductType {
-  DIGITAL = "digital",
-  FISIK = "fisik",
-  HYBRID = "hybrid",
-}
-
-export enum AIMarketSize_CustomerType {
-  B2B = "B2B",
-  B2C = "B2C",
-  HYBRID = "hybrid",
-}
-
-export enum AIMarketSize_MarketNeed {
-  ESSENTIAL = "essential",
-  NICHE = "niche",
-  LUXURY = "luxury",
-}
-
-export enum AIMarketSize_Regulation {
-  UNRESTRICTED = "unrestricted",
-  RESTRICTED = "restricted",
-}
-
-export enum AIMarketSize_GeographyScope {
-  LOKAL = "lokal",
-  REGIONAL = "regional",
-  GLOBAL = "global",
-}
-
-export enum AIMarketSize_SizeEstimate {
-  KECIL = "kecil",
-  SEDANG = "sedang",
-  BESAR = "besar",
-}
-
-export enum AIMarketSize_ARPUEstimate {
-  RENDAH = "rendah",
-  SEDANG = "sedang",
-  TINGGI = "tinggi",
-}
 
 export interface AIResultMarketSize extends JsonObject {
   product_name: string;

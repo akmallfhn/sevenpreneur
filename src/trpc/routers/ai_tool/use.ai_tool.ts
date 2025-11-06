@@ -5,8 +5,8 @@ import z from "zod";
 import {
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
-  aiToolPrompts,
-} from "./prompt.ai_tool";
+} from "./enum.ai_tool";
+import { aiToolPrompts } from "./prompt.ai_tool";
 import {
   AI_TOOL_ID_IDEA_GEN,
   AI_TOOL_ID_MARKET_SIZE,
