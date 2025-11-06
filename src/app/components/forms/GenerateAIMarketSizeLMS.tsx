@@ -15,6 +15,7 @@ import SelectLMS from "../fields/SelectLMS";
 import { Checkbox } from "@/components/ui/checkbox";
 import HeaderAIToolLMS from "../navigations/HeaderAIToolLMS";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import Image from "next/image";
 
 interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -272,8 +273,18 @@ export default function GenerateAIMarketSizeLMS({
             </>
           ) : (
             <>
-              <Sparkles fill="#FFFFFF" stroke="0" />
               Generate Insight
+              <div className="flex w-7">
+                <Image
+                  className="object-cover w-full h-full"
+                  src={
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
+                  }
+                  alt="AI Icon"
+                  height={100}
+                  width={100}
+                />
+              </div>
             </>
           )}
         </AppButton>
