@@ -176,7 +176,9 @@ export default function MarketSizeReportLMS({
               </div>
               <div className="som-insight flex flex-col gap-1">
                 <h3 className="text-lg font-bold">Insight</h3>
-                <p className="text-[#333333] text-[15px]">{somInsight}</p>
+                <p className="text-[#333333] text-[15px] whitespace-pre-line">
+                  {somInsight}
+                </p>
               </div>
             </div>
           </div>
