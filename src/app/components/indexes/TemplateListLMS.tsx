@@ -30,7 +30,7 @@ export default function TemplateListLMS({
   );
 
   return (
-    <div className="root-page hidden flex-col pl-64  pb-8 w-full h-full gap-4 items-center justify-center lg:flex">
+    <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
       <HeaderListLMS
         headerTitle="Business Templates"
         headerDescription="Ready-to-use templates to help you plan, analyze, and execute your business"

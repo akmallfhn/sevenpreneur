@@ -65,7 +65,7 @@ export default function InputLMS({
       {inputName && (
         <label
           htmlFor={inputId}
-          className="label-input flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+          className="label-input flex pl-1 gap-0.5 text-sm text-[#333333] font-bodycopy font-semibold"
         >
           {inputName}
           {required && (
@@ -74,7 +74,7 @@ export default function InputLMS({
         </label>
       )}
 
-      <div className="input-container relative w-full" suppressHydrationWarning>
+      <div className="input-container relative w-full">
         <input
           id={inputId}
           type={inputType}
@@ -86,6 +86,7 @@ export default function InputLMS({
           }`}
           value={value}
           onChange={handleInputChange}
+          suppressHydrationWarning
         />
         {computedError && (
           <p className="input-error-message inline-flex text-red-600 text-xs">
