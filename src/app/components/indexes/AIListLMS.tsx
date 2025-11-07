@@ -4,6 +4,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
+import Image from "next/image";
 
 interface AIList {
   id: number;
@@ -35,7 +36,7 @@ export default function AIListLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
       />
-      <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
+      <div className="index max-w-[calc(100%-4rem)] max-h-[calc(100vh-10rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto">
         {activeAI.length > 0 ? (
           <div className="template-list grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
             {activeAI
@@ -56,6 +57,22 @@ export default function AIListLMS({
             stateAction="Explore our Program"
           />
         )}
+      </div>
+      <div className="remarks-open-ai flex items-center pt-5 gap-2 opacity-60">
+        <p className="font-bodycopy font-medium text-[#333333] text-sm">
+          Powered by
+        </p>
+        <div className="logo-open-ai w-[70px] h-full">
+          <Image
+            className="object-cover w-full h-full"
+            src={
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/open-ai-logo.svg"
+            }
+            alt="Logo Open AI"
+            width={300}
+            height={300}
+          />
+        </div>
       </div>
     </div>
   );

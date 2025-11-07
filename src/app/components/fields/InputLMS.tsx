@@ -65,7 +65,7 @@ export default function InputLMS({
       {inputName && (
         <label
           htmlFor={inputId}
-          className="label-input flex pl-1 gap-0.5 text-sm text-[#333333] font-bodycopy font-semibold"
+          className="label-input flex pl-1 gap-0.5 text-[15px] text-[#333333] font-bodycopy font-semibold"
         >
           {inputName}
           {required && (

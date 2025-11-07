@@ -66,7 +66,7 @@ export default function SelectLMS({
       {selectName && (
         <label
           htmlFor={selectId}
-          className="select-label flex pl-1 gap-0.5 text-sm text-[#333333] font-bodycopy font-semibold"
+          className="select-label flex pl-1 gap-0.5 text-[15px] text-[#333333] font-bodycopy font-semibold"
         >
           {selectName}
           {required && (

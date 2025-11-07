@@ -16,6 +16,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import HeaderAIToolLMS from "../navigations/HeaderAIToolLMS";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import Image from "next/image";
+import AppTableofContents from "../elements/AppTableofContents";
+import AppCalloutBox from "../elements/AppCalloutBox";
 
 interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -46,6 +48,7 @@ export default function GenerateAIMarketSizeLMS({
     salesChannel: [],
   });
 
+  // List Sales Channel Options
   const salesChannelOptions = [
     "Offline Store (Kios, Gerai, Toko, etc)",
     "E-Commerce (Blibli, Shopee, Tiktok Shop, etc)",
@@ -53,6 +56,19 @@ export default function GenerateAIMarketSizeLMS({
     "Owned Platform (Aplikasi/Website)",
     "Reseller/Distributor",
     "Salesperson",
+  ];
+
+  // List Table of Contents
+  const tableofContents = [
+    {
+      name: "Product Overview",
+      url: "product-overview",
+    },
+    {
+      name: "Customer Targeting",
+      url: "customer-targeting",
+    },
+    { name: "Sales & Distribution", url: "sales-distribution" },
   ];
 
   // Handle Sales Channel Checkbox
@@ -152,143 +168,165 @@ export default function GenerateAIMarketSizeLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
       />
-      <form
-        className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
-        onSubmit={handleAIGenerate}
-      >
-        <div className="product-overview bg-white w-full flex flex-col gap-4 p-5 border rounded-lg">
-          <h2 className="section-title font-bold font-bodycopy">
-            Product Overview
-          </h2>
-          <InputLMS
-            inputId="product-name"
-            inputName="Apa nama produk atau layanan Anda?"
-            inputType="text"
-            inputPlaceholder="e.g. NutriBlend Smoothie"
-            value={formData.productName}
-            onInputChange={handleInputChange("productName")}
-            required
-          />
-          <TextAreaLMS
-            textAreaId="product-description"
-            textAreaName="Deskripsikan produk/layanan Anda"
-            textAreaPlaceholder="e.g. Smoothie sehat dengan kandungan nutrisi seimbang untuk diet"
-            characterLength={4000}
-            value={formData.productDescription}
-            onTextAreaChange={handleInputChange("productDescription")}
-            required
-          />
-          <SelectLMS
-            selectId="product-type"
-            selectName="Apa jenis produk atau layanan Anda?"
-            selectPlaceholder="Pilih jenis produk"
-            value={formData.productType}
-            onChange={handleInputChange("productType")}
-            required
-            options={[
-              {
-                label:
-                  "Fisik — produk atau layanan nyata yang bisa disentuh, dinikmati, atau dikonsumsi",
-                value: AIMarketSize_ProductType.FISIK,
-              },
-              {
-                label:
-                  "Digital — produk atau layanan non-fisik yang diakses secara online",
-                value: AIMarketSize_ProductType.DIGITAL,
-              },
-              {
-                label: "Gabungan — kombinasi fisik dan digital",
-                value: AIMarketSize_ProductType.HYBRID,
-              },
-            ]}
-          />
-        </div>
-        <div className="customer-targeting bg-white w-full flex flex-col gap-4 p-5 border rounded-lg">
-          <h2 className="section-title font-bold font-bodycopy">
-            Customer Targeting
-          </h2>
-          <InputLMS
-            inputId="operating-area"
-            inputName="Dimana area produk/layanan dijual atau beroperasi?"
-            inputType="text"
-            inputPlaceholder="e.g. Bali, Vietnam, Southeast Asia"
-            value={formData.operatingArea}
-            onInputChange={handleInputChange("operatingArea")}
-            required
-          />
-          <SelectLMS
-            selectId="customer-type"
-            selectName="Siapa target pelanggan utama Anda?"
-            selectPlaceholder="Pilih type customer"
-            value={formData.customerType}
-            onChange={handleInputChange("customerType")}
-            required
-            options={[
-              {
-                label: "B2C",
-                value: AIMarketSize_CustomerType.B2C,
-              },
-              {
-                label: "B2B",
-                value: AIMarketSize_CustomerType.B2B,
-              },
-              {
-                label: "Gabungan",
-                value: AIMarketSize_CustomerType.HYBRID,
-              },
-            ]}
-          />
-        </div>
-        <div className="sales-distribution bg-white w-full flex flex-col gap-4 p-5 border rounded-lg">
-          <h2 className="section-title font-bold font-bodycopy">
-            Sales & Distribution
-          </h2>
-          <div className="sales-channel-options grid grid-cols-3 gap-y-4">
-            {salesChannelOptions.map((item, index) => (
-              <div
-                className="checkbox-item flex gap-2 items-center font-bodycopy font-medium text-sm"
-                key={index}
-              >
-                <Checkbox
-                  checked={formData.salesChannel.includes(item)}
-                  onCheckedChange={(checked) =>
-                    handleSalesChannelChange(item, checked === true)
-                  }
-                  suppressHydrationWarning
-                />
-                {item}
+      <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
+        <main className="main-contents flex-2 w-full">
+          <form
+            className="form-generate-ai w-full flex flex-col gap-4 items-end"
+            onSubmit={handleAIGenerate}
+          >
+            <section
+              id="product-overview"
+              className="product-overview bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+            >
+              <h2 className="section-title font-bold font-bodycopy">
+                Product Overview
+              </h2>
+              <InputLMS
+                inputId="product-name"
+                inputName="Apa nama produk atau layanan Anda?"
+                inputType="text"
+                inputPlaceholder="e.g. NutriBlend Smoothie"
+                value={formData.productName}
+                onInputChange={handleInputChange("productName")}
+                required
+              />
+              <TextAreaLMS
+                textAreaId="product-description"
+                textAreaName="Deskripsikan produk/layanan Anda"
+                textAreaPlaceholder="e.g. Smoothie sehat dengan kandungan nutrisi seimbang untuk diet"
+                characterLength={4000}
+                value={formData.productDescription}
+                onTextAreaChange={handleInputChange("productDescription")}
+                required
+              />
+              <SelectLMS
+                selectId="product-type"
+                selectName="Apa jenis produk atau layanan Anda?"
+                selectPlaceholder="Pilih jenis produk"
+                value={formData.productType}
+                onChange={handleInputChange("productType")}
+                required
+                options={[
+                  {
+                    label:
+                      "Fisik — produk atau layanan nyata yang bisa disentuh, dinikmati, atau dikonsumsi",
+                    value: AIMarketSize_ProductType.FISIK,
+                  },
+                  {
+                    label:
+                      "Digital — produk atau layanan non-fisik yang diakses secara online",
+                    value: AIMarketSize_ProductType.DIGITAL,
+                  },
+                  {
+                    label: "Gabungan — kombinasi fisik dan digital",
+                    value: AIMarketSize_ProductType.HYBRID,
+                  },
+                ]}
+              />
+            </section>
+            <section
+              id={tableofContents[1].url}
+              className="customer-targeting bg-white w-full flex flex-col gap-4 p-5 border rounded-lg"
+            >
+              <h2 className="section-title font-bold font-bodycopy">
+                Customer Targeting
+              </h2>
+              <InputLMS
+                inputId="operating-area"
+                inputName="Dimana area produk/layanan dijual atau beroperasi?"
+                inputType="text"
+                inputPlaceholder="e.g. Bali, Vietnam, Southeast Asia"
+                value={formData.operatingArea}
+                onInputChange={handleInputChange("operatingArea")}
+                required
+              />
+              <SelectLMS
+                selectId="customer-type"
+                selectName="Siapa target pelanggan utama Anda?"
+                selectPlaceholder="Pilih type customer"
+                value={formData.customerType}
+                onChange={handleInputChange("customerType")}
+                required
+                options={[
+                  {
+                    label: "B2C",
+                    value: AIMarketSize_CustomerType.B2C,
+                  },
+                  {
+                    label: "B2B",
+                    value: AIMarketSize_CustomerType.B2B,
+                  },
+                  {
+                    label: "Gabungan",
+                    value: AIMarketSize_CustomerType.HYBRID,
+                  },
+                ]}
+              />
+            </section>
+            <section
+              id={tableofContents[2].url}
+              className="sales-distribution bg-white w-full flex flex-col gap-4 p-5 border rounded-lg"
+            >
+              <h2 className="section-title font-bold font-bodycopy">
+                Sales & Distribution
+              </h2>
+              <div className="sales-channel-options grid grid-cols-3 gap-y-4">
+                {salesChannelOptions.map((item, index) => (
+                  <div
+                    className="checkbox-item flex gap-2 items-center font-bodycopy font-medium text-sm"
+                    key={index}
+                  >
+                    <Checkbox
+                      checked={formData.salesChannel.includes(item)}
+                      onCheckedChange={(checked) =>
+                        handleSalesChannelChange(item, checked === true)
+                      }
+                      suppressHydrationWarning
+                    />
+                    {item}
+                  </div>
+                ))}
               </div>
-            ))}
+            </section>
+            <AppButton
+              className="w-fit"
+              type="submit"
+              disabled={isGeneratingContents}
+            >
+              {isGeneratingContents ? (
+                <>
+                  <Loader2 className="size-5 animate-spin" />
+                  Please wait...
+                </>
+              ) : (
+                <>
+                  Generate Insight
+                  <div className="flex w-7">
+                    <Image
+                      className="object-cover w-full h-full"
+                      src={
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
+                      }
+                      alt="AI Icon"
+                      height={100}
+                      width={100}
+                    />
+                  </div>
+                </>
+              )}
+            </AppButton>
+          </form>
+        </main>
+        <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
+          <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
+            <AppTableofContents
+              tocName="Table of Contents"
+              tocList={tableofContents}
+            />
+            <AppCalloutBox />
           </div>
-        </div>
-        <AppButton
-          className="w-fit"
-          type="submit"
-          disabled={isGeneratingContents}
-        >
-          {isGeneratingContents ? (
-            <>
-              <Loader2 className="size-5 animate-spin" />
-              Please wait...
-            </>
-          ) : (
-            <>
-              Generate Insight
-              <div className="flex w-7">
-                <Image
-                  className="object-cover w-full h-full"
-                  src={
-                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
-                  }
-                  alt="AI Icon"
-                  height={100}
-                  width={100}
-                />
-              </div>
-            </>
-          )}
-        </AppButton>
-      </form>
+        </aside>
+      </div>
     </div>
   );
 }

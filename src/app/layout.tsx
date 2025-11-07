@@ -83,22 +83,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      {/* --- Google Tag Manager */}
       <GoogleTagManager gtmId={googleTagManagerId!} />
-
       <body
         className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
         suppressHydrationWarning
       >
-        {/* --- Google Oauth Login */}
         <GoogleOAuthProvider clientId={googleOauthId!}>
           {children}
         </GoogleOAuthProvider>
-
-        {/* --- Google Analytics */}
         <GoogleAnalytics gaId={googleAnalyticsId!} />
-
-        {/* --- Tiktok Pixel */}
         <Script id="tiktok-pixel" strategy="afterInteractive">
           {`
             !function (w, d, t) {
@@ -138,8 +131,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
             }(window, document, 'ttq');
           `}
         </Script>
-
-        {/* --- Meta Pixel */}
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
