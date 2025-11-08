@@ -73,11 +73,11 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
               url="/cohorts"
               icon={<Presentation />}
             />
-            {/* <SidebarMenuItemLMS
-            menuTitle="Business Templates"
-            url="/templates"
-            icon={<BowArrow />}
-          /> */}
+            <SidebarMenuItemLMS
+              menuTitle="Business Templates"
+              url="/templates"
+              icon={<BowArrow />}
+            />
             <SidebarMenuItemLMS
               menuTitle="AI"
               url="/ai"
