@@ -6,7 +6,7 @@ import AIItemCardLMS from "../items/AIItemCardLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
 import Image from "next/image";
 
-interface AIList {
+export interface AIList {
   id: number;
   name: string;
   description: string | null;

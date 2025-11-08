@@ -16,6 +16,7 @@ export default async function DashboardPageLMS() {
   } catch (error) {
     return <div className="flex pt-10 lg:pt-24"></div>;
   }
+
   return (
     <div>
       <div className="hidden pl-72 p-10 lg:flex flex-col gap-2">

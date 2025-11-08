@@ -15,7 +15,7 @@ import {
 import SidebarMenuItemLMS from "./SidebarMenuItemLMS";
 import SidebarAIResultItemLMS from "./SidebarAIResultItemLMS";
 
-interface AIResultListProps {
+export interface AIResultListProps {
   id: string;
   name: string;
   ai_tool_slug_url: string;

@@ -1,4 +1,4 @@
-import AIListLMS from "@/app/components/indexes/AIListLMS";
+import AIListLMS, { AIList } from "@/app/components/indexes/AIListLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -12,7 +12,12 @@ export default async function AIPageLMS() {
   }
 
   const userData = (await trpc.auth.checkSession()).user;
-  const aiList = (await trpc.list.aiTools()).list;
+  let aiList: AIList[] = [];
+  try {
+    aiList = (await trpc.list.aiTools()).list;
+  } catch (error) {
+    aiList = [];
+  }
 
   return (
     <AIListLMS

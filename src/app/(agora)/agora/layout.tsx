@@ -1,5 +1,7 @@
 import "@/app/globals.css";
-import SidebarLMS from "@/app/components/navigations/SidebarLMS";
+import SidebarLMS, {
+  AIResultListProps,
+} from "@/app/components/navigations/SidebarLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -41,7 +43,12 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
     setSessionToken(sessionToken);
   }
 
-  const aiResultList = (await trpc.list.aiResults({})).list;
+  let aiResultList: AIResultListProps[] = [];
+  try {
+    aiResultList = (await trpc.list.aiResults({})).list;
+  } catch (error) {
+    aiResultList = [];
+  }
 
   return (
     <div className="root relative w-full min-h-screen bg-section-background">
