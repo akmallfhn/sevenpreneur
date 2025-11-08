@@ -13,6 +13,9 @@ export enum AIModelName {
   GPT_5 = "gpt-5",
   GPT_5_MINI = "gpt-5-mini",
   GPT_5_NANO = "gpt-5-nano",
+  GPT_4_1 = "gpt-4.1",
+  GPT_4_1_MINI = "gpt-4.1-mini",
+  GPT_4_1_NANO = "gpt-4.1-nano",
 }
 
 export const AI_TOOL_ID_IDEA_GEN = 1; // idea-gen
