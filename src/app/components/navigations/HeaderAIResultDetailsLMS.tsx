@@ -8,21 +8,20 @@ import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppBreadcrumb from "./AppBreadcrumb";
 import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
-export interface HeaderAIResultLMSProps extends AvatarBadgeLMSProps {
+export interface HeaderAIResultDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   headerResultName: string;
   headerTitle: string;
   headerDescription: string;
 }
 
-export default function HeaderAIResultLMS({
+export default function HeaderAIResultDetailsLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
-  headerResultName,
   headerTitle,
   headerDescription,
-}: HeaderAIResultLMSProps) {
+}: HeaderAIResultDetailsLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -90,7 +89,7 @@ export default function HeaderAIResultLMS({
             <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
-              alignMobile="right"
+              alignDesktop="right"
             >
               {sessionUserRole !== 3 && (
                 <Link href={`https://admin.${domain}`}>

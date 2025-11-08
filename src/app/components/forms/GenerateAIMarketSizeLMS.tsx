@@ -13,11 +13,11 @@ import InputLMS from "../fields/InputLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import SelectLMS from "../fields/SelectLMS";
 import { Checkbox } from "@/components/ui/checkbox";
-import HeaderAIToolLMS from "../navigations/HeaderAIToolLMS";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import Image from "next/image";
 import AppTableofContents from "../elements/AppTableofContents";
 import AppCalloutBox from "../elements/AppCalloutBox";
+import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 
 interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -161,12 +161,12 @@ export default function GenerateAIMarketSizeLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
-      <HeaderAIToolLMS
-        headerTitle="AI for Market Size Analysis"
-        headerDescription="View all bootcamps you’ve purchased and enrolled in."
+      <HeaderGenerateAIToolLMS
         sessionUserRole={sessionUserRole}
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
+        pageName="Market Size"
+        headerTitle="AI for Market Size Analysis"
       />
       <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
         <main className="main-contents flex-2 w-full">

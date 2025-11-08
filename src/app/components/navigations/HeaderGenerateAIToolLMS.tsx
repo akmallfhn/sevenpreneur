@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Blocks, Compass, Wallet } from "lucide-react";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
@@ -16,19 +15,21 @@ import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 import AppBreadcrumb from "./AppBreadcrumb";
 import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
-export interface HeaderAIToolLMSProps extends AvatarBadgeLMSProps {
-  headerTitle: string;
-  headerDescription: string;
+export interface HeaderGenerateAIToolLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
+  pageName: string;
+  headerTitle: string;
+  headerDescription?: string;
 }
 
-export default function HeaderAIToolLMS({
+export default function HeaderGenerateAIToolLMS({
+  sessionUserName,
+  sessionUserAvatar,
+  sessionUserRole,
+  pageName,
   headerTitle,
   headerDescription,
-  sessionUserAvatar,
-  sessionUserName,
-  sessionUserRole,
-}: HeaderAIToolLMSProps) {
+}: HeaderGenerateAIToolLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -72,27 +73,29 @@ export default function HeaderAIToolLMS({
                 <p className="slash font-bodycopy">/</p>
                 <AppBreadcrumbItem href="/ai">AI</AppBreadcrumbItem>
                 <p className="slash font-bodycopy">/</p>
-                <AppBreadcrumbItem isCurrentPage>Market Size</AppBreadcrumbItem>
+                <AppBreadcrumbItem isCurrentPage>{pageName}</AppBreadcrumbItem>
               </AppBreadcrumb>
             </div>
             <div className="header-information flex items-center gap-2">
               <h1 className="header-title font-brand font-bold text-2xl">
                 {headerTitle}
               </h1>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <FontAwesomeIcon
-                    icon={faCircleQuestion}
-                    className="text-alternative hover:cursor-pointer"
-                    size="sm"
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="header-desc max-w-[120px] text-center font-bodycopy">
-                    {headerDescription}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
+              {headerDescription && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <FontAwesomeIcon
+                      icon={faCircleQuestion}
+                      className="text-alternative hover:cursor-pointer"
+                      size="sm"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="header-desc max-w-[120px] text-center font-bodycopy">
+                      {headerDescription}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </div>
           </div>
           <div
@@ -107,7 +110,7 @@ export default function HeaderAIToolLMS({
             <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
-              alignMobile="right"
+              alignDesktop="right"
             >
               {sessionUserRole !== 3 && (
                 <Link href={`https://admin.${domain}`}>

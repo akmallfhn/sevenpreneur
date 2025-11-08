@@ -32,7 +32,7 @@ export default function PlaylistsLMS({
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
       <HeaderListLMS
         headerTitle="Learning Series"
-        headerDescription="View all bootcamps you’ve purchased and enrolled in."
+        headerDescription="Watch all learning series you’ve purchased"
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}

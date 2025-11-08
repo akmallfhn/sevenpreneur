@@ -118,7 +118,7 @@ export default function HeaderCohortEntityLMS({
             <AppDropdown
               isOpen={isActionsOpened}
               onClose={() => setIsActionsOpened(false)}
-              alignMobile="right"
+              alignDesktop="right"
             >
               {sessionUserRole !== 3 && (
                 <Link href={`https://admin.${domain}`}>

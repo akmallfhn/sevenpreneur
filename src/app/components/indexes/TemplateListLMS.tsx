@@ -8,9 +8,9 @@ import HeaderListLMS from "../navigations/HeaderListLMS";
 export interface TemplateList {
   id: number;
   name: string;
-  description?: string | null;
   image: string;
   document_url: string;
+  tags: string;
   status: StatusType;
 }
 
@@ -38,7 +38,7 @@ export default function TemplateListLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
       />
-      <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
+      <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4 bg-white p-5 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
         {activeTemplates.length > 0 ? (
           <div className="template-list grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
             {activeTemplates
@@ -47,7 +47,7 @@ export default function TemplateListLMS({
                 <TemplateItemCardLMS
                   key={index}
                   templateName={post.name}
-                  templateTags={post.description ?? ""}
+                  templateTags={post.tags ?? ""}
                   templateImage={post.image}
                   templateURL={post.document_url}
                 />
