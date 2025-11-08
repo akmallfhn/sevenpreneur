@@ -17,9 +17,7 @@ import OfferHighlightVideoCourseSVP from "../templates/OfferHighlightVideoCourse
 import VideoCoursePlaylistSVP, {
   VideoItem,
 } from "../indexes/VideoCoursePlaylistSVP";
-import HeroVideoCourseSVP, {
-  EducatorItem,
-} from "../templates/HeroVideoCourseSVP";
+import HeroVideoCourseSVP, { EducatorItem } from "../heroes/HeroVideoCourseSVP";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { getRupiahCurrency } from "@/lib/currency";

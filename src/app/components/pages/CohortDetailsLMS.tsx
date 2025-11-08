@@ -6,7 +6,7 @@ import CohortDetailsTabsLMS, {
   ProjectList,
   UserList,
 } from "../tabs/CohortDetailsTabsLMS";
-import HeroCohortDetailsLMS from "../templates/HeroCohortDetailsLMS";
+import HeroCohortDetailsLMS from "../heroes/HeroCohortDetailsLMS";
 import AttendanceProgressBarLMS from "../elements/AttendanceProgressBarLMS";
 import NearestScheduleCardLMS from "../elements/NearestScheduleCardLMS";
 

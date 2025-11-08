@@ -1,5 +1,5 @@
 "use client";
-import HeroHomeSVP from "../templates/HeroHomeSVP";
+import HeroHomeSVP from "../heroes/HeroHomeSVP";
 
 interface HomeSVPProps {
   imageHero: string;

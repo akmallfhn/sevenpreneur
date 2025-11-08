@@ -5,7 +5,7 @@ import TemplateItemCardLMS from "../items/TemplateItemCardLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
 
-interface TemplateList {
+export interface TemplateList {
   id: number;
   name: string;
   description?: string | null;

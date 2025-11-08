@@ -49,6 +49,10 @@ export default function ZTemporaryPlaylistLMS({
     setIsLoadingVideo(null);
   }, [searchParams]);
 
+  if (playlistVideos.length < 1) {
+    return;
+  }
+
   return (
     <div className="flex w-full h-full items-center justify-center lg:hidden">
       <div className="flex flex-col gap-5 pb-24 lg:pt-8 lg:pl-64 lg:max-w-[calc(100%-4rem)] w-full">

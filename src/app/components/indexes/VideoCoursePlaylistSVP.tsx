@@ -1,14 +1,14 @@
 "use client";
 import VideoCourseItemSVP from "../items/VideoCourseItemSVP";
 
-export type VideoItem = {
+export interface VideoItem {
   id: number;
   name: string;
   image_url: string;
   duration: number;
   video_url?: string;
   external_video_id: string;
-};
+}
 
 interface VideoCoursePlaylistSVPProps {
   playlistVideos: VideoItem[];

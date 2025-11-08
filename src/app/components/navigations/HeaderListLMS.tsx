@@ -16,7 +16,7 @@ import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 
 export interface HeaderListLMSProps extends AvatarBadgeLMSProps {
   headerTitle: string;
-  headerDescription: string;
+  headerDescription?: string;
   sessionUserRole: number;
 }
 
@@ -68,20 +68,22 @@ export default function HeaderListLMS({
             <h1 className="header-title font-brand font-bold text-2xl">
               {headerTitle}
             </h1>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <FontAwesomeIcon
-                  icon={faCircleQuestion}
-                  className="text-alternative hover:cursor-pointer"
-                  size="sm"
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="header-desc max-w-[120px] text-center font-bodycopy">
-                  {headerDescription}
-                </p>
-              </TooltipContent>
-            </Tooltip>
+            {headerDescription && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <FontAwesomeIcon
+                    icon={faCircleQuestion}
+                    className="text-alternative hover:cursor-pointer"
+                    size="sm"
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="header-desc max-w-[120px] text-center font-bodycopy">
+                    {headerDescription}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </div>
           <div
             className="user-menu relative flex hover:cursor-pointer"

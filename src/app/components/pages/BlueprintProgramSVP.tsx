@@ -2,7 +2,7 @@
 import BatchScheduleBlueprintProgramSVP from "../templates/BatchScheduleBlueprintProgramSVP";
 import CuriculumSessionsBlueprintProgramSVP from "../templates/CuriculumSessionsBlueprintProgramSVP";
 import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
-import HeroBlueprintProgramSVP from "../templates/HeroBlueprintProgramSVP";
+import HeroBlueprintProgramSVP from "../heroes/HeroBlueprintProgramSVP";
 import OfferHighlightBlueprintProgramSVP from "../templates/OfferHighlightBlueprintProgramSVP";
 import OverviewBlueprintProgramSVP from "../templates/OverviewBlueprintProgramSVP";
 import PackagePlansBlueprintProgramSVP, {

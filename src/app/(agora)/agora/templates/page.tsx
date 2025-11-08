@@ -1,4 +1,6 @@
-import TemplateListLMS from "@/app/components/indexes/TemplateListLMS";
+import TemplateListLMS, {
+  TemplateList,
+} from "@/app/components/indexes/TemplateListLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -12,7 +14,12 @@ export default async function TemplatesPageLMS() {
   }
 
   const userData = (await trpc.auth.checkSession()).user;
-  const templateLists = (await trpc.list.templates()).list;
+  let templateLists: TemplateList[] = [];
+  try {
+    templateLists = (await trpc.list.templates()).list;
+  } catch (error) {
+    templateLists = [];
+  }
 
   return (
     <TemplateListLMS

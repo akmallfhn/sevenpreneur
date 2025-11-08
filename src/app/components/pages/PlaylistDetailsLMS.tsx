@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
-import HeroPlaylistDetailsLMS from "../templates/HeroPlaylistDetailsLMS";
+import HeroPlaylistDetailsLMS from "../heroes/HeroPlaylistDetailsLMS";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import VideoListItemLMS from "../items/VideoListItemLMS";
 import { StatusType } from "@/lib/app-types";

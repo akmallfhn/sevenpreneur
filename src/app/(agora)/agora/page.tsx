@@ -1,3 +1,5 @@
+import { VideoItem } from "@/app/components/indexes/VideoCoursePlaylistSVP";
+import HomeLMS from "@/app/components/pages/HomeLMS";
 import ZTemporaryPlaylistLMS from "@/app/components/pages/ZTemporaryPlaylistLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
@@ -9,25 +11,28 @@ export default async function DashboardPageLMS() {
 
   // Get Data
   setSessionToken(sessionToken!);
-  let enrolledPlaylistData;
+
+  const userData = (await trpc.auth.checkSession()).user;
+
+  let enrolledPlaylistData: VideoItem[] = [];
   try {
     enrolledPlaylistData = (await trpc.read.enrolledPlaylist({ id: 1 }))
-      .playlist.playlist;
+      .playlist.playlist.videos;
   } catch (error) {
-    return <div className="flex pt-10 lg:pt-24"></div>;
+    enrolledPlaylistData = [];
   }
 
   return (
-    <div>
-      <div className="hidden pl-72 p-10 lg:flex flex-col gap-2">
-        <h2 className=" font-bold font-brand text-xl">
-          Welcome to Sevenpreneur!
-        </h2>
-        <p className="font-bodycopy">
-          Explore your collection by choose menu at sidebar
-        </p>
-      </div>
-      <ZTemporaryPlaylistLMS playlistVideos={enrolledPlaylistData.videos} />
-    </div>
+    <>
+      <HomeLMS
+        sessionUserName={userData.full_name}
+        sessionUserAvatar={
+          userData.avatar ||
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+        }
+        sessionUserRole={userData.role_id}
+      />
+      <ZTemporaryPlaylistLMS playlistVideos={enrolledPlaylistData} />
+    </>
   );
 }

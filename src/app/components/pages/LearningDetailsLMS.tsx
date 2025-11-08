@@ -5,7 +5,7 @@ import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 import FileItemLMS from "../items/FileItemLMS";
-import HeroLearningDetailsLMS from "../templates/HeroLearningDetailsLMS";
+import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import AppDiscussionStarterItem from "../items/AppDiscussionStarterItem";
 import { useEffect, useState } from "react";
