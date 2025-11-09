@@ -14,7 +14,7 @@ import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumber
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
-import AppliedDiscountCardSVP from "../items/AppliedDiscountCardSVP";
+import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
 import { encodeSHA256 } from "@/lib/encode";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";

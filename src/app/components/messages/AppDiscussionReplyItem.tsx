@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { CreateDiscussionReply, DeleteDiscussionReply } from "@/lib/actions";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import AppDiscussionTextArea from "../fields/AppDiscussionTextArea";
+import AppDiscussionTextArea from "./AppDiscussionTextArea";
 import { DiscussionReplyList } from "./AppDiscussionStarterItem";
 import { id } from "zod/v4/locales";
 

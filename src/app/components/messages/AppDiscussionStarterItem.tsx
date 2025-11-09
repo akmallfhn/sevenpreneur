@@ -14,7 +14,7 @@ import { ChevronDown, Loader2 } from "lucide-react";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import AppDiscussionTextArea from "../fields/AppDiscussionTextArea";
+import AppDiscussionTextArea from "./AppDiscussionTextArea";
 
 dayjs.extend(relativeTime);
 
