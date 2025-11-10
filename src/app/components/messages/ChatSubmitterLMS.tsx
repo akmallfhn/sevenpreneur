@@ -9,7 +9,7 @@ import {
 import AppButton from "../buttons/AppButton";
 import { ArrowUp, Square, StopCircle } from "lucide-react";
 
-interface AppChatSubmitterProps
+interface ChatSubmitterLMSProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   onTextAreaChange?: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
@@ -17,13 +17,13 @@ interface AppChatSubmitterProps
   isLoadingSubmit: boolean;
 }
 
-export default function AppChatSubmitter({
+export default function ChatSubmitterLMS({
   value: propValue,
   onTextAreaChange,
   onSubmit,
   isLoadingSubmit,
   ...rest
-}: AppChatSubmitterProps) {
+}: ChatSubmitterLMSProps) {
   const [value, setValue] = useState(propValue);
 
   const handleTextAreaChange = (
@@ -51,7 +51,7 @@ export default function AppChatSubmitter({
   }, [propValue]);
 
   return (
-    <div className="chat-submitter flex flex-col w-full p-4 bg-white gap-4 border border-outline rounded-xl">
+    <div className="chat-submitter flex flex-col w-full p-3 bg-white gap-3 border border-outline rounded-xl">
       <div className="text-area-container relative w-full">
         <textarea
           id="chat-ai"
@@ -65,7 +65,7 @@ export default function AppChatSubmitter({
           suppressHydrationWarning
         />
       </div>
-      <div className="chat-attachments flex items-center justify-between">
+      <div className="chat-attachments flex items-center justify-end">
         {isLoadingSubmit ? (
           <AppButton className="chat-end-submitting" size="largeIconRounded">
             <Square fill="#FFFFFF" className="size-5" />
