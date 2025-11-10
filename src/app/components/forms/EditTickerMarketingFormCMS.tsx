@@ -159,7 +159,7 @@ export default function EditTickerMarketingFormCMS({
                 textAreaHeight="h-20"
                 textAreaPlaceholder="e.g. Limited Time Offer"
                 value={formData.tickerTitle}
-                onInputChange={handleInputChange("tickerTitle")}
+                onTextAreaChange={handleInputChange("tickerTitle")}
                 required
               />
               <InputCMS

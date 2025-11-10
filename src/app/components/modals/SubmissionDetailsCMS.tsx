@@ -170,7 +170,7 @@ export default function SubmissionDetailsCMS({
             textAreaPlaceholder="Write feedback for user assignment"
             characterLength={4000}
             value={comment ?? ""}
-            onInputChange={handleCommentChange}
+            onTextAreaChange={handleCommentChange}
           />
         </div>
       )}

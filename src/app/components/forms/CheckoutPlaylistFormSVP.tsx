@@ -10,7 +10,6 @@ import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
-import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
@@ -18,6 +17,7 @@ import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
 import { encodeSHA256 } from "@/lib/encode";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
+import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
 
 interface PaymentMethodItem {
   id: number;
@@ -239,7 +239,7 @@ export default function CheckoutPlaylistFormSVP({
                 value={initialUserEmail}
                 disabled
               />
-              <InternationalPhoneNumberInputSVP
+              <PhoneNumberInputSVP
                 inputId="user-phone-number"
                 inputName="Phone Number"
                 inputIcon="🇮🇩"

@@ -206,7 +206,7 @@ export default function EditModuleFormCMS({
                 textAreaPlaceholder="Briefly describe the content or purpose of this document (optional)"
                 textAreaHeight="h-20"
                 value={formData.moduleDescription}
-                onInputChange={handleInputChange("moduleDescription")}
+                onTextAreaChange={handleInputChange("moduleDescription")}
               />
               <div className="module-status flex flex-col gap-1">
                 <label

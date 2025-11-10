@@ -7,10 +7,10 @@ import SelectCMS, { OptionType } from "../fields/SelectCMS";
 import AppSheet from "../modals/AppSheet";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
-import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
+import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
 
 interface DiscountType {
   name: string | undefined;
@@ -446,7 +446,7 @@ export default function CreateInvoiceFormCMS({
               />
 
               {/* Phone Number */}
-              <InternationalPhoneNumberInputSVP
+              <PhoneNumberInputSVP
                 inputId="invoice-user-phone"
                 inputName="Phone Number"
                 inputIcon="🇮🇩"

@@ -9,10 +9,8 @@ interface InputCMSProps extends InputHTMLAttributes<HTMLInputElement> {
   inputPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
-  onInputChange?: (value: string) => void;
   value: string;
-  disabled?: boolean;
-  required?: boolean;
+  onInputChange?: (value: string) => void;
 }
 
 export default function InputCMS({
@@ -23,9 +21,8 @@ export default function InputCMS({
   inputPlaceholder,
   characterLength,
   errorMessage,
-  onInputChange,
   value: propValue,
-  disabled,
+  onInputChange,
   required,
   ...rest
 }: InputCMSProps) {
@@ -86,7 +83,6 @@ export default function InputCMS({
           id={inputId}
           type={inputType}
           placeholder={inputPlaceholder}
-          disabled={disabled}
           {...rest}
           className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
@@ -95,6 +91,7 @@ export default function InputCMS({
           } ${inputIcon ? "pl-10" : ""} `}
           value={value}
           onChange={handleInputChange}
+          suppressHydrationWarning
         />
         {computedError && (
           <p className="input-error-message inline-flex text-red-600 text-xs">

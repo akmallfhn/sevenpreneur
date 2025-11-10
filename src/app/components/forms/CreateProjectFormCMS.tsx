@@ -161,7 +161,7 @@ export default function CreateProjectFormCMS({
               textAreaHeight="h-36"
               characterLength={4000}
               value={formData.projectDescription}
-              onInputChange={handleInputChange("projectDescription")}
+              onTextAreaChange={handleInputChange("projectDescription")}
               required
             />
             <div className="project-status flex flex-col gap-1">

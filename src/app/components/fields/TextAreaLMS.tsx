@@ -8,10 +8,8 @@ interface TextAreaLMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
-  onTextAreaChange?: (value: string) => void;
   value: string;
-  disabled?: boolean;
-  required?: boolean;
+  onTextAreaChange?: (value: string) => void;
 }
 
 export default function TextAreaLMS({
@@ -21,9 +19,8 @@ export default function TextAreaLMS({
   textAreaPlaceholder,
   characterLength,
   errorMessage,
-  onTextAreaChange,
   value: propValue,
-  disabled,
+  onTextAreaChange,
   required,
   ...rest
 }: TextAreaLMSProps) {
@@ -84,7 +81,6 @@ export default function TextAreaLMS({
           id={textAreaId}
           placeholder={textAreaPlaceholder}
           rows={1}
-          disabled={disabled}
           {...rest}
           className={`text-area-placeholder flex w-full min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-[15px] border-b-2 resize-none transform transition-all overflow-hidden placeholder:text-alternative placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
             computedError ? "border-destructive" : "border-outline"

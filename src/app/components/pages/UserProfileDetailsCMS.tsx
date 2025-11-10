@@ -26,8 +26,8 @@ import {
 } from "lucide-react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import { StatusType } from "@/lib/app-types";
+import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -196,7 +196,7 @@ export default function UserProfileDetailsCMS({
                   value={userDetailData?.user.email || ""}
                   disabled
                 />
-                <InternationalPhoneNumberInputSVP
+                <PhoneNumberInputSVP
                   inputId={"phone-number"}
                   inputName={"Phone Number"}
                   inputIcon={"🇮🇩"}

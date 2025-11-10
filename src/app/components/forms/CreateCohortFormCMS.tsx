@@ -192,7 +192,7 @@ export default function CreateCohortFormCMS({
               textAreaPlaceholder="Tell us about this program"
               textAreaHeight="h-32"
               value={formData.cohortDescription}
-              onInputChange={handleInputChange("cohortDescription")}
+              onTextAreaChange={handleInputChange("cohortDescription")}
               required
             />
             <div className="cohort-status flex flex-col gap-1">

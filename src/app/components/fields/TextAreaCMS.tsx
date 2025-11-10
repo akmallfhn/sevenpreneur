@@ -8,10 +8,8 @@ interface TextAreaCMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
-  onInputChange?: (value: string) => void;
   value: string;
-  disabled?: boolean;
-  required?: boolean;
+  onTextAreaChange?: (value: string) => void;
 }
 
 export default function TextAreaCMS({
@@ -21,9 +19,8 @@ export default function TextAreaCMS({
   textAreaPlaceholder,
   characterLength,
   errorMessage,
-  onInputChange,
   value: propValue,
-  disabled,
+  onTextAreaChange,
   required,
   ...rest
 }: TextAreaCMSProps) {
@@ -45,7 +42,7 @@ export default function TextAreaCMS({
       setInternalError("");
     }
     setValue(newValue.slice(0, maxLength));
-    if (onInputChange) onInputChange(newValue.slice(0, maxLength));
+    if (onTextAreaChange) onTextAreaChange(newValue.slice(0, maxLength));
   };
 
   // Sync on value change
@@ -77,7 +74,6 @@ export default function TextAreaCMS({
         <textarea
           id={textAreaId}
           placeholder={textAreaPlaceholder}
-          disabled={disabled}
           {...rest}
           className={`text-area-placeholder flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md border resize-none transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError

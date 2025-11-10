@@ -262,7 +262,7 @@ export default function CreateLearningFormCMS({
                 textAreaHeight="h-32"
                 characterLength={4000}
                 value={formData.learningDescription}
-                onInputChange={handleInputChange("learningDescription")}
+                onTextAreaChange={handleInputChange("learningDescription")}
                 required
               />
               <div className="learning-status flex flex-col gap-1">

@@ -209,7 +209,7 @@ export default function EditMaterialFormCMS({
                 textAreaPlaceholder="Briefly describe the content or purpose of this document (optional)"
                 textAreaHeight="h-20"
                 value={formData.materialDescription}
-                onInputChange={handleInputChange("materialDescription")}
+                onTextAreaChange={handleInputChange("materialDescription")}
               />
               <div className="material-status flex flex-col gap-1">
                 <label

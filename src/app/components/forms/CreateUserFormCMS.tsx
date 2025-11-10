@@ -27,8 +27,8 @@ import {
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import InternationalPhoneNumberInputSVP from "../fields/InternationalPhoneNumberInputSVP";
 import { StatusType } from "@/lib/app-types";
+import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -312,7 +312,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                   required
                 />
                 {/* Phone Number */}
-                <InternationalPhoneNumberInputSVP
+                <PhoneNumberInputSVP
                   inputId={"phone-number"}
                   inputName={"Phone Number"}
                   inputIcon={"🇮🇩"}
@@ -378,7 +378,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                   textAreaPlaceholder={"Summarize the learning focus"}
                   textAreaHeight={"h-[120px]"}
                   value={formData.learningGoal}
-                  onInputChange={handleInputChange("learningGoal")}
+                  onTextAreaChange={handleInputChange("learningGoal")}
                 />
               </div>
             </div>

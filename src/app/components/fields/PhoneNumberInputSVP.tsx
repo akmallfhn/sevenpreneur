@@ -1,48 +1,54 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, InputHTMLAttributes } from "react";
 
-interface InputSVPProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface PhoneNumberInputSVPProps
+  extends InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
-  inputName: string;
-  inputType: string;
-  inputIcon?: React.ReactNode;
+  inputName?: string;
+  inputIcon: string;
   inputPlaceholder?: string;
-  characterLength?: number;
+  inputCountryCode: string;
   errorMessage?: string;
   value: string;
   onInputChange?: (value: string) => void;
 }
 
-export default function InputSVP({
+export default function PhoneNumberInputSVP({
   inputId,
   inputName,
-  inputType,
   inputIcon,
+  inputCountryCode,
   inputPlaceholder,
-  characterLength,
   errorMessage,
-  value: propValue,
   onInputChange,
+  value: propValue,
   disabled,
   required,
   ...rest
-}: InputSVPProps) {
+}: PhoneNumberInputSVPProps) {
   const [value, setValue] = useState(propValue);
   const [internalError, setInternalError] = useState("");
-  const maxLength = characterLength ?? 128;
-  const characterLimitErrorMessage =
-    "Oops, you’ve reached the character limit.";
+  const maxLength = 15;
+  const characterLimitErrorMessage = "Phone number must be 10 to 15 digits";
 
   // Character Limitation on Input
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    if (newValue.length > maxLength) {
+    const rawValue = event.target.value;
+
+    // Sanitize: only allowed 0–9 digit
+    const sanitizedValue = rawValue.replace(/\D/g, "").slice(0, maxLength);
+
+    setValue(sanitizedValue);
+    if (onInputChange) onInputChange(sanitizedValue);
+
+    if (
+      sanitizedValue.length > 0 &&
+      (sanitizedValue.length < 10 || sanitizedValue.length > 15)
+    ) {
       setInternalError(characterLimitErrorMessage);
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
-    if (onInputChange) onInputChange(newValue.slice(0, maxLength));
   };
 
   // Sync on value change
@@ -72,15 +78,20 @@ export default function InputSVP({
 
       <div className="input-container relative ">
         {inputIcon && (
-          <div className="input-icon absolute left-0 flex items-center p-[9px] pl-3 pointer-events-none text-alternative">
-            {inputIcon}
+          <div className="input-icon absolute left-0 flex items-center p-[9px] pl-3 gap-1 pointer-events-none text-alternative">
+            <p className="input-emoji text-sm">{inputIcon}</p>
+            <p className="input-country-code font-ui text-[13px]">
+              +{inputCountryCode}
+            </p>
           </div>
         )}
         <input
           id={inputId}
-          type={inputType}
+          type="text"
+          inputMode="numeric"
+          pattern="\d*"
           placeholder={inputPlaceholder}
-          className={`input-placeholder flex w-full p-2 font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
+          className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
@@ -88,7 +99,7 @@ export default function InputSVP({
             disabled
               ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"
               : "bg-white dark:bg-[#2C2C2C]"
-          } ${inputIcon ? "pl-10" : ""}  `}
+          } ${inputIcon ? "pl-16" : ""} `}
           value={value}
           onChange={handleInputChange}
           {...rest}
