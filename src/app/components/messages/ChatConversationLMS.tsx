@@ -1,24 +1,25 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import ChatSubmitterLMS from "../messages/ChatSubmitterLMS";
+import ChatSubmitterLMS from "./ChatSubmitterLMS";
 import ChatBubbleLMS from "./ChatBubbleLMS";
 import ChatResponseMarkdown from "./ChatResponseMarkdown";
 
-interface ConversationList {
+interface Conversation {
   role: string;
   message: string;
 }
 
 interface ChatConversationLMSProps {
-  conversationList: ConversationList[];
+  conversation: Conversation[];
 }
 
 export default function ChatConversationLMS({
-  conversationList,
+  conversation,
 }: ChatConversationLMSProps) {
   const [textValue, setTextValue] = useState("");
   const [generatingAI, setGeneratingAI] = useState(false);
+  const conversationRef = useRef<HTMLDivElement | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -36,9 +37,9 @@ export default function ChatConversationLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64 w-full  min-h-screen items-center justify-center lg:flex">
-      <div className="relative flex flex-col w-full max-w-[768px] min-h-screen items-center justify-center">
-        <div className="conversations w-full flex flex-col py-5 pb-44 overflow-y-auto">
-          {conversationList.map((post, index) => (
+      <div className="conversation-page relative flex flex-col w-full max-w-[768px] min-h-screen">
+        <div className="conversation w-full flex flex-col py-5">
+          {conversation.map((post, index) => (
             <div
               key={index}
               className={`chat-wrapper flex w-full ${
@@ -46,10 +47,7 @@ export default function ChatConversationLMS({
               }`}
             >
               {post.role === "user" ? (
-                <ChatBubbleLMS
-                  chatMessage={post.message}
-                  chatRole={post.role}
-                />
+                <ChatBubbleLMS chatMessage={post.message} />
               ) : (
                 <ChatResponseMarkdown chatMessage={post.message} />
               )}
@@ -57,7 +55,7 @@ export default function ChatConversationLMS({
           ))}
         </div>
         <form
-          className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-section-background items-center justify-center gap-6 rounded-t-xl z-10"
+          className="form-generate-chat sticky flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-section-background items-center justify-center gap-6 rounded-t-xl z-10"
           onSubmit={handleSubmit}
         >
           <ChatSubmitterLMS
