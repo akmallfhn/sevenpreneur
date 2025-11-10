@@ -1,0 +1,182 @@
+/* markdown-styles.css */
+/* You can import this in your global.css or markdown renderer component */
+
+.markdown {
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.7;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+/* Headings */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  scroll-margin-top: 5rem;
+}
+
+.markdown h1 {
+  font-size: 1.8rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.3rem;
+}
+.markdown h2 {
+  font-size: 1.4rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.2rem;
+}
+.markdown h3 {
+  font-size: 1.2rem;
+}
+.markdown h4 {
+  font-size: 1.1rem;
+  color: #222;
+}
+.markdown h5,
+.markdown h6 {
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Paragraphs */
+.markdown p {
+  margin: 0.8em 0;
+}
+
+/* Inline text styles */
+.markdown b,
+.markdown strong {
+  font-weight: 600;
+  color: #111;
+}
+.markdown i,
+.markdown em {
+  font-style: italic;
+}
+.markdown u {
+  text-decoration: underline;
+}
+.markdown s {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+
+/* Blockquote */
+.markdown blockquote {
+  border-left: 4px solid #d1d5db;
+  background-color: #f9fafb;
+  padding: 0.75rem 1rem;
+  margin: 1em 0;
+  color: #374151;
+  border-radius: 0.25rem;
+}
+
+/* Code inline */
+.markdown code {
+  background-color: #f3f4f6;
+  color: #111827;
+  padding: 0.2rem 0.35rem;
+  border-radius: 0.25rem;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9em;
+}
+
+/* Code block */
+.markdown pre {
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 1em 0;
+}
+
+.markdown pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Lists */
+.markdown ul,
+.markdown ol {
+  margin: 0.8em 0 0.8em 1.4em;
+  padding-left: 0.4em;
+}
+.markdown li {
+  margin: 0.3em 0;
+}
+
+/* Tables */
+.markdown table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+}
+
+.markdown th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.markdown tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+
+/* Links */
+.markdown a {
+  color: #2563eb;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s;
+}
+.markdown a:hover {
+  border-bottom: 1px solid #2563eb;
+}
+
+/* Horizontal rule */
+.markdown hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 1.5em 0;
+}
+
+/* Images */
+.markdown img {
+  max-width: 100%;
+  border-radius: 0.4rem;
+  margin: 0.8em 0;
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .markdown {
+    font-size: 0.9rem;
+  }
+  .markdown pre {
+    font-size: 0.85rem;
+  }
+}

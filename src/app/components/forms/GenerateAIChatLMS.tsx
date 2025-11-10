@@ -1,7 +1,7 @@
 "use client";
 import { FormEvent, useState } from "react";
-import AppChatSubmitter from "../messages/AppChatSubmitter";
 import { toast } from "sonner";
+import ChatSubmitterLMS from "../messages/ChatSubmitterLMS";
 
 interface GenerateAIChatLMSProps {
   sessionUserName: string;
@@ -38,7 +38,7 @@ export default function GenerateAIChatLMS({
         <h1 className="greetings-chat font-bodycopy font-semibold text-3xl">
           What’s your next move, {nickName}?
         </h1>
-        <AppChatSubmitter
+        <ChatSubmitterLMS
           value={textValue}
           onTextAreaChange={(value) => setTextValue(value)}
           onSubmit={handleSubmit}
