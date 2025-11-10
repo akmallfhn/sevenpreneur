@@ -17,5 +17,5 @@ export default async function AIChatLMS() {
 
   const userData = (await trpc.auth.checkSession()).user;
 
-  return <GenerateAIChatLMS />;
+  return <GenerateAIChatLMS sessionUserName={userData.full_name} />;
 }

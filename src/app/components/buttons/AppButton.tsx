@@ -29,7 +29,8 @@ type SizeType =
   | "defaultRounded"
   | "mediumRounded"
   | "smallRounded"
-  | "iconRounded";
+  | "iconRounded"
+  | "largeIconRounded";
 type FontType = "brand" | "bodycopy" | "ui";
 
 interface AppButtonProps
@@ -123,6 +124,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       mediumRounded: "py-1.5 px-3 h-9 text-sm rounded-full",
       smallRounded: "py-1 px-2 h-8 text-xs rounded-full",
       iconRounded: "size-8 rounded-full",
+      largeIconRounded: "size-10 rounded-full",
     };
 
     const fontClasses: Record<FontType, string> = {
