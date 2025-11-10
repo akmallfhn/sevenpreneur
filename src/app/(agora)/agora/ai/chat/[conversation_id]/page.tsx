@@ -1,4 +1,4 @@
-import ChatConversationLMS from "@/app/components/messages/ChatConversationsLMS";
+import ChatConversationLMS from "@/app/components/messages/ChatConversationLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -20,7 +20,7 @@ export default async function AIChatConversationLMS({
   const { conversation_id } = await params;
   const userData = (await trpc.auth.checkSession()).user;
 
-  const conversations = [
+  const conversation = [
     {
       role: "user",
       message: "Hi, can you summarize this report for me?",
@@ -28,7 +28,7 @@ export default async function AIChatConversationLMS({
     {
       role: "system",
       message:
-        "Sure! Here's a quick summary:\n\n---\n\n### 📄 **Report Summary**\n**Topic:** Quarterly Sales Performance (Q3 2025)\n\n**Highlights:**\n- Revenue increased by **18%** compared to last quarter.\n- Top-performing region: **Southeast Asia**.\n- Product line **X-Series** contributed **45%** of total sales.\n\n**Next Steps:**\n1. Expand X-Series distribution.\n2. Optimize marketing spend in underperforming regions.\n3. Prepare Q4 forecast by **Nov 15**.\n\n---\n\nWould you like me to visualize this as a chart?",
+        "Sure! Here's a quick summary:\n---\n### 📄 **Report Summary**\n**Topic:** Quarterly Sales Performance (Q3 2025)\n\n**Highlights:**\n- Revenue increased by **18%** compared to last quarter.\n- Top-performing region: **Southeast Asia**.\n- Product line **X-Series** contributed **45%** of total sales.\n\n**Next Steps:**\n1. Expand X-Series distribution.\n2. Optimize marketing spend in underperforming regions.\n3. Prepare Q4 forecast by **Nov 15**.\n\n---\n\nWould you like me to visualize this as a chart?",
     },
     {
       role: "user",
@@ -51,5 +51,5 @@ export default async function AIChatConversationLMS({
     },
   ];
 
-  return <ChatConversationLMS conversationList={conversations} />;
+  return <ChatConversationLMS conversation={conversation} />;
 }

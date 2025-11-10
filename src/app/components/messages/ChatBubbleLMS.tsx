@@ -5,21 +5,13 @@ import AppButton from "../buttons/AppButton";
 
 interface ChatBubbleLMS {
   chatMessage: string;
-  chatRole: string;
 }
 
-export default function ChatBubbleLMS({
-  chatMessage,
-  chatRole,
-}: ChatBubbleLMS) {
+export default function ChatBubbleLMS({ chatMessage }: ChatBubbleLMS) {
   const { copied, copy } = useClipboard();
 
   return (
-    <div
-      className={`chat-container flex flex-col item gap-1 mt-2 w-full ${
-        chatRole === "system" ? "items-start" : "items-end"
-      }`}
-    >
+    <div className="chat-container flex flex-col gap-2 mt-2 w-full items-end">
       <div className="chat-box w-fit max-w-[min(70%,560px)] px-4 py-2 bg-white border border-outline rounded-[18px] font-ui">
         <p className="chat-message break-words whitespace-pre-wrap">
           {chatMessage}

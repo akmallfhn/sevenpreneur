@@ -1,6 +1,10 @@
 "use client";
 import { markdownToHtml } from "@/lib/markdown-to-html";
 import styles from "./Markdown.module.css";
+import Image from "next/image";
+import AppButton from "../buttons/AppButton";
+import { useClipboard } from "@/lib/use-clipboard";
+import { Check, CopyIcon } from "lucide-react";
 
 interface ChatResponseMarkdownProps {
   chatMessage: string;
@@ -9,12 +13,40 @@ interface ChatResponseMarkdownProps {
 export default function ChatResponseMarkdown({
   chatMessage,
 }: ChatResponseMarkdownProps) {
+  const { copied, copy } = useClipboard();
+
   return (
-    <div
-      className={styles.markdown}
-      dangerouslySetInnerHTML={{
-        __html: markdownToHtml(chatMessage),
-      }}
-    />
+    <div className="chat-response-box flex flex-1 w-full px-5 py-7 gap-3">
+      <div className="chat-response-avatar size-[30px] shrink-0 rounded-full overflow-hidden">
+        <Image
+          className="object-cover w-full h-full"
+          src={
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square.svg"
+          }
+          alt="Sevenpreneur AI"
+          width={100}
+          height={100}
+        />
+      </div>
+      <div className="chat-response-message flex flex-col w-full gap-2">
+        <div
+          className={`${styles.markdown} w-full`}
+          dangerouslySetInnerHTML={{
+            __html: markdownToHtml(chatMessage),
+          }}
+        />
+        <AppButton
+          variant="ghost"
+          size="icon"
+          onClick={() => copy(chatMessage)}
+        >
+          {copied ? (
+            <Check className="text-green-400 size-5" />
+          ) : (
+            <CopyIcon className="text-alternative size-5" />
+          )}
+        </AppButton>
+      </div>
+    </div>
   );
 }
