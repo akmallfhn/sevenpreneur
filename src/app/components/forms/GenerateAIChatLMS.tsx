@@ -31,20 +31,22 @@ export default function GenerateAIChatLMS({
 
   return (
     <div className="root-page hidden flex-col pl-64 w-full min-h-screen items-center justify-center lg:flex">
-      <form
-        className="form-generate-chat flex flex-col w-full max-w-[768px] items-center justify-center gap-6"
-        onSubmit={handleSubmit}
-      >
+      <div className="generate-ai-chat flex flex-col items-center w-full max-w-[768px] gap-6">
         <h1 className="greetings-chat font-bodycopy font-semibold text-3xl">
           What’s your next move, {nickName}?
         </h1>
-        <ChatSubmitterLMS
-          value={textValue}
-          onTextAreaChange={(value) => setTextValue(value)}
+        <form
+          className="form-generate-chat flex flex-col w-full"
           onSubmit={handleSubmit}
-          isLoadingSubmit={generatingAI}
-        />
-      </form>
+        >
+          <ChatSubmitterLMS
+            value={textValue}
+            onTextAreaChange={(value) => setTextValue(value)}
+            onSubmit={handleSubmit}
+            isLoadingSubmit={generatingAI}
+          />
+        </form>
+      </div>
     </div>
   );
 }

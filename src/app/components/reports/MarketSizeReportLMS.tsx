@@ -1,8 +1,10 @@
 "use client";
+import styles from "./Report.module.css";
 import { Progress } from "@/components/ui/progress";
 import { getShortRupiahCurrency } from "@/lib/currency";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
+import { markdownToHtml } from "@/lib/markdown-to-html";
 
 interface SourcesMarketSize {
   source_name: string;
@@ -72,7 +74,7 @@ export default function MarketSizeReportLMS({
                 <p className="font-bodycopy font-bold text-white text-xl">
                   TAM
                 </p>
-                <p className="font-bodycopy font-bold text-white text-2xl">
+                <p className="font-bodycopy font-bold text-white text-2xl text-center">
                   {getShortRupiahCurrency(tamValue)}
                 </p>
               </div>
@@ -80,7 +82,7 @@ export default function MarketSizeReportLMS({
                 <p className="font-bodycopy font-bold text-white text-lg">
                   SAM
                 </p>
-                <p className="font-bodycopy font-bold text-white text-2xl">
+                <p className="font-bodycopy font-bold text-white text-2xl text-center">
                   {getShortRupiahCurrency(samValue)}
                 </p>
               </div>
@@ -88,7 +90,7 @@ export default function MarketSizeReportLMS({
                 <p className="font-bodycopy font-bold text-white text-lg">
                   SOM
                 </p>
-                <p className="font-bodycopy font-bold text-white text-lg">
+                <p className="font-bodycopy font-bold text-white text-lg text-center">
                   {getShortRupiahCurrency(somValue)}
                 </p>
               </div>
@@ -140,9 +142,12 @@ export default function MarketSizeReportLMS({
               </div>
               <div className="tam-insight flex flex-col gap-1">
                 <h3 className="text-lg font-bold">Insight</h3>
-                <p className="text-[#333333] text-[15px] whitespace-pre-line">
-                  {tamInsight}
-                </p>
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: markdownToHtml(tamInsight),
+                  }}
+                />
               </div>
             </div>
             <div className="divider border-l self-stretch" />
@@ -158,9 +163,12 @@ export default function MarketSizeReportLMS({
               </div>
               <div className="sam-insight flex flex-col gap-1">
                 <h3 className="text-lg font-bold">Insight</h3>
-                <p className="text-[#333333] text-[15px] whitespace-pre-line">
-                  {samInsight}
-                </p>
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: markdownToHtml(samInsight),
+                  }}
+                />
               </div>
             </div>
             <div className="divider border-l self-stretch" />
@@ -176,9 +184,12 @@ export default function MarketSizeReportLMS({
               </div>
               <div className="som-insight flex flex-col gap-1">
                 <h3 className="text-lg font-bold">Insight</h3>
-                <p className="text-[#333333] text-[15px] whitespace-pre-line">
-                  {somInsight}
-                </p>
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: markdownToHtml(somInsight),
+                  }}
+                />
               </div>
             </div>
           </div>
