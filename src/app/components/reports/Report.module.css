@@ -1,72 +1,56 @@
-.markdown {
-  font-family: "Inter", system-ui, sans-serif;
-  line-height: 1.6;
+.report {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  line-height: 1.5;
   color: #111111;
-  font-size: 16px;
+  font-size: 15px;
   word-break: break-word;
 }
 
-.markdown > *:first-child {
+.report > *:first-child {
   margin-top: 0 !important;
 }
 
-.markdown > *:last-child {
+.report > *:last-child {
   margin-bottom: 0 !important;
 }
 
 /* Headings */
-.markdown h1,
-.markdown h2,
-.markdown h3,
-.markdown h4,
-.markdown h5,
-.markdown h6 {
+.report h1,
+.report h2,
+.report h3,
+.report h4,
+.report h5,
+.report h6 {
   font-weight: 600;
   margin: 12px 0;
-}
-.markdown h1 {
-  font-size: 21px;
-}
-.markdown h2 {
-  font-size: 20px;
-}
-.markdown h3 {
-  font-size: 18px;
-}
-.markdown h4 {
-  font-size: 16px;
-}
-.markdown h5,
-.markdown h6 {
-  font-size: 15px;
 }
 
 /* Paragraphs */
-.markdown p {
+.report p {
   margin: 12px 0;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 /* Inline text styles */
-.markdown b,
-.markdown strong {
+.report b,
+.report strong {
   font-weight: 600;
   color: #111111;
 }
-.markdown i,
-.markdown em {
+.report i,
+.report em {
   font-style: italic;
 }
-.markdown u {
+.report u {
   text-decoration: underline;
 }
-.markdown s {
+.report s {
   text-decoration: line-through;
   color: #6b7280;
 }
 
 /* Blockquote */
-.markdown blockquote {
+.report blockquote {
   border-left: 4px solid #d1d5db;
   padding: 1px 14px;
   margin: 12px 0;
@@ -74,7 +58,7 @@
 }
 
 /* Code inline */
-.markdown code {
+.report code {
   background-color: #f3f4f6;
   color: #111111;
   padding: 0.2rem 0.35rem;
@@ -84,7 +68,7 @@
 }
 
 /* Code block */
-.markdown pre {
+.report pre {
   background-color: #1e293b;
   color: #f8fafc;
   padding: 1rem;
@@ -96,7 +80,7 @@
   margin: 1em 0;
 }
 
-.markdown pre code {
+.report pre code {
   background: none;
   color: inherit;
   padding: 0;
@@ -104,22 +88,22 @@
 }
 
 /* Lists */
-.markdown ul {
+.report ul {
   margin: 12px 0 12px 22px;
   padding-left: 6px;
   list-style: disc;
 }
-.markdown ol {
+.report ol {
   margin: 12px 0 12px 22px;
   padding-left: 6px;
   list-style: decimal;
 }
-.markdown li {
+.report li {
   margin: 5px 0;
 }
 
 /* Tables */
-.markdown table {
+.report table {
   border-collapse: collapse;
   margin: 1em 0;
   width: 100%;
@@ -128,42 +112,42 @@
   font-size: 0.9rem;
 }
 
-.markdown th,
-.markdown td {
+.report th,
+.report td {
   border: 1px solid #e5e7eb;
   padding: 0.6rem 0.75rem;
   text-align: left;
 }
 
-.markdown th {
+.report th {
   background-color: #f3f4f6;
   font-weight: 600;
 }
 
-.markdown tr:nth-child(even) td {
+.report tr:nth-child(even) td {
   background-color: #fafafa;
 }
 
 /* Links */
-.markdown a {
+.report a {
   color: #2563eb;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all 0.2s;
 }
-.markdown a:hover {
+.report a:hover {
   border-bottom: 1px solid #2563eb;
 }
 
 /* Horizontal rule */
-.markdown hr {
+.report hr {
   border: none;
   border-top: 1px solid #cbd5e1;
   margin: 24px 0;
 }
 
 /* Images */
-.markdown img {
+.report img {
   max-width: 100%;
   border-radius: 0.4rem;
   margin: 0.8em 0;

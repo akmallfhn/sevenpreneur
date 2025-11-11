@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import AppButton from "../buttons/AppButton";
-import { ArrowUp, Square, StopCircle } from "lucide-react";
+import { ArrowUp, Paperclip, Square, StopCircle } from "lucide-react";
 
 interface ChatSubmitterLMSProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -65,7 +65,10 @@ export default function ChatSubmitterLMS({
           suppressHydrationWarning
         />
       </div>
-      <div className="chat-attachments flex items-center justify-end">
+      <div className="chat-attachments flex items-center justify-between">
+        <AppButton size="largeIconRounded" variant="outline" type="button">
+          <Paperclip className="size-5" />
+        </AppButton>
         {isLoadingSubmit ? (
           <AppButton className="chat-end-submitting" size="largeIconRounded">
             <Square fill="#FFFFFF" className="size-5" />
