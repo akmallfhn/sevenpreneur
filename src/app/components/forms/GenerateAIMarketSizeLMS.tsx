@@ -166,7 +166,7 @@ export default function GenerateAIMarketSizeLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         pageName="Market Size"
-        headerTitle="AI for Market Size Analysis"
+        headerTitle="Market Size Intelligence"
       />
       <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
         <main className="main-contents flex-2 w-full">
@@ -323,7 +323,12 @@ export default function GenerateAIMarketSizeLMS({
               tocName="Table of Contents"
               tocList={tableofContents}
             />
-            <AppCalloutBox />
+            <AppCalloutBox
+              calloutTitle="Tips"
+              calloutContent="Gunakan Market Size Intelligence untuk memahami potensi pasar lewat
+          analisis TAM, SAM, dan SOM. Fitur ini membantu mengukur peluang
+          bisnis, bukan menilai daya beli konsumen."
+            />
           </div>
         </aside>
       </div>
