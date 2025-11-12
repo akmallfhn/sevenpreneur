@@ -55,6 +55,8 @@ export const listRouter = createTRPCRouter({
 
   aiTools: listAITool.aiTools,
   aiResults: listAITool.aiResults,
+  aiConversations: listAITool.aiConversations,
+  aiChats: listAITool.aiChats,
 
   // Transaction-related //
 

@@ -1,6 +1,10 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
-import { stringNotBlank } from "@/trpc/utils/validation";
+import {
+  numberIsPositive,
+  stringIsNanoid,
+  stringNotBlank,
+} from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import z from "zod";
 import { isEnrolledAITool } from "./util.ai_tool";
@@ -83,6 +87,84 @@ export const listAITool = {
         code: STATUS_OK,
         message: "Success",
         list: returnedList,
+      };
+    }),
+
+  aiConversations: loggedInProcedure.query(async (opts) => {
+    if (opts.ctx.user.role.name === "General User") {
+      await isEnrolledAITool(
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        "You're not allowed to view AI tools."
+      );
+    }
+    const aiConversationsList = await opts.ctx.prisma.aIConversation.findMany({
+      select: {
+        id: true,
+        name: true,
+        created_at: true,
+      },
+      where: {
+        user_id: opts.ctx.user.id,
+      },
+      orderBy: [{ created_at: "desc" }],
+    });
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      list: aiConversationsList,
+    };
+  }),
+
+  aiChats: loggedInProcedure
+    .input(
+      z.object({
+        conv_id: stringIsNanoid(),
+        size: numberIsPositive().max(10).optional(),
+        before: stringIsNanoid().optional(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to view AI tools."
+        );
+      }
+      let lastTime: Date | undefined = undefined;
+      if (opts.input.before) {
+        const lastChat = await opts.ctx.prisma.aIChat.findFirst({
+          select: { created_at: true },
+          where: { id: opts.input.before },
+        });
+        if (lastChat) {
+          lastTime = lastChat.created_at;
+        }
+      }
+      const aiChatsList = await opts.ctx.prisma.aIChat.findMany({
+        select: {
+          id: true,
+          role: true,
+          message: true,
+          created_at: true,
+        },
+        where: {
+          conv_id: opts.input.conv_id,
+          created_at: {
+            lt: lastTime,
+          },
+          conv: {
+            user_id: opts.ctx.user.id,
+          },
+        },
+        orderBy: [{ created_at: "desc" }],
+        take: opts.input.size || 4,
+      });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: aiChatsList,
       };
     }),
 };
