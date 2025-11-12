@@ -7,7 +7,7 @@ import {
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import InputLMS from "../fields/InputLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
@@ -175,11 +175,11 @@ export default function GenerateAIMarketSizeLMS({
             onSubmit={handleAIGenerate}
           >
             <section
-              id="product-overview"
+              id={tableofContents[0].url}
               className="product-overview bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
-                Product Overview
+                {tableofContents[0].name}
               </h2>
               <InputLMS
                 inputId="product-name"
@@ -229,7 +229,7 @@ export default function GenerateAIMarketSizeLMS({
               className="customer-targeting bg-white w-full flex flex-col gap-4 p-5 border rounded-lg"
             >
               <h2 className="section-title font-bold font-bodycopy">
-                Customer Targeting
+                {tableofContents[1].name}
               </h2>
               <InputLMS
                 inputId="operating-area"
@@ -268,7 +268,7 @@ export default function GenerateAIMarketSizeLMS({
               className="sales-distribution bg-white w-full flex flex-col gap-4 p-5 border rounded-lg"
             >
               <h2 className="section-title font-bold font-bodycopy">
-                Sales & Distribution
+                {tableofContents[2].name}
               </h2>
               <div className="sales-channel-options grid grid-cols-3 gap-y-4">
                 {salesChannelOptions.map((item, index) => (
