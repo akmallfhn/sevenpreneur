@@ -2,12 +2,13 @@ import {
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
-import { PrismaClient } from "@prisma/client";
+import { CRoleEnum, Prisma, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { AutoParseableTextFormat } from "openai/lib/parser";
 import z from "zod";
+import { aiToolPrompts } from "./prompt.ai_tool";
 
 export enum AIModelName {
   GPT_5 = "gpt-5",
@@ -20,6 +21,8 @@ export enum AIModelName {
 
 export const AI_TOOL_ID_IDEA_GEN = 1; // idea-gen
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
+
+export type AIChatRole = "user" | "assistant";
 
 export async function isEnrolledAITool(
   prisma: PrismaClient,
@@ -117,4 +120,55 @@ export async function AISaveResult(
     });
   }
   return theResult.id;
+}
+
+interface AIChatItem {
+  role: AIChatRole;
+  content: string;
+}
+
+export async function AISendChat(
+  model: AIModelName,
+  history: AIChatItem[],
+  message: string
+) {
+  const generatedResult = await ChatGPTClient.responses.create({
+    model: model,
+    tools: [{ type: "web_search" }],
+    reasoning: { effort: "low" },
+    instructions: aiToolPrompts.sendChat.instruction,
+    input: [...history, { role: "user", content: message }],
+  });
+
+  return generatedResult.output_text;
+}
+
+export async function AISaveMessage(
+  prisma: PrismaClient,
+  user_id: string,
+  conv_id: string,
+  role: AIChatRole,
+  message: string
+) {
+  const roleConversion = {
+    user: CRoleEnum.USER,
+    assistant: CRoleEnum.ASSISTANT,
+  };
+  const createdMessage = await prisma.aIChat.create({
+    data: {
+      conv_id: conv_id,
+      role: roleConversion[role],
+      message: message,
+    },
+  });
+  const theMessage = await prisma.aIChat.findFirst({
+    where: { id: createdMessage.id },
+  });
+  if (!theMessage) {
+    throw new TRPCError({
+      code: STATUS_INTERNAL_SERVER_ERROR,
+      message: "Failed to save an AI chat result.",
+    });
+  }
+  return theMessage.id;
 }
