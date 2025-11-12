@@ -1,6 +1,7 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
-import { stringNotBlank } from "@/trpc/utils/validation";
+import { readFailedNotFound } from "@/trpc/utils/errors";
+import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
 import z from "zod";
 import {
   AIMarketSize_CustomerType,
@@ -10,9 +11,12 @@ import { aiToolPrompts } from "./prompt.ai_tool";
 import {
   AI_TOOL_ID_IDEA_GEN,
   AI_TOOL_ID_MARKET_SIZE,
+  AIChatRole,
   AIGenerate,
   AIModelName,
+  AISaveMessage,
   AISaveResult,
+  AISendChat,
   isEnrolledAITool,
 } from "./util.ai_tool";
 
@@ -109,6 +113,86 @@ export const useAITool = {
         id: resultId,
         title: parsedResult.title,
         result: formattedResult,
+      };
+    }),
+
+  sendChat: loggedInProcedure
+    .input(
+      z.object({
+        model: z.enum(AIModelName),
+        conv_id: stringIsNanoid(),
+        message: stringNotBlank(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const theConversation = await opts.ctx.prisma.aIConversation.findFirst({
+        where: {
+          id: opts.input.conv_id,
+          user_id: opts.ctx.user.id,
+        },
+      });
+      if (!theConversation) {
+        throw readFailedNotFound("conversation");
+      }
+
+      const aiChatsList = await opts.ctx.prisma.aIChat.findMany({
+        select: {
+          role: true,
+          message: true,
+        },
+        where: {
+          conv_id: opts.input.conv_id,
+          conv: {
+            user_id: opts.ctx.user.id,
+          },
+        },
+        orderBy: [{ created_at: "desc" }],
+        take: 4,
+      });
+      const history = aiChatsList.map((entry) => {
+        return {
+          role: entry.role.toString().toLowerCase() as AIChatRole,
+          content: entry.message,
+        };
+      });
+
+      const textResult = await AISendChat(
+        opts.input.model,
+        history,
+        opts.input.message
+      );
+
+      const chatId = await AISaveMessage(
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        opts.input.conv_id,
+        "user",
+        opts.input.message
+      );
+
+      const resultId = await AISaveMessage(
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        opts.input.conv_id,
+        "assistant",
+        textResult
+      );
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        chat_id: chatId,
+        chat: opts.input.message,
+        result_id: resultId,
+        result: textResult,
       };
     }),
 };

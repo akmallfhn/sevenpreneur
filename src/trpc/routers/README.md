@@ -367,6 +367,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `use.ai.marketSize`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiConversations`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiChats`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `create.aiConversation`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.sendChat`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 **Scopes:**
 
