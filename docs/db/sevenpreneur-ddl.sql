@@ -30,6 +30,13 @@ CREATE TYPE t_status_enum AS ENUM (
   'failed'
 );
 
+-- Enumeration for the ai_chats table (c_*)
+
+CREATE TYPE c_role_enum AS ENUM (
+  'user',
+  'assistant'
+);
+
 ------------
 -- Tables --
 ------------
@@ -305,6 +312,23 @@ CREATE TABLE ai_results (
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- AI-chat-related
+
+CREATE TABLE ai_conversations (
+  id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  user_id     UUID         NOT NULL,
+  name        VARCHAR      NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ai_chats (
+  id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  conv_id     CHAR(21)     NOT NULL,
+  role        c_role_enum  NOT NULL,
+  message     TEXT         NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Transaction-related
 
 CREATE TABLE discounts (
@@ -459,6 +483,14 @@ ALTER TABLE event_prices
 ALTER TABLE ai_results
   ADD FOREIGN KEY (user_id)    REFERENCES users (id),
   ADD FOREIGN KEY (ai_tool_id) REFERENCES ai_tools (id);
+
+-- AI-chat-related
+
+ALTER TABLE ai_conversations
+  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE ai_chats
+  ADD FOREIGN KEY (conv_id) REFERENCES ai_conversations (id);
 
 -- Transaction-related
 

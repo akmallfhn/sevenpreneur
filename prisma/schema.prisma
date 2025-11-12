@@ -47,6 +47,15 @@ enum TStatusEnum {
   @@map("t_status_enum")
 }
 
+// Enumeration for the AIChat table (C*)
+
+enum CRoleEnum {
+  USER      @map("user")
+  ASSISTANT @map("assistant")
+
+  @@map("c_role_enum")
+}
+
 ////////////
 // Models //
 ////////////
@@ -144,6 +153,7 @@ model User {
   Event                 Event[]
   UserEvent             UserEvent[]
   ai_results            AIResult[]
+  ai_conversations      AIConversation[]
 
   @@map("users")
 }
@@ -428,6 +438,30 @@ model AIResult {
   @@map("ai_results")
 }
 
+// AI-chat-related
+
+model AIConversation {
+  id         String   @id @default(nanoid()) @db.Char(21)
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String   @db.Uuid
+  name       String   @db.VarChar()
+  created_at DateTime @default(now()) @db.Timestamptz()
+  chats      AIChat[]
+
+  @@map("ai_conversations")
+}
+
+model AIChat {
+  id         String         @id @default(nanoid()) @db.Char(21)
+  conv       AIConversation @relation(fields: [conv_id], references: [id])
+  conv_id    String         @db.Char(21)
+  role       CRoleEnum
+  message    String         @db.Text()
+  created_at DateTime       @default(now()) @db.Timestamptz()
+
+  @@map("ai_chats")
+}
+
 // Transaction-related
 
 model Discount {
@@ -542,4 +576,10 @@ view UserAITool {
   user_id String @db.Uuid
 
   @@map("users_ai_tools")
+}
+
+view UserAIChat {
+  user_id String @db.Uuid
+
+  @@map("users_ai_chats")
 }

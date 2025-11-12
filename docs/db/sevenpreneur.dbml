@@ -33,6 +33,13 @@ enum t_status_enum {
   failed
 }
 
+// Enumeration for the ai_chats table (c_*)
+
+enum c_role_enum {
+  user
+  assistant
+}
+
 ////////////
 // Tables //
 ////////////
@@ -305,6 +312,23 @@ Table ai_results {
   ai_tool_id  smallint     [ref: > ai_tools.id]
   name        varchar
   result      json
+  created_at  timestamptz
+}
+
+// AI-chat-related
+
+Table ai_conversations {
+  id          char(21)    [primary key, note: 'default nanoid()']
+  user_id     uuid        [ref: > users.id]
+  name        varchar
+  created_at  timestamptz
+}
+
+Table ai_chats {
+  id          char(21)    [primary key, note: 'default nanoid()']
+  conv_id     char(21)    [ref: > ai_conversations.id]
+  role        c_role_enum
+  message     text
   created_at  timestamptz
 }
 
