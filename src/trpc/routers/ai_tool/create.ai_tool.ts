@@ -25,7 +25,7 @@ export const createAITool = {
     return {
       code: STATUS_CREATED,
       message: "Success",
-      playlist: theConversation,
+      conversation: theConversation,
     };
   }),
 };
