@@ -493,6 +493,23 @@ export async function DeleteDiscussionReply({
   };
 }
 
+// CREATE CONVERSATION
+export async function CreateConversation() {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const createConversation = await trpc.create.aiConversation();
+
+  return {
+    code: createConversation.code,
+    message: createConversation.message,
+  };
+}
+
 // AI MARKET SIZE
 interface GenerateAIMarketSize {
   productName: string;
