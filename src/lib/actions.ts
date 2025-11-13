@@ -493,8 +493,8 @@ export async function DeleteDiscussionReply({
   };
 }
 
-// CREATE CONVERSATION
-export async function CreateConversation() {
+// CREATE CONVERSATION AI
+export async function CreateAIConversation() {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
@@ -507,6 +507,36 @@ export async function CreateConversation() {
   return {
     code: createConversation.code,
     message: createConversation.message,
+    conversation: createConversation.conversation,
+  };
+}
+
+// SEND CHAT AI
+interface SendAIChatProps {
+  conversationId: string;
+  message: string;
+}
+export async function SendAIChat({ conversationId, message }: SendAIChatProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const sendChat = await trpc.use.ai.sendChat({
+    model: AIModelName.GPT_4_1_MINI,
+    conv_id: conversationId,
+    message: message,
+  });
+
+  return {
+    code: sendChat.code,
+    message: sendChat.message,
+    result_id: sendChat.result_id,
+    result: sendChat.result,
+    chat_id: sendChat.chat_id,
+    chat: sendChat.chat,
   };
 }
 

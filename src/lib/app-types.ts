@@ -22,3 +22,4 @@ export type FileVariant =
   | "UNKNOWN";
 export type AIMarketSize_CustomerType = "b2b" | "b2c" | "hybrid";
 export type AIMarketSize_ProductType = "fisik" | "digital" | "hybrid";
+export type AIChatRole = "USER" | "ASSISTANT";

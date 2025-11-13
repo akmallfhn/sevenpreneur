@@ -45,7 +45,24 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
 
   let aiResultList: AIResultListProps[] = [];
   try {
-    aiResultList = (await trpc.list.aiResults({})).list;
+    const [aiToolsRes, aiConversationRes] = await Promise.all([
+      trpc.list.aiResults({}),
+      trpc.list.aiConversations(),
+    ]);
+    const aiToolsResultList = aiToolsRes.list.map((item) => ({
+      ...item,
+      created_at: item.created_at.toISOString(),
+    }));
+    const aiConversationResultList = aiConversationRes.list.map((item) => ({
+      ...item,
+      created_at: item.created_at.toISOString(),
+      ai_tool_slug_url: "chat",
+    }));
+
+    aiResultList = [...aiToolsResultList, ...aiConversationResultList].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
   } catch (error) {
     aiResultList = [];
   }

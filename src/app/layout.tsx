@@ -82,12 +82,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const metaPixelId = process.env.META_PIXEL_ID;
 
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`scroll-smooth ${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
+      suppressHydrationWarning
+    >
       <GoogleTagManager gtmId={googleTagManagerId!} />
-      <body
-        className={`${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
-        suppressHydrationWarning
-      >
+      <body suppressHydrationWarning>
         <GoogleOAuthProvider clientId={googleOauthId!}>
           {children}
         </GoogleOAuthProvider>
