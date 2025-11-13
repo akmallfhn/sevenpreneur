@@ -1,6 +1,7 @@
 import ChatConversationLMS from "@/app/components/messages/ChatConversationLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
 interface AIChatConversationLMSProps {
   params: Promise<{ conversation_id: string }>;
@@ -28,10 +29,15 @@ export default async function AIChatConversationLMS({
     );
   }
 
-  const chatRaw = await trpc.list.aiChats({
-    conv_id: conversation_id,
-    size: 10,
-  });
+  let chatRaw;
+  try {
+    chatRaw = await trpc.list.aiChats({
+      conv_id: conversation_id,
+      size: 10,
+    });
+  } catch (error) {
+    return notFound();
+  }
 
   const chatList = chatRaw.list.map((item) => ({
     ...item,
