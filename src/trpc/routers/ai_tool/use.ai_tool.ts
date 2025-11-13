@@ -1,6 +1,6 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
-import { readFailedNotFound } from "@/trpc/utils/errors";
+import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
 import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
 import z from "zod";
 import {
@@ -13,6 +13,7 @@ import {
   AI_TOOL_ID_MARKET_SIZE,
   AIChatRole,
   AIGenerate,
+  AIGenerateTitle,
   AIModelName,
   AISaveMessage,
   AISaveResult,
@@ -171,6 +172,28 @@ export const useAITool = {
           content: entry.message,
         };
       });
+
+      if (history.length <= 1) {
+        const parsedResult = await AIGenerateTitle(
+          opts.input.model,
+          aiToolPrompts.generateTitle(opts.input.message)
+        );
+
+        const updatedConversation =
+          await opts.ctx.prisma.aIConversation.updateManyAndReturn({
+            data: {
+              name: parsedResult.response.title,
+            },
+            where: {
+              id: opts.input.conv_id,
+            },
+          });
+        checkUpdateResult(
+          updatedConversation.length,
+          "AI conversation",
+          "AI conversations"
+        );
+      }
 
       const textResult = await AISendChat(
         opts.input.model,
