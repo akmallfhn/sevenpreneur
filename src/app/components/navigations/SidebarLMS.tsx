@@ -19,6 +19,7 @@ export interface AIResultListProps {
   id: string;
   name: string;
   ai_tool_slug_url: string;
+  created_at: string;
 }
 
 interface SidebarLMSProps {

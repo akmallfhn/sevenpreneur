@@ -22,7 +22,7 @@
 .report h5,
 .report h6 {
   font-weight: 600;
-  margin: 12px 0;
+  margin: 8px 0;
 }
 
 /* Paragraphs */
@@ -143,7 +143,7 @@
 .report hr {
   border: none;
   border-top: 1px solid #cbd5e1;
-  margin: 24px 0;
+  margin: 18px 0;
 }
 
 /* Images */

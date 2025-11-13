@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import AppButton from "../buttons/AppButton";
-import { ArrowUp, Paperclip, Square, StopCircle } from "lucide-react";
+import { ArrowUp, Paperclip, Square } from "lucide-react";
 
 interface ChatSubmitterLMSProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -39,7 +39,9 @@ export default function ChatSubmitterLMS({
   // Handle submit with Enter
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault(); // cegah newline
+      event.preventDefault();
+
+      if (!value.trim()) return;
       const fakeEvent = { preventDefault: () => {} } as unknown as FormEvent;
       onSubmit(fakeEvent);
     }

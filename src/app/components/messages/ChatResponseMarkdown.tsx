@@ -16,7 +16,7 @@ export default function ChatResponseMarkdown({
   const { copied, copy } = useClipboard();
 
   return (
-    <div className="chat-response-box flex flex-1 w-full px-5 py-7 gap-3">
+    <div className="chat-response-box flex flex-1 w-full py-5 gap-3">
       <div className="chat-response-avatar size-[30px] shrink-0 rounded-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"
