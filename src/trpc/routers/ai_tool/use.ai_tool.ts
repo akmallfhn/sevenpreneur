@@ -143,6 +143,14 @@ export const useAITool = {
         throw readFailedNotFound("conversation");
       }
 
+      const chatId = await AISaveMessage(
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        opts.input.conv_id,
+        "user",
+        opts.input.message
+      );
+
       const aiChatsList = await opts.ctx.prisma.aIChat.findMany({
         select: {
           role: true,
@@ -167,14 +175,6 @@ export const useAITool = {
       const textResult = await AISendChat(
         opts.input.model,
         history,
-        opts.input.message
-      );
-
-      const chatId = await AISaveMessage(
-        opts.ctx.prisma,
-        opts.ctx.user.id,
-        opts.input.conv_id,
-        "user",
         opts.input.message
       );
 
