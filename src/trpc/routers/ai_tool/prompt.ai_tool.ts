@@ -191,6 +191,24 @@ export const aiToolPrompts = {
     };
   },
 
+  generateTitle: (message: string) => {
+    return {
+      instructions:
+        "Tulis judul secara singkat dari pesan yang diberikan. " +
+        "Gunakan format JSON berikut untuk menjawab:\n" +
+        AIFormatOutputText({
+          title: "<judul singkat dari isi pesan>",
+        }),
+      input: `Isi pesan: ${message}`,
+      format: AIFormatOutputZod(
+        "respons_judul_pesan",
+        z.object({
+          title: z.string(),
+        })
+      ),
+    };
+  },
+
   sendChat: {
     instruction:
       "Kamu adalah pebisnis handal dengan pengalaman 10+ tahun dalam konsultan bisnis, pengembangan bisnis, dan evaluasi peluang investasi bisnis. " +

@@ -122,6 +122,29 @@ export async function AISaveResult(
   return theResult.id;
 }
 
+export async function AIGenerateTitle<T extends AutoParseableTextFormat<U>, U>(
+  model: AIModelName,
+  prompt: AIPrompt<T>
+) {
+  const generatedResult = await ChatGPTClient.responses.parse({
+    model: model,
+    instructions: prompt.instructions,
+    input: prompt.input,
+    text: {
+      format: prompt.format,
+    },
+  });
+
+  if (generatedResult.output_parsed === null) {
+    throw new TRPCError({
+      code: STATUS_INTERNAL_SERVER_ERROR,
+      message: "Failed to parse an AI result.",
+    });
+  }
+
+  return generatedResult.output_parsed;
+}
+
 interface AIChatItem {
   role: AIChatRole;
   content: string;
