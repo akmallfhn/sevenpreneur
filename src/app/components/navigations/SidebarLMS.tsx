@@ -104,7 +104,7 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
                     key={post.id}
                     aiToolSlug={post.ai_tool_slug_url}
                     aiResultId={post.id}
-                    aiResultName={post.name}
+                    aiResultName={post.name || "Agora AI"}
                   />
                 ))}
               </div>

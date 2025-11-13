@@ -9,6 +9,7 @@ interface AIChatConversationLMSProps {
 export default async function AIChatConversationLMS({
   params,
 }: AIChatConversationLMSProps) {
+  const { conversation_id } = await params;
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
@@ -17,14 +18,22 @@ export default async function AIChatConversationLMS({
     setSessionToken(sessionToken);
   }
 
-  const { conversation_id } = await params;
-  const userData = (await trpc.auth.checkSession()).user;
+  if (conversation_id === "temp") {
+    return (
+      <ChatConversationLMS
+        conversationId={conversation_id}
+        conversationName="Agora AI"
+        conversationChats={[]}
+      />
+    );
+  }
 
-  const chatsRaw = (
-    await trpc.list.aiChats({ conv_id: conversation_id, size: 10 })
-  ).list;
+  const chatRaw = await trpc.list.aiChats({
+    conv_id: conversation_id,
+    size: 10,
+  });
 
-  const chats = chatsRaw.map((item) => ({
+  const chatList = chatRaw.list.map((item) => ({
     ...item,
     created_at: item.created_at.toISOString(),
   }));
@@ -32,7 +41,8 @@ export default async function AIChatConversationLMS({
   return (
     <ChatConversationLMS
       conversationId={conversation_id}
-      conversationChats={chats}
+      conversationName={"Agora AI"}
+      conversationChats={chatList}
     />
   );
 }

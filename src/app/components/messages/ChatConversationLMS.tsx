@@ -5,7 +5,7 @@ import ChatSubmitterLMS from "./ChatSubmitterLMS";
 import ChatBubbleLMS from "./ChatBubbleLMS";
 import ChatResponseMarkdown from "./ChatResponseMarkdown";
 import { SendAIChat } from "@/lib/actions";
-import { Loader2 } from "lucide-react";
+import { Loader2, MessageCircleMore } from "lucide-react";
 import { AIChatRole } from "@/lib/app-types";
 import { useChatContext } from "@/app/contexts/chat-context";
 
@@ -17,15 +17,17 @@ interface Chats {
 
 interface ChatConversationLMSProps {
   conversationId: string;
+  conversationName: string;
   conversationChats: Chats[];
 }
 
 export default function ChatConversationLMS({
   conversationId,
+  conversationName,
   conversationChats,
 }: ChatConversationLMSProps) {
-  const { initialMessage, setInitialMessage } = useChatContext();
   const hasSentInitial = useRef(false);
+  const { initialMessage, setInitialMessage } = useChatContext();
   const [textValue, setTextValue] = useState("");
   const [generatingAI, setGeneratingAI] = useState(false);
   const [chats, setChats] = useState<Chats[]>(conversationChats);
@@ -83,11 +85,11 @@ export default function ChatConversationLMS({
     setChats([newUserChat]);
 
     try {
-      const response = await SendAIChat({ conversationId, message });
-      if (response.code === "OK") {
+      const sendChat = await SendAIChat({ conversationId, message });
+      if (sendChat.code === "OK") {
         const newAssistantChat = {
           role: "ASSISTANT" as AIChatRole,
-          message: response.result,
+          message: sendChat.result,
           created_at: new Date().toISOString(),
         };
         setChats((prev) => [...prev, newAssistantChat]);
@@ -136,8 +138,14 @@ export default function ChatConversationLMS({
   return (
     <div
       ref={conversationRef}
-      className="root-page hidden flex-col pl-64 w-full h-screen overflow-y-auto lg:flex"
+      className="root-page relative hidden flex-col pl-64 w-full h-screen overflow-y-auto lg:flex"
     >
+      <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-section-background border-b text-[#333333] z-10">
+        <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold text-lg">
+          <MessageCircleMore className="size-6" />
+          {conversationName}
+        </div>
+      </div>
       <div className="conversation-page relative flex flex-col w-full max-w-[768px] mx-auto">
         <div className="conversation w-full flex flex-col pt-5 mb-52">
           {chats

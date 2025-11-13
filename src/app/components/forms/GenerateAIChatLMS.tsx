@@ -28,7 +28,7 @@ export default function GenerateAIChatLMS({
     setInitialMessage(message);
     setGeneratingAI(true);
 
-    router.push("/ai/chat/temp");
+    router.push("/ai/grow/temp");
 
     try {
       const createConversation = await CreateAIConversation();

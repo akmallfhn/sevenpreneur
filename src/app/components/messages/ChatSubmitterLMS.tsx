@@ -18,14 +18,12 @@ interface ChatSubmitterLMSProps
 }
 
 export default function ChatSubmitterLMS({
-  value: propValue,
+  value,
   onTextAreaChange,
   onSubmit,
   isLoadingSubmit,
   ...rest
 }: ChatSubmitterLMSProps) {
-  const [value, setValue] = useState(propValue);
-
   const handleTextAreaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -46,11 +44,6 @@ export default function ChatSubmitterLMS({
       onSubmit(fakeEvent);
     }
   };
-
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
 
   return (
     <div className="chat-submitter flex flex-col w-full p-3 bg-white gap-3 border border-outline rounded-xl">

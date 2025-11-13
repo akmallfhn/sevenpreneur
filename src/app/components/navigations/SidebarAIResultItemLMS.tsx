@@ -3,15 +3,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface SidebarAIResultItemLMSProps {
-  aiToolSlug: string;
   aiResultId: string;
-  aiResultName: string;
+  aiResultName?: string;
+  aiToolSlug: string;
 }
 
 export default function SidebarAIResultItemLMS({
-  aiToolSlug,
   aiResultId,
   aiResultName,
+  aiToolSlug,
 }: SidebarAIResultItemLMSProps) {
   const pathname = usePathname();
   const isActive =
