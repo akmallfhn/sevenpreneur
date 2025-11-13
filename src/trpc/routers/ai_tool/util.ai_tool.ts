@@ -2,7 +2,7 @@ import {
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
-import { CRoleEnum, Prisma, PrismaClient } from "@prisma/client";
+import { CRoleEnum, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
@@ -135,7 +135,6 @@ export async function AISendChat(
   const generatedResult = await ChatGPTClient.responses.create({
     model: model,
     tools: [{ type: "web_search" }],
-    reasoning: { effort: "low" },
     instructions: aiToolPrompts.sendChat.instruction,
     input: [...history, { role: "user", content: message }],
   });
