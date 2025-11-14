@@ -526,8 +526,45 @@ export async function SendAIChat({ conversationId, message }: SendAIChatProps) {
   };
 }
 
+// AI IDEA VALIDATION
+interface GenerateAIIdeaValidationProps {
+  problemStatement: string;
+  problemContext: string;
+  proposedSolution: string;
+  availableResources: string;
+}
+export async function GenerateAIIdeaValidation({
+  problemStatement,
+  problemContext,
+  proposedSolution,
+  availableResources,
+}: GenerateAIIdeaValidationProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const generateIdeaValidator = await trpc.use.ai.ideaValidation({
+    model: AIModelName.GPT_5_MINI,
+    problem: problemStatement,
+    location: problemContext,
+    ideation: proposedSolution,
+    resources: availableResources,
+  });
+
+  return {
+    code: generateIdeaValidator.code,
+    message: generateIdeaValidator.message,
+    id: generateIdeaValidator.id,
+    title: generateIdeaValidator.title,
+    result: generateIdeaValidator.result,
+  };
+}
+
 // AI MARKET SIZE
-interface GenerateAIMarketSize {
+interface GenerateAIMarketSizeProps {
   productName: string;
   productDescription: string;
   productType: AIMarketSize_ProductType;
@@ -542,7 +579,7 @@ export async function GenerateAIMarketSize({
   customerType,
   operatingArea,
   salesChannel,
-}: GenerateAIMarketSize) {
+}: GenerateAIMarketSizeProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {

@@ -10,6 +10,7 @@ import Image from "next/image";
 import AppTableofContents from "../elements/AppTableofContents";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
+import { GenerateAIIdeaValidation } from "@/lib/actions";
 
 interface GenerateAIIdeaValidatorLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -60,66 +61,52 @@ export default function GenerateAIIdeaValidatorLMS({
     e.preventDefault();
     setIsGeneratingContents(true);
 
-    // if (!formData.productName.trim()) {
-    //   toast.error("Please enter a product name before generating.");
-    //   setIsGeneratingContents(false);
-    //   return;
-    // }
-    // if (!formData.productDescription.trim()) {
-    //   toast.error("Give me a short description about product");
-    //   setIsGeneratingContents(false);
-    //   return;
-    // }
-    // if (!formData.productType) {
-    //   toast.error("Choose a product type");
-    //   setIsGeneratingContents(false);
-    //   return;
-    // }
-    // if (!formData.customerType) {
-    //   toast.error("Please select your target customer type");
-    //   setIsGeneratingContents(false);
-    //   return;
-    // }
-    // if (!formData.operatingArea.trim()) {
-    //   toast.error("Where does your business operate?");
-    //   setIsGeneratingContents(false);
-    //   return;
-    // }
+    if (!formData.problemStatement.trim()) {
+      toast.error("Tell your story about the problem you’re facing");
+      setIsGeneratingContents(false);
+      return;
+    }
+    if (!formData.problemContext.trim()) {
+      toast.error(
+        "Help us understand where this problem happens and how it shows up"
+      );
+      setIsGeneratingContents(false);
+      return;
+    }
+    if (!formData.proposedSolution.trim()) {
+      toast.error("Describe the solution you have in mind");
+      setIsGeneratingContents(false);
+      return;
+    }
 
-    // try {
-    //   const aiMarketSizeResult = await GenerateAIMarketSize({
-    //     productName: formData.productName.trim(),
-    //     productDescription: formData.productDescription.trim(),
-    //     productType: formData.productType,
-    //     customerType: formData.customerType,
-    //     operatingArea: formData.operatingArea.trim(),
-    //     salesChannel: formData.salesChannel.join(", "),
-    //   });
+    try {
+      const aiIdeaValidation = await GenerateAIIdeaValidation({
+        problemStatement: formData.problemStatement,
+        problemContext: formData.problemContext,
+        proposedSolution: formData.proposedSolution,
+        availableResources: formData.availableResource,
+      });
 
-    //   if (aiMarketSizeResult.code === "OK") {
-    //     toast.success("Market size report successfully generated!");
-    //     setFormData({
-    //       productName: "",
-    //       productDescription: "",
-    //       productType: null,
-    //       customerType: null,
-    //       operatingArea: "",
-    //       salesChannel: [],
-    //     });
-    //     router.push(`/ai/market-size/${aiMarketSizeResult.id}`);
-    //   } else {
-    //     toast.error(
-    //       "AI couldn’t complete the market analysis. Please try again."
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   toast.error(
-    //     "Failed to generate market size report. Please try again later."
-    //   );
-    // } finally {
-    //   setIsGeneratingContents(false);
-    // }
+      if (aiIdeaValidation.code === "OK") {
+        toast.success("AI validation complete! Your insights are ready");
+        setFormData({
+          problemStatement: "",
+          problemContext: "",
+          proposedSolution: "",
+          availableResource: "",
+        });
+        router.push(`/ai/idea-validator/${aiIdeaValidation.id}`);
+      } else {
+        toast.error("We couldn’t complete the validation. Please try again!");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "An unexpected error occurred while generating the validation. Please try again in a moment"
+      );
+    } finally {
+      setIsGeneratingContents(false);
+    }
   };
 
   return (
