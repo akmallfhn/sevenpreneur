@@ -1,8 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { toast } from "sonner";
 import ChatSubmitterLMS from "../messages/ChatSubmitterLMS";
-import { SendAIChat } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -24,25 +22,10 @@ export default function GenerateAIChatLMS({
 
     const message = textValue;
     setTextValue("");
+    sessionStorage.setItem("initialMessage", message);
     setGeneratingAI(true);
 
     router.push("/ai/chat/temp");
-
-    try {
-      const createConversation = await SendAIChat({
-        conversationId: undefined,
-        message: message,
-      });
-      if (createConversation.code === "OK") {
-        router.replace(`/ai/chat/${createConversation.conv_id}`);
-      } else {
-        toast.error("Couldn't create the chat room. Please try again.");
-      }
-    } catch (error) {
-      toast.error("Unable to create conversation. Let's try once more!");
-    } finally {
-      setGeneratingAI(false);
-    }
   };
 
   return (

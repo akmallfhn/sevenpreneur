@@ -146,13 +146,17 @@
 
 /* Links */
 .markdown a {
-  color: #2563eb;
+  color: var(--color-primary);
+  background-color: #e3eefd;
+  font-size: 13px;
+  padding: 2px 8px;
+  border-radius: 100px;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all 0.2s;
 }
 .markdown a:hover {
-  border-bottom: 1px solid #2563eb;
+  background-color: var(--color-primary-light);
 }
 
 /* Horizontal rule */

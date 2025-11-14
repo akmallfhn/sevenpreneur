@@ -36,6 +36,8 @@ export default function ChatSubmitterLMS({
 
   // Handle submit with Enter
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (isLoadingSubmit) return;
+
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
 
@@ -57,6 +59,7 @@ export default function ChatSubmitterLMS({
           value={value}
           onKeyDown={handleKeyDown}
           onChange={handleTextAreaChange}
+          disabled={isLoadingSubmit}
           suppressHydrationWarning
         />
       </div>

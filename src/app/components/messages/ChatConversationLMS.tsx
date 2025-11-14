@@ -7,6 +7,7 @@ import ChatResponseMarkdown from "./ChatResponseMarkdown";
 import { SendAIChat } from "@/lib/actions";
 import { Loader2, MessageCircleMore } from "lucide-react";
 import { AIChatRole } from "@/lib/app-types";
+import { useRouter } from "next/navigation";
 
 interface Chats {
   role: AIChatRole;
@@ -25,6 +26,8 @@ export default function ChatConversationLMS({
   conversationName,
   conversationChats,
 }: ChatConversationLMSProps) {
+  const router = useRouter();
+  const hasSentInitial = useRef(false);
   const [textValue, setTextValue] = useState("");
   const [generatingAI, setGeneratingAI] = useState(false);
   const [chats, setChats] = useState<Chats[]>(conversationChats);
@@ -43,7 +46,7 @@ export default function ChatConversationLMS({
     return () => clearTimeout(timeout);
   }, [chats]);
 
-  //  Automatically scrolls to the bottom when the page first loads.
+  // Automatically scrolls to the bottom when the page first loads.
   useLayoutEffect(() => {
     if (conversationRef.current) {
       conversationRef.current.scrollTo({
@@ -53,12 +56,56 @@ export default function ChatConversationLMS({
     }
   }, []);
 
+  // When there’s an initial message (from the previous page),
+  // it triggers the first AI message generation automatically.
+  useEffect(() => {
+    if (!hasSentInitial.current) {
+      const message = sessionStorage.getItem("initialMessage");
+
+      if (message) {
+        hasSentInitial.current = true;
+        sessionStorage.removeItem("initialMessage");
+        handleSubmitInitialMessage(message);
+      }
+    }
+  }, []);
+
   // Keeps local state in sync if new messages come in from the server or other sources.
   useEffect(() => {
     if (conversationChats.length > 0) {
       setChats(conversationChats);
     }
   }, [conversationChats]);
+
+  // Handles the first response when a conversation is created
+  const handleSubmitInitialMessage = async (message: string) => {
+    setGeneratingAI(true);
+
+    const newUserChat = {
+      role: "USER" as AIChatRole,
+      message,
+      created_at: new Date().toISOString(),
+    };
+    setChats([newUserChat]);
+
+    try {
+      const sendChat = await SendAIChat({ conversationId: undefined, message });
+
+      if (sendChat.code === "OK") {
+        const newAssistantChat = {
+          role: "ASSISTANT" as AIChatRole,
+          message: sendChat.result,
+          created_at: new Date().toISOString(),
+        };
+        router.replace(`/ai/chat/${sendChat.conv_id}`);
+        setChats((prev) => [...prev, newAssistantChat]);
+      }
+    } catch (err) {
+      toast.error("Failed to send initial message");
+    } finally {
+      setGeneratingAI(false);
+    }
+  };
 
   // Handles user message submissions within the chat.
   const handleSubmit = async (e: FormEvent) => {
