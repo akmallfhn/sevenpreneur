@@ -176,9 +176,8 @@ export const useAITool = {
         }
       }
 
-      const chatId = await AISaveMessage(
+      const chatMessage = await AISaveMessage(
         opts.ctx.prisma,
-        opts.ctx.user.id,
         convId,
         "user",
         opts.input.message
@@ -233,9 +232,8 @@ export const useAITool = {
         opts.input.message
       );
 
-      const resultId = await AISaveMessage(
+      const resultMessage = await AISaveMessage(
         opts.ctx.prisma,
-        opts.ctx.user.id,
         convId,
         "assistant",
         textResult
@@ -246,10 +244,12 @@ export const useAITool = {
         message: "Success",
         conv_id: convId,
         conv_name: theConversation.name,
-        chat_id: chatId,
+        chat_id: chatMessage.id,
         chat: opts.input.message,
-        result_id: resultId,
+        chat_created_at: chatMessage.created_at,
+        result_id: resultMessage.id,
         result: textResult,
+        result_created_at: resultMessage.created_at,
       };
     }),
 };

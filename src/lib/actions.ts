@@ -519,8 +519,10 @@ export async function SendAIChat({ conversationId, message }: SendAIChatProps) {
     conv_name: sendChat.conv_name,
     chat_id: sendChat.chat_id,
     chat: sendChat.chat,
+    chat_created_at: sendChat.chat_created_at,
     result_id: sendChat.result_id,
     result: sendChat.result,
+    result_created_at: sendChat.result_created_at,
   };
 }
 
