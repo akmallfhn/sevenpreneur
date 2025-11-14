@@ -1,4 +1,4 @@
-import { STATUS_OK } from "@/lib/status_code";
+import { STATUS_INTERNAL_SERVER_ERROR, STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
 import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
@@ -20,6 +20,7 @@ import {
   AISendChat,
   isEnrolledAITool,
 } from "./util.ai_tool";
+import { TRPCError } from "@trpc/server";
 
 export const useAITool = {
   ideaValidation: loggedInProcedure
@@ -129,7 +130,7 @@ export const useAITool = {
     .input(
       z.object({
         model: z.enum(AIModelName),
-        conv_id: stringIsNanoid(),
+        conv_id: stringIsNanoid().optional(),
         message: stringNotBlank(),
       })
     )
@@ -142,23 +143,68 @@ export const useAITool = {
         );
       }
 
+      let convId = "";
+      if (!opts.input.conv_id) {
+        const createdConversation = await opts.ctx.prisma.aIConversation.create(
+          {
+            data: {
+              user_id: opts.ctx.user.id,
+              name: "", // start empty
+            },
+          }
+        );
+        convId = createdConversation.id;
+      } else {
+        convId = opts.input.conv_id;
+      }
+
       const theConversation = await opts.ctx.prisma.aIConversation.findFirst({
+        select: { id: true, name: true },
         where: {
-          id: opts.input.conv_id,
+          id: convId,
           user_id: opts.ctx.user.id,
         },
       });
       if (!theConversation) {
-        throw readFailedNotFound("conversation");
+        if (!opts.input.conv_id) {
+          throw new TRPCError({
+            code: STATUS_INTERNAL_SERVER_ERROR,
+            message: "Failed to create a new conversation.",
+          });
+        } else {
+          throw readFailedNotFound("conversation");
+        }
       }
 
       const chatId = await AISaveMessage(
         opts.ctx.prisma,
         opts.ctx.user.id,
-        opts.input.conv_id,
+        convId,
         "user",
         opts.input.message
       );
+
+      if (!opts.input.conv_id) {
+        const parsedResult = await AIGenerateTitle(
+          opts.input.model,
+          aiToolPrompts.generateTitle(opts.input.message)
+        );
+
+        const updatedConversation =
+          await opts.ctx.prisma.aIConversation.updateManyAndReturn({
+            data: {
+              name: parsedResult.response.title,
+            },
+            where: {
+              id: convId,
+            },
+          });
+        checkUpdateResult(
+          updatedConversation.length,
+          "AI conversation",
+          "AI conversations"
+        );
+      }
 
       const aiChatsList = await opts.ctx.prisma.aIChat.findMany({
         select: {
@@ -166,7 +212,7 @@ export const useAITool = {
           message: true,
         },
         where: {
-          conv_id: opts.input.conv_id,
+          conv_id: convId,
           conv: {
             user_id: opts.ctx.user.id,
           },
@@ -181,28 +227,6 @@ export const useAITool = {
         };
       });
 
-      if (history.length <= 1) {
-        const parsedResult = await AIGenerateTitle(
-          opts.input.model,
-          aiToolPrompts.generateTitle(opts.input.message)
-        );
-
-        const updatedConversation =
-          await opts.ctx.prisma.aIConversation.updateManyAndReturn({
-            data: {
-              name: parsedResult.response.title,
-            },
-            where: {
-              id: opts.input.conv_id,
-            },
-          });
-        checkUpdateResult(
-          updatedConversation.length,
-          "AI conversation",
-          "AI conversations"
-        );
-      }
-
       const textResult = await AISendChat(
         opts.input.model,
         history,
@@ -212,7 +236,7 @@ export const useAITool = {
       const resultId = await AISaveMessage(
         opts.ctx.prisma,
         opts.ctx.user.id,
-        opts.input.conv_id,
+        convId,
         "assistant",
         textResult
       );
@@ -220,6 +244,8 @@ export const useAITool = {
       return {
         code: STATUS_OK,
         message: "Success",
+        conv_id: convId,
+        conv_name: theConversation.name,
         chat_id: chatId,
         chat: opts.input.message,
         result_id: resultId,

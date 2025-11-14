@@ -493,27 +493,9 @@ export async function DeleteDiscussionReply({
   };
 }
 
-// CREATE CONVERSATION AI
-export async function CreateAIConversation() {
-  const cookieStore = await cookies();
-  const sessionData = cookieStore.get("session_token");
-  if (!sessionData) {
-    return { code: STATUS_NOT_FOUND, message: "No session token found" };
-  }
-  setSessionToken(sessionData.value);
-
-  const createConversation = await trpc.create.aiConversation();
-
-  return {
-    code: createConversation.code,
-    message: createConversation.message,
-    conversation: createConversation.conversation,
-  };
-}
-
 // SEND CHAT AI
 interface SendAIChatProps {
-  conversationId: string;
+  conversationId: string | undefined;
   message: string;
 }
 export async function SendAIChat({ conversationId, message }: SendAIChatProps) {
@@ -533,10 +515,12 @@ export async function SendAIChat({ conversationId, message }: SendAIChatProps) {
   return {
     code: sendChat.code,
     message: sendChat.message,
-    result_id: sendChat.result_id,
-    result: sendChat.result,
+    conv_id: sendChat.conv_id,
+    conv_name: sendChat.conv_name,
     chat_id: sendChat.chat_id,
     chat: sendChat.chat,
+    result_id: sendChat.result_id,
+    result: sendChat.result,
   };
 }
 
