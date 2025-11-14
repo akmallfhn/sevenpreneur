@@ -363,8 +363,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.aiResults`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.ai.ideaGeneration` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.ai.marketSize`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.ideaValidation` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.ideaGeneration`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.marketSize`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.ideaValidation`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiConversations`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiChats`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `create.aiConversation`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |

@@ -10,6 +10,7 @@ import {
 import { aiToolPrompts } from "./prompt.ai_tool";
 import {
   AI_TOOL_ID_IDEA_GEN,
+  AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
   AIChatRole,
   AIGenerate,
@@ -114,6 +115,52 @@ export const useAITool = {
         id: resultId,
         title: parsedResult.title,
         result: formattedResult,
+      };
+    }),
+
+  ideaValidation: loggedInProcedure
+    .input(
+      z.object({
+        model: z.enum(AIModelName),
+        problem: stringNotBlank(),
+        location: stringNotBlank(),
+        ideation: stringNotBlank(),
+        resources: stringNotBlank(),
+      })
+    )
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const parsedResult = await AIGenerate(
+        opts.input.model,
+        aiToolPrompts.ideaValidation(
+          opts.input.problem,
+          opts.input.location,
+          opts.input.ideation,
+          opts.input.resources
+        )
+      );
+
+      const resultId = await AISaveResult(
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        AI_TOOL_ID_IDEA_VAL,
+        parsedResult.title,
+        parsedResult.response
+      );
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        id: resultId,
+        title: parsedResult.title,
+        result: parsedResult.response,
       };
     }),
 

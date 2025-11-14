@@ -40,3 +40,17 @@ export enum AIMarketSize_ARPUEstimate {
   SEDANG = "sedang",
   TINGGI = "tinggi",
 }
+
+// Idea Validation //
+
+export enum AIIdeaValidation_ProblemFreq {
+  RENDAH = "rendah",
+  SEDANG = "sedang",
+  TINGGI = "tinggi",
+}
+
+export enum AIIdeaValidation_BusinessAlignment {
+  LONGEVITY = "longevity",
+  SHORTTERM = "shortterm",
+  SEASONAL = "seasonal",
+}

@@ -1,6 +1,8 @@
 import { JsonObject } from "@prisma/client/runtime/library";
 import { z } from "zod";
 import {
+  AIIdeaValidation_BusinessAlignment,
+  AIIdeaValidation_ProblemFreq,
   AIMarketSize_ARPUEstimate,
   AIMarketSize_CustomerType,
   AIMarketSize_GeographyScope,
@@ -49,6 +51,53 @@ export interface AIResultMarketSize extends JsonObject {
   SOM_insight: {
     SOM_value: string;
     remarks: string;
+  };
+}
+
+// Idea Validation //
+
+export interface AIResultIdeaValidation extends JsonObject {
+  problem_validation: {
+    discovery: string;
+    sources: {
+      source_name: string;
+      source_url: string;
+      source_publisher: string;
+      source_year: number;
+    }[];
+    confidence_level: number;
+    affected_users: {
+      percentage: number;
+      segment: string;
+      segment_description: string;
+    }[];
+    frequency: AIIdeaValidation_ProblemFreq;
+  };
+  key_factors: {
+    PESTEL_factor: string;
+    root_cause: string;
+  };
+  sustainability_and_longevity: {
+    business_alignment: AIIdeaValidation_BusinessAlignment;
+    reason: string;
+    future_prospect: {
+      industry_direction: string;
+      technology_influence: string;
+      forecast_summary: string;
+    };
+    scalability_potential: {
+      is_scalable: boolean;
+      scaling_factors: string;
+      barriers: string;
+    };
+  };
+  idea_refinement: {
+    market_alignment_suggestions: string;
+    competitive_advantage_suggestions: string;
+    pivot_opportunities: {
+      pivot_direction: string;
+      reason: string;
+    }[];
   };
 }
 
@@ -185,6 +234,160 @@ export const aiToolPrompts = {
           SOM_insight: z.object({
             SOM_value: z.number(),
             remarks: z.string(),
+          }),
+        })
+      ),
+    };
+  },
+
+  ideaValidation: (
+    problem: string,
+    location: string,
+    ideation: string,
+    resources: string
+  ) => {
+    return {
+      instructions:
+        "Kamu adalah seorang business coach & market strategist berpengalaman yang membantu founder dan tim startup dalam memvalidasi ide bisnis mereka secara sistematis.\n" +
+        "Kamu berpikir analitis seperti consultant McKinsey, tapi berkomunikasi seperti mentor yang membimbing dengan empati dan berbasis data.\n" +
+        "Tugasmu:\n" +
+        "1. Evaluasi apakah problem yang disebutkan oleh user benar-benar relevan dan sering terjadi di masyarakat.\n" +
+        "2. Carilah konteks publik seperti tren diskusi online/laporan riset/publikasi media yang mendukung.\n" +
+        "3. Tentukan confidence_level dalam skala 1-100 berdasarkan kualitas sumber, kejelasan data, serta konsistensi antarvariabel. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut.\n" +
+        "4. Estimasikan siapa target pengguna yang paling terdampak dan seberapa besar skalanya.\n" +
+        "5. Jelaskan faktor sosial/ekonomi/teknologi/perilaku/regulasi yang berpengaruh terhadap masalah tersebut.\n" +
+        "6. Sebutkan akar penyebab dan hambatan potensial dalam masalah ini.\n" +
+        "7. Tentukan apakah ide ini termasuk tren jangka pendek atau kebutuhan jangka panjang.\n" +
+        "8. Berikan pandangan tentang prospek ide dalam 1–3 tahun ke depan berdasarkan arah industri dan teknologi.\n" +
+        "9. Nilai potensi skalabilitas (apakah bisa dikembangkan ke pasar lain atau dimonetisasi).\n" +
+        "10. Berikan rekomendasi konkrit untuk memperkuat ide dari sisi produk/positioning/monetisasi.\n" +
+        "11. Tambahkan saran competitive advantage agar ide ini lebih unggul di pasar.\n" +
+        "12. Jika perlu, berikan saran pivot yang lebih menjanjikan berdasarkan tren pasar.\n" +
+        "Output harus dalam format JSON seperti berikut:\n" +
+        AIFormatOutputText({
+          problem_validation: {
+            discovery:
+              "<analisis seberapa relevan dan nyata problem yang disebut user berdasarkan data publik/tren sosial/perilaku pasar>",
+            sources: [
+              {
+                source_name:
+                  "<nama sumber data atau publikasi yang mendukung validasi problem>",
+                source_url: "<tautan sumber data>",
+                source_publisher: "<pihak penerbit atau lembaga riset>",
+                source_year: "<tahun publikasi sumber>",
+              },
+            ],
+            confidence_level: "<estimasi tingkat kepercayaan validasi data>",
+            affected_users: [
+              {
+                percentage:
+                  "<estimasi proporsi pengguna yang terdampak oleh problem, dalam persen>",
+                segment:
+                  "<kelompok pengguna utama yang paling terdampak, misal UMKM digital, mahasiswa, ibu rumah tangga, pekerja remote>",
+                segment_description:
+                  "<deskripsi perilaku, kebutuhan, dan pain point dari segmen pengguna tersebut>",
+              },
+            ],
+            frequency:
+              "<low/medium/high — tingkat frekuensi munculnya masalah di ranah publik>",
+          },
+          key_factors: {
+            PESTEL_factor:
+              "<faktor sosial, ekonomi, teknologi, perilaku, lingkungan, atau regulasi yang memengaruhi problem, misal adopsi teknologi meningkat, regulasi e-commerce, perubahan gaya hidup digital>",
+            root_cause:
+              "<akar penyebab utama dari masalah dan potensi hambatan saat menyelesaikannya, misal kurangnya literasi digital, biaya tinggi, infrastruktur belum memadai>",
+          },
+          sustainability_and_longevity: {
+            business_alignment:
+              "<longevity/short-term/seasonal — klasifikasi apakah ide ini berkelanjutan, hanya tren sementara, atau musiman>",
+            reason:
+              "<penjelasan logis alasan ide ini diprediksi berkelanjutan atau tidak>",
+            future_prospect: {
+              industry_direction:
+                "<deskripsi arah perkembangan industri dalam 1–3 tahun ke depan yang relevan dengan ide, misal automasi AI, sustainable economy, digital health>",
+              technology_influence:
+                "<dampak inovasi teknologi peluang ide ini, misal mempermudah adopsi/menggantikan model bisnis lama/menambah efisiensi>",
+              forecast_summary:
+                "<ringkasan prospek ide: apakah akan tumbuh/stagnan/menurun dalam jangka 1–3 tahun>",
+            },
+            scalability_potential: {
+              is_scalable:
+                "<true/false — apakah ide ini dapat dikembangkan ke pasar lain atau dimonetisasi dengan mudah>",
+              scaling_factors:
+                "<faktor pendukung skalabilitas, misal: model bisnis digital, kemudahan replikasi, demand lintas pasar>",
+              barriers: "<hambatan potensial pertumbuhan ide>",
+            },
+          },
+          idea_refinement: {
+            market_alignment_suggestions:
+              "<saran penyempurnaan ide agar lebih fit dengan kebutuhan pasar>",
+            competitive_advantage_suggestions:
+              "<rekomendasi cara memperkuat keunggulan kompetitif>",
+            pivot_opportunities: [
+              {
+                pivot_direction:
+                  "<arah pivot yang lebih menjanjikan berdasarkan tren>",
+                reason: "<alasan logis pivot ini lebih potensial>",
+              },
+            ],
+          },
+        }),
+      input:
+        "Ide bisnis\n" +
+        `- Masalah yang dialami: ${problem}\n` +
+        `- Lokasi masalah: ${location}\n` +
+        `- Alternatif solusi yang ditawarkan: ${ideation}\n` +
+        `- Sumber daya yang dimiliki: ${resources}\n`,
+      format: AIFormatOutputZod(
+        "respons_validasi_ide",
+        z.object({
+          problem_validation: z.object({
+            discovery: z.string(),
+            sources: z.array(
+              z.object({
+                source_name: z.string(),
+                source_url: z.string(),
+                source_publisher: z.string(),
+                source_year: z.number(),
+              })
+            ),
+            confidence_level: z.number(),
+            affected_users: z.array(
+              z.object({
+                percentage: z.number(),
+                segment: z.string(),
+                segment_description: z.string(),
+              })
+            ),
+            frequency: z.enum(AIIdeaValidation_ProblemFreq),
+          }),
+          key_factors: z.object({
+            PESTEL_factor: z.string(),
+            root_cause: z.string(),
+          }),
+          sustainability_and_longevity: z.object({
+            business_alignment: z.enum(AIIdeaValidation_BusinessAlignment),
+            reason: z.string(),
+            future_prospect: z.object({
+              industry_direction: z.string(),
+              technology_influence: z.string(),
+              forecast_summary: z.string(),
+            }),
+            scalability_potential: z.object({
+              is_scalable: z.boolean(),
+              scaling_factors: z.string(),
+              barriers: z.string(),
+            }),
+          }),
+          idea_refinement: z.object({
+            market_alignment_suggestions: z.string(),
+            competitive_advantage_suggestions: z.string(),
+            pivot_opportunities: z.array(
+              z.object({
+                pivot_direction: z.string(),
+                reason: z.string(),
+              })
+            ),
           }),
         })
       ),
