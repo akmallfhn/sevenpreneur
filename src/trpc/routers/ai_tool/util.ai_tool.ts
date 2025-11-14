@@ -168,7 +168,6 @@ export async function AISendChat(
 
 export async function AISaveMessage(
   prisma: PrismaClient,
-  user_id: string,
   conv_id: string,
   role: AIChatRole,
   message: string
@@ -193,5 +192,5 @@ export async function AISaveMessage(
       message: "Failed to save an AI chat result.",
     });
   }
-  return theMessage.id;
+  return theMessage;
 }
