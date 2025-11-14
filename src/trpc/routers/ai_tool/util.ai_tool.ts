@@ -19,9 +19,9 @@ export enum AIModelName {
   GPT_4_1_NANO = "gpt-4.1-nano",
 }
 
-export const AI_TOOL_ID_IDEA_GEN = 1; // idea-gen
+export const AI_TOOL_ID_IDEA_VAL = 1; // idea-val
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
-export const AI_TOOL_ID_IDEA_VAL = 3; // idea-val
+export const AI_TOOL_ID_RESERVED = 3; // reserved
 
 export type AIChatRole = "user" | "assistant";
 

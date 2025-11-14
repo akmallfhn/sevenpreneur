@@ -13,47 +13,6 @@ import {
 } from "./enum.ai_tool";
 import { AIFormatOutputText, AIFormatOutputZod } from "./util.ai_tool";
 
-// Idea Generation //
-
-export interface AIResultIdeaGeneration extends JsonObject {
-  idea: {
-    idea_name: string;
-    explanation: string;
-  }[];
-}
-
-// Market Size //
-
-export interface AIResultMarketSize extends JsonObject {
-  product_name: string;
-  market_need: AIMarketSize_MarketNeed;
-  regulation: AIMarketSize_Regulation;
-  TAM_insight: {
-    geography_scope: AIMarketSize_GeographyScope;
-    TAM_size_estimate: AIMarketSize_SizeEstimate;
-    ARPU_estimate: AIMarketSize_ARPUEstimate;
-    TAM_value: number;
-    sources: {
-      source_name: string;
-      source_url: string;
-      source_publisher: string;
-      source_year: number;
-    }[];
-    confidence_level: number;
-    remarks: string;
-  };
-  SAM_insight: {
-    SAM_size_estimate: AIMarketSize_SizeEstimate;
-    ARPU_estimate: AIMarketSize_ARPUEstimate;
-    SAM_value: number;
-    remarks: string;
-  };
-  SOM_insight: {
-    SOM_value: string;
-    remarks: string;
-  };
-}
-
 // Idea Validation //
 
 export interface AIResultIdeaValidation extends JsonObject {
@@ -101,145 +60,41 @@ export interface AIResultIdeaValidation extends JsonObject {
   };
 }
 
+// Market Size //
+
+export interface AIResultMarketSize extends JsonObject {
+  product_name: string;
+  market_need: AIMarketSize_MarketNeed;
+  regulation: AIMarketSize_Regulation;
+  TAM_insight: {
+    geography_scope: AIMarketSize_GeographyScope;
+    TAM_size_estimate: AIMarketSize_SizeEstimate;
+    ARPU_estimate: AIMarketSize_ARPUEstimate;
+    TAM_value: number;
+    sources: {
+      source_name: string;
+      source_url: string;
+      source_publisher: string;
+      source_year: number;
+    }[];
+    confidence_level: number;
+    remarks: string;
+  };
+  SAM_insight: {
+    SAM_size_estimate: AIMarketSize_SizeEstimate;
+    ARPU_estimate: AIMarketSize_ARPUEstimate;
+    SAM_value: number;
+    remarks: string;
+  };
+  SOM_insight: {
+    SOM_value: string;
+    remarks: string;
+  };
+}
+
 // Prompts //
 
 export const aiToolPrompts = {
-  ideaGeneration: (count: number) => {
-    count = Math.max(0, Math.min(5, count));
-    return {
-      instructions:
-        "Kamu adalah pebisnis handal dengan pengalaman 10+ tahun dalam konsultan bisnis, pengembangan bisnis, dan evaluasi peluang investasi bisnis." +
-        `Berikan ${count} ide bisnis.` +
-        "Output harus dalam format JSON seperti berikut:\n" +
-        AIFormatOutputText({
-          idea: [{ idea_name: "<nama ide>", explanation: "<penjelasan ide>" }],
-        }),
-      input: `Saya punya lahan 900 hektar di Kalimantan`,
-      format: AIFormatOutputZod(
-        "respons_ide_bisnis",
-        z.object({
-          idea: z
-            .array(
-              z.object({
-                idea_name: z.string(),
-                explanation: z.string(),
-              })
-            )
-            .length(count),
-        })
-      ),
-    };
-  },
-
-  marketSize: (
-    additional_persona: string,
-    product_name: string,
-    description: string,
-    product_type: AIMarketSize_ProductType,
-    customer_type: AIMarketSize_CustomerType,
-    company_operating_area: string,
-    sales_channel: string
-  ) => {
-    return {
-      instructions:
-        `Kamu adalah analis pasar cerdas dengan pengalaman 10+ tahun dalam analisis pasar global, pengembangan bisnis, dan evaluasi peluang investasi. Kamu mahir menggabungkan data kuantitatif dan wawasan industri untuk memberikan estimasi TAM (total addressable market) yang realistis, analisis regulasi yang akurat, serta rekomendasi strategi pasar yang actionable. ${additional_persona}\n` +
-        "Tugasmu:\n" +
-        "1. Analisis market_need: apakah produk ini essential, niche, atau luxury.\n" +
-        "2. Analisis regulasi: apakah industri dibatasi hukum atau tidak.\n" +
-        `3. Tentukan geografi pasar (lokal/regional/global) berdasarkan ${product_type}.\n` +
-        `4. Tentukan TAM size (besar/sedang/kecil) dan ARPU (average revenue per unit) (tinggi/sedang/rendah) berdasarkan ${customer_type}, market_need, dan regulation\n` +
-        "5. Cantumkan TAM value berdasarkan deskripsi produk, market need, regulasi, dan geografi. Dapatkan dari sumber artikel paling kredibel (Statista, IBISWorld, McKinsey, World Bank, laporan pemerintah, dsb).\n" +
-        "6. Tentukan confidence_level dalam skala 1-100 berdasarkan kualitas sumber, kejelasan data pasar, serta konsistensi antar variabel. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut." +
-        "7. Buat remarks TAM terkait insight populasi, pasar, regulasi, dan anjuran strategi go-to-market.\n" +
-        "8. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
-        "9. Buat remarks SAM terkait insight yang menjelaskan pasar yang bisa dijangkau perusahaan dan anjuran strategi channel penjualan.\n" +
-        "10. Validasi bahwa TAM ≥ SAM dan sesuaikan jika perlu." +
-        "11. Tentukan estimasi SOM_value yang nilainya sekitar 1-2% dari total nilai SAM" +
-        "12. Buat remarks SOM terkait anjuran strategi kompetitif, kapasitas, atau tantangan penetrasi" +
-        "Output harus dalam format JSON seperti berikut:\n" +
-        AIFormatOutputText({
-          market_need: "<essential/niche/luxury>",
-          regulation: "<unrestricted/restricted>",
-          TAM_insight: {
-            geography_scope: "<lokal/regional/global>",
-            TAM_size_estimate: "<kecil/sedang/besar>",
-            ARPU_estimate: "<rendah/sedang/tinggi>",
-            TAM_value: "<estimasi nilai TAM setahun dalam Rupiah>",
-            sources: [
-              {
-                source_name:
-                  "<judul referensi artikel atau sumber data yang digunakan>",
-                source_url:
-                  "<url referensi artikel atau sumber data yang dipakai>",
-                source_publisher:
-                  "<lembaga penerbit dari referensi artikel atau sumber data>",
-                source_year:
-                  "tahun diterbitkannya referensi artikel atau sumber data",
-              },
-            ],
-            confidence_level: "<estimasi nilai kredibilitas sumber data>",
-            remarks:
-              "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
-          },
-          SAM_insight: {
-            SAM_size_estimate: "<kecil/sedang/besar>",
-            ARPU_estimate: "<rendah/sedang/tinggi>",
-            SAM_value:
-              "<estimasi nilai SAM setahun dalam Rupiah berdasarkan TAM value, area operasi, dan sales channels>",
-            remarks:
-              "<catatan tambahan terkait keterjangkauan pasar dan strategi channel penjualan. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
-          },
-          SOM_insight: {
-            SOM_value:
-              "estimasi nilai SOM dalam Rupiah, berkisar antara 1-2% dari SAM_value",
-            remarks:
-              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
-          },
-        }),
-      input:
-        "Data produk:\n" +
-        `- Nama: ${product_name}\n` +
-        `- Deskripsi: ${description}\n` +
-        `- Jenis produk/layanan: ${product_type}\n` +
-        `- Tipe pelanggan: ${customer_type}\n` +
-        `- Area operasi perusahaan: ${company_operating_area}\n` +
-        `- Channel penjualan: ${sales_channel}`,
-      format: AIFormatOutputZod(
-        "respons_ukuran_pasar",
-        z.object({
-          market_need: z.enum(AIMarketSize_MarketNeed),
-          regulation: z.enum(AIMarketSize_Regulation),
-          TAM_insight: z.object({
-            geography_scope: z.enum(AIMarketSize_GeographyScope),
-            TAM_size_estimate: z.enum(AIMarketSize_SizeEstimate),
-            ARPU_estimate: z.enum(AIMarketSize_ARPUEstimate),
-            TAM_value: z.number(),
-            sources: z.array(
-              z.object({
-                source_name: z.string(),
-                source_url: z.string(),
-                source_publisher: z.string(),
-                source_year: z.number(),
-              })
-            ),
-            confidence_level: z.number(),
-            remarks: z.string(),
-          }),
-          SAM_insight: z.object({
-            SAM_size_estimate: z.enum(AIMarketSize_SizeEstimate),
-            ARPU_estimate: z.enum(AIMarketSize_ARPUEstimate),
-            SAM_value: z.number(),
-            remarks: z.string(),
-          }),
-          SOM_insight: z.object({
-            SOM_value: z.number(),
-            remarks: z.string(),
-          }),
-        })
-      ),
-    };
-  },
-
   ideaValidation: (
     problem: string,
     location: string,
@@ -388,6 +243,115 @@ export const aiToolPrompts = {
                 reason: z.string(),
               })
             ),
+          }),
+        })
+      ),
+    };
+  },
+
+  marketSize: (
+    additional_persona: string,
+    product_name: string,
+    description: string,
+    product_type: AIMarketSize_ProductType,
+    customer_type: AIMarketSize_CustomerType,
+    company_operating_area: string,
+    sales_channel: string
+  ) => {
+    return {
+      instructions:
+        `Kamu adalah analis pasar cerdas dengan pengalaman 10+ tahun dalam analisis pasar global, pengembangan bisnis, dan evaluasi peluang investasi. Kamu mahir menggabungkan data kuantitatif dan wawasan industri untuk memberikan estimasi TAM (total addressable market) yang realistis, analisis regulasi yang akurat, serta rekomendasi strategi pasar yang actionable. ${additional_persona}\n` +
+        "Tugasmu:\n" +
+        "1. Analisis market_need: apakah produk ini essential, niche, atau luxury.\n" +
+        "2. Analisis regulasi: apakah industri dibatasi hukum atau tidak.\n" +
+        `3. Tentukan geografi pasar (lokal/regional/global) berdasarkan ${product_type}.\n` +
+        `4. Tentukan TAM size (besar/sedang/kecil) dan ARPU (average revenue per unit) (tinggi/sedang/rendah) berdasarkan ${customer_type}, market_need, dan regulation\n` +
+        "5. Cantumkan TAM value berdasarkan deskripsi produk, market need, regulasi, dan geografi. Dapatkan dari sumber artikel paling kredibel (Statista, IBISWorld, McKinsey, World Bank, laporan pemerintah, dsb).\n" +
+        "6. Tentukan confidence_level dalam skala 1-100 berdasarkan kualitas sumber, kejelasan data pasar, serta konsistensi antar variabel. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut." +
+        "7. Buat remarks TAM terkait insight populasi, pasar, regulasi, dan anjuran strategi go-to-market.\n" +
+        "8. Buat SAM insight: perkirakan SAM_size_estimate, ARPU_estimate, dan SAM_value berdasarkan TAM value, area operasi perusahaan, dan channel penjualan.\n" +
+        "9. Buat remarks SAM terkait insight yang menjelaskan pasar yang bisa dijangkau perusahaan dan anjuran strategi channel penjualan.\n" +
+        "10. Validasi bahwa TAM ≥ SAM dan sesuaikan jika perlu." +
+        "11. Tentukan estimasi SOM_value yang nilainya sekitar 1-2% dari total nilai SAM" +
+        "12. Buat remarks SOM terkait anjuran strategi kompetitif, kapasitas, atau tantangan penetrasi" +
+        "Output harus dalam format JSON seperti berikut:\n" +
+        AIFormatOutputText({
+          market_need: "<essential/niche/luxury>",
+          regulation: "<unrestricted/restricted>",
+          TAM_insight: {
+            geography_scope: "<lokal/regional/global>",
+            TAM_size_estimate: "<kecil/sedang/besar>",
+            ARPU_estimate: "<rendah/sedang/tinggi>",
+            TAM_value: "<estimasi nilai TAM setahun dalam Rupiah>",
+            sources: [
+              {
+                source_name:
+                  "<judul referensi artikel atau sumber data yang digunakan>",
+                source_url:
+                  "<url referensi artikel atau sumber data yang dipakai>",
+                source_publisher:
+                  "<lembaga penerbit dari referensi artikel atau sumber data>",
+                source_year:
+                  "tahun diterbitkannya referensi artikel atau sumber data",
+              },
+            ],
+            confidence_level: "<estimasi nilai kredibilitas sumber data>",
+            remarks:
+              "<catatan tambahan terkait populasi, pasar, regulasi, atau strategi go-to-market. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
+          },
+          SAM_insight: {
+            SAM_size_estimate: "<kecil/sedang/besar>",
+            ARPU_estimate: "<rendah/sedang/tinggi>",
+            SAM_value:
+              "<estimasi nilai SAM setahun dalam Rupiah berdasarkan TAM value, area operasi, dan sales channels>",
+            remarks:
+              "<catatan tambahan terkait keterjangkauan pasar dan strategi channel penjualan. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
+          },
+          SOM_insight: {
+            SOM_value:
+              "estimasi nilai SOM dalam Rupiah, berkisar antara 1-2% dari SAM_value",
+            remarks:
+              "<catatan tambahan terkait strategi kompetitif, kapasitas, atau tantangan penetrasi. Beri jeda 2 spasi jika ingin membuat paragraf baru agar mudah dibaca>",
+          },
+        }),
+      input:
+        "Data produk:\n" +
+        `- Nama: ${product_name}\n` +
+        `- Deskripsi: ${description}\n` +
+        `- Jenis produk/layanan: ${product_type}\n` +
+        `- Tipe pelanggan: ${customer_type}\n` +
+        `- Area operasi perusahaan: ${company_operating_area}\n` +
+        `- Channel penjualan: ${sales_channel}`,
+      format: AIFormatOutputZod(
+        "respons_ukuran_pasar",
+        z.object({
+          market_need: z.enum(AIMarketSize_MarketNeed),
+          regulation: z.enum(AIMarketSize_Regulation),
+          TAM_insight: z.object({
+            geography_scope: z.enum(AIMarketSize_GeographyScope),
+            TAM_size_estimate: z.enum(AIMarketSize_SizeEstimate),
+            ARPU_estimate: z.enum(AIMarketSize_ARPUEstimate),
+            TAM_value: z.number(),
+            sources: z.array(
+              z.object({
+                source_name: z.string(),
+                source_url: z.string(),
+                source_publisher: z.string(),
+                source_year: z.number(),
+              })
+            ),
+            confidence_level: z.number(),
+            remarks: z.string(),
+          }),
+          SAM_insight: z.object({
+            SAM_size_estimate: z.enum(AIMarketSize_SizeEstimate),
+            ARPU_estimate: z.enum(AIMarketSize_ARPUEstimate),
+            SAM_value: z.number(),
+            remarks: z.string(),
+          }),
+          SOM_insight: z.object({
+            SOM_value: z.number(),
+            remarks: z.string(),
           }),
         })
       ),

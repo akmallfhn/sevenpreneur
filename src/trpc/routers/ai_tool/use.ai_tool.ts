@@ -9,7 +9,6 @@ import {
 } from "./enum.ai_tool";
 import { aiToolPrompts } from "./prompt.ai_tool";
 import {
-  AI_TOOL_ID_IDEA_GEN,
   AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
   AIChatRole,
@@ -23,11 +22,14 @@ import {
 } from "./util.ai_tool";
 
 export const useAITool = {
-  ideaGeneration: loggedInProcedure
+  ideaValidation: loggedInProcedure
     .input(
       z.object({
         model: z.enum(AIModelName),
-        count: z.number().min(1).max(5),
+        problem: stringNotBlank(),
+        location: stringNotBlank(),
+        ideation: stringNotBlank(),
+        resources: stringNotBlank(),
       })
     )
     .query(async (opts) => {
@@ -41,13 +43,18 @@ export const useAITool = {
 
       const parsedResult = await AIGenerate(
         opts.input.model,
-        aiToolPrompts.ideaGeneration(opts.input.count)
+        aiToolPrompts.ideaValidation(
+          opts.input.problem,
+          opts.input.location,
+          opts.input.ideation,
+          opts.input.resources
+        )
       );
 
       const resultId = await AISaveResult(
         opts.ctx.prisma,
         opts.ctx.user.id,
-        AI_TOOL_ID_IDEA_GEN,
+        AI_TOOL_ID_IDEA_VAL,
         parsedResult.title,
         parsedResult.response
       );
@@ -115,52 +122,6 @@ export const useAITool = {
         id: resultId,
         title: parsedResult.title,
         result: formattedResult,
-      };
-    }),
-
-  ideaValidation: loggedInProcedure
-    .input(
-      z.object({
-        model: z.enum(AIModelName),
-        problem: stringNotBlank(),
-        location: stringNotBlank(),
-        ideation: stringNotBlank(),
-        resources: stringNotBlank(),
-      })
-    )
-    .query(async (opts) => {
-      if (opts.ctx.user.role.name === "General User") {
-        await isEnrolledAITool(
-          opts.ctx.prisma,
-          opts.ctx.user.id,
-          "You're not allowed to use AI tools."
-        );
-      }
-
-      const parsedResult = await AIGenerate(
-        opts.input.model,
-        aiToolPrompts.ideaValidation(
-          opts.input.problem,
-          opts.input.location,
-          opts.input.ideation,
-          opts.input.resources
-        )
-      );
-
-      const resultId = await AISaveResult(
-        opts.ctx.prisma,
-        opts.ctx.user.id,
-        AI_TOOL_ID_IDEA_VAL,
-        parsedResult.title,
-        parsedResult.response
-      );
-
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        id: resultId,
-        title: parsedResult.title,
-        result: parsedResult.response,
       };
     }),
 

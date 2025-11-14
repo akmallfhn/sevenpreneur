@@ -2,20 +2,15 @@ import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyNanoid } from "@/trpc/utils/validation";
+import { AIResultIdeaValidation, AIResultMarketSize } from "./prompt.ai_tool";
 import {
-  AIResultIdeaGeneration,
-  AIResultIdeaValidation,
-  AIResultMarketSize,
-} from "./prompt.ai_tool";
-import {
-  AI_TOOL_ID_IDEA_GEN,
   AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
   isEnrolledAITool,
 } from "./util.ai_tool";
 
 export const readAIResult = {
-  ideaGeneration: loggedInProcedure
+  ideaValidation: loggedInProcedure
     .input(objectHasOnlyNanoid())
     .query(async (opts) => {
       if (opts.ctx.user.role.name === "General User") {
@@ -31,11 +26,11 @@ export const readAIResult = {
         where: {
           id: opts.input.id,
           user_id: opts.ctx.user.id,
-          ai_tool_id: AI_TOOL_ID_IDEA_GEN,
+          ai_tool_id: AI_TOOL_ID_IDEA_VAL,
         },
       });
       if (!theAIResult) {
-        throw readFailedNotFound("AI result (idea generation)");
+        throw readFailedNotFound("AI result (idea validation)");
       }
 
       return {
@@ -43,7 +38,7 @@ export const readAIResult = {
         message: "Success",
         result: {
           name: theAIResult.name,
-          result: theAIResult.result as AIResultIdeaGeneration,
+          result: theAIResult.result as AIResultIdeaValidation,
           created_at: theAIResult.created_at,
         },
       };
@@ -78,40 +73,6 @@ export const readAIResult = {
         result: {
           name: theAIResult.name,
           result: theAIResult.result as AIResultMarketSize,
-          created_at: theAIResult.created_at,
-        },
-      };
-    }),
-
-  ideaValidation: loggedInProcedure
-    .input(objectHasOnlyNanoid())
-    .query(async (opts) => {
-      if (opts.ctx.user.role.name === "General User") {
-        await isEnrolledAITool(
-          opts.ctx.prisma,
-          opts.ctx.user.id,
-          "You're not allowed to use AI tools."
-        );
-      }
-
-      const theAIResult = await opts.ctx.prisma.aIResult.findFirst({
-        select: { name: true, result: true, created_at: true },
-        where: {
-          id: opts.input.id,
-          user_id: opts.ctx.user.id,
-          ai_tool_id: AI_TOOL_ID_IDEA_VAL,
-        },
-      });
-      if (!theAIResult) {
-        throw readFailedNotFound("AI result (idea validation)");
-      }
-
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        result: {
-          name: theAIResult.name,
-          result: theAIResult.result as AIResultIdeaValidation,
           created_at: theAIResult.created_at,
         },
       };

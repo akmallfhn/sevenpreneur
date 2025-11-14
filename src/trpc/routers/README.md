@@ -361,12 +361,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `check.aiTools`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiTools`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiResults`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.ideaGeneration` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.marketSize`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.ai.ideaValidation` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.ideaGeneration`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.marketSize`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.marketSize`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.ideaValidation`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.marketSize`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiConversations`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiChats`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `create.aiConversation`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
