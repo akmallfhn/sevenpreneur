@@ -5,7 +5,6 @@ import { createPlaylist } from "./playlist/create.playlist";
 import { createTemplate } from "./templates/templates";
 import { createTransaction } from "./transaction/create.transaction";
 import { createUserData } from "./userdata/create.userdata";
-import { createAITool } from "./ai_tool/create.ai_tool";
 
 export const createRouter = createTRPCRouter({
   // User Data //
@@ -38,9 +37,6 @@ export const createRouter = createTRPCRouter({
   // Template-related //
 
   template: createTemplate.template,
-
-  // AI-chat-related //
-  aiConversation: createAITool.aiConversation,
 
   // Transaction-related //
 
