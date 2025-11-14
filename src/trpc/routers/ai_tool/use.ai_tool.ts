@@ -220,7 +220,7 @@ export const useAITool = {
         orderBy: [{ created_at: "desc" }],
         take: 4,
       });
-      const history = aiChatsList.map((entry) => {
+      const history = aiChatsList.reverse().map((entry) => {
         return {
           role: entry.role.toString().toLowerCase() as AIChatRole,
           content: entry.message,
