@@ -5,10 +5,12 @@ import { Plus } from "lucide-react";
 
 interface EmptyRecordingCMSProps {
   actionClick: () => void;
+  isAllowedUpdateRecording: boolean;
 }
 
 export default function EmptyRecordingCMS({
   actionClick,
+  isAllowedUpdateRecording,
 }: EmptyRecordingCMSProps) {
   return (
     <div className="state-box flex flex-col w-full p-6 items-center lg:px-0 lg:pt-0 lg:justify-center">
@@ -32,10 +34,12 @@ export default function EmptyRecordingCMS({
             You can upload one to complete the archive.
           </p>
         </div>
-        <AppButton variant="cmsPrimary" size="medium" onClick={actionClick}>
-          <Plus className="size-4" />
-          Add Video Recording
-        </AppButton>
+        {isAllowedUpdateRecording && (
+          <AppButton variant="cmsPrimary" size="medium" onClick={actionClick}>
+            <Plus className="size-4" />
+            Add Video Recording
+          </AppButton>
+        )}
       </div>
     </div>
   );

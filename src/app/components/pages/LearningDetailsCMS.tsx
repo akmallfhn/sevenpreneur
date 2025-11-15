@@ -46,11 +46,9 @@ export default function LearningDetailsCMS({
   const [editLearning, setEditLearning] = useState(false);
   const [updateRecording, setUpdateRecording] = useState(false);
 
-  useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
-    }
-  }, [sessionToken]);
+  const allowedRolesUpdateLearning = [0, 2];
+  const isAllowedUpdateLearning =
+    allowedRolesUpdateLearning.includes(sessionUserRole);
 
   // Fetch tRPC Data
   const {
@@ -91,10 +89,7 @@ export default function LearningDetailsCMS({
               Details
             </AppBreadcrumbItem>
             <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem
-              href={`/cohorts/${cohortId}/learnings/${learningId}`}
-              isCurrentPage
-            >
+            <AppBreadcrumbItem isCurrentPage>
               {learningDetailsData?.learning.name}
             </AppBreadcrumbItem>
           </AppBreadcrumb>
@@ -131,16 +126,18 @@ export default function LearningDetailsCMS({
                   </p>
                 </div>
               </div>
-              <div className="edit-learning absolute flex top-4 right-4 z-10">
-                <AppButton
-                  variant="outline"
-                  size="small"
-                  onClick={() => setEditLearning(true)}
-                >
-                  <PenTool className="size-4" />
-                  Edit Learning Session
-                </AppButton>
-              </div>
+              {isAllowedUpdateLearning && (
+                <div className="edit-learning absolute flex top-4 right-4 z-10">
+                  <AppButton
+                    variant="outline"
+                    size="small"
+                    onClick={() => setEditLearning(true)}
+                  >
+                    <PenTool className="size-4" />
+                    Edit Learning Session
+                  </AppButton>
+                </div>
+              )}
             </div>
             <div className="body-contents flex w-full justify-between gap-4">
               <main className="flex flex-col flex-2 min-w-0 shrink-0 gap-4">
@@ -157,18 +154,19 @@ export default function LearningDetailsCMS({
                     <h2 className="font-brand font-bold text-black">
                       Video Recording
                     </h2>
-                    {learningDetailsData?.learning.recording_url && (
-                      <AppButton
-                        variant="outline"
-                        size="small"
-                        onClick={() => setUpdateRecording(true)}
-                      >
-                        <TvMinimalPlay className="size-4" />
-                        Change Video
-                      </AppButton>
-                    )}
+                    {learningDetailsData?.learning.recording_url &&
+                      isAllowedUpdateLearning && (
+                        <AppButton
+                          variant="outline"
+                          size="small"
+                          onClick={() => setUpdateRecording(true)}
+                        >
+                          <TvMinimalPlay className="size-4" />
+                          Change Video
+                        </AppButton>
+                      )}
                   </div>
-                  {learningDetailsData?.learning.recording_url && (
+                  {learningDetailsData?.learning.recording_url ? (
                     <div className="relative w-full aspect-video rounded-md overflow-hidden">
                       <iframe
                         width="100%"
@@ -181,10 +179,10 @@ export default function LearningDetailsCMS({
                         allowFullScreen
                       ></iframe>
                     </div>
-                  )}
-                  {!learningDetailsData?.learning.recording_url && (
+                  ) : (
                     <EmptyRecordingCMS
                       actionClick={() => setUpdateRecording(true)}
+                      isAllowedUpdateRecording={isAllowedUpdateLearning}
                     />
                   )}
                 </div>
@@ -216,7 +214,6 @@ export default function LearningDetailsCMS({
                   <h2 className="section-name font-brand font-bold text-black">
                     Place and Access
                   </h2>
-                  {/* Location */}
                   {learningDetailsData?.learning.location_name &&
                     learningDetailsData?.learning.location_url && (
                       <LocationItemCMS
@@ -226,7 +223,6 @@ export default function LearningDetailsCMS({
                         locationURL={learningDetailsData?.learning.location_url}
                       />
                     )}
-                  {/* Meeting Link */}
                   {learningDetailsData?.learning.meeting_url && (
                     <ConferenceItemCMS
                       conferenceURL={
@@ -241,18 +237,17 @@ export default function LearningDetailsCMS({
         </div>
       </div>
 
-      {/* Form Edit Learning */}
+      {/* Edit Learning */}
       {editLearning && (
         <EditLearningFormCMS
           sessionToken={sessionToken}
           learningId={learningId}
-          initialData={learningDetailsData?.learning}
           isOpen={editLearning}
           onClose={() => setEditLearning(false)}
         />
       )}
 
-      {/* Form Update Recording */}
+      {/* Update Recording */}
       {updateRecording && (
         <UpdateVideoRecordingFormCMS
           learningId={learningId}

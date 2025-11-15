@@ -5,7 +5,14 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
-import { EllipsisVertical, Pen, PenLine, Trash2, Video } from "lucide-react";
+import {
+  EllipsisVertical,
+  Pen,
+  PenLine,
+  PenTool,
+  Trash2,
+  Video,
+} from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
@@ -19,6 +26,8 @@ import EditLearningFormCMS from "../forms/EditLearningFormCMS";
 dayjs.extend(localizedFormat);
 
 interface LearningSessionItemCMSProps {
+  sessionToken: string;
+  sessionUserRole: number;
   cohortId: number;
   learningSessionId: number;
   learningSessionName: string;
@@ -31,6 +40,8 @@ interface LearningSessionItemCMSProps {
 }
 
 export default function LearningSessionItemCMS({
+  sessionToken,
+  sessionUserRole,
   cohortId,
   learningSessionId,
   learningSessionName,
@@ -46,6 +57,13 @@ export default function LearningSessionItemCMS({
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const allowedRolesUpdateLearning = [0, 2];
+  const allowedRolesDeleteLearning = [0, 2];
+  const isAllowedUpdateLearning =
+    allowedRolesUpdateLearning.includes(sessionUserRole);
+  const isAllowedDeleteLearning =
+    allowedRolesDeleteLearning.includes(sessionUserRole);
 
   let learningLocation;
   if (learningSessionMethod === "ONLINE") {
@@ -96,6 +114,7 @@ export default function LearningSessionItemCMS({
       }
     );
   };
+
   return (
     <React.Fragment>
       <div className="session-item flex items-center justify-between bg-white gap-2 rounded-md hover:cursor-pointer hover:bg-[#F2F4FA]">
@@ -148,46 +167,50 @@ export default function LearningSessionItemCMS({
             </div>
           </div>
         </Link>
-        {/* Button action */}
-        <div className="actions-button flex relative p-1" ref={wrapperRef}>
-          <AppButton
-            variant="ghost"
-            size="small"
-            type="button"
-            onClick={handleActionsDropdown}
-          >
-            <EllipsisVertical className="size-4" />
-          </AppButton>
 
-          <AppDropdown
-            isOpen={isActionsOpened}
-            onClose={() => setIsActionsOpened(false)}
-          >
-            {/* <AppDropdownItemList
-              menuIcon={<PenLine className="size-4" />}
-              menuName="Edit session"
-              onClick={() => setEditLearning(true)}
-            /> */}
-            <AppDropdownItemList
-              menuIcon={<Trash2 className="size-4" />}
-              menuName="Delete session"
-              isDestructive
-              onClick={() => setIsOpenDeleteConfirmation(true)}
-            />
-          </AppDropdown>
-        </div>
+        {(isAllowedUpdateLearning || isAllowedDeleteLearning) && (
+          <div className="actions-button flex relative p-1" ref={wrapperRef}>
+            <AppButton
+              variant="ghost"
+              size="small"
+              type="button"
+              onClick={handleActionsDropdown}
+            >
+              <EllipsisVertical className="size-4" />
+            </AppButton>
+            <AppDropdown
+              isOpen={isActionsOpened}
+              onClose={() => setIsActionsOpened(false)}
+            >
+              {isAllowedUpdateLearning && (
+                <AppDropdownItemList
+                  menuIcon={<PenTool className="size-4" />}
+                  menuName="Edit session"
+                  onClick={() => setEditLearning(true)}
+                />
+              )}
+              {isAllowedDeleteLearning && (
+                <AppDropdownItemList
+                  menuIcon={<Trash2 className="size-4" />}
+                  menuName="Delete session"
+                  isDestructive
+                  onClick={() => setIsOpenDeleteConfirmation(true)}
+                />
+              )}
+            </AppDropdown>
+          </div>
+        )}
       </div>
 
       {/* Edit Learning */}
-      {/* {editLearning && (
+      {editLearning && (
         <EditLearningFormCMS
           sessionToken={sessionToken}
           learningId={learningSessionId}
-          initialData={learningDetailsData?.learning}
           isOpen={editLearning}
           onClose={() => setEditLearning(false)}
         />
-      )} */}
+      )}
 
       {/* Delete Learning*/}
       {isOpenDeleteConfirmation && (

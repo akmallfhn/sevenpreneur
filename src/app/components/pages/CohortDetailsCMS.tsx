@@ -208,7 +208,11 @@ export default function CohortDetailsCMS({
                 </div>
               </div>
             </div>
-            <LearningListCMS sessionToken={sessionToken} cohortId={cohortId} />
+            <LearningListCMS
+              sessionToken={sessionToken}
+              sessionUserRole={sessionUserRole}
+              cohortId={cohortId}
+            />
           </main>
 
           <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">

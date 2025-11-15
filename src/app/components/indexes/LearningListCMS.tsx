@@ -9,17 +9,26 @@ import CreateLearningFormCMS from "../forms/CreateLearningFormCMS";
 
 interface LearningListCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   cohortId: number;
 }
 
 export default function LearningListCMS({
   cohortId,
+  sessionUserRole,
   sessionToken,
 }: LearningListCMSProps) {
-  const [createLearning, setCreateLearning] = useState(false);
   const utils = trpc.useUtils();
+  const [createLearning, setCreateLearning] = useState(false);
 
-  // --- Call data from tRPC
+  const allowedRolesCreateLearning = [0, 2];
+  const allowedRolesListLearning = [0, 1, 2, 3];
+  const isAllowedCreateLearning =
+    allowedRolesCreateLearning.includes(sessionUserRole);
+  const isAllowedListLearning =
+    allowedRolesListLearning.includes(sessionUserRole);
+
+  // Fetch tRPC data
   const {
     data: learningListData,
     isLoading,
@@ -29,19 +38,23 @@ export default function LearningListCMS({
     { enabled: !!sessionToken }
   );
 
+  if (!isAllowedListLearning) return;
+
   return (
     <React.Fragment>
       <div className="flex flex-col gap-3 p-3 bg-section-background rounded-md">
         <div className="section-name flex justify-between items-center">
           <h2 className="label-name font-brand font-bold">Learning Sessions</h2>
-          <AppButton
-            variant="outline"
-            size="small"
-            onClick={() => setCreateLearning(true)}
-          >
-            <Plus className="size-4" />
-            Add sessions
-          </AppButton>
+          {isAllowedCreateLearning && (
+            <AppButton
+              variant="outline"
+              size="small"
+              onClick={() => setCreateLearning(true)}
+            >
+              <Plus className="size-4" />
+              Add sessions
+            </AppButton>
+          )}
         </div>
         {isLoading && (
           <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
@@ -53,138 +66,49 @@ export default function LearningListCMS({
             No Data
           </div>
         )}
-        {/* --- Null Condition */}
-        {(!learningListData?.list || learningListData.list.length === 0) && (
-          <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
+
+        {!isLoading && !isError && (
+          <>
+            {(learningListData?.list ?? []).length > 0 ? (
+              <div className="learning-list flex flex-col gap-3">
+                {learningListData?.list
+                  .sort((a, b) =>
+                    dayjs(a.meeting_date).diff(dayjs(b.meeting_date))
+                  )
+                  .map((post) => (
+                    <LearningSessionItemCMS
+                      key={post.id}
+                      sessionToken={sessionToken}
+                      sessionUserRole={sessionUserRole}
+                      cohortId={cohortId}
+                      learningSessionId={post.id}
+                      learningSessionName={post.name}
+                      learningSessionEducatorName={
+                        post.speaker?.full_name || "Sevenpreneur Educator"
+                      }
+                      learningSessionEducatorAvatar={
+                        post.speaker?.avatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                      }
+                      learningSessionMethod={post.method}
+                      learningSessionDate={post.meeting_date}
+                      learningSessionPlace={
+                        post.location_name || "To Be Announced"
+                      }
+                      onDeleteSuccess={() => utils.list.learnings.invalidate()}
+                    />
+                  ))}
+              </div>
+            ) : (
+              <p className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
+                No Data
+              </p>
+            )}
+          </>
         )}
-        {/* --- LIVE NOW */}
-        {learningListData?.list.some((post) =>
-          dayjs().isSame(dayjs(post.meeting_date), "day")
-        ) && (
-          <div className="flex flex-col gap-3">
-            <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
-              LIVE NOW
-            </h3>
-            <div className="learning-list flex flex-col gap-3">
-              {learningListData?.list
-                .filter((post) =>
-                  dayjs().isSame(dayjs(post.meeting_date), "day")
-                )
-                .sort((a, b) =>
-                  dayjs(a.meeting_date).diff(dayjs(b.meeting_date))
-                )
-                .map((post, index) => (
-                  <LearningSessionItemCMS
-                    key={index}
-                    cohortId={cohortId}
-                    learningSessionId={post.id}
-                    learningSessionName={post.name}
-                    learningSessionEducatorName={
-                      post.speaker?.full_name || "Sevenpreneur Educator"
-                    }
-                    learningSessionEducatorAvatar={
-                      post.speaker?.avatar ||
-                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                    }
-                    learningSessionMethod={post.method}
-                    learningSessionDate={post.meeting_date}
-                    learningSessionPlace={
-                      post.location_name || "To Be Announced"
-                    }
-                    onDeleteSuccess={() => utils.list.learnings.invalidate()}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
-        {/* --- UPCOMING */}
-        {learningListData?.list.some((post) =>
-          dayjs().isBefore(dayjs(post.meeting_date), "day")
-        ) && (
-          <div className="flex flex-col gap-3">
-            <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
-              UPCOMING
-            </h3>
-            <div className="learning-list flex flex-col gap-3">
-              {learningListData?.list
-                .filter((post) =>
-                  dayjs().isBefore(dayjs(post.meeting_date), "day")
-                )
-                .sort((a, b) =>
-                  dayjs(a.meeting_date).diff(dayjs(b.meeting_date))
-                )
-                .map((post, index) => (
-                  <LearningSessionItemCMS
-                    key={index}
-                    cohortId={cohortId}
-                    learningSessionId={post.id}
-                    learningSessionName={post.name}
-                    learningSessionEducatorName={
-                      post.speaker?.full_name || "Sevenpreneur Educator"
-                    }
-                    learningSessionEducatorAvatar={
-                      post.speaker?.avatar ||
-                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                    }
-                    learningSessionMethod={post.method}
-                    learningSessionDate={post.meeting_date}
-                    learningSessionPlace={
-                      post.location_name || "To Be Announced"
-                    }
-                    onDeleteSuccess={() => utils.list.learnings.invalidate()}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
-        {/* --- COMPLETED */}
-        {learningListData?.list.some((post) =>
-          dayjs().isAfter(dayjs(post.meeting_date), "day")
-        ) && (
-          <div className="flex flex-col gap-3">
-            <h3 className="label-name text-alternative text-sm font-bodycopy font-semibold">
-              COMPLETED
-            </h3>
-            <div className="flex flex-col gap-3">
-              {learningListData?.list
-                .filter((post) =>
-                  dayjs().isAfter(dayjs(post.meeting_date), "day")
-                )
-                .sort((a, b) =>
-                  dayjs(a.meeting_date).diff(dayjs(b.meeting_date))
-                )
-                .map((post, index) => (
-                  <LearningSessionItemCMS
-                    key={index}
-                    cohortId={cohortId}
-                    learningSessionId={post.id}
-                    learningSessionName={post.name}
-                    learningSessionEducatorName={
-                      post.speaker?.full_name || "Sevenpreneur Educator"
-                    }
-                    learningSessionEducatorAvatar={
-                      post.speaker?.avatar ||
-                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                    }
-                    learningSessionMethod={post.method}
-                    learningSessionDate={post.meeting_date}
-                    learningSessionPlace={
-                      post.location_name || "To Be Announced"
-                    }
-                    onDeleteSuccess={() => utils.list.learnings.invalidate()}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
-        {/* <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
-        Load more
-      </p> */}
       </div>
 
-      {/* --- Form Create Learning */}
+      {/* Create Learning */}
       {createLearning && (
         <CreateLearningFormCMS
           sessionToken={sessionToken}
