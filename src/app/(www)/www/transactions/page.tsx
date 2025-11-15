@@ -1,5 +1,5 @@
 import TransactionCardItemSVP from "@/app/components/items/TransactionCardItemSVP";
-import EmptyTransactions from "@/app/components/state/EmptyTransactions";
+import EmptyTransactionsSVP from "@/app/components/state/EmptyTransactionsSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -52,16 +52,18 @@ export default async function TransactionsPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  // --- Redirect if not login
+  // Redirect if not login
   if (!sessionToken) {
     redirect(`/auth/login?redirectTo=/transactions/`);
   }
 
-  // --- Get User from Session Token
-  setSessionToken(sessionToken);
+  if (sessionToken) {
+    setSessionToken(sessionToken);
+  }
+
   const userSession = (await trpc.auth.checkSession()).user;
 
-  // --- Get Data Transactions
+  // Get Data Transactions
   const transactionDataRaw = await trpc.list.transactions({
     user_id: userSession.id,
   });
@@ -78,7 +80,7 @@ export default async function TransactionsPage() {
   return (
     <div className="flex flex-col w-full bg-white px-5 py-5 pb-20 gap-5 dark:bg-coal-black lg:px-0 lg:mx-auto lg:w-full lg:max-w-[960px] xl:max-w-[1208px]">
       <h1 className="font-bold font-ui text-xl">Transaction History</h1>
-      {transactionData.length === 0 && <EmptyTransactions />}
+      {transactionData.length === 0 && <EmptyTransactionsSVP />}
       <div className="flex flex-col gap-4">
         {transactionData
           .sort(

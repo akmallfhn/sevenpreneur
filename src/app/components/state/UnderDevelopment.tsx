@@ -11,8 +11,8 @@ export default function UnderDevelopment() {
 
   return (
     <div className="under-construction flex flex-col w-screen h-screen pt-24 px-6 items-center sm:pt-32 lg:px-0 lg:pt-0 lg:justify-center">
-      <div className="flex flex-col gap-4 max-w-md text-center items-center">
-        <div className="flex max-w-80 overflow-hidden lg:max-w-[600px]">
+      <div className="state-attributes flex flex-col gap-4 max-w-md text-center items-center">
+        <div className="state-image flex w-full max-w-64 overflow-hidden lg:max-w-80">
           <Image
             className="object-cover w-full h-full"
             src={
@@ -23,13 +23,15 @@ export default function UnderDevelopment() {
             height={400}
           />
         </div>
-        <h2 className="flex font-bold font-brand text-center tracking-tight text-2xl text-neutral-black">
-          This Page is Under Construction
-        </h2>
-        <p className="font-bodycopy text-center font-medium text-alternative">
-          We’re working on something exciting! This page is currently under
-          development and will be available soon. Stay tuned for updates.
-        </p>
+        <div className="state-text flex flex-col gap-2 items-center">
+          <h2 className="state-title flex font-bold font-bodycopy text-center tracking-tight text-2xl">
+            This Page is Under Construction
+          </h2>
+          <p className="state-description font-bodycopy text-center font-medium text-alternative">
+            We’re working on something exciting! This page is currently under
+            development and will be available soon. Stay tuned for updates.
+          </p>
+        </div>
         <Link href={`https://www.${domain}`}>
           <AppButton>Back to Home</AppButton>
         </Link>
