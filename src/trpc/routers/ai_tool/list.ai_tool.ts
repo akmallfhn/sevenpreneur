@@ -1,5 +1,6 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
+import { readFailedNotFound } from "@/trpc/utils/errors";
 import {
   numberIsPositive,
   stringIsNanoid,
@@ -132,6 +133,18 @@ export const listAITool = {
           "You're not allowed to view AI tools."
         );
       }
+
+      const aiConversation = await opts.ctx.prisma.aIConversation.findFirst({
+        select: { name: true },
+        where: {
+          id: opts.input.conv_id,
+          user_id: opts.ctx.user.id,
+        },
+      });
+      if (!aiConversation) {
+        throw readFailedNotFound("conversation");
+      }
+
       let lastTime: Date | undefined = undefined;
       if (opts.input.before) {
         const lastChat = await opts.ctx.prisma.aIChat.findFirst({
@@ -142,6 +155,7 @@ export const listAITool = {
           lastTime = lastChat.created_at;
         }
       }
+
       const aiChatsList = await opts.ctx.prisma.aIChat.findMany({
         select: {
           id: true,
@@ -161,9 +175,11 @@ export const listAITool = {
         orderBy: [{ created_at: "desc" }],
         take: opts.input.size || 4,
       });
+
       return {
         code: STATUS_OK,
         message: "Success",
+        conversation_name: aiConversation.name,
         list: aiChatsList,
       };
     }),
