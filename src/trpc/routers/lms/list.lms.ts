@@ -28,9 +28,6 @@ export const listLMS = {
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
         Object.assign(whereClause, {
           status: StatusEnum.ACTIVE,
-          cohort_prices: {
-            status: StatusEnum.ACTIVE,
-          },
         });
       }
 
@@ -65,6 +62,7 @@ export const listLMS = {
               id: true,
               name: true,
               amount: true,
+              status: true,
             },
           },
         },
@@ -78,6 +76,15 @@ export const listLMS = {
         take: paging.prisma.take,
       });
       const returnedList = cohortList.map((entry) => {
+        const returnedCohortPrices = entry.cohort_prices
+          .filter((entry) => entry.status === StatusEnum.ACTIVE)
+          .map((entry) => {
+            return {
+              id: entry.id,
+              name: entry.name,
+              amount: entry.amount,
+            };
+          });
         return {
           id: entry.id,
           name: entry.name,
@@ -86,7 +93,7 @@ export const listLMS = {
           slug_url: entry.slug_url,
           start_date: entry.start_date,
           end_date: entry.end_date,
-          prices: entry.cohort_prices,
+          prices: returnedCohortPrices,
         };
       });
 
