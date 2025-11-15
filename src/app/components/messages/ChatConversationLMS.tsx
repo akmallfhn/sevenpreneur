@@ -146,9 +146,9 @@ export default function ChatConversationLMS({
       ref={conversationRef}
       className="root-page relative hidden flex-col pl-64 w-full h-screen overflow-y-auto lg:flex"
     >
-      <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-section-background border-b text-[#333333] z-10">
-        <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold text-lg">
-          <MessageCircleMore className="size-6" />
+      <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-section-background border-b border-outline text-[#333333] z-10">
+        <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold">
+          <MessageCircleMore className="size-5" />
           {conversationName}
         </div>
       </div>

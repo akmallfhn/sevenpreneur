@@ -46,7 +46,7 @@ export default async function AIChatConversationLMS({
   return (
     <ChatConversationLMS
       conversationId={conversation_id}
-      conversationName={"Agora AI"}
+      conversationName={chatRaw.conversation_name}
       conversationChats={chatList}
     />
   );
