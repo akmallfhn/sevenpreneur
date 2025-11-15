@@ -212,7 +212,6 @@ export default function CohortDetailsCMS({
           </main>
 
           <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
-            {/* Stats */}
             <div className="cohort-stats flex flex-col gap-3">
               <ScorecardItemCMS
                 scorecardName="Total Learning Sessions"
@@ -225,7 +224,11 @@ export default function CohortDetailsCMS({
                 scorecardBackground="bg-warning-foreground"
               />
             </div>
-            <ModuleListCMS sessionToken={sessionToken} cohortId={cohortId} />
+            <ModuleListCMS
+              sessionToken={sessionToken}
+              sessionUserRole={sessionUserRole}
+              cohortId={cohortId}
+            />
             <ProjectListCMS sessionToken={sessionToken} cohortId={cohortId} />
             <EnrolledUserListCMS
               sessionToken={sessionToken}

@@ -3,23 +3,31 @@ import { Loader2, Plus } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import FileItemCMS from "../items/FileItemCMS";
 import { trpc } from "@/trpc/client";
-import { getFileVariantFromURL } from "@/lib/file-variants";
 import React, { useState } from "react";
 import CreateMaterialFormCMS from "../forms/CreateMaterialFormCMS";
 
 interface MaterialListCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   learningId: number;
 }
 
 export default function MaterialListCMS({
   sessionToken,
+  sessionUserRole,
   learningId,
 }: MaterialListCMSProps) {
-  const [createMaterial, setCreateMaterial] = useState(false);
   const utils = trpc.useUtils();
+  const [createMaterial, setCreateMaterial] = useState(false);
 
-  // --- Call data from tRPC
+  const allowedRolesCreateMaterial = [0, 2];
+  const allowedRolesListMaterial = [0, 1, 2, 3];
+  const isAllowedCreateMaterial =
+    allowedRolesCreateMaterial.includes(sessionUserRole);
+  const isAllowedListMaterial =
+    allowedRolesListMaterial.includes(sessionUserRole);
+
+  // Fetch tRPC Data
   const {
     data: materialListData,
     isError,
@@ -29,6 +37,8 @@ export default function MaterialListCMS({
     { enabled: !!sessionToken }
   );
 
+  if (!isAllowedListMaterial) return;
+
   return (
     <React.Fragment>
       <div className="materials flex flex-col gap-3 p-3 bg-section-background rounded-md">
@@ -36,15 +46,18 @@ export default function MaterialListCMS({
           <h2 className="label-name font-brand font-bold">
             Learning Materials
           </h2>
-          <AppButton
-            variant="outline"
-            size="small"
-            onClick={() => setCreateMaterial(true)}
-          >
-            <Plus className="size-4" />
-            Add file
-          </AppButton>
+          {isAllowedCreateMaterial && (
+            <AppButton
+              variant="outline"
+              size="small"
+              onClick={() => setCreateMaterial(true)}
+            >
+              <Plus className="size-4" />
+              Add file
+            </AppButton>
+          )}
         </div>
+
         {isLoading && (
           <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
             <Loader2 className="animate-spin size-5 " />
@@ -55,33 +68,34 @@ export default function MaterialListCMS({
             No Data
           </div>
         )}
-        {(!materialListData?.list || materialListData.list.length === 0) && (
-          <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
+
+        {!isLoading && !isError && (
+          <>
+            {(materialListData?.list ?? []).length > 0 ? (
+              <div className="material-list flex flex-col gap-2">
+                {materialListData?.list.map((post, index) => (
+                  <FileItemCMS
+                    key={index}
+                    sessionToken={sessionToken}
+                    sessionUserRole={sessionUserRole}
+                    learningId={learningId}
+                    fileId={post.id}
+                    fileName={post.name}
+                    fileURL={post.document_url}
+                    onDeleteSuccess={() => utils.list.materials.invalidate()}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
+                No Data
+              </p>
+            )}
+          </>
         )}
-        {materialListData?.list.some((post) => post.id) && (
-          <div className="material-list flex flex-col gap-2">
-            {materialListData?.list.map((post, index) => (
-              <FileItemCMS
-                key={index}
-                sessionToken={sessionToken}
-                learningId={learningId}
-                fileId={post.id}
-                fileName={post.name}
-                fileURL={post.document_url}
-                variants={getFileVariantFromURL(post.document_url)}
-                onDeleteSuccess={() => utils.list.materials.invalidate()}
-              />
-            ))}
-          </div>
-        )}
-        {/* <p className="text-sm text-cms-primary text-center font-semibold font-bodycopy">
-        Load more
-      </p> */}
       </div>
 
-      {/* --- Form Create Material */}
+      {/* Form Create Material */}
       {createMaterial && (
         <CreateMaterialFormCMS
           learningId={learningId}

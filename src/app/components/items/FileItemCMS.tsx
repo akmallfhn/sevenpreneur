@@ -13,32 +13,31 @@ import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { FileVariant } from "@/lib/app-types";
-import { getFileIconAndType } from "@/lib/file-variants";
+import { getFileIconAndType, getFileVariantFromURL } from "@/lib/file-variants";
 
 interface FileItemCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   cohortId?: number;
   learningId?: number;
   fileId: number;
   fileName: string;
   fileURL: string;
-  variants: FileVariant;
   onDeleteSuccess?: () => void;
 }
 
 export default function FileItemCMS({
   sessionToken,
+  sessionUserRole,
   cohortId,
   learningId,
   fileId,
   fileName,
   fileURL,
-  variants,
   onDeleteSuccess,
 }: FileItemCMSProps) {
-  const { fileIcon, fileType } = getFileIconAndType(variants);
-
-  // State
+  const variant = getFileVariantFromURL(fileURL);
+  const { fileIcon, fileType } = getFileIconAndType(variant);
   const [editFile, setEditFile] = useState(false);
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -46,6 +45,11 @@ export default function FileItemCMS({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isLearningDetailsPage = pathname.includes("/learnings/");
+
+  const allowedRolesUpdateFile = [0, 2];
+  const allowedRolesDeleteFile = [0, 2];
+  const isAllowedUpdateFile = allowedRolesUpdateFile.includes(sessionUserRole);
+  const isAllowedDeleteFile = allowedRolesDeleteFile.includes(sessionUserRole);
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -135,35 +139,40 @@ export default function FileItemCMS({
             </p>
           </div>
         </Link>
-        <div className="actions-button flex relative" ref={wrapperRef}>
-          <AppButton
-            variant="ghost"
-            size="small"
-            type="button"
-            onClick={handleActionsDropdown}
-          >
-            <EllipsisVertical className="size-4" />
-          </AppButton>
-
-          <AppDropdown
-            isOpen={isActionsOpened}
-            onClose={() => setIsActionsOpened(false)}
-            alignMobile="right"
-            alignDesktop="right"
-          >
-            <AppDropdownItemList
-              menuIcon={<Settings2 className="size-4" />}
-              menuName="Edit File"
-              onClick={() => setEditFile(true)}
-            />
-            <AppDropdownItemList
-              menuIcon={<Trash2 className="size-4" />}
-              menuName="Delete"
-              isDestructive
-              onClick={() => setIsOpenDeleteConfirmation(true)}
-            />
-          </AppDropdown>
-        </div>
+        {(isAllowedUpdateFile || isAllowedDeleteFile) && (
+          <div className="actions-button flex relative" ref={wrapperRef}>
+            <AppButton
+              variant="ghost"
+              size="small"
+              type="button"
+              onClick={handleActionsDropdown}
+            >
+              <EllipsisVertical className="size-4" />
+            </AppButton>
+            <AppDropdown
+              isOpen={isActionsOpened}
+              onClose={() => setIsActionsOpened(false)}
+              alignMobile="right"
+              alignDesktop="right"
+            >
+              {isAllowedUpdateFile && (
+                <AppDropdownItemList
+                  menuIcon={<Settings2 className="size-4" />}
+                  menuName="Edit File"
+                  onClick={() => setEditFile(true)}
+                />
+              )}
+              {isAllowedDeleteFile && (
+                <AppDropdownItemList
+                  menuIcon={<Trash2 className="size-4" />}
+                  menuName="Delete"
+                  isDestructive
+                  onClick={() => setIsOpenDeleteConfirmation(true)}
+                />
+              )}
+            </AppDropdown>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation */}

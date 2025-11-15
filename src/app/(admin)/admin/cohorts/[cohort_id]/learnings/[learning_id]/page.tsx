@@ -1,4 +1,6 @@
 import LearningDetailsCMS from "@/app/components/pages/LearningDetailsCMS";
+import ForbiddenComponent from "@/app/components/state/403Forbidden";
+import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
 interface LearningDetailPageProps {
@@ -9,17 +11,33 @@ export default async function LearningDetailsPage({
   params,
 }: LearningDetailPageProps) {
   const { cohort_id, learning_id } = await params;
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value ?? "";
   const cohortId = parseInt(cohort_id);
   const learningId = parseInt(learning_id);
 
-  console.log("learningId:", learningId);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value ?? "";
+  if (!sessionToken) return;
+
+  if (sessionToken) {
+    setSessionToken(sessionToken);
+  }
+
+  const userSession = await trpc.auth.checkSession();
+  const allowedRolesDetailsLearning = [0, 1, 2, 3];
+
+  if (!allowedRolesDetailsLearning.includes(userSession.user.role_id)) {
+    return (
+      <div className="forbidden flex w-full h-full pl-64">
+        <ForbiddenComponent />
+      </div>
+    );
+  }
 
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
       <LearningDetailsCMS
         sessionToken={sessionToken}
+        sessionUserRole={userSession.user.role_id}
         cohortId={cohortId}
         learningId={learningId}
       />

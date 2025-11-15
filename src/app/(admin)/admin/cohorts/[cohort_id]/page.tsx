@@ -21,9 +21,9 @@ export default async function CohortDetailsPage({
     setSessionToken(sessionToken);
   }
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListCohort = [0, 1, 2, 3];
+  const allowedRolesDetailsCohort = [0, 1, 2, 3];
 
-  if (!allowedRolesListCohort.includes(userSession.user.role_id)) {
+  if (!allowedRolesDetailsCohort.includes(userSession.user.role_id)) {
     return (
       <div className="forbidden flex w-full h-full pl-64">
         <ForbiddenComponent />

@@ -32,12 +32,14 @@ dayjs.extend(localizedFormat);
 
 interface LearningDetailsCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   cohortId: number;
   learningId: number;
 }
 
 export default function LearningDetailsCMS({
   sessionToken,
+  sessionUserRole,
   cohortId,
   learningId,
 }: LearningDetailsCMSProps) {
@@ -207,6 +209,7 @@ export default function LearningDetailsCMS({
                 </div>
                 <MaterialListCMS
                   sessionToken={sessionToken}
+                  sessionUserRole={sessionUserRole}
                   learningId={learningId}
                 />
                 <div className="learning-location-conference flex flex-col gap-3 p-3 bg-section-background rounded-md">
