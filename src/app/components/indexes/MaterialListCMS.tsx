@@ -27,7 +27,7 @@ export default function MaterialListCMS({
   const isAllowedListMaterial =
     allowedRolesListMaterial.includes(sessionUserRole);
 
-  // Fetch tRPC Data
+  // Fetch tRPC data
   const {
     data: materialListData,
     isError,
@@ -95,7 +95,7 @@ export default function MaterialListCMS({
         )}
       </div>
 
-      {/* Form Create Material */}
+      {/* Create Material */}
       {createMaterial && (
         <CreateMaterialFormCMS
           learningId={learningId}

@@ -18,28 +18,28 @@ import SubmissionDetailsCMS from "../modals/SubmissionDetailsCMS";
 
 dayjs.extend(localizedFormat);
 
-interface ProjectDeyailsCMSProps {
+interface SubmissionListCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   cohortId: number;
   projectId: number;
 }
 
-export default function ProjectDetailsCMS({
+export default function SubmissionListCMS({
   sessionToken,
+  sessionUserRole,
   cohortId,
   projectId,
-}: ProjectDeyailsCMSProps) {
+}: SubmissionListCMSProps) {
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
   const router = useRouter();
   const [isOpenDetails, setIsOpenDetails] = useState(false);
   const selectedId = searchParam.get("id");
 
-  useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
-    }
-  }, [sessionToken]);
+  const allowedRolesDetailsSubmission = [0, 1, 2, 3];
+  const isAllowedDetailsSubmission =
+    allowedRolesDetailsSubmission.includes(sessionUserRole);
 
   // Push Parameter to URL
   const viewSubmissionDetails = (submissionId: string) => {
@@ -127,7 +127,7 @@ export default function ProjectDetailsCMS({
           </div>
           <div className="project-deadline flex flex-col w-full gap-1">
             <h3 className="font-bold font-bodycopy">Project Deadline</h3>
-            <p className="font-bodycopy font-medium text-[15px] text-[#333333]/75 whitespace-pre-line">
+            <p className="font-bodycopy font-semibold text-[15px] text-[#333333]/75 whitespace-pre-line">
               {dayjs(projectDetailsData?.deadline_at).format(
                 "dddd, D MMM YYYY HH:mm"
               )}
@@ -143,7 +143,9 @@ export default function ProjectDetailsCMS({
                   <TableHeadCMS>{`Submitted at`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Timing Status`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Review Status`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
+                  {isAllowedDetailsSubmission && (
+                    <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -193,16 +195,18 @@ export default function ProjectDetailsCMS({
                         </p>
                       )}
                     </TableCellCMS>
-                    <TableCellCMS>
-                      <AppButton
-                        variant="outline"
-                        size="small"
-                        onClick={() => viewSubmissionDetails(String(post.id))}
-                      >
-                        <Eye className="size-4" />
-                        Preview
-                      </AppButton>
-                    </TableCellCMS>
+                    {isAllowedDetailsSubmission && (
+                      <TableCellCMS>
+                        <AppButton
+                          variant="outline"
+                          size="small"
+                          onClick={() => viewSubmissionDetails(String(post.id))}
+                        >
+                          <Eye className="size-4" />
+                          Preview
+                        </AppButton>
+                      </TableCellCMS>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -214,6 +218,7 @@ export default function ProjectDetailsCMS({
       {/* Open Submission Details */}
       {isOpenDetails && (
         <SubmissionDetailsCMS
+          sessionUserRole={sessionUserRole}
           projectDeadline={projectDetailsData?.deadline_at}
           submissionId={Number(selectedId)}
           isOpen={isOpenDetails}

@@ -8,17 +8,26 @@ import CreateProjectFormCMS from "../forms/CreateProjectFormCMS";
 
 interface ProjectListCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   cohortId: number;
 }
 
 export default function ProjectListCMS({
   sessionToken,
+  sessionUserRole,
   cohortId,
 }: ProjectListCMSProps) {
-  const [createProject, setCreateProject] = useState(false);
   const utils = trpc.useUtils();
+  const [createProject, setCreateProject] = useState(false);
 
-  // --- Call data from tRPC
+  const allowedRolesCreateProject = [0, 2];
+  const allowedRolesListProject = [0, 1, 2, 3];
+  const isAllowedCreateProject =
+    allowedRolesCreateProject.includes(sessionUserRole);
+  const isAllowedListProject =
+    allowedRolesListProject.includes(sessionUserRole);
+
+  // Fetch tRPC data
   const {
     data: projectListData,
     isError,
@@ -28,6 +37,8 @@ export default function ProjectListCMS({
     { enabled: !!sessionToken }
   );
 
+  if (!isAllowedListProject) return;
+
   return (
     <React.Fragment>
       <div className="projects flex flex-col gap-3 p-3 bg-section-background rounded-md">
@@ -35,15 +46,18 @@ export default function ProjectListCMS({
           <h2 className="label-name font-brand font-bold">
             Projects Assignment
           </h2>
-          <AppButton
-            variant="outline"
-            size="small"
-            onClick={() => setCreateProject(true)}
-          >
-            <Plus className="size-4" />
-            Add project
-          </AppButton>
+          {isAllowedCreateProject && (
+            <AppButton
+              variant="outline"
+              size="small"
+              onClick={() => setCreateProject(true)}
+            >
+              <Plus className="size-4" />
+              Add project
+            </AppButton>
+          )}
         </div>
+
         {isLoading && (
           <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
             <Loader2 className="animate-spin size-5 " />
@@ -54,28 +68,34 @@ export default function ProjectListCMS({
             No Data
           </div>
         )}
-        {(!projectListData?.list || projectListData.list.length === 0) && (
-          <div className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
-        {projectListData?.list.some((post) => post.id) && (
-          <div className="project-list flex flex-col gap-2">
-            {projectListData?.list.map((post, index) => (
-              <ProjectItemCMS
-                key={index}
-                cohortId={cohortId}
-                projectId={post.id}
-                projectName={post.name}
-                lastSubmission={post.deadline_at}
-                submissionPercentage={post.submission_percentage}
-                onDeleteSuccess={() => utils.list.projects.invalidate()}
-              />
-            ))}
-          </div>
+
+        {!isLoading && !isError && (
+          <>
+            {(projectListData?.list ?? []).length > 0 ? (
+              <div className="project-list flex flex-col gap-2">
+                {projectListData?.list.map((post, index) => (
+                  <ProjectItemCMS
+                    key={post.id}
+                    sessionUserRole={sessionUserRole}
+                    cohortId={cohortId}
+                    projectId={post.id}
+                    projectName={post.name}
+                    lastSubmission={post.deadline_at}
+                    submissionPercentage={post.submission_percentage}
+                    onDeleteSuccess={() => utils.list.projects.invalidate()}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
+                No Data
+              </p>
+            )}
+          </>
         )}
       </div>
 
+      {/* Create Project */}
       {createProject && (
         <CreateProjectFormCMS
           cohortId={cohortId}

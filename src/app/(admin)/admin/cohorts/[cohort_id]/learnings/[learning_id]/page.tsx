@@ -15,7 +15,7 @@ export default async function LearningDetailsPage({
   const learningId = parseInt(learning_id);
 
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value ?? "";
+  const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return;
 
   if (sessionToken) {

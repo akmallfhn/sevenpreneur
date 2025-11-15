@@ -18,6 +18,7 @@ dayjs.extend(localizedFormat);
 
 interface ProjectItemCMSProps {
   cohortId: number;
+  sessionUserRole: number;
   projectId: number;
   projectName: string;
   lastSubmission: string;
@@ -27,18 +28,25 @@ interface ProjectItemCMSProps {
 
 export default function ProjectItemCMS({
   cohortId,
+  sessionUserRole,
   projectId,
   projectName,
   lastSubmission,
   submissionPercentage,
   onDeleteSuccess,
 }: ProjectItemCMSProps) {
-  // State
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [editProject, setEditProject] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const allowedRolesUpdateProject = [0, 2];
+  const allowedRolesDeleteProject = [0, 2];
+  const isAllowedUpdateProject =
+    allowedRolesUpdateProject.includes(sessionUserRole);
+  const isAllowedDeleteProject =
+    allowedRolesDeleteProject.includes(sessionUserRole);
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -106,36 +114,42 @@ export default function ProjectItemCMS({
             </div>
           </div>
         </Link>
-        <div className="actions-button flex relative" ref={wrapperRef}>
-          <AppButton
-            variant="ghost"
-            size="small"
-            type="button"
-            onClick={handleActionsDropdown}
-          >
-            <EllipsisVertical className="size-4" />
-          </AppButton>
-          <AppDropdown
-            isOpen={isActionsOpened}
-            alignDesktop="right"
-            onClose={() => setIsActionsOpened(false)}
-          >
-            <AppDropdownItemList
-              menuIcon={<Pencil className="size-4" />}
-              menuName="Edit"
-              onClick={() => setEditProject(true)}
-            />
-            <AppDropdownItemList
-              menuIcon={<Trash2 className="size-4" />}
-              menuName="Delete"
-              isDestructive
-              onClick={() => setIsOpenDeleteConfirmation(true)}
-            />
-          </AppDropdown>
-        </div>
+        {(isAllowedUpdateProject || isAllowedDeleteProject) && (
+          <div className="actions-button flex relative" ref={wrapperRef}>
+            <AppButton
+              variant="ghost"
+              size="small"
+              type="button"
+              onClick={handleActionsDropdown}
+            >
+              <EllipsisVertical className="size-4" />
+            </AppButton>
+            <AppDropdown
+              isOpen={isActionsOpened}
+              alignDesktop="right"
+              onClose={() => setIsActionsOpened(false)}
+            >
+              {isAllowedUpdateProject && (
+                <AppDropdownItemList
+                  menuIcon={<Pencil className="size-4" />}
+                  menuName="Edit"
+                  onClick={() => setEditProject(true)}
+                />
+              )}
+              {isAllowedDeleteProject && (
+                <AppDropdownItemList
+                  menuIcon={<Trash2 className="size-4" />}
+                  menuName="Delete"
+                  isDestructive
+                  onClick={() => setIsOpenDeleteConfirmation(true)}
+                />
+              )}
+            </AppDropdown>
+          </div>
+        )}
       </div>
 
-      {/* Open Edit Form */}
+      {/* Edit Form */}
       {editProject && (
         <EditProjectFormCMS
           projectId={projectId}

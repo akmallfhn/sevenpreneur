@@ -13,6 +13,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface SubmissionDetailsCMSProps {
+  sessionUserRole: number;
   projectDeadline?: string;
   submissionId: number;
   isOpen: boolean;
@@ -20,6 +21,7 @@ interface SubmissionDetailsCMSProps {
 }
 
 export default function SubmissionDetailsCMS({
+  sessionUserRole,
   projectDeadline,
   submissionId,
   isOpen,
@@ -28,6 +30,10 @@ export default function SubmissionDetailsCMS({
   const utils = trpc.useUtils();
   const updateComment = trpc.update.submission.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const allowedRolesUpdateSubmission = [0, 1, 3];
+  const isAllowedUpdateSubmission =
+    allowedRolesUpdateSubmission.includes(sessionUserRole);
 
   // Return initial data
   const { data, isLoading, isError } = trpc.read.submission.useQuery(
@@ -174,17 +180,19 @@ export default function SubmissionDetailsCMS({
           />
         </div>
       )}
-      <div className="cancel-invoice sticky bottom-0 w-full p-4 bg-white z-40">
-        <AppButton
-          className="w-full"
-          variant="cmsPrimary"
-          onClick={handleUpdateComment}
-          disabled={isSubmitting}
-        >
-          {isSubmitting && <Loader2 className="animate-spin size-4" />}
-          Update Feedback
-        </AppButton>
-      </div>
+      {isAllowedUpdateSubmission && (
+        <div className="update-comment sticky bottom-0 w-full p-4 bg-white z-40">
+          <AppButton
+            className="w-full"
+            variant="cmsPrimary"
+            onClick={handleUpdateComment}
+            disabled={isSubmitting}
+          >
+            {isSubmitting && <Loader2 className="animate-spin size-4" />}
+            Update Feedback
+          </AppButton>
+        </div>
+      )}
     </AppSheet>
   );
 }

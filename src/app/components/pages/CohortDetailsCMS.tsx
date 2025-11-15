@@ -233,7 +233,11 @@ export default function CohortDetailsCMS({
               sessionUserRole={sessionUserRole}
               cohortId={cohortId}
             />
-            <ProjectListCMS sessionToken={sessionToken} cohortId={cohortId} />
+            <ProjectListCMS
+              sessionToken={sessionToken}
+              sessionUserRole={sessionUserRole}
+              cohortId={cohortId}
+            />
             <EnrolledUserListCMS
               sessionToken={sessionToken}
               cohortId={cohortId}
