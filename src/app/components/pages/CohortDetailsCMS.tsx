@@ -11,7 +11,7 @@ import {
   Loader2,
   PenTool,
 } from "lucide-react";
-import { setSessionToken, trpc } from "@/trpc/client";
+import { trpc } from "@/trpc/client";
 import Image from "next/image";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -31,11 +31,13 @@ dayjs.extend(localizedFormat);
 
 interface CohortDetailsCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
   cohortId: number;
 }
 
 export default function CohortDetailsCMS({
   cohortId,
+  sessionUserRole,
   sessionToken,
 }: CohortDetailsCMSProps) {
   const [editCohort, setEditCohort] = useState(false);
@@ -43,12 +45,9 @@ export default function CohortDetailsCMS({
   const [isOverflowing, setIsOverflowing] = useState(false);
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
 
-  // Set token for API
-  useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
-    }
-  }, [sessionToken]);
+  const allowedRolesUpdateCohort = [0, 2];
+  const isAllowedUpdateCohort =
+    allowedRolesUpdateCohort.includes(sessionUserRole);
 
   // Call data from tRPC
   const {
@@ -93,7 +92,7 @@ export default function CohortDetailsCMS({
             <ChevronRight className="size-3.5" />
             <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
             <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href={`/cohorts/${cohortId}`} isCurrentPage>
+            <AppBreadcrumbItem isCurrentPage>
               {cohortDetailsData?.cohort.name}
             </AppBreadcrumbItem>
           </AppBreadcrumb>
@@ -121,16 +120,18 @@ export default function CohortDetailsCMS({
                     variants={cohortDetailsData?.cohort.status as StatusType}
                   />
                 </div>
-                <div className="edit-cohort absolute top-4 right-4 z-20">
-                  <AppButton
-                    variant="outline"
-                    size="small"
-                    onClick={() => setEditCohort(true)}
-                  >
-                    <PenTool className="size-4" />
-                    Edit Cohort
-                  </AppButton>
-                </div>
+                {isAllowedUpdateCohort && (
+                  <div className="edit-cohort absolute top-4 right-4 z-20">
+                    <AppButton
+                      variant="outline"
+                      size="small"
+                      onClick={() => setEditCohort(true)}
+                    >
+                      <PenTool className="size-4" />
+                      Edit Cohort
+                    </AppButton>
+                  </div>
+                )}
               </div>
               <div className="cohort-attributes relative flex flex-col mt-[-20px] gap-3 p-4 bg-white text-black z-20 rounded-md">
                 <h1 className="cohort-title font-brand font-bold text-2xl line-clamp-2">
@@ -234,11 +235,11 @@ export default function CohortDetailsCMS({
         </div>
       </div>
 
-      {/* Form Edit Cohort */}
+      {/* Edit Cohort */}
       {editCohort && (
         <EditCohortFormCMS
+          sessionToken={sessionToken}
           cohortId={cohortId}
-          initialData={cohortDetailsData?.cohort}
           isOpen={editCohort}
           onClose={() => setEditCohort(false)}
         />

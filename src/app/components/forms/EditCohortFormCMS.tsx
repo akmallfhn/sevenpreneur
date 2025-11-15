@@ -15,15 +15,15 @@ import { Switch } from "@/components/ui/switch";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditCohortFormCMSProps {
+  sessionToken: string;
   cohortId: number;
-  initialData: any;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function EditCohortFormCMS({
+  sessionToken,
   cohortId,
-  initialData,
   isOpen,
   onClose,
 }: EditCohortFormCMSProps) {
@@ -33,6 +33,14 @@ export default function EditCohortFormCMS({
   const createCohortPrices = trpc.create.cohortPrice.useMutation();
   const deleteCohortPrices = trpc.delete.cohortPrice.useMutation();
   const utils = trpc.useUtils();
+
+  // Return initial data
+  const {
+    data: cohortDetailsData,
+    isLoading: isLoadingInitial,
+    isError: isErrorInitial,
+  } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
+  const initialData = cohortDetailsData?.cohort;
 
   // Beginning State
   const [formData, setFormData] = useState<{
@@ -44,24 +52,49 @@ export default function EditCohortFormCMS({
     cohortStatus: StatusType;
     cohortPriceTiers: PriceTier[];
   }>({
-    cohortName: initialData.name || "",
-    cohortImage: initialData.image || "",
-    cohortDescription: initialData.description || "",
-    cohortStartDate: initialData.start_date
-      ? dayjs(initialData.start_date).format("YYYY-MM-DDTHH:mm")
+    cohortName: initialData?.name || "",
+    cohortImage: initialData?.image || "",
+    cohortDescription: initialData?.description || "",
+    cohortStartDate: initialData?.start_date
+      ? dayjs(initialData?.start_date).format("YYYY-MM-DDTHH:mm")
       : "",
-    cohortEndDate: initialData.end_date
+    cohortEndDate: initialData?.end_date
       ? dayjs(initialData.end_date).format("YYYY-MM-DDTHH:mm")
       : "",
-    cohortStatus: initialData.status as StatusType,
-    cohortPriceTiers: initialData.cohort_prices.map(
-      (post: { id: number; name: string; amount: number }) => ({
-        id: post.id,
-        name: post.name,
-        amount: post.amount,
-      })
-    ),
+    cohortStatus: initialData?.status as StatusType,
+    cohortPriceTiers:
+      initialData?.cohort_prices.map(
+        (post: { id: number; name: string; amount: string }) => ({
+          id: post.id,
+          name: post.name,
+          amount: post.amount,
+        })
+      ) || [],
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        cohortName: initialData.name || "",
+        cohortImage: initialData.image || "",
+        cohortDescription: initialData.description || "",
+        cohortStartDate: initialData.start_date
+          ? dayjs(initialData.start_date).format("YYYY-MM-DDTHH:mm")
+          : "",
+        cohortEndDate: initialData.end_date
+          ? dayjs(initialData.end_date).format("YYYY-MM-DDTHH:mm")
+          : "",
+        cohortStatus: initialData.status as StatusType,
+        cohortPriceTiers: initialData.cohort_prices.map(
+          (post: { id: number; name: string; amount: string }) => ({
+            id: post.id,
+            name: post.name,
+            amount: post.amount,
+          })
+        ),
+      });
+    }
+  }, [initialData]);
 
   // Add event listener to prevent page refresh
   useEffect(() => {
@@ -146,7 +179,7 @@ export default function EditCohortFormCMS({
         end_date: new Date(formData.cohortEndDate).toISOString(),
       });
       // Use id to mapping initial Cohort Price data
-      const initialPricesMap = initialData.cohort_prices.map(
+      const initialPricesMap = initialData?.cohort_prices.map(
         (post: any) => post.id
       );
       // Update & Create Cohort Prices
@@ -179,9 +212,9 @@ export default function EditCohortFormCMS({
         .filter((tier) => tier.id)
         .map((tier) => tier.id);
       // Compare with initialPricesMap. If there is an id that is not in the form now, So, save it as deletedIds.
-      const deletedIds = initialPricesMap.filter(
-        (id: number) => !currentIds.includes(id)
-      );
+      const deletedIds =
+        initialPricesMap?.filter((id: number) => !currentIds.includes(id)) ||
+        [];
       // Delete all tiers listed in deletedIds.
       await Promise.all(
         deletedIds.map((id: number) => {
@@ -194,9 +227,9 @@ export default function EditCohortFormCMS({
       );
 
       // Final toast & refetch
-      toast.success("Cohort updated successfully");
       await utils.read.cohort.invalidate();
       await utils.list.cohorts.invalidate();
+      toast.success("Cohort updated successfully");
       onClose();
     } catch (error) {
       toast.error("Something went wrong. Failed to update cohort.");
@@ -213,92 +246,105 @@ export default function EditCohortFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form
-        className="relative w-full h-full flex flex-col"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
-          <div className="group-input flex flex-col gap-4">
-            <UploadThumbnailCohortCMS
-              onUpload={handleImageForm}
-              value={formData.cohortImage}
-            />
-            <InputCMS
-              inputId="cohort-name"
-              inputName="Program Name"
-              inputType="text"
-              inputPlaceholder="Name your program"
-              value={formData.cohortName}
-              onInputChange={handleInputChange("cohortName")}
-              required
-            />
-            <TextAreaCMS
-              textAreaId="cohort-description"
-              textAreaName="Program Overview"
-              textAreaPlaceholder="Tell us about this program"
-              textAreaHeight="h-32"
-              value={formData.cohortDescription}
-              onTextAreaChange={handleInputChange("cohortDescription")}
-              required
-            />
-            <div className="cohort-status flex flex-col gap-1">
-              <label
-                htmlFor={"cohort-status"}
-                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-              >
-                Status <span className="text-red-700">*</span>
-              </label>
-              <div className="switch-button flex pl-1 gap-2">
-                <Switch
-                  className="data-[state=checked]:bg-cms-primary"
-                  checked={formData.cohortStatus === "ACTIVE"}
-                  onCheckedChange={(checked) =>
-                    handleInputChange("cohortStatus")(
-                      checked ? "ACTIVE" : "INACTIVE"
-                    )
-                  }
-                />
-                {formData.cohortStatus && (
-                  <StatusLabelCMS variants={formData.cohortStatus} />
-                )}
+      {isLoadingInitial && (
+        <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+          <Loader2 className="animate-spin size-5 " />
+        </div>
+      )}
+      {isErrorInitial && (
+        <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+          No Data
+        </div>
+      )}
+
+      {!isLoadingInitial && !isErrorInitial && initialData && (
+        <form
+          className="relative w-full h-full flex flex-col"
+          onSubmit={handleSubmit}
+        >
+          <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
+            <div className="group-input flex flex-col gap-4">
+              <UploadThumbnailCohortCMS
+                onUpload={handleImageForm}
+                value={formData.cohortImage}
+              />
+              <InputCMS
+                inputId="cohort-name"
+                inputName="Program Name"
+                inputType="text"
+                inputPlaceholder="Name your program"
+                value={formData.cohortName}
+                onInputChange={handleInputChange("cohortName")}
+                required
+              />
+              <TextAreaCMS
+                textAreaId="cohort-description"
+                textAreaName="Program Overview"
+                textAreaPlaceholder="Tell us about this program"
+                textAreaHeight="h-32"
+                value={formData.cohortDescription}
+                onTextAreaChange={handleInputChange("cohortDescription")}
+                required
+              />
+              <div className="cohort-status flex flex-col gap-1">
+                <label
+                  htmlFor={"cohort-status"}
+                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                >
+                  Status <span className="text-red-700">*</span>
+                </label>
+                <div className="switch-button flex pl-1 gap-2">
+                  <Switch
+                    className="data-[state=checked]:bg-cms-primary"
+                    checked={formData.cohortStatus === "ACTIVE"}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("cohortStatus")(
+                        checked ? "ACTIVE" : "INACTIVE"
+                      )
+                    }
+                  />
+                  {formData.cohortStatus && (
+                    <StatusLabelCMS variants={formData.cohortStatus} />
+                  )}
+                </div>
               </div>
+              <InputCMS
+                inputId="start-date"
+                inputName="Program Starts"
+                inputType="datetime-local"
+                value={formData.cohortStartDate}
+                onInputChange={handleInputChange("cohortStartDate")}
+                required
+              />
+              <InputCMS
+                inputId="end-date"
+                inputName="Program Ends"
+                inputType="datetime-local"
+                value={formData.cohortEndDate}
+                onInputChange={handleInputChange("cohortEndDate")}
+                required
+              />
             </div>
-            <InputCMS
-              inputId="start-date"
-              inputName="Program Starts"
-              inputType="datetime-local"
-              value={formData.cohortStartDate}
-              onInputChange={handleInputChange("cohortStartDate")}
-              required
-            />
-            <InputCMS
-              inputId="end-date"
-              inputName="Program Ends"
-              inputType="datetime-local"
-              value={formData.cohortEndDate}
-              onInputChange={handleInputChange("cohortEndDate")}
-              required
+            <PriceTierStepperCMS
+              tiers={formData.cohortPriceTiers}
+              setTiers={(tiers) =>
+                setFormData({ ...formData, cohortPriceTiers: tiers })
+              }
             />
           </div>
-          <PriceTierStepperCMS
-            tiers={formData.cohortPriceTiers}
-            setTiers={(tiers) =>
-              setFormData({ ...formData, cohortPriceTiers: tiers })
-            }
-          />
-        </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
-          <AppButton
-            className="w-full"
-            variant="cmsPrimary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Save Changes
-          </AppButton>
-        </div>
-      </form>
+          <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+            <AppButton
+              className="w-full"
+              variant="cmsPrimary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2 className="animate-spin size-4" />}
+              Save Changes
+            </AppButton>
+          </div>
+        </form>
+      )}
     </AppSheet>
   );
 }
