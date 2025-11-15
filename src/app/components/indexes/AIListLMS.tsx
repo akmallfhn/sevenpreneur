@@ -16,6 +16,7 @@ export interface AIList {
 
 interface AIListLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
+  hasAIAccess: boolean;
   aiList: AIList[];
 }
 
@@ -23,6 +24,7 @@ export default function AIListLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  hasAIAccess,
   aiList,
 }: AIListLMSProps) {
   const activeAI = aiList.filter((ai) => ai.status === "ACTIVE");
@@ -37,7 +39,7 @@ export default function AIListLMS({
         sessionUserAvatar={sessionUserAvatar}
       />
       <div className="index max-w-[calc(100%-4rem)] max-h-[calc(100vh-10rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto">
-        {activeAI.length > 0 ? (
+        {hasAIAccess ? (
           <div className="template-list grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
             {activeAI
               .sort((a, b) => a.name.localeCompare(b.name))
@@ -53,7 +55,7 @@ export default function AIListLMS({
         ) : (
           <EmptyListLMS
             stateTitle="AI Tools Locked"
-            stateDescription="Looks like you’re not part of any Bootcamp Programs join one to unlock all AI Tools!"
+            stateDescription="Looks like you’re not part of any Bootcamp Programs. Join one to unlock all AI Tools!"
             stateAction="Explore our Program"
           />
         )}

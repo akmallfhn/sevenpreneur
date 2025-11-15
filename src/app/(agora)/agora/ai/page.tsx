@@ -1,6 +1,7 @@
 import AIListLMS, { AIList } from "@/app/components/indexes/AIListLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
 export default async function AIPageLMS() {
   const cookieStore = await cookies();
@@ -10,6 +11,8 @@ export default async function AIPageLMS() {
   if (sessionToken) {
     setSessionToken(sessionToken);
   }
+
+  const hasAIAccess = await trpc.check.aiTools();
 
   const userData = (await trpc.auth.checkSession()).user;
   let aiList: AIList[] = [];
@@ -27,6 +30,7 @@ export default async function AIPageLMS() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
+      hasAIAccess={hasAIAccess}
       aiList={aiList}
     />
   );
