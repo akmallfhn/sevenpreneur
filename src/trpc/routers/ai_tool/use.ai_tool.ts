@@ -183,6 +183,7 @@ export const useAITool = {
         opts.input.message
       );
 
+      let conversationName = theConversation.name;
       if (!opts.input.conv_id) {
         const parsedResult = await AIGenerateTitle(
           opts.input.model,
@@ -203,6 +204,8 @@ export const useAITool = {
           "AI conversation",
           "AI conversations"
         );
+
+        conversationName = parsedResult.response.title;
       }
 
       const aiChatsList = await opts.ctx.prisma.aIChat.findMany({
@@ -243,7 +246,7 @@ export const useAITool = {
         code: STATUS_OK,
         message: "Success",
         conv_id: convId,
-        conv_name: theConversation.name,
+        conv_name: conversationName,
         chat_id: chatMessage.id,
         chat: opts.input.message,
         chat_created_at: chatMessage.created_at,
