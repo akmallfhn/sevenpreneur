@@ -13,6 +13,8 @@ export default async function TemplatesPageLMS() {
     setSessionToken(sessionToken);
   }
 
+  const hasTemplateAccess = await trpc.check.aiTools();
+
   const userData = (await trpc.auth.checkSession()).user;
   let templateLists: TemplateList[] = [];
   try {
@@ -29,6 +31,7 @@ export default async function TemplatesPageLMS() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
+      hasTemplateAccess={hasTemplateAccess}
       templateList={templateLists}
     />
   );

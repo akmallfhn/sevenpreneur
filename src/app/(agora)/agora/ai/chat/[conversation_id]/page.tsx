@@ -33,7 +33,6 @@ export default async function AIChatConversationLMS({
   try {
     chatRaw = await trpc.list.aiChats({
       conv_id: conversation_id,
-      size: 10,
     });
   } catch (error) {
     return notFound();
