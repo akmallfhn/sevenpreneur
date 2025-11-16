@@ -5,45 +5,25 @@ import { getShortRupiahCurrency } from "@/lib/currency";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import { markdownToHtml } from "@/lib/markdown-to-html";
+import { SourcesArticle } from "./MarketSizeReportLMS";
 
-export interface SourcesArticle {
-  source_name: string;
-  source_url: string;
-  source_publisher: string;
-  source_year: number;
-}
-
-interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
+interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   resultName: string;
-  productName: string;
-  tamValue: number;
-  samValue: number;
-  tamInsight: string;
-  samInsight: string;
-  somInsight: string;
+  problemDiscovery: string;
   confidenceLevel: number;
   sources: SourcesArticle[];
 }
 
-export default function MarketSizeReportLMS({
+export default function IdeaValidationReportLMS({
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
   resultName,
-  productName,
-  tamValue,
-  samValue,
-  tamInsight,
-  samInsight,
-  somInsight,
+  problemDiscovery,
   confidenceLevel,
   sources,
-}: MarketSizeReportLMSProps) {
-  const somValue = 0.01 * samValue;
-  const conservativeScenario = 0.7 * somValue;
-  const aggresiveScenario = 1.5 * somValue;
-
+}: IdeaValidationReportLMSProps) {
   let confidenceStatus;
   if (confidenceLevel >= 80) {
     confidenceStatus = "High";
@@ -59,42 +39,21 @@ export default function MarketSizeReportLMS({
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
         sessionUserRole={sessionUserRole}
-        headerTitle="Market Size Estimation Result"
+        headerTitle="Idea Validation Result"
         headerResultName={resultName}
-        headerDescription={`For ${productName}`}
       />
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="market-analysis flex w-full gap-4">
-          <div className="market-size-chart flex flex-col flex-2 items-center gap-8 w-full bg-white p-5 pb-10 rounded-lg border">
+          <div className="market-size-chart flex flex-col flex-2 items-center gap-2 w-full bg-white p-5 pb-10 rounded-lg border">
             <h2 className="section-title font-bold text-lg font-bodycopy">
-              Market Size Analysis
+              Idea Problem Discovery
             </h2>
-            <div className="flex flex-col w-full items-center justify-center gap-10 xl:flex-row xl:items-end">
-              <div className="tam-chart flex flex-col size-52 bg-primary outline-[12px] outline-primary/50 items-center justify-center rounded-full overflow-hidden">
-                <p className="font-bodycopy font-bold text-white text-xl">
-                  TAM
-                </p>
-                <p className="font-bodycopy font-bold text-white text-2xl text-center">
-                  {getShortRupiahCurrency(tamValue)}
-                </p>
-              </div>
-              <div className="sam-chart flex flex-col size-40 bg-[#FBBF24] outline-[12px] outline-[#FBBF24]/50 items-center justify-center rounded-full overflow-hidden">
-                <p className="font-bodycopy font-bold text-white text-lg">
-                  SAM
-                </p>
-                <p className="font-bodycopy font-bold text-white text-2xl text-center">
-                  {getShortRupiahCurrency(samValue)}
-                </p>
-              </div>
-              <div className="som-chart flex flex-col size-32 bg-[#EF4444] outline-[12px] outline-[#EF4444]/50 items-center justify-center rounded-full overflow-hidden">
-                <p className="font-bodycopy font-bold text-white text-lg">
-                  SOM
-                </p>
-                <p className="font-bodycopy font-bold text-white text-lg text-center">
-                  {getShortRupiahCurrency(somValue)}
-                </p>
-              </div>
-            </div>
+            <p
+              className={styles.report}
+              dangerouslySetInnerHTML={{
+                __html: markdownToHtml(problemDiscovery),
+              }}
+            />
           </div>
           <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-white p-5 rounded-lg border">
             <h2 className="section-title font-bold text-lg font-bodycopy">
@@ -125,7 +84,7 @@ export default function MarketSizeReportLMS({
           </div>
         </div>
 
-        <div className="market-size-insights flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
+        {/* <div className="market-size-insights flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
           <h2 className="section-title font-bold text-lg font-bodycopy">
             Detail & Insights
           </h2>
@@ -193,8 +152,9 @@ export default function MarketSizeReportLMS({
               </div>
             </div>
           </div>
-        </div>
-        <div className="market-size-insights flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
+        </div> */}
+
+        {/* <div className="market-size-insights flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
           <h2 className="section-title font-bold text-lg font-bodycopy">
             Scenario Analysis (SOM)
           </h2>
@@ -238,7 +198,7 @@ export default function MarketSizeReportLMS({
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

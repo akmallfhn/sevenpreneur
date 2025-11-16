@@ -26,8 +26,10 @@ export interface AIResultIdeaValidation extends JsonObject {
     }[];
     confidence_level: number;
     affected_users: {
-      percentage: number;
       segment: string;
+      segment_size: number;
+      severity_percentage: number;
+      pain_points: string;
       segment_description: string;
     }[];
     frequency: AIIdeaValidation_ProblemFreq;
@@ -133,14 +135,17 @@ export const aiToolPrompts = {
               },
             ],
             confidence_level: "<estimasi tingkat kepercayaan validasi data>",
-            affected_users: [
+            affected_segment: [
               {
-                percentage:
-                  "<estimasi proporsi pengguna yang terdampak oleh problem, dalam persen>",
                 segment:
-                  "<kelompok pengguna utama yang paling terdampak, misal UMKM digital, mahasiswa, ibu rumah tangga, pekerja remote>",
+                  "<kelompok customer utama yang paling terdampak, misal UMKM, mahasiswa, ibu rumah tangga, pekerja remote>",
+                segment_size: "<jumlah kelompok customer dalam angka absolut>",
+                severity_percentage:
+                  "<estimasi proporsi kelompok customer yang terdampak masalah dalam persen (%)>",
+                pain_points:
+                  "<deskripsi pain point utama yang dialami segmen ini, termasuk apa yang mereka coba lakukan, apa yang menghambat, dan konsekuensi negatif yang mereka rasakan>",
                 segment_description:
-                  "<deskripsi perilaku, kebutuhan, dan pain point dari segmen pengguna tersebut>",
+                  "<deskripsi perilaku dan karakteristik dari segmen customer tersebut>",
               },
             ],
             frequency:
@@ -209,8 +214,10 @@ export const aiToolPrompts = {
             confidence_level: z.number(),
             affected_users: z.array(
               z.object({
-                percentage: z.number(),
                 segment: z.string(),
+                segment_size: z.number(),
+                severity_percentage: z.number(),
+                pain_points: z.string(),
                 segment_description: z.string(),
               })
             ),
