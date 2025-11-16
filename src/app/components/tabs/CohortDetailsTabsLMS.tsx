@@ -42,6 +42,7 @@ export interface UserList {
   full_name: string;
   avatar: string | null;
   email: string;
+  role_id: number;
 }
 
 interface CohortDetailsTabsLMSProps {
@@ -76,9 +77,10 @@ export default function CohortDetailsTabsLMS({
   const activeModules = moduleList.filter(
     (module) => module.status === "ACTIVE"
   );
-  const activeProject = projectList.filter(
+  const activeProjects = projectList.filter(
     (project) => project.status === "ACTIVE"
   );
+  const userMembers = userList.filter((user) => user.role_id === 3);
 
   return (
     <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg border overflow-hidden">
@@ -169,9 +171,9 @@ export default function CohortDetailsTabsLMS({
 
       {activeTab === "projects" && (
         <div className="tab-area w-full min-h-96">
-          {activeProject.length > 0 ? (
+          {activeProjects.length > 0 ? (
             <div className="tab-content flex flex-col p-4 gap-3">
-              {activeProject.map((post, index) => (
+              {activeProjects.map((post, index) => (
                 <ProjectItemLMS
                   key={index}
                   cohortId={cohortId}
@@ -195,7 +197,7 @@ export default function CohortDetailsTabsLMS({
       {activeTab === "members" && (
         <div className="tab-area w-full min-h-96">
           <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
-            {userList.map((post, index) => (
+            {userMembers.map((post, index) => (
               <UserItemLMS
                 key={index}
                 sessionUserId={sessionUserId}
