@@ -212,7 +212,7 @@ export default function GenerateAIIdeaValidatorLMS({
             />
             <AppCalloutBox
               calloutTitle="Tips"
-              calloutContent="Idea Validator membantu memvalidasi ide bisnismu sebelum dieksekusi dengan menganalisis relevansi masalah, potensi bisnis, dan arah industrinya agar kamu bisa mengambil keputusan berbasis data."
+              calloutContent="Idea Validator membantu memvalidasi ide bisnismu sebelum dieksekusi dengan menganalisis relevansi masalah (problem fit), potensi bisnis (solution fit), dan long-term viability agar kamu bisa mengambil keputusan berbasis data."
             />
           </div>
         </aside>

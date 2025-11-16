@@ -12,7 +12,7 @@ export interface HeaderAIResultDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   headerResultName: string;
   headerTitle: string;
-  headerDescription: string;
+  headerDescription?: string;
 }
 
 export default function HeaderAIResultDetailsLMS({
@@ -72,9 +72,11 @@ export default function HeaderAIResultDetailsLMS({
               <h1 className="header-title font-brand font-bold text-2xl">
                 {headerTitle}
               </h1>
-              <p className="font-bodycopy font-medium text-[#333333]">
-                {headerDescription}
-              </p>
+              {headerDescription && (
+                <p className="font-bodycopy font-medium text-[#333333]">
+                  {headerDescription}
+                </p>
+              )}
             </div>
           </div>
           <div
