@@ -121,7 +121,7 @@ export const listAITool = {
     .input(
       z.object({
         conv_id: stringIsNanoid(),
-        size: numberIsPositive().max(10).optional(),
+        size: numberIsPositive().min(1).optional(),
         before: stringIsNanoid().optional(),
       })
     )
@@ -173,7 +173,7 @@ export const listAITool = {
           },
         },
         orderBy: [{ created_at: "desc" }],
-        take: opts.input.size || 4,
+        take: opts.input.size,
       });
 
       return {
