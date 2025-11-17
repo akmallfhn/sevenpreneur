@@ -163,6 +163,7 @@ export const listLMS = {
           phone_country: entry.user.phone_country,
           phone_number: entry.user.phone_number,
           avatar: entry.user.avatar,
+          role_id: entry.user.role_id,
         };
       });
       return {
