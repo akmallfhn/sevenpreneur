@@ -6,8 +6,8 @@ export enum AIIdeaValidation_ProblemFreq {
   TINGGI = "tinggi",
 }
 
-export enum AIIdeaValidation_BusinessAlignment {
-  LONGEVITY = "longevity",
+export enum AIIdeaValidation_LongevityAlignment {
+  LONGTERM = "longterm",
   SHORTTERM = "shortterm",
   SEASONAL = "seasonal",
 }
