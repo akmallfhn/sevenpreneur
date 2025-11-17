@@ -48,6 +48,9 @@
   text-decoration: line-through;
   color: #6b7280;
 }
+.report del {
+  text-decoration: none;
+}
 
 /* Blockquote */
 .report blockquote {
