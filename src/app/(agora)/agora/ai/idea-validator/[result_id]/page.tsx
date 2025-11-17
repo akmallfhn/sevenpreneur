@@ -30,11 +30,6 @@ export default async function AIIdeaValidatorResultLMS({
 
   const aiIdeaValidationResult = aiIdeaValidationData.result;
 
-  console.log(
-    "AI Idea Validation Result:",
-    aiIdeaValidationResult.result.problem_validation.affected_users
-  );
-
   return (
     <IdeaValidationReportLMS
       sessionUserName={userData.full_name}
@@ -45,11 +40,12 @@ export default async function AIIdeaValidatorResultLMS({
       sessionUserRole={userData.role_id}
       resultName={aiIdeaValidationResult.name}
       problemDiscovery={
-        aiIdeaValidationResult.result.problem_validation.discovery
+        aiIdeaValidationResult.result.problem_fit.validation.discovery
       }
-      sources={aiIdeaValidationResult.result.problem_validation.sources}
+      sources={aiIdeaValidationResult.result.problem_fit.validation.sources}
       confidenceLevel={
-        aiIdeaValidationResult.result.problem_validation.confidence_level
+        aiIdeaValidationResult.result.problem_fit.validation
+          .data_confidence_level
       }
     />
   );
