@@ -65,10 +65,10 @@ export default function CuriculumSessionsBlueprintProgramSVP() {
       session_name: "Product & Offer",
       session_description:
         "Turn what you have into what people can’t wait to pay for.",
-      session_educator: "Vander Lesnussa",
-      session_educator_title: "Senior Product Manager Allofresh",
+      session_educator: "Vicktor Aritonang",
+      session_educator_title: "CEO SSPACE Media",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vander.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
       session_variant: "frameworkSecondary",
     },
     {
