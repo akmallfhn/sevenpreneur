@@ -1,4 +1,5 @@
 import IdeaValidationReportLMS from "@/app/components/reports/IdeaValidationReportLMS";
+import { AIIdeaValidation_ProblemFreq } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -41,6 +42,22 @@ export default async function AIIdeaValidatorResultLMS({
       resultName={aiIdeaValidationResult.name}
       problemDiscovery={
         aiIdeaValidationResult.result.problem_fit.validation.discovery
+      }
+      problemFrequency={
+        aiIdeaValidationResult.result.problem_fit.validation.frequency
+      }
+      problemFitScore={
+        aiIdeaValidationResult.result.problem_fit.final_problem_fit_score
+      }
+      affectedSegments={
+        aiIdeaValidationResult.result.problem_fit.validation.affected_segments
+      }
+      problemFactors={
+        aiIdeaValidationResult.result.problem_fit.validation.key_factors
+      }
+      existingAlternatives={
+        aiIdeaValidationResult.result.problem_fit.validation
+          .existing_alternatives
       }
       sources={aiIdeaValidationResult.result.problem_fit.validation.sources}
       confidenceLevel={

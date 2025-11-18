@@ -27,11 +27,11 @@ export interface AIResultIdeaValidation extends JsonObject {
       }[];
       data_confidence_level: number;
       affected_segments: {
-        segment: string;
+        segment_name: string;
+        segment_description: string;
         segment_size: number;
         severity_percentage: number;
         pain_points: string;
-        segment_description: string;
       }[];
       frequency: AIIdeaValidation_ProblemFreq;
       key_factors: string;
@@ -115,7 +115,7 @@ export const aiToolPrompts = {
         "3. Tentukan data_confidence_level (1-100) berdasarkan kualitas data publik dan konsistensi analisis. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut.\n" +
         "4. Identifikasi segmen pengguna yang paling terdampak, ukur skalanya, dan jelaskan pain point mereka.\n" +
         "5. Tentukan frekuensi masalah muncul di publik (low/medium/high).\n" +
-        "6. Jelaskan akar penyebab + hambatan dari berbagai faktor (sosial/ekonomi/teknologi/perilaku).\n" +
+        "6. Jelaskan penyebab utama terjadi masalah ini + hambatan dari berbagai faktor (sosial/ekonomi/teknologi/perilaku).\n" +
         "7. Jelaskan alternatif solusi yang sudah ada dan mengapa belum optimal.\n" +
         "8. Hitung dan interpretasikan final_problem_fit_score dalam rentang 1–100, di mana semakin tinggi skor berarti problem semakin layak untuk diselesaikan. Skor dihitung menggunakan weighted scoring yang mencakup: severity_score (30%), urgency_score (20%), segment_size_score (20%), evidence_strength_score (20%), dan competitive_gap_score (10%)\n" +
         `9. Analisis value proposition ide "${ideation}": seberapa tepat untuk menyelesaikan masalah.\n` +
@@ -147,16 +147,16 @@ export const aiToolPrompts = {
                 "<estimasi tingkat kepercayaan validasi data (1-100)>",
               affected_segments: [
                 {
-                  segment:
+                  segment_name:
                     "<kelompok customer utama yang paling terdampak, misal: UMKM, mahasiswa, ibu rumah tangga, pekerja remote>",
+                  segment_description:
+                    "<ringkasan perilaku dan karakteristik dari segmen customer tersebut dalam 1-2 paragraf pendek>",
                   segment_size:
                     "<jumlah kelompok customer dalam angka absolut>",
                   severity_percentage:
                     "<estimasi proporsi kelompok customer yang terdampak masalah dalam persen (%)>",
                   pain_points:
                     "<pain point utama yang dialami segmen ini, termasuk apa yang mereka coba lakukan, apa yang menghambat, dan konsekuensi negatif yang mereka rasakan>",
-                  segment_description:
-                    "<ringkasan perilaku dan karakteristik dari segmen customer tersebut dalam 1-2 paragraf pendek>",
                 },
               ],
               frequency: "<low/medium/high>",
@@ -227,11 +227,11 @@ export const aiToolPrompts = {
               data_confidence_level: z.number(),
               affected_segments: z.array(
                 z.object({
-                  segment: z.string(),
+                  segment_name: z.string(),
+                  segment_description: z.string(),
                   segment_size: z.number(),
                   severity_percentage: z.number(),
                   pain_points: z.string(),
-                  segment_description: z.string(),
                 })
               ),
               frequency: z.enum(AIIdeaValidation_ProblemFreq),
