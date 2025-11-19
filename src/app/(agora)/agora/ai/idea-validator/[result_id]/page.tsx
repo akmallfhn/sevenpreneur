@@ -1,5 +1,4 @@
 import IdeaValidationReportLMS from "@/app/components/reports/IdeaValidationReportLMS";
-import { AIIdeaValidation_ProblemFreq } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -63,6 +62,26 @@ export default async function AIIdeaValidatorResultLMS({
       confidenceLevel={
         aiIdeaValidationResult.result.problem_fit.validation
           .data_confidence_level
+      }
+      solutionFitScore={
+        aiIdeaValidationResult.result.solution_fit.final_solution_fit_score
+      }
+      solutionValue={
+        aiIdeaValidationResult.result.solution_fit.validation.value_proposition
+      }
+      solutionFeasibility={
+        aiIdeaValidationResult.result.solution_fit.validation
+          .feasibility_analysis
+      }
+      industryDirection={
+        aiIdeaValidationResult.result.solution_fit.validation.industry_direction
+      }
+      longevityAlignment={
+        aiIdeaValidationResult.result.solution_fit.validation
+          .longevity_alignment
+      }
+      longevityReason={
+        aiIdeaValidationResult.result.solution_fit.validation.longevity_reason
       }
     />
   );
