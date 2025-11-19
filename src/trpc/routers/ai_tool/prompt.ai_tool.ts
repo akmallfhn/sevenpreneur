@@ -118,8 +118,8 @@ export const aiToolPrompts = {
         "12. Berikan proyeksi arah industri dalam 1–3 tahun ke depan.\n" +
         "13. Hitung final_solution_fit_score (1–100) dengan weighted scoring yang kamu tentukan secara logis. \n" +
         "14. Berikan saran agar ide lebih sesuai kebutuhan pasar.\n" +
-        "15. Berikan cara memperkuat competitive advantage.\n" +
-        "16. Berikan recommended focus area yang paling berdampak." +
+        "15. Berikan saran memperkuat competitive advantage.\n" +
+        "16. Berikan saran prioritas area yang paling berdampak." +
         `17. Berikan rekomendasi cara memanfaatkan resource "${resources}" yang dimiliki untuk memprekuat posisi.\n` +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
@@ -178,17 +178,18 @@ export const aiToolPrompts = {
           },
           idea_refinement: {
             market_alignment_suggestions:
-              "<saran penyempurnaan ide agar lebih fit dengan kebutuhan pasar>",
+              "<paragraf markdown saran penyempurnaan ide agar lebih fit dengan kebutuhan pasar>",
             competitive_advantage_suggestions:
-              "<cara memperkuat keunggulan kompetitif>",
-            priority_focus: "<area yang harus jadi fokus utama>",
+              "<paragraf markdown saran penguatan keunggulan kompetitif.>",
+            priority_focus:
+              "<paragraf markdown saran area yang harus jadi fokus utama.>",
             next_validation_steps: [
               "<contoh: landing page test>",
               "<contoh: pricing experiment>",
               "<contoh: 5-user interview>",
             ],
             resource_based_recommendation:
-              "<cara memanfaatkan resources untuk memperkuat posisi>",
+              "<paragraf markdown saran memanfaatkan resources untuk memperkuat posisi>",
           },
         }),
       input:
