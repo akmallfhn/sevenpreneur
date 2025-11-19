@@ -113,6 +113,8 @@ export default function MarketSizeReportLMS({
                   <a
                     href={post.source_url}
                     className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
+                    target="__blank"
+                    rel="noopener noreferrer"
                   >
                     {post.source_name}
                   </a>

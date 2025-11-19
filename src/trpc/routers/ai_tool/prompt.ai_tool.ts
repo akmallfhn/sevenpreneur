@@ -39,7 +39,6 @@ export interface AIResultIdeaValidation extends JsonObject {
     };
     final_problem_fit_score: number;
   };
-
   solution_fit: {
     validation: {
       value_proposition: string;
@@ -47,11 +46,6 @@ export interface AIResultIdeaValidation extends JsonObject {
       longevity_alignment: AIIdeaValidation_LongevityAlignment;
       longevity_reason: string;
       industry_direction: string;
-      scalability_potential: {
-        is_scalable: boolean;
-        scaling_factors: string;
-        barriers: string;
-      };
     };
     final_solution_fit_score: number;
   };
@@ -118,16 +112,15 @@ export const aiToolPrompts = {
         "6. Jelaskan penyebab utama terjadi masalah ini + hambatan dari berbagai faktor (sosial/ekonomi/teknologi/perilaku).\n" +
         "7. Jelaskan alternatif solusi yang sudah ada dan mengapa belum optimal.\n" +
         "8. Hitung dan interpretasikan final_problem_fit_score dalam rentang 1–100, di mana semakin tinggi skor berarti problem semakin layak untuk diselesaikan. Skor dihitung menggunakan weighted scoring yang mencakup: severity_score (30%), urgency_score (20%), segment_size_score (20%), evidence_strength_score (20%), dan competitive_gap_score (10%)\n" +
-        `9. Analisis value proposition ide "${ideation}": seberapa tepat untuk menyelesaikan masalah.\n` +
+        `9. Analisis proposisi nilai (seberapa tepat untuk menyelesaikan masalah) dari ide "${ideation}"\n` +
         "10. Analisis feasibility dari sisi teknis, operasional, finansial.\n" +
         "11. Tentukan apakah ide ini short-term / long-term / seasonal, dan alasannya." +
         "12. Berikan proyeksi arah industri dalam 1–3 tahun ke depan.\n" +
-        "13. Nilai skalabilitas: apakah bisa berkembang lintas pasar, monetizable, dan hambatannya.\n" +
-        "14. Hitung final_solution_fit_score (1–100) dengan weighted scoring yang kamu tentukan secara logis. \n" +
-        "15. Berikan saran agar ide lebih sesuai kebutuhan pasar.\n" +
-        "16. Berikan cara memperkuat competitive advantage.\n" +
-        "17. Berikan recommended focus area yang paling berdampak." +
-        `18. Berikan rekomendasi cara memanfaatkan resource "${resources}" yang dimiliki untuk memprekuat posisi.\n` +
+        "13. Hitung final_solution_fit_score (1–100) dengan weighted scoring yang kamu tentukan secara logis. \n" +
+        "14. Berikan saran agar ide lebih sesuai kebutuhan pasar.\n" +
+        "15. Berikan cara memperkuat competitive advantage.\n" +
+        "16. Berikan recommended focus area yang paling berdampak." +
+        `17. Berikan rekomendasi cara memanfaatkan resource "${resources}" yang dimiliki untuk memprekuat posisi.\n` +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           problem_fit: {
@@ -160,9 +153,10 @@ export const aiToolPrompts = {
                 },
               ],
               frequency: "<low/medium/high>",
-              key_factors: "<akar penyebab utama dan potensi hambatan>",
+              key_factors:
+                "<akar penyebab utama dan potensi hambatan. Dalam paragraf markdown>",
               existing_alternatives:
-                "<solusi atau alternatif yang sudah ada di pasar untuk mengatasi masalah ini>",
+                "<solusi atau alternatif yang sudah ada di pasar untuk mengatasi masalah ini. Dalam paragraf markdown>",
             },
             final_problem_fit_score:
               "<skor akhir (1-100) yang menunjukkan seberapa layak masalah ini untuk diselesaikan berdasarkan weighted scoring dari berbagai faktor>",
@@ -170,21 +164,14 @@ export const aiToolPrompts = {
           solution_fit: {
             validation: {
               value_proposition:
-                "<analisis kekuatan proposisi nilai dari ide yang diajukan berdasarkan kesesuaian dengan kebutuhan pasar, diferensiasi dari solusi yang ada, dan potensi dampak positif bagi pengguna>",
+                "<kekuatan proposisi nilai dari ide yang diajukan berdasarkan kesesuaian dengan kebutuhan, diferensiasi, dan potensi bagi pengguna. Dalam paragraf markdown>",
               feasibility_analysis:
-                "<evaluasi kelayakan ide dari segi teknis, operasional, dan finansial, termasuk sumber daya yang dibutuhkan dan tantangan potensial dalam implementasinya>",
+                "<evaluasi kelayakan ide dari segi teknis, operasional, dan finansial serta tantangan potensial dalam implementasinya. Dalam paragraf markdown>",
               longevity_alignment: "<long-term/short-term/seasonal>",
               longevity_reason:
-                "<alasan logis mengapa ide diprediksi berkelanjutan atau tidak>",
+                "<alasan logis mengapa ide diprediksi berkelanjutan atau tidak. Dalam paragraf markdown>",
               industry_direction:
-                "<perkembangan industri dalam 1–3 tahun ke depan>",
-              scalability_potential: {
-                is_scalable:
-                  "<true/false — apakah ide ini dapat dikembangkan ke pasar lain atau dimonetisasi dengan mudah>",
-                scaling_factors:
-                  "<faktor pendukung skalabilitas, misal: model bisnis digital, kemudahan replikasi, demand lintas pasar>",
-                barriers: "<hambatan potensial pertumbuhan ide>",
-              },
+                "<perkembangan industri dalam 1–3 tahun ke depan. Dalam paragraf markdown>",
             },
             final_solution_fit_score:
               "<skor akhir (1-100) yang menunjukkan seberapa layak solusi ini untuk dijalankan berdasarkan weighted scoring dari berbagai faktor>",
@@ -247,11 +234,6 @@ export const aiToolPrompts = {
               longevity_alignment: z.enum(AIIdeaValidation_LongevityAlignment),
               longevity_reason: z.string(),
               industry_direction: z.string(),
-              scalability_potential: z.object({
-                is_scalable: z.boolean(),
-                scaling_factors: z.string(),
-                barriers: z.string(),
-              }),
             }),
             final_solution_fit_score: z.number(),
           }),
