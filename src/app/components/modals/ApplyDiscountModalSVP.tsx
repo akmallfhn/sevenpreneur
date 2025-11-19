@@ -134,7 +134,6 @@ export default function ApplyDiscountModalSVP({
                 Redeem Promo
               </h2>
               <InputSVP
-                className="w-full"
                 inputId="discount-code"
                 inputName="Promo Code"
                 inputType="text"
