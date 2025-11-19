@@ -14,7 +14,7 @@ export default function AIItemCardLMS({
   aiDescriptions,
 }: AIItemCardLMS) {
   let aiIcon;
-  if (aiSlug === "idea-generation") {
+  if (aiSlug === "idea-validator") {
     aiIcon = <Lightbulb className="size-6 text-primary" />;
   } else if (aiSlug === "market-size") {
     aiIcon = <Boxes className="size-6 text-primary" />;

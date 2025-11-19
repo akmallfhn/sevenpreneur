@@ -78,6 +78,13 @@ export default function GenerateAIIdeaValidatorLMS({
       setIsGeneratingContents(false);
       return;
     }
+    if (!formData.availableResource.trim()) {
+      toast.error(
+        "Tell me what resources you have available before we continue."
+      );
+      setIsGeneratingContents(false);
+      return;
+    }
 
     try {
       const aiIdeaValidation = await GenerateAIIdeaValidation({
@@ -173,6 +180,7 @@ export default function GenerateAIIdeaValidatorLMS({
                 characterLength={4000}
                 value={formData.availableResource}
                 onTextAreaChange={handleInputChange("availableResource")}
+                required
               />
             </section>
             <AppButton

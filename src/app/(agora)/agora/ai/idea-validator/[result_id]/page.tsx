@@ -83,6 +83,24 @@ export default async function AIIdeaValidatorResultLMS({
       longevityReason={
         aiIdeaValidationResult.result.solution_fit.validation.longevity_reason
       }
+      ideaMarketRecommendation={
+        aiIdeaValidationResult.result.idea_refinement
+          .market_alignment_suggestions
+      }
+      ideaCompetitiveRecommendation={
+        aiIdeaValidationResult.result.idea_refinement
+          .competitive_advantage_suggestions
+      }
+      ideaResourceRecommendation={
+        aiIdeaValidationResult.result.idea_refinement
+          .resource_based_recommendation
+      }
+      ideaPriorityFocus={
+        aiIdeaValidationResult.result.idea_refinement.priority_focus
+      }
+      ideaNextStep={
+        aiIdeaValidationResult.result.idea_refinement.next_validation_steps
+      }
     />
   );
 }

@@ -108,6 +108,11 @@ interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
   industryDirection: string;
   longevityAlignment: AIIdeaValidation_LongevityAlignment;
   longevityReason: string;
+  ideaMarketRecommendation: string;
+  ideaCompetitiveRecommendation: string;
+  ideaResourceRecommendation: string;
+  ideaPriorityFocus: string;
+  ideaNextStep: string[];
 }
 
 export default function IdeaValidationReportLMS({
@@ -129,6 +134,11 @@ export default function IdeaValidationReportLMS({
   industryDirection,
   longevityAlignment,
   longevityReason,
+  ideaMarketRecommendation,
+  ideaCompetitiveRecommendation,
+  ideaResourceRecommendation,
+  ideaPriorityFocus,
+  ideaNextStep,
 }: IdeaValidationReportLMSProps) {
   const freq = freqAttributes[problemFrequency];
   const longevity = longevityAttributes[longevityAlignment];
@@ -380,7 +390,7 @@ export default function IdeaValidationReportLMS({
               />
             </div>
           </div>
-          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 items-center text-center rounded-lg border">
+          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 items-center text-center rounded-lg border">
             <div
               className={`aspect-square p-1 rounded-full ${longevity.icon_background}`}
             >
@@ -402,6 +412,70 @@ export default function IdeaValidationReportLMS({
         <h2 className="section-title font-bold font-brand text-xl">
           Idea Refinement
         </h2>
+        <div className="idea-refinement flex w-full gap-4">
+          <div className="suggestions flex flex-col flex-2 gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 rounded-lg border">
+            <h3 className="section-title font-bodycopy font-bold text-lg">
+              Rekomendasi & Saran
+            </h3>
+            <div className="suggestion-list flex flex-col gap-3">
+              <div className="market-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{ __html: ideaMarketRecommendation }}
+                />
+              </div>
+              <div className="competitive-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: ideaCompetitiveRecommendation,
+                  }}
+                />
+              </div>
+              <div className="resource-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: ideaResourceRecommendation,
+                  }}
+                />
+              </div>
+              <div className="priority-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: ideaPriorityFocus,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 rounded-lg border">
+            <h3 className="section-title font-bold text-lg font-bodycopy">
+              Next Step Actions
+            </h3>
+            <div className="step-list relative flex flex-col gap-4">
+              {ideaNextStep.map((item) => (
+                <div
+                  key={item}
+                  className="step-item flex items-center gap-6 z-10"
+                >
+                  <div className="step-point bg-primary size-3 rounded-full shrink-0 outline-primary-light/60 outline-4" />
+                  <p className="step-action font-bodycopy font-medium text-[15px] text-[#333333]">
+                    {item}
+                  </p>
+                </div>
+              ))}
+              <div
+                className="step-rail absolute left-1 w-[2px] h-full self-stretch"
+                style={{
+                  backgroundImage:
+                    "repeating-linear-gradient(to bottom, #B8C9DD 0, #B8C9DD 6px, transparent 6px, transparent 12px)",
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
