@@ -50,7 +50,7 @@ export default async function AIIdeaValidatorResultLMS({
         aiIdeaValidationResult.result.problem_fit.validation.affected_segments
       }
       problemFactors={
-        aiIdeaValidationResult.result.problem_fit.validation.key_factors
+        aiIdeaValidationResult.result.problem_fit.validation.key_factor
       }
       existingAlternatives={
         aiIdeaValidationResult.result.problem_fit.validation

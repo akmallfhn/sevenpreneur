@@ -68,7 +68,7 @@ const longevityAttributes: Record<
   shortterm: {
     name: "Short-term Product",
     description:
-      "Produk ini cocok untuk kebutuhan jangka pendek atau fase awal",
+      "Produk ini cocok untuk kebutuhan jangka pendek atau fase awal.",
     icon: "⚡",
     icon_background:
       "bg-linear-to-br from-0% from-yellow-100 to-80% to-[#FCFCFC]",
@@ -418,13 +418,13 @@ export default function IdeaValidationReportLMS({
               Rekomendasi & Saran
             </h3>
             <div className="suggestion-list flex flex-col gap-3">
-              <div className="market-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+              <div className="market-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{ __html: ideaMarketRecommendation }}
                 />
               </div>
-              <div className="competitive-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+              <div className="competitive-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -432,7 +432,7 @@ export default function IdeaValidationReportLMS({
                   }}
                 />
               </div>
-              <div className="resource-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+              <div className="resource-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -440,7 +440,7 @@ export default function IdeaValidationReportLMS({
                   }}
                 />
               </div>
-              <div className="priority-suggestions w-full bg-[#E3E6E8]/50 p-3 rounded-lg border">
+              <div className="priority-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -454,7 +454,7 @@ export default function IdeaValidationReportLMS({
             <h3 className="section-title font-bold text-lg font-bodycopy">
               Next Step Actions
             </h3>
-            <div className="step-list relative flex flex-col gap-4">
+            <div className="step-list relative flex flex-col gap-4 pb-2">
               {ideaNextStep.map((item) => (
                 <div
                   key={item}

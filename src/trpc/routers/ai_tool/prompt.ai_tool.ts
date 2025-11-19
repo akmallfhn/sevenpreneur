@@ -34,7 +34,7 @@ export interface AIResultIdeaValidation extends JsonObject {
         pain_points: string;
       }[];
       frequency: AIIdeaValidation_ProblemFreq;
-      key_factors: string;
+      key_factor: string;
       existing_alternatives: string;
     };
     final_problem_fit_score: number;
@@ -101,26 +101,26 @@ export const aiToolPrompts = {
   ) => {
     return {
       instructions:
-        "Kamu adalah seorang business coach & market strategist berpengalaman yang membantu founder dan tim startup dalam memvalidasi ide bisnis mereka secara sistematis.\n" +
-        "Kamu berpikir analitis seperti consultant McKinsey, tapi berkomunikasi seperti mentor yang membimbing dengan empati dan berbasis data.\n" +
-        "Tugasmu:\n" +
-        `1. Evaluasi apakah masalah "${problem}" pada saat "${location}" benar-benar nyata dan relevan\n` +
-        "2. Gunakan konteks publik seperti tren online, laporan riset, atau publikasi media untuk mendukung analisis.\n" +
-        "3. Tentukan data_confidence_level (1-100) berdasarkan kualitas data publik dan konsistensi analisis. Beri nilai dalam rentang 90-100 jika data berasal dari sumber kredibel dan perhitungan konsisten. Beri nilai dalam rentang 70-80 jika sebagian data diasumsikan tetapi masih logis. Beri nilai dalam rentang 50-60 jika data terbatas, perlu validasi lebih lanjut.\n" +
+        "Kamu adalah business coach & market strategist berpengalaman. Kamu berpikir analitis seperti konsultan McKinsey, namun berkomunikasi jelas, empatik, dan berbasis data.\n" +
+        "Tugasmu adalah memvalidasi ide bisnis secara sistematis dan mudah dipahami.\n" +
+        `1. Evaluasi apakah masalah "${problem}" pada situasi "${location}" benar-benar nyata dan relevan\n` +
+        "2. Gunakan data publik (tren online, laporan riset, artikel media) sebagai dasar analisis.\n" +
+        "3. Tentukan data_confidence_level (1–100): 90–100 jika datanya kuat, 70–80 jika sebagian asumsi, 50–60 jika datanya terbatas.\n" +
         "4. Identifikasi segmen pengguna yang paling terdampak, ukur skalanya, dan jelaskan pain point mereka.\n" +
-        "5. Tentukan frekuensi masalah muncul di publik (low/medium/high).\n" +
-        "6. Jelaskan penyebab utama terjadi masalah ini + hambatan dari berbagai faktor (sosial/ekonomi/teknologi/perilaku).\n" +
+        "5. Tentukan frekuensi masalah (low/medium/high).\n" +
+        "6. Jelaskan penyebab utama terjadi masalah ini dan faktor utamanya.\n" +
         "7. Jelaskan alternatif solusi yang sudah ada dan mengapa belum optimal.\n" +
-        "8. Hitung dan interpretasikan final_problem_fit_score dalam rentang 1–100, di mana semakin tinggi skor berarti problem semakin layak untuk diselesaikan. Skor dihitung menggunakan weighted scoring yang mencakup: severity_score (30%), urgency_score (20%), segment_size_score (20%), evidence_strength_score (20%), dan competitive_gap_score (10%)\n" +
+        "8. Hitung final_problem_fit_score (1–100), berdasarkan weighted scoring: severity (30%), urgency (20%), segment_size (20%), evidence_strength (20%), competitive_gap (10%).\n" +
         `9. Analisis proposisi nilai (seberapa tepat untuk menyelesaikan masalah) dari ide "${ideation}"\n` +
-        "10. Analisis feasibility dari sisi teknis, operasional, finansial.\n" +
+        "10. Analisis feasibility dari ide tersebut.\n" +
         "11. Tentukan apakah ide ini short-term / long-term / seasonal, dan alasannya." +
         "12. Berikan proyeksi arah industri dalam 1–3 tahun ke depan.\n" +
-        "13. Hitung final_solution_fit_score (1–100) dengan weighted scoring yang kamu tentukan secara logis. \n" +
-        "14. Berikan saran agar ide lebih sesuai kebutuhan pasar.\n" +
-        "15. Berikan saran memperkuat competitive advantage.\n" +
-        "16. Berikan saran prioritas area yang paling berdampak." +
-        `17. Berikan rekomendasi cara memanfaatkan resource "${resources}" yang dimiliki untuk memprekuat posisi.\n` +
+        "13. Hitung final_solution_fit_score (1–100) dengan weighted scoring yang logis. \n" +
+        "14. Berikan saran untuk meningkatkan market fit.\n" +
+        "15. Berikan saran memperkuat keunggulan kompetitif.\n" +
+        "16. Berikan saran area prioritas dengan dampak terbesar." +
+        `17. Berikan rekomendasi cara memanfaatkan resource "${resources}" yang dimiliki.\n` +
+        "Semua field yang membutuhkan penjelasan (termasuk key_factor, feasibility_analysis, market_alignment_suggestions, competitive_advantage_suggestions, priority_focus, resource_based_recommendation) wajib ditulis dalam bentuk paragraf naratif yang mengalir, tanpa list, tanpa numbering, tanpa bullet point, tanpa tanda dash (-), tanpa format enumerasi apa pun, tanpa pemisahan kategori, dan tanpa label seperti Teknis:, Operasional:, atau Finansial:.\n" +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           problem_fit: {
@@ -129,67 +129,58 @@ export const aiToolPrompts = {
                 "<analisis relevansi dan seberapa nyata problem yang disebut user berdasarkan data publik/tren sosial/perilaku pasar/wawancara>",
               sources: [
                 {
-                  source_name:
-                    "<nama sumber data atau publikasi yang mendukung validasi problem>",
-                  source_url: "<tautan sumber data>",
-                  source_publisher: "<pihak penerbit sumber data>",
-                  source_year: "<tahun publikasi sumber data>",
+                  source_name: "<nama sumber data>",
+                  source_url: "<url>",
+                  source_publisher: "<penerbit>",
+                  source_year: "<tahun publikasi>",
                 },
               ],
-              data_confidence_level:
-                "<estimasi tingkat kepercayaan validasi data (1-100)>",
+              data_confidence_level: "<1-100>",
               affected_segments: [
                 {
                   segment_name:
-                    "<kelompok customer utama yang paling terdampak, misal: UMKM, mahasiswa, ibu rumah tangga, pekerja remote>",
+                    "<nama kelompok customer utama yang paling terdampak>",
                   segment_description:
-                    "<ringkasan perilaku dan karakteristik dari segmen customer tersebut dalam 1-2 paragraf pendek>",
+                    "<deskripsi ringkas perilaku dan karakteristik>",
                   segment_size:
                     "<jumlah kelompok customer dalam angka absolut>",
-                  severity_percentage:
-                    "<estimasi proporsi kelompok customer yang terdampak masalah dalam persen (%)>",
+                  severity_percentage: "<persentase terdampak (%)>",
                   pain_points:
-                    "<pain point utama yang dialami segmen ini, termasuk apa yang mereka coba lakukan, apa yang menghambat, dan konsekuensi negatif yang mereka rasakan>",
+                    "<pain point dan konsekuensi utama yang dialami>",
                 },
               ],
               frequency: "<low/medium/high>",
-              key_factors:
-                "<akar penyebab utama dan potensi hambatan. Dalam paragraf markdown>",
+              key_factor:
+                "<penjelasan naratif mengenai akar penyebab dan hambatan>",
               existing_alternatives:
-                "<solusi atau alternatif yang sudah ada di pasar untuk mengatasi masalah ini. Dalam paragraf markdown>",
+                "<solusi yang sudah ada + alasan belum optimal>",
             },
-            final_problem_fit_score:
-              "<skor akhir (1-100) yang menunjukkan seberapa layak masalah ini untuk diselesaikan berdasarkan weighted scoring dari berbagai faktor>",
+            final_problem_fit_score: "<1-100>",
           },
           solution_fit: {
             validation: {
-              value_proposition:
-                "<kekuatan proposisi nilai dari ide yang diajukan berdasarkan kesesuaian dengan kebutuhan, diferensiasi, dan potensi bagi pengguna. Dalam paragraf markdown>",
+              value_proposition: "<analisis value proposition>",
               feasibility_analysis:
-                "<evaluasi kelayakan ide dari segi teknis, operasional, dan finansial serta tantangan potensial dalam implementasinya. Dalam paragraf markdown>",
+                "<analisis kelayakan dalam bentuk paragraf naratif>",
               longevity_alignment: "<long-term/short-term/seasonal>",
-              longevity_reason:
-                "<alasan logis mengapa ide diprediksi berkelanjutan atau tidak. Dalam paragraf markdown>",
-              industry_direction:
-                "<perkembangan industri dalam 1–3 tahun ke depan. Dalam paragraf markdown>",
+              longevity_reason: "<alasan pemilihan longevity_alignment>",
+              industry_direction: "<prediksi arah industri 1–3 tahun>",
             },
-            final_solution_fit_score:
-              "<skor akhir (1-100) yang menunjukkan seberapa layak solusi ini untuk dijalankan berdasarkan weighted scoring dari berbagai faktor>",
+            final_solution_fit_score: "<1-100>",
           },
           idea_refinement: {
             market_alignment_suggestions:
-              "<paragraf markdown saran penyempurnaan ide agar lebih fit dengan kebutuhan pasar>",
+              "<saran penyempurnaan agar lebih fit dengan pasar>",
             competitive_advantage_suggestions:
-              "<paragraf markdown saran penguatan keunggulan kompetitif.>",
-            priority_focus:
-              "<paragraf markdown saran area yang harus jadi fokus utama.>",
+              "<saran memperkuat keunggulan kompetitif>",
+            priority_focus: "<area yang harus jadi fokus utama>",
             next_validation_steps: [
               "<contoh: landing page test>",
               "<contoh: pricing experiment>",
               "<contoh: 5-user interview>",
             ],
             resource_based_recommendation:
-              "<paragraf markdown saran memanfaatkan resources untuk memperkuat posisi>",
+              "<saran memaksimalkan resources yang dimiliki>",
           },
         }),
       input:
@@ -223,7 +214,7 @@ export const aiToolPrompts = {
                 })
               ),
               frequency: z.enum(AIIdeaValidation_ProblemFreq),
-              key_factors: z.string(),
+              key_factor: z.string(),
               existing_alternatives: z.string(),
             }),
             final_problem_fit_score: z.number(),
