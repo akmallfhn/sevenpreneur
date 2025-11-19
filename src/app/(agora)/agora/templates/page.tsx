@@ -7,11 +7,9 @@ import { cookies } from "next/headers";
 export default async function TemplatesPageLMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const hasTemplateAccess = await trpc.check.aiTools();
 

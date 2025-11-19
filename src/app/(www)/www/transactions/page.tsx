@@ -56,10 +56,7 @@ export default async function TransactionsPage() {
   if (!sessionToken) {
     redirect(`/auth/login?redirectTo=/transactions/`);
   }
-
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  setSessionToken(sessionToken);
 
   const userSession = (await trpc.auth.checkSession()).user;
 

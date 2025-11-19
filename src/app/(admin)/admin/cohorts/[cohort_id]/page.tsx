@@ -12,14 +12,12 @@ export default async function CohortDetailsPage({
 }: CohortDetailPageProps) {
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
-
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
+
   const userSession = await trpc.auth.checkSession();
   const allowedRolesDetailsCohort = [0, 1, 2, 3];
 

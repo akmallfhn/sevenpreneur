@@ -10,16 +10,13 @@ interface PlaylistDetailsPageLMSProps {
 export default async function PlaylistDetailsPageLMS({
   params,
 }: PlaylistDetailsPageLMSProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
-
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
-
   const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id, 10);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const userData = (await trpc.auth.checkSession()).user;
 

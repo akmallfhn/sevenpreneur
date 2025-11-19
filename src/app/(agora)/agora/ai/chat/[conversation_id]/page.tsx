@@ -13,11 +13,9 @@ export default async function AIChatConversationLMS({
   const { conversation_id } = await params;
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   if (conversation_id === "temp") {
     return (

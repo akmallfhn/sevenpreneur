@@ -11,12 +11,12 @@ interface TransactionDetailsPageProps {
 export async function generateMetadata({
   params,
 }: TransactionDetailsPageProps): Promise<Metadata> {
+  const { transaction_id } = await params;
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  const { transaction_id } = await params;
 
-  // --- Get Data
   setSessionToken(sessionToken!);
+
   const transactionDetailsData = (
     await trpc.read.transaction({
       id: transaction_id,
@@ -69,22 +69,20 @@ export async function generateMetadata({
 export default async function TransactionDetailsPage({
   params,
 }: TransactionDetailsPageProps) {
+  const { transaction_id } = await params;
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  const { transaction_id } = await params;
 
-  // --- Redirect if not login
   if (!sessionToken) {
     redirect(`/auth/login?redirectTo=/transactions/${transaction_id}`);
   }
+  setSessionToken(sessionToken);
 
   // Redirect 404 if invalid transaction_id
   if (!transaction_id || transaction_id.length < 21) {
     return notFound();
   }
 
-  // --- Get Data
-  setSessionToken(sessionToken);
   let transactionDetailsData;
   try {
     transactionDetailsData = (

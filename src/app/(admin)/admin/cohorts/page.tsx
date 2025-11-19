@@ -6,11 +6,9 @@ import { cookies } from "next/headers";
 export default async function CohortsPageCMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
   const allowedRolesListCohort = [0, 1, 2, 3];

@@ -11,16 +11,13 @@ interface CohortDetailsPageLMSProps {
 export default async function CohortDetailsPageLMS({
   params,
 }: CohortDetailsPageLMSProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
-
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
-
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id, 10);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const userData = (await trpc.auth.checkSession()).user;
 

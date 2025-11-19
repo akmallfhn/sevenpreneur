@@ -11,12 +11,12 @@ interface PlaylistDetailsPageProps {
 export async function generateMetadata({
   params,
 }: PlaylistDetailsPageProps): Promise<Metadata> {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id);
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
-  // --- Get Data
   setSecretKey(secretKey!);
+
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
   if (playlistData.status !== "ACTIVE") {
@@ -79,12 +79,12 @@ export async function generateMetadata({
 export default async function PlaylistDetailsPage({
   params,
 }: PlaylistDetailsPageProps) {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { playlist_id, playlist_name } = await params;
   const playlistId = parseInt(playlist_id);
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
-  // Get Data
   setSecretKey(secretKey!);
+
   let playlistDataRaw;
   try {
     playlistDataRaw = (await trpc.read.playlist({ id: playlistId })).playlist;

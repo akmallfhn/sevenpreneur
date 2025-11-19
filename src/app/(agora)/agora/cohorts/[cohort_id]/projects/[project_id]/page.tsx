@@ -10,17 +10,14 @@ interface ProjectDetailsPageLMSProps {
 export default async function ProjectDetailsPageLMS({
   params,
 }: ProjectDetailsPageLMSProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
-
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
-
   const { cohort_id, project_id } = await params;
   const cohortId = parseInt(cohort_id, 10);
   const projectId = parseInt(project_id, 10);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   // Fetch tRPC
   const userData = (await trpc.auth.checkSession()).user;

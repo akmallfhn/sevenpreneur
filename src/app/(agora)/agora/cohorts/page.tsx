@@ -5,11 +5,9 @@ import { cookies } from "next/headers";
 export default async function CohortsPageLMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const userData = (await trpc.auth.checkSession()).user;
   const enrolledCohortData = (await trpc.list.enrolledCohorts({})).list;

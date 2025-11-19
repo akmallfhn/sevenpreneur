@@ -12,14 +12,13 @@ interface CheckoutPlaylistPageProps {
 export async function generateMetadata({
   params,
 }: CheckoutPlaylistPageProps): Promise<Metadata> {
+  const { playlist_id } = await params;
+  const playlistId = parseInt(playlist_id);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  const { playlist_id } = await params;
-  const playlistId = parseInt(playlist_id);
-
-  // --- Get Data
   setSessionToken(sessionToken!);
+
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
 
   return {
@@ -67,20 +66,19 @@ export async function generateMetadata({
 export default async function CheckoutPlaylistPage({
   params,
 }: CheckoutPlaylistPageProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
   const { playlist_id, playlist_name } = await params;
   const playlistId = parseInt(playlist_id);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
 
-  // --- Redirect if not login
+  // Redirect if not login
   if (!sessionToken) {
     redirect(
       `/auth/login?redirectTo=/playlists/${playlist_name}/${playlist_id}/checkout`
     );
   }
-
-  // --- Get Data
   setSessionToken(sessionToken);
+
   const checkUser = (await trpc.auth.checkSession()).user;
   let playlistDataRaw;
   try {
@@ -105,7 +103,7 @@ export default async function CheckoutPlaylistPage({
         : post.calc_flat,
   }));
 
-  // --- Auto Correction Slug
+  // Auto Correction Slug
   const correctSlug = playlistData.slug_url;
   if (playlist_name !== correctSlug) {
     redirect(`/playlists/${correctSlug}/${playlistId}/checkout`);

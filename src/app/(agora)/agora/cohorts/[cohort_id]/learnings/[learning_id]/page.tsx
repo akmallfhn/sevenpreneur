@@ -10,17 +10,14 @@ interface LearningDetailsPageLMSProps {
 export default async function LearningsDetailsPageLMS({
   params,
 }: LearningDetailsPageLMSProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
-
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
-
   const { cohort_id, learning_id } = await params;
   const cohortId = parseInt(cohort_id, 10);
   const learningId = parseInt(learning_id, 10);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
+
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const userData = (await trpc.auth.checkSession()).user;
 

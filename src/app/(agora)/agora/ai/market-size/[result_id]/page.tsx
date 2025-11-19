@@ -10,15 +10,13 @@ interface AIMarketSizeResultLMSProps {
 export default async function AIMarketSizeResultLMS({
   params,
 }: AIMarketSizeResultLMSProps) {
+  const { result_id } = await params;
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
+
   if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
-
-  const { result_id } = await params;
   const userData = (await trpc.auth.checkSession()).user;
 
   let aiMarketSizeData;

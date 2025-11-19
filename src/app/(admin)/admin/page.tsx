@@ -6,11 +6,9 @@ export default async function AdminHomePage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  if (!sessionToken) {
-    return null;
-  }
-
+  if (!sessionToken) return null;
   setSessionToken(sessionToken);
+
   const checkSession = await trpc.auth.checkSession();
   const sessionUser = checkSession.user;
 

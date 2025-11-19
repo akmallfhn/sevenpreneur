@@ -1,6 +1,5 @@
 import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP";
 import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
-import NotFoundComponent from "@/app/components/state/404NotFound";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -14,14 +13,13 @@ interface CheckoutCohortPageProps {
 export async function generateMetadata({
   params,
 }: CheckoutCohortPageProps): Promise<Metadata> {
+  const { cohort_id } = await params;
+  const cohortId = parseInt(cohort_id);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  const { cohort_id } = await params;
-  const cohortId = parseInt(cohort_id);
-
-  // Get Data
   setSessionToken(sessionToken!);
+
   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
 
   return {
@@ -69,10 +67,10 @@ export async function generateMetadata({
 export default async function CheckoutCohortPage({
   params,
 }: CheckoutCohortPageProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
   const { cohort_name, cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
 
   // Redirect if not login
   if (!sessionToken) {
@@ -80,9 +78,8 @@ export default async function CheckoutCohortPage({
       `/auth/login?redirectTo=/cohorts/${cohort_name}/${cohort_id}/checkout`
     );
   }
-
-  // Get Data
   setSessionToken(sessionToken);
+
   const checkUser = (await trpc.auth.checkSession()).user;
   let cohortData;
   try {

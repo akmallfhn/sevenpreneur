@@ -7,11 +7,9 @@ export default async function PlaylistsPageLMS() {
   // Get Token for Header Navbar
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   // Fetch tRPC
   const userData = (await trpc.auth.checkSession()).user;

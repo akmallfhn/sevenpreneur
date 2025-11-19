@@ -1,6 +1,5 @@
 import CheckoutEventFormSVP from "@/app/components/forms/CheckoutEventFormSVP";
 import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
-import NotFoundComponent from "@/app/components/state/404NotFound";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -14,14 +13,13 @@ interface CheckoutEventPageProps {
 export async function generateMetadata({
   params,
 }: CheckoutEventPageProps): Promise<Metadata> {
+  const { event_id } = await params;
+  const eventId = parseInt(event_id);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  const { event_id } = await params;
-  const eventId = parseInt(event_id);
-
-  // Get Data
   setSessionToken(sessionToken!);
+
   const eventData = (await trpc.read.event({ id: eventId })).event;
 
   return {
@@ -69,10 +67,10 @@ export async function generateMetadata({
 export default async function CheckoutEventPage({
   params,
 }: CheckoutEventPageProps) {
-  const cookieStore = await cookies();
-  const sessionToken = cookieStore.get("session_token")?.value;
   const { event_id, event_name } = await params;
   const eventId = parseInt(event_id);
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session_token")?.value;
 
   // Redirect if not login
   if (!sessionToken) {
@@ -80,9 +78,8 @@ export default async function CheckoutEventPage({
       `/auth/login?redirectTo=/events/${event_name}/${event_id}/checkout`
     );
   }
-
-  // Get Data
   setSessionToken(sessionToken);
+
   const checkUser = (await trpc.auth.checkSession()).user;
   let eventData;
   try {

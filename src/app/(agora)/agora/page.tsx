@@ -9,8 +9,8 @@ export default async function DashboardPageLMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  // Get Data
-  setSessionToken(sessionToken!);
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   const userData = (await trpc.auth.checkSession()).user;
 

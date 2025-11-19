@@ -7,8 +7,8 @@ import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
 export async function generateMetadata(): Promise<Metadata> {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
-  // Get Data
   setSecretKey(secretKey!);
+
   const cohortData = (await trpc.read.cohort({ id: 36 })).cohort;
 
   if (cohortData.status !== "ACTIVE") {
@@ -71,8 +71,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BlueprintProgramPage() {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
-  // Get Data
   setSecretKey(secretKey!);
+
   let cohortDataRaw;
   try {
     cohortDataRaw = (await trpc.read.cohort({ id: 36 })).cohort;

@@ -10,12 +10,12 @@ interface CohortDetailsPageProps {
 export async function generateMetadata({
   params,
 }: CohortDetailsPageProps): Promise<Metadata> {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
-  // Get Data
   setSecretKey(secretKey!);
+
   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
 
   if (cohortData.status !== "ACTIVE") {
@@ -78,12 +78,12 @@ export async function generateMetadata({
 export default async function CohortDetailsPage({
   params,
 }: CohortDetailsPageProps) {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { cohort_id, cohort_name } = await params;
   const cohortId = parseInt(cohort_id);
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
-  // Get Data
   setSecretKey(secretKey!);
+
   let cohortDataRaw;
   try {
     cohortDataRaw = (await trpc.read.cohort({ id: cohortId })).cohort;
