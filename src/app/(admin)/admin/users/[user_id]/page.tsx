@@ -11,9 +11,5 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value ?? "";
 
-  return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <UserProfileDetailsCMS sessionToken={sessionToken} userId={user_id} />
-    </div>
-  );
+  return <UserProfileDetailsCMS sessionToken={sessionToken} userId={user_id} />;
 }

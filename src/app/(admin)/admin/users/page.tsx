@@ -9,9 +9,5 @@ export default async function UsersPageCMS() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
-  return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <UserListCMS sessionToken={sessionToken} />
-    </div>
-  );
+  return <UserListCMS sessionToken={sessionToken} />;
 }

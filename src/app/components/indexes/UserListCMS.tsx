@@ -59,13 +59,6 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
     wrapperRef.current[id] = el;
   };
 
-  // Set token for API
-  useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
-    }
-  }, [sessionToken]);
-
   // Debounce Typing for 1 second
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -128,7 +121,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   };
 
   return (
-    <React.Fragment>
+    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
@@ -339,6 +332,6 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
           }}
         />
       )}
-    </React.Fragment>
+    </div>
   );
 }
