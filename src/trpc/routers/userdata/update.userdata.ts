@@ -8,7 +8,13 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import {
+  LegalEntityEnum,
+  NumEmployeeEnum,
+  OccupationEnum,
+  RevenueEnum,
+  StatusEnum,
+} from "@prisma/client";
 import z from "zod";
 
 export const updateUserData = {
@@ -28,6 +34,14 @@ export const updateUserData = {
         entrepreneur_stage_id: numberIsID().nullable().optional(),
         business_name: stringNotBlank().nullable().optional(),
         industry_id: numberIsID().nullable().optional(),
+        business_description: stringNotBlank().nullable().optional(),
+        occupation: z.enum(OccupationEnum).nullable().optional(),
+        yearly_revenue: z.enum(RevenueEnum).nullable().optional(),
+        total_employees: z.enum(NumEmployeeEnum).nullable().optional(),
+        company_profile_url: stringNotBlank().nullable().optional(),
+        business_age_years: z.number().nullable().optional(),
+        legal_entity_type: z.enum(LegalEntityEnum).nullable().optional(),
+        average_selling_price: z.number().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -46,6 +60,14 @@ export const updateUserData = {
           entrepreneur_stage_id: opts.input.entrepreneur_stage_id,
           business_name: opts.input.business_name,
           industry_id: opts.input.industry_id,
+          business_description: opts.input.business_description,
+          occupation: opts.input.occupation,
+          yearly_revenue: opts.input.yearly_revenue,
+          total_employees: opts.input.total_employees,
+          company_profile_url: opts.input.company_profile_url,
+          business_age_years: opts.input.business_age_years,
+          legal_entity_type: opts.input.legal_entity_type,
+          average_selling_price: opts.input.average_selling_price,
         },
         where: {
           id: opts.input.id,
