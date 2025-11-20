@@ -67,6 +67,16 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Administrators have write access to all users' data.
 - Administrators, Educators, and Class Managers have read access to all users' data.
 
+### User Businesses 👤
+
+| Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `update.user_business` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Logged-in users can only update their own business data.
+
 ## Cohorts 🎓
 
 | Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
