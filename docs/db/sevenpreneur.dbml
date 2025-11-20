@@ -95,12 +95,6 @@ Table roles {
   updated_at  timestamptz
 }
 
-Table entrepreneur_stages {
-  id          smallint     [primary key]
-  stage_name  varchar      [note: 'unique, e.g. Growth']
-  created_at  timestamptz
-}
-
 Table industries {
   id             smallint     [primary key]
   industry_name  varchar      [note: 'unique, e.g. Information Technology']
@@ -129,19 +123,17 @@ Table payment_channels {
 // User data
 
 Table users {
-  id                     uuid         [primary key]
-  full_name              varchar      [note: 'e.g. Budi Sadikin']
-  email                  varchar      [note: 'unique, e.g. budisadikin@gmail.com']
-  phone_country_id       smallint     [ref: > phone_country_codes.id]
+  id                     uuid               [primary key]
+  full_name              varchar            [note: 'e.g. Budi Sadikin']
+  email                  varchar            [note: 'unique, e.g. budisadikin@gmail.com']
+  phone_country_id       smallint           [ref: > phone_country_codes.id]
   phone_number           varchar
   avatar                 varchar
-  role_id                smallint     [ref: > roles.id, note: 'default 3']
-  status                 status_enum  [note: 'default active']
+  role_id                smallint           [ref: > roles.id, note: 'default 3']
+  status                 status_enum        [note: 'default active']
   date_of_birth          date
-  learning_goal          varchar
-  entrepreneur_stage     smallint     [ref: > entrepreneur_stages.id]
   business_name          varchar
-  industry_id            smallint     [ref: > industries.id]
+  industry_id            smallint           [ref: > industries.id]
   business_description   text
   occupation             occupation_enum
   yearly_revenue         revenue_enum

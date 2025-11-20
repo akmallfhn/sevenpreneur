@@ -12,7 +12,6 @@ export const listRouter = createTRPCRouter({
   // Lookup Tables //
 
   roles: listLookup.roles,
-  entrepreneurStages: listLookup.entrepreneurStages,
   industries: listLookup.industries,
   phoneCountryCodes: listLookup.phoneCountryCodes,
   paymentChannels: listLookup.paymentChannels,

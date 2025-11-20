@@ -27,15 +27,6 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:** All logged-in users have read access to all roles.
 
-## Entrepreneur Stages 📈
-
-| Procedure Name            | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.entrepreneurStages` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.entrepreneurStage`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-
-**Scopes:** All logged-in users have read access to all entrepreneur stages.
-
 ## Industries 🏭
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |

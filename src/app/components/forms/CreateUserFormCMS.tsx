@@ -57,13 +57,6 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     isLoading: isLoadingIndustries,
     isError: isErrorIndustries,
   } = trpc.list.industries.useQuery(undefined, { enabled: !!sessionToken });
-  const {
-    data: stagesData,
-    isLoading: isLoadingStages,
-    isError: isErrorStages,
-  } = trpc.list.entrepreneurStages.useQuery(undefined, {
-    enabled: !!sessionToken,
-  });
 
   // Beginning State
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,10 +68,8 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     roleId: string | number;
     status: "ACTIVE" | "INACTIVE";
     dateOfBirth: string;
-    learningGoal: string;
     businessName: string;
     industry: string | number;
-    entrepreneurStage: string | number;
   }>({
     fullName: "",
     email: "",
@@ -87,10 +78,8 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
     roleId: "",
     status: "ACTIVE",
     dateOfBirth: "",
-    learningGoal: "",
     businessName: "",
     industry: "",
-    entrepreneurStage: "",
   });
 
   // Add event listener to prevent page refresh
@@ -105,8 +94,8 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   }, []);
 
   // Extract variable
-  const isLoading = isLoadingRoles || isLoadingIndustries || isLoadingStages;
-  const isError = isErrorRoles || isErrorIndustries || isErrorStages;
+  const isLoading = isLoadingRoles || isLoadingIndustries;
+  const isError = isErrorRoles || isErrorIndustries;
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -169,12 +158,6 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
             : undefined,
-          learning_goal: formData.learningGoal.trim()
-            ? formData.learningGoal
-            : undefined,
-          entrepreneur_stage_id: formData.entrepreneurStage
-            ? Number(formData.entrepreneurStage)
-            : undefined,
           business_name: formData.businessName.trim()
             ? formData.businessName
             : undefined,
@@ -193,10 +176,8 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
               roleId: "",
               status: "ACTIVE",
               dateOfBirth: "",
-              learningGoal: "",
               businessName: "",
               industry: "",
-              entrepreneurStage: "",
             });
             utils.list.users.invalidate();
             router.push("/users");
@@ -371,15 +352,6 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                   value={formData.dateOfBirth}
                   onInputChange={handleInputChange("dateOfBirth")}
                 />
-                {/* Learning Goals */}
-                <TextAreaCMS
-                  textAreaId={"learning-goal"}
-                  textAreaName={"Learning Goal"}
-                  textAreaPlaceholder={"Summarize the learning focus"}
-                  textAreaHeight={"h-[120px]"}
-                  value={formData.learningGoal}
-                  onTextAreaChange={handleInputChange("learningGoal")}
-                />
               </div>
             </div>
           </div>
@@ -410,21 +382,6 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                 onChange={handleInputChange("industry")}
                 options={
                   industriesData?.list?.map((role) => ({
-                    label: role.name,
-                    value: role.id,
-                  })) || []
-                }
-              />
-              {/* Entrepeneur Stage */}
-              <SelectCMS
-                selectId={"entrepeneur-stage"}
-                selectName={"Entrepeneur Stage"}
-                selectPlaceholder="Set entrepreneur level"
-                selectIcon={<Sprout className="size-5" />}
-                value={formData.entrepreneurStage}
-                onChange={handleInputChange("entrepreneurStage")}
-                options={
-                  stagesData?.list?.map((role) => ({
                     label: role.name,
                     value: role.id,
                   })) || []
