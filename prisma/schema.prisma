@@ -56,6 +56,55 @@ enum CRoleEnum {
   @@map("c_role_enum")
 }
 
+// Enumeration for the users table
+
+enum OccupationEnum {
+  EMPLOYEE     @map("employee")
+  ENTREPRENEUR @map("entrepreneur")
+  STUDENT      @map("student")
+  FREELANCE    @map("freelance")
+  MILITARY     @map("military")
+  UNEMPLOYED   @map("unemployed")
+
+  @@map("occupation_enum")
+}
+
+enum RevenueEnum {
+  BELOW_50M         @map("below_50m")
+  BETWEEN_50M_100M  @map("between_50m_100m")
+  BETWEEN_100M_500M @map("between_100m_500m")
+  BETWEEN_500M_1B   @map("between_500m_1b")
+  BETWEEN_1B_10B    @map("between_1b_10b")
+  BETWEEN_10B_25B   @map("between_10b_25b")
+  ABOVE_25B         @map("above_25b")
+
+  @@map("Revenue_enum")
+}
+
+enum NumEmployeeEnum {
+  SMALL   @map("small")
+  MEDIUM  @map("medium")
+  LARGE   @map("large")
+  XLARGE  @map("xlarge")
+  XXLARGE @map("xxlarge")
+
+  @@map("num_employee_enum")
+}
+
+enum LegalEntityEnum {
+  CV               @map("cv")
+  PT               @map("pt")
+  PT_TBK           @map("pt_tbk")
+  PERSERO          @map("persero")
+  FIRMA            @map("firma")
+  KOPERASI         @map("koperasi")
+  YAYASAN          @map("yayasan")
+  UD               @map("ud")
+  NON_LEGAL_ENTITY @map("non_legal_entity")
+
+  @@map("legal_entity_enum")
+}
+
 ////////////
 // Models //
 ////////////
@@ -135,6 +184,14 @@ model User {
   business_name         String?             @db.VarChar()
   industry              Industry?           @relation(fields: [industry_id], references: [id])
   industry_id           Int?                @db.SmallInt
+  business_description  String?             @db.Text
+  occupation            OccupationEnum?
+  yearly_revenue        RevenueEnum?
+  total_employees       NumEmployeeEnum?
+  company_profile_url   String?             @db.VarChar()
+  business_age_years    Int?                @db.Integer
+  legal_entity_type     LegalEntityEnum?
+  average_selling_price Decimal?            @db.Decimal(12, 2)
   created_at            DateTime            @default(now()) @db.Timestamptz()
   updated_at            DateTime            @default(now()) @updatedAt @db.Timestamptz()
   last_login            DateTime            @default(now()) @updatedAt @db.Timestamptz()

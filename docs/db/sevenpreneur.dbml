@@ -40,6 +40,47 @@ enum c_role_enum {
   assistant
 }
 
+// Enumeration for the users table
+
+enum occupation_enum {
+  employee
+  entrepreneur
+  student
+  freelance
+  military
+  unemployed
+}
+
+enum revenue_enum {
+  below_50m
+  between_50m_100m
+  between_100m_500m
+  between_500m_1b
+  between_1b_10b
+  between_10b_25b
+  above_25b
+}
+
+enum num_employee_enum {
+  small
+  medium
+  large
+  xlarge
+  xxlarge
+}
+
+enum legal_entity_enum {
+  cv
+  pt
+  pt_tbk
+  persero
+  firma
+  koperasi
+  yayasan
+  ud
+  non_legal_entity
+}
+
 ////////////
 // Tables //
 ////////////
@@ -88,23 +129,31 @@ Table payment_channels {
 // User data
 
 Table users {
-  id                  uuid         [primary key]
-  full_name           varchar      [note: 'e.g. Budi Sadikin']
-  email               varchar      [note: 'unique, e.g. budisadikin@gmail.com']
-  phone_country_id    smallint     [ref: > phone_country_codes.id]
-  phone_number        varchar
-  avatar              varchar
-  role_id             smallint     [ref: > roles.id, note: 'default 3']
-  status              status_enum  [note: 'default active']
-  date_of_birth       date
-  learning_goal       varchar
-  entrepreneur_stage  smallint     [ref: > entrepreneur_stages.id]
-  business_name       varchar
-  industry_id         smallint     [ref: > industries.id]
-  created_at          timestamptz
-  updated_at          timestamptz
-  last_login          timestamptz
-  deleted_at          timestamptz
+  id                     uuid         [primary key]
+  full_name              varchar      [note: 'e.g. Budi Sadikin']
+  email                  varchar      [note: 'unique, e.g. budisadikin@gmail.com']
+  phone_country_id       smallint     [ref: > phone_country_codes.id]
+  phone_number           varchar
+  avatar                 varchar
+  role_id                smallint     [ref: > roles.id, note: 'default 3']
+  status                 status_enum  [note: 'default active']
+  date_of_birth          date
+  learning_goal          varchar
+  entrepreneur_stage     smallint     [ref: > entrepreneur_stages.id]
+  business_name          varchar
+  industry_id            smallint     [ref: > industries.id]
+  business_description   text
+  occupation             occupation_enum
+  yearly_revenue         revenue_enum
+  total_employees        num_employee_enum
+  company_profile_url    varchar
+  business_age_years     integer
+  legal_entity_type      legal_entity_enum
+  average_selling_price  decimal(12,2)
+  created_at             timestamptz
+  updated_at             timestamptz
+  last_login             timestamptz
+  deleted_at             timestamptz
 }
 
 Table tokens {

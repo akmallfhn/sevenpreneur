@@ -37,6 +37,47 @@ CREATE TYPE c_role_enum AS ENUM (
   'assistant'
 );
 
+-- Enumeration for the users table
+
+CREATE TYPE occupation_enum AS ENUM (
+  'employee',
+  'entrepreneur',
+  'student',
+  'freelance',
+  'military',
+  'unemployed'
+);
+
+CREATE TYPE revenue_enum AS ENUM (
+  'below_50m',
+  'between_50m_100m',
+  'between_100m_500m',
+  'between_500m_1b',
+  'between_1b_10b',
+  'between_10b_25b',
+  'above_25b'
+);
+
+CREATE TYPE num_employee_enum AS ENUM (
+  'small',
+  'medium',
+  'large',
+  'xlarge',
+  'xxlarge'
+);
+
+CREATE TYPE legal_entity_enum AS ENUM (
+  'cv',
+  'pt',
+  'pt_tbk',
+  'persero',
+  'firma',
+  'koperasi',
+  'yayasan',
+  'ud',
+  'non_legal_entity'
+);
+
 ------------
 -- Tables --
 ------------
@@ -85,23 +126,31 @@ CREATE TABLE payment_channels (
 -- User data
 
 CREATE TABLE users (
-  id                  UUID         PRIMARY KEY  DEFAULT gen_random_uuid(),
-  full_name           VARCHAR      NOT NULL,
-  email               VARCHAR      NOT NULL     UNIQUE,
-  phone_country_id    SMALLINT         NULL,
-  phone_number        VARCHAR          NULL,
-  avatar              VARCHAR          NULL,
-  role_id             SMALLINT     NOT NULL     DEFAULT 3, -- General User
-  status              status_enum  NOT NULL     DEFAULT 'active',
-  date_of_birth       DATE             NULL,
-  learning_goal       VARCHAR          NULL,
-  entrepreneur_stage  SMALLINT         NULL,
-  business_name       VARCHAR          NULL,
-  industry_id         SMALLINT         NULL,
-  created_at          TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP,
-  updated_at          TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP,
-  last_login          TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP,
-  deleted_at          TIMESTAMPTZ      NULL
+  id                     UUID               PRIMARY KEY  DEFAULT gen_random_uuid(),
+  full_name              VARCHAR            NOT NULL,
+  email                  VARCHAR            NOT NULL     UNIQUE,
+  phone_country_id       SMALLINT               NULL,
+  phone_number           VARCHAR                NULL,
+  avatar                 VARCHAR                NULL,
+  role_id                SMALLINT           NOT NULL     DEFAULT 3, -- General User
+  status                 status_enum        NOT NULL     DEFAULT 'active',
+  date_of_birth          DATE                   NULL,
+  learning_goal          VARCHAR                NULL,
+  entrepreneur_stage     SMALLINT               NULL,
+  business_name          VARCHAR                NULL,
+  industry_id            SMALLINT               NULL,
+  business_description   TEXT                   NULL,
+  occupation             occupation_enum        NULL,
+  yearly_revenue         revenue_enum           NULL,
+  total_employees        num_employee_enum      NULL,
+  company_profile_url    VARCHAR                NULL,
+  business_age_years     INTEGER                NULL,
+  legal_entity_type      legal_entity_enum      NULL,
+  average_selling_price  DECIMAL(12, 2)         NULL,
+  created_at             TIMESTAMPTZ        NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  updated_at             TIMESTAMPTZ        NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  last_login             TIMESTAMPTZ        NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  deleted_at             TIMESTAMPTZ            NULL
 );
 
 CREATE TABLE tokens (
