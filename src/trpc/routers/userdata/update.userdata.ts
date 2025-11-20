@@ -1,5 +1,5 @@
 import { STATUS_OK } from "@/lib/status_code";
-import { administratorProcedure } from "@/trpc/init";
+import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import { stringToDate } from "@/trpc/utils/string_date";
 import {
@@ -67,6 +67,48 @@ export const updateUserData = {
         },
         where: {
           id: opts.input.id,
+          deleted_at: null,
+        },
+      });
+      checkUpdateResult(updatedUser.length, "user", "users");
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        user: updatedUser[0],
+      };
+    }),
+
+  user_business: loggedInProcedure
+    .input(
+      z.object({
+        business_name: stringNotBlank().nullable().optional(),
+        industry_id: numberIsID().nullable().optional(),
+        business_description: stringNotBlank().nullable().optional(),
+        occupation: z.enum(OccupationEnum).nullable().optional(),
+        yearly_revenue: z.enum(RevenueEnum).nullable().optional(),
+        total_employees: z.enum(NumEmployeeEnum).nullable().optional(),
+        company_profile_url: stringNotBlank().nullable().optional(),
+        business_age_years: z.number().nullable().optional(),
+        legal_entity_type: z.enum(LegalEntityEnum).nullable().optional(),
+        average_selling_price: z.number().nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedUser = await opts.ctx.prisma.user.updateManyAndReturn({
+        data: {
+          business_name: opts.input.business_name,
+          industry_id: opts.input.industry_id,
+          business_description: opts.input.business_description,
+          occupation: opts.input.occupation,
+          yearly_revenue: opts.input.yearly_revenue,
+          total_employees: opts.input.total_employees,
+          company_profile_url: opts.input.company_profile_url,
+          business_age_years: opts.input.business_age_years,
+          legal_entity_type: opts.input.legal_entity_type,
+          average_selling_price: opts.input.average_selling_price,
+        },
+        where: {
+          id: opts.ctx.user.id,
           deleted_at: null,
         },
       });

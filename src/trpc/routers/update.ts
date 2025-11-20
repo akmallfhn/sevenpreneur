@@ -11,6 +11,7 @@ export const updateRouter = createTRPCRouter({
   // User Data //
 
   user: updateUserData.user,
+  user_business: updateUserData.user_business,
 
   // LMS-related //
 
