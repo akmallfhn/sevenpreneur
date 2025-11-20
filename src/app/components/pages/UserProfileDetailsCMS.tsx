@@ -69,13 +69,6 @@ export default function UserProfileDetailsCMS({
     isError: isErrorIndustries,
   } = trpc.list.industries.useQuery(undefined, { enabled: !!sessionToken });
   const {
-    data: stagesData,
-    isLoading: isLoadingStages,
-    isError: isErrorStages,
-  } = trpc.list.entrepreneurStages.useQuery(undefined, {
-    enabled: !!sessionToken,
-  });
-  const {
     data: transactionsData,
     isLoading: isLoadingTransactions,
     isError: isErrorTransactions,
@@ -89,13 +82,11 @@ export default function UserProfileDetailsCMS({
     isLoadingUserDetail ||
     isLoadingRoles ||
     isLoadingIndustries ||
-    isLoadingStages ||
     isLoadingTransactions;
   const isError =
     isErrorUserDetail ||
     isErrorRoles ||
     isErrorIndustries ||
-    isErrorStages ||
     isErrorTransactions;
 
   return (
@@ -286,18 +277,6 @@ export default function UserProfileDetailsCMS({
                     inputIcon={<Building2 className="size-5" />}
                     value={userDetailData.user.business_name || ""}
                     disabled
-                  />
-                  <SelectCMS
-                    selectId={"entrepreneur-stage"}
-                    selectName={"Entrepreneur Stage"}
-                    selectIcon={<Sprout className="size-5" />}
-                    selectPlaceholder="None"
-                    value={userDetailData.user.entrepreneur_stage_id}
-                    disabled
-                    options={stagesData?.list?.map((post) => ({
-                      label: post.name,
-                      value: post.id,
-                    }))}
                   />
                   <SelectCMS
                     selectId={"industry"}

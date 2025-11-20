@@ -13,7 +13,6 @@ export const readRouter = createTRPCRouter({
   // Lookup Tables //
 
   role: readLookup.role,
-  entrepreneurStage: readLookup.entrepreneurStage,
   industry: readLookup.industry,
 
   // User Data //

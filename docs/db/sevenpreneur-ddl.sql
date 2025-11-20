@@ -92,12 +92,6 @@ CREATE TABLE roles (
   updated_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE entrepreneur_stages (
-  id          SMALLSERIAL  PRIMARY KEY,
-  stage_name  VARCHAR      NOT NULL  UNIQUE,
-  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE industries (
   id             SMALLSERIAL  PRIMARY KEY,
   industry_name  VARCHAR      NOT NULL  UNIQUE,
@@ -135,8 +129,6 @@ CREATE TABLE users (
   role_id                SMALLINT           NOT NULL     DEFAULT 3, -- General User
   status                 status_enum        NOT NULL     DEFAULT 'active',
   date_of_birth          DATE                   NULL,
-  learning_goal          VARCHAR                NULL,
-  entrepreneur_stage     SMALLINT               NULL,
   business_name          VARCHAR                NULL,
   industry_id            SMALLINT               NULL,
   business_description   TEXT                   NULL,
@@ -471,7 +463,6 @@ CREATE VIEW users_ai_tools AS
 ALTER TABLE users
   ADD FOREIGN KEY (phone_country_id)   REFERENCES phone_country_codes (id),
   ADD FOREIGN KEY (role_id)            REFERENCES roles (id),
-  ADD FOREIGN KEY (entrepreneur_stage) REFERENCES entrepreneur_stages (id),
   ADD FOREIGN KEY (industry_id)        REFERENCES industries (id);
 
 ALTER TABLE tokens

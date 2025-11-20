@@ -122,15 +122,6 @@ model Role {
   @@map("roles")
 }
 
-model EntrepreneurStage {
-  id         Int      @id @default(autoincrement()) @db.SmallInt
-  stage_name String   @unique @db.VarChar()
-  created_at DateTime @default(now()) @db.Timestamptz()
-  users      User[]
-
-  @@map("entrepreneur_stages")
-}
-
 model Industry {
   id            Int      @id @default(autoincrement()) @db.SmallInt
   industry_name String   @unique @db.VarChar()
@@ -178,9 +169,6 @@ model User {
   role_id               Int                 @default(3) @db.SmallInt // General User
   status                StatusEnum          @default(ACTIVE)
   date_of_birth         DateTime?           @db.Date
-  learning_goal         String?             @db.VarChar()
-  entrepreneur_stage    EntrepreneurStage?  @relation(fields: [entrepreneur_stage_id], references: [id])
-  entrepreneur_stage_id Int?                @map("entrepreneur_stage") @db.SmallInt
   business_name         String?             @db.VarChar()
   industry              Industry?           @relation(fields: [industry_id], references: [id])
   industry_id           Int?                @db.SmallInt

@@ -12,7 +12,6 @@ export const readUserData = {
         include: {
           phone_country: true,
           role: true,
-          entrepreneur_stage: true,
           industry: true,
         },
         where: {

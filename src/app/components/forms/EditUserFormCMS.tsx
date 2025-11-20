@@ -65,13 +65,6 @@ export default function EditUserForm({
     isLoading: isLoadingIndustries,
     isError: isErrorIndustries,
   } = trpc.list.industries.useQuery(undefined, { enabled: !!sessionToken });
-  const {
-    data: stagesData,
-    isLoading: isLoadingStages,
-    isError: isErrorStages,
-  } = trpc.list.entrepreneurStages.useQuery(undefined, {
-    enabled: !!sessionToken,
-  });
 
   // Beginning State
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,10 +76,8 @@ export default function EditUserForm({
     roleId: string | number;
     status: "ACTIVE" | "INACTIVE";
     dateOfBirth: string;
-    learningGoal: string;
     businessName: string;
     industry: string | number;
-    entrepreneurStage: string | number;
   }>({
     fullName: initialData?.user.full_name || "",
     email: initialData?.user.email || "",
@@ -97,10 +88,8 @@ export default function EditUserForm({
     dateOfBirth: initialData?.user.date_of_birth
       ? new Date(initialData?.user.date_of_birth).toISOString().split("T")[0]
       : "",
-    learningGoal: initialData?.user.learning_goal || "",
     businessName: initialData?.user.business_name || "",
     industry: initialData?.user.industry_id || "",
-    entrepreneurStage: initialData?.user.entrepreneur_stage_id || "",
   });
 
   // Iterate initial data (so it doesn't get lost)
@@ -118,10 +107,8 @@ export default function EditUserForm({
               .toISOString()
               .split("T")[0]
           : "",
-        learningGoal: initialData.user.learning_goal || "",
         businessName: initialData.user.business_name || "",
         industry: initialData.user.industry_id || "",
-        entrepreneurStage: initialData.user.entrepreneur_stage_id || "",
       });
     }
   }, [initialData]);
@@ -138,13 +125,8 @@ export default function EditUserForm({
   }, []);
 
   // Extract variable
-  const isLoading =
-    isLoadingInitial ||
-    isLoadingRoles ||
-    isLoadingIndustries ||
-    isLoadingStages;
-  const isError =
-    isErrorInitial || isErrorRoles || isErrorIndustries || isErrorStages;
+  const isLoading = isLoadingInitial || isLoadingRoles || isLoadingIndustries;
+  const isError = isErrorInitial || isErrorRoles || isErrorIndustries;
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -207,12 +189,6 @@ export default function EditUserForm({
           avatar: formData.avatar.trim() ? formData.avatar : null,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
-            : null,
-          learning_goal: formData.learningGoal.trim()
-            ? formData.learningGoal
-            : null,
-          entrepreneur_stage_id: formData.entrepreneurStage
-            ? Number(formData.entrepreneurStage)
             : null,
           business_name: formData.businessName.trim()
             ? formData.businessName
@@ -405,15 +381,6 @@ export default function EditUserForm({
                   value={formData.dateOfBirth}
                   onInputChange={handleInputChange("dateOfBirth")}
                 />
-                {/* Learning Goals */}
-                <TextAreaCMS
-                  textAreaId={"learning-goal"}
-                  textAreaName={"Learning Goal"}
-                  textAreaPlaceholder={"Summarize the learning focus"}
-                  textAreaHeight={"h-[120px]"}
-                  value={formData.learningGoal}
-                  onTextAreaChange={handleInputChange("learningGoal")}
-                />
               </div>
             </div>
           </div>
@@ -444,21 +411,6 @@ export default function EditUserForm({
                 onChange={handleInputChange("industry")}
                 options={
                   industriesData?.list?.map((role) => ({
-                    label: role.name,
-                    value: role.id,
-                  })) || []
-                }
-              />
-              {/* Entrepeneur Stage */}
-              <SelectCMS
-                selectId={"entrepeneur-stage"}
-                selectName={"Entrepeneur Stage"}
-                selectPlaceholder="Set entrepreneur level"
-                selectIcon={<Sprout className="size-5" />}
-                value={formData.entrepreneurStage}
-                onChange={handleInputChange("entrepreneurStage")}
-                options={
-                  stagesData?.list?.map((role) => ({
                     label: role.name,
                     value: role.id,
                   })) || []

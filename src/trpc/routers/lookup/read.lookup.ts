@@ -24,26 +24,6 @@ export const readLookup = {
       };
     }),
 
-  entrepreneurStage: loggedInProcedure
-    .input(objectHasOnlyID())
-    .query(async (opts) => {
-      const theEntrepreneurStage =
-        await opts.ctx.prisma.entrepreneurStage.findFirst({
-          where: { id: opts.input.id },
-        });
-      if (!theEntrepreneurStage) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: "The entrepreneur stage with the given ID is not found.",
-        });
-      }
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        entrepreneur_stage: theEntrepreneurStage,
-      };
-    }),
-
   industry: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
     const theIndustry = await opts.ctx.prisma.industry.findFirst({
       where: { id: opts.input.id },

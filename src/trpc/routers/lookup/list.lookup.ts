@@ -22,23 +22,6 @@ export const listLookup = {
     };
   }),
 
-  entrepreneurStages: loggedInProcedure.query(async (opts) => {
-    const stageList = await opts.ctx.prisma.entrepreneurStage.findMany({
-      orderBy: [{ id: "asc" }],
-    });
-    const returnedList = stageList.map((entry) => {
-      return {
-        id: entry.id,
-        name: entry.stage_name,
-      };
-    });
-    return {
-      code: STATUS_OK,
-      message: "Success",
-      list: returnedList,
-    };
-  }),
-
   industries: loggedInProcedure.query(async (opts) => {
     const industryList = await opts.ctx.prisma.industry.findMany({
       orderBy: [{ industry_name: "asc" }, { id: "asc" }],
