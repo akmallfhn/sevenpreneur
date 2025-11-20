@@ -42,13 +42,6 @@ export default function EditUserForm({
   const editUser = trpc.update.user.useMutation();
   const router = useRouter();
 
-  // Set session token to client
-  useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
-    }
-  }, [sessionToken]);
-
   // Return initial data
   const {
     data: initialData,

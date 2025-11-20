@@ -92,6 +92,7 @@ export default function InputSVP({
           value={value}
           onChange={handleInputChange}
           {...rest}
+          suppressHydrationWarning
         />
         {computedError && (
           <p className="input-error-message inline-flex text-red-600 text-xs font-bodycopy">
