@@ -81,6 +81,7 @@ export const updateUserData = {
   user_business: loggedInProcedure
     .input(
       z.object({
+        date_of_birth: z.iso.date().nullable().optional(),
         business_name: stringNotBlank().nullable().optional(),
         industry_id: numberIsID().nullable().optional(),
         business_description: stringNotBlank().nullable().optional(),
@@ -94,8 +95,10 @@ export const updateUserData = {
       })
     )
     .mutation(async (opts) => {
+      const dateOfBirth = stringToDate(opts.input.date_of_birth);
       const updatedUser = await opts.ctx.prisma.user.updateManyAndReturn({
         data: {
+          date_of_birth: dateOfBirth,
           business_name: opts.input.business_name,
           industry_id: opts.input.industry_id,
           business_description: opts.input.business_description,
