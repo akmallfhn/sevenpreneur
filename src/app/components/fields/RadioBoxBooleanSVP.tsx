@@ -21,8 +21,8 @@ export default function RadioBoxBooleanSVP({
     <label
       className={`input-container flex p-3 gap-4 border rounded-md hover:cursor-pointer ${
         isSelected
-          ? "bg-[#F2F8FF] border-cms-primary"
-          : "bg-white border-outline"
+          ? "bg-[#F2F8FF] border-cms-primary dark:bg-[#0C2538]"
+          : "bg-white border-outline dark:bg-[#2C2C2C] dark:border-outline-dark"
       } `}
     >
       <input
@@ -34,7 +34,7 @@ export default function RadioBoxBooleanSVP({
         onChange={() => onChange(value)}
       />
       <div className="input-attributes flex flex-col font-bodycopy text-sm ">
-        <p className="input-label text-black font-bold">{radioName}</p>
+        <p className="input-label font-bold">{radioName}</p>
         <p className="input-description text-alternative font-medium">
           {radioDescription}
         </p>

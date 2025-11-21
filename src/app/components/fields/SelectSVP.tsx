@@ -66,7 +66,7 @@ export default function SelectSVP({
       {selectName && (
         <label
           htmlFor={selectId}
-          className="select-label flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+          className="select-label flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
         >
           {selectName}
           {required && (
@@ -76,10 +76,10 @@ export default function SelectSVP({
       )}
 
       <div
-        className={`select-container relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
+        className={`select-container relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all dark:bg-[#2C2C2C] ${
           isOpen
-            ? "border-primary outline-4 outline-primary/15"
-            : "border-outline"
+            ? "outline-4 border-primary outline-primary/15 dark:border-surface-black dark:outline-outline-dark"
+            : "border-outline dark:border-outline-dark"
         } ${selectIcon ? "pl-10" : ""} ${
           disabled ? "cursor-not-allowed" : "cursor-pointer"
         }`}
@@ -120,7 +120,7 @@ export default function SelectSVP({
         )}
 
         {isOpen && !disabled && (
-          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden">
+          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden dark:bg-[#2C2C2C] dark:border-outline-dark">
             <ul className="dropdown-options flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt, index) => (
                 <div
@@ -130,8 +130,10 @@ export default function SelectSVP({
                     onChange?.(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-primary ${
-                    value === opt.value ? "bg-[#E1EDFF] text-primary" : ""
+                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-primary dark:hover:bg-white/5 dark:hover:text-white ${
+                    value === opt.value
+                      ? "bg-[#E1EDFF] text-primary dark:bg-white/5 dark:text-white"
+                      : ""
                   }`}
                 >
                   {opt.image && (

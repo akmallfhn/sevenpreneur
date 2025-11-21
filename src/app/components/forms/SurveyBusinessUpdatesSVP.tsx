@@ -195,7 +195,7 @@ export default function SurveyBusinessUpdateSVP({
         className="form-container flex flex-col w-full max-w-[768px] mx-auto items-center p-5 pb-64 gap-5"
         onSubmit={handleSubmit}
       >
-        <div className="welcoming-section flex flex-col bg-linear-to-br from-0% from-[#D2E5FC] to-40% w-full gap-3 font-bodycopy p-5 border border-outline rounded-md">
+        <div className="welcoming-section flex flex-col bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white w-full gap-3 font-bodycopy p-5 border border-outline rounded-md dark:from-primary/20 dark:to-surface-black dark:border-outline-dark">
           <h1 className="page-title font-brand font-bold text-2xl">
             Business Information Update
           </h1>
@@ -212,7 +212,7 @@ export default function SurveyBusinessUpdateSVP({
             pihak mana pun.
           </p>
         </div>
-        <div className="contact-section flex flex-col bg-white w-full gap-3 font-bodycopy p-5 border border-outline rounded-md">
+        <div className="contact-section flex flex-col bg-white w-full gap-3 font-bodycopy p-5 border border-outline rounded-md dark:bg-surface-black dark:border-outline-dark">
           <h2 className="section-title font-brand font-bold text-lg">
             Personal Information
           </h2>
@@ -294,7 +294,7 @@ export default function SurveyBusinessUpdateSVP({
               : "max-h-0 opacity-0 -translate-y-3 pointer-events-none"
           }`}
         >
-          <div className="business-section flex flex-col bg-white w-full gap-3 font-bodycopy p-5 border border-outline rounded-md">
+          <div className="business-section flex flex-col bg-white w-full gap-3 font-bodycopy p-5 border border-outline rounded-md dark:bg-surface-black dark:border-outline-dark">
             <h2 className="section-title font-brand font-bold text-lg">
               Business Information
             </h2>
