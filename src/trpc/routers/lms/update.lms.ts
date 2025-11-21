@@ -138,6 +138,7 @@ export const updateLMS = {
         location_url: stringNotBlank().nullable().optional(),
         speaker_id: stringNotBlank().nullable().optional(),
         recording_url: stringNotBlank().nullable().optional(),
+        external_video_id: stringNotBlank().nullable().optional(),
         status: z.enum(StatusEnum).optional(),
       })
     )
@@ -155,6 +156,7 @@ export const updateLMS = {
             location_url: opts.input.location_url,
             speaker_id: opts.input.speaker_id,
             recording_url: opts.input.recording_url,
+            external_video_id: opts.input.external_video_id,
             status: opts.input.status,
           },
           where: {
