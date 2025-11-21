@@ -34,18 +34,26 @@ export default function SurveyBusinessUpdateSVP({
     hasBusiness: boolean | null;
     businessName: string;
     businessDescription: string;
+    businessAgeYears: number | null;
     industry: IndustryList["id"] | null;
     totalEmployees: string;
     yearlyRevenue: string;
+    companyProfileUrl: string;
+    legalEntityType: string;
+    averageSellingPrice: number | null;
   }>({
     occupation: "",
     dateOfBirth: "",
     hasBusiness: null,
     businessName: "",
     businessDescription: "",
+    businessAgeYears: null,
     industry: null,
     totalEmployees: "",
     yearlyRevenue: "",
+    companyProfileUrl: "",
+    legalEntityType: "",
+    averageSellingPrice: null,
   });
 
   const handleInputChange = (fieldName: string) => (value: any) => {
