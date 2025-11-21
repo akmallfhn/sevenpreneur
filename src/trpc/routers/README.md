@@ -58,7 +58,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `create.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `list.users`   |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
-| `read.user`    |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
+| `read.user`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `update.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 | `delete.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
 
@@ -66,6 +66,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators have write access to all users' data.
 - Administrators, Educators, and Class Managers have read access to all users' data.
+- General Users can only read their own user data.
 
 ### User Businesses 👤
 

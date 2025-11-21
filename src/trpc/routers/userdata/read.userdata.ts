@@ -1,13 +1,17 @@
 import { STATUS_OK } from "@/lib/status_code";
-import { roleBasedProcedure } from "@/trpc/init";
+import { loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { stringIsUUID } from "@/trpc/utils/validation";
 import z from "zod";
 
 export const readUserData = {
-  user: roleBasedProcedure(["Administrator", "Educator", "Class Manager"])
-    .input(z.object({ id: stringIsUUID() }))
+  user: loggedInProcedure
+    .input(z.object({ id: stringIsUUID().optional() }))
     .query(async (opts) => {
+      let selectedUserId = opts.input.id || opts.ctx.user.id;
+      if (opts.ctx.user.role.name === "General User") {
+        selectedUserId = opts.ctx.user.id;
+      }
       const theUser = await opts.ctx.prisma.user.findFirst({
         include: {
           phone_country: true,
@@ -15,7 +19,7 @@ export const readUserData = {
           industry: true,
         },
         where: {
-          id: opts.input.id,
+          id: selectedUserId,
           deleted_at: null,
         },
       });
