@@ -79,7 +79,8 @@ export default async function LearningsDetailsPageLMS({
         learningDetails.speaker?.avatar ||
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
-      learningVideoRecording={learningDetails.recording_url || ""}
+      learningRecordingYoutube={learningDetails.recording_url || ""}
+      learningRecordingCloudflare={learningDetails.external_video_id || ""}
       materialList={materialList}
       discussionStarterList={discussionStarterList}
     />

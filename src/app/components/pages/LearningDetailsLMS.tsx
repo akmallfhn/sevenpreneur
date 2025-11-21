@@ -14,6 +14,7 @@ import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
 import { CreateDiscussionStarter } from "@/lib/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 
 export interface MaterialList {
   name: string;
@@ -47,7 +48,8 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningLocationName: string;
   learningEducatorName: string;
   learningEducatorAvatar: string;
-  learningVideoRecording: string;
+  learningRecordingYoutube: string;
+  learningRecordingCloudflare: string;
   materialList: MaterialList[];
   discussionStarterList: DiscussionStarterList[];
 }
@@ -69,7 +71,8 @@ export default function LearningDetailsLMS({
   learningLocationName,
   learningEducatorName,
   learningEducatorAvatar,
-  learningVideoRecording,
+  learningRecordingYoutube,
+  learningRecordingCloudflare,
   materialList,
   discussionStarterList,
 }: LearningDetailsLMSProps) {
@@ -131,6 +134,19 @@ export default function LearningDetailsLMS({
     );
   };
 
+  const learningVideoKey = (() => {
+    if (learningRecordingCloudflare) return learningRecordingCloudflare;
+
+    if (learningRecordingYoutube) {
+      const extracted = extractEmbedPathFromYouTubeURL(
+        learningRecordingYoutube
+      );
+      return extracted || null;
+    }
+
+    return null;
+  })();
+
   return (
     <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
       <HeaderCohortEntityLMS
@@ -165,10 +181,26 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 Live Class Recording
               </h3>
-              {!learningVideoRecording && <EmptyRecordingLMS />}
-              {/* <div className="video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
-                <AppVideoPlayer videoId={"d929af5a12b4d3fbe74215e9678b1b58"} />
-              </div> */}
+              {learningRecordingCloudflare && (
+                <div className="learning-video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
+                  <AppVideoPlayer videoId={learningRecordingCloudflare} />
+                </div>
+              )}
+              {!learningRecordingCloudflare && learningVideoKey && (
+                <div className="learning-video-recording relative w-full aspect-video overflow-hidden rounded-md">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${learningVideoKey}&amp;controls=1`}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              )}
+              {!learningVideoKey && <EmptyRecordingLMS />}
             </div>
             <div className="learning-discussions flex flex-col gap-3 bg-white p-4 border rounded-lg">
               <h3 className="section-title font-bold font-bodycopy">

@@ -8,28 +8,49 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 interface UpdateVideoRecordingFormCMSProps {
+  sessionToken: string;
   learningId: number;
-  initialData: any;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function UpdateVideoRecordingFormCMS({
+  sessionToken,
   learningId,
-  initialData,
   isOpen,
   onClose,
 }: UpdateVideoRecordingFormCMSProps) {
+  const utils = trpc.useUtils();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editLearning = trpc.update.learning.useMutation();
-  const utils = trpc.useUtils();
+
+  const {
+    data: learningDetailsData,
+    isLoading,
+    isError,
+  } = trpc.read.learning.useQuery(
+    { id: learningId },
+    { enabled: !!sessionToken }
+  );
+  const initialData = learningDetailsData?.learning;
 
   // Beginning State
   const [formData, setFormData] = useState<{
-    learningRecordingURL: string;
+    learningRecordingYoutube: string;
+    learningRecordingCloudflare: string;
   }>({
-    learningRecordingURL: initialData.recording_url || "",
+    learningRecordingYoutube: initialData?.recording_url || "",
+    learningRecordingCloudflare: initialData?.external_video_id || "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        learningRecordingYoutube: initialData.recording_url || "",
+        learningRecordingCloudflare: initialData.external_video_id || "",
+      });
+    }
+  }, [initialData]);
 
   // Add event listener to prevent page refresh
   useEffect(() => {
@@ -55,8 +76,10 @@ export default function UpdateVideoRecordingFormCMS({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validation URL
-    if (!formData.learningRecordingURL.startsWith("https://youtu.be/")) {
+    if (
+      formData.learningRecordingYoutube.trim() &&
+      !formData.learningRecordingYoutube.startsWith("https://youtu.be/")
+    ) {
       toast.error(
         "Unsupported link format. The recording must be hosted on YouTube"
       );
@@ -64,17 +87,13 @@ export default function UpdateVideoRecordingFormCMS({
       return;
     }
 
-    // POST to Database
     try {
       editLearning.mutate(
         {
-          // Mandatory fields:
           id: learningId,
-
-          // Optional fields:
-          recording_url: formData.learningRecordingURL.trim()
-            ? formData.learningRecordingURL
-            : null,
+          recording_url: formData.learningRecordingYoutube.trim() || null,
+          external_video_id:
+            formData.learningRecordingCloudflare.trim() || null,
         },
         {
           onSuccess: () => {
@@ -107,35 +126,55 @@ export default function UpdateVideoRecordingFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <form
-        className="relative w-full h-full flex flex-col"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
-          <div className="group-input flex flex-col gap-4">
-            <InputCMS
-              inputId="learning-recording-url"
-              inputName="Link to Video Recording"
-              inputType="url"
-              inputPlaceholder="e.g. https://youtu.be/_ordOyNg548?si=BhK3OdSuAewbD0fl"
-              value={formData.learningRecordingURL}
-              onInputChange={handleInputChange("learningRecordingURL")}
-              required
-            />
+      {isLoading && (
+        <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+          <Loader2 className="animate-spin size-5 " />
+        </div>
+      )}
+      {isError && (
+        <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+          No Data
+        </div>
+      )}
+
+      {!isLoading && !isError && initialData && (
+        <form
+          className="relative w-full h-full flex flex-col"
+          onSubmit={handleSubmit}
+        >
+          <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
+            <div className="group-input flex flex-col gap-4">
+              <InputCMS
+                inputId="learning-recording-youtube"
+                inputName="Add Recording from Youtube"
+                inputType="url"
+                inputPlaceholder="e.g. https://youtu.be/_ordOyNg548?si=BhK3OdSuAewbD0fl"
+                value={formData.learningRecordingYoutube}
+                onInputChange={handleInputChange("learningRecordingYoutube")}
+              />
+              <InputCMS
+                inputId="learning-recording-cloudflare"
+                inputName="Add Recording from Cloudflare"
+                inputType="text"
+                inputPlaceholder="e.g. d929af5a12b4d3fbe74215e9678b1b58"
+                value={formData.learningRecordingCloudflare}
+                onInputChange={handleInputChange("learningRecordingCloudflare")}
+              />
+            </div>
           </div>
-        </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
-          <AppButton
-            className="w-full"
-            variant="cmsPrimary"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Update Video Recording
-          </AppButton>
-        </div>
-      </form>
+          <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+            <AppButton
+              className="w-full"
+              variant="cmsPrimary"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && <Loader2 className="animate-spin size-4" />}
+              Update Video Recording
+            </AppButton>
+          </div>
+        </form>
+      )}
     </AppSheet>
   );
 }

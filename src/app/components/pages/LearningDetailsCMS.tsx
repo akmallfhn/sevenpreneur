@@ -27,6 +27,7 @@ import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { SessionMethod } from "@/lib/app-types";
 import ConferenceItemCMS from "../items/ConferenceItemCMS";
 import EmptyRecordingCMS from "../state/EmptyRecordingCMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
 
 dayjs.extend(localizedFormat);
 
@@ -74,8 +75,19 @@ export default function LearningDetailsCMS({
     );
   }
 
-  const recordingURL = learningDetailsData?.learning.recording_url || "";
-  const embedYoutube = extractEmbedPathFromYouTubeURL(recordingURL);
+  const learningVideoKey = (() => {
+    const learning = learningDetailsData?.learning;
+    if (!learning) return null;
+
+    if (learning.external_video_id) return learning.external_video_id;
+
+    if (learning.recording_url) {
+      const extracted = extractEmbedPathFromYouTubeURL(learning.recording_url);
+      return extracted || null;
+    }
+
+    return null;
+  })();
 
   return (
     <React.Fragment>
@@ -145,7 +157,7 @@ export default function LearningDetailsCMS({
                   <h2 className="section-name font-brand font-bold text-black">
                     What&apos;s on this sessions?
                   </h2>
-                  <p className="font-bodycopy font-medium text-sm text-[#333333] bg-white p-3 rounded-md whitespace-pre-line">
+                  <p className="font-bodycopy font-medium text-[15px] text-[#333333] bg-white p-3 rounded-md whitespace-pre-line">
                     {learningDetailsData?.learning.description}
                   </p>
                 </div>
@@ -154,32 +166,39 @@ export default function LearningDetailsCMS({
                     <h2 className="font-brand font-bold text-black">
                       Video Recording
                     </h2>
-                    {learningDetailsData?.learning.recording_url &&
-                      isAllowedUpdateLearning && (
-                        <AppButton
-                          variant="outline"
-                          size="small"
-                          onClick={() => setUpdateRecording(true)}
-                        >
-                          <TvMinimalPlay className="size-4" />
-                          Change Video
-                        </AppButton>
-                      )}
+                    {learningVideoKey && isAllowedUpdateLearning && (
+                      <AppButton
+                        variant="outline"
+                        size="small"
+                        onClick={() => setUpdateRecording(true)}
+                      >
+                        <TvMinimalPlay className="size-4" />
+                        Change Video
+                      </AppButton>
+                    )}
                   </div>
-                  {learningDetailsData?.learning.recording_url ? (
-                    <div className="relative w-full aspect-video rounded-md overflow-hidden">
-                      <iframe
-                        width="100%"
-                        height="100%"
-                        src={`https://www.youtube.com/embed/${embedYoutube}&amp;controls=1`}
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        allowFullScreen
-                      ></iframe>
-                    </div>
-                  ) : (
+                  {learningDetailsData?.learning.external_video_id &&
+                    learningVideoKey && (
+                      <div className="learning-video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
+                        <AppVideoPlayer videoId={learningVideoKey} />
+                      </div>
+                    )}
+                  {!learningDetailsData?.learning.external_video_id &&
+                    learningVideoKey && (
+                      <div className="learning-video-recording relative w-full aspect-video overflow-hidden rounded-md">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={`https://www.youtube.com/embed/${learningVideoKey}&amp;controls=1`}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          allowFullScreen
+                        />
+                      </div>
+                    )}
+                  {!learningVideoKey && (
                     <EmptyRecordingCMS
                       actionClick={() => setUpdateRecording(true)}
                       isAllowedUpdateRecording={isAllowedUpdateLearning}
@@ -187,7 +206,6 @@ export default function LearningDetailsCMS({
                   )}
                 </div>
               </main>
-
               <aside className="aside-contents flex flex-col flex-1 min-w-0 gap-4">
                 <div className="learning-educator flex flex-col gap-3 p-3 bg-section-background rounded-md">
                   <h2 className="section-name font-brand font-bold text-black">
@@ -250,8 +268,8 @@ export default function LearningDetailsCMS({
       {/* Update Recording */}
       {updateRecording && (
         <UpdateVideoRecordingFormCMS
+          sessionToken={sessionToken}
           learningId={learningId}
-          initialData={learningDetailsData?.learning}
           isOpen={updateRecording}
           onClose={() => setUpdateRecording(false)}
         />
