@@ -191,21 +191,22 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE learnings (
-  id             SERIAL                PRIMARY KEY,
-  cohort_id      INTEGER               NOT NULL,
-  name           VARCHAR               NOT NULL,
-  description    VARCHAR               NOT NULL,
-  method         learning_method_enum  NOT NULL,
-  meeting_date   TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  meeting_url    VARCHAR                   NULL,
-  location_name  VARCHAR                   NULL,
-  location_url   VARCHAR                   NULL,
-  speaker_id     UUID                      NULL,
-  recording_url  VARCHAR                   NULL,
-  price_id       INTEGER                   NULL,
-  status         status_enum           NOT NULL,
-  created_at     TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at     TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  id                 SERIAL                PRIMARY KEY,
+  cohort_id          INTEGER               NOT NULL,
+  name               VARCHAR               NOT NULL,
+  description        VARCHAR               NOT NULL,
+  method             learning_method_enum  NOT NULL,
+  meeting_date       TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  meeting_url        VARCHAR                   NULL,
+  location_name      VARCHAR                   NULL,
+  location_url       VARCHAR                   NULL,
+  speaker_id         UUID                      NULL,
+  recording_url      VARCHAR                   NULL,
+  external_video_id  VARCHAR                   NULL,
+  price_id           INTEGER                   NULL,
+  status             status_enum           NOT NULL,
+  created_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE materials (

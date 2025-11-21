@@ -194,21 +194,22 @@ Table modules {
 }
 
 Table learnings {
-  id             integer               [primary key]
-  cohort_id      integer               [ref: > cohorts.id]
-  name           varchar
-  description    varchar
-  method         learning_method_enum
-  meeting_date   timestamptz
-  meeting_url    varchar
-  location_name  varchar
-  location_url   varchar
-  speaker_id     uuid                  [ref: > users.id]
-  recording_url  varchar
-  price_id       integer               [ref: > cohort_prices.id]
-  status         status_enum
-  created_at     timestamptz
-  updated_at     timestamptz
+  id                 integer               [primary key]
+  cohort_id          integer               [ref: > cohorts.id]
+  name               varchar
+  description        varchar
+  method             learning_method_enum
+  meeting_date       timestamptz
+  meeting_url        varchar
+  location_name      varchar
+  location_url       varchar
+  speaker_id         uuid                  [ref: > users.id]
+  recording_url      varchar
+  external_video_id  varchar
+  price_id           integer               [ref: > cohort_prices.id]
+  status             status_enum
+  created_at         timestamptz
+  updated_at         timestamptz
 }
 
 Table materials {

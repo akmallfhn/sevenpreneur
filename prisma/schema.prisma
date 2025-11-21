@@ -268,26 +268,27 @@ model Module {
 }
 
 model Learning {
-  id            Int                 @id @default(autoincrement()) @db.Integer
-  cohort        Cohort              @relation(fields: [cohort_id], references: [id])
-  cohort_id     Int                 @db.Integer
-  name          String              @db.VarChar()
-  description   String              @db.VarChar()
-  method        LearningMethodEnum
-  meeting_date  DateTime            @default(now()) @db.Timestamptz()
-  meeting_url   String?             @db.VarChar()
-  location_name String?             @db.VarChar()
-  location_url  String?             @db.VarChar()
-  speaker       User?               @relation(fields: [speaker_id], references: [id])
-  speaker_id    String?             @db.Uuid
-  recording_url String?             @db.VarChar()
-  price         CohortPrice?        @relation(fields: [price_id], references: [id])
-  price_id      Int?                @db.Integer
-  status        StatusEnum
-  created_at    DateTime            @default(now()) @db.Timestamptz()
-  updated_at    DateTime            @default(now()) @updatedAt @db.Timestamptz()
-  materials     Material[]
-  discussions   DiscussionStarter[]
+  id                Int                 @id @default(autoincrement()) @db.Integer
+  cohort            Cohort              @relation(fields: [cohort_id], references: [id])
+  cohort_id         Int                 @db.Integer
+  name              String              @db.VarChar()
+  description       String              @db.VarChar()
+  method            LearningMethodEnum
+  meeting_date      DateTime            @default(now()) @db.Timestamptz()
+  meeting_url       String?             @db.VarChar()
+  location_name     String?             @db.VarChar()
+  location_url      String?             @db.VarChar()
+  speaker           User?               @relation(fields: [speaker_id], references: [id])
+  speaker_id        String?             @db.Uuid
+  recording_url     String?             @db.VarChar()
+  external_video_id String?             @db.VarChar()
+  price             CohortPrice?        @relation(fields: [price_id], references: [id])
+  price_id          Int?                @db.Integer
+  status            StatusEnum
+  created_at        DateTime            @default(now()) @db.Timestamptz()
+  updated_at        DateTime            @default(now()) @updatedAt @db.Timestamptz()
+  materials         Material[]
+  discussions       DiscussionStarter[]
 
   @@map("learnings")
 }
