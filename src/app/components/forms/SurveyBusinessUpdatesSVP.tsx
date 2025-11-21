@@ -288,7 +288,7 @@ export default function SurveyBusinessUpdateSVP({
           </div>
         </div>
         <div
-          className={`flex w-full transition-all duration-300 ease-out ${
+          className={`relative flex w-full transition-all duration-300 ease-out z-10 ${
             formData.hasBusiness
               ? "opacity-100 translate-y-0"
               : "max-h-0 opacity-0 -translate-y-3 pointer-events-none"
