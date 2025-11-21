@@ -23,3 +23,42 @@ export type FileVariant =
 export type AIMarketSize_CustomerType = "b2b" | "b2c" | "hybrid";
 export type AIMarketSize_ProductType = "fisik" | "digital" | "hybrid";
 export type AIChatRole = "USER" | "ASSISTANT";
+export type OccupationUser =
+  | "EMPLOYEE"
+  | "ENTREPRENEUR"
+  | "STUDENT"
+  | "FREELANCE"
+  | "MILITARY"
+  | "UNEMPLOYED";
+export type BusinessRevenue =
+  | "BELOW_50M"
+  | "BETWEEN_50M_100M"
+  | "BETWEEN_100M_500M"
+  | "BETWEEN_500M_1B"
+  | "BETWEEN_1B_10B"
+  | "BETWEEN_10B_25B"
+  | "ABOVE_25B";
+export type BusinessEmployeeNumber =
+  | "SMALL"
+  | "MEDIUM"
+  | "LARGE"
+  | "XLARGE"
+  | "XXLARGE";
+export type BusinessLegalEntity =
+  | "CV"
+  | "PT"
+  | "PT_TBK"
+  | "PERSERO"
+  | "FIRMA"
+  | "KOPERASI"
+  | "YAYASAN"
+  | "UD"
+  | "NON_LEGAL_ENTITY";
+export type BusinessYearlyRevenue =
+  | "BELOW_50M"
+  | "BETWEEN_50M_100M"
+  | "BETWEEN_100M_500M"
+  | "BETWEEN_500M_1B"
+  | "BETWEEN_1B_10B"
+  | "BETWEEN_10B_25B"
+  | "ABOVE_25B";

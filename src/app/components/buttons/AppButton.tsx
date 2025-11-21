@@ -198,6 +198,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         onClick={handleClick}
         className={finalClasses}
         {...rest}
+        suppressHydrationWarning
       >
         {children}
       </button>

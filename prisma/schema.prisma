@@ -78,7 +78,7 @@ enum RevenueEnum {
   BETWEEN_10B_25B   @map("between_10b_25b")
   ABOVE_25B         @map("above_25b")
 
-  @@map("Revenue_enum")
+  @@map("revenue_enum")
 }
 
 enum NumEmployeeEnum {

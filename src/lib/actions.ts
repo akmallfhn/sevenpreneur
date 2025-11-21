@@ -7,6 +7,12 @@ import {
   AIMarketSize_ProductType,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
+import {
+  BusinessEmployeeNumber,
+  BusinessLegalEntity,
+  BusinessYearlyRevenue,
+  OccupationUser,
+} from "./app-types";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -38,6 +44,62 @@ export async function DeleteSession() {
   return { code: STATUS_INTERNAL_SERVER_ERROR, message: "Logout failed" };
 }
 
+// UPDATE USER DATA
+interface UpdateUserBusinessProps {
+  userDateofBirth: string;
+  userOccupation: OccupationUser;
+  businessName?: string;
+  businessDescription?: string;
+  businessAgeYears?: number;
+  businessIndustry?: number;
+  businessLegalEntity?: BusinessLegalEntity;
+  businessEmployeeNum?: BusinessEmployeeNumber;
+  businessYearlyRevenue?: BusinessYearlyRevenue;
+  companyProfileUrl?: string;
+  averageSellingPrice?: number;
+}
+export async function UpdateUserBusiness({
+  userDateofBirth,
+  userOccupation,
+  businessName,
+  businessDescription,
+  businessAgeYears,
+  businessIndustry,
+  businessLegalEntity,
+  businessEmployeeNum,
+  businessYearlyRevenue,
+  companyProfileUrl,
+  averageSellingPrice,
+}: UpdateUserBusinessProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+
+  setSessionToken(sessionData.value);
+
+  const updateUserBusiness = await trpc.update.user_business({
+    date_of_birth: userDateofBirth,
+    occupation: userOccupation,
+    business_name: businessName,
+    business_description: businessDescription,
+    business_age_years: businessAgeYears,
+    industry_id: businessIndustry,
+    legal_entity_type: businessLegalEntity,
+    total_employees: businessEmployeeNum,
+    yearly_revenue: businessYearlyRevenue,
+    company_profile_url: companyProfileUrl,
+    average_selling_price: averageSellingPrice,
+  });
+
+  return {
+    code: updateUserBusiness.code,
+    message: updateUserBusiness.message,
+  };
+}
+
 // MAKE PAYMENT COHORT AT XENDIT
 interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
@@ -53,10 +115,13 @@ export async function MakePaymentCohortXendit({
 }: MakePaymentCohortXenditProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
+
   if (!sessionData) {
     return { code: STATUS_NOT_FOUND, message: "No session token found" };
   }
+
   setSessionToken(sessionData.value);
+
   const paymentResponse = await trpc.purchase.cohort({
     cohort_price_id: cohortPriceId,
     payment_channel_id: paymentChannelId,
