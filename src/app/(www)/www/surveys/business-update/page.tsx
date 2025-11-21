@@ -54,7 +54,7 @@ export default async function UpdateBusinessPage() {
 
   // Redirect if not login
   if (!sessionToken) {
-    redirect(`/auth/login?redirectTo=/surveys/business-updates`);
+    redirect(`/auth/login?redirectTo=/surveys/business-update`);
   }
   setSessionToken(sessionToken);
 
