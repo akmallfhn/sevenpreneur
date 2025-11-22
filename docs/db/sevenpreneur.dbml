@@ -354,6 +354,8 @@ Table ai_results {
   ai_tool_id  smallint     [ref: > ai_tools.id]
   name        varchar
   result      json
+  is_done     boolean      [note: 'default false']
+  qstash_id   varchar
   created_at  timestamptz
 }
 

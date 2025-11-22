@@ -351,6 +351,8 @@ CREATE TABLE ai_results (
   ai_tool_id  SMALLINT     NOT NULL,
   name        VARCHAR      NOT NULL,
   result      JSON         NOT NULL,
+  is_done     BOOLEAN      NOT NULL  DEFAULT FALSE,
+  qstash_id   VARCHAR          NULL,
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
