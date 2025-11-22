@@ -1,7 +1,12 @@
-import { STATUS_INTERNAL_SERVER_ERROR, STATUS_OK } from "@/lib/status_code";
+import {
+  STATUS_CREATED,
+  STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_OK,
+} from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
 import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
+import { TRPCError } from "@trpc/server";
 import z from "zod";
 import {
   AIMarketSize_CustomerType,
@@ -17,11 +22,9 @@ import {
   AIGenerateTitle,
   AIModelName,
   AISaveMessage,
-  AISaveResult,
   AISendChat,
   isEnrolledAITool,
 } from "./util.ai_tool";
-import { TRPCError } from "@trpc/server";
 
 export const useAITool = {
   ideaValidation: loggedInProcedure
@@ -43,30 +46,22 @@ export const useAITool = {
         );
       }
 
-      const parsedResult = await AIGenerate(
+      await AIGenerate(
         opts.input.model,
         aiToolPrompts.ideaValidation(
           opts.input.problem,
           opts.input.location,
           opts.input.ideation,
           opts.input.resources
-        )
-      );
-
-      const resultId = await AISaveResult(
+        ),
         opts.ctx.prisma,
         opts.ctx.user.id,
-        AI_TOOL_ID_IDEA_VAL,
-        parsedResult.title,
-        parsedResult.response
+        AI_TOOL_ID_IDEA_VAL
       );
 
       return {
-        code: STATUS_OK,
-        message: "Success",
-        id: resultId,
-        title: parsedResult.title,
-        result: parsedResult.response,
+        code: STATUS_CREATED,
+        message: "Queued",
       };
     }),
 
@@ -92,7 +87,7 @@ export const useAITool = {
         );
       }
 
-      const parsedResult = await AIGenerate(
+      await AIGenerate(
         opts.input.model,
         aiToolPrompts.marketSize(
           opts.input.additional_persona || "",
@@ -102,28 +97,15 @@ export const useAITool = {
           opts.input.customer_type,
           opts.input.company_operating_area,
           opts.input.sales_channel
-        )
-      );
-
-      const formattedResult = {
-        product_name: opts.input.product_name,
-        ...parsedResult.response,
-      };
-
-      const resultId = await AISaveResult(
+        ),
         opts.ctx.prisma,
         opts.ctx.user.id,
-        AI_TOOL_ID_MARKET_SIZE,
-        parsedResult.title,
-        formattedResult
+        AI_TOOL_ID_MARKET_SIZE
       );
 
       return {
-        code: STATUS_OK,
-        message: "Success",
-        id: resultId,
-        title: parsedResult.title,
-        result: formattedResult,
+        code: STATUS_CREATED,
+        message: "Queued",
       };
     }),
 
