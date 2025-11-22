@@ -1,6 +1,8 @@
 import { JsonObject } from "@prisma/client/runtime/library";
 import { z } from "zod";
 import {
+  AICompetitorGrader_BarriersToEntry,
+  AICompetitorGrader_MarketMaturity,
   AIIdeaValidation_LongevityAlignment,
   AIIdeaValidation_ProblemFreq,
   AIMarketSize_ARPUEstimate,
@@ -12,6 +14,7 @@ import {
   AIMarketSize_SizeEstimate,
 } from "./enum.ai_tool";
 import { AIFormatOutputText, AIFormatOutputZod } from "./util.ai_tool";
+import { X } from "lucide-react";
 
 // Idea Validation //
 
@@ -87,6 +90,54 @@ export interface AIResultMarketSize extends JsonObject {
   SOM_insight: {
     SOM_value: string;
     remarks: string;
+  };
+}
+
+// Competitor Grader //
+
+export interface AIResultCompetitorGrading extends JsonObject {
+  industry_analisis: {
+    current_condition: string;
+    market_maturity: {
+      status: AICompetitorGrader_MarketMaturity;
+      reason: string;
+    };
+    barriers_to_entry: {
+      level: AICompetitorGrader_BarriersToEntry;
+      reason: string;
+    };
+    CAGR_projection: {
+      2024: number;
+      2025: number;
+      2026: number;
+      2027: number;
+      2028: number;
+    };
+    sources: {
+      source_name: string;
+      source_url: string;
+      source_publisher: string;
+      source_year: number;
+    }[];
+    data_confidence_level: number;
+  };
+  competitor_analysis: {
+    competitors: {
+      name: string;
+      company_url: string;
+      key_strength: string;
+      market_score: number;
+      position: { x: number; y: number };
+    }[];
+    attributes: {
+      x: { left: string; right: string };
+      y: { top: string; bottom: string };
+    };
+    user_product: {
+      x: number;
+      y: number;
+    };
+    room_of_growth_opportunity: string;
   };
 }
 
@@ -345,6 +396,159 @@ export const aiToolPrompts = {
           SOM_insight: z.object({
             SOM_value: z.number(),
             remarks: z.string(),
+          }),
+        })
+      ),
+    };
+  },
+
+  competitorGrading: (
+    product_name: string,
+    product_description: string,
+    country: string,
+    industry: string
+  ) => {
+    return {
+      instructions:
+        "Kamu adalah Senior Business & Market Intelligence Strategist dengan pengalaman lebih dari 15 tahun di bidang market research, competitive analysis, industry landscape mapping, brand positioning, dan strategic forecasting. Kamu terbiasa membuat analisis mendalam untuk startup, corporate, dan venture capital dengan standar laporan profesional.\n" +
+        "Kamu mampu menyusun insight berdasarkan data, menghindari klaim tanpa dasar, dan selalu menyertakan confidence level atas analisis yang diberikan.\n" +
+        "Tugasmu adalah melakukan Competitor & Industry Analysis secara sistematis dan mudah dipahami.\n" +
+        `1. Berikan current condition industri ${industry} saat ini berdasarkan tren, dinamika, dan insight terbaru.\n` +
+        "2. Tentukan market maturity (emerging / growing / mature / declining) terhadap industri + berikan alasan.\n" +
+        "3. Tentukan barriers to entry (easy / medium / hard) + berikan alasan.\n" +
+        "4. Buat CAGR projection 2024–2028 (berbentuk angka estimasi) berdasarkan data yang valid.\n" +
+        "5. Berikan sumber data yang relevan (format: source_name, source_url, source_publisher, source_year).\n" +
+        "6. Berikan confidence level (1-100) terhadap validitas data & asumsi.\n" +
+        "7. Identifikasi maksimal 5 kompetitor relevan (nama + company_url).\n" +
+        "8. Berikan key_strength masing-masing kompetitor (keunggulan utama).\n" +
+        "9. Berikan market_score (1–100) berdasarkan key_strength dan posisinya dalam market.\n" +
+        "10. Buat brand positioning map dengan menentukan atribut X axis (left vs right) dan atribut Y axis (top vs bottom).\n" +
+        "11. Plot koordinat x/y tiap kompetitor.\n" +
+        `12. Tentukan koordinat x/y untuk produk ${product_name}` +
+        "13. Identifikasi room_of_growth_opportunity (peluang pertumbuhan, gap pasar, ide diferensiasi).\n" +
+        AIFormatOutputText({
+          industry_analysis: {
+            current_condition: "<Deskripsi kondisi industri saat ini>",
+            market_maturity: {
+              status: "<emerging/growing/mature/declining>",
+              reason: "<alasan kenapa maturity tersebut dipilih>",
+            },
+            barriers_to_entry: {
+              level: "<easy/medium/hard>",
+              reason: "<faktor yang membuat industri mudah/sulit dimasuki>",
+            },
+            CAGR_projection: {
+              "2024": "<Angka CAGR baseline atau estimasi tahun berjalan>",
+              "2025": "<estimasi tahun berjalan atau proyeksi CAGR>",
+              "2026": "<Proyeksi CAGR>",
+              "2027": "<Proyeksi CAGR>",
+              "2028": "<Proyeksi CAGR>",
+            },
+            sources: [
+              {
+                source_name: "<Nama sumber data/publikasi>",
+                source_url: "<URL sumber>",
+                source_publisher: "<Nama penerbit/lembaga riset>",
+                source_year: "<Tahun publikasi>",
+              },
+            ],
+            data_confidence_level: "<1-100>",
+          },
+          competitor_analysis: {
+            competitors: [
+              {
+                name: "<Nama kompetitor>",
+                company_url: "<Situs resmi perusahaan>",
+                key_strength: "<Kekuatan utama kompetitor di pasar>",
+                market_score: "<Skor 1–100 untuk menunjukkan kekuatan pasar>",
+                position: {
+                  x: "<Koordinat posisi kompetitor di sumbu X>",
+                  y: "<Koordinat posisi kompetitor di sumbu Y>",
+                },
+              },
+            ],
+            attributes: {
+              x: {
+                left: "<Atribut sisi kiri sumbu X (misal: harga rendah)>",
+                right: "<Atribut sisi kanan sumbu X (misal: harga premium)>",
+              },
+              y: {
+                top: "<Atribut sisi atas sumbu Y (misal: kualitas tinggi)>",
+                bottom: "<Atribut sisi bawah sumbu Y (misal: kualitas dasar)>",
+              },
+            },
+            user_product: {
+              x: "<Posisi produk user di sumbu X>",
+              y: "<Posisi produk user di sumbu Y>",
+            },
+            room_of_growth_opportunity:
+              "<Analisis area yang masih terbuka untuk produk user tumbuh dan diferensiasi>",
+          },
+        }),
+      input:
+        "Data produk:\n" +
+        `- Nama: ${product_name}\n` +
+        `- Deskripsi: ${product_description}\n` +
+        `- Negara: ${country}` +
+        `- Industri: ${industry}`,
+      format: AIFormatOutputZod(
+        "respon_pemeringkatan_kompetitor",
+        z.object({
+          industry_analysis: z.object({
+            current_condition: z.string(),
+            market_maturity: {
+              status: z.enum(AICompetitorGrader_MarketMaturity),
+              reason: z.string(),
+            },
+            barriers_to_entry: {
+              level: z.enum(AICompetitorGrader_BarriersToEntry),
+              reason: z.string(),
+            },
+            CAGR_projection: {
+              "2024": z.number(),
+              "2025": z.number(),
+              "2026": z.number(),
+              "2027": z.number(),
+              "2028": z.number(),
+            },
+            sources: [
+              {
+                source_name: z.string(),
+                source_url: z.string(),
+                source_publisher: z.string(),
+                source_year: z.number(),
+              },
+            ],
+            data_confidence_level: z.number(),
+          }),
+          competitor_analysis: z.object({
+            competitors: z.array(
+              z.object({
+                name: z.string(),
+                company_url: z.string(),
+                key_strength: z.string(),
+                market_score: z.number(),
+                position: z.object({
+                  x: "<Koordinat posisi kompetitor di sumbu X>",
+                  y: "<Koordinat posisi kompetitor di sumbu Y>",
+                }),
+              })
+            ),
+            attributes: z.object({
+              x: z.object({
+                left: z.string(),
+                right: z.string(),
+              }),
+              y: z.object({
+                top: z.string(),
+                bottom: z.string(),
+              }),
+            }),
+            user_product: z.object({
+              x: z.number(),
+              y: z.number(),
+            }),
+            room_of_growth_opportunity: z.string(),
           }),
         })
       ),
