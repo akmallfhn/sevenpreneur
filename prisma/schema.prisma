@@ -479,6 +479,8 @@ model AIResult {
   ai_tool_id Int      @db.SmallInt
   name       String   @db.VarChar()
   result     Json     @db.Json
+  is_done    Boolean  @default(false) @db.Boolean
+  qstash_id  String?  @db.VarChar()
   created_at DateTime @default(now()) @db.Timestamptz()
 
   @@map("ai_results")

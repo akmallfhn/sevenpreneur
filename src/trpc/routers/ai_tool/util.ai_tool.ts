@@ -4,6 +4,7 @@ import {
 } from "@/lib/status_code";
 import { CRoleEnum, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { Client, openai } from "@upstash/qstash";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { AutoParseableTextFormat } from "openai/lib/parser";
@@ -69,46 +70,53 @@ export function AIFormatOutputZod<T extends z.ZodObject>(
   );
 }
 
-const ChatGPTClient = new OpenAI();
+const QStashClient = new Client();
+
+let baseURL = "https://api.sevenpreneur.com/";
+if (process.env.DOMAIN_MODE === "local")
+  baseURL = "https://api.example.com:3000/";
 
 export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   model: AIModelName,
-  prompt: AIPrompt<T>
-) {
-  const generatedResult = await ChatGPTClient.responses.parse({
-    model: model,
-    tools: [{ type: "web_search" }],
-    reasoning: { effort: "low" },
-    instructions: prompt.instructions,
-    input: prompt.input,
-    text: {
-      format: prompt.format,
-    },
-  });
-
-  if (generatedResult.output_parsed === null) {
-    throw new TRPCError({
-      code: STATUS_INTERNAL_SERVER_ERROR,
-      message: "Failed to parse an AI result.",
-    });
-  }
-
-  return generatedResult.output_parsed;
-}
-
-export async function AISaveResult(
+  prompt: AIPrompt<T>,
   prisma: PrismaClient,
   user_id: string,
-  ai_tool_id: number,
-  title: string,
-  result: object
+  ai_tool_id: number
 ) {
+  const res = await QStashClient.publishJSON({
+    api: {
+      name: "llm",
+      provider: openai({ token: process.env.OPENAI_API_KEY! }),
+    },
+    body: {
+      model: model,
+      messages: [
+        {
+          role: "system",
+          content:
+            prompt.instructions +
+            "\nAdditional meta-constraints:\n" +
+            "- Reasoning effort: low\n" +
+            "- Text format: " +
+            prompt.format,
+        },
+        {
+          role: "user",
+          content: prompt.input,
+        },
+      ],
+    },
+    callback: baseURL + "qstash/callback",
+  });
+  const messageId = res.messageId as string;
+
   const createdResult = await prisma.aIResult.create({
     data: {
       user_id: user_id,
       ai_tool_id: ai_tool_id,
-      name: title,
-      result: result,
+      name: "", // empty for now
+      result: {}, // empty for now
+      qstash_id: messageId,
     },
   });
   const theResult = await prisma.aIResult.findFirst({
@@ -120,8 +128,9 @@ export async function AISaveResult(
       message: "Failed to save an AI result.",
     });
   }
-  return theResult.id;
 }
+
+const ChatGPTClient = new OpenAI();
 
 export async function AIGenerateTitle<T extends AutoParseableTextFormat<U>, U>(
   model: AIModelName,
