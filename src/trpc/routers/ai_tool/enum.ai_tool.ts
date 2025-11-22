@@ -54,3 +54,18 @@ export enum AIMarketSize_ARPUEstimate {
   SEDANG = "sedang",
   TINGGI = "tinggi",
 }
+
+// Competitor Grader //
+
+export enum AICompetitorGrader_MarketMaturity {
+  EMERGING = "emerging",
+  GROWING = "growing",
+  MATURE = "mature",
+  DECLINING = "declining",
+}
+
+export enum AICompetitorGrader_BarriersToEntry {
+  EASY = "easy",
+  MEDIUM = "medium",
+  HARD = "hard",
+}

@@ -21,7 +21,7 @@ export enum AIModelName {
 
 export const AI_TOOL_ID_IDEA_VAL = 1; // idea-val
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
-export const AI_TOOL_ID_RESERVED = 3; // reserved
+export const AI_TOOL_ID_COMPETITOR_GRADER = 3; // competitor-grader
 
 export type AIChatRole = "user" | "assistant";
 
