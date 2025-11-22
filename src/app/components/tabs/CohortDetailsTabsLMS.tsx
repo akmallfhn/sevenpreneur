@@ -42,6 +42,7 @@ export interface UserList {
   full_name: string;
   avatar: string | null;
   email: string;
+  role_id: number;
 }
 
 interface CohortDetailsTabsLMSProps {
@@ -79,6 +80,7 @@ export default function CohortDetailsTabsLMS({
   const activeProject = projectList.filter(
     (project) => project.status === "ACTIVE"
   );
+  const generalUser = userList.filter((user) => user.role_id === 3);
 
   return (
     <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg border overflow-hidden">
@@ -194,22 +196,23 @@ export default function CohortDetailsTabsLMS({
 
       {activeTab === "members" && (
         <div className="tab-area w-full min-h-96">
-          <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
-            {userList.map((post, index) => (
-              <UserItemLMS
-                key={index}
-                sessionUserId={sessionUserId}
-                userId={post.id}
-                userName={post.full_name}
-                userAvatar={
-                  post.avatar ||
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                }
-                userEmail={post.email}
-              />
-            ))}
-          </div>
-          {userList.length === 0 && (
+          {generalUser.length > 0 ? (
+            <div className="tab-content flex flex-col 2xl:grid 2xl:grid-cols-2 2xl:content-start p-4 gap-3">
+              {generalUser.map((post) => (
+                <UserItemLMS
+                  key={post.id}
+                  sessionUserId={sessionUserId}
+                  userId={post.id}
+                  userName={post.full_name}
+                  userAvatar={
+                    post.avatar ||
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                  }
+                  userEmail={post.email}
+                />
+              ))}
+            </div>
+          ) : (
             <div className="flex w-full h-full items-center">
               <EmptyItemLMS
                 stateTitle="No Members Have Joined So Far."
