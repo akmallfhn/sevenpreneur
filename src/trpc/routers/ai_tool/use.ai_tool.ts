@@ -46,7 +46,7 @@ export const useAITool = {
         );
       }
 
-      await AIGenerate(
+      const result = await AIGenerate(
         opts.input.model,
         aiToolPrompts.ideaValidation(
           opts.input.problem,
@@ -62,6 +62,7 @@ export const useAITool = {
       return {
         code: STATUS_CREATED,
         message: "Queued",
+        result_id: result.id,
       };
     }),
 
@@ -87,7 +88,7 @@ export const useAITool = {
         );
       }
 
-      await AIGenerate(
+      const result = await AIGenerate(
         opts.input.model,
         aiToolPrompts.marketSize(
           opts.input.additional_persona || "",
@@ -106,6 +107,7 @@ export const useAITool = {
       return {
         code: STATUS_CREATED,
         message: "Queued",
+        result_id: result.id,
       };
     }),
 
