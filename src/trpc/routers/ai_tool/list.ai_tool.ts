@@ -60,6 +60,7 @@ export const listAITool = {
           id: true,
           name: true,
           created_at: true,
+          is_done: true,
           ai_tool: {
             select: {
               name: true,
@@ -81,6 +82,7 @@ export const listAITool = {
           name: entry.name,
           ai_tool_name: entry.ai_tool.name,
           ai_tool_slug_url: entry.ai_tool.slug_url,
+          is_done: entry.is_done,
           created_at: entry.created_at,
         };
       });
