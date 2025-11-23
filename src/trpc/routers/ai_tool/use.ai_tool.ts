@@ -37,7 +37,7 @@ export const useAITool = {
         resources: stringNotBlank(),
       })
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       if (opts.ctx.user.role.name === "General User") {
         await isEnrolledAITool(
           opts.ctx.prisma,
@@ -78,7 +78,7 @@ export const useAITool = {
         sales_channel: stringNotBlank(),
       })
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       if (opts.ctx.user.role.name === "General User") {
         await isEnrolledAITool(
           opts.ctx.prisma,
