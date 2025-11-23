@@ -84,27 +84,17 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   ai_tool_id: number
 ) {
   const res = await QStashClient.publishJSON({
-    api: {
-      name: "llm",
-      provider: openai({ token: process.env.OPENAI_API_KEY! }),
+    url: "https://api.openai.com/v1/responses",
+    headers: {
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY!}`,
     },
     body: {
       model: model,
-      messages: [
-        {
-          role: "system",
-          content:
-            prompt.instructions +
-            "\nAdditional meta-constraints:\n" +
-            "- Reasoning effort: low\n" +
-            "- Text format: " +
-            prompt.format,
-        },
-        {
-          role: "user",
-          content: prompt.input,
-        },
-      ],
+      tools: [{ type: "web_search" }],
+      reasoning: { effort: "low" },
+      instructions: prompt.instructions,
+      input: prompt.input,
+      text: { format: prompt.format },
     },
     callback: baseURL + "qstash/callback",
   });

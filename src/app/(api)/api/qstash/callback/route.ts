@@ -12,7 +12,23 @@ async function handler(req: Request) {
   const body = JSON.parse(atob(result.body));
 
   // The reply/assistant message
-  const content = JSON.parse(body.choices[0].message.content);
+  const assistantContents = [];
+  for (const output of body.output) {
+    if (
+      output.type === "message" &&
+      output.status === "completed" &&
+      output.role === "assistant"
+    ) {
+      assistantContents.push(...output.content);
+    }
+  }
+  let assistantText = "";
+  for (const content of assistantContents) {
+    if (content.type === "output_text") {
+      assistantText += content.text;
+    }
+  }
+  const content = JSON.parse(assistantText);
 
   const updatedResult = await prisma.aIResult.updateManyAndReturn({
     data: {
