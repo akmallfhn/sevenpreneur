@@ -27,7 +27,7 @@ export const readAIResult = {
       }
 
       const theAIResult = await opts.ctx.prisma.aIResult.findFirst({
-        select: { name: true, result: true, created_at: true },
+        select: { name: true, result: true, is_done: true, created_at: true },
         where: {
           id: opts.input.id,
           user_id: opts.ctx.user.id,
@@ -43,7 +43,10 @@ export const readAIResult = {
         message: "Success",
         result: {
           name: theAIResult.name,
-          result: theAIResult.result as AIResultIdeaValidation,
+          result: theAIResult.is_done
+            ? (theAIResult.result as AIResultIdeaValidation)
+            : null,
+          is_done: theAIResult.is_done,
           created_at: theAIResult.created_at,
         },
       };
@@ -61,7 +64,7 @@ export const readAIResult = {
       }
 
       const theAIResult = await opts.ctx.prisma.aIResult.findFirst({
-        select: { name: true, result: true, created_at: true },
+        select: { name: true, result: true, is_done: true, created_at: true },
         where: {
           id: opts.input.id,
           user_id: opts.ctx.user.id,
@@ -77,7 +80,10 @@ export const readAIResult = {
         message: "Success",
         result: {
           name: theAIResult.name,
-          result: theAIResult.result as AIResultMarketSize,
+          result: theAIResult.is_done
+            ? (theAIResult.result as AIResultMarketSize)
+            : null,
+          is_done: theAIResult.is_done,
           created_at: theAIResult.created_at,
         },
       };
