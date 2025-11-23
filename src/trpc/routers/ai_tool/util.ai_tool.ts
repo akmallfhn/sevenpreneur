@@ -118,6 +118,8 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
       message: "Failed to save an AI result.",
     });
   }
+
+  return theResult;
 }
 
 const ChatGPTClient = new OpenAI();
