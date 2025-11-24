@@ -106,6 +106,7 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
       ai_tool_id: ai_tool_id,
       name: "", // empty for now
       result: {}, // empty for now
+      is_done: false,
       qstash_id: messageId,
     },
   });
