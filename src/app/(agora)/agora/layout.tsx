@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
+import { TRPCProvider } from "@/trpc/client";
 
 export const metadata: Metadata = {
   title: {
@@ -29,6 +30,10 @@ export const metadata: Metadata = {
     ],
   },
 };
+
+let baseURL = "https://api.sevenpreneur.com/trpc";
+if (process.env.DOMAIN_MODE === "local")
+  baseURL = "https://api.example.com:3000/trpc";
 
 interface AgoraLayoutProps {
   children: ReactNode;
@@ -68,10 +73,12 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
   }
 
   return (
-    <div className="root relative w-full min-h-screen bg-section-background">
-      <SidebarLMS aiResultList={aiResultList} />
-      {children}
-      <Toaster richColors position="top-center" />
-    </div>
+    <TRPCProvider baseURL={baseURL}>
+      <div className="root relative w-full min-h-screen bg-section-background">
+        <SidebarLMS aiResultList={aiResultList} />
+        {children}
+        <Toaster richColors position="top-center" />
+      </div>
+    </TRPCProvider>
   );
 }

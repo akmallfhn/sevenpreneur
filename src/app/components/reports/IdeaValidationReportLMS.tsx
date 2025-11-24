@@ -11,8 +11,11 @@ import {
   AIIdeaValidation_ProblemFreq,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { Minus, TrendingDown, TrendingUp, User } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import AIItemSegmentLMS from "../items/AIItemSegmentLMS";
+import { useRouter } from "next/navigation";
+import { setSessionToken, trpc } from "@/trpc/client";
+import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
 
 const freqAttributes: Record<
   AIIdeaValidation_ProblemFreq,
@@ -92,12 +95,15 @@ interface AffectedSegments {
 }
 
 interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
+  sessionToken: string;
   sessionUserRole: number;
+  resultId: string;
   resultName: string;
+  resultStatus: boolean;
   problemDiscovery: string;
   problemFrequency: AIIdeaValidation_ProblemFreq;
   problemFitScore: number;
-  problemFactors: string;
+  problemFactor: string;
   affectedSegments: AffectedSegments[];
   existingAlternatives: string;
   sources: SourcesArticle[];
@@ -116,14 +122,17 @@ interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function IdeaValidationReportLMS({
+  sessionToken,
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  resultId,
   resultName,
+  resultStatus,
   problemDiscovery,
   problemFrequency,
   problemFitScore,
-  problemFactors,
+  problemFactor,
   affectedSegments,
   existingAlternatives,
   sources,
@@ -140,6 +149,31 @@ export default function IdeaValidationReportLMS({
   ideaPriorityFocus,
   ideaNextStep,
 }: IdeaValidationReportLMSProps) {
+  const router = useRouter();
+  const [intervalMs, setIntervalMs] = useState<number | false>(2000);
+
+  useEffect(() => {
+    if (sessionToken) {
+      setSessionToken(sessionToken);
+    }
+  }, [sessionToken]);
+
+  const { data } = trpc.read.ai.ideaValidation.useQuery(
+    { id: resultId },
+    {
+      refetchInterval: intervalMs,
+      enabled: !!sessionToken,
+    }
+  );
+  const isDoneResult = data?.result.is_done;
+
+  useEffect(() => {
+    if (isDoneResult) {
+      router.refresh();
+      setIntervalMs(false);
+    }
+  }, [isDoneResult, router]);
+
   const freq = freqAttributes[problemFrequency];
   const longevity = longevityAttributes[longevityAlignment];
 
@@ -173,6 +207,23 @@ export default function IdeaValidationReportLMS({
     confidenceStatus = "Medium";
   } else {
     confidenceStatus = "Low";
+  }
+
+  if (!resultStatus) {
+    return (
+      <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+        <HeaderAIResultDetailsLMS
+          sessionUserName={sessionUserName}
+          sessionUserAvatar={sessionUserAvatar}
+          sessionUserRole={sessionUserRole}
+          headerTitle="Idea Validation Result"
+          headerResultName={resultName}
+        />
+        <div className="flex flex-col w-full items-center">
+          <LoadingAIGeneratingResult />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -304,7 +355,7 @@ export default function IdeaValidationReportLMS({
               <h3 className="section-title text-lg font-bold">
                 Mengapa Masalah Ini Terjadi?
               </h3>
-              <p className="text-[#333333] text-[15px]">{problemFactors}</p>
+              <p className="text-[#333333] text-[15px]">{problemFactor}</p>
             </div>
           </div>
           <div className="divider border-l self-stretch" />

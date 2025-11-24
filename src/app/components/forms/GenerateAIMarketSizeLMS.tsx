@@ -134,15 +134,7 @@ export default function GenerateAIMarketSizeLMS({
       });
 
       if (aiMarketSizeResult.code === "CREATED") {
-        toast.success("Market size report requested!");
-        setFormData({
-          productName: "",
-          productDescription: "",
-          productType: null,
-          customerType: null,
-          operatingArea: "",
-          salesChannel: [],
-        });
+        toast.success("Finding your market’s sweet spot...");
         router.push(`/ai/market-size/${aiMarketSizeResult.id}`);
       } else {
         toast.error(

@@ -95,13 +95,7 @@ export default function GenerateAIIdeaValidatorLMS({
       });
 
       if (aiIdeaValidation.code === "CREATED") {
-        toast.success("Idea validation requested!");
-        setFormData({
-          problemStatement: "",
-          problemContext: "",
-          proposedSolution: "",
-          availableResource: "",
-        });
+        toast.success("Validating your idea...");
         router.push(`/ai/idea-validator/${aiIdeaValidation.id}`);
       } else {
         toast.error("We couldn’t complete the validation. Please try again!");

@@ -5,6 +5,10 @@ import { getShortRupiahCurrency } from "@/lib/currency";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import { markdownToHtml } from "@/lib/markdown-to-html";
+import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import { setSessionToken, trpc } from "@/trpc/client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export interface SourcesArticle {
   source_name: string;
@@ -14,8 +18,11 @@ export interface SourcesArticle {
 }
 
 interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
+  sessionToken: string;
   sessionUserRole: number;
+  resultId: string;
   resultName: string;
+  resultStatus: boolean;
   productName: string;
   tamValue: number;
   samValue: number;
@@ -27,10 +34,13 @@ interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function MarketSizeReportLMS({
+  sessionToken,
   sessionUserName,
   sessionUserAvatar,
   sessionUserRole,
+  resultId,
   resultName,
+  resultStatus,
   productName,
   tamValue,
   samValue,
@@ -40,6 +50,31 @@ export default function MarketSizeReportLMS({
   confidenceLevel,
   sources,
 }: MarketSizeReportLMSProps) {
+  const router = useRouter();
+  const [intervalMs, setIntervalMs] = useState<number | false>(2000);
+
+  useEffect(() => {
+    if (sessionToken) {
+      setSessionToken(sessionToken);
+    }
+  }, [sessionToken]);
+
+  const { data } = trpc.read.ai.marketSize.useQuery(
+    { id: resultId },
+    {
+      refetchInterval: intervalMs,
+      enabled: !!sessionToken,
+    }
+  );
+  const isDoneResult = data?.result.is_done;
+
+  useEffect(() => {
+    if (isDoneResult) {
+      router.refresh();
+      setIntervalMs(false);
+    }
+  }, [isDoneResult, router]);
+
   const somValue = 0.01 * samValue;
   const conservativeScenario = 0.7 * somValue;
   const aggresiveScenario = 1.5 * somValue;
@@ -51,6 +86,23 @@ export default function MarketSizeReportLMS({
     confidenceStatus = "Medium";
   } else {
     confidenceStatus = "Low";
+  }
+
+  if (!resultStatus) {
+    return (
+      <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+        <HeaderAIResultDetailsLMS
+          sessionUserName={sessionUserName}
+          sessionUserAvatar={sessionUserAvatar}
+          sessionUserRole={sessionUserRole}
+          headerTitle="Market Size Estimation Result"
+          headerResultName={resultName}
+        />
+        <div className="flex flex-col w-full items-center">
+          <LoadingAIGeneratingResult />
+        </div>
+      </div>
+    );
   }
 
   return (

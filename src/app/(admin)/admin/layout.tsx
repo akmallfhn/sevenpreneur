@@ -8,7 +8,6 @@ import { Metadata } from "next";
 import DisallowedMobile from "@/app/components/state/DisallowedMobile";
 import ForbiddenComponent from "@/app/components/state/403Forbidden";
 
-// --- Metadata
 export const metadata: Metadata = {
   title: {
     template: "%s | Admin Sevenpreneur",
@@ -31,7 +30,6 @@ export const metadata: Metadata = {
   },
 };
 
-// --- Pass the base URL to the client
 let baseURL = "https://api.sevenpreneur.com/trpc";
 if (process.env.DOMAIN_MODE === "local")
   baseURL = "https://api.example.com:3000/trpc";
@@ -39,14 +37,14 @@ if (process.env.DOMAIN_MODE === "local")
 export default async function AdminLayout(
   props: Readonly<{ children: React.ReactNode }>
 ) {
-  // --- Get Cookie
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
 
-  // --- Checking Access
+  if (!sessionToken) return null;
   setSessionToken(sessionToken);
+
   const checkUser = (await trpc.auth.checkSession()).user;
+
   if (!checkUser || checkUser.role_id === 3) {
     return <ForbiddenComponent />;
   }
