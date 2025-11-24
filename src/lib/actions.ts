@@ -622,9 +622,7 @@ export async function GenerateAIIdeaValidation({
   return {
     code: generateIdeaValidator.code,
     message: generateIdeaValidator.message,
-    id: generateIdeaValidator.id,
-    title: generateIdeaValidator.title,
-    result: generateIdeaValidator.result,
+    id: generateIdeaValidator.result_id,
   };
 }
 
@@ -665,8 +663,6 @@ export async function GenerateAIMarketSize({
   return {
     code: generateMarketSize.code,
     message: generateMarketSize.message,
-    id: generateMarketSize.id,
-    title: generateMarketSize.title,
-    result: generateMarketSize.result,
+    id: generateMarketSize.result_id,
   };
 }

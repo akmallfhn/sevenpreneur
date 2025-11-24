@@ -94,8 +94,8 @@ export default function GenerateAIIdeaValidatorLMS({
         availableResources: formData.availableResource,
       });
 
-      if (aiIdeaValidation.code === "OK") {
-        toast.success("AI validation complete! Your insights are ready");
+      if (aiIdeaValidation.code === "CREATED") {
+        toast.success("Idea validation requested!");
         setFormData({
           problemStatement: "",
           problemContext: "",
