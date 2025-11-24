@@ -14,7 +14,6 @@ import {
   AIMarketSize_SizeEstimate,
 } from "./enum.ai_tool";
 import { AIFormatOutputText, AIFormatOutputZod } from "./util.ai_tool";
-import { X } from "lucide-react";
 
 // Idea Validation //
 
@@ -96,7 +95,7 @@ export interface AIResultMarketSize extends JsonObject {
 // Competitor Grader //
 
 export interface AIResultCompetitorGrading extends JsonObject {
-  industry_analisis: {
+  industry_analysis: {
     current_condition: string;
     market_maturity: {
       status: AICompetitorGrader_MarketMaturity;
@@ -430,7 +429,7 @@ export const aiToolPrompts = {
         "13. Identifikasi room_of_growth_opportunity (peluang pertumbuhan, gap pasar, ide diferensiasi).\n" +
         AIFormatOutputText({
           industry_analysis: {
-            current_condition: "<Deskripsi kondisi industri saat ini>",
+            current_condition: "<deskripsi kondisi industri saat ini>",
             market_maturity: {
               status: "<emerging/growing/mature/declining>",
               reason: "<alasan kenapa maturity tersebut dipilih>",
@@ -440,18 +439,18 @@ export const aiToolPrompts = {
               reason: "<faktor yang membuat industri mudah/sulit dimasuki>",
             },
             CAGR_projection: {
-              "2024": "<Angka CAGR baseline atau estimasi tahun berjalan>",
+              "2024": "<angka CAGR baseline atau estimasi tahun berjalan>",
               "2025": "<estimasi tahun berjalan atau proyeksi CAGR>",
-              "2026": "<Proyeksi CAGR>",
-              "2027": "<Proyeksi CAGR>",
-              "2028": "<Proyeksi CAGR>",
+              "2026": "<proyeksi CAGR>",
+              "2027": "<proyeksi CAGR>",
+              "2028": "<proyeksi CAGR>",
             },
             sources: [
               {
-                source_name: "<Nama sumber data/publikasi>",
+                source_name: "<nama sumber data/publikasi>",
                 source_url: "<URL sumber>",
-                source_publisher: "<Nama penerbit/lembaga riset>",
-                source_year: "<Tahun publikasi>",
+                source_publisher: "<nama penerbit/lembaga riset>",
+                source_year: "<tahun publikasi>",
               },
             ],
             data_confidence_level: "<1-100>",
@@ -459,32 +458,32 @@ export const aiToolPrompts = {
           competitor_analysis: {
             competitors: [
               {
-                name: "<Nama kompetitor>",
-                company_url: "<Situs resmi perusahaan>",
-                key_strength: "<Kekuatan utama kompetitor di pasar>",
-                market_score: "<Skor 1–100 untuk menunjukkan kekuatan pasar>",
+                name: "<nama kompetitor>",
+                company_url: "<situs resmi perusahaan>",
+                key_strength: "<kekuatan utama kompetitor di pasar>",
+                market_score: "<skor 1–100 untuk menunjukkan kekuatan pasar>",
                 position: {
-                  x: "<Koordinat posisi kompetitor di sumbu X>",
-                  y: "<Koordinat posisi kompetitor di sumbu Y>",
+                  x: "<koordinat posisi kompetitor di sumbu X>",
+                  y: "<koordinat posisi kompetitor di sumbu Y>",
                 },
               },
             ],
             attributes: {
               x: {
-                left: "<Atribut sisi kiri sumbu X (misal: harga rendah)>",
-                right: "<Atribut sisi kanan sumbu X (misal: harga premium)>",
+                left: "<atribut sisi kiri sumbu X (misal: harga rendah)>",
+                right: "<atribut sisi kanan sumbu X (misal: harga premium)>",
               },
               y: {
-                top: "<Atribut sisi atas sumbu Y (misal: kualitas tinggi)>",
-                bottom: "<Atribut sisi bawah sumbu Y (misal: kualitas dasar)>",
+                top: "<atribut sisi atas sumbu Y (misal: kualitas tinggi)>",
+                bottom: "<atribut sisi bawah sumbu Y (misal: kualitas dasar)>",
               },
             },
             user_product: {
-              x: "<Posisi produk user di sumbu X>",
-              y: "<Posisi produk user di sumbu Y>",
+              x: "<posisi produk user di sumbu X>",
+              y: "<posisi produk user di sumbu Y>",
             },
             room_of_growth_opportunity:
-              "<Analisis area yang masih terbuka untuk produk user tumbuh dan diferensiasi>",
+              "<analisis area yang masih terbuka untuk produk user tumbuh dan diferensiasi>",
           },
         }),
       input:
@@ -494,33 +493,33 @@ export const aiToolPrompts = {
         `- Negara: ${country}` +
         `- Industri: ${industry}`,
       format: AIFormatOutputZod(
-        "respon_pemeringkatan_kompetitor",
+        "respons_pemeringkatan_kompetitor",
         z.object({
           industry_analysis: z.object({
             current_condition: z.string(),
-            market_maturity: {
+            market_maturity: z.object({
               status: z.enum(AICompetitorGrader_MarketMaturity),
               reason: z.string(),
-            },
-            barriers_to_entry: {
+            }),
+            barriers_to_entry: z.object({
               level: z.enum(AICompetitorGrader_BarriersToEntry),
               reason: z.string(),
-            },
-            CAGR_projection: {
+            }),
+            CAGR_projection: z.object({
               "2024": z.number(),
               "2025": z.number(),
               "2026": z.number(),
               "2027": z.number(),
               "2028": z.number(),
-            },
-            sources: [
-              {
+            }),
+            sources: z.array(
+              z.object({
                 source_name: z.string(),
                 source_url: z.string(),
                 source_publisher: z.string(),
                 source_year: z.number(),
-              },
-            ],
+              })
+            ),
             data_confidence_level: z.number(),
           }),
           competitor_analysis: z.object({

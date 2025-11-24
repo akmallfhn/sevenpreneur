@@ -358,18 +358,20 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## AI Tools and AI Conversations ✨
 
-| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `check.aiTools`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiTools`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiResults`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.ideaValidation` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.marketSize`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.ideaValidation`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.marketSize`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiConversations`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiChats`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.sendChat`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name              | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :-------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `check.aiTools`             |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiTools`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiResults`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.ideaValidation`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.marketSize`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.competitorGrading` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.ideaValidation`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.marketSize`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.competitorGrading`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiConversations`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiChats`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.sendChat`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 **Scopes:**
 
