@@ -51,6 +51,7 @@ export const readRouter = createTRPCRouter({
   ai: {
     ideaValidation: readAIResult.ideaValidation,
     marketSize: readAIResult.marketSize,
+    competitorGrading: readAIResult.competitorGrading,
   },
 
   // Transaction-related //

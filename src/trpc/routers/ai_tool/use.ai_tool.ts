@@ -121,7 +121,7 @@ export const useAITool = {
         industry: stringNotBlank(),
       })
     )
-    .query(async (opts) => {
+    .mutation(async (opts) => {
       if (opts.ctx.user.role.name === "General User") {
         await isEnrolledAITool(
           opts.ctx.prisma,
@@ -130,30 +130,23 @@ export const useAITool = {
         );
       }
 
-      const parsedResult = await AIGenerate(
+      const result = await AIGenerate(
         opts.input.model,
         aiToolPrompts.competitorGrading(
           opts.input.product_name,
           opts.input.product_description,
           opts.input.country,
           opts.input.industry
-        )
-      );
-
-      const resultId = await AISaveResult(
+        ),
         opts.ctx.prisma,
         opts.ctx.user.id,
-        AI_TOOL_ID_COMPETITOR_GRADER,
-        parsedResult.title,
-        parsedResult.response
+        AI_TOOL_ID_COMPETITOR_GRADER
       );
 
       return {
-        code: STATUS_OK,
-        message: "Success",
-        id: resultId,
-        title: parsedResult.title,
-        result: parsedResult.response,
+        code: STATUS_CREATED,
+        message: "Queued",
+        result_id: result.id,
       };
     }),
 

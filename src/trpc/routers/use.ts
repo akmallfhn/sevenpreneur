@@ -6,6 +6,7 @@ export const useRouter = createTRPCRouter({
   ai: {
     ideaValidation: useAITool.ideaValidation,
     marketSize: useAITool.marketSize,
+    competitorGrading: useAITool.competitorGrading,
     sendChat: useAITool.sendChat,
   },
 });
