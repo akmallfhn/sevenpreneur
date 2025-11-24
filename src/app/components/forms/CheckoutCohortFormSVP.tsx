@@ -17,7 +17,7 @@ import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
 import { encodeSHA256 } from "@/lib/encode";
 import { getRupiahCurrency } from "@/lib/currency";
 import { ProductCategory } from "@/lib/app-types";
-import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
+import InputNumberSVP from "../fields/InputNumberSVP";
 
 interface PaymentMethodItem {
   id: number;
@@ -342,12 +342,12 @@ export default function CheckoutCohortFormSVP({
                   value={initialUserEmail}
                   disabled
                 />
-                <PhoneNumberInputSVP
+                <InputNumberSVP
                   inputId="user-phone-number"
                   inputName="Phone Number"
-                  inputIcon="🇮🇩"
-                  inputCountryCode="62"
+                  inputIcon="🇮🇩 62"
                   inputPlaceholder="Enter Mobile or WhatsApp number"
+                  characterLength={15}
                   value={formData.userPhoneNumber}
                   onInputChange={handleInputChange("userPhoneNumber")}
                   required

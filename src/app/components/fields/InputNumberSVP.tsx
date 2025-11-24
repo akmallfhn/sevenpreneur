@@ -6,6 +6,7 @@ interface InputNumberSVPProps extends InputHTMLAttributes<HTMLInputElement> {
   inputName?: string;
   inputIcon?: string;
   inputPlaceholder?: string;
+  characterLength?: number;
   errorMessage?: string;
   value: string;
   onInputChange?: (value: string) => void;
@@ -16,6 +17,7 @@ export default function InputNumberSVP({
   inputName,
   inputIcon,
   inputPlaceholder,
+  characterLength,
   errorMessage,
   onInputChange,
   value: propValue,
@@ -25,7 +27,7 @@ export default function InputNumberSVP({
 }: InputNumberSVPProps) {
   const [value, setValue] = useState(propValue);
   const [internalError, setInternalError] = useState("");
-  const maxLength = 60;
+  const maxLength = characterLength ?? 60;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
 
@@ -36,14 +38,13 @@ export default function InputNumberSVP({
     // Sanitize: only allowed 0–9 digit
     const sanitizedValue = rawValue.replace(/\D/g, "").slice(0, maxLength);
 
-    setValue(sanitizedValue);
-    if (onInputChange) onInputChange(sanitizedValue);
-
-    if (sanitizedValue.length > maxLength) {
+    if (rawValue.length > maxLength) {
       setInternalError(characterLimitErrorMessage);
     } else {
       setInternalError("");
     }
+    setValue(sanitizedValue);
+    if (onInputChange) onInputChange(sanitizedValue);
   };
 
   // Sync on value change
@@ -95,6 +96,7 @@ export default function InputNumberSVP({
           value={value}
           onChange={handleInputChange}
           {...rest}
+          suppressHydrationWarning
         />
         {computedError && (
           <p className="input-error-message inline-flex text-red-600 text-xs font-bodycopy">
