@@ -133,8 +133,8 @@ export default function GenerateAIMarketSizeLMS({
         salesChannel: formData.salesChannel.join(", "),
       });
 
-      if (aiMarketSizeResult.code === "OK") {
-        toast.success("Market size report successfully generated!");
+      if (aiMarketSizeResult.code === "CREATED") {
+        toast.success("Market size report requested!");
         setFormData({
           productName: "",
           productDescription: "",

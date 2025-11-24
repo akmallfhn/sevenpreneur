@@ -28,6 +28,14 @@ export default async function AIMarketSizeResultLMS({
 
   const aiMarketSizeResult = aiMarketSizeData.result;
 
+  if (!aiMarketSizeResult.is_done || aiMarketSizeResult.result === null) {
+    return (
+      <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+        <p>The data is not ready yet!</p>
+      </div>
+    );
+  }
+
   return (
     <MarketSizeReportLMS
       sessionUserName={userData.full_name}
