@@ -32,7 +32,7 @@ export default function LoadingAIGeneratingResult() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [index, states.length]);
 
   const isLast = index === states.length - 1;
 

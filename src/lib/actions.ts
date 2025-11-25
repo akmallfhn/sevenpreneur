@@ -666,3 +666,38 @@ export async function GenerateAIMarketSize({
     id: generateMarketSize.result_id,
   };
 }
+
+// AI COMPETITOR GRADING
+interface GenerateAICompetitorGradingProps {
+  productName: string;
+  productDescription: string;
+  productCountry: string;
+  productIndustry: string;
+}
+export async function GenerateAICompetitorGrading({
+  productName,
+  productDescription,
+  productCountry,
+  productIndustry,
+}: GenerateAICompetitorGradingProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const generateCompetitorGrading = await trpc.use.ai.competitorGrading({
+    model: AIModelName.GPT_5_MINI,
+    product_name: productName,
+    product_description: productDescription,
+    country: productCountry,
+    industry: productIndustry,
+  });
+
+  return {
+    code: generateCompetitorGrading.code,
+    message: generateCompetitorGrading.message,
+    id: generateCompetitorGrading.result_id,
+  };
+}
