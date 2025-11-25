@@ -119,6 +119,17 @@ const nextConfig = {
             {
               type: "header",
               key: "host",
+              value: process.env.NGROK_DOMAIN + ".*",
+            },
+          ],
+          destination: "/api/:path*",
+        },
+        {
+          source: "/:path*",
+          has: [
+            {
+              type: "header",
+              key: "host",
               value: "(?<subdomain>[^.]+).(sevenpreneur|example).com.*",
             },
           ],
@@ -151,7 +162,11 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["www.sevenpreneur.com", "www.example.com:3000"],
+      allowedOrigins: [
+        "www.sevenpreneur.com",
+        "www.example.com:3000",
+        process.env.NGROK_DOMAIN,
+      ],
     },
   },
 };
