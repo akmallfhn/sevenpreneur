@@ -30,6 +30,12 @@ export default async function AICompetitorGraderResultLMS({
 
   const aiCompetitorGradingResult = aiCompetitorGradingData.result;
 
+  const projection = (aiCompetitorGradingResult.result?.industry_analysis.CAGR
+    .projection ?? {}) as Record<string, number>;
+  const years = [2024, 2025, 2026, 2027, 2028];
+
+  const aiCAGRprojection = years.map((year) => projection[year]);
+
   return (
     <CompetitorGradingReportLMS
       sessionToken={sessionToken}
@@ -43,6 +49,21 @@ export default async function AICompetitorGraderResultLMS({
       resultName={aiCompetitorGradingResult.name}
       resultStatus={aiCompetitorGradingResult.is_done}
       productName={aiCompetitorGradingResult.result?.product_name ?? ""}
+      industryCurrentCondition={
+        aiCompetitorGradingResult.result?.industry_analysis.current_condition ??
+        ""
+      }
+      industryCAGRValue={aiCAGRprojection ?? []}
+      industryCAGRReason={
+        aiCompetitorGradingResult.result?.industry_analysis.CAGR.reason ?? ""
+      }
+      sources={
+        aiCompetitorGradingResult.result?.industry_analysis.sources ?? []
+      }
+      confidenceLevel={
+        aiCompetitorGradingResult.result?.industry_analysis
+          .data_confidence_level ?? 0
+      }
     />
   );
 }
