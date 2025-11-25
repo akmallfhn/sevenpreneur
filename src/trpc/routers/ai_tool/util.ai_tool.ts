@@ -75,6 +75,8 @@ const QStashClient = new Client();
 let baseURL = "https://api.sevenpreneur.com/";
 if (process.env.DOMAIN_MODE === "local")
   baseURL = "https://api.example.com:3000/";
+if (process.env.NGROK_DOMAIN !== "")
+  baseURL = "https://" + process.env.NGROK_DOMAIN + "/";
 
 export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   model: AIModelName,
