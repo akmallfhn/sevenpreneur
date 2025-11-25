@@ -105,6 +105,13 @@ const nextConfig = {
     ];
   },
   async rewrites() {
+    let ngrokDomain = "ngrok-no-domain.ngrok-free.app";
+    if (process.env.DOMAIN_MODE === "local") {
+      const ngrokDomainEnv = process.env.NGROK_DOMAIN;
+      if (ngrokDomainEnv !== undefined && ngrokDomainEnv !== "") {
+        ngrokDomain = ngrokDomainEnv;
+      }
+    }
     return {
       beforeFiles: [
         {
@@ -119,7 +126,7 @@ const nextConfig = {
             {
               type: "header",
               key: "host",
-              value: process.env.NGROK_DOMAIN + ".*",
+              value: ngrokDomain + ".*",
             },
           ],
           destination: "/api/:path*",
