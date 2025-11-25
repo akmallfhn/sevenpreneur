@@ -119,17 +119,6 @@ const nextConfig = {
             {
               type: "header",
               key: "host",
-              value: process.env.NGROK_DOMAIN + ".*",
-            },
-          ],
-          destination: "/api/:path*",
-        },
-        {
-          source: "/:path*",
-          has: [
-            {
-              type: "header",
-              key: "host",
               value: "(?<subdomain>[^.]+).(sevenpreneur|example).com.*",
             },
           ],
