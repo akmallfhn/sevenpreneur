@@ -1,4 +1,5 @@
 import CompetitorGradingReportLMS from "@/app/components/reports/CompetitorGradingReportLMS";
+import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -56,6 +57,14 @@ export default async function AICompetitorGraderResultLMS({
       industryCAGRValue={aiCAGRprojection ?? []}
       industryCAGRReason={
         aiCompetitorGradingResult.result?.industry_analysis.CAGR.reason ?? ""
+      }
+      industryMarketMaturity={
+        aiCompetitorGradingResult.result?.industry_analysis.market_maturity
+          .status as AICompetitorGrader_MarketMaturity
+      }
+      industryMarketMaturityReason={
+        aiCompetitorGradingResult.result?.industry_analysis.market_maturity
+          .reason ?? ""
       }
       sources={
         aiCompetitorGradingResult.result?.industry_analysis.sources ?? []

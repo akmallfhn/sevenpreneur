@@ -215,7 +215,7 @@ export default function IdeaValidationReportLMS(
           Problem-Fit Analysis
         </h2>
         <div className="problem-fit flex w-full h-[420px] gap-4 bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 border rounded-lg xl:h-[320px]">
-          <div className="discovery relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] to-60% to-white p-4 border rounded-lg">
+          <div className="discovery relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white p-4 border rounded-lg">
             <h3 className="section-title sticky top-0 left-0 font-bodycopy font-bold text-lg">
               Ringkasan Temuan Penelitian
             </h3>
@@ -351,7 +351,7 @@ export default function IdeaValidationReportLMS(
           Solution-Fit Analysis
         </h2>
         <div className="solution-fit flex w-full h-[420px] gap-4 bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 border rounded-lg xl:h-[300px]">
-          <div className="value-proposition relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] to-60% to-white p-4 border rounded-lg">
+          <div className="value-proposition relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white p-4 border rounded-lg">
             <h3 className="section-title sticky top-0 left-0 font-bodycopy font-bold text-lg">
               Nilai Utama Solusi
             </h3>

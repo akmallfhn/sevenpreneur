@@ -63,9 +63,3 @@ export enum AICompetitorGrader_MarketMaturity {
   MATURE = "mature",
   DECLINING = "declining",
 }
-
-export enum AICompetitorGrader_BarriersToEntry {
-  EASY = "easy",
-  MEDIUM = "medium",
-  HARD = "hard",
-}

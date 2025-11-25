@@ -9,6 +9,47 @@ import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
 import { SourcesArticle } from "./MarketSizeReportLMS";
 import { Progress } from "@/components/ui/progress";
 import { BarChart } from "@mui/x-charts";
+import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
+import { markdownToHtml } from "@/lib/markdown-to-html";
+
+const maturityAttributes: Record<
+  AICompetitorGrader_MarketMaturity,
+  {
+    label: string;
+    icon: string;
+    description: string;
+    color: string;
+  }
+> = {
+  emerging: {
+    label: "Emerging",
+    icon: "🚀",
+    description:
+      "pasar masih kecil dan baru mulai tumbuh, serta jumlah perusahaan yang aktif masih sedikit.",
+    color: "text-[#FB8C00]",
+  },
+  growing: {
+    label: "Growing",
+    icon: "🌱",
+    description:
+      "pasar berkembang pesat, permintaan meningkat, dan semakin banyak perusahaan mulai masuk dan bersaing.",
+    color: "text-[#43A047]",
+  },
+  mature: {
+    label: "Mature",
+    icon: "🌊",
+    description:
+      "pasar mulai stabil, persaingan antara perusahaan sudah ketat, dan pasar relatif mapan.",
+    color: "text-primary",
+  },
+  declining: {
+    label: "Declining",
+    icon: "❌",
+    description:
+      "pasar mulai menyusut, permintaan menurun, dan jumlah perusahaan berkurang karena berhenti beroperasi.",
+    color: "text-destructive",
+  },
+};
 
 interface CompetitorGradingReportLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
@@ -20,6 +61,8 @@ interface CompetitorGradingReportLMSProps extends AvatarBadgeLMSProps {
   industryCurrentCondition: string;
   industryCAGRValue: number[];
   industryCAGRReason: string;
+  industryMarketMaturity: AICompetitorGrader_MarketMaturity;
+  industryMarketMaturityReason: string;
   sources: SourcesArticle[];
   confidenceLevel: number;
 }
@@ -51,6 +94,8 @@ export default function CompetitorGradingReportLMS(
       setIntervalMs(false);
     }
   }, [isDoneResult, router]);
+
+  const maturity = maturityAttributes[props.industryMarketMaturity];
 
   let confidenceStatus;
   if (props.confidenceLevel >= 80) {
@@ -90,34 +135,58 @@ export default function CompetitorGradingReportLMS(
       />
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="industry-analysis flex w-full gap-4">
-          <main className="main-contents flex flex-col flex-2 gap-4 w-full">
+          <main className="main-industry-analysis flex flex-col flex-2 gap-4 w-full">
             <div className="cagr-projection flex flex-col flex-2 gap-2 w-full bg-white p-5 rounded-lg border">
-              <h3 className="section-title font-bodycopy font-bold text-lg">
-                CAGR Projection
-              </h3>
+              <div className="section-title flex flex-col">
+                <h3 className="title font-bodycopy font-bold text-lg">
+                  Proyeksi Pertumbuhan Tahunan Industri (CAGR)
+                </h3>
+                <p className="remarks font-bodycopy font-medium text-[15px] text-[#333333]">
+                  dalam persen (%)
+                </p>
+              </div>
               <div className="flex w-full">
                 <BarChart
                   xAxis={[{ data: ["2024", "2025", "2026", "2027", "2028"] }]}
                   series={[{ data: props.industryCAGRValue }]}
-                  height={300}
+                  height={280}
                 />
               </div>
               <div
                 className={styles.report}
-                dangerouslySetInnerHTML={{ __html: props.industryCAGRReason }}
+                dangerouslySetInnerHTML={{
+                  __html: markdownToHtml(props.industryCAGRReason),
+                }}
               />
             </div>
-            <div></div>
+            <div className="market-maturity flex flex-col gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 rounded-lg border font-bodycopy">
+              <h3 className="text-lg font-bold">Fase Perkembangan Industri</h3>
+              <h4 className={`font-brand font-bold text-3xl ${maturity.color}`}>
+                {maturity.label} {maturity.icon}
+              </h4>
+              <div className="market-maturity-reason flex flex-col gap-2">
+                <p className="text-[#111111] text-[15px]">
+                  Fase industri {maturity.label} menunjukkan kondisi di mana
+                  pertumbuhan {maturity.description}
+                </p>
+                <div
+                  className={styles.report}
+                  dangerouslySetInnerHTML={{
+                    __html: markdownToHtml(props.industryMarketMaturityReason),
+                  }}
+                />
+              </div>
+            </div>
           </main>
-          <aside className="aside-contents flex flex-col flex-1 gap-4 w-full">
-            <div className="current-condition flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
+          <aside className="aside-industry-analisis flex flex-col flex-[1.2] gap-4 w-full">
+            <div className="current-condition flex flex-col gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white p-5 rounded-lg border">
               <h3 className="section-title font-bodycopy font-bold text-lg">
-                Industry Competition Landscape
+                Lanskap Persaingan Industri
               </h3>
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: props.industryCurrentCondition,
+                  __html: markdownToHtml(props.industryCurrentCondition),
                 }}
               />
             </div>

@@ -1,7 +1,6 @@
 import { JsonObject } from "@prisma/client/runtime/library";
 import { z } from "zod";
 import {
-  AICompetitorGrader_BarriersToEntry,
   AICompetitorGrader_MarketMaturity,
   AIIdeaValidation_LongevityAlignment,
   AIIdeaValidation_ProblemFreq,
@@ -100,10 +99,6 @@ export interface AIResultCompetitorGrading extends JsonObject {
     current_condition: string;
     market_maturity: {
       status: AICompetitorGrader_MarketMaturity;
-      reason: string;
-    };
-    barriers_to_entry: {
-      level: AICompetitorGrader_BarriersToEntry;
       reason: string;
     };
     CAGR: {
@@ -421,17 +416,16 @@ export const aiToolPrompts = {
         "Tugasmu adalah melakukan Competitor & Industry Analysis secara sistematis dan mudah dipahami.\n" +
         `1. Berikan current condition industri ${industry} saat ini berdasarkan tren, dinamika, dan insight terbaru.\n` +
         "2. Tentukan market maturity (emerging / growing / mature / declining) terhadap industri + berikan alasan.\n" +
-        "3. Tentukan barriers to entry (easy / medium / hard) + berikan alasan.\n" +
-        "4. Buat CAGR projection per tahun (%) dari tahun 2024–2028 (berbentuk angka estimasi) berdasarkan data yang valid dan beri penjelasan.\n" +
-        "5. Saat membuat proyeksi CAGR, Buatlah proyeksi CAGR yang realistis dan fluktuatif (bisa naik atau turun setiap tahun), dengan variasi yang masih masuk akal berdasarkan dinamika industri." +
-        "6. Pastikan angka tahun-ke-tahun (YoY Growth) menunjukkan perubahan yang wajar, misalnya fluktuasi ±1–4% per tahun, kecuali ada alasan kontekstual untuk deviasi lebih besar." +
-        "7. Berikan sumber data yang relevan (format: source_name, source_url, source_publisher, source_year).\n" +
-        "8. Berikan confidence level (1-100) terhadap validitas data & asumsi.\n" +
-        `9. Identifikasi maksimal 5 kompetitor relevan (nama + company_url) berdasarkan jenis produk dan wilayah kompetisi product ${country}.\n` +
-        "10. Berikan key_strength masing-masing kompetitor (keunggulan utama).\n" +
-        "11. Berikan market_score (1–100) berdasarkan key_strength dan posisinya dalam market.\n" +
-        "12. Buat brand positioning map dengan menentukan atribut X axis (left vs right) dan atribut Y axis (top vs bottom).\n" +
-        "13. Atribut brand positioning wajib singkat (1–3 kata). Dilarang membuat atribut yang tidak berpasangan secara konsep.\n" +
+        "3. Buat CAGR projection per tahun (%) dari tahun 2024–2028 (berbentuk angka estimasi) berdasarkan data yang valid dan beri penjelasan.\n" +
+        "4. Saat membuat proyeksi CAGR, Buatlah proyeksi CAGR yang realistis dan fluktuatif (bisa naik atau turun setiap tahun), dengan variasi yang masih masuk akal berdasarkan dinamika industri." +
+        "5. Pastikan angka tahun-ke-tahun (YoY Growth) menunjukkan perubahan yang wajar, misalnya fluktuasi ±1–4% per tahun, kecuali ada alasan kontekstual untuk deviasi lebih besar." +
+        "6. Berikan sumber data yang relevan (format: source_name, source_url, source_publisher, source_year).\n" +
+        "7. Berikan confidence level (1-100) terhadap validitas data & asumsi.\n" +
+        `8. Identifikasi maksimal 5 kompetitor relevan (nama + company_url) berdasarkan jenis produk dan wilayah kompetisi product ${country}.\n` +
+        "9. Berikan key_strength masing-masing kompetitor (keunggulan utama).\n" +
+        "10. Berikan market_score (1–100) berdasarkan key_strength dan posisinya dalam market.\n" +
+        "11. Buat brand positioning map dengan menentukan atribut X axis (left vs right) dan atribut Y axis (top vs bottom).\n" +
+        "12. Atribut brand positioning wajib singkat (1–3 kata). Dilarang membuat atribut yang tidak berpasangan secara konsep.\n" +
         "13. Plot koordinat x/y tiap kompetitor (skala -5 sampai 5).\n" +
         `14. Tentukan koordinat x/y (skala -5 sampai 5) untuk produk ${product_name}` +
         "15. Identifikasi room_of_growth_opportunity (peluang pertumbuhan, gap pasar, ide diferensiasi).\n" +
@@ -442,10 +436,6 @@ export const aiToolPrompts = {
             market_maturity: {
               status: "<emerging/growing/mature/declining>",
               reason: "<alasan kenapa maturity tersebut dipilih>",
-            },
-            barriers_to_entry: {
-              level: "<easy/medium/hard>",
-              reason: "<faktor yang membuat industri mudah/sulit dimasuki>",
             },
             CAGR: {
               projection: {
@@ -513,10 +503,6 @@ export const aiToolPrompts = {
             current_condition: z.string(),
             market_maturity: z.object({
               status: z.enum(AICompetitorGrader_MarketMaturity),
-              reason: z.string(),
-            }),
-            barriers_to_entry: z.object({
-              level: z.enum(AICompetitorGrader_BarriersToEntry),
               reason: z.string(),
             }),
             CAGR: z.object({
