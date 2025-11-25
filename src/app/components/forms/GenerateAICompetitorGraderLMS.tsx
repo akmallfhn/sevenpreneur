@@ -118,10 +118,12 @@ export default function GenerateAICompetitorGraderLMS({
             onSubmit={handleAIGenerate}
           >
             <section
-              id="product-overview"
-              className="product-overview bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              id="business-profile"
+              className="business-profile bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
             >
-              <h2 className="section-title font-bold font-bodycopy">Brand</h2>
+              <h2 className="section-title font-bold font-bodycopy">
+                Business Profile
+              </h2>
               <InputLMS
                 inputId="product-name"
                 inputName="Apa nama produk atau layanan Anda?"

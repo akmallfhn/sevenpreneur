@@ -121,48 +121,23 @@ interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
   ideaNextStep: string[];
 }
 
-export default function IdeaValidationReportLMS({
-  sessionToken,
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
-  resultId,
-  resultName,
-  resultStatus,
-  problemDiscovery,
-  problemFrequency,
-  problemFitScore,
-  problemFactor,
-  affectedSegments,
-  existingAlternatives,
-  sources,
-  confidenceLevel,
-  solutionValue,
-  solutionFitScore,
-  solutionFeasibility,
-  industryDirection,
-  longevityAlignment,
-  longevityReason,
-  ideaMarketRecommendation,
-  ideaCompetitiveRecommendation,
-  ideaResourceRecommendation,
-  ideaPriorityFocus,
-  ideaNextStep,
-}: IdeaValidationReportLMSProps) {
+export default function IdeaValidationReportLMS(
+  props: IdeaValidationReportLMSProps
+) {
   const router = useRouter();
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
 
   useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
+    if (props.sessionToken) {
+      setSessionToken(props.sessionToken);
     }
-  }, [sessionToken]);
+  }, [props.sessionToken]);
 
   const { data } = trpc.read.ai.ideaValidation.useQuery(
-    { id: resultId },
+    { id: props.resultId },
     {
       refetchInterval: intervalMs,
-      enabled: !!sessionToken,
+      enabled: !!props.sessionToken,
     }
   );
   const isDoneResult = data?.result.is_done;
@@ -174,13 +149,13 @@ export default function IdeaValidationReportLMS({
     }
   }, [isDoneResult, router]);
 
-  const freq = freqAttributes[problemFrequency];
-  const longevity = longevityAttributes[longevityAlignment];
+  const freq = freqAttributes[props.problemFrequency];
+  const longevity = longevityAttributes[props.longevityAlignment];
 
   let problemScoreDesc;
-  if (problemFitScore >= 75) {
+  if (props.problemFitScore >= 75) {
     problemScoreDesc = "sangat kuat dan layak menjadi prioritas utama.";
-  } else if (problemFitScore >= 50) {
+  } else if (props.problemFitScore >= 50) {
     problemScoreDesc =
       "cukup penting, namun tetap perlu dibandingkan dengan peluang lain.";
   } else {
@@ -189,10 +164,10 @@ export default function IdeaValidationReportLMS({
   }
 
   let solutionScoreDesc;
-  if (solutionFitScore >= 75) {
+  if (props.solutionFitScore >= 75) {
     solutionScoreDesc =
       "relevan dengan masalah yang diidentifikasi dan kemungkinan dapat membantu sebagian besar pengguna.";
-  } else if (solutionFitScore >= 50) {
+  } else if (props.solutionFitScore >= 50) {
     solutionScoreDesc =
       "memiliki kecocokan terbatas. Beberapa pengguna mungkin merasakan manfaat, tapi tidak semua.";
   } else {
@@ -201,23 +176,23 @@ export default function IdeaValidationReportLMS({
   }
 
   let confidenceStatus;
-  if (confidenceLevel >= 80) {
+  if (props.confidenceLevel >= 80) {
     confidenceStatus = "High";
-  } else if (confidenceLevel >= 70) {
+  } else if (props.confidenceLevel >= 70) {
     confidenceStatus = "Medium";
   } else {
     confidenceStatus = "Low";
   }
 
-  if (!resultStatus) {
+  if (!props.resultStatus) {
     return (
       <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
         <HeaderAIResultDetailsLMS
-          sessionUserName={sessionUserName}
-          sessionUserAvatar={sessionUserAvatar}
-          sessionUserRole={sessionUserRole}
+          sessionUserName={props.sessionUserName}
+          sessionUserAvatar={props.sessionUserAvatar}
+          sessionUserRole={props.sessionUserRole}
           headerTitle="Idea Validation Result"
-          headerResultName={resultName}
+          headerResultName={props.resultName}
         />
         <div className="flex flex-col w-full items-center">
           <LoadingAIGeneratingResult />
@@ -229,11 +204,11 @@ export default function IdeaValidationReportLMS({
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
       <HeaderAIResultDetailsLMS
-        sessionUserName={sessionUserName}
-        sessionUserAvatar={sessionUserAvatar}
-        sessionUserRole={sessionUserRole}
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
         headerTitle="Idea Validation Result"
-        headerResultName={resultName}
+        headerResultName={props.resultName}
       />
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <h2 className="section-title font-bold font-brand text-xl">
@@ -247,7 +222,7 @@ export default function IdeaValidationReportLMS({
             <div
               className={`${styles.report} overflow-y-auto pb-10`}
               dangerouslySetInnerHTML={{
-                __html: markdownToHtml(problemDiscovery),
+                __html: markdownToHtml(props.problemDiscovery),
               }}
             />
           </div>
@@ -262,7 +237,7 @@ export default function IdeaValidationReportLMS({
                 {freq.icon}
               </div>
               <p className={`font-brand font-bold text-3xl ${freq.color}`}>
-                {problemFrequency.toUpperCase()}
+                {props.problemFrequency.toUpperCase()}
               </p>
             </div>
             <p className="description font-bodycopy font-medium text-[15px] text-[#333333] text-center">
@@ -275,7 +250,7 @@ export default function IdeaValidationReportLMS({
             </h3>
             <div className="indicator relative flex max-w-[124px] items-center justify-center">
               <Gauge
-                value={problemFitScore}
+                value={props.problemFitScore}
                 width={124}
                 height={124}
                 cornerRadius={50}
@@ -292,11 +267,11 @@ export default function IdeaValidationReportLMS({
                 })}
               />
               <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-brand font-bold">
-                {problemFitScore}
+                {props.problemFitScore}
               </p>
             </div>
             <p className="description font-bodycopy font-medium text-[15px] text-[#333333] text-center">
-              Skor {problemFitScore} menunjukkan bahwa masalah ini{" "}
+              Skor {props.problemFitScore} menunjukkan bahwa masalah ini{" "}
               {problemScoreDesc}
             </p>
           </div>
@@ -307,7 +282,7 @@ export default function IdeaValidationReportLMS({
               Segmen yang Terdampak
             </h3>
             <div className="segment-list flex flex-col gap-4">
-              {affectedSegments.map((post) => (
+              {props.affectedSegments.map((post) => (
                 <AIItemSegmentLMS
                   key={post.segment_name}
                   segmentName={post.segment_name}
@@ -324,14 +299,14 @@ export default function IdeaValidationReportLMS({
               Data Confidence
             </h3>
             <div className="confidence-level flex flex-col gap-2">
-              <Progress value={confidenceLevel} />
+              <Progress value={props.confidenceLevel} />
               <p className="confidence-status font-semibold font-bodycopy text-sm">
                 {confidenceStatus}
               </p>
             </div>
             <div className="sources-data flex flex-col gap-2 font-bodycopy">
               <p className="font-semibold">Sources</p>
-              {sources.map((post, index) => (
+              {props.sources.map((post, index) => (
                 <div className="source-item flex flex-col gap-0.5" key={index}>
                   <a
                     href={post.source_url}
@@ -355,7 +330,9 @@ export default function IdeaValidationReportLMS({
               <h3 className="section-title text-lg font-bold">
                 Mengapa Masalah Ini Terjadi?
               </h3>
-              <p className="text-[#333333] text-[15px]">{problemFactor}</p>
+              <p className="text-[#333333] text-[15px]">
+                {props.problemFactor}
+              </p>
             </div>
           </div>
           <div className="divider border-l self-stretch" />
@@ -365,7 +342,7 @@ export default function IdeaValidationReportLMS({
                 Alternatif yang Tersedia
               </h3>
               <p className="text-[#333333] text-[15px]">
-                {existingAlternatives}
+                {props.existingAlternatives}
               </p>
             </div>
           </div>
@@ -381,7 +358,7 @@ export default function IdeaValidationReportLMS({
             <div
               className={`${styles.report} overflow-y-auto pb-10`}
               dangerouslySetInnerHTML={{
-                __html: markdownToHtml(solutionValue),
+                __html: markdownToHtml(props.solutionValue),
               }}
             />
           </div>
@@ -391,7 +368,7 @@ export default function IdeaValidationReportLMS({
             </h3>
             <div className="indicator relative flex max-w-[124px] items-center justify-center">
               <Gauge
-                value={solutionFitScore}
+                value={props.solutionFitScore}
                 width={124}
                 height={124}
                 cornerRadius={50}
@@ -408,11 +385,12 @@ export default function IdeaValidationReportLMS({
                 })}
               />
               <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-brand font-bold">
-                {solutionFitScore}
+                {props.solutionFitScore}
               </p>
             </div>
             <p className="description font-bodycopy font-medium text-[15px] text-[#333333] text-center">
-              Skor {solutionFitScore} menunjukkan solusi ini {solutionScoreDesc}
+              Skor {props.solutionFitScore} menunjukkan solusi ini{" "}
+              {solutionScoreDesc}
             </p>
           </div>
         </div>
@@ -425,7 +403,7 @@ export default function IdeaValidationReportLMS({
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(solutionFeasibility),
+                  __html: markdownToHtml(props.solutionFeasibility),
                 }}
               />
             </div>
@@ -436,7 +414,7 @@ export default function IdeaValidationReportLMS({
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(industryDirection),
+                  __html: markdownToHtml(props.industryDirection),
                 }}
               />
             </div>
@@ -454,7 +432,7 @@ export default function IdeaValidationReportLMS({
               className={styles.report}
               dangerouslySetInnerHTML={{
                 __html: markdownToHtml(
-                  `${longevity.description} ${longevityReason}`
+                  `${longevity.description} ${props.longevityReason}`
                 ),
               }}
             />
@@ -472,14 +450,16 @@ export default function IdeaValidationReportLMS({
               <div className="market-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
                 <div
                   className={styles.report}
-                  dangerouslySetInnerHTML={{ __html: ideaMarketRecommendation }}
+                  dangerouslySetInnerHTML={{
+                    __html: props.ideaMarketRecommendation,
+                  }}
                 />
               </div>
               <div className="competitive-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: ideaCompetitiveRecommendation,
+                    __html: props.ideaCompetitiveRecommendation,
                   }}
                 />
               </div>
@@ -487,7 +467,7 @@ export default function IdeaValidationReportLMS({
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: ideaResourceRecommendation,
+                    __html: props.ideaResourceRecommendation,
                   }}
                 />
               </div>
@@ -495,7 +475,7 @@ export default function IdeaValidationReportLMS({
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: ideaPriorityFocus,
+                    __html: props.ideaPriorityFocus,
                   }}
                 />
               </div>
@@ -506,7 +486,7 @@ export default function IdeaValidationReportLMS({
               Next Step Actions
             </h3>
             <div className="step-list relative flex flex-col gap-4 pb-2">
-              {ideaNextStep.map((item) => (
+              {props.ideaNextStep.map((item) => (
                 <div
                   key={item}
                   className="step-item flex items-center gap-6 z-10"

@@ -95,6 +95,7 @@ export interface AIResultMarketSize extends JsonObject {
 // Competitor Grader //
 
 export interface AIResultCompetitorGrading extends JsonObject {
+  product_name: string;
   industry_analysis: {
     current_condition: string;
     market_maturity: {
@@ -105,13 +106,17 @@ export interface AIResultCompetitorGrading extends JsonObject {
       level: AICompetitorGrader_BarriersToEntry;
       reason: string;
     };
-    CAGR_projection: {
-      2024: number;
-      2025: number;
-      2026: number;
-      2027: number;
-      2028: number;
+    CAGR: {
+      projection: {
+        2024: number;
+        2025: number;
+        2026: number;
+        2027: number;
+        2028: number;
+      };
+      reason: string;
     };
+
     sources: {
       source_name: string;
       source_url: string;
@@ -417,17 +422,21 @@ export const aiToolPrompts = {
         `1. Berikan current condition industri ${industry} saat ini berdasarkan tren, dinamika, dan insight terbaru.\n` +
         "2. Tentukan market maturity (emerging / growing / mature / declining) terhadap industri + berikan alasan.\n" +
         "3. Tentukan barriers to entry (easy / medium / hard) + berikan alasan.\n" +
-        "4. Buat CAGR projection 2024–2028 (berbentuk angka estimasi) berdasarkan data yang valid.\n" +
-        "5. Berikan sumber data yang relevan (format: source_name, source_url, source_publisher, source_year).\n" +
-        "6. Berikan confidence level (1-100) terhadap validitas data & asumsi.\n" +
-        "7. Identifikasi maksimal 5 kompetitor relevan (nama + company_url).\n" +
-        "8. Berikan key_strength masing-masing kompetitor (keunggulan utama).\n" +
-        "9. Berikan market_score (1–100) berdasarkan key_strength dan posisinya dalam market.\n" +
-        "10. Buat brand positioning map dengan menentukan atribut X axis (left vs right) dan atribut Y axis (top vs bottom).\n" +
-        "11. Plot koordinat x/y tiap kompetitor.\n" +
-        `12. Tentukan koordinat x/y untuk produk ${product_name}` +
-        "13. Identifikasi room_of_growth_opportunity (peluang pertumbuhan, gap pasar, ide diferensiasi).\n" +
+        "4. Buat CAGR projection per tahun (%) dari tahun 2024–2028 (berbentuk angka estimasi) berdasarkan data yang valid dan beri penjelasan.\n" +
+        "5. Saat membuat proyeksi CAGR, Buatlah proyeksi CAGR yang realistis dan fluktuatif (bisa naik atau turun setiap tahun), dengan variasi yang masih masuk akal berdasarkan dinamika industri." +
+        "6. Pastikan angka tahun-ke-tahun (YoY Growth) menunjukkan perubahan yang wajar, misalnya fluktuasi ±1–4% per tahun, kecuali ada alasan kontekstual untuk deviasi lebih besar." +
+        "7. Berikan sumber data yang relevan (format: source_name, source_url, source_publisher, source_year).\n" +
+        "8. Berikan confidence level (1-100) terhadap validitas data & asumsi.\n" +
+        `9. Identifikasi maksimal 5 kompetitor relevan (nama + company_url) berdasarkan jenis produk dan wilayah kompetisi product ${country}.\n` +
+        "10. Berikan key_strength masing-masing kompetitor (keunggulan utama).\n" +
+        "11. Berikan market_score (1–100) berdasarkan key_strength dan posisinya dalam market.\n" +
+        "12. Buat brand positioning map dengan menentukan atribut X axis (left vs right) dan atribut Y axis (top vs bottom).\n" +
+        "13. Atribut brand positioning wajib singkat (1–3 kata). Dilarang membuat atribut yang tidak berpasangan secara konsep.\n" +
+        "13. Plot koordinat x/y tiap kompetitor (skala -5 sampai 5).\n" +
+        `14. Tentukan koordinat x/y (skala -5 sampai 5) untuk produk ${product_name}` +
+        "15. Identifikasi room_of_growth_opportunity (peluang pertumbuhan, gap pasar, ide diferensiasi).\n" +
         AIFormatOutputText({
+          product_name: "<nama produk sesuai data yang diberikan>",
           industry_analysis: {
             current_condition: "<deskripsi kondisi industri saat ini>",
             market_maturity: {
@@ -438,12 +447,16 @@ export const aiToolPrompts = {
               level: "<easy/medium/hard>",
               reason: "<faktor yang membuat industri mudah/sulit dimasuki>",
             },
-            CAGR_projection: {
-              "2024": "<angka CAGR baseline atau estimasi tahun berjalan>",
-              "2025": "<estimasi tahun berjalan atau proyeksi CAGR>",
-              "2026": "<proyeksi CAGR>",
-              "2027": "<proyeksi CAGR>",
-              "2028": "<proyeksi CAGR>",
+            CAGR: {
+              projection: {
+                "2024":
+                  "<angka CAGR baseline atau estimasi tahun berjalan (%)>",
+                "2025": "<estimasi tahun berjalan atau proyeksi CAGR (%)>",
+                "2026": "<proyeksi CAGR (%)>",
+                "2027": "<proyeksi CAGR (%)>",
+                "2028": "<proyeksi CAGR (%)>",
+              },
+              reason: "<penjelasan mengenai proyeksi CAGR>",
             },
             sources: [
               {
@@ -463,8 +476,8 @@ export const aiToolPrompts = {
                 key_strength: "<kekuatan utama kompetitor di pasar>",
                 market_score: "<skor 1–100 untuk menunjukkan kekuatan pasar>",
                 position: {
-                  x: "<koordinat posisi kompetitor di sumbu X>",
-                  y: "<koordinat posisi kompetitor di sumbu Y>",
+                  x: "<koordinat posisi kompetitor di sumbu X (-5 - 5)>",
+                  y: "<koordinat posisi kompetitor di sumbu Y (-5 - 5)>",
                 },
               },
             ],
@@ -479,8 +492,8 @@ export const aiToolPrompts = {
               },
             },
             user_product: {
-              x: "<posisi produk user di sumbu X>",
-              y: "<posisi produk user di sumbu Y>",
+              x: "<posisi produk user di sumbu X (-5 - 5)>",
+              y: "<posisi produk user di sumbu Y (-5 - 5)>",
             },
             room_of_growth_opportunity:
               "<analisis area yang masih terbuka untuk produk user tumbuh dan diferensiasi>",
@@ -495,6 +508,7 @@ export const aiToolPrompts = {
       format: AIFormatOutputZod(
         "respons_pemeringkatan_kompetitor",
         z.object({
+          product_name: z.string(),
           industry_analysis: z.object({
             current_condition: z.string(),
             market_maturity: z.object({
@@ -505,12 +519,15 @@ export const aiToolPrompts = {
               level: z.enum(AICompetitorGrader_BarriersToEntry),
               reason: z.string(),
             }),
-            CAGR_projection: z.object({
-              "2024": z.number(),
-              "2025": z.number(),
-              "2026": z.number(),
-              "2027": z.number(),
-              "2028": z.number(),
+            CAGR: z.object({
+              projection: z.object({
+                "2024": z.number(),
+                "2025": z.number(),
+                "2026": z.number(),
+                "2027": z.number(),
+                "2028": z.number(),
+              }),
+              reason: z.string(),
             }),
             sources: z.array(
               z.object({
@@ -530,8 +547,8 @@ export const aiToolPrompts = {
                 key_strength: z.string(),
                 market_score: z.number(),
                 position: z.object({
-                  x: "<Koordinat posisi kompetitor di sumbu X>",
-                  y: "<Koordinat posisi kompetitor di sumbu Y>",
+                  x: z.number(),
+                  y: z.number(),
                 }),
               })
             ),

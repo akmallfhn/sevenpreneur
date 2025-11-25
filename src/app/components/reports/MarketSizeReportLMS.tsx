@@ -33,37 +33,21 @@ interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
   sources: SourcesArticle[];
 }
 
-export default function MarketSizeReportLMS({
-  sessionToken,
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
-  resultId,
-  resultName,
-  resultStatus,
-  productName,
-  tamValue,
-  samValue,
-  tamInsight,
-  samInsight,
-  somInsight,
-  confidenceLevel,
-  sources,
-}: MarketSizeReportLMSProps) {
+export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
   const router = useRouter();
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
 
   useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
+    if (props.sessionToken) {
+      setSessionToken(props.sessionToken);
     }
-  }, [sessionToken]);
+  }, [props.sessionToken]);
 
   const { data } = trpc.read.ai.marketSize.useQuery(
-    { id: resultId },
+    { id: props.resultId },
     {
       refetchInterval: intervalMs,
-      enabled: !!sessionToken,
+      enabled: !!props.sessionToken,
     }
   );
   const isDoneResult = data?.result.is_done;
@@ -75,28 +59,28 @@ export default function MarketSizeReportLMS({
     }
   }, [isDoneResult, router]);
 
-  const somValue = 0.01 * samValue;
+  const somValue = 0.01 * props.samValue;
   const conservativeScenario = 0.7 * somValue;
   const aggresiveScenario = 1.5 * somValue;
 
   let confidenceStatus;
-  if (confidenceLevel >= 80) {
+  if (props.confidenceLevel >= 80) {
     confidenceStatus = "High";
-  } else if (confidenceLevel >= 70) {
+  } else if (props.confidenceLevel >= 70) {
     confidenceStatus = "Medium";
   } else {
     confidenceStatus = "Low";
   }
 
-  if (!resultStatus) {
+  if (!props.resultStatus) {
     return (
       <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
         <HeaderAIResultDetailsLMS
-          sessionUserName={sessionUserName}
-          sessionUserAvatar={sessionUserAvatar}
-          sessionUserRole={sessionUserRole}
+          sessionUserName={props.sessionUserName}
+          sessionUserAvatar={props.sessionUserAvatar}
+          sessionUserRole={props.sessionUserRole}
           headerTitle="Market Size Estimation Result"
-          headerResultName={resultName}
+          headerResultName={props.resultName}
         />
         <div className="flex flex-col w-full items-center">
           <LoadingAIGeneratingResult />
@@ -108,12 +92,12 @@ export default function MarketSizeReportLMS({
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
       <HeaderAIResultDetailsLMS
-        sessionUserName={sessionUserName}
-        sessionUserAvatar={sessionUserAvatar}
-        sessionUserRole={sessionUserRole}
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
         headerTitle="Market Size Estimation Result"
-        headerResultName={resultName}
-        headerDescription={`For ${productName}`}
+        headerResultName={props.resultName}
+        headerDescription={`For ${props.productName}`}
       />
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="market-analysis flex w-full gap-4">
@@ -127,7 +111,7 @@ export default function MarketSizeReportLMS({
                   TAM
                 </p>
                 <p className="font-bodycopy font-bold text-white text-2xl text-center">
-                  {getShortRupiahCurrency(tamValue)}
+                  {getShortRupiahCurrency(props.tamValue)}
                 </p>
               </div>
               <div className="sam-chart flex flex-col size-40 bg-[#FBBF24] outline-[12px] outline-[#FBBF24]/50 items-center justify-center rounded-full overflow-hidden">
@@ -135,7 +119,7 @@ export default function MarketSizeReportLMS({
                   SAM
                 </p>
                 <p className="font-bodycopy font-bold text-white text-2xl text-center">
-                  {getShortRupiahCurrency(samValue)}
+                  {getShortRupiahCurrency(props.samValue)}
                 </p>
               </div>
               <div className="som-chart flex flex-col size-32 bg-[#EF4444] outline-[12px] outline-[#EF4444]/50 items-center justify-center rounded-full overflow-hidden">
@@ -153,14 +137,14 @@ export default function MarketSizeReportLMS({
               Data Confidence
             </h2>
             <div className="confidence-level flex flex-col gap-2">
-              <Progress value={confidenceLevel} />
+              <Progress value={props.confidenceLevel} />
               <p className="confidence-status font-semibold font-bodycopy text-sm">
                 {confidenceStatus}
               </p>
             </div>
             <div className="sources-data flex flex-col gap-2 font-bodycopy">
               <p className="font-semibold">Sources</p>
-              {sources.map((post, index) => (
+              {props.sources.map((post, index) => (
                 <div className="source-item flex flex-col gap-0.5" key={index}>
                   <a
                     href={post.source_url}
@@ -199,7 +183,7 @@ export default function MarketSizeReportLMS({
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(tamInsight),
+                    __html: markdownToHtml(props.tamInsight),
                   }}
                 />
               </div>
@@ -220,7 +204,7 @@ export default function MarketSizeReportLMS({
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(samInsight),
+                    __html: markdownToHtml(props.samInsight),
                   }}
                 />
               </div>
@@ -241,7 +225,7 @@ export default function MarketSizeReportLMS({
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(somInsight),
+                    __html: markdownToHtml(props.somInsight),
                   }}
                 />
               </div>
