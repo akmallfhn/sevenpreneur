@@ -54,9 +54,7 @@ export default function PackageItemBlueprintProgramSVP({
         <p className="description font-bodycopy text-white text-[15px] text-center leading-tight">
           {packageDescription}
         </p>
-
-        {/* Price Information */}
-        <div className="price-discount flex items-center gap-2 font-brand text-white">
+        {/* <div className="price-discount flex items-center gap-2 font-brand text-white">
           <p className="discount-rate bg-secondary font-bold text-xs px-1 py-0.5 rounded-sm lg:text-sm">
             {Math.round(100 - (salePeriodPrice / normalPrice) * 100)}% OFF
           </p>
@@ -67,19 +65,17 @@ export default function PackageItemBlueprintProgramSVP({
             </p>
             <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
           </div>
-        </div>
-        <AppCountdownTimer
+        </div> */}
+        {/* <AppCountdownTimer
           targetDateTime={"2025-10-18T23:59:00+07:00"}
           isIncludeDimension={false}
-        />
+        /> */}
         <div className="price-after-discount flex items-center gap-0.5 font-brand text-white">
           <p className="font-bold text-lg">Rp</p>
           <p className="font-bold text-4xl">
             {salePeriodPrice.toLocaleString("id-ID")}
           </p>
         </div>
-
-        {/* CTA Button */}
         <Link
           href={`/cohorts/${cohortSlug}/${cohortId}/checkout?ticketId=${packageId}`}
           className={`w-full ${
@@ -92,6 +88,7 @@ export default function PackageItemBlueprintProgramSVP({
             variant={isPriority ? "primaryGradient" : "outline"}
             size="defaultRounded"
             className="cta-button flex w-full"
+            disabled
             // GTM
             featureName="add_to_cart_blueprint_program"
             featureId={String(packageId)}
@@ -110,11 +107,10 @@ export default function PackageItemBlueprintProgramSVP({
             metaCurrency="IDR"
             metaValue={salePeriodPrice}
           >
-            {isPriority ? "Best Value – Choose Plan" : "Purchase Now"}
+            {/* {isPriority ? "Best Value – Choose Plan" : "Purchase Now"} */}
+            Sold Out
           </AppButton>
         </Link>
-
-        {/* Benefit */}
         <div className="benefits flex flex-col gap-1.5 w-full text-white">
           <h4 className="font-bodycopy font-extrabold text-[15px]">
             {isPriority
