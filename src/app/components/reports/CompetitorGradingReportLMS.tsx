@@ -11,6 +11,7 @@ import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.a
 import { markdownToHtml } from "@/lib/markdown-to-html";
 import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
 import XYMapLMS, { CompetitorList } from "../elements/XYMapLMS";
+import AICompetitorItemLMS from "../items/AICompetitorItemLMS";
 
 const maturityAttributes: Record<
   AICompetitorGrader_MarketMaturity,
@@ -178,6 +179,20 @@ export default function CompetitorGradingReportLMS(
             </div>
             <div className="competitor-analysis flex flex-col gap-4 w-full bg-white p-5 rounded-lg border font-bodycopy">
               <h3 className="text-lg font-bold">Kompetitor Utama</h3>
+              <div className="flex flex-col gap-2">
+                {props.competitorList
+                  .sort((a, b) => b.market_score - a.market_score)
+                  .map((item, index) => (
+                    <AICompetitorItemLMS
+                      key={item.name}
+                      leaderboardIndex={index + 1}
+                      competitorName={item.name}
+                      competitorURL={item.company_url}
+                      competitorScore={item.market_score}
+                      competitorKeyStrength={item.key_strength}
+                    />
+                  ))}
+              </div>
             </div>
             <div className="brand-positioning flex flex-2 w-full">
               <XYMapLMS
