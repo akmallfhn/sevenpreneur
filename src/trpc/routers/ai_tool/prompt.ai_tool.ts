@@ -422,13 +422,15 @@ export const aiToolPrompts = {
         "6. Berikan sumber data yang relevan (format: source_name, source_url, source_publisher, source_year).\n" +
         "7. Berikan confidence level (1-100) terhadap validitas data & asumsi.\n" +
         `8. Identifikasi maksimal 5 kompetitor relevan (nama + company_url) berdasarkan jenis produk dan wilayah kompetisi product ${country}.\n` +
-        "9. Berikan key_strength masing-masing kompetitor (keunggulan utama).\n" +
+        "9. Berikan key_strength masing-masing kompetitor (keunggulan utama) dalam bentuk paragraf naratif. Jelaskan bukan hanya apa keunggulannya, tetapi mengapa keunggulan itu efektif, bagaimana faktor tersebut membuat mereka unggul, dan alasan di balik kesuksesan mereka di pasar.\n" +
         "10. Berikan market_score (1–100) berdasarkan key_strength dan posisinya dalam market.\n" +
         "11. Buat brand positioning map dengan menentukan atribut X axis (left vs right) dan atribut Y axis (top vs bottom).\n" +
         "12. Atribut brand positioning wajib singkat (1–3 kata). Dilarang membuat atribut yang tidak berpasangan secara konsep.\n" +
         "13. Plot koordinat x/y tiap kompetitor (skala -5 sampai 5).\n" +
         `14. Tentukan koordinat x/y (skala -5 sampai 5) untuk produk ${product_name}` +
         "15. Identifikasi room_of_growth_opportunity (peluang pertumbuhan, gap pasar, ide diferensiasi).\n" +
+        "Semua field yang membutuhkan penjelasan (termasuk room_of_growth_opportunity, reason projection CAGR, dan key_strength competitors) wajib ditulis dalam bentuk paragraf naratif yang mengalir, tanpa list, tanpa numbering, tanpa bullet point, tanpa tanda dash (-), tanpa format enumerasi apa pun.\n" +
+        "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
           product_name: "<nama produk sesuai data yang diberikan>",
           industry_analysis: {

@@ -69,8 +69,8 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
               target="__blank"
               rel="noopener noreferrer"
             >
-              <ExternalLink className="size-3 text-[#111111]/80" />
-              <p className="competitor-url font-bodycopy text-sm text-[#111111]/80 hover:underline hover:underline-offset-2">
+              <ExternalLink className="size-3 text-[#111111]/80 shrink-0" />
+              <p className="competitor-url font-bodycopy text-sm text-[#111111]/80 line-clamp-1 hover:underline hover:underline-offset-2">
                 {props.competitorURL}
               </p>
             </a>
@@ -93,7 +93,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
             : "max-h-0 opacity-0 pointer-events-none"
         }`}
       >
-        <p className="market-score flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
+        <div className="market-score flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
           <b>Market Score:</b>
           <div className="competitor-score flex w-fit items-center gap-2 bg-white py-1 px-2 border border-outline rounded-md shrink-0">
             <div className="flex size-1.5 bg-alternative rounded-full" />
@@ -101,7 +101,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
               {props.competitorScore}/100
             </p>
           </div>
-        </p>
+        </div>
         <p className="key-strength flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
           <b>Key Strength:</b>
           {props.competitorKeyStrength}

@@ -1,5 +1,5 @@
 "use client";
-import { Atom, Boxes, Lightbulb } from "lucide-react";
+import { Atom, Boxes, LandPlot, Lightbulb } from "lucide-react";
 import Link from "next/link";
 
 interface AIItemCardLMS {
@@ -18,6 +18,8 @@ export default function AIItemCardLMS({
     aiIcon = <Lightbulb className="size-6 text-primary" />;
   } else if (aiSlug === "market-size") {
     aiIcon = <Boxes className="size-6 text-primary" />;
+  } else if (aiSlug === "competitor-grader") {
+    aiIcon = <LandPlot className="size-6 text-primary" />;
   } else {
     aiIcon = <Atom className="size-6" />;
   }
