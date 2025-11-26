@@ -43,3 +43,9 @@ export function getShortNumber(value: number): string {
 
   return `${isNegative ? "-" : ""}${formatted} ${unit}`;
 }
+
+// Scale -5 to 5 become a percent
+// -5→0%, 0→50%, 5→100%
+export function scaleToPercent(value: number) {
+  return ((value + 5) / 10) * 100;
+}

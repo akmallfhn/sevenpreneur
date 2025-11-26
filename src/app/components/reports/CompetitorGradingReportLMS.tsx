@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
-import { SourcesArticle } from "./MarketSizeReportLMS";
-import { Progress } from "@/components/ui/progress";
 import { BarChart } from "@mui/x-charts";
 import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { markdownToHtml } from "@/lib/markdown-to-html";
+import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
+import XYMapLMS, { CompetitorList } from "../elements/XYMapLMS";
 
 const maturityAttributes: Record<
   AICompetitorGrader_MarketMaturity,
@@ -58,11 +58,19 @@ interface CompetitorGradingReportLMSProps extends AvatarBadgeLMSProps {
   resultName: string;
   resultStatus: boolean;
   productName: string;
+  productXPosition: number;
+  productYPosition: number;
   industryCurrentCondition: string;
   industryCAGRValue: number[];
   industryCAGRReason: string;
   industryMarketMaturity: AICompetitorGrader_MarketMaturity;
   industryMarketMaturityReason: string;
+  competitorList: CompetitorList[];
+  xLeftAttribute: string;
+  xRightAttribute: string;
+  yTopAttribute: string;
+  yBottomAttribute: string;
+  growthOpportunity: string;
   sources: SourcesArticle[];
   confidenceLevel: number;
 }
@@ -97,15 +105,6 @@ export default function CompetitorGradingReportLMS(
 
   const maturity = maturityAttributes[props.industryMarketMaturity];
 
-  let confidenceStatus;
-  if (props.confidenceLevel >= 80) {
-    confidenceStatus = "High";
-  } else if (props.confidenceLevel >= 70) {
-    confidenceStatus = "Medium";
-  } else {
-    confidenceStatus = "Low";
-  }
-
   if (!props.resultStatus) {
     return (
       <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
@@ -136,7 +135,7 @@ export default function CompetitorGradingReportLMS(
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="industry-analysis flex w-full gap-4">
           <main className="main-industry-analysis flex flex-col flex-2 gap-4 w-full">
-            <div className="cagr-projection flex flex-col flex-2 gap-2 w-full bg-white p-5 rounded-lg border">
+            <div className="cagr-projection flex flex-col gap-2 w-full bg-white p-5 rounded-lg border">
               <div className="section-title flex flex-col">
                 <h3 className="title font-bodycopy font-bold text-lg">
                   Proyeksi Pertumbuhan Tahunan Industri (CAGR)
@@ -177,9 +176,24 @@ export default function CompetitorGradingReportLMS(
                 />
               </div>
             </div>
+            <div className="competitor-analysis flex flex-col gap-4 w-full bg-white p-5 rounded-lg border font-bodycopy">
+              <h3 className="text-lg font-bold">Kompetitor Utama</h3>
+            </div>
+            <div className="brand-positioning flex flex-2 w-full">
+              <XYMapLMS
+                competitorList={props.competitorList}
+                productName={props.productName}
+                productXPosition={props.productXPosition}
+                productYPosition={props.productYPosition}
+                xLeftAttribute={props.xLeftAttribute}
+                xRightAttribute={props.xRightAttribute}
+                yTopAttribute={props.yTopAttribute}
+                yBottomAttribute={props.yBottomAttribute}
+              />
+            </div>
           </main>
           <aside className="aside-industry-analisis flex flex-col flex-[1.2] gap-4 w-full">
-            <div className="current-condition flex flex-col gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white p-5 rounded-lg border">
+            <div className="current-condition flex flex-col gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 rounded-lg border">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Lanskap Persaingan Industri
               </h3>
@@ -190,37 +204,20 @@ export default function CompetitorGradingReportLMS(
                 }}
               />
             </div>
-            <div className="data-confidence flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
-              <h3 className="section-title font-bold text-lg font-bodycopy">
-                Data Confidence
+            <AICitationLMS
+              sources={props.sources}
+              confidenceLevel={props.confidenceLevel}
+            />
+            <div className="room-of-growth flex flex-col gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 rounded-lg border">
+              <h3 className="section-title text-lg font-bold font-bodycopy">
+                Celah Kompetitif
               </h3>
-              <div className="confidence-level flex flex-col gap-2">
-                <Progress value={props.confidenceLevel} />
-                <p className="confidence-status font-semibold font-bodycopy text-sm">
-                  {confidenceStatus}
-                </p>
-              </div>
-              <div className="sources-data flex flex-col gap-2 font-bodycopy">
-                <p className="font-semibold">Sources</p>
-                {props.sources.map((post, index) => (
-                  <div
-                    className="source-item flex flex-col gap-0.5"
-                    key={index}
-                  >
-                    <a
-                      href={post.source_url}
-                      className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
-                      target="__blank"
-                      rel="noopener noreferrer"
-                    >
-                      {post.source_name}
-                    </a>
-                    <p className="source-publisher text-sm text-alternative">
-                      {`${post.source_publisher} ${post.source_year}`}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <div
+                className={styles.report}
+                dangerouslySetInnerHTML={{
+                  __html: markdownToHtml(props.growthOpportunity),
+                }}
+              />
             </div>
           </aside>
         </div>

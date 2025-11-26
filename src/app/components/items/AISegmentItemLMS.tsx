@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, User } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import { useEffect, useRef, useState } from "react";
 
-interface AIItemSegmentLMSProps {
+interface AISegmentItemLMSProps {
   segmentName: string;
   segmentDescription: string;
   segmentSize: number;
@@ -12,13 +12,7 @@ interface AIItemSegmentLMSProps {
   segmentPainPoints: string;
 }
 
-export default function AIItemSegmentLMS({
-  segmentName,
-  segmentDescription,
-  segmentSize,
-  segmentPercentage,
-  segmentPainPoints,
-}: AIItemSegmentLMSProps) {
+export default function AISegmentItemLMS(props: AISegmentItemLMSProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -46,14 +40,14 @@ export default function AIItemSegmentLMS({
         <div className="flex flex-col">
           <div className="segment-number flex gap-2 items-end">
             <p className="segment-percentage font-brand font-bold text-[#42359B] text-3xl">
-              {segmentPercentage}%
+              {props.segmentPercentage}%
             </p>
             <p className="segment-size font-bodycopy font-medium text-[#333333] text-[15px]">
-              dari {getShortNumber(segmentSize)}
+              dari {getShortNumber(props.segmentSize)}
             </p>
           </div>
           <p className="segment-name flex flex-col font-bodycopy font-semibold text-[#333333]">
-            {segmentName}
+            {props.segmentName}
           </p>
         </div>
       </div>
@@ -65,10 +59,10 @@ export default function AIItemSegmentLMS({
       >
         <p className="segment-description flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
           <b>Characteristics:</b>
-          {segmentDescription}
+          {props.segmentDescription}
         </p>
         <p className="segment-pain-points flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
-          <b>Pain Points:</b> {segmentPainPoints}
+          <b>Pain Points:</b> {props.segmentPainPoints}
         </p>
       </div>
       {isOverflowing && (
