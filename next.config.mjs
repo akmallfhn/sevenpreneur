@@ -126,17 +126,6 @@ const nextConfig = {
             {
               type: "header",
               key: "host",
-              value: ngrokDomain + ".*",
-            },
-          ],
-          destination: "/api/:path*",
-        },
-        {
-          source: "/:path*",
-          has: [
-            {
-              type: "header",
-              key: "host",
               value: "(?<subdomain>[^.]+).(sevenpreneur|example).com.*",
             },
           ],
@@ -163,6 +152,17 @@ const nextConfig = {
             },
           ],
           destination: "/www/:path*",
+        },
+        {
+          source: "/:path*",
+          has: [
+            {
+              type: "header",
+              key: "host",
+              value: ngrokDomain + ".*",
+            },
+          ],
+          destination: "/api/:path*",
         },
       ],
     };
