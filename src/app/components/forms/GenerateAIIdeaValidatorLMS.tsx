@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import Image from "next/image";
-import AppTableofContents from "../elements/AppTableofContents";
+import AppTableofContents from "../navigations/AppTableofContents";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 import { GenerateAIIdeaValidation } from "@/lib/actions";

@@ -1,10 +1,8 @@
 "use client";
 import styles from "./Report.module.css";
-import { Progress } from "@/components/ui/progress";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import { markdownToHtml } from "@/lib/markdown-to-html";
-import { SourcesArticle } from "./MarketSizeReportLMS";
 import { Gauge, gaugeClasses } from "@mui/x-charts";
 import {
   AIIdeaValidation_LongevityAlignment,
@@ -12,10 +10,11 @@ import {
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { Minus, TrendingDown, TrendingUp, User } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
-import AIItemSegmentLMS from "../items/AIItemSegmentLMS";
 import { useRouter } from "next/navigation";
 import { setSessionToken, trpc } from "@/trpc/client";
 import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
+import AISegmentItemLMS from "../items/AISegmentItemLMS";
 
 const freqAttributes: Record<
   AIIdeaValidation_ProblemFreq,
@@ -283,7 +282,7 @@ export default function IdeaValidationReportLMS(
             </h3>
             <div className="segment-list flex flex-col gap-4">
               {props.affectedSegments.map((post) => (
-                <AIItemSegmentLMS
+                <AISegmentItemLMS
                   key={post.segment_name}
                   segmentName={post.segment_name}
                   segmentDescription={post.segment_description}
@@ -294,34 +293,11 @@ export default function IdeaValidationReportLMS(
               ))}
             </div>
           </div>
-          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-white p-5 rounded-lg border">
-            <h3 className="section-title font-bold text-lg font-bodycopy">
-              Data Confidence
-            </h3>
-            <div className="confidence-level flex flex-col gap-2">
-              <Progress value={props.confidenceLevel} />
-              <p className="confidence-status font-semibold font-bodycopy text-sm">
-                {confidenceStatus}
-              </p>
-            </div>
-            <div className="sources-data flex flex-col gap-2 font-bodycopy">
-              <p className="font-semibold">Sources</p>
-              {props.sources.map((post, index) => (
-                <div className="source-item flex flex-col gap-0.5" key={index}>
-                  <a
-                    href={post.source_url}
-                    className="source-url font-medium text-sm text-primary hover:underline underline-offset-2"
-                    target="__blank"
-                    rel="noopener noreferrer"
-                  >
-                    {post.source_name}
-                  </a>
-                  <p className="source-publisher text-sm text-alternative">
-                    {`${post.source_publisher} ${post.source_year}`}
-                  </p>
-                </div>
-              ))}
-            </div>
+          <div className="sources flex flex-[1.5] w-full">
+            <AICitationLMS
+              sources={props.sources}
+              confidenceLevel={props.confidenceLevel}
+            />
           </div>
         </div>
         <div className="problem-fit flex gap-6 font-bodycopy w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 rounded-lg border">

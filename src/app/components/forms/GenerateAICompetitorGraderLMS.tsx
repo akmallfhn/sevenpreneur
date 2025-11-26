@@ -10,7 +10,6 @@ import AppButton from "../buttons/AppButton";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import AppCalloutBox from "../elements/AppCalloutBox";
-import AppTableofContents from "../elements/AppTableofContents";
 import InputLMS from "../fields/InputLMS";
 import SelectLMS from "../fields/SelectLMS";
 

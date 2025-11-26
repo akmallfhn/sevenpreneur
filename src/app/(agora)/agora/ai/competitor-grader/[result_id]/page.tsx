@@ -50,6 +50,14 @@ export default async function AICompetitorGraderResultLMS({
       resultName={aiCompetitorGradingResult.name}
       resultStatus={aiCompetitorGradingResult.is_done}
       productName={aiCompetitorGradingResult.result?.product_name ?? ""}
+      productXPosition={
+        aiCompetitorGradingResult.result?.competitor_analysis.user_product.x ??
+        0
+      }
+      productYPosition={
+        aiCompetitorGradingResult.result?.competitor_analysis.user_product.y ??
+        0
+      }
       industryCurrentCondition={
         aiCompetitorGradingResult.result?.industry_analysis.current_condition ??
         ""
@@ -65,6 +73,29 @@ export default async function AICompetitorGraderResultLMS({
       industryMarketMaturityReason={
         aiCompetitorGradingResult.result?.industry_analysis.market_maturity
           .reason ?? ""
+      }
+      competitorList={
+        aiCompetitorGradingResult.result?.competitor_analysis.competitors ?? []
+      }
+      xLeftAttribute={
+        aiCompetitorGradingResult.result?.competitor_analysis.attributes.x
+          .left ?? ""
+      }
+      xRightAttribute={
+        aiCompetitorGradingResult.result?.competitor_analysis.attributes.x
+          .right ?? ""
+      }
+      yTopAttribute={
+        aiCompetitorGradingResult.result?.competitor_analysis.attributes.y
+          .top ?? ""
+      }
+      yBottomAttribute={
+        aiCompetitorGradingResult.result?.competitor_analysis.attributes.y
+          .bottom ?? ""
+      }
+      growthOpportunity={
+        aiCompetitorGradingResult.result?.competitor_analysis
+          .room_of_growth_opportunity ?? ""
       }
       sources={
         aiCompetitorGradingResult.result?.industry_analysis.sources ?? []
