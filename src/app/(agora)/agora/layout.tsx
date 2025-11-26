@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { TRPCProvider } from "@/trpc/client";
+import DisallowedMobile from "@/app/components/state/DisallowedMobile";
 
 export const metadata: Metadata = {
   title: {
@@ -77,6 +78,7 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
       <div className="root relative w-full min-h-screen bg-section-background">
         <SidebarLMS aiResultList={aiResultList} />
         {children}
+        <DisallowedMobile />
         <Toaster richColors position="top-center" />
       </div>
     </TRPCProvider>

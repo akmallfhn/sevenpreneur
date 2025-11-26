@@ -23,7 +23,7 @@ export default function NotFoundComponent() {
           />
         </div>
         <div className="state-text flex flex-col gap-2 items-center">
-          <h2 className="state-title flex font-bold font-bodycopy text-center tracking-tight text-2xl text-neutral-black">
+          <h2 className="state-title flex font-bold font-bodycopy text-center tracking-tight text-2xl">
             404 - Nothing to see here
           </h2>
           <p className="state-description font-bodycopy text-center font-medium text-alternative">
