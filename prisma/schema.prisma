@@ -199,6 +199,7 @@ model User {
   UserEvent             UserEvent[]
   ai_results            AIResult[]
   ai_conversations      AIConversation[]
+  attendances           Attendance[]
 
   @@map("users")
 }
@@ -285,10 +286,14 @@ model Learning {
   price             CohortPrice?        @relation(fields: [price_id], references: [id])
   price_id          Int?                @db.Integer
   status            StatusEnum
+  check_in          Boolean             @default(false) @db.Boolean
+  check_out         Boolean             @default(false) @db.Boolean
+  check_out_code    String?             @db.VarChar()
   created_at        DateTime            @default(now()) @db.Timestamptz()
   updated_at        DateTime            @default(now()) @updatedAt @db.Timestamptz()
   materials         Material[]
   discussions       DiscussionStarter[]
+  attendances       Attendance[]
 
   @@map("learnings")
 }
@@ -362,6 +367,18 @@ model Submission {
   updated_at   DateTime @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("submissions")
+}
+
+model Attendance {
+  learning     Learning  @relation(fields: [learning_id], references: [id])
+  learning_id  Int       @db.Integer
+  user         User      @relation(fields: [user_id], references: [id])
+  user_id      String    @db.Uuid
+  check_in_at  DateTime? @db.Timestamptz()
+  check_out_at DateTime? @db.Timestamptz()
+
+  @@id([learning_id, user_id])
+  @@map("attendances")
 }
 
 // Playlist-related
