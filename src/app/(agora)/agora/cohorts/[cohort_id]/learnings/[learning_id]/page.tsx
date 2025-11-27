@@ -36,6 +36,8 @@ export default async function LearningsDetailsPageLMS({
     return notFound();
   }
 
+  const hasAttendance = await trpc.read.attendance({ learning_id: learningId });
+
   const learningDetails = {
     ...learningDetailsRaw,
     meeting_date: learningDetailsRaw.meeting_date.toISOString(),
@@ -70,6 +72,8 @@ export default async function LearningsDetailsPageLMS({
       learningSessionDate={learningDetails.meeting_date}
       learningSessionMethod={learningDetails.method}
       learningSessionURL={learningDetails.meeting_url || ""}
+      learningSessionCheckIn={learningDetails.check_in}
+      learningSessionCheckOut={learningDetails.check_out}
       learningLocationURL={learningDetails.location_url || ""}
       learningLocationName={learningDetails.location_name || ""}
       learningEducatorName={
@@ -83,6 +87,8 @@ export default async function LearningsDetailsPageLMS({
       learningRecordingCloudflare={learningDetails.external_video_id || ""}
       materialList={materialList}
       discussionStarterList={discussionStarterList}
+      hasCheckIn={hasAttendance.check_in}
+      hasCheckOut={hasAttendance.check_out}
     />
   );
 }

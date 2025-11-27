@@ -11,10 +11,12 @@ import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import { useEffect, useState } from "react";
 import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
 import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
-import { CreateDiscussionStarter } from "@/lib/actions";
+import { CheckInSession, CreateDiscussionStarter } from "@/lib/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
+import AppButton from "../buttons/AppButton";
+import { Loader2 } from "lucide-react";
 
 export interface MaterialList {
   name: string;
@@ -44,6 +46,8 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningSessionDate: string;
   learningSessionMethod: SessionMethod;
   learningSessionURL: string;
+  learningSessionCheckIn: boolean;
+  learningSessionCheckOut: boolean;
   learningLocationURL: string;
   learningLocationName: string;
   learningEducatorName: string;
@@ -52,6 +56,8 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningRecordingCloudflare: string;
   materialList: MaterialList[];
   discussionStarterList: DiscussionStarterList[];
+  hasCheckIn: boolean;
+  hasCheckOut: boolean;
 }
 
 export default function LearningDetailsLMS({
@@ -67,6 +73,8 @@ export default function LearningDetailsLMS({
   learningSessionDate,
   learningSessionMethod,
   learningSessionURL,
+  learningSessionCheckIn,
+  learningSessionCheckOut,
   learningLocationURL,
   learningLocationName,
   learningEducatorName,
@@ -75,11 +83,25 @@ export default function LearningDetailsLMS({
   learningRecordingCloudflare,
   materialList,
   discussionStarterList,
+  hasCheckIn,
+  hasCheckOut,
 }: LearningDetailsLMSProps) {
   const router = useRouter();
   const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
   const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
   const [textValue, setTextValue] = useState("");
+  const [checkingIn, setCheckingIn] = useState(false);
+
+  let checkInAction = "Check In";
+  let checkInDisabled = false;
+
+  if (hasCheckIn) {
+    checkInAction = "Checked In";
+    checkInDisabled = true;
+  } else if (!learningSessionCheckIn) {
+    checkInAction = "Closed";
+    checkInDisabled = true;
+  }
 
   const activeMaterials = materialList.filter(
     (material) => material.status === "ACTIVE"
@@ -147,6 +169,26 @@ export default function LearningDetailsLMS({
     return null;
   })();
 
+  const handleCheckIn = async () => {
+    setCheckingIn(true);
+
+    try {
+      const checkInSession = await CheckInSession({
+        learningId: learningSessionId,
+      });
+      if (checkInSession.code === "CREATED") {
+        toast.success("You’ve successfully checked in!");
+        router.refresh();
+      } else {
+        toast.error("Unable to complete check-in. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setCheckingIn(false);
+    }
+  };
+
   return (
     <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
       <HeaderCohortEntityLMS
@@ -173,7 +215,7 @@ export default function LearningDetailsLMS({
               <h3 className="section-title font-bold font-bodycopy">
                 What&apos;s on this sessions?
               </h3>
-              <p className="text-[#333333] font-sm font-bodycopy whitespace-pre-line">
+              <p className="text-[#333333] font-sm font-bodycopy text-[15px] whitespace-pre-line">
                 {learningSessionDescription}
               </p>
             </div>
@@ -272,6 +314,19 @@ export default function LearningDetailsLMS({
                   </p>
                 </div>
               </div>
+            </div>
+            <div className="learning-materials flex flex-col gap-3 bg-white p-4 border rounded-lg">
+              <h3 className="section-title font-bold font-bodycopy">
+                Check In Attendance
+              </h3>
+              <AppButton
+                size="medium"
+                onClick={handleCheckIn}
+                disabled={checkInDisabled}
+              >
+                {checkingIn && <Loader2 className="size-5 animate-spin" />}
+                {checkInAction}
+              </AppButton>
             </div>
             <div className="learning-materials flex flex-col gap-3 bg-white p-4 border rounded-lg">
               <h3 className="section-title font-bold font-bodycopy">

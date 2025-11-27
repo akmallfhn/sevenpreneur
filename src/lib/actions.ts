@@ -13,6 +13,7 @@ import {
   BusinessYearlyRevenue,
   OccupationUser,
 } from "./app-types";
+import { codec } from "zod";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -97,6 +98,31 @@ export async function UpdateUserBusiness({
   return {
     code: updateUserBusiness.code,
     message: updateUserBusiness.message,
+  };
+}
+
+// CHECK IN SESSION
+interface CheckInSessionProps {
+  learningId: number;
+}
+export async function CheckInSession(props: CheckInSessionProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+
+  setSessionToken(sessionData.value);
+
+  const checkInSession = await trpc.create.checkIn({
+    learning_id: props.learningId,
+  });
+
+  return {
+    code: checkInSession.code,
+    message: checkInSession.message,
+    attendance: checkInSession.attendance,
   };
 }
 
