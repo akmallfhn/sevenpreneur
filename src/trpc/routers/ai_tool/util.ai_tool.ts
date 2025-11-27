@@ -20,6 +20,27 @@ export enum AIModelName {
   GPT_4_1_NANO = "gpt-4.1-nano",
 }
 
+function getTool(model: AIModelName): [{ type: "web_search" }] | undefined {
+  switch (model) {
+    case AIModelName.GPT_5:
+    case AIModelName.GPT_5_MINI:
+    case AIModelName.GPT_5_NANO:
+    case AIModelName.GPT_4_1:
+      return [{ type: "web_search" }];
+    default:
+  }
+}
+
+function getReasoningLevel(model: AIModelName): { effort: "low" } | undefined {
+  switch (model) {
+    case AIModelName.GPT_5:
+    case AIModelName.GPT_5_MINI:
+    case AIModelName.GPT_5_NANO:
+      return { effort: "low" };
+    default:
+  }
+}
+
 export const AI_TOOL_ID_IDEA_VAL = 1; // idea-val
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
 export const AI_TOOL_ID_COMPETITOR_GRADER = 3; // competitor-grader
@@ -95,8 +116,8 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
     },
     body: {
       model: model,
-      tools: [{ type: "web_search" }],
-      reasoning: { effort: "low" },
+      tools: getTool(model),
+      reasoning: getReasoningLevel(model),
       instructions: prompt.instructions,
       input: prompt.input,
       text: { format: prompt.format },
@@ -136,6 +157,8 @@ export async function AIGenerateTitle<T extends AutoParseableTextFormat<U>, U>(
 ) {
   const generatedResult = await ChatGPTClient.responses.parse({
     model: model,
+    tools: getTool(model),
+    reasoning: getReasoningLevel(model),
     instructions: prompt.instructions,
     input: prompt.input,
     text: {
@@ -165,7 +188,8 @@ export async function AISendChat(
 ) {
   const generatedResult = await ChatGPTClient.responses.create({
     model: model,
-    tools: [{ type: "web_search" }],
+    tools: getTool(model),
+    reasoning: getReasoningLevel(model),
     instructions: aiToolPrompts.sendChat.instruction,
     input: [...history, { role: "user", content: message }],
   });
