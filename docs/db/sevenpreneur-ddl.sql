@@ -205,6 +205,9 @@ CREATE TABLE learnings (
   external_video_id  VARCHAR                   NULL,
   price_id           INTEGER                   NULL,
   status             status_enum           NOT NULL,
+  check_in           BOOLEAN               NOT NULL DEFAULT FALSE,
+  check_out          BOOLEAN               NOT NULL DEFAULT FALSE,
+  check_out_code     VARCHAR                   NULL,
   created_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
@@ -259,6 +262,15 @@ CREATE TABLE submissions (
   created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE attendances (
+  learning_id  INTEGER     NOT NULL,
+  user_id      UUID        NOT NULL,
+  check_in_at  TIMESTAMPTZ NULL,
+  check_out_at TIMESTAMPTZ NULL,
+
+  PRIMARY KEY (learning_id, user_id)
+)
 
 -- Playlist-related
 
@@ -504,6 +516,10 @@ ALTER TABLE projects
 ALTER TABLE submissions
   ADD FOREIGN KEY (project_id)   REFERENCES projects (id),
   ADD FOREIGN KEY (submitter_id) REFERENCES users (id);
+
+ALTER TABLE attendances
+  ADD FOREIGN KEY (user_id)     REFERENCES users (id),
+  ADD FOREIGN KEY (learning_id) REFERENCES learnings (id);
 
 -- Playlist-related
 

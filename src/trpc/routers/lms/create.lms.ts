@@ -1,8 +1,10 @@
 import {
   STATUS_CREATED,
+  STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
 import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
+import { readFailedNotFound } from "@/trpc/utils/errors";
 import { createSlugFromTitle } from "@/trpc/utils/slug";
 import {
   numberIsID,
@@ -11,7 +13,7 @@ import {
 } from "@/trpc/utils/validation";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import z from "zod";
+import z, { number, string } from "zod";
 
 export const createLMS = {
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])
@@ -388,6 +390,115 @@ export const createLMS = {
         code: STATUS_CREATED,
         message: "Success",
         submission: theSubmission,
+      };
+    }),
+
+  checkIn: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const userId = opts.ctx.user.id;
+
+      const existing = await opts.ctx.prisma.attendance.findFirst({
+        where: {
+          learning_id: opts.input.learning_id,
+          user_id: userId,
+        },
+      });
+
+      if (existing && !existing.check_in_at) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You have already checked in.",
+        });
+      }
+
+      const theCheckIn = await opts.ctx.prisma.attendance.upsert({
+        create: {
+          learning_id: opts.input.learning_id,
+          user_id: userId,
+          check_in_at: new Date(),
+        },
+        update: {
+          check_in_at: new Date(),
+        },
+        where: {
+          learning_id_user_id: {
+            learning_id: opts.input.learning_id,
+            user_id: userId,
+          },
+        },
+      });
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        attendance: theCheckIn,
+      };
+    }),
+
+  checkOut: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+        check_out_code: stringNotBlank(),
+      })
+    )
+    .mutation(async (opts) => {
+      const userId = opts.ctx.user.id;
+      const learning = await opts.ctx.prisma.learning.findFirst({
+        where: {
+          id: opts.input.learning_id,
+        },
+      });
+
+      if (!learning) {
+        throw readFailedNotFound("learning");
+      }
+
+      if (learning.check_out_code !== opts.input.check_out_code) {
+        throw new TRPCError({
+          code: STATUS_FORBIDDEN,
+          message: "Check Out Code is Wrong",
+        });
+      }
+
+      const existing = await opts.ctx.prisma.attendance.findFirst({
+        where: {
+          learning_id: opts.input.learning_id,
+          user_id: userId,
+        },
+      });
+
+      if (existing && !existing.check_out_at) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You have already checked out.",
+        });
+      }
+
+      const theCheckOut = await opts.ctx.prisma.attendance.upsert({
+        create: {
+          learning_id: opts.input.learning_id,
+          user_id: userId,
+          check_out_at: new Date(),
+        },
+        update: {
+          check_out_at: new Date(),
+        },
+        where: {
+          learning_id_user_id: {
+            learning_id: opts.input.learning_id,
+            user_id: userId,
+          },
+        },
+      });
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        attendance: theCheckOut,
       };
     }),
 };

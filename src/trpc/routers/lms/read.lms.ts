@@ -319,4 +319,28 @@ export const readLMS = {
         submission: theSubmission,
       };
     }),
+
+  attendance: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const userId = opts.ctx.user.id;
+
+      const attendance = await opts.ctx.prisma.attendance.findFirst({
+        where: {
+          learning_id: opts.input.learning_id,
+          user_id: userId,
+        },
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        check_in: !!attendance?.check_in_at,
+        check_out: !!attendance?.check_out_at,
+      };
+    }),
 };
