@@ -30,6 +30,7 @@ export const readRouter = createTRPCRouter({
   project: readLMS.project,
   submission: readLMS.submission,
   submissionByProject: readLMS.submissionByProject,
+  attendance: readLMS.attendance,
 
   // Playlist-related //
 
