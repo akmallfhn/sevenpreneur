@@ -409,7 +409,7 @@ export const createLMS = {
         },
       });
 
-      if (existing && !existing.check_in_at) {
+      if (existing && existing.check_in_at) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "You have already checked in.",
@@ -472,7 +472,7 @@ export const createLMS = {
         },
       });
 
-      if (existing && !existing.check_out_at) {
+      if (existing && existing.check_out_at) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "You have already checked out.",

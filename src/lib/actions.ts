@@ -126,6 +126,33 @@ export async function CheckInSession(props: CheckInSessionProps) {
   };
 }
 
+// CHECK OUT SESSION
+interface CheckOutSessionProps {
+  learningId: number;
+  checkOutCode: string;
+}
+export async function CheckOutSession(props: CheckOutSessionProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+
+  setSessionToken(sessionData.value);
+
+  const checkOutSession = await trpc.create.checkOut({
+    learning_id: props.learningId,
+    check_out_code: props.checkOutCode,
+  });
+
+  return {
+    code: checkOutSession.code,
+    message: checkOutSession.message,
+    attendance: checkOutSession.attendance,
+  };
+}
+
 // MAKE PAYMENT COHORT AT XENDIT
 interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
