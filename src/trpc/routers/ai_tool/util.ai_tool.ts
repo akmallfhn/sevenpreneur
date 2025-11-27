@@ -4,7 +4,7 @@ import {
 } from "@/lib/status_code";
 import { CRoleEnum, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import { Client, openai } from "@upstash/qstash";
+import { Client } from "@upstash/qstash";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { AutoParseableTextFormat } from "openai/lib/parser";
