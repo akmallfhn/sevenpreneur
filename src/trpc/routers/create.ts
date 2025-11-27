@@ -22,6 +22,8 @@ export const createRouter = createTRPCRouter({
   discussionReply: createLMS.discussionReply,
   project: createLMS.project,
   submission: createLMS.submission,
+  checkIn: createLMS.checkIn,
+  checkOut: createLMS.checkOut,
 
   // Playlist-related //
 
