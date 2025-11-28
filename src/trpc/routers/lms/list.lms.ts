@@ -333,6 +333,7 @@ export const listLMS = {
       const attendanceCount = await opts.ctx.prisma.attendance.aggregate({
         _count: { _all: true },
         where: {
+          user_id: opts.ctx.user.id,
           OR: [{ check_in_at: { not: null } }, { check_out_at: { not: null } }],
         },
       });
