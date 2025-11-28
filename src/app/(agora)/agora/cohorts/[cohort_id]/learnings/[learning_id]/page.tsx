@@ -74,6 +74,7 @@ export default async function LearningsDetailsPageLMS({
       learningSessionURL={learningDetails.meeting_url || ""}
       learningSessionCheckIn={learningDetails.check_in}
       learningSessionCheckOut={learningDetails.check_out}
+      learningSessionFeedbackURL={learningDetails.feedback_form || ""}
       learningLocationURL={learningDetails.location_url || ""}
       learningLocationName={learningDetails.location_name || ""}
       learningEducatorName={

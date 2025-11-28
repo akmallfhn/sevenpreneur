@@ -51,6 +51,7 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningSessionURL: string;
   learningSessionCheckIn: boolean;
   learningSessionCheckOut: boolean;
+  learningSessionFeedbackURL: string;
   learningLocationURL: string;
   learningLocationName: string;
   learningEducatorName: string;
@@ -293,28 +294,49 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
               hasCheckOut={props.hasCheckOut}
               learningSessionCheckOut={props.learningSessionCheckOut}
             />
-            {props.learningSessionCheckOut && (
-              <a
-                href="https://forms.gle/XtGCMjh3GbwQ65Ss6"
-                className="check-out-attendance flex items-center justify-between bg-white p-4 border rounded-lg transition-all active:scale-95"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div className="flex flex-col gap-1">
-                  <h3 className="section-title font-bold font-bodycopy">
-                    Ratings & Feedback
-                  </h3>
-                  <div className="flex items-center">
-                    <Star className="size-6" fill="#FFB21D" stroke="#FFF3DB" />
-                    <Star className="size-6" fill="#FFB21D" stroke="#FFF3DB" />
-                    <Star className="size-6" fill="#FFB21D" stroke="#FFF3DB" />
-                    <Star className="size-6" fill="#FFB21D" stroke="#FFF3DB" />
-                    <Star className="size-6" fill="#FFB21D" stroke="#FFF3DB" />
+            {props.learningSessionFeedbackURL &&
+              props.learningSessionCheckOut && (
+                <a
+                  href={props.learningSessionFeedbackURL}
+                  className="check-out-attendance flex items-center justify-between bg-white p-4 border rounded-lg transition-all active:scale-95"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div className="flex flex-col gap-1">
+                    <h3 className="section-title font-bold font-bodycopy">
+                      Ratings & Feedback
+                    </h3>
+                    <div className="flex items-center">
+                      <Star
+                        className="size-6"
+                        fill="#FFB21D"
+                        stroke="#FFF3DB"
+                      />
+                      <Star
+                        className="size-6"
+                        fill="#FFB21D"
+                        stroke="#FFF3DB"
+                      />
+                      <Star
+                        className="size-6"
+                        fill="#FFB21D"
+                        stroke="#FFF3DB"
+                      />
+                      <Star
+                        className="size-6"
+                        fill="#FFB21D"
+                        stroke="#FFF3DB"
+                      />
+                      <Star
+                        className="size-6"
+                        fill="#FFB21D"
+                        stroke="#FFF3DB"
+                      />
+                    </div>
                   </div>
-                </div>
-                <ChevronRight className="size-6 text-alternative" />
-              </a>
-            )}
+                  <ChevronRight className="size-6 text-alternative" />
+                </a>
+              )}
           </aside>
         </div>
       </div>

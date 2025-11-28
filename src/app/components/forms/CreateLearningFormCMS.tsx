@@ -12,6 +12,7 @@ import SelectCMS from "../fields/SelectCMS";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { Switch } from "@/components/ui/switch";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 
 interface CreateLearningFormCMSProps {
   sessionToken: string;
@@ -20,12 +21,9 @@ interface CreateLearningFormCMSProps {
   onClose: () => void;
 }
 
-export default function CreateLearningFormCMS({
-  sessionToken,
-  cohortId,
-  isOpen,
-  onClose,
-}: CreateLearningFormCMSProps) {
+export default function CreateLearningFormCMS(
+  props: CreateLearningFormCMSProps
+) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createLearning = trpc.create.learning.useMutation();
   const utils = trpc.useUtils();
@@ -34,7 +32,10 @@ export default function CreateLearningFormCMS({
     data: educatorUserList,
     isLoading,
     isError,
-  } = trpc.list.users.useQuery({ role_id: 1 }, { enabled: !!sessionToken });
+  } = trpc.list.users.useQuery(
+    { role_id: 1 },
+    { enabled: !!props.sessionToken }
+  );
 
   // Beginning State
   const [formData, setFormData] = useState<{
@@ -47,6 +48,10 @@ export default function CreateLearningFormCMS({
     learningLocationURL: string;
     learningSpeaker: string;
     learningStatus: StatusType;
+    learningCheckIn: boolean;
+    learningCheckOut: boolean;
+    learningCheckOutCode: string;
+    learningFeedbackURL: string;
   }>({
     learningName: "",
     learningDescription: "",
@@ -57,6 +62,10 @@ export default function CreateLearningFormCMS({
     learningLocationURL: "",
     learningSpeaker: "",
     learningStatus: "ACTIVE",
+    learningCheckIn: false,
+    learningCheckOut: false,
+    learningCheckOutCode: "",
+    learningFeedbackURL: "",
   });
 
   // Add event listener to prevent page refresh
@@ -177,7 +186,7 @@ export default function CreateLearningFormCMS({
       createLearning.mutate(
         {
           // Mandatory fields:
-          cohort_id: cohortId,
+          cohort_id: props.cohortId,
           name: formData.learningName.trim(),
           status: formData.learningStatus,
           description: formData.learningDescription.trim(),
@@ -197,6 +206,14 @@ export default function CreateLearningFormCMS({
           speaker_id: formData.learningSpeaker.trim()
             ? formData.learningSpeaker
             : null,
+          check_in: formData.learningCheckIn,
+          check_out: formData.learningCheckOut,
+          check_out_code: formData.learningCheckOutCode.trim()
+            ? formData.learningCheckOutCode.trim()
+            : "",
+          feedback_form: formData.learningFeedbackURL.trim()
+            ? formData.learningFeedbackURL.trim()
+            : "",
         },
         {
           onSuccess: () => {
@@ -205,7 +222,7 @@ export default function CreateLearningFormCMS({
             );
             setIsSubmitting(false);
             utils.list.learnings.invalidate();
-            onClose();
+            props.onClose();
           },
           onError: (err) => {
             toast.error("Something went wrong while creating the session ", {
@@ -225,8 +242,8 @@ export default function CreateLearningFormCMS({
     <AppSheet
       sheetName="Create Learning Session"
       sheetDescription="Plan your next cohort session with a clear schedule, place, and topic."
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
     >
       {isLoading && (
         <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
@@ -367,6 +384,79 @@ export default function CreateLearningFormCMS({
                   })) || []
                 }
               />
+              <div className="attendance-settings flex flex-col gap-4 p-4 bg-section-background/50 border border-outline rounded-md">
+                <h5 className="font-bodycopy font-bold text-sm">
+                  Attendance Settings
+                </h5>
+                <div className="check-in flex flex-col gap-1">
+                  <label
+                    htmlFor={"learning-check-in"}
+                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  >
+                    Check-In Enabled
+                  </label>
+                  <div className="switch-button flex items-center pl-1 gap-2">
+                    <Switch
+                      className="data-[state=checked]:bg-cms-primary"
+                      checked={formData.learningCheckIn}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("learningCheckIn")(
+                          checked ? true : false
+                        )
+                      }
+                    />
+                    <div className="font-bodycopy text-[15px] font-medium text-[#333333]">
+                      {formData.learningCheckIn ? (
+                        <BooleanLabelCMS label="OPEN" value={true} />
+                      ) : (
+                        <BooleanLabelCMS label="CLOSE" value={false} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="check-out flex flex-col gap-1">
+                  <label
+                    htmlFor={"learning-check-out"}
+                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  >
+                    Check-Out Enabled
+                  </label>
+                  <div className="switch-button flex items-center pl-1 gap-2">
+                    <Switch
+                      className="data-[state=checked]:bg-cms-primary"
+                      checked={formData.learningCheckOut}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("learningCheckOut")(
+                          checked ? true : false
+                        )
+                      }
+                    />
+                    <div className="font-bodycopy text-[15px] font-medium text-[#333333]">
+                      {formData.learningCheckOut ? (
+                        <BooleanLabelCMS label="OPEN" value={true} />
+                      ) : (
+                        <BooleanLabelCMS label="CLOSE" value={false} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <InputCMS
+                  inputId="learning-check-out-code"
+                  inputName="Check Out Code"
+                  inputType="text"
+                  inputPlaceholder="e.g. WEAREFOUNDER"
+                  value={formData.learningCheckOutCode}
+                  onInputChange={handleInputChange("learningCheckOutCode")}
+                />
+                <InputCMS
+                  inputId="learning-feedback-url"
+                  inputName="Feedback Form"
+                  inputType="url"
+                  inputPlaceholder="e.g. https://forms.gle/XtGCMjh3GbwQ65Ss6"
+                  value={formData.learningFeedbackURL}
+                  onInputChange={handleInputChange("learningFeedbackURL")}
+                />
+              </div>
             </div>
           </div>
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">

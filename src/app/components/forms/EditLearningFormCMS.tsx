@@ -12,6 +12,7 @@ import SelectCMS from "../fields/SelectCMS";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { Switch } from "@/components/ui/switch";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 
 interface EditLearningFormCMSProps {
   sessionToken: string;
@@ -20,12 +21,7 @@ interface EditLearningFormCMSProps {
   onClose: () => void;
 }
 
-export default function EditLearningFormCMS({
-  sessionToken,
-  learningId,
-  isOpen,
-  onClose,
-}: EditLearningFormCMSProps) {
+export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editLearning = trpc.update.learning.useMutation();
   const utils = trpc.useUtils();
@@ -35,14 +31,17 @@ export default function EditLearningFormCMS({
     data: educatorUserList,
     isLoading: isLoadingEducatorList,
     isError: isErrorEducatorList,
-  } = trpc.list.users.useQuery({ role_id: 1 }, { enabled: !!sessionToken });
+  } = trpc.list.users.useQuery(
+    { role_id: 1 },
+    { enabled: !!props.sessionToken }
+  );
   const {
     data: learningDetailsData,
     isLoading: isLoadingInitialData,
     isError: isErrorInitialData,
   } = trpc.read.learning.useQuery(
-    { id: learningId },
-    { enabled: !!sessionToken }
+    { id: props.learningId },
+    { enabled: !!props.sessionToken }
   );
   const initialData = learningDetailsData?.learning;
 
@@ -60,6 +59,10 @@ export default function EditLearningFormCMS({
     learningLocationURL: string;
     learningSpeaker: string;
     learningStatus: StatusType;
+    learningCheckIn: boolean;
+    learningCheckOut: boolean;
+    learningCheckOutCode: string;
+    learningFeedbackURL: string;
   }>({
     learningName: initialData?.name || "",
     learningDescription: initialData?.description || "",
@@ -78,6 +81,14 @@ export default function EditLearningFormCMS({
       : "",
     learningSpeaker: initialData?.speaker_id ? initialData.speaker_id : "",
     learningStatus: initialData?.status as StatusType,
+    learningCheckIn: initialData?.check_in ?? false,
+    learningCheckOut: initialData?.check_out ?? false,
+    learningCheckOutCode: initialData?.check_out_code
+      ? initialData.check_out_code
+      : "",
+    learningFeedbackURL: initialData?.feedback_form
+      ? initialData.feedback_form
+      : "",
   });
 
   useEffect(() => {
@@ -100,6 +111,14 @@ export default function EditLearningFormCMS({
           : "",
         learningSpeaker: initialData.speaker_id ? initialData.speaker_id : "",
         learningStatus: initialData.status as StatusType,
+        learningCheckIn: initialData.check_in,
+        learningCheckOut: initialData.check_out,
+        learningCheckOutCode: initialData.check_out_code
+          ? initialData.check_out_code
+          : "",
+        learningFeedbackURL: initialData.feedback_form
+          ? initialData.feedback_form
+          : "",
       });
     }
   }, [initialData]);
@@ -224,7 +243,7 @@ export default function EditLearningFormCMS({
       editLearning.mutate(
         {
           // Mandatory fields:
-          id: learningId,
+          id: props.learningId,
           name: formData.learningName.trim(),
           status: formData.learningStatus,
           description: formData.learningDescription.trim(),
@@ -244,6 +263,14 @@ export default function EditLearningFormCMS({
           speaker_id: formData.learningSpeaker.trim()
             ? formData.learningSpeaker
             : null,
+          check_in: formData.learningCheckIn,
+          check_out: formData.learningCheckOut,
+          check_out_code: formData.learningCheckOutCode.trim()
+            ? formData.learningCheckOutCode.trim()
+            : "",
+          feedback_form: formData.learningFeedbackURL.trim()
+            ? formData.learningFeedbackURL.trim()
+            : "",
         },
         {
           onSuccess: () => {
@@ -251,7 +278,7 @@ export default function EditLearningFormCMS({
             setIsSubmitting(false);
             utils.read.learning.invalidate();
             utils.list.learnings.invalidate();
-            onClose();
+            props.onClose();
           },
           onError: (err) => {
             toast.error("Update failed", {
@@ -271,8 +298,8 @@ export default function EditLearningFormCMS({
     <AppSheet
       sheetName="Edit Learning Session"
       sheetDescription="Update and refine your learning session. Adjust the schedule, location, or topic to reflect the latest changes."
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
     >
       {isLoading && (
         <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
@@ -425,6 +452,79 @@ export default function EditLearningFormCMS({
                   }
                 />
               )}
+              <div className="attendance-settings flex flex-col gap-4 p-4 bg-section-background/50 border border-outline rounded-md">
+                <h5 className="font-bodycopy font-bold text-sm">
+                  Attendance Settings
+                </h5>
+                <div className="check-in flex flex-col gap-1">
+                  <label
+                    htmlFor={"learning-check-in"}
+                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  >
+                    Check-In Enabled
+                  </label>
+                  <div className="switch-button flex items-center pl-1 gap-2">
+                    <Switch
+                      className="data-[state=checked]:bg-cms-primary"
+                      checked={formData.learningCheckIn}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("learningCheckIn")(
+                          checked ? true : false
+                        )
+                      }
+                    />
+                    <div className="font-bodycopy text-[15px] font-medium text-[#333333]">
+                      {formData.learningCheckIn ? (
+                        <BooleanLabelCMS label="OPEN" value={true} />
+                      ) : (
+                        <BooleanLabelCMS label="CLOSE" value={false} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="check-out flex flex-col gap-1">
+                  <label
+                    htmlFor={"learning-check-out"}
+                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  >
+                    Check-Out Enabled
+                  </label>
+                  <div className="switch-button flex items-center pl-1 gap-2">
+                    <Switch
+                      className="data-[state=checked]:bg-cms-primary"
+                      checked={formData.learningCheckOut}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("learningCheckOut")(
+                          checked ? true : false
+                        )
+                      }
+                    />
+                    <div className="font-bodycopy text-[15px] font-medium text-[#333333]">
+                      {formData.learningCheckOut ? (
+                        <BooleanLabelCMS label="OPEN" value={true} />
+                      ) : (
+                        <BooleanLabelCMS label="CLOSE" value={false} />
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <InputCMS
+                  inputId="learning-check-out-code"
+                  inputName="Check Out Code"
+                  inputType="text"
+                  inputPlaceholder="e.g. WEAREFOUNDER"
+                  value={formData.learningCheckOutCode}
+                  onInputChange={handleInputChange("learningCheckOutCode")}
+                />
+                <InputCMS
+                  inputId="learning-feedback-url"
+                  inputName="Feedback Form"
+                  inputType="url"
+                  inputPlaceholder="e.g. https://forms.gle/XtGCMjh3GbwQ65Ss6"
+                  value={formData.learningFeedbackURL}
+                  onInputChange={handleInputChange("learningFeedbackURL")}
+                />
+              </div>
             </div>
           </div>
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
