@@ -289,6 +289,7 @@ model Learning {
   check_in          Boolean             @default(false) @db.Boolean
   check_out         Boolean             @default(false) @db.Boolean
   check_out_code    String?             @db.VarChar()
+  feedback_form     String?             @db.VarChar()
   created_at        DateTime            @default(now()) @db.Timestamptz()
   updated_at        DateTime            @default(now()) @updatedAt @db.Timestamptz()
   materials         Material[]
