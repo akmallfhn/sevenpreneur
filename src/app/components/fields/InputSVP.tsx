@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 interface InputSVPProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
-  inputName: string;
+  inputName?: string;
   inputType: string;
   inputIcon?: React.ReactNode;
   inputPlaceholder?: string;
@@ -62,13 +62,17 @@ export default function InputSVP({
 
   return (
     <div className="input-box flex flex-col gap-1">
-      <label
-        htmlFor={inputId}
-        className="label-input flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
-      >
-        {inputName}
-        {required && <span className="label-required text-destructive">*</span>}
-      </label>
+      {inputName && (
+        <label
+          htmlFor={inputId}
+          className="label-input flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
+        >
+          {inputName}
+          {required && (
+            <span className="label-required text-destructive">*</span>
+          )}
+        </label>
+      )}
 
       <div className="input-container relative ">
         {inputIcon && (

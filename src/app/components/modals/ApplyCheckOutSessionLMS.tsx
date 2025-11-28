@@ -86,22 +86,32 @@ export default function ApplyCheckOutSessionLMS(
           className="apply-check-out-form flex flex-col w-full items-center gap-4"
           onSubmit={handleCheckOut}
         >
-          <div className="flex flex-col w-full gap-2">
-            <h2 className="w-full font-bodycopy font-bold pl-0.5">Check Out</h2>
+          <div className="flex flex-col w-full gap-3">
+            <div className="flex flex-col">
+              <h2 className="w-full font-bodycopy font-bold">Check Out</h2>
+              <p className="text-sm text-[#333333] font-bodycopy font-medium">
+                To receive checkout code, please complete the ratings and
+                feedback form first.
+              </p>
+            </div>
             <InputSVP
               inputId="check-out-code"
-              inputName="Check Out Code"
               inputType="text"
-              inputPlaceholder="Enter check-out code here. e.g. GOODLUCK20"
+              inputPlaceholder="Enter check-out code here..."
               characterLength={32}
               value={checkOutCode}
               onInputChange={handleInputChange}
             />
           </div>
-          <AppButton type="submit" disabled={checkingOut}>
-            {checkingOut && <Loader2 className="animate-spin size-5" />}
-            Submit
-          </AppButton>
+          <div className="cta flex w-full items-center gap-4 justify-end">
+            <AppButton variant="semiDestructive" onClick={props.onClose}>
+              Cancel
+            </AppButton>
+            <AppButton type="submit" disabled={checkingOut}>
+              {checkingOut && <Loader2 className="animate-spin size-5" />}
+              Submit
+            </AppButton>
+          </div>
         </form>
         <div
           className="absolute flex top-4 right-4 hover:cursor-pointer"

@@ -50,7 +50,7 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
   return (
     <div className="sidebar-lms-root hidden fixed flex-col max-w-64 w-full h-full inset-y-0 left-0 items-center bg-[#FCFDFE] backdrop-blur-md z-50 dark:bg-surface-black lg:flex">
       <div className="sidebar-lms-container relative flex flex-col w-full h-full">
-        <div className="sidebar-main-menu fixed top-0 inset-x-0 flex flex-col w-full p-3 pt-5 items-center gap-4 bg-[#FCFDFE] z-10">
+        <div className="sidebar-main-menu fixed top-0 left-0 w-64 flex flex-col p-3 pt-5 items-center gap-4 bg-[#FCFDFE] z-10">
           <div className="sidebar-logo flex w-48 p-2 px-2.5">
             <Image
               className="object-cover w-full h-full"
