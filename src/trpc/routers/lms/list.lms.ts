@@ -330,9 +330,16 @@ export const listLMS = {
           status: entry.status,
         };
       });
+      const attendanceCount = await opts.ctx.prisma.attendance.aggregate({
+        _count: { _all: true },
+        where: {
+          OR: [{ check_in_at: { not: null } }, { check_out_at: { not: null } }],
+        },
+      });
       return {
         code: STATUS_OK,
         message: "Success",
+        attendance_count: attendanceCount._count._all,
         list: returnedList,
       };
     }),
