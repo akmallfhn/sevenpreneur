@@ -208,6 +208,7 @@ CREATE TABLE learnings (
   check_in           BOOLEAN               NOT NULL  DEFAULT FALSE,
   check_out          BOOLEAN               NOT NULL  DEFAULT FALSE,
   check_out_code     VARCHAR                   NULL,
+  feedback_form      VARCHAR                   NULL,
   created_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );

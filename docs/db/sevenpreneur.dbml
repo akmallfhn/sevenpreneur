@@ -211,6 +211,7 @@ Table learnings {
   check_in           boolean               [note: 'default false']
   check_out          boolean               [note: 'default false']
   check_out_code     varchar
+  feedback_form      varchar
   created_at         timestamptz
   updated_at         timestamptz
 }
