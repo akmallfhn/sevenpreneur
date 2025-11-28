@@ -19,8 +19,9 @@ export default function UploadFilesCMS({
   value,
 }: UploadFilesCMSProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false); // State upload to Supabase
+  const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   // Trigger input via button
   const handleUploadClick = () => {
@@ -38,9 +39,10 @@ export default function UploadFilesCMS({
 
     // File validation
     if (!file) return;
+    setSelectedFileName(file.name);
     if (file?.size < 1) return;
-    if (file?.size > 1024 * 1024 * 5) {
-      toast.error("File must be smaller than 5MB");
+    if (file?.size > 1024 * 1024 * 15) {
+      toast.error("File must be smaller than 15MB");
       return;
     }
     if (!allowedFormat.includes(file.type)) {
@@ -58,10 +60,24 @@ export default function UploadFilesCMS({
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `modules/${fileName}`;
 
+    // Upload Simulation
+    let progressSteps = [0, 30, 60, 80];
+    let currentStep = 0;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    const fakeProgressInterval = setInterval(() => {
+      if (currentStep < progressSteps.length) {
+        setUploadProgress(progressSteps[currentStep]);
+        currentStep++;
+      } else {
+        clearInterval(fakeProgressInterval);
+      }
+    }, 300);
+
     // Upload to Supabase
     try {
-      setIsUploading(true);
-      setUploadProgress(45);
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("sevenpreneur")
         .upload(filePath, file, {
@@ -70,7 +86,7 @@ export default function UploadFilesCMS({
         });
       if (uploadError) {
         console.error("Upload Error:", uploadError.message);
-        toast.error("Failed to upload image. Please try again.");
+        toast.error("Failed to upload file. Please try again.");
         return;
       }
       const { data: publicUrlData } = supabase.storage
@@ -88,7 +104,7 @@ export default function UploadFilesCMS({
     }
   };
 
-  // Remove image
+  // Remove file
   const handleRemoveFile = () => {
     onUpload(null);
     if (fileInputRef.current) {
@@ -137,18 +153,18 @@ export default function UploadFilesCMS({
           </div>
           <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-alternative">
             <p>Supported Formats: PDF</p>
-            <p>Maximum Size: 5MB</p>
+            <p>Maximum Size: 15MB</p>
           </div>
         </div>
       )}
 
       {/* Result File */}
-      {value && (
+      {(isUploading || value) && (
         <div className="relative text-xs text-green-700 mt-2 break-all">
           <FileResultUploadingCMS
-            fileName={value}
-            fileURL={value}
-            variants={getFileVariantFromURL(value) as FileVariant}
+            fileName={selectedFileName || "Material Document"}
+            fileURL={value || ""}
+            variants={getFileVariantFromURL(value || "") as FileVariant}
             isUploading={isUploading}
             uploadProgress={uploadProgress}
           />

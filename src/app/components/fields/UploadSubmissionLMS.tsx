@@ -42,7 +42,7 @@ export default function UploadSubmissionLMS({
     setSelectedFileName(file.name);
     if (file?.size < 1) return;
     if (file?.size > 1024 * 1024 * 50) {
-      toast.error("File must be smaller than 5MB");
+      toast.error("File must be smaller than 50MB");
       return;
     }
     if (!allowedFormat.includes(file.type)) {

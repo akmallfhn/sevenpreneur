@@ -21,13 +21,7 @@ interface EditMaterialFormCMSProps {
   onClose: () => void;
 }
 
-export default function EditMaterialFormCMS({
-  sessionToken,
-  learningId,
-  materialId,
-  isOpen,
-  onClose,
-}: EditMaterialFormCMSProps) {
+export default function EditMaterialFormCMS(props: EditMaterialFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedUploadMethod, setSelectedUploadMethod] = useState("");
   const [hasInitializedUploadMethod, setHasInitializedUploadMethod] =
@@ -42,8 +36,8 @@ export default function EditMaterialFormCMS({
     isLoading,
     isError,
   } = trpc.read.material.useQuery(
-    { id: materialId },
-    { enabled: !!sessionToken }
+    { id: props.materialId },
+    { enabled: !!props.sessionToken }
   );
 
   // Beginning State
@@ -134,8 +128,8 @@ export default function EditMaterialFormCMS({
       editMaterial.mutate(
         {
           // Mandatory fields:
-          learning_id: learningId,
-          id: materialId,
+          learning_id: props.learningId,
+          id: props.materialId,
           name: formData.materialName.trim(),
           status: formData.materialStatus,
           document_url: formData.materialURL,
@@ -151,7 +145,7 @@ export default function EditMaterialFormCMS({
             setIsSubmitting(false);
             utils.list.materials.invalidate();
             utils.read.material.invalidate();
-            onClose();
+            props.onClose();
           },
           onError: (err) => {
             toast.error(
@@ -174,8 +168,8 @@ export default function EditMaterialFormCMS({
     <AppSheet
       sheetName="Edit File"
       sheetDescription="Update the document's title, description, or access link to keep your cohort resources up to date."
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
     >
       {isLoading && (
         <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">

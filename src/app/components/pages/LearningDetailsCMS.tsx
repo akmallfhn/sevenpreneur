@@ -38,18 +38,20 @@ interface LearningDetailsCMSProps {
   learningId: number;
 }
 
-export default function LearningDetailsCMS({
-  sessionToken,
-  sessionUserRole,
-  cohortId,
-  learningId,
-}: LearningDetailsCMSProps) {
+export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
   const [editLearning, setEditLearning] = useState(false);
   const [updateRecording, setUpdateRecording] = useState(false);
 
   const allowedRolesUpdateLearning = [0, 2];
-  const isAllowedUpdateLearning =
-    allowedRolesUpdateLearning.includes(sessionUserRole);
+  const isAllowedUpdateLearning = allowedRolesUpdateLearning.includes(
+    props.sessionUserRole
+  );
+
+  useEffect(() => {
+    if (props.sessionToken) {
+      setSessionToken(props.sessionToken);
+    }
+  }, [props.sessionToken]);
 
   // Fetch tRPC Data
   const {
@@ -57,8 +59,8 @@ export default function LearningDetailsCMS({
     isLoading,
     isError,
   } = trpc.read.learning.useQuery(
-    { id: learningId },
-    { enabled: !!sessionToken }
+    { id: props.learningId },
+    { enabled: !!props.sessionToken }
   );
   if (isLoading) {
     return (
@@ -97,7 +99,7 @@ export default function LearningDetailsCMS({
             <ChevronRight className="size-3.5" />
             <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
             <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href={`/cohorts/${cohortId}`}>
+            <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
               Details
             </AppBreadcrumbItem>
             <ChevronRight className="size-3.5" />
@@ -224,9 +226,9 @@ export default function LearningDetailsCMS({
                   />
                 </div>
                 <MaterialListCMS
-                  sessionToken={sessionToken}
-                  sessionUserRole={sessionUserRole}
-                  learningId={learningId}
+                  sessionToken={props.sessionToken}
+                  sessionUserRole={props.sessionUserRole}
+                  learningId={props.learningId}
                 />
                 <div className="learning-location-conference flex flex-col gap-3 p-3 bg-section-background rounded-md">
                   <h2 className="section-name font-brand font-bold text-black">
@@ -258,8 +260,8 @@ export default function LearningDetailsCMS({
       {/* Edit Learning */}
       {editLearning && (
         <EditLearningFormCMS
-          sessionToken={sessionToken}
-          learningId={learningId}
+          sessionToken={props.sessionToken}
+          learningId={props.learningId}
           isOpen={editLearning}
           onClose={() => setEditLearning(false)}
         />
@@ -268,8 +270,8 @@ export default function LearningDetailsCMS({
       {/* Update Recording */}
       {updateRecording && (
         <UpdateVideoRecordingFormCMS
-          sessionToken={sessionToken}
-          learningId={learningId}
+          sessionToken={props.sessionToken}
+          learningId={props.learningId}
           isOpen={updateRecording}
           onClose={() => setUpdateRecording(false)}
         />
