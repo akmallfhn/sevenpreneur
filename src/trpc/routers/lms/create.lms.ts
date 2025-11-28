@@ -170,7 +170,12 @@ export const createLMS = {
         speaker_id: stringNotBlank().nullable().optional(),
         recording_url: stringNotBlank().nullable().optional(),
         external_video_id: stringNotBlank().nullable().optional(),
+        price_id: numberIsID().nullable().optional(),
         status: z.enum(StatusEnum),
+        check_in: z.boolean().optional(),
+        check_out: z.boolean().optional(),
+        check_out_code: stringNotBlank().nullable().optional(),
+        feedback_form: stringNotBlank().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -187,7 +192,12 @@ export const createLMS = {
           speaker_id: opts.input.speaker_id,
           recording_url: opts.input.recording_url,
           external_video_id: opts.input.external_video_id,
+          price_id: opts.input.price_id,
           status: opts.input.status,
+          check_in: opts.input.check_in,
+          check_out: opts.input.check_out,
+          check_out_code: opts.input.check_out_code,
+          feedback_form: opts.input.feedback_form,
         },
       });
       const theLearning = await opts.ctx.prisma.learning.findFirst({
