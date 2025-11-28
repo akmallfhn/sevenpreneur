@@ -208,6 +208,9 @@ Table learnings {
   external_video_id  varchar
   price_id           integer               [ref: > cohort_prices.id]
   status             status_enum
+  check_in           boolean               [note: 'default false']
+  check_out          boolean               [note: 'default false']
+  check_out_code     varchar
   created_at         timestamptz
   updated_at         timestamptz
 }
@@ -263,6 +266,13 @@ Table submissions {
   updated_at    timestamptz
 }
 
+Table attendances {
+  learning_id  integer      [ref: > users.id]
+  user_id      uuid         [ref: > cohorts.id]
+  check_in_at  timestamptz
+  check_out_at timestamptz
+}
+
 // Playlist-related
 
 Table playlists {
@@ -297,27 +307,27 @@ Table videos {
 // Event-related
 
 Table events {
-  id            integer      [primary key, ref: <> users.id]
-  name          varchar
-  description   varchar
-  image         varchar
-  status        status_enum
-  slug_url      varchar
-  start_date    timestamptz
-  end_date      timestamptz
+  id             integer               [primary key, ref: <> users.id]
+  name           varchar
+  description    varchar
+  image          varchar
+  status         status_enum
+  slug_url       varchar
+  start_date     timestamptz
+  end_date       timestamptz
   method         learning_method_enum
   meeting_url    varchar
   location_name  varchar
   location_url   varchar
-  published_at  timestamptz
-  updated_at    timestamptz
-  deleted_at    timestamptz
-  deleted_by    uuid         [ref: > users.id]
+  published_at   timestamptz
+  updated_at     timestamptz
+  deleted_at     timestamptz
+  deleted_by     uuid                  [ref: > users.id]
 }
 
 Table event_prices {
   id          integer         [primary key]
-  event_id  integer         [ref: > events.id]
+  event_id    integer         [ref: > events.id]
   name        varchar
   amount      decimal(12,2)
   status      status_enum
