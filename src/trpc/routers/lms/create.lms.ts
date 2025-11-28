@@ -410,12 +410,28 @@ export const createLMS = {
       })
     )
     .mutation(async (opts) => {
-      const userId = opts.ctx.user.id;
+      const learning = await opts.ctx.prisma.learning.findFirst({
+        select: { check_in: true },
+        where: {
+          id: opts.input.learning_id,
+        },
+      });
+
+      if (!learning) {
+        throw readFailedNotFound("learning");
+      }
+
+      if (!learning.check_in) {
+        throw new TRPCError({
+          code: STATUS_FORBIDDEN,
+          message: "This learning does not accept check-ins.",
+        });
+      }
 
       const existing = await opts.ctx.prisma.attendance.findFirst({
         where: {
           learning_id: opts.input.learning_id,
-          user_id: userId,
+          user_id: opts.ctx.user.id,
         },
       });
 
@@ -429,7 +445,7 @@ export const createLMS = {
       const theCheckIn = await opts.ctx.prisma.attendance.upsert({
         create: {
           learning_id: opts.input.learning_id,
-          user_id: userId,
+          user_id: opts.ctx.user.id,
           check_in_at: new Date(),
         },
         update: {
@@ -438,7 +454,7 @@ export const createLMS = {
         where: {
           learning_id_user_id: {
             learning_id: opts.input.learning_id,
-            user_id: userId,
+            user_id: opts.ctx.user.id,
           },
         },
       });
@@ -457,8 +473,8 @@ export const createLMS = {
       })
     )
     .mutation(async (opts) => {
-      const userId = opts.ctx.user.id;
       const learning = await opts.ctx.prisma.learning.findFirst({
+        select: { check_out: true, check_out_code: true },
         where: {
           id: opts.input.learning_id,
         },
@@ -468,17 +484,24 @@ export const createLMS = {
         throw readFailedNotFound("learning");
       }
 
+      if (!learning.check_out) {
+        throw new TRPCError({
+          code: STATUS_FORBIDDEN,
+          message: "This learning does not accept check-outs.",
+        });
+      }
+
       if (learning.check_out_code !== opts.input.check_out_code) {
         throw new TRPCError({
           code: STATUS_FORBIDDEN,
-          message: "Check Out Code is Wrong",
+          message: "The check-out code is wrong.",
         });
       }
 
       const existing = await opts.ctx.prisma.attendance.findFirst({
         where: {
           learning_id: opts.input.learning_id,
-          user_id: userId,
+          user_id: opts.ctx.user.id,
         },
       });
 
@@ -492,7 +515,7 @@ export const createLMS = {
       const theCheckOut = await opts.ctx.prisma.attendance.upsert({
         create: {
           learning_id: opts.input.learning_id,
-          user_id: userId,
+          user_id: opts.ctx.user.id,
           check_out_at: new Date(),
         },
         update: {
@@ -501,7 +524,7 @@ export const createLMS = {
         where: {
           learning_id_user_id: {
             learning_id: opts.input.learning_id,
-            user_id: userId,
+            user_id: opts.ctx.user.id,
           },
         },
       });
