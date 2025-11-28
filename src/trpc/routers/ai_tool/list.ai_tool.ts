@@ -105,6 +105,7 @@ export const listAITool = {
       select: {
         id: true,
         name: true,
+        is_done: true,
         created_at: true,
       },
       where: {
@@ -137,7 +138,7 @@ export const listAITool = {
       }
 
       const aiConversation = await opts.ctx.prisma.aIConversation.findFirst({
-        select: { name: true },
+        select: { name: true, is_done: true },
         where: {
           id: opts.input.conv_id,
           user_id: opts.ctx.user.id,
@@ -182,6 +183,7 @@ export const listAITool = {
         code: STATUS_OK,
         message: "Success",
         conversation_name: aiConversation.name,
+        is_done: aiConversation.is_done,
         list: aiChatsList,
       };
     }),

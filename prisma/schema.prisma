@@ -510,6 +510,7 @@ model AIConversation {
   user       User     @relation(fields: [user_id], references: [id])
   user_id    String   @db.Uuid
   name       String   @db.VarChar()
+  is_done    Boolean  @default(true) @db.Boolean
   created_at DateTime @default(now()) @db.Timestamptz()
   chats      AIChat[]
 
