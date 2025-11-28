@@ -362,6 +362,7 @@ CREATE TABLE ai_conversations (
   id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
   user_id     UUID         NOT NULL,
   name        VARCHAR      NOT NULL,
+  is_done     BOOLEAN      NOT NULL  DEFAULT TRUE,
   created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
