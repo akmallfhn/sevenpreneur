@@ -27,19 +27,9 @@ interface AppDiscussionReplyItemProps {
   onReplyDeleted: (replyId: number) => void;
 }
 
-export default function AppDiscussionReplyItem({
-  sessionUserName,
-  sessionUserAvatar,
-  discussionStarterId,
-  discussionReplyId,
-  discussionReplyAuthorName,
-  discussionReplyAuthorAvatar,
-  discussionReplyMessage,
-  discussionReplyCreatedAt,
-  discussionReplyOwner,
-  onReplyCreated,
-  onReplyDeleted,
-}: AppDiscussionReplyItemProps) {
+export default function AppDiscussionReplyItem(
+  props: AppDiscussionReplyItemProps
+) {
   const router = useRouter();
   const [writeReply, setWriteReply] = useState(false);
   const [textValue, setTextValue] = useState("");
@@ -60,7 +50,7 @@ export default function AppDiscussionReplyItem({
 
     try {
       const createReply = await CreateDiscussionReply({
-        discussionStarterId,
+        discussionStarterId: props.discussionStarterId,
         discussionReplyMessage: textValue,
       });
 
@@ -69,10 +59,10 @@ export default function AppDiscussionReplyItem({
         setWriteReply(false);
         toast.success("Reply Sent!");
 
-        onReplyCreated?.({
+        props.onReplyCreated?.({
           id: createReply.discussion.id,
-          full_name: sessionUserName,
-          avatar: sessionUserAvatar,
+          full_name: props.sessionUserName,
+          avatar: props.sessionUserAvatar,
           message: createReply.discussion.message,
           created_at: createReply.discussion.created_at,
           updated_at: createReply.discussion.updated_at,
@@ -89,16 +79,16 @@ export default function AppDiscussionReplyItem({
 
   // Delete reply item
   const handleDelete = async () => {
-    if (!discussionReplyId) return;
+    if (!props.discussionReplyId) return;
     try {
       const deleteReply = await DeleteDiscussionReply({
-        discussionReplyId,
+        discussionReplyId: props.discussionReplyId,
       });
       if (deleteReply.code === "NO_CONTENT") {
         toast.success("Discussion Deleted", {
           description: "Your discussion has been successfully removed.",
         });
-        onReplyDeleted?.(discussionReplyId);
+        props.onReplyDeleted?.(props.discussionReplyId);
         router.refresh();
       } else {
         toast.error("Failed to Delete", {
@@ -117,14 +107,14 @@ export default function AppDiscussionReplyItem({
   return (
     <React.Fragment>
       <section
-        id={`reply-${discussionReplyId}`}
+        id={`reply-${props.discussionReplyId}`}
         className="discussion-reply-container flex gap-3"
       >
         <div className="discussion-reply-author-avatar flex size-8 aspect-square shrink-0 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={discussionReplyAuthorAvatar}
-            alt={discussionReplyAuthorName}
+            src={props.discussionReplyAuthorAvatar}
+            alt={props.discussionReplyAuthorName}
             width={300}
             height={300}
           />
@@ -133,14 +123,14 @@ export default function AppDiscussionReplyItem({
           <div className="flex flex-col">
             <div className="discussion-reply-attributes flex items-center gap-2 font-bodycopy text-sm">
               <p className="discussion-reply-author-name font-bold">
-                {discussionReplyAuthorName}
+                {props.discussionReplyAuthorName}
               </p>
               <p className="discussion-reply-created-at text-alternative">
-                {dayjs(discussionReplyCreatedAt).fromNow()}
+                {dayjs(props.discussionReplyCreatedAt).fromNow()}
               </p>
             </div>
             <p className="discussion-reply-message font-bodycopy text-sm whitespace-pre-line">
-              {discussionReplyMessage}
+              {props.discussionReplyMessage}
             </p>
           </div>
           <div className="discussion-reply-action flex font-bodycopy text-sm items-center gap-3">
@@ -150,7 +140,7 @@ export default function AppDiscussionReplyItem({
             >
               Reply
             </p>
-            {discussionReplyOwner && (
+            {props.discussionReplyOwner && (
               <p
                 className="discussion-reply-delete font-semibold text-destructive hover:cursor-pointer"
                 onClick={() => setIsOpenDeleteConfirmation(true)}
@@ -161,15 +151,16 @@ export default function AppDiscussionReplyItem({
           </div>
           <div
             className={`discussion-write-reply flex w-full transition-all duration-300 ease-in-out overflow-hidden ${
-              writeReply ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
+              writeReply ? "opacity-100 mt-2" : "max-h-0 opacity-0"
             }`}
           >
             <AppDiscussionTextArea
-              sessionUserName={sessionUserName}
-              sessionUserAvatar={sessionUserAvatar}
+              sessionUserName={props.sessionUserName}
+              sessionUserAvatar={props.sessionUserAvatar}
               textAreaId="reply"
               textAreaPlaceholder="Let's discuss about this learning"
               onTextAreaChange={(value) => setTextValue(value)}
+              characterLength={4000}
               value={textValue}
               onSubmit={handleSubmitReply}
               isLoadingSubmit={isSendingReply}

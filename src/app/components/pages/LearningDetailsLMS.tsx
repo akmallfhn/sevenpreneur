@@ -202,6 +202,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   sessionUserAvatar={props.sessionUserAvatar}
                   textAreaId="discussion"
                   textAreaPlaceholder="Let's discuss about this learning"
+                  characterLength={4000}
                   onTextAreaChange={(value) => setTextValue(value)}
                   value={textValue}
                   onSubmit={handleSubmitDiscussion}

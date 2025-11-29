@@ -36,6 +36,7 @@ export default function AppDiscussionTextArea({
 }: AppDiscussionTextAreaProps) {
   const [value, setValue] = useState(propValue);
   const [internalError, setInternalError] = useState("");
+  const [isScrollable, setIsScrollable] = useState(false);
   const maxLength = characterLength ?? 520;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -46,7 +47,10 @@ export default function AppDiscussionTextArea({
     // Dynamic resize height text area
     const textarea = event.target;
     textarea.style.height = "auto";
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    const newHeight = Math.min(textarea.scrollHeight, 160);
+    textarea.style.height = `${newHeight}px`;
+
+    setIsScrollable(textarea.scrollHeight > 160);
 
     // Character Limitation on Text Area
     const newValue = event.target.value;
@@ -94,9 +98,9 @@ export default function AppDiscussionTextArea({
           rows={1}
           disabled={disabled}
           {...rest}
-          className={`text-area-placeholder flex w-full min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-sm border-b-2 resize-none transform transition-all overflow-hidden placeholder:text-alternative placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
+          className={`text-area-placeholder flex w-full max-h-40 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-sm border-b-2 resize-none transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
             computedError ? "border-destructive" : "border-outline"
-          } `}
+          } ${isScrollable ? "overflow-y-auto" : "overflow-y-hidden"}`}
           value={value}
           onChange={handleTextAreaChange}
         />
@@ -108,7 +112,8 @@ export default function AppDiscussionTextArea({
       </div>
 
       <AppButton
-        size="mediumRounded"
+        className="shrink-0"
+        size="largeIconRounded"
         disabled={!value || isLoadingSubmit}
         onClick={onSubmit}
       >

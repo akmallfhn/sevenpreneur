@@ -42,19 +42,9 @@ interface AppDiscussionStarterItemProps {
   onDiscussionDeleted: (discussionId: number) => void;
 }
 
-export default function AppDiscussionStarterItem({
-  sessionUserId,
-  sessionUserName,
-  sessionUserAvatar,
-  discussionStarterId,
-  discussionStarterAuthorName,
-  discussionStarterAuthorAvatar,
-  discussionStarterMessage,
-  discussionStarterTotalReplies,
-  discussionStarterCreatedAt,
-  discussionStarterOwner,
-  onDiscussionDeleted,
-}: AppDiscussionStarterItemProps) {
+export default function AppDiscussionStarterItem(
+  props: AppDiscussionStarterItemProps
+) {
   const [isOpenReplies, setIsOpenReplies] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
@@ -78,7 +68,7 @@ export default function AppDiscussionStarterItem({
 
     try {
       const createReply = await CreateDiscussionReply({
-        discussionStarterId,
+        discussionStarterId: props.discussionStarterId,
         discussionReplyMessage: textValue,
       });
 
@@ -96,7 +86,7 @@ export default function AppDiscussionStarterItem({
         try {
           setIsLoadingReplies(true);
           const discussionReplies = await DiscussionReplyList({
-            discussionStarterId,
+            discussionStarterId: props.discussionStarterId,
           });
 
           if (discussionReplies.code === "OK") {
@@ -133,7 +123,7 @@ export default function AppDiscussionStarterItem({
         try {
           setIsLoadingReplies(true);
           const discussionReplies = await DiscussionReplyList({
-            discussionStarterId,
+            discussionStarterId: props.discussionStarterId,
           });
 
           if (discussionReplies.code === "OK") {
@@ -154,14 +144,14 @@ export default function AppDiscussionStarterItem({
 
   // Delete discussion starter
   const handleDelete = async () => {
-    if (!discussionStarterId) return;
+    if (!props.discussionStarterId) return;
     try {
       const deleteDiscussion = await DeleteDiscussionStarter({
-        discussionStarterId,
+        discussionStarterId: props.discussionStarterId,
       });
       if (deleteDiscussion.code === "NO_CONTENT") {
         toast.success("Discussion Deleted");
-        onDiscussionDeleted(discussionStarterId);
+        props.onDiscussionDeleted(props.discussionStarterId);
       } else {
         toast.error("Failed to Delete", {
           description: "We couldn’t delete your discussion. Please try again.",
@@ -186,14 +176,14 @@ export default function AppDiscussionStarterItem({
   return (
     <React.Fragment>
       <section
-        id={`discussion-${discussionStarterId}`}
+        id={`discussion-${props.discussionStarterId}`}
         className="discussion-starter-container flex gap-3"
       >
         <div className="discussion-starter-author-avatar flex size-8 aspect-square shrink-0 rounded-full overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={discussionStarterAuthorAvatar}
-            alt={discussionStarterAuthorName}
+            src={props.discussionStarterAuthorAvatar}
+            alt={props.discussionStarterAuthorName}
             width={300}
             height={300}
           />
@@ -202,14 +192,14 @@ export default function AppDiscussionStarterItem({
           <div className="flex flex-col">
             <div className="discussion-starter-attributes flex items-center gap-2 font-bodycopy text-sm">
               <p className="discussion-starter-author-name font-bold">
-                {discussionStarterAuthorName}
+                {props.discussionStarterAuthorName}
               </p>
               <p className="discussion-starter-created-at text-alternative">
-                {dayjs(discussionStarterCreatedAt).fromNow()}
+                {dayjs(props.discussionStarterCreatedAt).fromNow()}
               </p>
             </div>
             <p className="discussion-starter-message font-bodycopy text-sm whitespace-pre-line">
-              {discussionStarterMessage}
+              {props.discussionStarterMessage}
             </p>
           </div>
           <div className="discussion-starter-action flex font-bodycopy text-sm items-center gap-3">
@@ -219,7 +209,7 @@ export default function AppDiscussionStarterItem({
             >
               {writeReply ? "Cancel" : "Reply"}
             </p>
-            {discussionStarterOwner && (
+            {props.discussionStarterOwner && (
               <p
                 className="discussion-starter-delete font-semibold text-destructive hover:cursor-pointer"
                 onClick={() => setIsOpenDeleteConfirmation(true)}
@@ -230,21 +220,22 @@ export default function AppDiscussionStarterItem({
           </div>
           <div
             className={`discussion-write-reply flex w-full transition-all duration-300 ease-in-out overflow-hidden ${
-              writeReply ? "max-h-40 opacity-100 mt-2" : "max-h-0 opacity-0"
+              writeReply ? "opacity-100 mt-2" : "max-h-0 opacity-0"
             }`}
           >
             <AppDiscussionTextArea
-              sessionUserName={sessionUserName}
-              sessionUserAvatar={sessionUserAvatar}
+              sessionUserName={props.sessionUserName}
+              sessionUserAvatar={props.sessionUserAvatar}
               textAreaId="reply"
               textAreaPlaceholder="Let's discuss about this learning"
+              characterLength={4000}
               onTextAreaChange={(value) => setTextValue(value)}
               value={textValue}
               onSubmit={handleSubmitReply}
               isLoadingSubmit={isSendingReply}
             />
           </div>
-          {discussionStarterTotalReplies > 0 && (
+          {props.discussionStarterTotalReplies > 0 && (
             <AppButton
               className="discussion-starter-view-replies w-fit"
               size="small"
@@ -256,7 +247,7 @@ export default function AppDiscussionStarterItem({
                   isOpenReplies ? "rotate-180" : "rotate-0"
                 }`}
               />
-              View {discussionStarterTotalReplies} replies
+              View {props.discussionStarterTotalReplies} replies
             </AppButton>
           )}
 
@@ -266,25 +257,31 @@ export default function AppDiscussionStarterItem({
                 <Loader2 className="discussion-loading-replies size-4 animate-spin text-alternative" />
               ) : (
                 <div className="discsussion-replies flex flex-col gap-4">
-                  {replies.map((post) => (
-                    <AppDiscussionReplyItem
-                      key={post.id}
-                      sessionUserName={sessionUserName}
-                      sessionUserAvatar={sessionUserAvatar}
-                      discussionStarterId={discussionStarterId}
-                      discussionReplyId={post.id}
-                      discussionReplyAuthorName={post.full_name}
-                      discussionReplyAuthorAvatar={
-                        post.avatar ||
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                      }
-                      discussionReplyMessage={post.message}
-                      discussionReplyCreatedAt={post.created_at}
-                      discussionReplyOwner={post.is_owner}
-                      onReplyCreated={handleReplyCreated}
-                      onReplyDeleted={handleReplyDeleted}
-                    />
-                  ))}
+                  {replies
+                    .sort(
+                      (a, b) =>
+                        dayjs(a.created_at).valueOf() -
+                        dayjs(b.created_at).valueOf()
+                    )
+                    .map((post) => (
+                      <AppDiscussionReplyItem
+                        key={post.id}
+                        sessionUserName={props.sessionUserName}
+                        sessionUserAvatar={props.sessionUserAvatar}
+                        discussionStarterId={props.discussionStarterId}
+                        discussionReplyId={post.id}
+                        discussionReplyAuthorName={post.full_name}
+                        discussionReplyAuthorAvatar={
+                          post.avatar ||
+                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                        }
+                        discussionReplyMessage={post.message}
+                        discussionReplyCreatedAt={post.created_at}
+                        discussionReplyOwner={post.is_owner}
+                        onReplyCreated={handleReplyCreated}
+                        onReplyDeleted={handleReplyDeleted}
+                      />
+                    ))}
                 </div>
               )}
             </div>
