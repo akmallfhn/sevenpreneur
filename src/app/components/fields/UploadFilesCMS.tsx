@@ -41,8 +41,8 @@ export default function UploadFilesCMS({
     if (!file) return;
     setSelectedFileName(file.name);
     if (file?.size < 1) return;
-    if (file?.size > 1024 * 1024 * 15) {
-      toast.error("File must be smaller than 15MB");
+    if (file?.size > 1024 * 1024 * 50) {
+      toast.error("File must be smaller than 50MB");
       return;
     }
     if (!allowedFormat.includes(file.type)) {
@@ -153,7 +153,7 @@ export default function UploadFilesCMS({
           </div>
           <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-alternative">
             <p>Supported Formats: PDF</p>
-            <p>Maximum Size: 15MB</p>
+            <p>Maximum Size: 50MB</p>
           </div>
         </div>
       )}
