@@ -174,7 +174,7 @@ export default function ProjectDetailsLMS({
                 <p className="font-bold font-bodycopy text-[15px]">
                   Assignment Brief
                 </p>
-                <p className="font-bodycopy text-[15px]">
+                <p className="font-bodycopy text-[15px] whitespace-pre-line">
                   {projectDescription}
                 </p>
               </div>
