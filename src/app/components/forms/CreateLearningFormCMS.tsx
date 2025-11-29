@@ -210,10 +210,10 @@ export default function CreateLearningFormCMS(
           check_out: formData.learningCheckOut,
           check_out_code: formData.learningCheckOutCode.trim()
             ? formData.learningCheckOutCode.trim()
-            : "",
+            : null,
           feedback_form: formData.learningFeedbackURL.trim()
             ? formData.learningFeedbackURL.trim()
-            : "",
+            : null,
         },
         {
           onSuccess: () => {
