@@ -216,6 +216,19 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Logged-in users can only update and delete their own discussion replies.
 - Administrators can delete all discussion replies.
 
+### Attendances 📋
+
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.checkIn`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `create.checkOut` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.attendance` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Logged-in users can check-in and check-out given the learning ID.
+- Logged-in users can see their own attendances given the learning ID.
+
 ## Projects 🗂️
 
 | Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
