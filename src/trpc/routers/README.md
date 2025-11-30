@@ -247,13 +247,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Submissions 🗒️
 
-| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
-| `list.submissions`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.submission`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.submission` |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
-| `delete.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.submission`        |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+| `list.submissions`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.submission`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.submissionByProject` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.submission`        |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
+| `delete.submission`        |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
 
 **Scopes:**
 
