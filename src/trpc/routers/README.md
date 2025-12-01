@@ -14,9 +14,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `auth.login`        |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 | `auth.checkSession` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `auth.createJWT`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `auth.logout`       |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 
-**Scopes:** `auth.checkSession`: All logged-in users only have read access to their own user data.
+**Scopes:**
+
+- `auth.checkSession`: All logged-in users only have read access to their own user data.
+- `auth.createJWT`: All logged-in users can only create JWT from their own user ID.
 
 ## Roles 👥
 
