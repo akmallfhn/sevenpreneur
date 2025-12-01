@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Stream } from "@cloudflare/stream-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { toast } from "sonner";
 
 interface AppVideoPlayerProps {
   videoId: string;
@@ -28,6 +29,9 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
       try {
         const response = await fetch(`/api/stream/url/${videoId}`);
         const data = await response.json();
+        if (data.status !== 200) {
+          toast.error("Invalid Video ID");
+        }
         const url = new URL(data.signed_url);
         const tokenFromURL = url.searchParams.get("token");
         if (isMounted && tokenFromURL) {
@@ -47,7 +51,7 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
     const interval = setInterval(() => {
       fetchData();
       if (isMounted) setRefreshKey((prev) => prev + 1);
-    }, 1000 * 60 * 30);
+    }, 1000 * 60 * 240);
 
     return () => {
       isMounted = false;

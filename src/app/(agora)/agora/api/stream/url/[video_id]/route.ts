@@ -19,7 +19,7 @@ export async function GET(req: Request, { params }: VideoStreamProps) {
   const CLOUDFLARE_SIGNING_KEY = process.env.CLOUDFLARE_SIGNING_KEY!;
   const CLOUDFLARE_PRIVATE_KEY = process.env.CLOUDFLARE_PRIVATE_KEY!;
 
-  const expiresInSecond = 3600;
+  const expiresInSecond = 14400;
   const exp = Math.floor(Date.now() / 1000) + expiresInSecond;
 
   // Create Payload JWT
@@ -57,6 +57,7 @@ export async function GET(req: Request, { params }: VideoStreamProps) {
 
   return NextResponse.json({
     status: 200,
+    messages: "Success",
     signed_url: `https://customer-${CLOUDFLARE_ACCOUNT_ID}.cloudflarestream.com/${videoId}/manifest/video.m3u8?token=${signedToken}`,
   });
 }
