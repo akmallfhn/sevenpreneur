@@ -46,7 +46,7 @@ export const useAITool = {
         );
       }
 
-      const result = await AIGenerate(
+      const resultId = await AIGenerate(
         opts.input.model,
         aiToolPrompts.ideaValidation(
           opts.input.problem,
@@ -62,7 +62,7 @@ export const useAITool = {
       return {
         code: STATUS_CREATED,
         message: "Queued",
-        result_id: result.id,
+        result_id: resultId,
       };
     }),
 
@@ -88,7 +88,7 @@ export const useAITool = {
         );
       }
 
-      const result = await AIGenerate(
+      const resultId = await AIGenerate(
         opts.input.model,
         aiToolPrompts.marketSize(
           opts.input.additional_persona || "",
@@ -107,7 +107,7 @@ export const useAITool = {
       return {
         code: STATUS_CREATED,
         message: "Queued",
-        result_id: result.id,
+        result_id: resultId,
       };
     }),
 
@@ -130,7 +130,7 @@ export const useAITool = {
         );
       }
 
-      const result = await AIGenerate(
+      const resultId = await AIGenerate(
         opts.input.model,
         aiToolPrompts.competitorGrading(
           opts.input.product_name,
@@ -146,7 +146,7 @@ export const useAITool = {
       return {
         code: STATUS_CREATED,
         message: "Queued",
-        result_id: result.id,
+        result_id: resultId,
       };
     }),
 

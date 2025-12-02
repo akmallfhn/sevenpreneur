@@ -1,7 +1,5 @@
-import GetPrismaClient from "@/lib/prisma";
+import { SetAIResultEphemeral } from "@/lib/redis";
 import { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
-
-const prisma = GetPrismaClient();
 
 async function handler(req: Request) {
   // The response from QStash
@@ -30,23 +28,13 @@ async function handler(req: Request) {
   }
   const content = JSON.parse(assistantText);
 
-  const updatedResult = await prisma.aIResult.updateManyAndReturn({
-    data: {
-      name: content.title as string,
-      result: content.response,
-      is_done: true,
-    },
-    where: {
-      qstash_id: sourceMessageId,
-    },
-  });
-  if (updatedResult.length < 1) {
+  const savedResult = await SetAIResultEphemeral(
+    sourceMessageId,
+    content.response
+  );
+  if (!savedResult) {
     console.error(
-      `qstash.callback: The AI result (${sourceMessageId}) is not found.`
-    );
-  } else if (updatedResult.length > 1) {
-    console.error(
-      `qstash.callback: More-than-one AI results are updated at once.`
+      `qstash.callback-redis: The AI result (${sourceMessageId}) is not found.`
     );
   }
 

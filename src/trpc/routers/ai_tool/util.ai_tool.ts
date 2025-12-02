@@ -1,3 +1,4 @@
+import { SaveQStashMessageID } from "@/lib/redis";
 import {
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
@@ -44,6 +45,8 @@ function getReasoningLevel(model: AIModelName): { effort: "low" } | undefined {
 export const AI_TOOL_ID_IDEA_VAL = 1; // idea-val
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
 export const AI_TOOL_ID_COMPETITOR_GRADER = 3; // competitor-grader
+
+// AI tools with ephemeral result will have negative IDs
 
 export type AIChatRole = "user" | "assistant";
 
@@ -109,6 +112,15 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   user_id: string,
   ai_tool_id: number
 ) {
+  if (ai_tool_id === 0) {
+    return "";
+  }
+
+  let callbackUrl =
+    ai_tool_id > 0
+      ? baseURL + "qstash/callback"
+      : baseURL + "qstash/callback-redis";
+
   const res = await QStashClient.publishJSON({
     url: "https://api.openai.com/v1/responses",
     headers: {
@@ -122,31 +134,38 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
       input: prompt.input,
       text: { format: prompt.format },
     },
-    callback: baseURL + "qstash/callback",
+    callback: callbackUrl,
   });
   const messageId = res.messageId as string;
 
-  const createdResult = await prisma.aIResult.create({
-    data: {
-      user_id: user_id,
-      ai_tool_id: ai_tool_id,
-      name: "", // empty for now
-      result: {}, // empty for now
-      is_done: false,
-      qstash_id: messageId,
-    },
-  });
-  const theResult = await prisma.aIResult.findFirst({
-    where: { id: createdResult.id },
-  });
-  if (!theResult) {
-    throw new TRPCError({
-      code: STATUS_INTERNAL_SERVER_ERROR,
-      message: "Failed to save an AI result.",
+  if (ai_tool_id > 0) {
+    const createdResult = await prisma.aIResult.create({
+      data: {
+        user_id: user_id,
+        ai_tool_id: ai_tool_id,
+        name: "", // empty for now
+        result: {}, // empty for now
+        is_done: false,
+        qstash_id: messageId,
+      },
     });
+    const theResult = await prisma.aIResult.findFirst({
+      where: { id: createdResult.id },
+    });
+    if (!theResult) {
+      throw new TRPCError({
+        code: STATUS_INTERNAL_SERVER_ERROR,
+        message: "Failed to save an AI result.",
+      });
+    }
+
+    return theResult.id;
+  } else if (ai_tool_id < 0) {
+    // Ephemeral result
+    return await SaveQStashMessageID(messageId);
   }
 
-  return theResult;
+  return ""; // Unreachable
 }
 
 const ChatGPTClient = new OpenAI();
