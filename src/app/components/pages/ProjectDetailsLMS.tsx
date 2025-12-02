@@ -40,24 +40,7 @@ interface ProjectDetailsLMS extends AvatarBadgeLMSProps {
   initialData: InitialData;
 }
 
-export default function ProjectDetailsLMS({
-  cohortId,
-  cohortName,
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
-  projectId,
-  projectName,
-  projectDescription,
-  projectDocumentURL,
-  projectDeadline,
-  submissionId,
-  submissionDocumentURL,
-  submissionComment,
-  submissionCreatedAt,
-  submissionUpdatedAt,
-  initialData,
-}: ProjectDetailsLMS) {
+export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
   const router = useRouter();
   const [deadlineStatus, setDeadlineStatus] = useState("");
   const [submittedTime, setSubmittedTime] = useState("");
@@ -68,14 +51,16 @@ export default function ProjectDetailsLMS({
   const [isOpenEditForm, setIsOpenEditForm] = useState(false);
 
   const now = dayjs();
-  const deadlineAt = dayjs(projectDeadline);
-  const submittedAt = dayjs(submissionCreatedAt);
+  const deadlineAt = dayjs(props.projectDeadline);
+  const submittedAt = dayjs(props.submissionCreatedAt);
   const isOverdue = now.isAfter(deadlineAt);
 
   // Update Submission status
   useEffect(() => {
-    setSubmissionStatus(submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED");
-  }, [submissionDocumentURL]);
+    setSubmissionStatus(
+      props.submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED"
+    );
+  }, [props.submissionDocumentURL]);
 
   // Update Deadline status
   useEffect(() => {
@@ -102,7 +87,7 @@ export default function ProjectDetailsLMS({
 
   // Update Submission Time
   useEffect(() => {
-    if (!submissionCreatedAt) return;
+    if (!props.submissionCreatedAt) return;
 
     const differentMilisecond = submittedAt.diff(deadlineAt);
     const isEarly = differentMilisecond < 0;
@@ -127,12 +112,14 @@ export default function ProjectDetailsLMS({
         `Assignment was submitted ${formatted || "less than an hour"} late`
       );
     }
-  }, [submissionCreatedAt, submittedAt, deadlineAt]);
+  }, [props.submissionCreatedAt, submittedAt, deadlineAt]);
 
   const handleDelete = async () => {
-    if (!submissionId) return;
+    if (!props.submissionId) return;
     try {
-      const deleteSubmission = await DeleteSubmission({ submissionId });
+      const deleteSubmission = await DeleteSubmission({
+        submissionId: props.submissionId,
+      });
       if (deleteSubmission.code === "NO_CONTENT") {
         toast.success("Submission Deleted", {
           description: "Your submission has been successfully removed.",
@@ -156,11 +143,11 @@ export default function ProjectDetailsLMS({
     <React.Fragment>
       <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
         <HeaderCohortEntityLMS
-          cohortId={cohortId}
-          cohortName={cohortName}
-          sessionUserName={sessionUserName}
-          sessionUserAvatar={sessionUserAvatar}
-          sessionUserRole={sessionUserRole}
+          cohortId={props.cohortId}
+          cohortName={props.cohortName}
+          sessionUserName={props.sessionUserName}
+          sessionUserAvatar={props.sessionUserAvatar}
+          sessionUserRole={props.sessionUserRole}
           headerTitle="Assignment Overview"
           headerDescription="Test your knowledge and skills by completing the assignment below."
         />
@@ -168,20 +155,20 @@ export default function ProjectDetailsLMS({
           <main className="w-full flex flex-col flex-2 gap-4">
             <div className="project-attributes flex flex-col w-full gap-3 p-4 bg-white border rounded-lg">
               <h2 className="project-name font-bodycopy font-bold text-2xl">
-                {projectName}
+                {props.projectName}
               </h2>
               <div className="project-description flex flex-col gap-1">
                 <p className="font-bold font-bodycopy text-[15px]">
                   Assignment Brief
                 </p>
                 <p className="font-bodycopy text-[15px] whitespace-pre-line">
-                  {projectDescription}
+                  {props.projectDescription}
                 </p>
               </div>
-              {projectDocumentURL && (
+              {props.projectDocumentURL && (
                 <FileItemLMS
                   fileName="Guideline Document"
-                  fileURL={projectDocumentURL}
+                  fileURL={props.projectDocumentURL}
                 />
               )}
             </div>
@@ -196,12 +183,12 @@ export default function ProjectDetailsLMS({
                 </p>
               </div>
               {/* Create Form */}
-              {!submissionDocumentURL && (
-                <CreateSubmissionFormLMS projectId={projectId} />
+              {!props.submissionDocumentURL && (
+                <CreateSubmissionFormLMS projectId={props.projectId} />
               )}
 
               {/* Details Submission */}
-              {submissionDocumentURL && !isOpenEditForm && (
+              {props.submissionDocumentURL && !isOpenEditForm && (
                 <div className="project flex flex-col w-full gap-3">
                   <div className="project-document flex flex-col gap-2">
                     <p className="font-bold font-bodycopy text-[15px]">
@@ -209,7 +196,7 @@ export default function ProjectDetailsLMS({
                     </p>
                     <FileItemLMS
                       fileName="Project Document"
-                      fileURL={submissionDocumentURL}
+                      fileURL={props.submissionDocumentURL}
                     />
                   </div>
                   {!isOverdue && !isOpenEditForm && (
@@ -238,7 +225,7 @@ export default function ProjectDetailsLMS({
               {/* Edit Form */}
               {isOpenEditForm && (
                 <EditSubmissionFormLMS
-                  initialData={initialData}
+                  initialData={props.initialData}
                   onClose={() => setIsOpenEditForm(false)}
                 />
               )}
@@ -264,7 +251,9 @@ export default function ProjectDetailsLMS({
                     Due Date
                   </p>
                   <p className="font-medium font-bodycopy text-sm">
-                    {dayjs(projectDeadline).format("DD MMM YYYY [at] HH:mm")}
+                    {dayjs(props.projectDeadline).format(
+                      "DD MMM YYYY [at] HH:mm"
+                    )}
                   </p>
                 </div>
               </div>
@@ -277,14 +266,16 @@ export default function ProjectDetailsLMS({
                     Submitted at
                   </p>
                   <p className="font-medium font-bodycopy text-sm">
-                    {submissionCreatedAt
-                      ? dayjs(submissionCreatedAt).format(
+                    {props.submissionCreatedAt
+                      ? dayjs(props.submissionCreatedAt).format(
                           "DD MMM YYYY [at] HH:mm"
                         )
                       : "-"}
                   </p>
                   <p className="font-medium font-bodycopy text-sm">
-                    {submissionDocumentURL ? submittedTime : deadlineStatus}
+                    {props.submissionDocumentURL
+                      ? submittedTime
+                      : deadlineStatus}
                   </p>
                 </div>
               </div>
@@ -293,7 +284,7 @@ export default function ProjectDetailsLMS({
               <h3 className="section-name font-bodycopy font-bold text-[15px]">
                 Feedback from us
               </h3>
-              {submissionComment ? (
+              {props.submissionComment ? (
                 <div className="comment-container flex flex-col-reverse gap-2">
                   <div className="comment-author flex items-center gap-2">
                     <div className="comment-author-image w-6 aspect-square rounded-full overflow-hidden">
@@ -312,7 +303,7 @@ export default function ProjectDetailsLMS({
                     </p>
                   </div>
                   <p className="comment text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
-                    {submissionComment}
+                    {props.submissionComment}
                   </p>
                 </div>
               ) : (

@@ -12,20 +12,18 @@ interface ProjectListCMSProps {
   cohortId: number;
 }
 
-export default function ProjectListCMS({
-  sessionToken,
-  sessionUserRole,
-  cohortId,
-}: ProjectListCMSProps) {
+export default function ProjectListCMS(props: ProjectListCMSProps) {
   const utils = trpc.useUtils();
   const [createProject, setCreateProject] = useState(false);
 
   const allowedRolesCreateProject = [0, 2];
   const allowedRolesListProject = [0, 1, 2, 3];
-  const isAllowedCreateProject =
-    allowedRolesCreateProject.includes(sessionUserRole);
-  const isAllowedListProject =
-    allowedRolesListProject.includes(sessionUserRole);
+  const isAllowedCreateProject = allowedRolesCreateProject.includes(
+    props.sessionUserRole
+  );
+  const isAllowedListProject = allowedRolesListProject.includes(
+    props.sessionUserRole
+  );
 
   // Fetch tRPC data
   const {
@@ -33,8 +31,8 @@ export default function ProjectListCMS({
     isError,
     isLoading,
   } = trpc.list.projects.useQuery(
-    { cohort_id: cohortId },
-    { enabled: !!sessionToken }
+    { cohort_id: props.cohortId },
+    { enabled: !!props.sessionToken }
   );
 
   if (!isAllowedListProject) return;
@@ -76,8 +74,8 @@ export default function ProjectListCMS({
                 {projectListData?.list.map((post, index) => (
                   <ProjectItemCMS
                     key={post.id}
-                    sessionUserRole={sessionUserRole}
-                    cohortId={cohortId}
+                    sessionUserRole={props.sessionUserRole}
+                    cohortId={props.cohortId}
                     projectId={post.id}
                     projectName={post.name}
                     lastSubmission={post.deadline_at}
@@ -98,7 +96,7 @@ export default function ProjectListCMS({
       {/* Create Project */}
       {createProject && (
         <CreateProjectFormCMS
-          cohortId={cohortId}
+          cohortId={props.cohortId}
           isOpen={createProject}
           onClose={() => setCreateProject(false)}
         />

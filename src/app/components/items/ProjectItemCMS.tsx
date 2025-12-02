@@ -26,15 +26,7 @@ interface ProjectItemCMSProps {
   onDeleteSuccess?: () => void;
 }
 
-export default function ProjectItemCMS({
-  cohortId,
-  sessionUserRole,
-  projectId,
-  projectName,
-  lastSubmission,
-  submissionPercentage,
-  onDeleteSuccess,
-}: ProjectItemCMSProps) {
+export default function ProjectItemCMS(props: ProjectItemCMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const [editProject, setEditProject] = useState(false);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -43,10 +35,12 @@ export default function ProjectItemCMS({
 
   const allowedRolesUpdateProject = [0, 2];
   const allowedRolesDeleteProject = [0, 2];
-  const isAllowedUpdateProject =
-    allowedRolesUpdateProject.includes(sessionUserRole);
-  const isAllowedDeleteProject =
-    allowedRolesDeleteProject.includes(sessionUserRole);
+  const isAllowedUpdateProject = allowedRolesUpdateProject.includes(
+    props.sessionUserRole
+  );
+  const isAllowedDeleteProject = allowedRolesDeleteProject.includes(
+    props.sessionUserRole
+  );
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,14 +70,16 @@ export default function ProjectItemCMS({
   const deleteProject = trpc.delete.project.useMutation();
   const handleDelete = () => {
     deleteProject.mutate(
-      { id: projectId },
+      { id: props.projectId },
       {
         onSuccess: () => {
-          toast.success(`Project ${projectName} has been successfully removed`);
-          onDeleteSuccess?.();
+          toast.success(
+            `Project ${props.projectName} has been successfully removed`
+          );
+          props.onDeleteSuccess?.();
         },
         onError: (error) => {
-          toast.error(`Failed to delete the ${projectName}`, {
+          toast.error(`Failed to delete the ${props.projectName}`, {
             description: `${error}`,
           });
         },
@@ -93,23 +89,29 @@ export default function ProjectItemCMS({
   return (
     <React.Fragment>
       <div className="project-item flex items-center justify-between bg-white gap-2 p-1 rounded-md">
-        <Link href={`/cohorts/${cohortId}/projects/${projectId}/submissions`}>
+        <Link
+          href={`/cohorts/${props.cohortId}/projects/${props.projectId}/submissions`}
+        >
           <div className="flex items-center w-[calc(87%)]">
             <div className="icon relative aspect-square flex size-20 p-3 items-center">
-              <Gauge width={200} height={200} value={submissionPercentage} />
+              <Gauge
+                width={200}
+                height={200}
+                value={props.submissionPercentage}
+              />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-xs font-bold text-black bg-white font-bodycopy">
-                  {submissionPercentage}%
+                  {props.submissionPercentage}%
                 </span>
               </div>
             </div>
             <div className="attribute-data flex flex-col">
               <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
-                {projectName}
+                {props.projectName}
               </h3>
               <p className="font-bodycopy font-medium text-alternative text-[13px]">
                 Last submission:{" "}
-                {dayjs(lastSubmission).format("D MMM YYYY HH.mm")}
+                {dayjs(props.lastSubmission).format("D MMM YYYY HH.mm")}
               </p>
             </div>
           </div>
@@ -152,7 +154,7 @@ export default function ProjectItemCMS({
       {/* Edit Form */}
       {editProject && (
         <EditProjectFormCMS
-          projectId={projectId}
+          projectId={props.projectId}
           isOpen={editProject}
           onClose={() => setEditProject(false)}
         />
@@ -162,7 +164,7 @@ export default function ProjectItemCMS({
       {isOpenDeleteConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Permanently delete this item?"
-          alertDialogMessage={`Are you sure you want to delete ${projectName}? This action cannot be undone.`}
+          alertDialogMessage={`Are you sure you want to delete ${props.projectName}? This action cannot be undone.`}
           alertCancelLabel="Cancel"
           alertConfirmLabel="Delete"
           isOpen={isOpenDeleteConfirmation}

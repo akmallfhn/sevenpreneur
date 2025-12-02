@@ -563,7 +563,7 @@ export const listLMS = {
         });
         const memberCount = await opts.ctx.prisma.userCohort.aggregate({
           _count: true,
-          where: { cohort_id: opts.input.cohort_id },
+          where: { cohort_id: opts.input.cohort_id, user: { role_id: 3 } },
         });
         const returnedList = projectsList.map((entry) => {
           const submissionPercentage =
