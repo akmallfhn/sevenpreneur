@@ -1,6 +1,8 @@
 import { JsonObject } from "@prisma/client/runtime/library";
 import { z } from "zod";
 import {
+  AICOGSStructure_CustomerType,
+  AICOGSStructure_ProductCategory,
   AICompetitorGrader_MarketMaturity,
   AIIdeaValidation_LongevityAlignment,
   AIIdeaValidation_ProblemFreq,
@@ -138,6 +140,23 @@ export interface AIResultCompetitorGrading extends JsonObject {
     };
     room_of_growth_opportunity: string;
   };
+}
+
+// Cost of Goods Sold (COGS) Structure //
+
+export interface AIResultCOGSStructure extends JsonObject {
+  variable_cost: {
+    name: string;
+    quantity: number;
+    unit: string;
+    total_cost: number;
+  }[];
+  fixed_cost: {
+    name: string;
+    quantity: number;
+    unit: string;
+    total_cost: number;
+  }[];
 }
 
 // Prompts //
@@ -556,6 +575,73 @@ export const aiToolPrompts = {
             }),
             room_of_growth_opportunity: z.string(),
           }),
+        })
+      ),
+    };
+  },
+
+  COGSStructure: (
+    product_name: string,
+    description: string,
+    product_category: AICOGSStructure_ProductCategory,
+    COGS_calculation: AICOGSStructure_CustomerType,
+    volume_per_batch: number
+  ) => {
+    return {
+      instructions:
+        "Kamu adalah seorang Senior Cost Accountant & Pricing Strategist dengan pengalaman mendalam dalam metode absorption costing di berbagai industri (F&B, Retail, Jasa, Manufaktur, dan Software). Anda sangat teliti, berpikir sistematis, dan mampu mengidentifikasi seluruh komponen biaya yang relevan untuk menghitung COGS. Kamu selalu memisahkan biaya menjadi variable cost dan fixed cost berdasarkan karakteristik produksi.\n" +
+        "Tugasmu\n" +
+        "1. Membuat daftar variable cost dan fixed cost berdasarkan input pengguna.\n" +
+        "2. Menggunakan prinsip absorption costing: seluruh biaya produksi yang relevan (langsung maupun tidak langsung) harus masuk dalam perhitungan.\n" +
+        "3. Hanya masukkan biaya yang relevan langsung dengan produksi, seperti bahan baku, tenaga kerja langsung, overhead pabrik.\n" +
+        "4. Jangan pernah memasukkan tidak relevan, seperti biaya G&A, biaya selling, biaya marketing, biaya distribusi, atau biaya non-produktif ke dalam COGS.\n" +
+        "5. Jika metode COGS menggunakan Batch, gunakan Volume Produksi per Batch untuk menghitung total kebutuhan dari biaya variabel.\n" +
+        "Format output wajib dalam bentuk JSON sesuai struktur berikut:\n" +
+        AIFormatOutputText({
+          variable_cost: [
+            {
+              name: "<nama biaya>",
+              quantity: "<jumlah kebutuhan biaya>",
+              unit: "<satuan yang digunakan>",
+              total_cost: "<total biaya dalam Rupiah>",
+            },
+          ],
+          fixed_cost: [
+            {
+              name: "<nama biaya>",
+              quantity: "<jumlah atau periode biaya>",
+              unit: "<satuan waktu atau unit biaya>",
+              total_cost: "<total biaya dalam Rupiah>",
+            },
+          ],
+        }),
+      input:
+        `- Nama produk: ${product_name}\n` +
+        `- Deskripsi produk: ${description}\n` +
+        `- Kategori produk: ${product_category}\n` +
+        `- Perhitungan COGS: ${COGS_calculation}\n` +
+        (volume_per_batch > 0
+          ? `- Volume produksi per batch: ${volume_per_batch}\n`
+          : ""),
+      format: AIFormatOutputZod(
+        "respons_struktur_biaya",
+        z.object({
+          variable_cost: z.array(
+            z.object({
+              name: z.string(),
+              quantity: z.number(),
+              unit: z.string(),
+              total_cost: z.number(),
+            })
+          ),
+          fixed_cost: z.array(
+            z.object({
+              name: z.string(),
+              quantity: z.number(),
+              unit: z.string(),
+              total_cost: z.number(),
+            })
+          ),
         })
       ),
     };

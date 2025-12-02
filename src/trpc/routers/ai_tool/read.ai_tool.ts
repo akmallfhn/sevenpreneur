@@ -1,8 +1,13 @@
+import { GetAIResultEphemeral } from "@/lib/redis";
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
-import { objectHasOnlyNanoid } from "@/trpc/utils/validation";
 import {
+  objectHasOnlyNanoid,
+  objectHasOnlyUUID,
+} from "@/trpc/utils/validation";
+import {
+  AIResultCOGSStructure,
   AIResultCompetitorGrading,
   AIResultIdeaValidation,
   AIResultMarketSize,
@@ -123,6 +128,28 @@ export const readAIResult = {
           is_done: theAIResult.is_done,
           created_at: theAIResult.created_at,
         },
+      };
+    }),
+
+  COGSStructure: loggedInProcedure
+    .input(objectHasOnlyUUID())
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const theAIResult = await GetAIResultEphemeral<AIResultCOGSStructure>(
+        opts.input.id
+      );
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        result: theAIResult,
       };
     }),
 };
