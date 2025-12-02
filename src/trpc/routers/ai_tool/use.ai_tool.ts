@@ -9,11 +9,14 @@ import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import {
+  AICOGSStructure_CustomerType,
+  AICOGSStructure_ProductCategory,
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
 } from "./enum.ai_tool";
 import { aiToolPrompts } from "./prompt.ai_tool";
 import {
+  AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE,
   AI_TOOL_ID_COMPETITOR_GRADER,
   AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
@@ -141,6 +144,47 @@ export const useAITool = {
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_COMPETITOR_GRADER
+      );
+
+      return {
+        code: STATUS_CREATED,
+        message: "Queued",
+        result_id: resultId,
+      };
+    }),
+
+  COGSStructure: loggedInProcedure
+    .input(
+      z.object({
+        model: z.enum(AIModelName),
+        product_name: stringNotBlank(),
+        description: stringNotBlank(),
+        product_category: z.enum(AICOGSStructure_ProductCategory),
+        COGS_calculation: z.enum(AICOGSStructure_CustomerType),
+        volume_per_batch: z.number().default(0),
+      })
+    )
+    .mutation(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const resultId = await AIGenerate(
+        opts.input.model,
+        aiToolPrompts.COGSStructure(
+          opts.input.product_name,
+          opts.input.description,
+          opts.input.product_category,
+          opts.input.COGS_calculation,
+          opts.input.volume_per_batch
+        ),
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE
       );
 
       return {

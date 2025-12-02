@@ -63,3 +63,18 @@ export enum AICompetitorGrader_MarketMaturity {
   MATURE = "mature",
   DECLINING = "declining",
 }
+
+// Cost of Goods Sold (COGS) Structure //
+
+export enum AICOGSStructure_ProductCategory {
+  RETAIL = "retail",
+  FNB = "fnb",
+  JASA = "jasa",
+  MANUFAKTUR = "manufaktur",
+  SOFTWARE = "software",
+}
+
+export enum AICOGSStructure_CustomerType {
+  SATUAN = "satuan",
+  BATCH = "batch",
+}

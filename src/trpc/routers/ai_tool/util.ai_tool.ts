@@ -46,7 +46,8 @@ export const AI_TOOL_ID_IDEA_VAL = 1; // idea-val
 export const AI_TOOL_ID_MARKET_SIZE = 2; // market-size
 export const AI_TOOL_ID_COMPETITOR_GRADER = 3; // competitor-grader
 
-// AI tools with ephemeral result will have negative IDs
+// AI tools with ephemeral result
+export const AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE = -1; // COGS structure
 
 export type AIChatRole = "user" | "assistant";
 
