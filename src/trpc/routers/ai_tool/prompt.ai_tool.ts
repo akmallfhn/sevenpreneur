@@ -1,7 +1,6 @@
 import { JsonObject } from "@prisma/client/runtime/library";
 import { z } from "zod";
 import {
-  AICOGSStructure_CustomerType,
   AICOGSStructure_ProductCategory,
   AICompetitorGrader_MarketMaturity,
   AIIdeaValidation_LongevityAlignment,
@@ -583,9 +582,7 @@ export const aiToolPrompts = {
   COGSStructure: (
     product_name: string,
     description: string,
-    product_category: AICOGSStructure_ProductCategory,
-    COGS_calculation: AICOGSStructure_CustomerType,
-    volume_per_batch: number
+    product_category: AICOGSStructure_ProductCategory
   ) => {
     return {
       instructions:
@@ -595,7 +592,6 @@ export const aiToolPrompts = {
         "2. Menggunakan prinsip absorption costing: seluruh biaya produksi yang relevan (langsung maupun tidak langsung) harus masuk dalam perhitungan.\n" +
         "3. Hanya masukkan biaya yang relevan langsung dengan produksi, seperti bahan baku, tenaga kerja langsung, overhead pabrik.\n" +
         "4. Jangan pernah memasukkan tidak relevan, seperti biaya G&A, biaya selling, biaya marketing, biaya distribusi, atau biaya non-produktif ke dalam COGS.\n" +
-        "5. Jika metode COGS menggunakan Batch, gunakan Volume Produksi per Batch untuk menghitung total kebutuhan dari biaya variabel.\n" +
         "Format output wajib dalam bentuk JSON sesuai struktur berikut:\n" +
         AIFormatOutputText({
           variable_cost: [
@@ -618,11 +614,7 @@ export const aiToolPrompts = {
       input:
         `- Nama produk: ${product_name}\n` +
         `- Deskripsi produk: ${description}\n` +
-        `- Kategori produk: ${product_category}\n` +
-        `- Perhitungan COGS: ${COGS_calculation}\n` +
-        (volume_per_batch > 0
-          ? `- Volume produksi per batch: ${volume_per_batch}\n`
-          : ""),
+        `- Kategori produk: ${product_category}\n`,
       format: AIFormatOutputZod(
         "respons_struktur_biaya",
         z.object({

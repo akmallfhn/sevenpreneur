@@ -9,7 +9,6 @@ import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import {
-  AICOGSStructure_CustomerType,
   AICOGSStructure_ProductCategory,
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
@@ -160,8 +159,6 @@ export const useAITool = {
         product_name: stringNotBlank(),
         description: stringNotBlank(),
         product_category: z.enum(AICOGSStructure_ProductCategory),
-        COGS_calculation: z.enum(AICOGSStructure_CustomerType),
-        volume_per_batch: z.number().default(0),
       })
     )
     .mutation(async (opts) => {
@@ -178,9 +175,7 @@ export const useAITool = {
         aiToolPrompts.COGSStructure(
           opts.input.product_name,
           opts.input.description,
-          opts.input.product_category,
-          opts.input.COGS_calculation,
-          opts.input.volume_per_batch
+          opts.input.product_category
         ),
         opts.ctx.prisma,
         opts.ctx.user.id,
