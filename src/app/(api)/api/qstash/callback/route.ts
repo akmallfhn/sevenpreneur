@@ -1,35 +1,9 @@
 import GetPrismaClient from "@/lib/prisma";
-import { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
+import QStashHandlerVerified from "../handler";
 
 const prisma = GetPrismaClient();
 
-async function handler(req: Request) {
-  // The response from QStash
-  const result = await req.json();
-  const sourceMessageId = result.sourceMessageId as string;
-
-  // The response from OpenAI API
-  const body = JSON.parse(atob(result.body));
-
-  // The reply/assistant message
-  const assistantContents = [];
-  for (const output of body.output) {
-    if (
-      output.type === "message" &&
-      output.status === "completed" &&
-      output.role === "assistant"
-    ) {
-      assistantContents.push(...output.content);
-    }
-  }
-  let assistantText = "";
-  for (const content of assistantContents) {
-    if (content.type === "output_text") {
-      assistantText += content.text;
-    }
-  }
-  const content = JSON.parse(assistantText);
-
+export const POST = QStashHandlerVerified(async ({ messageId, content }) => {
   const updatedResult = await prisma.aIResult.updateManyAndReturn({
     data: {
       name: content.title as string,
@@ -37,22 +11,16 @@ async function handler(req: Request) {
       is_done: true,
     },
     where: {
-      qstash_id: sourceMessageId,
+      qstash_id: messageId,
     },
   });
   if (updatedResult.length < 1) {
     console.error(
-      `qstash.callback: The AI result (${sourceMessageId}) is not found.`
+      `qstash.callback: The AI result (${messageId}) is not found.`
     );
   } else if (updatedResult.length > 1) {
     console.error(
       `qstash.callback: More-than-one AI results are updated at once.`
     );
   }
-
-  return Response.json({
-    received: true, // Tell QStash that the result has been received successfully
-  });
-}
-
-export const POST = verifySignatureAppRouter(handler);
+});
