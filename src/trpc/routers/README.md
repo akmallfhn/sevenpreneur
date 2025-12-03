@@ -367,10 +367,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `read.ai.marketSize`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.ai.competitorGrading` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `read.ai.COGSStructure`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.pricingStrategy`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.ideaValidation`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.marketSize`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.competitorGrading`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.COGSStructure`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.pricingStrategy`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiConversations`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiChats`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.sendChat`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |

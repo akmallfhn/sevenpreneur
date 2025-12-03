@@ -19,6 +19,7 @@ import {
   AI_TOOL_ID_COMPETITOR_GRADER,
   AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
+  AI_TOOL_ID_PRICING_STRATEGY,
   AIChatRole,
   AIGenerate,
   AIGenerateTitle,
@@ -186,6 +187,80 @@ export const useAITool = {
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE
+      );
+
+      return {
+        code: STATUS_CREATED,
+        message: "Queued",
+        result_id: resultId,
+      };
+    }),
+
+  pricingStrategy: loggedInProcedure
+    .input(
+      z.object({
+        model: z.enum(AIModelName),
+        product_name: stringNotBlank(),
+        description: stringNotBlank(),
+        product_category: z.enum(AICOGSStructure_ProductCategory),
+        production_per_month: z.number(),
+        variable_cost_list: z.array(
+          z.object({
+            name: z.string(),
+            quantity: z.number(),
+            unit: z.string(),
+            total_cost: z.number(),
+          })
+        ),
+        fixed_cost_list: z.array(
+          z.object({
+            name: z.string(),
+            quantity: z.number(),
+            unit: z.string(),
+            total_cost: z.number(),
+          })
+        ),
+      })
+    )
+    .mutation(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const var_cost_list = opts.input.variable_cost_list;
+      const fix_cost_list = opts.input.fixed_cost_list;
+
+      const accumulate = (p: number, c: { total_cost: number }) =>
+        p + c.total_cost;
+      const total_var_cost = var_cost_list.reduce(accumulate, 0);
+      const total_fix_cost = fix_cost_list.reduce(accumulate, 0);
+
+      const resultId = await AIGenerate(
+        opts.input.model,
+        aiToolPrompts.pricingStrategy(
+          opts.input.product_name,
+          opts.input.description,
+          opts.input.product_category,
+          opts.input.production_per_month,
+          var_cost_list,
+          fix_cost_list,
+          total_var_cost,
+          total_fix_cost
+        ),
+        {
+          production_per_month: opts.input.production_per_month,
+          total_cost: {
+            variable_cost: total_var_cost,
+            fixed_cost: total_fix_cost,
+          },
+        },
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        AI_TOOL_ID_PRICING_STRATEGY
       );
 
       return {

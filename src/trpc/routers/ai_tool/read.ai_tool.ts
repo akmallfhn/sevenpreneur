@@ -11,11 +11,13 @@ import {
   AIResultCompetitorGrading,
   AIResultIdeaValidation,
   AIResultMarketSize,
+  AIResultPricingStrategy,
 } from "./prompt.ai_tool";
 import {
   AI_TOOL_ID_COMPETITOR_GRADER,
   AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
+  AI_TOOL_ID_PRICING_STRATEGY,
   isEnrolledAITool,
 } from "./util.ai_tool";
 
@@ -150,6 +152,43 @@ export const readAIResult = {
         code: STATUS_OK,
         message: "Success",
         result: theAIResult,
+      };
+    }),
+
+  pricingStrategy: loggedInProcedure
+    .input(objectHasOnlyNanoid())
+    .query(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const theAIResult = await opts.ctx.prisma.aIResult.findFirst({
+        select: { name: true, result: true, is_done: true, created_at: true },
+        where: {
+          id: opts.input.id,
+          user_id: opts.ctx.user.id,
+          ai_tool_id: AI_TOOL_ID_PRICING_STRATEGY,
+        },
+      });
+      if (!theAIResult) {
+        throw readFailedNotFound("AI result (pricing strategy)");
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        result: {
+          name: theAIResult.name,
+          result: theAIResult.is_done
+            ? (theAIResult.result as AIResultPricingStrategy)
+            : null,
+          is_done: theAIResult.is_done,
+          created_at: theAIResult.created_at,
+        },
       };
     }),
 };
