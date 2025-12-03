@@ -1,6 +1,7 @@
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
+  STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NO_CONTENT,
   STATUS_OK,
 } from "@/lib/status_code";
@@ -14,6 +15,7 @@ import { stringNotBlank } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { randomBytes } from "crypto";
+import jwt from "jsonwebtoken";
 import { z } from "zod";
 
 export const authRouter = createTRPCRouter({
@@ -119,6 +121,26 @@ export const authRouter = createTRPCRouter({
         role_name: theUser.role.name,
         status: theUser.status,
       },
+    };
+  }),
+
+  createJWT: loggedInProcedure.query((opts) => {
+    const secretKey = process.env.SECRET_KEY_JWT;
+    if (!secretKey || secretKey == "") {
+      throw new TRPCError({
+        code: STATUS_INTERNAL_SERVER_ERROR,
+        message: "No JWT secret key!",
+      });
+    }
+
+    const payload = { user_id: opts.ctx.user.id };
+    const options = { expiresIn: "1h" } as jwt.SignOptions;
+    const createdToken = jwt.sign(payload, secretKey, options);
+
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      token: createdToken,
     };
   }),
 

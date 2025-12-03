@@ -14,9 +14,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `auth.login`        |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 | `auth.checkSession` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `auth.createJWT`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `auth.logout`       |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
 
-**Scopes:** `auth.checkSession`: All logged-in users only have read access to their own user data.
+**Scopes:**
+
+- `auth.checkSession`: All logged-in users only have read access to their own user data.
+- `auth.createJWT`: All logged-in users can only create JWT from their own user ID.
 
 ## Roles 👥
 
@@ -216,6 +220,19 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Logged-in users can only update and delete their own discussion replies.
 - Administrators can delete all discussion replies.
 
+### Attendances 📋
+
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.checkIn`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `create.checkOut` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.attendance` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+
+**Scopes:**
+
+- Logged-in users can check-in and check-out given the learning ID.
+- Logged-in users can see their own attendances given the learning ID.
+
 ## Projects 🗂️
 
 | Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
@@ -234,13 +251,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Submissions 🗒️
 
-| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
-| `list.submissions`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.submission`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.submission` |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
-| `delete.submission` |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.submission`        |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+| `list.submissions`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.submission`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.submissionByProject` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `update.submission`        |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
+| `delete.submission`        |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
 
 **Scopes:**
 
