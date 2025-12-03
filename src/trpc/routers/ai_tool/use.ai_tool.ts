@@ -102,7 +102,9 @@ export const useAITool = {
           opts.input.company_operating_area,
           opts.input.sales_channel
         ),
-        {}, // empty for now
+        {
+          product_name: opts.input.product_name,
+        },
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_MARKET_SIZE
