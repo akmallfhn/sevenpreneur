@@ -12,6 +12,8 @@ import {
   AIMarketSize_ProductType,
   AIMarketSize_Regulation,
   AIMarketSize_SizeEstimate,
+  AIPricingStrategy_ValueBased_Benefit,
+  AIPricingStrategy_ValueBased_Involvement,
 } from "./enum.ai_tool";
 import { AIFormatOutputText, AIFormatOutputZod } from "./util.ai_tool";
 
@@ -143,19 +145,52 @@ export interface AIResultCompetitorGrading extends JsonObject {
 
 // Cost of Goods Sold (COGS) Structure //
 
+type CostEntry = {
+  name: string;
+  quantity: number;
+  unit: string;
+  total_cost: number;
+};
+
 export interface AIResultCOGSStructure extends JsonObject {
-  variable_cost: {
-    name: string;
-    quantity: number;
-    unit: string;
-    total_cost: number;
-  }[];
-  fixed_cost: {
-    name: string;
-    quantity: number;
-    unit: string;
-    total_cost: number;
-  }[];
+  variable_cost: CostEntry[];
+  fixed_cost: CostEntry[];
+}
+
+// Pricing Strategy //
+
+function costEntryToString({ name, quantity, unit, total_cost }: CostEntry) {
+  return `${name} (${quantity} ${unit} = ${total_cost})`;
+}
+
+export interface AIResultPricingStrategy extends JsonObject {
+  production_per_month: number; // before generating
+  total_cost: {
+    variable_cost: number;
+    fixed_cost: number;
+  }; // before generating
+  prices: {
+    cost_based: {
+      margin_percentage: number;
+      estimated_price: number; // after generating
+    };
+    competition_based: {
+      estimated_price: number;
+      competitors: {
+        name: string;
+        company_url: string;
+      }[];
+    };
+    value_based: {
+      max_willingness_to_pay: number;
+      estimated_price: number;
+      value_communication: {
+        involvement: AIPricingStrategy_ValueBased_Involvement;
+        benefit: AIPricingStrategy_ValueBased_Benefit;
+        recommendations: string;
+      };
+    };
+  };
 }
 
 // Prompts //
@@ -632,6 +667,114 @@ export const aiToolPrompts = {
               total_cost: z.number(),
             })
           ),
+        })
+      ),
+    };
+  },
+
+  pricingStrategy: (
+    product_name: string,
+    description: string,
+    product_category: AICOGSStructure_ProductCategory,
+    production_per_month: number,
+    variable_cost_list: CostEntry[],
+    fixed_cost_list: CostEntry[],
+    total_var_cost: number,
+    total_fix_cost: number
+  ) => {
+    const var_cost_str = variable_cost_list.map(costEntryToString).join(", ");
+    const fix_cost_str = fixed_cost_list.map(costEntryToString).join(", ");
+
+    const total_cost = total_var_cost * production_per_month + total_fix_cost;
+
+    return {
+      instructions:
+        "Kamu adalah seorang Senior Pricing Strategist dengan pengalaman mendalam dalam cost-based pricing, competition-based pricing, dan value-based pricing di berbagai industri (Food & Beverage, Retail, Jasa Konsultan, Jasa (Service), Manufaktur/Pabrik, dan Software). Anda mampu menghitung struktur biaya secara akurat, memahami perilaku pasar, dan menentukan harga optimal yang profitable dan market-fit.\n" +
+        "Kamu selalu mengikuti prinsip pricing strategy modern, tidak memasukkan asumsi biaya yang tidak relevan, dan memberikan reasoning yang logis dan realistis.\n" +
+        "Tugasmu:\n" +
+        "1. Menghasilkan 3 pendekatan strategic pricing lengkap yang terdiri dari Cost-based pricing, Competition-based pricing, Value-based pricing.\n" +
+        "2. Skema penentuan Cost-Based Pricing. " +
+        "Tentukan persentasi margin yang wajar sesuai kategori: " +
+        "F&B: 30–60%, Retail: 20–40%,  Jasa Konsultan: 40–120%, Jasa Layanan: 20–40%, Manufaktur: 15–35%, Software: 50–80%.\n" +
+        "3. Skema penentuan Competition-Based Pricing: " +
+        "(a) Identifikasi kompetitor serupa sesuai kategori produk. " +
+        "(b) Berikan 3–4 nama kompetitor yang relevan. " +
+        "(c) Estimasi harga kompetitor berdasarkan standar pasar. " +
+        "(d) Tentukan estimated_price dengan referensi rentang harga kompetitor.\n" +
+        "4. Skema penentuan Value-Based Pricing: " +
+        "(a) Tentukan maximum willingness to pay (WTP) berdasarkan nilai, manfaat, dan kategori produk. " +
+        "(b) Pilih harga dengan tidak boleh di bawah total cost, berada di sweet spot, dan mendekati WTP tanpa melewati batas toleransi customer.\n" +
+        "5. Tentukan apakah produk tersebut termasuk kategori high involvement atau low involvement.\n" +
+        "6. Tentukan apakah produk tersebut memberikan psychological benefit atau economic benefit.\n" +
+        "7. Berdasarkan kedua penilaian tersebut, berikan rekomendasi komunikasi produk yang paling efektif. " +
+        "Rekomendasi harus mengikuti pola berikut: " +
+        "(a) high involvement + psychological = fokus pada storytelling, identity, dan emotional payoff. " +
+        "(b) high involvement + economic = fokus pada ROI, total cost of ownership, dan bukti rasional. " +
+        "(c) low involvement + psychological = fokus pada rasa nyaman, kemudahan, mood booster. " +
+        "(d) low involvement + economic = fokus pada harga terbaik, simplicity, dan utility.\n" +
+        "Format output wajib dalam bentuk JSON sesuai struktur berikut:\n" +
+        AIFormatOutputText({
+          prices: {
+            cost_based: {
+              margin_percentage: "<persentase margin yang dipilih>",
+            },
+            competition_based: {
+              estimated_price: "<perkiraan/saran harga jual per item>",
+              competitors: [
+                {
+                  name: "<nama kompetitor>",
+                  company_url: "<situs resmi perusahaan>",
+                },
+              ],
+            },
+            value_based: {
+              max_willingness_to_pay:
+                "<harga maksimum yang masih dalam toleransi customer>",
+              estimated_price: "<perkiraan/saran harga jual per item>",
+              value_communication: {
+                involvement: "<high/low>",
+                benefit: "<psychological/economic>",
+                recommendations: "<penjelasan/alasan harga jual per item>",
+              },
+            },
+          },
+        }),
+      input:
+        `- Nama produk: ${product_name}\n` +
+        `- Deskripsi produk: ${description}\n` +
+        `- Kategori produk: ${product_category}\n` +
+        `- Jumlah item produksi per bulan: ${production_per_month}\n` +
+        `- Daftar variable cost (per item): ${var_cost_str}\n` +
+        `- Daftar fixed cost (bulanan): ${fix_cost_str}\n` +
+        `- Total variable cost (per item): ${total_var_cost}\n` +
+        `- Total fixed cost (bulanan): ${total_fix_cost}\n` +
+        `- Total cost (bulanan): ${total_cost}\n`,
+      format: AIFormatOutputZod(
+        "respons_strategi_harga",
+        z.object({
+          prices: z.object({
+            cost_based: z.object({
+              margin_percentage: z.number(),
+            }),
+            competition_based: z.object({
+              estimated_price: z.number(),
+              competitors: z.array(
+                z.object({
+                  name: z.string(),
+                  company_url: z.string(),
+                })
+              ),
+            }),
+            value_based: z.object({
+              max_willingness_to_pay: z.number(),
+              estimated_price: z.number(),
+              value_communication: z.object({
+                involvement: z.enum(AIPricingStrategy_ValueBased_Involvement),
+                benefit: z.enum(AIPricingStrategy_ValueBased_Benefit),
+                recommendations: z.string(),
+              }),
+            }),
+          }),
         })
       ),
     };

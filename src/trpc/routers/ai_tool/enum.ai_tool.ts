@@ -74,3 +74,15 @@ export enum AICOGSStructure_ProductCategory {
   MANUFAKTUR = "manufaktur",
   SOFTWARE = "software",
 }
+
+// Pricing Strategy //
+
+export enum AIPricingStrategy_ValueBased_Involvement {
+  HIGH = "high",
+  LOW = "low",
+}
+
+export enum AIPricingStrategy_ValueBased_Benefit {
+  PSYCHOLOGICAL = "psychological",
+  ECONOMIC = "economic",
+}

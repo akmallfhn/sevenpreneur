@@ -8,6 +8,7 @@ export const useRouter = createTRPCRouter({
     marketSize: useAITool.marketSize,
     competitorGrading: useAITool.competitorGrading,
     COGSStructure: useAITool.COGSStructure,
+    pricingStrategy: useAITool.pricingStrategy,
     sendChat: useAITool.sendChat,
   },
 });
