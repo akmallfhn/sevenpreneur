@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
-import { GenerateAICompetitorGrading } from "@/lib/actions";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import AppButton from "../buttons/AppButton";
@@ -12,18 +11,14 @@ import Image from "next/image";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
 import SelectLMS from "../fields/SelectLMS";
+import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_tool";
 
-interface IndustryList {
-  name: string;
-}
-
-interface GenerateAICompetitorGraderLMSProps extends AvatarBadgeLMSProps {
+interface GenerateAICOGSPricesLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
-  indutryList: IndustryList[];
 }
 
-export default function GenerateAICompetitorGraderLMS(
-  props: GenerateAICompetitorGraderLMSProps
+export default function GenerateAICOGSPricesLMS(
+  props: GenerateAICOGSPricesLMSProps
 ) {
   const router = useRouter();
   const [isGeneratingContents, setIsGeneratingContents] = useState(false);
@@ -32,13 +27,11 @@ export default function GenerateAICompetitorGraderLMS(
   const [formData, setFormData] = useState<{
     productName: string;
     productDescription: string;
-    productCountry: string;
-    productIndustry: string;
+    productCategory: AICOGSStructure_ProductCategory | null;
   }>({
     productName: "",
     productDescription: "",
-    productCountry: "",
-    productIndustry: "",
+    productCategory: null,
   });
 
   // Handle data changes
@@ -63,39 +56,29 @@ export default function GenerateAICompetitorGraderLMS(
       setIsGeneratingContents(false);
       return;
     }
-    if (!formData.productIndustry) {
-      toast.error("Please choose an industry before proceeding.");
-      setIsGeneratingContents(false);
-      return;
-    }
-    if (!formData.productIndustry.trim()) {
-      toast.error("Tell us which region/country you're targeting.");
-      setIsGeneratingContents(false);
-      return;
-    }
 
-    try {
-      const aiCompetitorGrading = await GenerateAICompetitorGrading({
-        productName: formData.productName,
-        productDescription: formData.productDescription,
-        productCountry: formData.productCountry,
-        productIndustry: formData.productIndustry,
-      });
+    // try {
+    //   const aiCompetitorGrading = await GenerateAICompetitorGrading({
+    //     productName: formData.productName,
+    //     productDescription: formData.productDescription,
+    //     productCountry: formData.productCountry,
+    //     productIndustry: formData.productIndustry,
+    //   });
 
-      if (aiCompetitorGrading.code === "CREATED") {
-        toast.success("Grading process initiated...");
-        router.push(`/ai/competitor-grader/${aiCompetitorGrading.id}`);
-      } else {
-        toast.error("We couldn’t complete the grading. Please try again!");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        "An unexpected error occurred while grading the competitor. Please try again in a moment"
-      );
-    } finally {
-      setIsGeneratingContents(false);
-    }
+    //   if (aiCompetitorGrading.code === "CREATED") {
+    //     toast.success("Grading process initiated...");
+    //     router.push(`/ai/competitor-grader/${aiCompetitorGrading.id}`);
+    //   } else {
+    //     toast.error("We couldn’t complete the grading. Please try again!");
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error(
+    //     "An unexpected error occurred while grading the competitor. Please try again in a moment"
+    //   );
+    // } finally {
+    //   setIsGeneratingContents(false);
+    // }
   };
 
   return (
@@ -104,8 +87,8 @@ export default function GenerateAICompetitorGraderLMS(
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
-        pageName="Competitor Grader"
-        headerTitle="Competitor Grader"
+        pageName="COGS & Prices Calculator"
+        headerTitle="COGS & Prices Calculator"
       />
       <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
         <main className="main-contents flex-2 w-full">
@@ -114,11 +97,11 @@ export default function GenerateAICompetitorGraderLMS(
             onSubmit={handleAIGenerate}
           >
             <section
-              id="business-profile"
-              className="business-profile bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              id="product-information"
+              className="product-information bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
-                Business Profile
+                Product Information
               </h2>
               <InputLMS
                 inputId="product-name"
@@ -136,27 +119,6 @@ export default function GenerateAICompetitorGraderLMS(
                 characterLength={4000}
                 value={formData.productDescription}
                 onTextAreaChange={handleInputChange("productDescription")}
-                required
-              />
-              <SelectLMS
-                selectId="product-industry"
-                selectName="Apa kategori industri yang paling sesuai dengan bisnis Anda?"
-                selectPlaceholder="Pilih kategori industri"
-                value={formData.productIndustry}
-                onChange={handleInputChange("productIndustry")}
-                required
-                options={props.indutryList.map((item) => ({
-                  label: item.name,
-                  value: item.name,
-                }))}
-              />
-              <InputLMS
-                inputId="product-country"
-                inputName="Di pasar/wilayah mana kompetisi bisnis berlangsung?"
-                inputType="text"
-                inputPlaceholder="e.g. Greater Sumatera, Indonesia"
-                value={formData.productCountry}
-                onInputChange={handleInputChange("productCountry")}
                 required
               />
             </section>
@@ -193,7 +155,7 @@ export default function GenerateAICompetitorGraderLMS(
           <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
             <AppCalloutBox
               calloutTitle="Tips"
-              calloutContent="Competitor Grader membantu memahami siapa kompetitor terdekat, bagaimana posisi bisnis di pasar, dan strategi yang dapat memperkuat daya saing bisnis Anda."
+              calloutContent="What is COGS & Prices Calculator?"
             />
           </div>
         </aside>

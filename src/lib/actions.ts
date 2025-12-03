@@ -3,6 +3,7 @@ import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND } from "./status_code";
 import {
+  AICOGSStructure_ProductCategory,
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
@@ -651,12 +652,9 @@ interface GenerateAIIdeaValidationProps {
   proposedSolution: string;
   availableResources: string;
 }
-export async function GenerateAIIdeaValidation({
-  problemStatement,
-  problemContext,
-  proposedSolution,
-  availableResources,
-}: GenerateAIIdeaValidationProps) {
+export async function GenerateAIIdeaValidation(
+  props: GenerateAIIdeaValidationProps
+) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
@@ -666,10 +664,10 @@ export async function GenerateAIIdeaValidation({
 
   const generateIdeaValidator = await trpc.use.ai.ideaValidation({
     model: AIModelName.GPT_5_MINI,
-    problem: problemStatement,
-    location: problemContext,
-    ideation: proposedSolution,
-    resources: availableResources,
+    problem: props.problemStatement,
+    location: props.problemContext,
+    ideation: props.proposedSolution,
+    resources: props.availableResources,
   });
 
   return {
@@ -688,14 +686,7 @@ interface GenerateAIMarketSizeProps {
   operatingArea: string;
   salesChannel: string;
 }
-export async function GenerateAIMarketSize({
-  productName,
-  productDescription,
-  productType,
-  customerType,
-  operatingArea,
-  salesChannel,
-}: GenerateAIMarketSizeProps) {
+export async function GenerateAIMarketSize(props: GenerateAIMarketSizeProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
@@ -705,12 +696,12 @@ export async function GenerateAIMarketSize({
 
   const generateMarketSize = await trpc.use.ai.marketSize({
     model: AIModelName.GPT_5_MINI,
-    product_name: productName,
-    description: productDescription,
-    product_type: productType,
-    customer_type: customerType,
-    company_operating_area: operatingArea,
-    sales_channel: salesChannel,
+    product_name: props.productName,
+    description: props.productDescription,
+    product_type: props.productType,
+    customer_type: props.customerType,
+    company_operating_area: props.operatingArea,
+    sales_channel: props.salesChannel,
   });
 
   return {
@@ -727,12 +718,9 @@ interface GenerateAICompetitorGradingProps {
   productCountry: string;
   productIndustry: string;
 }
-export async function GenerateAICompetitorGrading({
-  productName,
-  productDescription,
-  productCountry,
-  productIndustry,
-}: GenerateAICompetitorGradingProps) {
+export async function GenerateAICompetitorGrading(
+  props: GenerateAICompetitorGradingProps
+) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
@@ -742,15 +730,105 @@ export async function GenerateAICompetitorGrading({
 
   const generateCompetitorGrading = await trpc.use.ai.competitorGrading({
     model: AIModelName.GPT_5_MINI,
-    product_name: productName,
-    product_description: productDescription,
-    country: productCountry,
-    industry: productIndustry,
+    product_name: props.productName,
+    product_description: props.productDescription,
+    country: props.productCountry,
+    industry: props.productIndustry,
   });
 
   return {
     code: generateCompetitorGrading.code,
     message: generateCompetitorGrading.message,
     id: generateCompetitorGrading.result_id,
+  };
+}
+
+// AI COGS STRUCTURE
+interface GenerateCOGSStructureProps {
+  productName: string;
+  productDescription: string;
+  productCategory: AICOGSStructure_ProductCategory;
+}
+export async function GenerateCOGSStructure(props: GenerateCOGSStructureProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const generateCOGSStructure = await trpc.use.ai.COGSStructure({
+    model: AIModelName.GPT_5_MINI,
+    product_name: props.productName,
+    description: props.productDescription,
+    product_category: props.productCategory,
+  });
+
+  return {
+    code: generateCOGSStructure.code,
+    message: generateCOGSStructure.message,
+    id: generateCOGSStructure.result_id,
+  };
+}
+
+// AI READ COGS STRUCTURE
+interface AICOGSStructureDetailsProps {
+  resultId: string;
+}
+export async function AICOGSStructureDetails(
+  props: AICOGSStructureDetailsProps
+) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const COGSStructureDetails = await trpc.read.ai.COGSStructure({
+    id: props.resultId,
+  });
+
+  return {
+    code: COGSStructureDetails.code,
+    message: COGSStructureDetails.message,
+    result: COGSStructureDetails.result,
+  };
+}
+
+// AI PRICE STRATEGY
+export interface CostList {
+  name: string;
+  quantity: number;
+  unit: string;
+  total_cost: number;
+}
+interface GeneratePriceStrategyProps extends GenerateCOGSStructureProps {
+  productionPerMonth: number;
+  variableCostList: CostList[];
+  fixedCostList: CostList[];
+}
+export async function GeneratePriceStrategy(props: GeneratePriceStrategyProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+  setSessionToken(sessionData.value);
+
+  const generatePriceStrategy = await trpc.use.ai.pricingStrategy({
+    model: AIModelName.GPT_5_MINI,
+    product_name: props.productName,
+    description: props.productDescription,
+    product_category: props.productCategory,
+    production_per_month: props.productionPerMonth,
+    variable_cost_list: props.variableCostList,
+    fixed_cost_list: props.fixedCostList,
+  });
+
+  return {
+    code: generatePriceStrategy.code,
+    message: generatePriceStrategy.message,
+    result_id: generatePriceStrategy.result_id,
   };
 }

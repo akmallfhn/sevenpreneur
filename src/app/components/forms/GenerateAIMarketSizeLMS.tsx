@@ -23,11 +23,9 @@ interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
 }
 
-export default function GenerateAIMarketSizeLMS({
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
-}: GenerateAIMarketSizeLMSProps) {
+export default function GenerateAIMarketSizeLMS(
+  props: GenerateAIMarketSizeLMSProps
+) {
   const router = useRouter();
   const [isGeneratingContents, setIsGeneratingContents] = useState(false);
 
@@ -154,9 +152,9 @@ export default function GenerateAIMarketSizeLMS({
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
       <HeaderGenerateAIToolLMS
-        sessionUserRole={sessionUserRole}
-        sessionUserName={sessionUserName}
-        sessionUserAvatar={sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
         pageName="Market Size"
         headerTitle="Market Size Intelligence"
       />

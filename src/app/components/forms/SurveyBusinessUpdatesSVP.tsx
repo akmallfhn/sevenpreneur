@@ -14,7 +14,6 @@ import {
 import InputNumberSVP from "../fields/InputNumberSVP";
 import { toast } from "sonner";
 import { UpdateUserBusiness } from "@/lib/actions";
-import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
@@ -30,15 +29,12 @@ interface SurveyBusinessUpdateSVPProps {
   industriesData: IndustryList[];
 }
 
-export default function SurveyBusinessUpdateSVP({
-  sessionUserId,
-  sessionUserName,
-  sessionUserEmail,
-  industriesData,
-}: SurveyBusinessUpdateSVPProps) {
+export default function SurveyBusinessUpdateSVP(
+  props: SurveyBusinessUpdateSVPProps
+) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const nickname = sessionUserName.split(" ")[0];
+  const nickname = props.sessionUserName.split(" ")[0];
 
   const [formData, setFormData] = useState<{
     userOccupation: OccupationUser | null;
@@ -220,7 +216,7 @@ export default function SurveyBusinessUpdateSVP({
             inputId="user-email"
             inputName="Email"
             inputType="email"
-            value={sessionUserEmail}
+            value={props.sessionUserEmail}
             disabled
           />
           <InputSVP
@@ -305,7 +301,7 @@ export default function SurveyBusinessUpdateSVP({
               value={formData.businessIndustry}
               onChange={handleInputChange("businessIndustry")}
               options={
-                industriesData?.map((item) => ({
+                props.industriesData?.map((item) => ({
                   label: item.name,
                   value: item.id,
                 })) || []
