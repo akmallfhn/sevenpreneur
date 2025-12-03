@@ -56,6 +56,7 @@ export const useAITool = {
           opts.input.ideation,
           opts.input.resources
         ),
+        {}, // empty for now
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_IDEA_VAL
@@ -101,6 +102,7 @@ export const useAITool = {
           opts.input.company_operating_area,
           opts.input.sales_channel
         ),
+        {}, // empty for now
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_MARKET_SIZE
@@ -140,6 +142,7 @@ export const useAITool = {
           opts.input.country,
           opts.input.industry
         ),
+        {}, // empty for now
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_COMPETITOR_GRADER
@@ -177,6 +180,7 @@ export const useAITool = {
           opts.input.description,
           opts.input.product_category
         ),
+        {}, // should be empty (not supported)
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE

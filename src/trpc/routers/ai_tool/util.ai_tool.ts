@@ -109,6 +109,7 @@ if (process.env.DOMAIN_MODE === "local") {
 export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   model: AIModelName,
   prompt: AIPrompt<T>,
+  first_result: object, // Not supported for ephemeral results
   prisma: PrismaClient,
   user_id: string,
   ai_tool_id: number
@@ -145,7 +146,7 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
         user_id: user_id,
         ai_tool_id: ai_tool_id,
         name: "", // empty for now
-        result: {}, // empty for now
+        result: first_result,
         is_done: false,
         qstash_id: messageId,
       },
