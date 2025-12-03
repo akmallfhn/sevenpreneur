@@ -4,10 +4,23 @@ import QStashHandlerVerified from "../handler";
 const prisma = GetPrismaClient();
 
 export const POST = QStashHandlerVerified(async ({ messageId, content }) => {
+  const oldResult = await prisma.aIResult.findFirst({
+    select: { result: true },
+    where: { qstash_id: messageId },
+  });
+
+  let newResult = {};
+  if (oldResult) {
+    newResult = {
+      ...(oldResult.result as object),
+      ...content.response,
+    };
+  }
+
   const updatedResult = await prisma.aIResult.updateManyAndReturn({
     data: {
       name: content.title as string,
-      result: content.response,
+      result: newResult,
       is_done: true,
     },
     where: {
