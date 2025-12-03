@@ -337,7 +337,6 @@ export const aiToolPrompts = {
         "12. Buat remarks SOM terkait anjuran strategi kompetitif, kapasitas, atau tantangan penetrasi" +
         "Output harus dalam format JSON seperti berikut:\n" +
         AIFormatOutputText({
-          product_name: "<nama produk sesuai data yang diberikan>",
           market_need: "<essential/niche/luxury>",
           regulation: "<unrestricted/restricted>",
           TAM_insight: {
@@ -387,7 +386,6 @@ export const aiToolPrompts = {
       format: AIFormatOutputZod(
         "respons_ukuran_pasar",
         z.object({
-          product_name: z.string(),
           market_need: z.enum(AIMarketSize_MarketNeed),
           regulation: z.enum(AIMarketSize_Regulation),
           TAM_insight: z.object({
