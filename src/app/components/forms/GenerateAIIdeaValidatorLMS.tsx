@@ -16,11 +16,9 @@ interface GenerateAIIdeaValidatorLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
 }
 
-export default function GenerateAIIdeaValidatorLMS({
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
-}: GenerateAIIdeaValidatorLMSProps) {
+export default function GenerateAIIdeaValidatorLMS(
+  props: GenerateAIIdeaValidatorLMSProps
+) {
   const router = useRouter();
   const [isGeneratingContents, setIsGeneratingContents] = useState(false);
 
@@ -113,9 +111,9 @@ export default function GenerateAIIdeaValidatorLMS({
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
       <HeaderGenerateAIToolLMS
-        sessionUserRole={sessionUserRole}
-        sessionUserName={sessionUserName}
-        sessionUserAvatar={sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
         pageName="Idea Validator"
         headerTitle="Idea Validator"
       />
