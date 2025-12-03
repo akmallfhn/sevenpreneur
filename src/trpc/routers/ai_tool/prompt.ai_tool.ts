@@ -63,7 +63,7 @@ export interface AIResultIdeaValidation extends JsonObject {
 // Market Size //
 
 export interface AIResultMarketSize extends JsonObject {
-  product_name: string;
+  product_name: string; // before generating
   market_need: AIMarketSize_MarketNeed;
   regulation: AIMarketSize_Regulation;
   TAM_insight: {

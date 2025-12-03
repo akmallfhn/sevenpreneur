@@ -5,7 +5,7 @@ const prisma = GetPrismaClient();
 
 export const POST = QStashHandlerVerified(async ({ messageId, content }) => {
   const oldResult = await prisma.aIResult.findFirst({
-    select: { result: true },
+    select: { ai_tool_id: true, result: true },
     where: { qstash_id: messageId },
   });
 
@@ -15,6 +15,11 @@ export const POST = QStashHandlerVerified(async ({ messageId, content }) => {
       ...(oldResult.result as object),
       ...content.response,
     };
+
+    switch (oldResult.ai_tool_id) {
+      default:
+        break;
+    }
   }
 
   const updatedResult = await prisma.aIResult.updateManyAndReturn({
