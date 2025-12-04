@@ -83,7 +83,7 @@ export default function CompetitorGradingReportLMS(
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
 
   useEffect(() => {
-    if (setSessionToken) {
+    if (props.sessionToken) {
       setSessionToken(props.sessionToken);
     }
   }, [props.sessionToken]);
