@@ -62,3 +62,4 @@ export type BusinessYearlyRevenue =
   | "BETWEEN_1B_10B"
   | "BETWEEN_10B_25B"
   | "ABOVE_25B";
+export type NumberConfig = "numeric" | "decimal";

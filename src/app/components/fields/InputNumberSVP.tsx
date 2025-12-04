@@ -1,10 +1,39 @@
 "use client";
+import { NumberConfig } from "@/lib/app-types";
 import React, { useState, useEffect, InputHTMLAttributes } from "react";
+
+export const NumberVariant: Record<
+  NumberConfig,
+  {
+    sanitize: (raw: string) => string;
+    pattern: string;
+    mode: "numeric" | "decimal";
+  }
+> = {
+  numeric: {
+    mode: "numeric",
+    pattern: "[0-9]*",
+    sanitize: (raw) =>
+      raw
+        .replace(/\D/g, "") // only number
+        .replace(/^0+/, ""), // remove leading zero
+  },
+  decimal: {
+    mode: "decimal",
+    pattern: "^[0-9]*[.,]?[0-9]*$",
+    sanitize: (raw) =>
+      raw
+        .replace(/[^0-9.,]/g, "") // allow number + coma + dot
+        .replace(/,/g, ".") // normalize comma into dot
+        .replace(/(\..*)\./g, "$1"), // only 1 dot
+  },
+};
 
 interface InputNumberSVPProps extends InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
   inputName?: string;
   inputIcon?: string;
+  inputConfig: NumberConfig;
   inputPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
@@ -16,6 +45,7 @@ export default function InputNumberSVP({
   inputId,
   inputName,
   inputIcon,
+  inputConfig,
   inputPlaceholder,
   characterLength,
   errorMessage,
@@ -31,12 +61,13 @@ export default function InputNumberSVP({
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
 
+  const { mode, pattern, sanitize } = NumberVariant[inputConfig];
+
   // Character Limitation on Input
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = event.target.value;
 
-    // Sanitize: only allowed 0–9 digit
-    const sanitizedValue = rawValue.replace(/\D/g, "").slice(0, maxLength);
+    const sanitizedValue = sanitize(rawValue).slice(0, maxLength);
 
     if (rawValue.length > maxLength) {
       setInternalError(characterLimitErrorMessage);
@@ -64,13 +95,17 @@ export default function InputNumberSVP({
 
   return (
     <div className="input-box flex flex-col gap-1">
-      <label
-        htmlFor={inputId}
-        className="label-input flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
-      >
-        {inputName}
-        {required && <span className="label-required text-destructive">*</span>}
-      </label>
+      {inputName && (
+        <label
+          htmlFor={inputId}
+          className="label-input flex pl-1 gap-0.5 text-sm font-bodycopy font-semibold"
+        >
+          {inputName}
+          {required && (
+            <span className="label-required text-destructive">*</span>
+          )}
+        </label>
+      )}
 
       <div className="input-container relative ">
         {inputIcon && (
@@ -81,8 +116,8 @@ export default function InputNumberSVP({
         <input
           id={inputId}
           type="text"
-          inputMode="numeric"
-          pattern="\d*"
+          inputMode={mode}
+          pattern={pattern}
           placeholder={inputPlaceholder}
           className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError

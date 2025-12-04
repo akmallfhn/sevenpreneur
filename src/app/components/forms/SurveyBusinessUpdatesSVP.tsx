@@ -332,6 +332,7 @@ export default function SurveyBusinessUpdateSVP(
               inputId={"business-age-years"}
               inputName={"Berapa tahun bisnis kamu berjalan?"}
               inputPlaceholder={"e.g. 2"}
+              inputConfig="numeric"
               value={String(formData.businessAgeYears)}
               onInputChange={handleInputChange("businessAgeYears")}
               required
@@ -412,6 +413,7 @@ export default function SurveyBusinessUpdateSVP(
               inputId={"average-selling-price"}
               inputName={"Berapa rata-rata harga produk bisnismu?"}
               inputPlaceholder={"e.g. 35000"}
+              inputConfig="numeric"
               value={String(formData.averageSellingPrice)}
               onInputChange={handleInputChange("averageSellingPrice")}
               required
