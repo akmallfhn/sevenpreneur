@@ -345,6 +345,7 @@ export default function CheckoutEventFormSVP({
                   inputName="Phone Number"
                   inputIcon="🇮🇩 62"
                   inputPlaceholder="Enter Mobile or WhatsApp number"
+                  inputConfig="numeric"
                   characterLength={15}
                   value={formData.userPhoneNumber}
                   onInputChange={handleInputChange("userPhoneNumber")}

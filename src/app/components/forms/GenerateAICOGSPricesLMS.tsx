@@ -14,6 +14,10 @@ import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_
 import RadioBoxLMS from "../fields/RadioBoxLMS";
 import { CostList, GenerateCOGSStructure } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
+import AICostListStepperLMS, {
+  CostListForm,
+} from "../stepper/AICostListStepperLMS";
+import InputNumberSVP from "../fields/InputNumberSVP";
 
 interface GenerateAICOGSPricesLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
@@ -34,17 +38,34 @@ export default function GenerateAICOGSPricesLMS(
     productName: string;
     productDescription: string;
     productCategory: AICOGSStructure_ProductCategory | null;
-    variableCost: CostList[];
-    fixedCost: CostList[];
-    productionPerMonth: number | null;
+    productionPerMonth: number | string;
   }>({
     productName: "",
     productDescription: "",
     productCategory: null,
-    variableCost: [],
-    fixedCost: [],
-    productionPerMonth: null,
+    productionPerMonth: "",
   });
+  const [variableCost, setVariableCost] = useState<CostListForm[]>([]);
+  const [fixedCost, setFixedCost] = useState<CostListForm[]>([]);
+
+  const productionQuestions: Record<AICOGSStructure_ProductCategory, string> = {
+    [AICOGSStructure_ProductCategory.MANUFAKTUR]:
+      "Berapa total produksi yang Anda targetkan dalam 1 bulan (dalam unit)?",
+    [AICOGSStructure_ProductCategory.RETAIL]:
+      "Berapa total item penjualan yang Anda targetkan dalam 1 bulan (dalam order)?",
+    [AICOGSStructure_ProductCategory.FNB]:
+      "Berapa total item penjualan yang Anda targetkan dalam 1 bulan (dalam order)?",
+    [AICOGSStructure_ProductCategory.JASA_LAYANAN]:
+      "Berapa total item penjualan yang Anda targetkan dalam 1 bulan (dalam order)?",
+    [AICOGSStructure_ProductCategory.JASA_KONSULTAN]:
+      "Berapa total project atau client yang Anda targetkan dalam 1 bulan?",
+    [AICOGSStructure_ProductCategory.SOFTWARE]:
+      "Berapa total active users atau subscriber yang Anda targetkan dalam 1 bulan?",
+  };
+
+  const productionQuestion = formData.productCategory
+    ? productionQuestions[formData.productCategory]
+    : "Berapa total produksi yang Anda targetkan dalam 1 bulan (dalam unit)?";
 
   // Get Details COGS
   useEffect(() => {
@@ -62,23 +83,73 @@ export default function GenerateAICOGSPricesLMS(
   );
   const isDoneResult = data?.result.is_done;
 
+  // Update State Costs
   useEffect(() => {
     if (isDoneResult) {
       setIntervalMs(false);
       setIsGeneratingCosts(false);
 
-      const variableCosts = data.result.result?.variable_cost ?? [];
-      const fixedCost = data.result.result?.fixed_cost ?? [];
+      const newVariableCosts = data.result.result?.variable_cost ?? [];
+      const newFixedCosts = data.result.result?.fixed_cost ?? [];
 
-      setFormData((prev) => ({
-        ...prev,
-        variableCost: variableCosts,
-        fixedCost: fixedCost,
-      }));
+      setVariableCost((prev) => {
+        const merged = [...prev];
 
-      toast.success("Generate COGS");
+        newVariableCosts.forEach((cost: CostListForm) => {
+          if (!merged.some((c) => c.name === cost.name)) {
+            merged.push({
+              ...cost,
+              quantity: String(cost.quantity ?? ""),
+              total_cost: String(cost.total_cost ?? ""),
+            });
+          }
+        });
+
+        const cleaned = merged.filter((c) => {
+          const isEmpty =
+            (!c.name || c.name.trim() === "") &&
+            (!c.quantity || c.quantity.trim() === "") &&
+            (!c.unit || c.unit.trim() === "") &&
+            (!c.total_cost || c.total_cost.trim() === "");
+
+          return !isEmpty;
+        });
+
+        return cleaned;
+      });
+      setFixedCost((prev) => {
+        const merged = [...prev];
+
+        newFixedCosts.forEach((cost: CostListForm) => {
+          if (!merged.some((c) => c.name === cost.name)) {
+            merged.push({
+              ...cost,
+              quantity: String(cost.quantity ?? ""),
+              total_cost: String(cost.total_cost ?? ""),
+            });
+          }
+        });
+
+        const cleaned = merged.filter((c) => {
+          const isEmpty =
+            (!c.name || c.name.trim() === "") &&
+            (!c.quantity || c.quantity.trim() === "") &&
+            (!c.unit || c.unit.trim() === "") &&
+            (!c.total_cost || c.total_cost.trim() === "");
+
+          return !isEmpty;
+        });
+
+        return cleaned;
+      });
+
+      toast.success("All set! COGS breakdown generated.");
     }
-  }, [isDoneResult]);
+  }, [
+    isDoneResult,
+    data?.result?.result?.variable_cost,
+    data?.result?.result?.fixed_cost,
+  ]);
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -128,13 +199,14 @@ export default function GenerateAICOGSPricesLMS(
       toast.error(
         "An unexpected error occurred while generating COGS. Please try again in a moment"
       );
+      setIsGeneratingCosts(false);
     }
   };
 
   // Generate Price
   const handleAIGenerate = async (e: FormEvent) => {
     e.preventDefault();
-    setIsGeneratingContents(true);
+    // setIsGeneratingContents(true);
 
     if (!formData.productName.trim()) {
       toast.error("Please enter a product name before generating.");
@@ -146,6 +218,8 @@ export default function GenerateAICOGSPricesLMS(
       setIsGeneratingContents(false);
       return;
     }
+
+    toast.success("OK");
 
     // try {
     //   const aiCompetitorGrading = await GenerateAICompetitorGrading({
@@ -261,6 +335,22 @@ export default function GenerateAICOGSPricesLMS(
                   />
                 </div>
               </div>
+              <AppButton
+                variant="primary"
+                type="button"
+                size="small"
+                onClick={handleAICOGSStructure}
+                disabled={isGeneratingCosts}
+              >
+                {isGeneratingCosts ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    Please wait...
+                  </>
+                ) : (
+                  <>Analisis COGS dengan AI</>
+                )}
+              </AppButton>
             </section>
             <section
               id="variable-cost"
@@ -275,6 +365,10 @@ export default function GenerateAICOGSPricesLMS(
                   produk seperti bahan baku atau komponen produk.
                 </p>
               </div>
+              <AICostListStepperLMS
+                costs={variableCost}
+                setCosts={setVariableCost}
+              />
             </section>
             <section
               id="fixed-cost"
@@ -289,22 +383,24 @@ export default function GenerateAICOGSPricesLMS(
                   produk.
                 </p>
               </div>
+              <AICostListStepperLMS costs={fixedCost} setCosts={setFixedCost} />
             </section>
-            <AppButton
-              variant="secondary"
-              type="button"
-              onClick={handleAICOGSStructure}
-              disabled={isGeneratingCosts}
+            <section
+              id="target-volume-per-month"
+              className="target-volume-per-month bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
             >
-              {isGeneratingCosts ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Please wait...
-                </>
-              ) : (
-                <>Get COGS</>
-              )}
-            </AppButton>
+              <h2 className="section-title font-bold font-bodycopy">
+                Target Volume per Month
+              </h2>
+              <InputNumberSVP
+                inputId="production-per-month"
+                inputName={productionQuestion}
+                inputPlaceholder="e.g. 1000"
+                inputConfig="numeric"
+                value={String(formData.productionPerMonth)}
+                onInputChange={handleInputChange("productionPerMonth")}
+              />
+            </section>
             <AppButton
               className="w-fit"
               type="submit"
@@ -340,16 +436,6 @@ export default function GenerateAICOGSPricesLMS(
               calloutTitle="Tips"
               calloutContent="COGS membantu identifikasi susunan biaya dalam setiap unit produk. Sementara Prices Calculator memberikan rekomendasi harga menggunakan pendekatan cost-based, competition-based, dan value-based."
             />
-            <div className="flex flex-col">
-              {formData.variableCost.map((post, index) => (
-                <div key={index}>
-                  <p>{post.name}</p>
-                  <p>{post.quantity}</p>
-                  <p>{post.unit}</p>
-                  <p>{post.total_cost}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </aside>
       </div>
