@@ -278,8 +278,8 @@ export default function GenerateAICOGSPricesLMS(
               />
               <TextAreaLMS
                 textAreaId="product-description"
-                textAreaName="Deskripsikan produk Anda"
-                textAreaPlaceholder="e.g. Smoothie untuk membantu diet dengan sistem subscription."
+                textAreaName="Jelaskan secara singkat produk tersebut"
+                textAreaPlaceholder="e.g. Smoothie ukuran 500ml rasa mangga."
                 characterLength={4000}
                 value={formData.productDescription}
                 onTextAreaChange={handleInputChange("productDescription")}
