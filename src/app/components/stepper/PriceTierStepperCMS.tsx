@@ -1,8 +1,7 @@
 "use client";
-import { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
-import { DollarSign, PlusIcon, X } from "lucide-react";
+import { PlusIcon, X } from "lucide-react";
 
 export interface PriceTier {
   id?: number;
@@ -19,14 +18,12 @@ export default function PriceTierStepperCMS({
   tiers,
   setTiers,
 }: PriceTierStepperCMSProps) {
-  // --- Add price tier
   const handleAddTier = () => {
     if (tiers.length < 5) {
       setTiers([...tiers, { name: "", amount: "" }]);
     }
   };
 
-  // --- Remove price tier
   const handleRemoveTier = (indexToRemove: number) => {
     if (tiers.length > 1) {
       const updated = tiers.filter((_, i) => i !== indexToRemove);
@@ -34,7 +31,6 @@ export default function PriceTierStepperCMS({
     }
   };
 
-  // ---
   const handleChange = (
     index: number,
     field: "name" | "amount",

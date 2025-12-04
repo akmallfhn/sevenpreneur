@@ -8,14 +8,8 @@ interface RadioBoxCMSProps {
   onChange: (value: string) => void;
 }
 
-export default function RadioBoxCMS({
-  radioName,
-  radioDescription,
-  value,
-  selectedValue,
-  onChange,
-}: RadioBoxCMSProps) {
-  const isSelected = selectedValue === value;
+export default function RadioBoxCMS(props: RadioBoxCMSProps) {
+  const isSelected = props.selectedValue === props.value;
 
   return (
     <label
@@ -27,14 +21,14 @@ export default function RadioBoxCMS({
     >
       <input
         type="radio"
-        name={radioName}
-        value={value}
+        name={props.radioName}
+        value={props.value}
         checked={isSelected}
-        onChange={() => onChange(value)}
+        onChange={() => props.onChange(props.value)}
       />
-      <div className="flex flex-col font-bodycopy text-sm ">
-        <p className="text-black font-bold">{radioName}</p>
-        <p className="text-alternative font-medium">{radioDescription}</p>
+      <div className="flex flex-col font-bodycopy text-sm">
+        <p className="text-black font-bold">{props.radioName}</p>
+        <p className="text-alternative font-medium">{props.radioDescription}</p>
       </div>
     </label>
   );

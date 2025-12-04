@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
@@ -10,10 +10,13 @@ import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
-import SelectLMS from "../fields/SelectLMS";
 import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_tool";
+import RadioBoxLMS from "../fields/RadioBoxLMS";
+import { CostList, GenerateCOGSStructure } from "@/lib/actions";
+import { setSessionToken, trpc } from "@/trpc/client";
 
 interface GenerateAICOGSPricesLMSProps extends AvatarBadgeLMSProps {
+  sessionToken: string;
   sessionUserRole: number;
 }
 
@@ -21,18 +24,61 @@ export default function GenerateAICOGSPricesLMS(
   props: GenerateAICOGSPricesLMSProps
 ) {
   const router = useRouter();
+  const [isGeneratingCosts, setIsGeneratingCosts] = useState(false);
   const [isGeneratingContents, setIsGeneratingContents] = useState(false);
+  const [intervalMs, setIntervalMs] = useState<number | false>(2000);
+  const [COGSId, setCOGSId] = useState("");
 
   // Beginning State
   const [formData, setFormData] = useState<{
     productName: string;
     productDescription: string;
     productCategory: AICOGSStructure_ProductCategory | null;
+    variableCost: CostList[];
+    fixedCost: CostList[];
+    productionPerMonth: number | null;
   }>({
     productName: "",
     productDescription: "",
     productCategory: null,
+    variableCost: [],
+    fixedCost: [],
+    productionPerMonth: null,
   });
+
+  // Get Details COGS
+  useEffect(() => {
+    if (props.sessionToken) {
+      setSessionToken(props.sessionToken);
+    }
+  }, [props.sessionToken]);
+
+  const { data } = trpc.read.ai.COGSStructure.useQuery<any>(
+    { id: COGSId },
+    {
+      refetchInterval: intervalMs,
+      enabled: !!props.sessionToken && !!COGSId,
+    }
+  );
+  const isDoneResult = data?.result.is_done;
+
+  useEffect(() => {
+    if (isDoneResult) {
+      setIntervalMs(false);
+      setIsGeneratingCosts(false);
+
+      const variableCosts = data.result.result?.variable_cost ?? [];
+      const fixedCost = data.result.result?.fixed_cost ?? [];
+
+      setFormData((prev) => ({
+        ...prev,
+        variableCost: variableCosts,
+        fixedCost: fixedCost,
+      }));
+
+      toast.success("Generate COGS");
+    }
+  }, [isDoneResult]);
 
   // Handle data changes
   const handleInputChange = (fieldName: string) => (value: any) => {
@@ -42,6 +88,50 @@ export default function GenerateAICOGSPricesLMS(
     }));
   };
 
+  // Generate COGS Structure
+  const handleAICOGSStructure = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsGeneratingCosts(true);
+
+    if (!formData.productName.trim()) {
+      toast.error("Please enter a product name before generating.");
+      setIsGeneratingCosts(false);
+      return;
+    }
+    if (!formData.productDescription.trim()) {
+      toast.error("Give me a description about product");
+      setIsGeneratingCosts(false);
+      return;
+    }
+    if (!formData.productCategory) {
+      toast.error("Choose one of the product categories");
+      setIsGeneratingCosts(false);
+      return;
+    }
+
+    try {
+      const aiCOGSStructure = await GenerateCOGSStructure({
+        productName: formData.productName,
+        productDescription: formData.productDescription,
+        productCategory: formData.productCategory,
+      });
+
+      if (aiCOGSStructure.code === "CREATED") {
+        setCOGSId(aiCOGSStructure.id);
+      } else {
+        toast.error(
+          "Failed to generate COGS structure. Please review your inputs!"
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "An unexpected error occurred while generating COGS. Please try again in a moment"
+      );
+    }
+  };
+
+  // Generate Price
   const handleAIGenerate = async (e: FormEvent) => {
     e.preventDefault();
     setIsGeneratingContents(true);
@@ -105,7 +195,7 @@ export default function GenerateAICOGSPricesLMS(
               </h2>
               <InputLMS
                 inputId="product-name"
-                inputName="Apa nama produk atau layanan Anda?"
+                inputName="Apa nama produk Anda?"
                 inputType="text"
                 inputPlaceholder="e.g. NutriBlend Smoothie"
                 value={formData.productName}
@@ -114,14 +204,107 @@ export default function GenerateAICOGSPricesLMS(
               />
               <TextAreaLMS
                 textAreaId="product-description"
-                textAreaName="Deskripsikan produk/layanan Anda dan jelaskan model bisnisnya"
+                textAreaName="Deskripsikan produk Anda"
                 textAreaPlaceholder="e.g. Smoothie untuk membantu diet dengan sistem subscription."
                 characterLength={4000}
                 value={formData.productDescription}
                 onTextAreaChange={handleInputChange("productDescription")}
                 required
               />
+              <div className="product-category flex flex-col gap-2">
+                <h3 className="text-[15px] text-[#333333] font-bodycopy font-semibold">
+                  Pilih Kategori Produk
+                  <span className="label-required text-destructive">*</span>
+                </h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <RadioBoxLMS
+                    radioName="Manufaktur"
+                    radioDescription="Produk yang dihasilkan melalui tahapan produksi"
+                    value={AICOGSStructure_ProductCategory.MANUFAKTUR}
+                    selectedValue={formData.productCategory ?? ""}
+                    onChange={handleInputChange("productCategory")}
+                  />
+                  <RadioBoxLMS
+                    radioName="Retail"
+                    radioDescription="Produk yang dijual sebagai barang siap konsumsi atau penggunaan."
+                    value={AICOGSStructure_ProductCategory.RETAIL}
+                    selectedValue={formData.productCategory ?? ""}
+                    onChange={handleInputChange("productCategory")}
+                  />
+                  <RadioBoxLMS
+                    radioName="F&B"
+                    radioDescription="Produk makanan atau minuman yang diolah dan disajikan untuk konsumsi"
+                    value={AICOGSStructure_ProductCategory.FNB}
+                    selectedValue={formData.productCategory ?? ""}
+                    onChange={handleInputChange("productCategory")}
+                  />
+                  <RadioBoxLMS
+                    radioName="Jasa Konsultan"
+                    radioDescription="Layanan yang memberikan analisis atau rekomendasi berbasis keahlian khusus"
+                    value={AICOGSStructure_ProductCategory.JASA_KONSULTAN}
+                    selectedValue={formData.productCategory ?? ""}
+                    onChange={handleInputChange("productCategory")}
+                  />
+                  <RadioBoxLMS
+                    radioName="Jasa Layanan"
+                    radioDescription="Layanan untuk memenuhi kebutuhan personal, rumah tangga, atau bisnis."
+                    value={AICOGSStructure_ProductCategory.JASA_LAYANAN}
+                    selectedValue={formData.productCategory ?? ""}
+                    onChange={handleInputChange("productCategory")}
+                  />
+                  <RadioBoxLMS
+                    radioName="Software / SaaS"
+                    radioDescription="Aplikasi, platform, atau sistem berbasis teknologi."
+                    value={AICOGSStructure_ProductCategory.SOFTWARE}
+                    selectedValue={formData.productCategory ?? ""}
+                    onChange={handleInputChange("productCategory")}
+                  />
+                </div>
+              </div>
             </section>
+            <section
+              id="variable-cost"
+              className="variable-cost bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+            >
+              <div className="section-attributes flex flex-col">
+                <h2 className="section-title font-bold font-bodycopy">
+                  Variable Cost
+                </h2>
+                <p className="section-description text-[15px] text-[#333333]/70 font-medium font-bodycopy">
+                  Variable cost adalah biaya yang melekat pada setiap unit
+                  produk seperti bahan baku atau komponen produk.
+                </p>
+              </div>
+            </section>
+            <section
+              id="fixed-cost"
+              className="fixed-cost bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+            >
+              <div className="section-attributes flex flex-col">
+                <h2 className="section-title font-bold font-bodycopy">
+                  Fixed Cost
+                </h2>
+                <p className="section-description text-[15px] text-[#333333]/70 font-medium font-bodycopy">
+                  Fixed cost adalah biaya tetap yang tidak terikat pada jumlah
+                  produk.
+                </p>
+              </div>
+            </section>
+            <AppButton
+              variant="secondary"
+              type="button"
+              onClick={handleAICOGSStructure}
+              disabled={isGeneratingCosts}
+            >
+              {isGeneratingCosts ? (
+                <>
+                  <Loader2 className="size-5 animate-spin" />
+                  Please wait...
+                </>
+              ) : (
+                <>Get COGS</>
+              )}
+            </AppButton>
             <AppButton
               className="w-fit"
               type="submit"
@@ -155,8 +338,18 @@ export default function GenerateAICOGSPricesLMS(
           <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
             <AppCalloutBox
               calloutTitle="Tips"
-              calloutContent="What is COGS & Prices Calculator?"
+              calloutContent="COGS membantu identifikasi susunan biaya dalam setiap unit produk. Sementara Prices Calculator memberikan rekomendasi harga menggunakan pendekatan cost-based, competition-based, dan value-based."
             />
+            <div className="flex flex-col">
+              {formData.variableCost.map((post, index) => (
+                <div key={index}>
+                  <p>{post.name}</p>
+                  <p>{post.quantity}</p>
+                  <p>{post.unit}</p>
+                  <p>{post.total_cost}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </aside>
       </div>
