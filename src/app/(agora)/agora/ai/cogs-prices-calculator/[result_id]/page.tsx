@@ -66,6 +66,10 @@ export default async function AICOGSPricesResultLMS({
       productionPerPeriod={
         aiCOGSPriceStrategyResult.result?.production_per_month ?? 0
       }
+      competitorList={
+        aiCOGSPriceStrategyResult.result?.prices.competition_based
+          .competitors ?? []
+      }
     />
   );
 }

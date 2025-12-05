@@ -13,21 +13,21 @@ const priceVariant: Record<
 > = {
   value: {
     title: "Value Based Price",
-    desc: "Harga berdasarkan pada perceived value dan willingness to pay customers, sehingga selaras dengan manfaat yang diterima",
+    desc: "Harga berdasarkan pada perceived value dan willingness-to-pay yang selaras dengan manfaat",
     background: "bg-[#F6F6FD] border-[#4F41B6]",
     label_background: "bg-[#E8E7FC]",
     color: "text-[#4F41B6]",
   },
   cost: {
     title: "Cost Based Price",
-    desc: "Harga ditentukan dari total biaya produksi plus markup yang wajar",
+    desc: "Harga berdasarkan keseluruhan biaya produksi lalu menambahkan margin yang realistis",
     background: "bg-[#FFFEF6] border-warning-foreground",
     label_background: "bg-warning-background",
     color: "text-warning-foreground",
   },
   competition: {
     title: "Competition Based Price",
-    desc: "Harga disusun berdasarkan benchmark kompetitor",
+    desc: "Harga berdasarkan landscape kompetitor dan benchmark pasar",
     background: "bg-[#F5F1F6] border-danger-foreground",
     label_background: "bg-danger-background",
     color: "text-danger-foreground",

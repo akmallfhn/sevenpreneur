@@ -12,6 +12,11 @@ import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import { formatWithComma } from "@/lib/convert-number";
 
+interface CompetitorList {
+  name: string;
+  company_url: string;
+}
+
 interface COGSPricesCalculationReportLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
   sessionUserRole: number;
@@ -25,6 +30,7 @@ interface COGSPricesCalculationReportLMSProps extends AvatarBadgeLMSProps {
   variableCostPerUnit: number;
   fixedCostPerPeriod: number;
   productionPerPeriod: number;
+  competitorList: CompetitorList[];
 }
 
 export default function COGSPricesCalculationReportLMS(
@@ -34,29 +40,38 @@ export default function COGSPricesCalculationReportLMS(
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
   const [selectedPrice, setSelectedPrice] = useState<AIPriceType | null>(null);
   const [profitTarget, setProfitTarget] = useState(10000000);
-
-  const fixedCostPerUnit = props.fixedCostPerPeriod / props.productionPerPeriod;
-  const totalCostPerUnit = fixedCostPerUnit + props.variableCostPerUnit;
+  const [volumeProduction, setVolumeProduction] = useState(
+    props.productionPerPeriod
+  );
 
   const handleProfitTargetChange = (value: string) => {
     const num = Number(value.replace(/[^0-9]/g, ""));
     setProfitTarget(num || 0);
   };
 
+  const handleVolumeProductionChange = (value: string) => {
+    const num = Number(value.replace(/[^0-9]/g, ""));
+    setVolumeProduction(num || 0);
+  };
+
+  useEffect(() => {
+    if (props.productionPerPeriod)
+      setVolumeProduction(props.productionPerPeriod);
+  }, [props.productionPerPeriod]);
+
+  const fixedCostPerUnit = props.fixedCostPerPeriod / volumeProduction;
+  const totalCostPerUnit = fixedCostPerUnit + props.variableCostPerUnit;
+
   // Margin Profit
   const marginProfitByValue = Math.round(
-    ((props.estimatedPriceByValue - totalCostPerUnit) /
-      props.estimatedPriceByValue) *
-      100
+    ((props.estimatedPriceByValue - totalCostPerUnit) / totalCostPerUnit) * 100
   );
   const marginProfitByCost = Math.round(
-    ((props.estimatedPriceByCost - totalCostPerUnit) /
-      props.estimatedPriceByCost) *
-      100
+    ((props.estimatedPriceByCost - totalCostPerUnit) / totalCostPerUnit) * 100
   );
   const marginProfitByCompetition = Math.round(
     ((props.estimatedPriceByCompetition - totalCostPerUnit) /
-      props.estimatedPriceByCompetition) *
+      totalCostPerUnit) *
       100
   );
 
@@ -92,7 +107,7 @@ export default function COGSPricesCalculationReportLMS(
   const monthlySalesTarget = useMemo(() => {
     if (!estimatedPrice) return 0;
 
-    return Math.round(
+    return Math.ceil(
       (props.fixedCostPerPeriod + profitTarget) /
         (estimatedPrice - props.variableCostPerUnit)
     );
@@ -176,19 +191,33 @@ export default function COGSPricesCalculationReportLMS(
           <main className="flex flex-col flex-2 gap-4 w-full">
             <div className="target-profit flex flex-col w-full gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
-                Masukkan Target Profit per Bulan
+                Simulasi Target
               </h3>
               <InputNumberSVP
                 inputId="target-profit"
+                inputName="Masukkan target keuntungan per bulan (dalam rupiah)"
+                inputIcon="Rp"
                 value={String(profitTarget)}
                 inputConfig="numeric"
                 onInputChange={handleProfitTargetChange}
               />
+              <InputNumberSVP
+                inputId="production-per-periods"
+                inputName="Atur volume produksi/persediaan per bulan"
+                value={String(volumeProduction)}
+                inputConfig="numeric"
+                onInputChange={handleVolumeProductionChange}
+              />
             </div>
             <div className="price-strategy flex flex-col gap-3 p-5 bg-white border border-outline rounded-lg">
-              <h3 className="section-title font-bodycopy font-bold text-lg">
-                Harga yang Disarankan
-              </h3>
+              <div className="flex flex-col">
+                <h3 className="section-title font-bodycopy font-bold text-lg">
+                  Harga yang Disarankan
+                </h3>
+                <p className="text-[15px] text-[#111111]/80 font-bodycopy font-medium">
+                  Pilih salah satu
+                </p>
+              </div>
               <AIPriceItemLMS
                 estimatedPrice={props.estimatedPriceByValue}
                 marginProfit={marginProfitByValue}
@@ -220,14 +249,14 @@ export default function COGSPricesCalculationReportLMS(
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 <ScorecardItemCMS
-                  scorecardName="Target Penjualan Unit per Bulan"
+                  scorecardName="Target Penjualan per Bulan (unit)"
                   scorecardValue={formatWithComma(monthlySalesTarget)}
                   scorecardBackground="bg-tertiary"
                 />
                 <ScorecardItemCMS
-                  scorecardName="Target Penjualan Unit per Hari"
+                  scorecardName="Target Penjualan per Hari (unit)"
                   scorecardValue={formatWithComma(
-                    Math.round(monthlySalesTarget / 30)
+                    Math.ceil(monthlySalesTarget / 30)
                   )}
                   scorecardBackground="bg-primary"
                 />
@@ -251,7 +280,7 @@ export default function COGSPricesCalculationReportLMS(
               </h3>
               <div className="fixed-cost-per-period flex items-center justify-between text-[#111111]">
                 <p className="font-bodycopy font-medium text-[15px]">
-                  Fixed Cost per Periods
+                  Fixed Cost per Bulan
                 </p>
                 <p className="font-bodycopy font-semibold text-[15px]">
                   {getRupiahCurrency(props.fixedCostPerPeriod)}
@@ -262,7 +291,7 @@ export default function COGSPricesCalculationReportLMS(
                   Volume Produksi
                 </p>
                 <p className="font-bodycopy font-semibold text-[15px]">
-                  {props.productionPerPeriod} unit
+                  {volumeProduction} unit
                 </p>
               </div>
               <hr className="divider border-b" />
@@ -299,6 +328,23 @@ export default function COGSPricesCalculationReportLMS(
               <p className="font-bodycopy font-medium text-[15px] text-[#111111]">
                 {props.valueCommunication}
               </p>
+            </div>
+            <div className="value-communication flex flex-col gap-2 p-5 bg-white border border-outline rounded-lg">
+              <h3 className="section-title font-bodycopy font-bold text-lg">
+                Benchmark Kompetitor
+              </h3>
+              <div className="flex flex-col gap-2">
+                {props.competitorList.map((post, index) => (
+                  <div
+                    className="flex flex-col p-3 bg-section-background rounded-md"
+                    key={index}
+                  >
+                    <p className="font-bodycopy font-medium text-[15px] text-[#111111]">
+                      {post.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </aside>
         </div>
