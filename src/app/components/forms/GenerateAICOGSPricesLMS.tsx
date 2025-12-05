@@ -12,12 +12,13 @@ import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
 import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import RadioBoxLMS from "../fields/RadioBoxLMS";
-import { CostList, GenerateCOGSStructure } from "@/lib/actions";
+import { GenerateAIPriceStrategy, GenerateCOGSStructure } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
 import AICostListStepperLMS, {
   CostListForm,
 } from "../stepper/AICostListStepperLMS";
 import InputNumberSVP from "../fields/InputNumberSVP";
+import { findIncompleteCosts } from "@/lib/array";
 
 interface GenerateAICOGSPricesLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
@@ -206,7 +207,10 @@ export default function GenerateAICOGSPricesLMS(
   // Generate Price
   const handleAIGenerate = async (e: FormEvent) => {
     e.preventDefault();
-    // setIsGeneratingContents(true);
+    setIsGeneratingContents(true);
+
+    const incompleteVariable = findIncompleteCosts(variableCost);
+    const incompleteFixed = findIncompleteCosts(fixedCost);
 
     if (!formData.productName.trim()) {
       toast.error("Please enter a product name before generating.");
@@ -218,31 +222,56 @@ export default function GenerateAICOGSPricesLMS(
       setIsGeneratingContents(false);
       return;
     }
+    if (!formData.productCategory) {
+      toast.error("Choose one of the product categories");
+      setIsGeneratingContents(false);
+      return;
+    }
+    if (!formData.productionPerMonth) {
+      toast.error("Please input volume production per month.");
+      setIsGeneratingContents(false);
+      return;
+    }
+    if (incompleteVariable.length > 0 || incompleteFixed.length > 0) {
+      toast.error(
+        "There are cost items that are partially filled. Please complete all required fields."
+      );
+      setIsGeneratingContents(false);
+      return;
+    }
 
-    toast.success("OK");
+    try {
+      const aiPriceStrategy = await GenerateAIPriceStrategy({
+        productName: formData.productName,
+        productDescription: formData.productDescription,
+        productCategory: formData.productCategory,
+        productionPerMonth: Number(formData.productionPerMonth),
+        variableCostList: variableCost.map((item) => ({
+          ...item,
+          quantity: Number(item.quantity) || 0,
+          total_cost: Number(item.total_cost) || 0,
+        })),
+        fixedCostList: fixedCost.map((item) => ({
+          ...item,
+          quantity: Number(item.quantity) || 0,
+          total_cost: Number(item.total_cost) || 0,
+        })),
+      });
 
-    // try {
-    //   const aiCompetitorGrading = await GenerateAICompetitorGrading({
-    //     productName: formData.productName,
-    //     productDescription: formData.productDescription,
-    //     productCountry: formData.productCountry,
-    //     productIndustry: formData.productIndustry,
-    //   });
-
-    //   if (aiCompetitorGrading.code === "CREATED") {
-    //     toast.success("Grading process initiated...");
-    //     router.push(`/ai/competitor-grader/${aiCompetitorGrading.id}`);
-    //   } else {
-    //     toast.error("We couldn’t complete the grading. Please try again!");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   toast.error(
-    //     "An unexpected error occurred while grading the competitor. Please try again in a moment"
-    //   );
-    // } finally {
-    //   setIsGeneratingContents(false);
-    // }
+      if (aiPriceStrategy.code === "CREATED") {
+        toast.success("Optimizing your pricing strategy...");
+        router.push(`/ai/cogs-prices-calculator/${aiPriceStrategy.id}`);
+      } else {
+        toast.error("We couldn’t complete the process. Please try again!");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "An unexpected error occurred while preparing your strategy. Please try again in a moment"
+      );
+    } finally {
+      setIsGeneratingContents(false);
+    }
   };
 
   return (
@@ -390,7 +419,7 @@ export default function GenerateAICOGSPricesLMS(
               className="target-volume-per-month bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
-                Target Volume per Month
+                Volume Production per Month
               </h2>
               <InputNumberSVP
                 inputId="production-per-month"

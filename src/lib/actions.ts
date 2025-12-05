@@ -771,31 +771,6 @@ export async function GenerateCOGSStructure(props: GenerateCOGSStructureProps) {
   };
 }
 
-// AI READ COGS STRUCTURE
-interface AICOGSStructureDetailsProps {
-  resultId: string;
-}
-export async function AICOGSStructureDetails(
-  props: AICOGSStructureDetailsProps
-) {
-  const cookieStore = await cookies();
-  const sessionData = cookieStore.get("session_token");
-  if (!sessionData) {
-    return { code: STATUS_NOT_FOUND, message: "No session token found" };
-  }
-  setSessionToken(sessionData.value);
-
-  const COGSStructureDetails = await trpc.read.ai.COGSStructure({
-    id: props.resultId,
-  });
-
-  return {
-    code: COGSStructureDetails.code,
-    message: COGSStructureDetails.message,
-    result: COGSStructureDetails.result,
-  };
-}
-
 // AI PRICE STRATEGY
 export interface CostList {
   name: string;
@@ -803,12 +778,14 @@ export interface CostList {
   unit: string;
   total_cost: number;
 }
-interface GeneratePriceStrategyProps extends GenerateCOGSStructureProps {
+interface GenerateAIPriceStrategyProps extends GenerateCOGSStructureProps {
   productionPerMonth: number;
   variableCostList: CostList[];
   fixedCostList: CostList[];
 }
-export async function GeneratePriceStrategy(props: GeneratePriceStrategyProps) {
+export async function GenerateAIPriceStrategy(
+  props: GenerateAIPriceStrategyProps
+) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
   if (!sessionData) {
@@ -829,6 +806,6 @@ export async function GeneratePriceStrategy(props: GeneratePriceStrategyProps) {
   return {
     code: generatePriceStrategy.code,
     message: generatePriceStrategy.message,
-    result_id: generatePriceStrategy.result_id,
+    id: generatePriceStrategy.result_id,
   };
 }
