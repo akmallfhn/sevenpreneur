@@ -1,5 +1,5 @@
 "use client";
-import { Atom, Boxes, LandPlot, Lightbulb } from "lucide-react";
+import { Atom, Boxes, CirclePercent, LandPlot, Lightbulb } from "lucide-react";
 import Link from "next/link";
 
 interface AIItemCardLMS {
@@ -20,6 +20,8 @@ export default function AIItemCardLMS({
     aiIcon = <Boxes className="size-6 text-primary" />;
   } else if (aiSlug === "competitor-grader") {
     aiIcon = <LandPlot className="size-6 text-primary" />;
+  } else if (aiSlug === "cogs-prices-calculator") {
+    aiIcon = <CirclePercent className="size-6 text-primary" />;
   } else {
     aiIcon = <Atom className="size-6" />;
   }
