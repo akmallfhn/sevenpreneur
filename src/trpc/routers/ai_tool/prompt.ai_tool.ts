@@ -624,13 +624,14 @@ export const aiToolPrompts = {
         "Kamu selalu memisahkan biaya menjadi variable cost per unit dan fixed cost per bulan berdasarkan karakteristik produksi.\n" +
         "Tugasmu\n" +
         "1. Membuat daftar variable_cost yang dialokasikan per unit berdasarkan input product dan kategori product.\n" +
-        "2. Variable cost hanya boleh komponen yang berubah sesuai jumlah produksi seperti seperti bahan baku, packaging, atau tenaga kerja langsung (jika ada) dll.\n" +
+        "2. Variable cost hanya boleh komponen yang berubah sesuai jumlah produksi seperti daftar bahan baku, packaging, atau tenaga kerja langsung (jika ada) dll.\n" +
         "3. Membuat daftar fixed_cost yang diestimasikan per bulan berdasarkan input product dan kategori product.\n" +
         "4. Fixed cost hanya komponen biaya produksi bulanan seperti sewa, listrik/air, gaji karyawan dll.\n" +
-        "5. Jangan pernah memasukkan biaya yang tidak relevan, seperti biaya G&A, biaya selling, biaya marketing, biaya distribusi, atau biaya non-produktif.\n" +
-        "6. Menggunakan prinsip absorption costing: seluruh biaya produksi yang relevan harus masuk dalam perhitungan.\n" +
-        "7. Hindari over-specification: hanya tampilkan biaya yang penting, tidak perlu semua biaya kecil yang tidak material dicantumkan.\n" +
+        "5. Jangan pernah memasukkan biaya yang tidak relevan, seperti biaya G&A, biaya selling, biaya marketing, biaya distribusi, biaya pemeliharaan, biaya depresiasi, biaya asuransi, atau biaya non-produktif.\n" +
+        "6. Hindari over-specification: hanya tampilkan biaya yang penting, tidak perlu semua biaya kecil yang tidak material dicantumkan.\n" +
+        "7. Menggunakan prinsip absorption costing: seluruh biaya produksi yang relevan harus masuk dalam perhitungan.\n" +
         "8. Harga biaya harus wajar. realistis, dan sesuai pasar.\n" +
+        "9. Untuk field unit, hanya gunakan satuan berdiri sendiri seperti `kg`, `gram`, `ml`, `liter`, `pcs`, `month`, `hour`, `person`, dsb. Tidak boleh ada format yang mengandung kata `per`, misalnya: `per kg`, `per person`, `per month`.\n" +
         "Format output wajib dalam bentuk JSON sesuai struktur berikut:\n" +
         AIFormatOutputText({
           variable_cost: [
