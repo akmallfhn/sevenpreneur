@@ -49,3 +49,10 @@ export function getShortNumber(value: number): string {
 export function scaleToPercent(value: number) {
   return ((value + 5) / 10) * 100;
 }
+
+export function formatWithComma(value: any): string {
+  const num = toNumber(value);
+  if (num === null || isNaN(num)) return "0";
+
+  return num.toLocaleString("id-ID");
+}

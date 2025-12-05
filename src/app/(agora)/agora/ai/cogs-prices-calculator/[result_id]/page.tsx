@@ -1,3 +1,4 @@
+import COGSPricesCalculationReportLMS from "@/app/components/reports/COGSPricesCalculationReportLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -29,5 +30,38 @@ export default async function AICOGSPricesResultLMS({
 
   const aiCOGSPriceStrategyResult = aiCOGSPriceStrategy.result;
 
-  return <></>;
+  return (
+    <COGSPricesCalculationReportLMS
+      sessionToken={sessionToken}
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
+        userData.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+      }
+      sessionUserRole={userData.role_id}
+      resultId={result_id}
+      resultName={aiCOGSPriceStrategyResult.name}
+      resultStatus={aiCOGSPriceStrategyResult.is_done}
+      estimatedPriceByValue={
+        aiCOGSPriceStrategyResult.result?.prices.value_based.estimated_price ??
+        0
+      }
+      estimatedPriceByCost={
+        aiCOGSPriceStrategyResult.result?.prices.cost_based.estimated_price ?? 0
+      }
+      estimatedPriceByCompetition={
+        aiCOGSPriceStrategyResult.result?.prices.competition_based
+          .estimated_price ?? 0
+      }
+      variableCostPerUnit={
+        aiCOGSPriceStrategyResult.result?.total_cost.variable_cost ?? 0
+      }
+      fixedCostPerPeriod={
+        aiCOGSPriceStrategyResult.result?.total_cost.fixed_cost ?? 0
+      }
+      productionPerPeriod={
+        aiCOGSPriceStrategyResult.result?.production_per_month ?? 0
+      }
+    />
+  );
 }

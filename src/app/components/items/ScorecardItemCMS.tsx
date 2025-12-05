@@ -17,7 +17,7 @@ export default function ScorecardItemCMS({
         <div
           className={`scorecard-icon flex size-2.5 justify-center items-center rounded-full ${scorecardBackground}`}
         />
-        <h3 className="scorecard-name font-bodycopy font-medium text-sm text-alternative">
+        <h3 className="scorecard-name font-bodycopy font-medium text-sm text-[#333333]">
           {scorecardName}
         </h3>
       </div>

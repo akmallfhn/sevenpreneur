@@ -63,3 +63,4 @@ export type BusinessYearlyRevenue =
   | "BETWEEN_10B_25B"
   | "ABOVE_25B";
 export type NumberConfig = "numeric" | "decimal";
+export type AIPriceType = "value" | "cost" | "competition";
