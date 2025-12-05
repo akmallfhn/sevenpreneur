@@ -710,7 +710,7 @@ export const aiToolPrompts = {
         "(d) Tentukan estimated_price dengan referensi rentang harga kompetitor.\n" +
         "4. Skema penentuan Value-Based Pricing: " +
         "(a) Tentukan maximum willingness to pay (WTP) berdasarkan nilai, manfaat, dan kategori produk. " +
-        "(b) Pilih harga dengan tidak boleh di bawah total cost, berada di sweet spot, dan mendekati WTP tanpa melewati batas toleransi customer.\n" +
+        "(b) Pilih harga dengan tidak boleh di bawah total cost, berada di sweet spot, dan mendekati WTP (80-90%) tanpa melewati batas toleransi customer.\n" +
         "5. Tentukan apakah produk tersebut termasuk kategori high involvement atau low involvement.\n" +
         "6. Tentukan apakah produk tersebut memberikan psychological benefit atau economic benefit.\n" +
         "7. Berdasarkan kedua penilaian tersebut, berikan rekomendasi komunikasi produk yang paling efektif. " +
@@ -741,7 +741,8 @@ export const aiToolPrompts = {
               value_communication: {
                 involvement: "<high/low>",
                 benefit: "<psychological/economic>",
-                recommendations: "<penjelasan/alasan harga jual per item>",
+                recommendations:
+                  "<rekomendasi komunikasi produk value berdasarkan involvement dan benefit>",
               },
             },
           },

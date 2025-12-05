@@ -8,7 +8,6 @@ import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
 import { getRupiahCurrency } from "@/lib/currency";
 import AIPriceItemLMS from "../items/AIPriceItemLMS";
 import { AIPriceType } from "@/lib/app-types";
-import StatItemCMS from "../items/StatItemCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import { formatWithComma } from "@/lib/convert-number";
@@ -22,6 +21,7 @@ interface COGSPricesCalculationReportLMSProps extends AvatarBadgeLMSProps {
   estimatedPriceByValue: number;
   estimatedPriceByCost: number;
   estimatedPriceByCompetition: number;
+  valueCommunication: string;
   variableCostPerUnit: number;
   fixedCostPerPeriod: number;
   productionPerPeriod: number;
@@ -229,17 +229,17 @@ export default function COGSPricesCalculationReportLMS(
                   scorecardValue={formatWithComma(
                     Math.round(monthlySalesTarget / 30)
                   )}
-                  scorecardBackground="bg-warning-foreground"
+                  scorecardBackground="bg-primary"
                 />
                 <ScorecardItemCMS
                   scorecardName="Total Pendapatan per Bulan"
                   scorecardValue={monthlyRevenue}
-                  scorecardBackground="bg-danger-foreground"
+                  scorecardBackground="bg-success-foreground"
                 />
                 <ScorecardItemCMS
                   scorecardName="Total Biaya per Bulan"
                   scorecardValue={monthlyExpense}
-                  scorecardBackground="bg-success-foreground"
+                  scorecardBackground="bg-danger-foreground"
                 />
               </div>
             </div>
@@ -291,6 +291,14 @@ export default function COGSPricesCalculationReportLMS(
                   {getRupiahCurrency(totalCostPerUnit)}
                 </p>
               </div>
+            </div>
+            <div className="value-communication flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg">
+              <h3 className="section-title font-bodycopy font-bold text-lg">
+                Value Communication
+              </h3>
+              <p className="font-bodycopy font-medium text-[15px] text-[#111111]">
+                {props.valueCommunication}
+              </p>
             </div>
           </aside>
         </div>
