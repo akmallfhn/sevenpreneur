@@ -53,6 +53,10 @@ export default async function AICOGSPricesResultLMS({
         aiCOGSPriceStrategyResult.result?.prices.competition_based
           .estimated_price ?? 0
       }
+      valueCommunication={
+        aiCOGSPriceStrategyResult.result?.prices.value_based.value_communication
+          .recommendations ?? ""
+      }
       variableCostPerUnit={
         aiCOGSPriceStrategyResult.result?.total_cost.variable_cost ?? 0
       }
