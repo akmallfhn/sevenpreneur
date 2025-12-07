@@ -73,38 +73,9 @@ interface TransactionStatusDetailsSVPProps {
   paidTransactionAt: string | undefined;
 }
 
-export default function TransactionStatusDetailsSVP({
-  transactionId,
-  transactionStatus,
-  invoiceNumber,
-  invoiceURL,
-  productCategory,
-  productPrice,
-  productDiscount,
-  productAdminFee,
-  productVAT,
-  productTotalAmount,
-  playlistId,
-  playlistName,
-  playlistImage,
-  playlistSlug,
-  playlistTotalVideo,
-  cohortId,
-  cohortName,
-  cohortImage,
-  cohortSlug,
-  cohortPriceName,
-  eventId,
-  eventName,
-  eventImage,
-  eventSlug,
-  eventPriceName,
-  paymentChannelName,
-  paymentChannelImage,
-  userName,
-  createTransactionAt,
-  paidTransactionAt,
-}: TransactionStatusDetailsSVPProps) {
+export default function TransactionStatusDetailsSVP(
+  props: TransactionStatusDetailsSVPProps
+) {
   const router = useRouter();
   const { theme } = useTheme();
   const [openAmountDetails, setOpenAmountDetails] = useState(false);
@@ -112,13 +83,14 @@ export default function TransactionStatusDetailsSVP({
   const [loadingCancelation, setLoadingCancelation] = useState(false);
   const [isOpenCancelConfirmation, setIsOpenCancelConfirmation] =
     useState(false);
-  const { statusWord, statusDescription } = variantStyles[transactionStatus];
-  const isPaid = transactionStatus === "PAID";
-  const isPending = transactionStatus === "PENDING";
-  const isFailed = transactionStatus === "FAILED";
-  const isCohort = productCategory === "COHORT";
-  const isPlaylist = productCategory === "PLAYLIST";
-  const isEvent = productCategory === "EVENT";
+  const { statusWord, statusDescription } =
+    variantStyles[props.transactionStatus];
+  const isPaid = props.transactionStatus === "PAID";
+  const isPending = props.transactionStatus === "PENDING";
+  const isFailed = props.transactionStatus === "FAILED";
+  const isCohort = props.productCategory === "COHORT";
+  const isPlaylist = props.productCategory === "PLAYLIST";
+  const isEvent = props.productCategory === "EVENT";
 
   // Refresh data without full page reload
   const handleRefresh = () => {
@@ -130,19 +102,19 @@ export default function TransactionStatusDetailsSVP({
   };
 
   // Set Max Payment Deadline
-  const paymentDeadline = dayjs(createTransactionAt).add(12, "hour");
+  const paymentDeadline = dayjs(props.createTransactionAt).add(12, "hour");
   const countdown = useCountdownHours(paymentDeadline);
 
   // Cancel Payment on Xendit
   const handleCancelation = async () => {
-    if (!transactionId) {
+    if (!props.transactionId) {
       toast.error("The transaction could not be found");
       return;
     }
     setLoadingCancelation(true);
     try {
       const cancelPayment = await CancelPaymentXendit({
-        transactionId,
+        transactionId: props.transactionId,
       });
       if (cancelPayment.code === "NO_CONTENT") {
         router.refresh();
@@ -159,40 +131,40 @@ export default function TransactionStatusDetailsSVP({
 
   // Product Conditional Rendering
   let productImage =
-    "https://www.jport.co/Editor/image/4721055615600659_empty.png";
-  if (isCohort && cohortImage) {
-    productImage = cohortImage;
-  } else if (isEvent && eventImage) {
-    productImage = eventImage;
-  } else if (isPlaylist && playlistImage) {
-    productImage = playlistImage;
+    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/empty-icon.svg";
+  if (isCohort && props.cohortImage) {
+    productImage = props.cohortImage;
+  } else if (isEvent && props.eventImage) {
+    productImage = props.eventImage;
+  } else if (isPlaylist && props.playlistImage) {
+    productImage = props.playlistImage;
   }
 
   let productName = "-";
-  if (isCohort && cohortName) {
-    productName = cohortName;
-  } else if (isEvent && eventName) {
-    productName = eventName;
-  } else if (isPlaylist && playlistName) {
-    productName = playlistName;
+  if (isCohort && props.cohortName) {
+    productName = props.cohortName;
+  } else if (isEvent && props.eventName) {
+    productName = props.eventName;
+  } else if (isPlaylist && props.playlistName) {
+    productName = props.playlistName;
   }
 
   let productTier = "-";
-  if (isCohort && cohortPriceName) {
-    productTier = cohortPriceName;
-  } else if (isEvent && eventPriceName) {
-    productTier = eventPriceName;
-  } else if (isPlaylist && playlistTotalVideo) {
-    productTier = `Learning Series - ${playlistTotalVideo} episodes`;
+  if (isCohort && props.cohortPriceName) {
+    productTier = props.cohortPriceName;
+  } else if (isEvent && props.eventPriceName) {
+    productTier = props.eventPriceName;
+  } else if (isPlaylist && props.playlistTotalVideo) {
+    productTier = `Learning Series - ${props.playlistTotalVideo} episodes`;
   }
 
   let productPage = "/";
-  if (isCohort && cohortSlug && cohortId) {
-    productPage = `/cohorts/${cohortSlug}/${cohortId}/checkout`;
-  } else if (isEvent && eventSlug && eventId) {
-    productPage = `/events/${eventSlug}/${eventId}/checkout`;
-  } else if (isPlaylist && playlistSlug && playlistId) {
-    productPage = `/playlist/${playlistSlug}/${playlistId}/checkout`;
+  if (isCohort && props.cohortSlug && props.cohortId) {
+    productPage = `/cohorts/${props.cohortSlug}/${props.cohortId}/checkout`;
+  } else if (isEvent && props.eventSlug && props.eventId) {
+    productPage = `/events/${props.eventSlug}/${props.eventId}/checkout`;
+  } else if (isPlaylist && props.playlistSlug && props.playlistId) {
+    productPage = `/playlist/${props.playlistSlug}/${props.playlistId}/checkout`;
   }
 
   return (
@@ -202,7 +174,7 @@ export default function TransactionStatusDetailsSVP({
           {/* Transaction Status */}
           <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
             <div className="status-guidance flex flex-col items-center text-center font-ui">
-              <PaymentStatusAnimationSVP variant={transactionStatus} />
+              <PaymentStatusAnimationSVP variant={props.transactionStatus} />
               <div className="flex flex-col items-center gap-2">
                 <h2 className="font-bold">{statusWord}</h2>
                 <p className="text-alternative text-sm">{statusDescription}</p>
@@ -219,7 +191,7 @@ export default function TransactionStatusDetailsSVP({
                 </AppButton>
               </div>
             </div>
-            {transactionStatus !== "FAILED" && (
+            {props.transactionStatus !== "FAILED" && (
               <div
                 className={`flex font-ui w-full items-center ${
                   isPaid ? "justify-center" : "justify-between"
@@ -232,7 +204,9 @@ export default function TransactionStatusDetailsSVP({
                   </p>
                   <p className="payment-deadline text-alternative">
                     {isPaid &&
-                      dayjs(paidTransactionAt).format("DD MMM YYYY [at] HH:mm")}
+                      dayjs(props.paidTransactionAt).format(
+                        "DD MMM YYYY [at] HH:mm"
+                      )}
                     {isPending &&
                       paymentDeadline.format("DD MMM YYYY [at] HH:mm")}
                   </p>
@@ -253,7 +227,7 @@ export default function TransactionStatusDetailsSVP({
                 <Image
                   className="object-cover w-full h-full"
                   src={
-                    paymentChannelImage ||
+                    props.paymentChannelImage ||
                     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/payment-icon/payment-mandiri.svg"
                   }
                   alt="Icon Payment"
@@ -262,7 +236,7 @@ export default function TransactionStatusDetailsSVP({
                 />
               </div>
               <p className="payment-channel-name font-ui font-[450px] text-sm">
-                {paymentChannelName}
+                {props.paymentChannelName}
               </p>
             </div>
             <div
@@ -275,24 +249,26 @@ export default function TransactionStatusDetailsSVP({
               <div className="amount-details flex flex-col gap-2">
                 <ReceiptLineItemSVP
                   receiptName="Program Price"
-                  receiptValue={getRupiahCurrency(productPrice)}
+                  receiptValue={getRupiahCurrency(props.productPrice)}
                 />
-                {productDiscount !== 0 && (
+                {props.productDiscount !== 0 && (
                   <ReceiptLineItemSVP
                     receiptName="Discount"
                     receiptValue={`-${getRupiahCurrency(
-                      Math.round(productDiscount)
+                      Math.round(props.productDiscount)
                     )}`}
                     isDiscount
                   />
                 )}
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
-                  receiptValue={getRupiahCurrency(Math.round(productAdminFee))}
+                  receiptValue={getRupiahCurrency(
+                    Math.round(props.productAdminFee)
+                  )}
                 />
                 <ReceiptLineItemSVP
                   receiptName="VAT"
-                  receiptValue={getRupiahCurrency(Math.round(productVAT))}
+                  receiptValue={getRupiahCurrency(Math.round(props.productVAT))}
                 />
                 <hr className="border-t border-outline border-dashed dark:border-outline-dark" />
               </div>
@@ -304,7 +280,7 @@ export default function TransactionStatusDetailsSVP({
               <div className="amount flex flex-col font-ui text-sm">
                 <p>Total Amount</p>
                 <p className="font-bold">
-                  {getRupiahCurrency(Math.round(productTotalAmount))}
+                  {getRupiahCurrency(Math.round(props.productTotalAmount))}
                 </p>
               </div>
               <ChevronDown
@@ -338,21 +314,21 @@ export default function TransactionStatusDetailsSVP({
           <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
             <ReceiptLineItemSVP
               receiptName="Transaction ID"
-              receiptValue={transactionId}
+              receiptValue={props.transactionId}
             />
             <ReceiptLineItemSVP
               receiptName="Invoice Number"
-              receiptValue={invoiceNumber}
+              receiptValue={props.invoiceNumber}
             />
             <ReceiptLineItemSVP
               receiptName="Transaction Date"
-              receiptValue={dayjs(createTransactionAt).format(
+              receiptValue={dayjs(props.createTransactionAt).format(
                 "DD MMM YYYY HH:mm"
               )}
             />
             <ReceiptLineItemSVP
               receiptName="Customer Name"
-              receiptValue={userName}
+              receiptValue={props.userName}
             />
           </div>
 
@@ -394,7 +370,7 @@ export default function TransactionStatusDetailsSVP({
             {isPending && (
               <>
                 <a
-                  href={invoiceURL}
+                  href={props.invoiceURL}
                   target="_blank"
                   rel="noopenner noreferrer"
                   className="w-full lg:w-[240px]"

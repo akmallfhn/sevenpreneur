@@ -87,7 +87,7 @@ export default function TransactionCardItemSVP({
 
   // Product Conditional Rendering
   let productImage =
-    "https://www.jport.co/Editor/image/4721055615600659_empty.png";
+    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/empty-icon.svg";
   if (isCohort && cohortImage) {
     productImage = cohortImage;
   } else if (isEvent && eventImage) {

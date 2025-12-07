@@ -64,7 +64,7 @@ export default function AppLoginContainer({
         <Image
           className="flex max-w-[90px] lg:hidden"
           src={
-            "https://static.wixstatic.com/media/02a5b1_66724615f4b947cfbdd68d48775ec024~mv2.webp"
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square-outline.webp"
           }
           alt="Logo Sevenpreneur"
           width={300}
@@ -73,7 +73,7 @@ export default function AppLoginContainer({
         <Image
           className="hidden max-w-[140px] lg:flex"
           src={
-            "https://static.wixstatic.com/media/02a5b1_37f72798de574a0eac1c827c176225a0~mv2.webp"
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square-blue.webp"
           }
           alt="Logo Sevenpreneur"
           width={300}

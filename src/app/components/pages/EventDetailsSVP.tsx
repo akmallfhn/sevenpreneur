@@ -64,27 +64,9 @@ export default function EventDetailsSVP({
     return () => window.removeEventListener("resize", checkOverflow);
   }, []);
 
-  // Show floating button when sentinel was gone
-  // useEffect(() => {
-  //   if (!sentinelRef.current) return;
-  //   const observer = new IntersectionObserver(
-  //     ([entry]) => {
-  //       setShowCTA(!entry.isIntersecting);
-  //     },
-  //     {
-  //       root: null,
-  //       threshold: 0,
-  //       rootMargin: "0px 0px 0px 0px",
-  //     }
-  //   );
-  //   observer.observe(sentinelRef.current);
-  //   return () => observer.disconnect();
-  // }, []);
-
   return (
     <React.Fragment>
       <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
-        {/* <div ref={sentinelRef} className="h-0" /> */}
         <div className="page-container flex flex-col px-5 py-5 w-full gap-8 z-10 lg:flex-row lg:px-0 lg:py-10 lg:pb-20 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
           <main className="flex flex-col gap-8 md:flex-[2] lg:gap-10">
             <div className="event-image flex aspect-video w-full h-full rounded-lg overflow-hidden">
@@ -92,7 +74,7 @@ export default function EventDetailsSVP({
                 className="object-cover w-full h-full"
                 src={
                   eventImage ||
-                  "https://www.jport.co/Editor/image/4721055615600659_empty.png"
+                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/empty-icon.svg"
                 }
                 alt={eventName}
                 width={1200}
