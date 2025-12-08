@@ -222,11 +222,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Attendances 📋
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.checkIn`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `create.checkOut` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.attendance` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `create.checkIn`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `create.checkOut`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.attendance_counts` |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
+| `read.attendance`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 **Scopes:**
 
