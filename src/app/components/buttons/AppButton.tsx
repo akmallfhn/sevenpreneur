@@ -8,6 +8,7 @@ export type VariantType =
   | "primaryGradient"
   | "secondary"
   | "tertiary"
+  | "quarternary"
   | "outline"
   | "ghost"
   | "whatsapp"
@@ -94,6 +95,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A] disabled:bg-[#E4AEBD]",
       tertiary:
         "bg-tertiary text-white hover:bg-[#2D12CA] active:bg-[#2D12CA] disabled:bg-[#9183E3]",
+      quarternary:
+        "text-white bg-success-foreground hover:bg-[#418E86] active:bg-[#418E86] disabled:bg-[#9ABEBA]",
       outline:
         "bg-white border border-[#E3E3E3] active:bg-[#F5F5F5] dark:bg-surface-black dark:border-outline-dark disabled:text-[#909090] disabled:dark:text-[#262626]",
       ghost:

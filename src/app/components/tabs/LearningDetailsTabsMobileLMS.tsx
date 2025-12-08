@@ -10,13 +10,22 @@ import { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AttendanceGatewayMobileLMS from "../gateways/AttendanceGatewayMobileLMS";
 import { ChevronDown } from "lucide-react";
-import { MaterialList } from "../pages/LearningDetailsLMS";
+import {
+  DiscussionStarterList,
+  MaterialList,
+} from "../pages/LearningDetailsLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
+import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
+import { toast } from "sonner";
+import { CreateDiscussionStarter } from "@/lib/actions";
 
-export interface LearningDetailsTabsMobileLMSProps {
+export interface LearningDetailsTabsMobileLMSProps extends AvatarBadgeLMSProps {
+  sessionUserId: string;
   learningSessionId: number;
   learningSessionDescription: string;
   learningSessionDate: string;
@@ -31,6 +40,7 @@ export interface LearningDetailsTabsMobileLMSProps {
   hasCheckIn: boolean;
   hasCheckOut: boolean;
   materialList: MaterialList[];
+  discussionStarterList: DiscussionStarterList[];
 }
 
 export default function LearningDetailsTabsMobileLMS(
@@ -45,6 +55,9 @@ export default function LearningDetailsTabsMobileLMS(
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
+  const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
+  const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
+  const [textValue, setTextValue] = useState("");
 
   const tabOptions = [
     { id: "details", label: "Details" },
@@ -107,6 +120,55 @@ export default function LearningDetailsTabsMobileLMS(
     return null;
   })();
 
+  // Update list discussion to state
+  useEffect(() => {
+    setDiscussion(props.discussionStarterList);
+  }, [props.discussionStarterList]);
+
+  // Create discussion
+  const handleSubmitDiscussion = async () => {
+    if (!textValue.trim()) {
+      return;
+    }
+    setIsSendingDiscussion(true);
+
+    try {
+      const createDiscussion = await CreateDiscussionStarter({
+        learningSessionId: props.learningSessionId,
+        discussionStarterMessage: textValue,
+      });
+
+      if (createDiscussion.code === "CREATED") {
+        const newDiscussion = {
+          id: createDiscussion.discussion.id,
+          full_name: props.sessionUserName,
+          avatar: props.sessionUserAvatar,
+          message: createDiscussion.discussion.message,
+          reply_count: 0,
+          created_at: createDiscussion.discussion.created_at,
+          updated_at: createDiscussion.discussion.updated_at,
+          is_owner: true,
+        };
+
+        setTextValue("");
+        toast.success("Discussion Sent!");
+        setDiscussion((prev) => [newDiscussion, ...prev]);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to send discussion. Please try again.");
+    } finally {
+      setIsSendingDiscussion(false);
+    }
+  };
+
+  // Remove deleted discussion on state
+  const handleDiscussionDeleted = (discussionId: number) => {
+    setDiscussion((prevDiscussions) =>
+      prevDiscussions.filter((discussion) => discussion.id !== discussionId)
+    );
+  };
+
   return (
     <div className="learning-session-tabs flex flex-col w-full">
       <div className="tab-options flex border-b justify-around">
@@ -167,7 +229,7 @@ export default function LearningDetailsTabsMobileLMS(
                     >
                       <AppButton
                         size="medium"
-                        variant="tertiary"
+                        variant="primary"
                         disabled={isExpired}
                       >
                         Join Meeting
@@ -183,7 +245,7 @@ export default function LearningDetailsTabsMobileLMS(
                     >
                       <AppButton
                         size="medium"
-                        variant="tertiary"
+                        variant="primary"
                         disabled={isExpired}
                       >
                         Check Maps
@@ -193,7 +255,7 @@ export default function LearningDetailsTabsMobileLMS(
               </div>
             </div>
           </div>
-          <div className="attendance flex p-4">
+          <div className="attendance flex flex-col bg-white p-5">
             <AttendanceGatewayMobileLMS
               learningSessionId={props.learningSessionId}
               hasCheckIn={props.hasCheckIn}
@@ -235,6 +297,46 @@ export default function LearningDetailsTabsMobileLMS(
             {!isExpanded && isOverflowing && (
               <div className="overlay absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-40% from-white to-100% to-transparent pointer-events-none" />
             )}
+          </div>
+        </div>
+      )}
+
+      {activeTab === "discussions" && (
+        <div className="tab-content flex flex-col w-full gap-1">
+          <div className="video-recording relative flex flex-col gap-3 bg-white p-5">
+            <h2 className="section-title font-bodycopy font-bold">
+              Discussions
+            </h2>
+            <div className="discussions-thread flex flex-col gap-6">
+              {discussion.length > 0 ? (
+                <div className="discussions-list flex flex-col gap-4">
+                  {discussion.map((post) => (
+                    <AppDiscussionStarterItem
+                      key={post.id}
+                      sessionUserId={props.sessionUserId}
+                      sessionUserName={props.sessionUserName}
+                      sessionUserAvatar={
+                        props.sessionUserAvatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                      }
+                      discussionStarterId={post.id}
+                      discussionStarterAuthorName={post.full_name}
+                      discussionStarterAuthorAvatar={
+                        post.avatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                      }
+                      discussionStarterMessage={post.message}
+                      discussionStarterTotalReplies={post.reply_count}
+                      discussionStarterCreatedAt={post.created_at}
+                      discussionStarterOwner={post.is_owner}
+                      onDiscussionDeleted={handleDiscussionDeleted}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <EmptyDiscussionLMS />
+              )}
+            </div>
           </div>
         </div>
       )}
