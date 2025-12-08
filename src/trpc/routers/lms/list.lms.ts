@@ -309,7 +309,13 @@ export const listLMS = {
         ];
       }
       const learningsList = await opts.ctx.prisma.learning.findMany({
-        include: { speaker: true },
+        include: {
+          speaker: true,
+          attendances: {
+            select: { check_in_at: true, check_out_at: true },
+            where: { user_id: opts.ctx.user.id },
+          },
+        },
         where: {
           cohort_id: opts.input.cohort_id,
           OR: whereOr,
@@ -317,6 +323,10 @@ export const listLMS = {
         orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
       });
       const returnedList = learningsList.map((entry) => {
+        const attended =
+          entry.attendances.length == 1 && // only one attendance row for each (learning_id, user_id)
+          !!entry.attendances[0].check_in_at &&
+          !!entry.attendances[0].check_out_at;
         return {
           id: entry.id,
           cohort_id: entry.cohort_id,
@@ -328,6 +338,7 @@ export const listLMS = {
           location_url: entry.location_url,
           speaker: entry.speaker,
           status: entry.status,
+          attended: attended,
         };
       });
       const attendanceCount = await opts.ctx.prisma.attendance.aggregate({
