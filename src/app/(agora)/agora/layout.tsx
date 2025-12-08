@@ -78,7 +78,7 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
       <div className="root relative w-full min-h-screen bg-section-background">
         <SidebarLMS aiResultList={aiResultList} />
         {children}
-        <DisallowedMobile />
+        {/* <DisallowedMobile /> */}
         <Toaster richColors position="top-center" />
       </div>
     </TRPCProvider>

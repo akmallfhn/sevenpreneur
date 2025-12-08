@@ -83,7 +83,7 @@ export default function CohortDetailsTabsLMS({
   const generalUser = userList.filter((user) => user.role_id === 3);
 
   return (
-    <div className="cohort-tabs w-full min-h-80 bg-white/70 backdrop-blur-md rounded-lg border overflow-hidden">
+    <div className="cohort-tabs w-full min-h-80 bg-white/70 rounded-lg border overflow-hidden">
       <div className="tab-options flex border-b justify-around">
         {tabOptions.map((post) => (
           <div className="tab-item relative w-full" key={post.id}>

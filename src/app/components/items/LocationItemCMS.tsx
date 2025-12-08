@@ -17,7 +17,7 @@ export default function LocationItemCMS({
         <Image
           className="object-cover w-full h-full"
           src={
-            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/maps-icon.webp"
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/gmaps-icon.png"
           }
           alt="File"
           width={200}
