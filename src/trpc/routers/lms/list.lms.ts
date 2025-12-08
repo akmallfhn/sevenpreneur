@@ -1,5 +1,9 @@
 import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
-import { loggedInProcedure, publicProcedure } from "@/trpc/init";
+import {
+  loggedInProcedure,
+  publicProcedure,
+  roleBasedProcedure,
+} from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { calculatePage } from "@/trpc/utils/paging";
 import {
@@ -12,6 +16,13 @@ import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import { isEnrolledCohort, isEnrolledLearning } from "./util.lms";
+
+type AttendanceCount = {
+  learning_id: number;
+  check_in_count: number;
+  check_out_count: number;
+  has_no_attendance: number;
+};
 
 export const listLMS = {
   cohorts: publicProcedure
@@ -640,6 +651,49 @@ export const listLMS = {
           comment: entry.comment,
         };
       });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  attendance_counts: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(
+      z.object({
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      type MemberCount = {
+        member_count: number;
+      };
+      const cohortMemberCount = await opts.ctx.prisma.$queryRaw<MemberCount[]>`
+SELECT COUNT(*)::INTEGER AS member_count
+FROM users_cohorts
+  LEFT JOIN users ON users_cohorts.user_id = users.id
+WHERE cohort_id = ${opts.input.cohort_id}
+  AND users.role_id = 3 /* General User */;`;
+      const memberCount = cohortMemberCount[0].member_count;
+
+      const returnedList = await opts.ctx.prisma.$queryRaw<AttendanceCount[]>`
+SELECT
+  learnings.id AS learning_id,
+  COUNT(check_in_at)::INTEGER AS check_in_count,
+  COUNT(check_out_at)::INTEGER AS check_out_count,
+  (${memberCount} - COUNT(users.id))::INTEGER AS has_no_attendance
+FROM learnings
+  LEFT JOIN attendances ON learnings.id = attendances.learning_id
+  LEFT JOIN users ON attendances.user_id = users.id
+WHERE cohort_id = ${opts.input.cohort_id}
+  AND (users.role_id IS NULL OR users.role_id = 3 /* General User */)
+GROUP BY learnings.id
+ORDER BY meeting_date ASC, learnings.created_at ASC;`;
+
       return {
         code: STATUS_OK,
         message: "Success",

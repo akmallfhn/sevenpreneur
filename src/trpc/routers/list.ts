@@ -34,6 +34,7 @@ export const listRouter = createTRPCRouter({
   discussionReplies: listLMS.discussionReplies,
   projects: listLMS.projects,
   submissions: listLMS.submissions,
+  attendance_counts: listLMS.attendance_counts,
 
   // Playlist-related //
 
