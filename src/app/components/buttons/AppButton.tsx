@@ -7,6 +7,7 @@ export type VariantType =
   | "primaryLight"
   | "primaryGradient"
   | "secondary"
+  | "tertiary"
   | "outline"
   | "ghost"
   | "whatsapp"
@@ -91,6 +92,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         "text-white bg-gradient-to-br from-0% from-[#267EFF] via-19% via-[#2D4BF1] to-100% to-[#5E17E3] before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:skew-x-12 before:translate-x-[-200%] hover:before:translate-x-[300%] before:transition-transform before:duration-700",
       secondary:
         "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A] disabled:bg-[#E4AEBD]",
+      tertiary:
+        "bg-tertiary text-white hover:bg-[#2D12CA] active:bg-[#2D12CA] disabled:bg-[#9183E3]",
       outline:
         "bg-white border border-[#E3E3E3] active:bg-[#F5F5F5] dark:bg-surface-black dark:border-outline-dark disabled:text-[#909090] disabled:dark:text-[#262626]",
       ghost:
