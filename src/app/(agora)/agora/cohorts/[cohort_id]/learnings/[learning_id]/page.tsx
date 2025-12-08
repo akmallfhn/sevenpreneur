@@ -63,6 +63,11 @@ export default async function LearningsDetailsPageLMS({
         cohortId={cohortId}
         cohortName={"Sevenpreneur Business Blueprint Program Batch 7"}
         sessionUserId={userData.id}
+        sessionUserName={userData.full_name}
+        sessionUserAvatar={
+          userData.avatar ||
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+        }
         sessionUserRole={userData.role_id}
         learningSessionId={learningDetails.id}
         learningSessionName={learningDetails.name}

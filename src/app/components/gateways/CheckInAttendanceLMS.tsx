@@ -28,7 +28,7 @@ export default function CheckInAttendanceLMS(props: CheckInAttendanceLMSProps) {
         icon: <Check className="size-4" />,
         label: "Checked In",
         disabled: false,
-        color: "whatsapp",
+        color: "quarternary",
       };
     if (!canCheckIn)
       return {

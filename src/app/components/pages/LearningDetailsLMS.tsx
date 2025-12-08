@@ -65,7 +65,6 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
-  const router = useRouter();
   const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
   const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
   const [textValue, setTextValue] = useState("");

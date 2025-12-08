@@ -1,41 +1,23 @@
 "use client";
 import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
-import { StatusType } from "@/lib/app-types";
 import Image from "next/image";
 import LearningDetailsTabsMobileLMS, {
   LearningDetailsTabsMobileLMSProps,
 } from "../tabs/LearningDetailsTabsMobileLMS";
 import { Star } from "lucide-react";
 import AppButton from "../buttons/AppButton";
-
-export interface MaterialList {
-  name: string;
-  document_url: string;
-  status: StatusType;
-}
-
-export interface DiscussionStarterList {
-  id: number;
-  full_name: string;
-  avatar: string | null;
-  message: string;
-  reply_count: number;
-  created_at: string;
-  updated_at: string;
-  is_owner: boolean;
-}
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 
 interface LearningDetailsMobileLMSProps
-  extends LearningDetailsTabsMobileLMSProps {
+  extends LearningDetailsTabsMobileLMSProps,
+    AvatarBadgeLMSProps {
   cohortId: number;
   cohortName: string;
-  sessionUserId: string;
   sessionUserRole: number;
   learningSessionName: string;
   learningEducatorName: string;
   learningEducatorAvatar: string;
   learningSessionFeedbackURL: string;
-  discussionStarterList: DiscussionStarterList[];
 }
 
 export default function LearningDetailsMobileLMS(
@@ -76,6 +58,9 @@ export default function LearningDetailsMobileLMS(
         </div>
       </div>
       <LearningDetailsTabsMobileLMS
+        sessionUserId={props.sessionUserId}
+        sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserName={props.sessionUserName}
         learningSessionId={props.learningSessionId}
         learningSessionDescription={props.learningSessionDescription}
         learningSessionDate={props.learningSessionDate}
@@ -90,6 +75,7 @@ export default function LearningDetailsMobileLMS(
         hasCheckIn={props.hasCheckIn}
         hasCheckOut={props.hasCheckOut}
         materialList={props.materialList}
+        discussionStarterList={props.discussionStarterList}
       />
       {props.learningSessionFeedbackURL && props.learningSessionCheckOut && (
         <div className="ratings-feedback fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t border-outline transition-all z-[90]">

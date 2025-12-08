@@ -29,20 +29,20 @@ export default function AttendanceGatewayMobileLMS(
         icon: <Check className="size-4" />,
         label: "Checked In",
         disabled: false,
-        color: "whatsapp",
+        color: "quarternary",
       };
     if (!canCheckIn)
       return {
         icon: <LockKeyholeIcon className="size-4" />,
         label: "Closed",
         disabled: true,
-        color: "outline",
+        color: "primary",
       };
     return {
       icon: <ClockPlus className="size-4" />,
       label: "Check In",
       disabled: false,
-      color: "outline",
+      color: "primary",
     };
   };
 
@@ -52,20 +52,20 @@ export default function AttendanceGatewayMobileLMS(
         icon: <Check className="size-4" />,
         label: "Checked Out",
         disabled: false,
-        color: "whatsapp",
+        color: "quarternary",
       };
     if (!canCheckOut)
       return {
         icon: <LockKeyholeIcon className="size-4" />,
         label: "Closed",
         disabled: true,
-        color: "outline",
+        color: "primary",
       };
     return {
       icon: <ClockPlus className="size-4" />,
       label: "Check Out",
       disabled: false,
-      color: "outline",
+      color: "primary",
     };
   };
 
@@ -120,12 +120,10 @@ export default function AttendanceGatewayMobileLMS(
 
   return (
     <React.Fragment>
-      <div className="attendance-gateway relative flex flex-col w-full p-4 gap-3 border border-outline rounded-lg overflow-hidden">
+      <div className="attendance-gateway relative flex flex-col w-full p-3.5 gap-3 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg overflow-hidden">
         <div className="section-title flex flex-col gap-1 z-20">
-          <h3 className="font-bodycopy font-bold text-white">
-            Sudah Hadir Hari Ini?
-          </h3>
-          <p className="font-bodycopy text-white text-sm">
+          <h3 className="font-bodycopy font-bold ">Sudah Hadir Sesi Ini?</h3>
+          <p className="font-bodycopy  text-sm">
             Yuk, lakukan check-in sekarang dan check-out setelah sesi selesai.
           </p>
         </div>
@@ -154,16 +152,6 @@ export default function AttendanceGatewayMobileLMS(
             {checkOutAction}
             {checkOutIcon}
           </AppButton>
-        </div>
-        <div className="overlay absolute bg-black/30 backdrop-blur-sm inset-0 z-10" />
-        <div className="background-image absolute inset-0">
-          <Image
-            className="object-cover w-full h-full"
-            src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-gateway-attendance.jpg"
-            alt="Background Image"
-            width={400}
-            height={400}
-          />
         </div>
       </div>
 

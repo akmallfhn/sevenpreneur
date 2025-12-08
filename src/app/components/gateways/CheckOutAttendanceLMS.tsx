@@ -24,7 +24,7 @@ export default function CheckOutAttendanceLMS(
         icon: <Check className="size-4" />,
         label: "Checked Out",
         disabled: false,
-        color: "whatsapp",
+        color: "quarternary",
       };
     if (!canCheckOut)
       return {
