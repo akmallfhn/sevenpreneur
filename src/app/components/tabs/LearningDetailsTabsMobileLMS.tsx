@@ -10,6 +10,11 @@ import { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AttendanceGatewayMobileLMS from "../gateways/AttendanceGatewayMobileLMS";
 import { ChevronDown } from "lucide-react";
+import { MaterialList } from "../pages/LearningDetailsLMS";
+import FileItemLMS from "../items/FileItemLMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
+import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
+import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 
 export interface LearningDetailsTabsMobileLMSProps {
   learningSessionId: number;
@@ -21,8 +26,11 @@ export interface LearningDetailsTabsMobileLMSProps {
   learningLocationName: string;
   learningSessionCheckIn: boolean;
   learningSessionCheckOut: boolean;
+  learningRecordingYoutube: string;
+  learningRecordingCloudflare: string;
   hasCheckIn: boolean;
   hasCheckOut: boolean;
+  materialList: MaterialList[];
 }
 
 export default function LearningDetailsTabsMobileLMS(
@@ -44,6 +52,11 @@ export default function LearningDetailsTabsMobileLMS(
     { id: "materials", label: "Materials" },
   ];
 
+  const activeMaterials = props.materialList.filter(
+    (material) => material.status === "ACTIVE"
+  );
+
+  // Set expired link for 4 hours
   const isExpired = dayjs().isAfter(
     dayjs(props.learningSessionDate).add(4, "hour")
   );
@@ -65,7 +78,7 @@ export default function LearningDetailsTabsMobileLMS(
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/gmaps-icon.png";
   }
 
-  // Checking overflow using divRef
+  // Checking overflow for show more button
   useEffect(() => {
     const checkOverflow = () => {
       if (divRef.current) {
@@ -78,6 +91,21 @@ export default function LearningDetailsTabsMobileLMS(
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
   }, []);
+
+  // Get Video Key from URL
+  const learningVideoKey = (() => {
+    if (props.learningRecordingCloudflare)
+      return props.learningRecordingCloudflare;
+
+    if (props.learningRecordingYoutube) {
+      const extracted = extractEmbedPathFromYouTubeURL(
+        props.learningRecordingYoutube
+      );
+      return extracted || null;
+    }
+
+    return null;
+  })();
 
   return (
     <div className="learning-session-tabs flex flex-col w-full">
@@ -206,6 +234,55 @@ export default function LearningDetailsTabsMobileLMS(
             )}
             {!isExpanded && isOverflowing && (
               <div className="overlay absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-40% from-white to-100% to-transparent pointer-events-none" />
+            )}
+          </div>
+        </div>
+      )}
+
+      {activeTab === "materials" && (
+        <div className="tab-content flex flex-col w-full gap-1">
+          <div className="video-recording relative flex flex-col gap-3 bg-white p-5">
+            <h2 className="section-title font-bodycopy font-bold">
+              Video Recording
+            </h2>
+            {props.learningRecordingCloudflare && (
+              <div className="learning-video-recording relative w-full h-auto overflow-hidden rounded-sm">
+                <AppVideoPlayer videoId={props.learningRecordingCloudflare} />
+              </div>
+            )}
+            {!props.learningRecordingCloudflare && learningVideoKey && (
+              <div className="learning-video-recording relative w-full aspect-video overflow-hidden rounded-md">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${learningVideoKey}&amp;controls=1`}
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              </div>
+            )}
+            {!learningVideoKey && <EmptyRecordingLMS />}
+          </div>
+          <div className="learning-materials relative flex flex-col gap-3 bg-white p-5">
+            <h2 className="section-title font-bodycopy font-bold">Materials</h2>
+            {activeMaterials.length > 0 ? (
+              <div className="material-list flex flex-col gap-2">
+                {activeMaterials.map((post, index) => (
+                  <FileItemLMS
+                    key={index}
+                    fileName={post.name}
+                    fileURL={post.document_url}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="text-alternative text-sm font-bodycopy font-medium">
+                The session materials are being prepared and will be available
+                soon.
+              </p>
             )}
           </div>
         </div>

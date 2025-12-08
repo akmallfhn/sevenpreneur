@@ -61,7 +61,7 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
 
   if (isLoading) {
     return (
-      <div className="flex w-full h-full items-center justify-center bg-black">
+      <div className="flex w-full aspect-video items-center justify-center bg-black">
         <DotLottieReact
           src="/animation/loading-spinner.lottie"
           loop
@@ -75,8 +75,8 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
 
   if (!signedToken || hasError) {
     return (
-      <div className="flex w-full h-full items-center justify-center bg-black">
-        <p className="font-bodycopy text-white">
+      <div className="flex w-full aspect-video items-center justify-center bg-black">
+        <p className="font-bodycopy text-white text-sm lg:text-base">
           Video unavailable. Please refresh the page.
         </p>
       </div>

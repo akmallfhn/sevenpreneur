@@ -35,9 +35,6 @@ interface LearningDetailsMobileLMSProps
   learningEducatorName: string;
   learningEducatorAvatar: string;
   learningSessionFeedbackURL: string;
-  learningRecordingYoutube: string;
-  learningRecordingCloudflare: string;
-  materialList: MaterialList[];
   discussionStarterList: DiscussionStarterList[];
 }
 
@@ -88,8 +85,11 @@ export default function LearningDetailsMobileLMS(
         learningLocationURL={props.learningLocationURL}
         learningSessionCheckIn={props.learningSessionCheckIn}
         learningSessionCheckOut={props.learningSessionCheckOut}
+        learningRecordingCloudflare={props.learningRecordingCloudflare}
+        learningRecordingYoutube={props.learningRecordingYoutube}
         hasCheckIn={props.hasCheckIn}
         hasCheckOut={props.hasCheckOut}
+        materialList={props.materialList}
       />
       {props.learningSessionFeedbackURL && props.learningSessionCheckOut && (
         <div className="ratings-feedback fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t border-outline transition-all z-[90]">
