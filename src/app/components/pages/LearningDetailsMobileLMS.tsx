@@ -16,7 +16,6 @@ interface LearningDetailsMobileLMSProps extends AvatarBadgeLMSProps {
   cohortId: number;
   cohortName: string;
   sessionUserId: string;
-  sessionUserRole: number;
   learningSessionName: string;
   learningEducatorName: string;
   learningEducatorAvatar: string;

@@ -9,12 +9,15 @@ import CohortDetailsTabsLMS, {
 import HeroCohortDetailsLMS from "../heroes/HeroCohortDetailsLMS";
 import AttendanceProgressBarLMS from "../elements/AttendanceProgressBarLMS";
 import NearestScheduleCardLMS from "../elements/NearestScheduleCardLMS";
+import { useEffect, useState } from "react";
+import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
   sessionUserRole: number;
   cohortId: number;
   cohortName: string;
+  cohorImage: string;
   attendanceCount: number;
   learningList: LearningSessionList[];
   moduleList: ModuleList[];
@@ -24,6 +27,30 @@ interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
 
 export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
   const learningCount = props.learningList.length;
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <CohortDetailsMobileLMS
+        cohortId={props.cohortId}
+        cohortName={props.cohortName}
+        cohortImage={props.cohorImage}
+        learningList={props.learningList}
+      />
+    );
+  }
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">

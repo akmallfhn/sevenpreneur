@@ -6,13 +6,10 @@ import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
 import EmptyItemLMS from "../state/EmptyItemLMS";
 import LearningSessionItemMobileLMS from "../items/LearningSessionItemMobileLMS";
 
-interface CohortDetailsMobileLMSProps extends AvatarBadgeLMSProps {
-  sessionUserId: string;
-  sessionUserRole: number;
+interface CohortDetailsMobileLMSProps {
   cohortId: number;
   cohortName: string;
   cohortImage: string;
-  attendanceCount: number;
   learningList: LearningSessionList[];
 }
 

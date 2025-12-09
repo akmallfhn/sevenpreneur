@@ -8,7 +8,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
 import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
 import { CreateDiscussionStarter } from "@/lib/actions";
@@ -17,6 +17,8 @@ import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { ChevronRight, Star } from "lucide-react";
 import CheckInAttendanceLMS from "../gateways/CheckInAttendanceLMS";
 import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
+import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
+import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
 
 export interface MaterialList {
   name: string;
@@ -67,6 +69,19 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
   );
   const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
   const [textValue, setTextValue] = useState("");
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const activeMaterials = props.materialList.filter(
     (material) => material.status === "ACTIVE"
@@ -129,6 +144,38 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
 
     return null;
   })();
+
+  // Render Mobile
+  if (isMobile) {
+    return (
+      <LearningDetailsMobileLMS
+        cohortId={props.cohortId}
+        cohortName={props.cohortName}
+        sessionUserId={props.sessionUserId}
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
+        learningSessionId={props.learningSessionId}
+        learningSessionName={props.learningSessionName}
+        learningSessionDescription={props.learningSessionDescription}
+        learningSessionDate={props.learningSessionDate}
+        learningSessionMethod={props.learningSessionMethod}
+        learningSessionURL={props.learningSessionURL}
+        learningSessionCheckIn={props.learningSessionCheckIn}
+        learningSessionCheckOut={props.learningSessionCheckOut}
+        learningSessionFeedbackURL={props.learningSessionFeedbackURL}
+        learningLocationURL={props.learningLocationURL}
+        learningLocationName={props.learningLocationName}
+        learningEducatorName={props.learningEducatorName}
+        learningEducatorAvatar={props.learningEducatorAvatar}
+        learningRecordingYoutube={props.learningRecordingYoutube}
+        learningRecordingCloudflare={props.learningRecordingCloudflare}
+        materialList={props.materialList}
+        discussionStarterList={props.discussionStarterList}
+        hasCheckIn={props.hasCheckIn}
+        hasCheckOut={props.hasCheckOut}
+      />
+    );
+  }
 
   return (
     <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
