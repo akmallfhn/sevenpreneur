@@ -8,7 +8,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
 import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
 import { CreateDiscussionStarter } from "@/lib/actions";
@@ -62,18 +62,15 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
-  const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
+  const [discussion, setDiscussion] = useState<DiscussionStarterList[]>(
+    props.discussionStarterList
+  );
   const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
   const [textValue, setTextValue] = useState("");
 
   const activeMaterials = props.materialList.filter(
     (material) => material.status === "ACTIVE"
   );
-
-  // Update list discussion to state
-  useEffect(() => {
-    setDiscussion(props.discussionStarterList);
-  }, [props.discussionStarterList]);
 
   // Create discussion
   const handleSubmitDiscussion = async () => {
