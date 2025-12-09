@@ -92,7 +92,7 @@ export default function LearningDetailsMobileLMS(
   };
 
   return (
-    <div className="root-page flex flex-col w-full items-center pb-20 lg:hidden">
+    <div className="root-page relative flex flex-col w-full items-center pb-20 lg:hidden">
       <HeaderMobileLMS
         headerTitle="Session Details"
         headerBackURL={`/cohorts/${props.cohortId}`}

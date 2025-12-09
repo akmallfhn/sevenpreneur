@@ -6,6 +6,7 @@ import HeroPlaylistDetailsLMS from "../heroes/HeroPlaylistDetailsLMS";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import VideoListItemLMS from "../items/VideoListItemLMS";
 import { StatusType } from "@/lib/app-types";
+import PlaylistDetailsMobileLMS from "./PlaylistDetailsMobileLMS";
 
 export interface VideoItem {
   id: number;
@@ -26,22 +27,15 @@ interface PlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
   playlistVideos: VideoItem[];
 }
 
-export default function PlaylistDetailsLMS({
-  sessionUserName,
-  sessionUserAvatar,
-  sessionUserRole,
-  playlistId,
-  playlistName,
-  playlistDescription,
-  playlistVideos,
-}: PlaylistDetailsLMSProps) {
+export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const videoIdParams = searchParams.get("videoId");
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
   const [isLoadingVideo, setIsLoadingVideo] = useState<number | null>(null);
 
-  const activeVideos = playlistVideos;
+  const activeVideos = props.playlistVideos;
 
   // Handle Sync URL param to selectedVideoId
   useEffect(() => {
@@ -50,14 +44,14 @@ export default function PlaylistDetailsLMS({
 
       // if not number, then delete param
       if (isNaN(videoId)) {
-        router.replace(`/playlists/${playlistId}`, { scroll: false });
+        router.replace(`/playlists/${props.playlistId}`, { scroll: false });
         return;
       }
 
       // if id not exist, then delete param
       const exists = activeVideos.some((video) => Number(video.id) === videoId);
       if (!exists) {
-        router.replace(`/playlists/${playlistId}`, { scroll: false });
+        router.replace(`/playlists/${props.playlistId}`, { scroll: false });
         return;
       }
 
@@ -66,7 +60,7 @@ export default function PlaylistDetailsLMS({
     } else {
       setSelectedVideoId(null);
     }
-  }, [videoIdParams, activeVideos, playlistId, router]);
+  }, [videoIdParams, activeVideos, props.playlistId, router]);
 
   // Get Data from selected Video ID
   const selectedVideoData = useMemo(() => {
@@ -83,7 +77,7 @@ export default function PlaylistDetailsLMS({
 
       const params = new URLSearchParams(searchParams);
       params.set("videoId", videoId.toString());
-      router.replace(`/playlists/${playlistId}?${params.toString()}`, {
+      router.replace(`/playlists/${props.playlistId}?${params.toString()}`, {
         scroll: false,
       });
     }
@@ -93,13 +87,37 @@ export default function PlaylistDetailsLMS({
     setIsLoadingVideo(null);
   }, [selectedVideoId]);
 
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Render Mobile
+  if (isMobile) {
+    return (
+      <PlaylistDetailsMobileLMS
+        playlistId={props.playlistId}
+        playlistName={props.playlistName}
+        playlistDescription={props.playlistDescription}
+        playlistVideos={props.playlistVideos}
+      />
+    );
+  }
+
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
       <HeroPlaylistDetailsLMS
-        sessionUserName={sessionUserName}
-        sessionUserAvatar={sessionUserAvatar}
-        sessionUserRole={sessionUserRole}
-        playlistName={playlistName}
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
+        playlistName={props.playlistName}
       />
       <div className="body-playlist max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
         <main className="main flex flex-col flex-2 w-full gap-4">
@@ -129,13 +147,13 @@ export default function PlaylistDetailsLMS({
               <p className="video-description font-bodycopy text-[15px] text-[#333333] whitespace-pre-line">
                 {selectedVideoData
                   ? selectedVideoData.description
-                  : playlistDescription}
+                  : props.playlistDescription}
               </p>
             </div>
           </div>
         </main>
         <aside className="aside flex flex-col flex-1 w-full gap-3">
-          <div className="flex flex-col bg-white border p-4 gap-3 rounded-lg">
+          <div className="flex flex-col bg-white border p-4 gap-3 rounded-lg overflow-hidden">
             <h2 className="section-title font-bodycopy font-bold">
               Playlist Videos
             </h2>
