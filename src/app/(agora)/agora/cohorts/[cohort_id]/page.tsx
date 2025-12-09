@@ -1,6 +1,8 @@
 import CohortDetailsLMS from "@/app/components/pages/CohortDetailsLMS";
+import CohortDetailsMobileLMS from "@/app/components/pages/CohortDetailsMobileLMS";
+import { getDevice } from "@/lib/device";
 import { setSessionToken, trpc } from "@/trpc/server";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -12,6 +14,11 @@ export default async function CohortDetailsPageLMS({
   params,
 }: CohortDetailsPageLMSProps) {
   const { cohort_id } = await params;
+
+  const headersStore = await headers();
+  const userAgent = headersStore.get("user-agent");
+  const device = getDevice(userAgent);
+
   const cohortId = parseInt(cohort_id, 10);
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
@@ -55,6 +62,25 @@ export default async function CohortDetailsPageLMS({
     ...item,
     deadline_at: item.deadline_at ? item.deadline_at.toISOString() : "",
   }));
+
+  if (device === "mobile") {
+    return (
+      <CohortDetailsMobileLMS
+        sessionUserId={userData.id}
+        sessionUserName={userData.full_name}
+        sessionUserAvatar={
+          userData.avatar ||
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+        }
+        sessionUserRole={userData.role_id}
+        cohortId={enrolledCohortDetails.cohort.cohort_id}
+        cohortName={enrolledCohortDetails.cohort.cohort.name}
+        cohortImage={enrolledCohortDetails.cohort.cohort.image}
+        attendanceCount={learningListRest.attendance_count}
+        learningList={learningList}
+      />
+    );
+  }
 
   return (
     <CohortDetailsLMS

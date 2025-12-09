@@ -54,14 +54,7 @@ interface CohortDetailsTabsLMSProps {
   userList: UserList[];
 }
 
-export default function CohortDetailsTabsLMS({
-  sessionUserId,
-  cohortId,
-  learningList,
-  moduleList,
-  projectList,
-  userList,
-}: CohortDetailsTabsLMSProps) {
+export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
   const [activeTab, setActiveTab] = useState("learnings");
 
   const tabOptions = [
@@ -71,16 +64,16 @@ export default function CohortDetailsTabsLMS({
     { id: "members", label: "Network" },
   ];
 
-  const activeLearnings = learningList.filter(
+  const activeLearnings = props.learningList.filter(
     (learning) => learning.status === "ACTIVE"
   );
-  const activeModules = moduleList.filter(
+  const activeModules = props.moduleList.filter(
     (module) => module.status === "ACTIVE"
   );
-  const activeProject = projectList.filter(
+  const activeProject = props.projectList.filter(
     (project) => project.status === "ACTIVE"
   );
-  const generalUser = userList.filter((user) => user.role_id === 3);
+  const generalUser = props.userList.filter((user) => user.role_id === 3);
 
   return (
     <div className="cohort-tabs w-full min-h-80 bg-white/70 rounded-lg border overflow-hidden">
@@ -117,7 +110,7 @@ export default function CohortDetailsTabsLMS({
                 .map((post, index) => (
                   <LearningSessionItemLMS
                     key={index}
-                    cohortId={cohortId}
+                    cohortId={props.cohortId}
                     learningSessionId={post.id}
                     learningSessionName={post.name}
                     learningSessionMethod={post.method}
@@ -176,7 +169,7 @@ export default function CohortDetailsTabsLMS({
               {activeProject.map((post, index) => (
                 <ProjectItemLMS
                   key={index}
-                  cohortId={cohortId}
+                  cohortId={props.cohortId}
                   projectId={post.id}
                   projectName={post.name}
                   projectDeadline={post.deadline_at}
@@ -201,7 +194,7 @@ export default function CohortDetailsTabsLMS({
               {generalUser.map((post) => (
                 <UserItemLMS
                   key={post.id}
-                  sessionUserId={sessionUserId}
+                  sessionUserId={props.sessionUserId}
                   userId={post.id}
                   userName={post.full_name}
                   userAvatar={
