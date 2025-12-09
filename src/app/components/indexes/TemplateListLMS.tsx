@@ -4,6 +4,8 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import TemplateItemCardLMS from "../items/TemplateItemCardLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
+import { useEffect, useState } from "react";
+import DisallowedMobile from "../state/DisallowedMobile";
 
 export interface TemplateList {
   id: number;
@@ -27,9 +29,27 @@ export default function TemplateListLMS({
   hasTemplateAccess,
   templateList,
 }: TemplateListLMSProps) {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const activeTemplates = templateList.filter(
     (template) => template.status === "ACTIVE"
   );
+
+  if (isMobile) {
+    return <DisallowedMobile />;
+  }
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">

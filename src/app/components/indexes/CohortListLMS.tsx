@@ -4,6 +4,8 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import CohortItemCardLMS from "../items/CohortItemCardLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
+import { useEffect, useState } from "react";
+import DisallowedMobile from "../state/DisallowedMobile";
 
 interface CohortList {
   id: number;
@@ -25,9 +27,28 @@ export default function CohortListLMS({
   sessionUserRole,
   cohortList,
 }: CohortListLMSProps) {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
   const activeCohorts = cohortList.filter(
     (cohort) => cohort.status === "ACTIVE"
   );
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Render Mobile
+  if (isMobile) {
+    return <DisallowedMobile />;
+  }
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">

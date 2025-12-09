@@ -4,6 +4,8 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import PlaylistItemLMS from "../items/PlaylistItemLMS";
 import EmptyListLMS from "../state/EmptyListLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
+import { useEffect, useState } from "react";
+import DisallowedMobile from "../state/DisallowedMobile";
 
 interface Playlists {
   id: number;
@@ -24,9 +26,28 @@ export default function PlaylistsLMS({
   sessionUserRole,
   playlists,
 }: PlaylistsLMSProps) {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
   const activePlaylists = playlists.filter(
     (playlist) => playlist.status === "ACTIVE"
   );
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Render Mobile
+  if (isMobile) {
+    return <DisallowedMobile />;
+  }
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">

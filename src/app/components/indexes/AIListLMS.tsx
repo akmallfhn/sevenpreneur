@@ -5,6 +5,8 @@ import EmptyListLMS from "../state/EmptyListLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import DisallowedMobile from "../state/DisallowedMobile";
 
 export interface AIList {
   id: number;
@@ -27,7 +29,25 @@ export default function AIListLMS({
   hasAIAccess,
   aiList,
 }: AIListLMSProps) {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const activeAI = aiList.filter((ai) => ai.status === "ACTIVE");
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Render Mobile
+  if (isMobile) {
+    return <DisallowedMobile />;
+  }
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">

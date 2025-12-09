@@ -8,7 +8,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
 import { SubmissionStatus } from "@/lib/app-types";
 import AppButton from "../buttons/AppButton";
-import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import CreateSubmissionFormLMS from "../forms/CreateSubmissionFormLMS";
 import { DeleteSubmission } from "@/lib/actions";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
@@ -19,6 +19,7 @@ import EditSubmissionFormLMS, {
 } from "../forms/EditSubmissionFormLMS";
 import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
 import Image from "next/image";
+import DisallowedMobile from "../state/DisallowedMobile";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -42,6 +43,7 @@ interface ProjectDetailsLMS extends AvatarBadgeLMSProps {
 
 export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
   const router = useRouter();
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const [deadlineStatus, setDeadlineStatus] = useState("");
   const [submittedTime, setSubmittedTime] = useState("");
   const [submissionStatus, setSubmissionStatus] =
@@ -54,6 +56,18 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
   const deadlineAt = dayjs(props.projectDeadline);
   const submittedAt = dayjs(props.submissionCreatedAt);
   const isOverdue = now.isAfter(deadlineAt);
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // Update Submission status
   useEffect(() => {
@@ -138,6 +152,11 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
       });
     }
   };
+
+  // Render Mobile
+  if (isMobile) {
+    return <DisallowedMobile />;
+  }
 
   return (
     <React.Fragment>
