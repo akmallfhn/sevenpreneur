@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AttendanceGatewayMobileLMS from "../gateways/AttendanceGatewayMobileLMS";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, MapPinned, Video } from "lucide-react";
 import {
   DiscussionStarterList,
   MaterialList,
@@ -40,24 +40,24 @@ export interface LearningDetailsTabsMobileLMSProps extends AvatarBadgeLMSProps {
   hasCheckIn: boolean;
   hasCheckOut: boolean;
   materialList: MaterialList[];
-  discussionStarterList: DiscussionStarterList[];
+  discussion: DiscussionStarterList[];
+  onTabChange: (tab: string) => void;
+  onDiscussionDeleted: (id: number) => void;
 }
 
 export default function LearningDetailsTabsMobileLMS(
   props: LearningDetailsTabsMobileLMSProps
 ) {
   const [activeTab, setActiveTab] = useState("details");
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const divRef = useRef<HTMLDivElement | null>(null);
+
   const conferencePlatform = getConferenceVariantFromURL(
     props.learningSessionURL
   );
   const { conferenceIcon, conferenceName } =
     getConferenceAttributes(conferencePlatform);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const divRef = useRef<HTMLDivElement | null>(null);
-  const [discussion, setDiscussion] = useState<DiscussionStarterList[]>([]);
-  const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
-  const [textValue, setTextValue] = useState("");
 
   const tabOptions = [
     { id: "details", label: "Details" },
@@ -120,55 +120,6 @@ export default function LearningDetailsTabsMobileLMS(
     return null;
   })();
 
-  // Update list discussion to state
-  useEffect(() => {
-    setDiscussion(props.discussionStarterList);
-  }, [props.discussionStarterList]);
-
-  // Create discussion
-  const handleSubmitDiscussion = async () => {
-    if (!textValue.trim()) {
-      return;
-    }
-    setIsSendingDiscussion(true);
-
-    try {
-      const createDiscussion = await CreateDiscussionStarter({
-        learningSessionId: props.learningSessionId,
-        discussionStarterMessage: textValue,
-      });
-
-      if (createDiscussion.code === "CREATED") {
-        const newDiscussion = {
-          id: createDiscussion.discussion.id,
-          full_name: props.sessionUserName,
-          avatar: props.sessionUserAvatar,
-          message: createDiscussion.discussion.message,
-          reply_count: 0,
-          created_at: createDiscussion.discussion.created_at,
-          updated_at: createDiscussion.discussion.updated_at,
-          is_owner: true,
-        };
-
-        setTextValue("");
-        toast.success("Discussion Sent!");
-        setDiscussion((prev) => [newDiscussion, ...prev]);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to send discussion. Please try again.");
-    } finally {
-      setIsSendingDiscussion(false);
-    }
-  };
-
-  // Remove deleted discussion on state
-  const handleDiscussionDeleted = (discussionId: number) => {
-    setDiscussion((prevDiscussions) =>
-      prevDiscussions.filter((discussion) => discussion.id !== discussionId)
-    );
-  };
-
   return (
     <div className="learning-session-tabs flex flex-col w-full">
       <div className="tab-options flex border-b justify-around">
@@ -180,7 +131,10 @@ export default function LearningDetailsTabsMobileLMS(
                   ? "bg-gradient-to-t from-0% from-primary-light/50 to-60% to-primary-light/0 text-primary font-bold"
                   : "bg-white font-medium"
               }`}
-              onClick={() => setActiveTab(post.id)}
+              onClick={() => {
+                setActiveTab(post.id);
+                props.onTabChange(post.id);
+              }}
             >
               {post.label}
             </div>
@@ -219,19 +173,22 @@ export default function LearningDetailsTabsMobileLMS(
                   </p>
                 </div>
               </div>
-              <div className="learning-join-class flex items-center gap-3">
+              <div className="learning-join-class flex flex-col w-full items-center gap-3">
                 {props.learningSessionMethod !== "ONSITE" &&
                   props.learningSessionURL && (
                     <a
                       href={props.learningSessionURL}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="join-meeting w-full"
                     >
                       <AppButton
+                        className="w-full"
                         size="medium"
                         variant="primary"
                         disabled={isExpired}
                       >
+                        <Video className="size-5" />
                         Join Meeting
                       </AppButton>
                     </a>
@@ -242,12 +199,15 @@ export default function LearningDetailsTabsMobileLMS(
                       href={props.learningLocationURL}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="check-maps w-full"
                     >
                       <AppButton
+                        className="w-full"
                         size="medium"
                         variant="primary"
                         disabled={isExpired}
                       >
+                        <MapPinned className="size-5" />
                         Check Maps
                       </AppButton>
                     </a>
@@ -308,9 +268,9 @@ export default function LearningDetailsTabsMobileLMS(
               Discussions
             </h2>
             <div className="discussions-thread flex flex-col gap-6">
-              {discussion.length > 0 ? (
+              {props.discussion.length > 0 ? (
                 <div className="discussions-list flex flex-col gap-4">
-                  {discussion.map((post) => (
+                  {props.discussion.map((post) => (
                     <AppDiscussionStarterItem
                       key={post.id}
                       sessionUserId={props.sessionUserId}
@@ -329,7 +289,7 @@ export default function LearningDetailsTabsMobileLMS(
                       discussionStarterTotalReplies={post.reply_count}
                       discussionStarterCreatedAt={post.created_at}
                       discussionStarterOwner={post.is_owner}
-                      onDiscussionDeleted={handleDiscussionDeleted}
+                      onDiscussionDeleted={props.onDiscussionDeleted}
                     />
                   ))}
                 </div>

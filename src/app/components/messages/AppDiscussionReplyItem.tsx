@@ -158,7 +158,7 @@ export default function AppDiscussionReplyItem(
               sessionUserName={props.sessionUserName}
               sessionUserAvatar={props.sessionUserAvatar}
               textAreaId="reply"
-              textAreaPlaceholder="Let's discuss about this learning"
+              textAreaPlaceholder="Write reply..."
               onTextAreaChange={(value) => setTextValue(value)}
               characterLength={4000}
               value={textValue}

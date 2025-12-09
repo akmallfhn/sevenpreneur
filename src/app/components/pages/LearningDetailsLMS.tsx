@@ -11,13 +11,10 @@ import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import React, { useEffect, useState } from "react";
 import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
 import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
-import { CheckInSession, CreateDiscussionStarter } from "@/lib/actions";
+import { CreateDiscussionStarter } from "@/lib/actions";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
-import AppButton from "../buttons/AppButton";
-import { ChevronRight, Loader2, Star } from "lucide-react";
-import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
+import { ChevronRight, Star } from "lucide-react";
 import CheckInAttendanceLMS from "../gateways/CheckInAttendanceLMS";
 import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
 
