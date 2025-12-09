@@ -227,7 +227,7 @@ export default function AppDiscussionStarterItem(
               sessionUserName={props.sessionUserName}
               sessionUserAvatar={props.sessionUserAvatar}
               textAreaId="reply"
-              textAreaPlaceholder="Let's discuss about this learning"
+              textAreaPlaceholder="Write reply..."
               characterLength={4000}
               onTextAreaChange={(value) => setTextValue(value)}
               value={textValue}
