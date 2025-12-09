@@ -262,7 +262,7 @@ export default function LearningDetailsTabsMobileLMS(
       )}
 
       {activeTab === "discussions" && (
-        <div className="tab-content flex flex-col w-full gap-1">
+        <div className="tab-content flex flex-col w-full gap-1 pb-11">
           <div className="video-recording relative flex flex-col gap-3 bg-white p-5">
             <h2 className="section-title font-bodycopy font-bold">
               Discussions
