@@ -7,7 +7,6 @@ import AppButton from "../buttons/AppButton";
 import {
   AlignLeftIcon,
   Blocks,
-  BookMarked,
   LayoutDashboard,
   LogOut,
   UserCircle2,
@@ -214,11 +213,6 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                   </div>
                 ) : (
                   <Link href={`/auth/login?redirectTo=${pathname}`}>
-                    <div className="login-mobile flex lg:hidden">
-                      <AppButton variant="ghost" size="iconRounded">
-                        <UserCircle2 className="size-6" />
-                      </AppButton>
-                    </div>
                     <div className="login-desktop hidden lg:flex">
                       <AppButton variant="primary" size="mediumRounded">
                         <UserCircle2 className="size-5" />
