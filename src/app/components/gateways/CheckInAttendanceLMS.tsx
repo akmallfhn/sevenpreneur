@@ -80,7 +80,7 @@ export default function CheckInAttendanceLMS(props: CheckInAttendanceLMSProps) {
   };
 
   return (
-    <div className="check-in-attendance relative flex items-center justify-between gap-3 bg-linear-to-br from-0% from-[#EFEDF9] to-50% to-white p-4 border rounded-lg overflow-hidden">
+    <div className="check-in-attendance relative flex items-center justify-between gap-3 bg-white p-4 border rounded-lg overflow-hidden">
       <div className="flex items-center gap-2">
         <div className="clock-icon size-11 aspect-square bg-white p-1 border border-outline shrink-0 rounded-lg overflow-hidden">
           <Image

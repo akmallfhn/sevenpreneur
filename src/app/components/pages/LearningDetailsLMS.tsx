@@ -298,7 +298,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   <p className="text-[15px] text-black font-semibold line-clamp-1">
                     {props.learningEducatorName}
                   </p>
-                  <p className="educator-role text-[13px] text-[#333333]/50 font-medium">
+                  <p className="educator-role text-[13px] text-[#111111]/70 font-medium">
                     BUSINESS COACH
                   </p>
                 </div>
