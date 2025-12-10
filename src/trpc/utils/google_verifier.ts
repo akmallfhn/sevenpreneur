@@ -40,7 +40,8 @@ export async function GoogleTokenVerifier(
     }
 
     return { name, email, picture };
-  } catch (e: any) {
+  } catch (error) {
+    console.error(error);
     return false;
   }
 }

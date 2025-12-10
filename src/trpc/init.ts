@@ -12,7 +12,7 @@ export async function createTRPCContext(
 ) {
   const prisma = GetPrismaClient();
 
-  let secret = opts?.secretKey;
+  const secret = opts?.secretKey;
 
   async function getSessionTokenFromHeader() {
     const heads = await headers();

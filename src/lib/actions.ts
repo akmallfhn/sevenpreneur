@@ -14,7 +14,6 @@ import {
   BusinessYearlyRevenue,
   OccupationUser,
 } from "./app-types";
-import { codec } from "zod";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {

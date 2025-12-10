@@ -119,7 +119,7 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
     return "";
   }
 
-  let callbackUrl =
+  const callbackUrl =
     ai_tool_id > 0
       ? baseURL + "qstash/callback"
       : baseURL + "qstash/callback-redis";
