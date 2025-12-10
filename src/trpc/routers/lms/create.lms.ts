@@ -13,7 +13,7 @@ import {
 } from "@/trpc/utils/validation";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import z, { number, string } from "zod";
+import z from "zod";
 
 export const createLMS = {
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])

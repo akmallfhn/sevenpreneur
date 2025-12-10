@@ -69,7 +69,7 @@ export function calculateFinalPrice(
   }
 
   // diff = finalPrice - initialPrice
-  let diff = calculatedPrices.finalPrice.minus(initialPrice);
+  const diff = calculatedPrices.finalPrice.minus(initialPrice);
 
   // adminFee = diff * 1 / (1 + vat_mult)
   calculatedPrices.adminFee = diff.dividedBy(ONE.plus(vat_mult));
