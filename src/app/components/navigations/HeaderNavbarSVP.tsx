@@ -155,12 +155,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                     menuUrl="/collaboration"
                   />
                   <Link href={`https://agora.${domain}`}>
-                    <AppButton
-                      size="mediumRounded"
-                      variant="primaryGradient"
-                      font="brand"
-                    >
-                      <LayoutDashboard className="size-4" />
+                    <AppButton size="mediumRounded" variant="primaryGradient">
                       <p className="font-medium">My Learning</p>
                     </AppButton>
                   </Link>
