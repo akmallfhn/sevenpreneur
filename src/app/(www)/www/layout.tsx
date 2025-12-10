@@ -28,14 +28,19 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  // Check User Session for Header Navbar
-  let userData:
-    | Awaited<ReturnType<typeof trpc.auth.checkSession>>["user"]
-    | null = null;
   if (sessionToken) {
     setSessionToken(sessionToken);
-    const checkUser = await trpc.auth.checkSession();
-    userData = checkUser.user;
+  }
+
+  let userData = null;
+
+  if (sessionToken) {
+    try {
+      const userSession = (await trpc.auth.checkSession()).user;
+      userData = userSession ?? null;
+    } catch (error) {
+      userData = null;
+    }
   }
 
   let tickerDataRaw;
@@ -54,16 +59,17 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     <div>
       <ThemeProvider attribute="class" defaultTheme="light">
         <HeaderNavbarSVP
-          userName={userData?.full_name}
+          userName={userData?.full_name ?? null}
           userAvatar={userData?.avatar ?? null}
-          userRole={userData?.role_id}
+          userRole={userData?.role_id ?? null}
+          userEmail={userData?.email ?? null}
           isLoggedIn={!!userData}
-          tickerTitle={tickerData?.title ?? ""}
-          tickerCallout={tickerData?.callout ?? ""}
+          tickerTitle={tickerData.title ?? ""}
+          tickerCallout={tickerData.callout ?? ""}
           tickerTargetURL={tickerData.target_url ?? ""}
-          tickerStatus={tickerData?.status as StatusType}
-          tickerStartDate={tickerData?.start_date ?? ""}
-          tickerEndDate={tickerData?.end_date ?? ""}
+          tickerStatus={tickerData.status as StatusType}
+          tickerStartDate={tickerData.start_date ?? ""}
+          tickerEndDate={tickerData.end_date ?? ""}
         />
         {children}
         <Toaster richColors position="top-center" />

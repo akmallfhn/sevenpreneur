@@ -8,7 +8,7 @@ import {
   AlignLeftIcon,
   Blocks,
   BookMarked,
-  ChevronDown,
+  LayoutDashboard,
   LogOut,
   UserCircle2,
   Wallet,
@@ -31,38 +31,26 @@ dayjs.extend(isBetween);
 interface HeaderNavbarSVPProps extends AnnouncementTickerSVPProps {
   isLoggedIn: boolean;
   userAvatar: string | null;
-  userName: string | undefined;
-  userRole: number | undefined;
+  userName: string | null;
+  userEmail: string | null;
+  userRole: number | null;
   tickerStatus: StatusType;
   tickerStartDate: string;
   tickerEndDate: string;
 }
 
-export default function HeaderNavbarSVP({
-  isLoggedIn,
-  userAvatar,
-  userName,
-  userRole,
-  tickerTitle,
-  tickerCallout,
-  tickerTargetURL,
-  tickerStatus,
-  tickerStartDate,
-  tickerEndDate,
-}: HeaderNavbarSVPProps) {
+export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  // Path yang tidak mau menampilkan Navbar & Footer
   const disallowedPath = ["/auth", "/checkout"];
   const isDisallowedPage = disallowedPath.some((path) =>
     pathname.includes(path)
   );
 
-  //  Get Nickname
-  const nickName = userName?.split(" ")[0];
+  const nickName = props.userName?.split(" ")[0];
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -88,7 +76,6 @@ export default function HeaderNavbarSVP({
     };
   }, []);
 
-  // Domain Logic
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
@@ -101,8 +88,8 @@ export default function HeaderNavbarSVP({
 
   // Validate Ticker Based on Start Date and End Date
   const isValidTicker = dayjs().isBetween(
-    tickerStartDate,
-    tickerEndDate,
+    props.tickerStartDate,
+    props.tickerEndDate,
     null,
     "[]"
   );
@@ -146,9 +133,8 @@ export default function HeaderNavbarSVP({
                   />
                 </svg>
               </Link>
-
               <nav className="desktop-menu hidden lg:flex">
-                <ul className="menu-item-list flex items-center gap-10">
+                <ul className="menu-item-list flex items-center gap-7">
                   <HeaderNavbarItemSVP
                     menuTitle="Program"
                     menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
@@ -169,30 +155,41 @@ export default function HeaderNavbarSVP({
                     menuTitle="Collab with Us"
                     menuUrl="/collaboration"
                   />
+                  <Link href={`https://agora.${domain}`}>
+                    <AppButton
+                      size="mediumRounded"
+                      variant="primaryGradient"
+                      font="brand"
+                    >
+                      <LayoutDashboard className="size-4" />
+                      <p className="font-medium">My Learning</p>
+                    </AppButton>
+                  </Link>
                 </ul>
               </nav>
-
               <div className="navigation-control flex items-center gap-4">
                 <div className="theme-switcher hidden lg:flex">
                   <AppThemeSwitcher />
                 </div>
-
-                {isLoggedIn ? (
+                {props.isLoggedIn ? (
                   <div
                     className="user-menu relative flex hover:cursor-pointer"
                     ref={wrapperRef}
                     onClick={handleActionsDropdown}
                   >
                     <AvatarBadgeSVP
-                      userAvatar={userAvatar}
-                      userName={nickName}
+                      userAvatar={
+                        props.userAvatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                      }
+                      userName={nickName || "User"}
                     />
                     <AppDropdown
                       isOpen={accountMenuOpen}
                       onClose={() => setAccountMenuOpen(false)}
                       alignMobile="right"
                     >
-                      {userRole !== 3 && (
+                      {props.userRole !== 3 && (
                         <Link href={`https://admin.${domain}`}>
                           <AppDropdownItemList
                             menuIcon={<Blocks className="size-4" />}
@@ -200,12 +197,6 @@ export default function HeaderNavbarSVP({
                           />
                         </Link>
                       )}
-                      <Link href={`https://agora.${domain}`}>
-                        <AppDropdownItemList
-                          menuIcon={<BookMarked className="size-4" />}
-                          menuName="My Learning"
-                        />
-                      </Link>
                       <Link href={`/transactions`}>
                         <AppDropdownItemList
                           menuIcon={<Wallet className="size-4" />}
@@ -248,18 +239,26 @@ export default function HeaderNavbarSVP({
               </div>
             </div>
           </div>
-          {tickerStatus === "ACTIVE" && isValidTicker && (
+          {props.tickerStatus === "ACTIVE" && isValidTicker && (
             <AnnouncementTickerSVP
-              tickerTitle={tickerTitle}
-              tickerCallout={tickerCallout}
-              tickerTargetURL={tickerTargetURL}
+              tickerTitle={props.tickerTitle}
+              tickerCallout={props.tickerCallout}
+              tickerTargetURL={props.tickerTargetURL}
             />
           )}
         </div>
       )}
 
+      {/* Open Mobile Navbar */}
       {mobileMenuOpen && (
         <SideMenuMobileSVP
+          isLoggedIn={props.isLoggedIn}
+          userName={props.userName || "User"}
+          userAvatar={
+            props.userAvatar ||
+            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+          }
+          userEmail={props.userEmail || "-"}
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
         />

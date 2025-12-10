@@ -22,8 +22,8 @@ export default function HeaderNavbarItemSVP({
 
   return (
     <li
-      className={`menu-item relative flex items-center font-brand text-sm ${
-        isActive ? "font-bold" : "font-medium"
+      className={`menu-item relative flex items-center font-brand text-[15px] ${
+        isActive ? "font-bold" : ""
       }`}
     >
       {isDropdownMenu ? (

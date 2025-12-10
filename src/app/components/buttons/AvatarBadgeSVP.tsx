@@ -3,33 +3,27 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
 interface AvatarBadgeSVPProps {
-  userAvatar: string | null;
-  userName: string | undefined;
+  userAvatar: string;
+  userName: string;
 }
 
-export default function AvatarBadgeSVP({
-  userAvatar,
-  userName,
-}: AvatarBadgeSVPProps) {
+export default function AvatarBadgeSVP(props: AvatarBadgeSVPProps) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="aspect-square size-7 rounded-full overflow-hidden hover:cursor-pointer">
+    <div className="user-attributes hidden items-center gap-3 lg:flex">
+      <div className="user-avatar aspect-square size-7 rounded-full overflow-hidden hover:cursor-pointer">
         <Image
-          className="object-cover w-full h-full"
-          src={
-            userAvatar ||
-            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-          }
-          alt="Homepage"
+          className="user-avatar object-cover w-full h-full"
+          src={props.userAvatar}
+          alt="User Avatar"
           width={320}
           height={320}
         />
       </div>
-      <div className="hidden items-center gap-1 lg:flex">
-        <p className="max-w-28 font-ui font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
-          {userName}
+      <div className="flex items-center gap-1">
+        <p className="user-name max-w-28 font-bodycopy font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
+          {props.userName}
         </p>
-        <ChevronDown className="size-3" />
+        <ChevronDown className="dropdown-icon size-3" />
       </div>
     </div>
   );
