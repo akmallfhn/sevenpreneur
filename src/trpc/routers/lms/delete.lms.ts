@@ -90,18 +90,17 @@ export const deleteLMS = {
         selectedUserId = undefined;
       }
       await opts.ctx.prisma.$transaction(async (tx) => {
-        await opts.ctx.prisma.discussionReply.deleteMany({
+        await tx.discussionReply.deleteMany({
           where: {
             starter_id: opts.input.id,
           },
         });
-        const deletedDiscussionStarter =
-          await opts.ctx.prisma.discussionStarter.deleteMany({
-            where: {
-              id: opts.input.id,
-              user_id: selectedUserId,
-            },
-          });
+        const deletedDiscussionStarter = await tx.discussionStarter.deleteMany({
+          where: {
+            id: opts.input.id,
+            user_id: selectedUserId,
+          },
+        });
         checkDeleteResult(
           deletedDiscussionStarter.count,
           "discussion starters",
