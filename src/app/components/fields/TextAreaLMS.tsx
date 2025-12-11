@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useEffect, TextareaHTMLAttributes } from "react";
+import React, { TextareaHTMLAttributes, useState } from "react";
 
 interface TextAreaLMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaId: string;
   textAreaName: string;
-  textAreaHeight?: string;
   textAreaPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
@@ -15,17 +14,22 @@ interface TextAreaLMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 export default function TextAreaLMS({
   textAreaId,
   textAreaName,
-  textAreaHeight,
   textAreaPlaceholder,
   characterLength,
   errorMessage,
-  value: propValue,
+  value,
   onTextAreaChange,
   required,
   ...rest
 }: TextAreaLMSProps) {
-  const [value, setValue] = useState(propValue);
+  const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
+
+  // Sync only when parent value changes AND it's different
+  if (textValue !== value) {
+    setTextValue(value ?? "");
+  }
+
   const maxLength = characterLength ?? 520;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -47,21 +51,14 @@ export default function TextAreaLMS({
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
+    setTextValue(newValue.slice(0, maxLength));
     if (onTextAreaChange) onTextAreaChange(newValue.slice(0, maxLength));
   };
 
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
-
   // Reset internalError if get any errorMessage from parent
-  useEffect(() => {
-    if (errorMessage) {
-      setInternalError("");
-    }
-  }, [errorMessage]);
+  if (errorMessage && internalError !== "") {
+    setInternalError("");
+  }
 
   // Compute error (parent > internal)
   const computedError = errorMessage || internalError;
@@ -85,7 +82,7 @@ export default function TextAreaLMS({
           className={`text-area-placeholder flex w-full min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-[15px] border-b-2 resize-none transform transition-all overflow-hidden placeholder:text-alternative placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
             computedError ? "border-destructive" : "border-outline"
           } `}
-          value={value}
+          value={textValue}
           onChange={handleTextAreaChange}
         />
         {computedError && (
