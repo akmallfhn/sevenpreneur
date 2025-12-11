@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import {
   STATUS_FORBIDDEN,
   STATUS_NOT_FOUND,
@@ -15,7 +16,7 @@ export const readLMS = {
   cohort: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
     let whereClause = {
       id: opts.input.id,
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
       deleted_at: null,
     };
     if (!opts.ctx.user) {
@@ -274,7 +275,7 @@ export const readLMS = {
   }),
 
   submission: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    let selectedUserId: string | undefined = undefined;
+    let selectedUserId: Optional<string> = undefined;
     if (opts.ctx.user.role.name === "General User") {
       selectedUserId = opts.ctx.user.id;
     }

@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
@@ -13,7 +14,7 @@ import { isEnrolledAITool } from "./util.ai_tool";
 export const listAITool = {
   aiTools: loggedInProcedure.query(async (opts) => {
     const whereClause = {
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
     };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledAITool(
@@ -148,7 +149,7 @@ export const listAITool = {
         throw readFailedNotFound("conversation");
       }
 
-      let lastTime: Date | undefined = undefined;
+      let lastTime: Optional<Date> = undefined;
       if (opts.input.before) {
         const lastChat = await opts.ctx.prisma.aIChat.findFirst({
           select: { created_at: true },

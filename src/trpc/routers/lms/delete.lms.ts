@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN, STATUS_NO_CONTENT } from "@/lib/status_code";
 import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
 import { checkDeleteResult, readFailedNotFound } from "@/trpc/utils/errors";
@@ -85,7 +86,7 @@ export const deleteLMS = {
   discussionStarter: loggedInProcedure
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
-      let selectedUserId: string | undefined = opts.ctx.user.id;
+      let selectedUserId: Optional<string> = opts.ctx.user.id;
       if (opts.ctx.user.role.name === "Administrator") {
         selectedUserId = undefined;
       }
@@ -116,7 +117,7 @@ export const deleteLMS = {
   discussionReply: loggedInProcedure
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
-      let selectedUserId: string | undefined = opts.ctx.user.id;
+      let selectedUserId: Optional<string> = opts.ctx.user.id;
       if (opts.ctx.user.role.name === "Administrator") {
         selectedUserId = undefined;
       }
@@ -156,7 +157,7 @@ export const deleteLMS = {
   submission: roleBasedProcedure(["Administrator", "General User"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
-      let selectedUserId: string | undefined = undefined;
+      let selectedUserId: Optional<string> = undefined;
       if (opts.ctx.user.role.name === "General User") {
         selectedUserId = opts.ctx.user.id;
 

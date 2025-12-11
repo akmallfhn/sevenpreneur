@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
 import {
   loggedInProcedure,
@@ -36,10 +37,8 @@ export const listLMS = {
     .query(async (opts) => {
       const whereClause = {
         deleted_at: null,
-        status: undefined as StatusEnum | undefined,
-        name: undefined as
-          | { contains: string; mode: "insensitive" }
-          | undefined,
+        status: undefined as Optional<StatusEnum>,
+        name: undefined as Optional<{ contains: string; mode: "insensitive" }>,
       };
 
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
@@ -205,9 +204,7 @@ export const listLMS = {
         cohort: {
           deleted_at: null,
         },
-        name: undefined as
-          | { contains: string; mode: "insensitive" }
-          | undefined,
+        name: undefined as Optional<{ contains: string; mode: "insensitive" }>,
       };
 
       if (opts.input.keyword !== undefined) {
@@ -315,7 +312,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      let whereOr: { price_id: number | null }[] | undefined = undefined;
+      let whereOr: Optional<{ price_id: number | null }[]> = undefined;
       if (opts.ctx.user.role.name === "General User") {
         const theEnrolledCohort = await isEnrolledCohort(
           opts.ctx.prisma,

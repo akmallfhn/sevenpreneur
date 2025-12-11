@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
@@ -27,7 +28,7 @@ export const readTransaction = {
         throw readFailedNotFound("discount");
       }
 
-      let cohortBadge: CohortBadge | undefined;
+      let cohortBadge: Optional<CohortBadge>;
       if (theDiscount.category === CategoryEnum.COHORT) {
         const theCohortPrice = await opts.ctx.prisma.cohort.findFirst({
           where: { id: theDiscount.item_id },
@@ -42,7 +43,7 @@ export const readTransaction = {
         }
       }
 
-      let playlistBadge: PlaylistBadge | undefined;
+      let playlistBadge: Optional<PlaylistBadge>;
       if (theDiscount.category === CategoryEnum.PLAYLIST) {
         const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
           where: { id: theDiscount.item_id },
@@ -93,7 +94,7 @@ export const readTransaction = {
   transaction: loggedInProcedure
     .input(z.object({ id: stringIsNanoid() }))
     .query(async (opts) => {
-      let selectedUserId: string | undefined = opts.ctx.user.id;
+      let selectedUserId: Optional<string> = opts.ctx.user.id;
       if (opts.ctx.user.role.name === "Administrator") {
         selectedUserId = undefined;
       }
@@ -122,13 +123,13 @@ export const readTransaction = {
         checkoutPrefix = "https://checkout-staging.xendit.co/v2/";
       }
 
-      let invoiceUrl: string | undefined;
+      let invoiceUrl: Optional<string>;
       if (theTransaction.status === TStatusEnum.PENDING) {
         invoiceUrl = `${checkoutPrefix}${theTransaction.invoice_number}`;
       }
 
-      let discountCode: string | undefined;
-      let discountPercent: Decimal | undefined;
+      let discountCode: Optional<string>;
+      let discountPercent: Optional<Decimal>;
       if (theTransaction.discount_id) {
         const theDiscount = await opts.ctx.prisma.discount.findFirst({
           where: { id: theTransaction.discount_id },
@@ -139,8 +140,8 @@ export const readTransaction = {
         }
       }
 
-      let paymentChannelName: string | undefined;
-      let paymentChannelImage: string | undefined;
+      let paymentChannelName: Optional<string>;
+      let paymentChannelImage: Optional<string>;
       const thePaymentChannel = await opts.ctx.prisma.paymentChannel.findFirst({
         where: { code: theTransaction.payment_channel },
       });
@@ -149,7 +150,7 @@ export const readTransaction = {
         paymentChannelImage = thePaymentChannel.image;
       }
 
-      let cohortBadge: CohortBadgeWithPrice | undefined;
+      let cohortBadge: Optional<CohortBadgeWithPrice>;
       if (theTransaction.category === CategoryEnum.COHORT) {
         const theCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
           include: { cohort: true },
@@ -166,7 +167,7 @@ export const readTransaction = {
         }
       }
 
-      let eventBadge: EventBadgeWithPrice | undefined;
+      let eventBadge: Optional<EventBadgeWithPrice>;
       if (theTransaction.category === CategoryEnum.EVENT) {
         const theEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
           include: { event: true },
@@ -183,7 +184,7 @@ export const readTransaction = {
         }
       }
 
-      let playlistBadge: PlaylistBadge | undefined;
+      let playlistBadge: Optional<PlaylistBadge>;
       if (theTransaction.category === CategoryEnum.PLAYLIST) {
         const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
           where: { id: theTransaction.item_id },

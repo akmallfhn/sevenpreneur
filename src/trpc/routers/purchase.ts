@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { calculateFinalPrice } from "@/lib/price-calc";
 import {
   STATUS_BAD_REQUEST,
@@ -40,7 +41,7 @@ async function createTransaction(
     amount: Decimal;
   },
   paymentChannelId: number,
-  discountCode: string | undefined
+  discountCode: Optional<string>
 ): Promise<{ transactionId: string; invoiceUrl: string }> {
   const selectedPayment = await prisma.paymentChannel.findFirst({
     where: { id: paymentChannelId },

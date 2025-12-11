@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
@@ -10,12 +11,12 @@ export const readPlaylist = {
     const whereClause = {
       id: opts.input.id,
       deleted_at: null,
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
     };
-    const videoWhereClause = { status: undefined as StatusEnum | undefined };
+    const videoWhereClause = { status: undefined as Optional<StatusEnum> };
     const countVideoWhereClause = {
       playlist_id: opts.input.id,
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
     };
     if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
       whereClause.status = StatusEnum.ACTIVE;

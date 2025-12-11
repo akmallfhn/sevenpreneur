@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { roleBasedProcedure } from "@/trpc/init";
 import { calculatePage } from "@/trpc/utils/paging";
@@ -21,9 +22,10 @@ export const listUserData = {
     .query(async (opts) => {
       const whereClause = {
         role_id: opts.input.role_id,
-        full_name: undefined as
-          | { contains: string; mode: "insensitive" }
-          | undefined,
+        full_name: undefined as Optional<{
+          contains: string;
+          mode: "insensitive";
+        }>,
         deleted_at: null,
       };
 

@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import GetPrismaClient from "@/lib/prisma";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
@@ -8,7 +9,7 @@ export type createTRPCContextOptions = {
 };
 
 export async function createTRPCContext(
-  opts: createTRPCContextOptions | undefined
+  opts: Optional<createTRPCContextOptions>
 ) {
   const prisma = GetPrismaClient();
 
