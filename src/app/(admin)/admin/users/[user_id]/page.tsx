@@ -1,6 +1,5 @@
 import UserProfileDetailsCMS from "@/app/components/pages/UserProfileDetailsCMS";
 import { cookies } from "next/headers";
-import React from "react";
 
 interface UserDetailPageProps {
   params: Promise<{ user_id: string }>;

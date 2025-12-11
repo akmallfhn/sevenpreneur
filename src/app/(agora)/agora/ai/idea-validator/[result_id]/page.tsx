@@ -26,7 +26,7 @@ export default async function AIIdeaValidatorResultLMS({
   let aiIdeaValidationData;
   try {
     aiIdeaValidationData = await trpc.read.ai.ideaValidation({ id: result_id });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

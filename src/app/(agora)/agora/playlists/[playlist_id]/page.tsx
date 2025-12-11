@@ -25,7 +25,7 @@ export default async function PlaylistDetailsPageLMS({
     enrolledPlaylistData = (
       await trpc.read.enrolledPlaylist({ id: playlistId })
     ).playlist.playlist;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

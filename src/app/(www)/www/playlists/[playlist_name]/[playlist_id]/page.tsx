@@ -1,8 +1,7 @@
-import React from "react";
+import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
+import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { setSecretKey, trpc } from "@/trpc/server";
-import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
 
 interface PlaylistDetailsPageProps {
   params: Promise<{ playlist_name: string; playlist_id: string }>;
@@ -88,7 +87,7 @@ export default async function PlaylistDetailsPage({
   let playlistDataRaw;
   try {
     playlistDataRaw = (await trpc.read.playlist({ id: playlistId })).playlist;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

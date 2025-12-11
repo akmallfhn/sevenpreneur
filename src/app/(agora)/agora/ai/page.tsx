@@ -1,7 +1,6 @@
 import AIListLMS, { AIList } from "@/app/components/indexes/AIListLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 
 export default async function AIPageLMS() {
   const cookieStore = await cookies();
@@ -16,7 +15,7 @@ export default async function AIPageLMS() {
   let aiList: AIList[] = [];
   try {
     aiList = (await trpc.list.aiTools()).list;
-  } catch (error) {
+  } catch {
     aiList = [];
   }
 

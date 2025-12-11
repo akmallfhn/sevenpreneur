@@ -1,5 +1,5 @@
-import { cookies } from "next/headers";
 import EditUserForm from "@/app/components/forms/EditUserFormCMS";
+import { cookies } from "next/headers";
 
 interface EditUserPageProps {
   params: Promise<{ user_id: string }>;

@@ -90,7 +90,7 @@ export default async function TransactionDetailsPage({
         id: transaction_id,
       })
     ).transaction;
-  } catch (err) {
+  } catch {
     return notFound();
   }
 

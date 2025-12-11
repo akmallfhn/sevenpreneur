@@ -84,7 +84,7 @@ export default async function CheckoutCohortPage({
   let cohortData;
   try {
     cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
-  } catch (error) {
+  } catch {
     return notFound();
   }
   const ticketListRaw = cohortData.cohort_prices;

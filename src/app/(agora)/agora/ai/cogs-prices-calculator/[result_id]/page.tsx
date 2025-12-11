@@ -24,7 +24,7 @@ export default async function AICOGSPricesResultLMS({
     aiCOGSPriceStrategy = await trpc.read.ai.pricingStrategy({
       id: result_id,
     });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

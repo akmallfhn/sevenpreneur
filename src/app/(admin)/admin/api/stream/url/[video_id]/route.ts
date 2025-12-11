@@ -1,8 +1,8 @@
 // Create a JWT token signed using the private key
 // Return a time-limited signed URL (valid for a few minutes)
-import { NextResponse } from "next/server";
-import crypto from "crypto";
 import { encodeBase64Url } from "@/lib/encode";
+import crypto from "crypto";
+import { NextResponse } from "next/server";
 
 interface VideoStreamProps {
   params: Promise<{ video_id: string }>;

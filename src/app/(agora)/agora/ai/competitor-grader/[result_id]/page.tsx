@@ -25,7 +25,7 @@ export default async function AICompetitorGraderResultLMS({
     aiCompetitorGradingData = await trpc.read.ai.competitorGrading({
       id: result_id,
     });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

@@ -22,7 +22,7 @@ export default async function AIMarketSizeResultLMS({
   let aiMarketSizeData;
   try {
     aiMarketSizeData = await trpc.read.ai.marketSize({ id: result_id });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

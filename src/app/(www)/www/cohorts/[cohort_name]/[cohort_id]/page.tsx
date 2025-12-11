@@ -1,4 +1,3 @@
-import React from "react";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -87,7 +86,7 @@ export default async function CohortDetailsPage({
   let cohortDataRaw;
   try {
     cohortDataRaw = (await trpc.read.cohort({ id: cohortId })).cohort;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

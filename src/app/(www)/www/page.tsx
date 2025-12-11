@@ -1,8 +1,7 @@
+import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
+import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { setSecretKey, trpc } from "@/trpc/server";
-import HomeSVP from "@/app/components/pages/HomeSVP";
-import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
 
 export const metadata: Metadata = {
   title: "Sevenpreneur | All-in-One Business Learning Platform",
@@ -56,7 +55,7 @@ export default async function HomePage() {
   let cohortDataRaw;
   try {
     cohortDataRaw = (await trpc.read.cohort({ id: 36 })).cohort;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 
@@ -68,7 +67,7 @@ export default async function HomePage() {
   // Sanitize data type
   const cohortData = {
     ...cohortDataRaw,
-    cohort_prices: cohortDataRaw.cohort_prices.map((price: any) => ({
+    cohort_prices: cohortDataRaw.cohort_prices.map((price) => ({
       ...price,
       amount: Number(price.amount),
     })),

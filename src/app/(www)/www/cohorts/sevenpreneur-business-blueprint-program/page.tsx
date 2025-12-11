@@ -1,8 +1,7 @@
-import React from "react";
+import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
 
 export async function generateMetadata(): Promise<Metadata> {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
@@ -76,7 +75,7 @@ export default async function BlueprintProgramPage() {
   let cohortDataRaw;
   try {
     cohortDataRaw = (await trpc.read.cohort({ id: 36 })).cohort;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 
@@ -88,7 +87,7 @@ export default async function BlueprintProgramPage() {
   // Sanitize data type
   const cohortData = {
     ...cohortDataRaw,
-    cohort_prices: cohortDataRaw.cohort_prices.map((price: any) => ({
+    cohort_prices: cohortDataRaw.cohort_prices.map((price) => ({
       ...price,
       amount: Number(price.amount),
     })),

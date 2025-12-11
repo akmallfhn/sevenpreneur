@@ -1,9 +1,9 @@
+import CheckoutPlaylistFormSVP from "@/app/components/forms/CheckoutPlaylistFormSVP";
+import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
+import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
-import CheckoutPlaylistFormSVP from "@/app/components/forms/CheckoutPlaylistFormSVP";
-import { setSessionToken, trpc } from "@/trpc/server";
-import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
 
 interface CheckoutPlaylistPageProps {
   params: Promise<{ playlist_name: string; playlist_id: string }>;
@@ -83,7 +83,7 @@ export default async function CheckoutPlaylistPage({
   let playlistDataRaw;
   try {
     playlistDataRaw = (await trpc.read.playlist({ id: playlistId })).playlist;
-  } catch (error) {
+  } catch {
     return notFound();
   }
   const playlistData = {

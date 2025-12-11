@@ -87,7 +87,7 @@ export default async function EventDetailsPage({
   let eventDataRaw;
   try {
     eventDataRaw = (await trpc.read.event({ id: eventId })).event;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

@@ -1,6 +1,6 @@
-import { cookies } from "next/headers";
 import UserListCMS from "@/app/components/indexes/UserListCMS";
 import { setSessionToken } from "@/trpc/server";
+import { cookies } from "next/headers";
 
 export default async function UsersPageCMS() {
   const cookieStore = await cookies();

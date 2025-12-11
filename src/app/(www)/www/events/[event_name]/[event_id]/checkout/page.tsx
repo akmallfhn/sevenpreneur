@@ -84,7 +84,7 @@ export default async function CheckoutEventPage({
   let eventData;
   try {
     eventData = (await trpc.read.event({ id: eventId })).event;
-  } catch (error) {
+  } catch {
     return notFound();
   }
   const ticketListRaw = eventData.event_prices;

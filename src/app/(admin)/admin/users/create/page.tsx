@@ -1,5 +1,5 @@
-import { cookies } from "next/headers";
 import CreateUserForm from "@/app/components/forms/CreateUserFormCMS";
+import { cookies } from "next/headers";
 
 export default async function CreateUserPage() {
   const cookieStore = await cookies();

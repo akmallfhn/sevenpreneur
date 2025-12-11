@@ -1,12 +1,11 @@
 import "@/app/globals.css";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { Plus_Jakarta_Sans, Mona_Sans } from "next/font/google";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
-import Script from "next/script";
-import localFont from "next/font/local";
-import { ReactNode } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
+import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
+import Script from "next/script";
+import { ReactNode } from "react";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",

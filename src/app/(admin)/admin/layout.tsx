@@ -1,12 +1,12 @@
-import "@/app/globals.css";
-import { cookies } from "next/headers";
-import { setSessionToken, trpc } from "@/trpc/server";
-import { TRPCProvider } from "@/trpc/client";
 import SidebarCMS from "@/app/components/navigations/SidebarCMS";
-import { Toaster } from "sonner";
-import { Metadata } from "next";
-import DisallowedMobile from "@/app/components/state/DisallowedMobile";
 import ForbiddenComponent from "@/app/components/state/403Forbidden";
+import DisallowedMobile from "@/app/components/state/DisallowedMobile";
+import "@/app/globals.css";
+import { TRPCProvider } from "@/trpc/client";
+import { setSessionToken, trpc } from "@/trpc/server";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
