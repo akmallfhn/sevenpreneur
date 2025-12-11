@@ -7,7 +7,6 @@ import AppButton from "../buttons/AppButton";
 import {
   AlignLeftIcon,
   Blocks,
-  LayoutDashboard,
   LogOut,
   UserCircle2,
   Wallet,

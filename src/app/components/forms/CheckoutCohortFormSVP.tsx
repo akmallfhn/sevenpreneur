@@ -59,7 +59,6 @@ interface CheckoutCohortFormSVPProps {
 }
 
 export default function CheckoutCohortFormSVP({
-  cohortId,
   cohortName,
   cohortImage,
   initialUserId,
@@ -138,7 +137,7 @@ export default function CheckoutCohortFormSVP({
   }, [searchParams]);
 
   // --- Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

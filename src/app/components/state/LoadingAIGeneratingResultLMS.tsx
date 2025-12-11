@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useEffect, useState } from "react";
 
 export default function LoadingAIGeneratingResult() {
   const states = [

@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
-getRupiahCurrency;
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -91,7 +90,7 @@ export default function CheckoutPlaylistFormSVP({
   }, [defaultPaymentChannel, selectedPaymentChannel]);
 
   // --- Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

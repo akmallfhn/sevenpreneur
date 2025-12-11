@@ -59,7 +59,6 @@ interface CheckoutEventFormSVPProps {
 }
 
 export default function CheckoutEventFormSVP({
-  eventId,
   eventName,
   eventImage,
   initialUserId,
@@ -136,7 +135,7 @@ export default function CheckoutEventFormSVP({
   }, [searchParams]);
 
   // --- Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

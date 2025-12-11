@@ -1,8 +1,7 @@
 "use client";
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { ChevronRight } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import { HTMLAttributes, ReactNode } from "react";
 
 interface AppBreadcrumbProps extends HTMLAttributes<HTMLDivElement> {

@@ -1,9 +1,5 @@
 "use client";
-import { useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { setSessionToken, trpc } from "@/trpc/client";
-import { Loader2 } from "lucide-react";
 
 interface UserBadgeCMSProps {
   userAvatar: string;

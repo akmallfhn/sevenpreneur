@@ -1,13 +1,13 @@
 "use client";
+import { FileVariant } from "@/lib/app-types";
+import { getFileVariantFromURL } from "@/lib/file-variants";
 import { supabase } from "@/lib/supabase";
+import { X } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import { X } from "lucide-react";
-import { getFileVariantFromURL } from "@/lib/file-variants";
 import FileResultUploadingCMS from "../items/FileResultUploadingCMS";
-import { FileVariant } from "@/lib/app-types";
 
 interface UploadFilesCMSProps {
   onUpload: (url: string | null) => void;
@@ -61,7 +61,7 @@ export default function UploadFilesCMS({
     const filePath = `modules/${fileName}`;
 
     // Upload Simulation
-    let progressSteps = [0, 30, 60, 80];
+    const progressSteps = [0, 30, 60, 80];
     let currentStep = 0;
 
     setIsUploading(true);
@@ -78,7 +78,7 @@ export default function UploadFilesCMS({
 
     // Upload to Supabase
     try {
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("sevenpreneur")
         .upload(filePath, file, {
           cacheControl: "3600",

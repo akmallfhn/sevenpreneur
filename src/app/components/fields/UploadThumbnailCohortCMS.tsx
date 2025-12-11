@@ -1,12 +1,9 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import { supabase } from "@/lib/supabase";
-import { ImageUp, X } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { X } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
 
 interface UploadThumbnailCohortCMSProps {
   onUpload: (url: string | null) => void;
@@ -65,7 +62,7 @@ export default function UploadThumbnailCohortCMS({
     // Upload to Supabase
     try {
       setIsUploading(true);
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("sevenpreneur")
         .upload(filePath, file, {
           cacheControl: "3600",

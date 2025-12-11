@@ -61,7 +61,7 @@ export default function UploadSubmissionLMS({
     const filePath = `submissions/${fileName}`;
 
     // Upload Simulation
-    let progressSteps = [0, 30, 60, 80];
+    const progressSteps = [0, 30, 60, 80];
     let currentStep = 0;
 
     setIsUploading(true);
@@ -78,7 +78,7 @@ export default function UploadSubmissionLMS({
 
     // Upload to Supabase
     try {
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("sevenpreneur")
         .upload(filePath, file, {
           cacheControl: "3600",

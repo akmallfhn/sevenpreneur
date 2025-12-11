@@ -1,15 +1,14 @@
 "use client";
-import styles from "./Report.module.css";
-import { Progress } from "@/components/ui/progress";
 import { getShortRupiahCurrency } from "@/lib/currency";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import { markdownToHtml } from "@/lib/markdown-to-html";
-import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
+import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
+import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import styles from "./Report.module.css";
 
 interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
@@ -56,15 +55,6 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
   const somValue = 0.01 * props.samValue;
   const conservativeScenario = 0.7 * somValue;
   const aggresiveScenario = 1.5 * somValue;
-
-  let confidenceStatus;
-  if (props.confidenceLevel >= 80) {
-    confidenceStatus = "High";
-  } else if (props.confidenceLevel >= 70) {
-    confidenceStatus = "Medium";
-  } else {
-    confidenceStatus = "Low";
-  }
 
   if (!props.resultStatus) {
     return (

@@ -4,25 +4,23 @@ import {
   getConferenceAttributes,
   getConferenceVariantFromURL,
 } from "@/lib/conference-variant";
+import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import dayjs from "dayjs";
+import { ChevronDown, MapPinned, Video } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
 import AttendanceGatewayMobileLMS from "../gateways/AttendanceGatewayMobileLMS";
-import { ChevronDown, MapPinned, Video } from "lucide-react";
+import FileItemLMS from "../items/FileItemLMS";
+import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import {
   DiscussionStarterList,
   MaterialList,
 } from "../pages/LearningDetailsLMS";
-import FileItemLMS from "../items/FileItemLMS";
-import AppVideoPlayer from "../elements/AppVideoPlayer";
-import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
-import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
-import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
-import { toast } from "sonner";
-import { CreateDiscussionStarter } from "@/lib/actions";
+import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 
 export interface LearningDetailsTabsMobileLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;

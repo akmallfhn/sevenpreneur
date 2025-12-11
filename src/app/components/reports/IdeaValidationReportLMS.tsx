@@ -174,15 +174,6 @@ export default function IdeaValidationReportLMS(
       "kurang cocok dengan masalah yang ada dan dampaknya terhadap pengguna kemungkinan kecil.";
   }
 
-  let confidenceStatus;
-  if (props.confidenceLevel >= 80) {
-    confidenceStatus = "High";
-  } else if (props.confidenceLevel >= 70) {
-    confidenceStatus = "Medium";
-  } else {
-    confidenceStatus = "Low";
-  }
-
   if (!props.resultStatus) {
     return (
       <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
