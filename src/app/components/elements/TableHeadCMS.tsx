@@ -12,7 +12,7 @@ export default function TableHeadCMS({
 }: TableHeadCMSProps) {
   return (
     <th
-      className={`h-10 px-2 py-2 font-semibold font-bodycopy text-left text-sm align-middle whitespace-nowrap`}
+      className={`h-10 px-2 py-2 font-semibold font-bodycopy text-left text-sm align-middle whitespace-nowrap ${className}`}
       {...props}
     >
       {children}

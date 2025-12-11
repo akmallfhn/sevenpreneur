@@ -12,7 +12,6 @@ interface AppDropdownProps extends HTMLAttributes<HTMLDivElement> {
 
 export default function AppDropdown({
   isOpen,
-  onClose,
   children,
   alignMobile = "center",
   alignDesktop = "center",

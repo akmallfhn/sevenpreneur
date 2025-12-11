@@ -42,12 +42,10 @@ export default function EventDetailsSVP({
   eventEndDate,
   eventPrice,
 }: EventDetailsSVPProps) {
-  const [showCTA, setShowCTA] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const { theme } = useTheme();
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const expiredEvent = dayjs().isAfter(eventEndDate);
 
   // Checking height content description

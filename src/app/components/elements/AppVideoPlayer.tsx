@@ -8,7 +8,7 @@ interface AppVideoPlayerProps {
   videoId: string;
 }
 
-export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
+export default function AppVideoPlayer(props: AppVideoPlayerProps) {
   const [signedToken, setSignedToken] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +18,7 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
     let isMounted = true;
 
     const fetchData = async () => {
-      if (!videoId) return;
+      if (!props.videoId) return;
 
       if (isMounted) {
         setIsLoading(true);
@@ -27,7 +27,7 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
       }
 
       try {
-        const response = await fetch(`/api/stream/url/${videoId}`);
+        const response = await fetch(`/api/stream/url/${props.videoId}`);
         const data = await response.json();
         if (data.status !== 200) {
           toast.error("Invalid Video ID");
@@ -57,7 +57,7 @@ export default function AppVideoPlayer({ videoId }: AppVideoPlayerProps) {
       isMounted = false;
       clearInterval(interval);
     };
-  }, [videoId]);
+  }, [props.videoId]);
 
   if (isLoading) {
     return (

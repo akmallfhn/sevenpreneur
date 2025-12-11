@@ -1,16 +1,16 @@
 "use client";
-import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
-import Image from "next/image";
-import LearningDetailsTabsMobileLMS from "../tabs/LearningDetailsTabsMobileLMS";
+import { CreateDiscussionStarter } from "@/lib/actions";
+import { SessionMethod } from "@/lib/app-types";
 import { Star } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import { useEffect, useState } from "react";
-import { SessionMethod } from "@/lib/app-types";
-import { DiscussionStarterList, MaterialList } from "./LearningDetailsLMS";
 import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
-import { CreateDiscussionStarter } from "@/lib/actions";
-import { toast } from "sonner";
+import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
+import LearningDetailsTabsMobileLMS from "../tabs/LearningDetailsTabsMobileLMS";
+import { DiscussionStarterList, MaterialList } from "./LearningDetailsLMS";
 
 interface LearningDetailsMobileLMSProps extends AvatarBadgeLMSProps {
   cohortId: number;

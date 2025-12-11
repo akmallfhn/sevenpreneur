@@ -1,23 +1,22 @@
 "use client";
-import HeroEventRestart25 from "@/app/components/custom-components-restart25/HeroEventRestart25";
-import ContentEventRestart25 from "@/app/components/custom-components-restart25/ContentEventRestart25";
-import TicketCarouselRestart25 from "@/app/components/custom-components-restart25/TicketCarouselRestart25";
-import BannerEventRestart25 from "@/app/components/custom-components-restart25/BannerEventRestart25";
-import FAQEventRestart25 from "@/app/components/custom-components-restart25/FAQEventRestart25";
-import SpeakersLineUpRestart25 from "@/app/components/custom-components-restart25/SpeakersLineUpRestart25";
-import EventExperienceRestart25 from "@/app/components/custom-components-restart25/EventExperienceRestart25";
-import CustomFloatingRestart25 from "@/app/components/custom-components-restart25/CustomFloatingRestart25";
-import TopicSpeakerListRestart25 from "@/app/components/custom-components-restart25/TopicSpeakerListRestart25";
-import TopNavbar from "@/app/components/custom-components-restart25/TopNavbarRestart25";
 import AttendeeRoleListRestart25 from "@/app/components/custom-components-restart25/AttendeeRoleListRestart25";
-import AppInterstitialBanner from "../modals/AppInterstitialBanner";
+import BannerEventRestart25 from "@/app/components/custom-components-restart25/BannerEventRestart25";
+import ContentEventRestart25 from "@/app/components/custom-components-restart25/ContentEventRestart25";
+import CustomFloatingRestart25 from "@/app/components/custom-components-restart25/CustomFloatingRestart25";
+import EventExperienceRestart25 from "@/app/components/custom-components-restart25/EventExperienceRestart25";
+import FAQEventRestart25 from "@/app/components/custom-components-restart25/FAQEventRestart25";
+import HeroEventRestart25 from "@/app/components/custom-components-restart25/HeroEventRestart25";
+import SpeakersLineUpRestart25 from "@/app/components/custom-components-restart25/SpeakersLineUpRestart25";
+import TicketCarouselRestart25 from "@/app/components/custom-components-restart25/TicketCarouselRestart25";
+import TopicSpeakerListRestart25 from "@/app/components/custom-components-restart25/TopicSpeakerListRestart25";
 import PartnerLogosRestart25 from "../custom-components-restart25/PartnerLogosRestart25";
+// import AppInterstitialBanner from "../modals/AppInterstitialBanner";
 
 export default function RestartEventSVP() {
-  let bannerTimeInterval = 1000 * 60 * 60;
-  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
-    bannerTimeInterval = 1000 * 40;
-  }
+  // let bannerTimeInterval = 1000 * 60 * 60;
+  // if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+  //   bannerTimeInterval = 1000 * 40;
+  // }
 
   return (
     <div className="root relative bg-black items-center">

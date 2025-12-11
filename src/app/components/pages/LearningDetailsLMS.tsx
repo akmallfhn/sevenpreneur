@@ -1,23 +1,22 @@
 "use client";
-import Image from "next/image";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
-import { SessionMethod, StatusType } from "@/lib/app-types";
-import AppVideoPlayer from "../elements/AppVideoPlayer";
-import FileItemLMS from "../items/FileItemLMS";
-import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
-import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
-import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
-import React, { useEffect, useState } from "react";
-import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
-import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
 import { CreateDiscussionStarter } from "@/lib/actions";
-import { toast } from "sonner";
+import { SessionMethod, StatusType } from "@/lib/app-types";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { ChevronRight, Star } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
 import CheckInAttendanceLMS from "../gateways/CheckInAttendanceLMS";
 import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
-import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
+import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
+import FileItemLMS from "../items/FileItemLMS";
+import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
+import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
+import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
+import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
+import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
 import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
 
 export interface MaterialList {

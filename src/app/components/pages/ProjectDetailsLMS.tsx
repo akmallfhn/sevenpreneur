@@ -71,8 +71,10 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
 
   // Update Submission status
   useEffect(() => {
-    setSubmissionStatus(
-      props.submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED"
+    queueMicrotask(() =>
+      setSubmissionStatus(
+        props.submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED"
+      )
     );
   }, [props.submissionDocumentURL]);
 
@@ -92,11 +94,13 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
 
     const formatted = parts.join(" ");
 
-    if (isRemaining) {
-      setDeadlineStatus(`${formatted || "less than an hour"} remaining`);
-    } else {
-      setDeadlineStatus(`Overdue ${formatted || "less than an hour"}`);
-    }
+    queueMicrotask(() => {
+      if (isRemaining) {
+        setDeadlineStatus(`${formatted || "less than an hour"} remaining`);
+      } else {
+        setDeadlineStatus(`Overdue ${formatted || "less than an hour"}`);
+      }
+    });
   }, [deadlineAt, now]);
 
   // Update Submission Time
@@ -117,15 +121,17 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
 
     const formatted = parts.join(" ");
 
-    if (isEarly) {
-      setSubmittedTime(
-        `Assignment was submitted ${formatted || "less than an hour"} early`
-      );
-    } else {
-      setSubmittedTime(
-        `Assignment was submitted ${formatted || "less than an hour"} late`
-      );
-    }
+    queueMicrotask(() => {
+      if (isEarly) {
+        setSubmittedTime(
+          `Assignment was submitted ${formatted || "less than an hour"} early`
+        );
+      } else {
+        setSubmittedTime(
+          `Assignment was submitted ${formatted || "less than an hour"} late`
+        );
+      }
+    });
   }, [props.submissionCreatedAt, submittedAt, deadlineAt]);
 
   const handleDelete = async () => {

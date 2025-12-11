@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { StatusType } from "@/lib/app-types";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 import HeroPlaylistDetailsLMS from "../heroes/HeroPlaylistDetailsLMS";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import VideoListItemLMS from "../items/VideoListItemLMS";
-import { StatusType } from "@/lib/app-types";
 import PlaylistDetailsMobileLMS from "./PlaylistDetailsMobileLMS";
 
 export interface VideoItem {
@@ -32,35 +32,20 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
   const router = useRouter();
   const videoIdParams = searchParams.get("videoId");
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
-  const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
-  const [isLoadingVideo, setIsLoadingVideo] = useState<number | null>(null);
+  const [loadingVideoId, setLoadingVideoId] = useState<number | null>(null);
 
   const activeVideos = props.playlistVideos;
 
   // Handle Sync URL param to selectedVideoId
-  useEffect(() => {
-    if (videoIdParams) {
-      const videoId = parseInt(videoIdParams);
+  const selectedVideoId = useMemo(() => {
+    if (!videoIdParams) return null;
 
-      // if not number, then delete param
-      if (isNaN(videoId)) {
-        router.replace(`/playlists/${props.playlistId}`, { scroll: false });
-        return;
-      }
+    const videoId = parseInt(videoIdParams);
+    if (isNaN(videoId)) return null;
 
-      // if id not exist, then delete param
-      const exists = activeVideos.some((video) => Number(video.id) === videoId);
-      if (!exists) {
-        router.replace(`/playlists/${props.playlistId}`, { scroll: false });
-        return;
-      }
-
-      // if valid, update to state
-      setSelectedVideoId(videoId);
-    } else {
-      setSelectedVideoId(null);
-    }
-  }, [videoIdParams, activeVideos, props.playlistId, router]);
+    const exists = activeVideos.some((video) => video.id === videoId);
+    return exists ? videoId : null;
+  }, [videoIdParams, activeVideos]);
 
   // Get Data from selected Video ID
   const selectedVideoData = useMemo(() => {
@@ -72,9 +57,7 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
   // Handle Query Params Video ID
   const handleParamsQuery = (videoId: number) => {
     if (videoId !== selectedVideoId) {
-      setSelectedVideoId(videoId);
-      setIsLoadingVideo(videoId);
-
+      setLoadingVideoId(videoId);
       const params = new URLSearchParams(searchParams);
       params.set("videoId", videoId.toString());
       router.replace(`/playlists/${props.playlistId}?${params.toString()}`, {
@@ -83,8 +66,9 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
     }
   };
 
+  // State Loading
   useEffect(() => {
-    setIsLoadingVideo(null);
+    queueMicrotask(() => setLoadingVideoId(null));
   }, [selectedVideoId]);
 
   // Dynamic mobile rendering
@@ -166,7 +150,7 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
                   videoImage={post.image_url}
                   videoDuration={post.duration}
                   onClick={() => handleParamsQuery(post.id)}
-                  isLoading={isLoadingVideo === post.id}
+                  isLoading={loadingVideoId === post.id}
                 />
               ))}
             </div>

@@ -21,8 +21,7 @@ export default function PlaylistDetailsMobileLMS(
   const searchParams = useSearchParams();
   const router = useRouter();
   const videoIdParams = searchParams.get("videoId");
-  const [selectedVideoId, setSelectedVideoId] = useState<number | null>(null);
-  const [isLoadingVideo, setIsLoadingVideo] = useState<number | null>(null);
+  const [loadingVideoId, setLoadingVideoId] = useState<number | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -30,29 +29,15 @@ export default function PlaylistDetailsMobileLMS(
   const activeVideos = props.playlistVideos;
 
   // Handle Sync URL param to selectedVideoId
-  useEffect(() => {
-    if (videoIdParams) {
-      const videoId = parseInt(videoIdParams);
+  const selectedVideoId = useMemo(() => {
+    if (!videoIdParams) return null;
 
-      // if not number, then delete param
-      if (isNaN(videoId)) {
-        router.replace(`/playlists/${props.playlistId}`, { scroll: false });
-        return;
-      }
+    const videoId = parseInt(videoIdParams);
+    if (isNaN(videoId)) return null;
 
-      // if id not exist, then delete param
-      const exists = activeVideos.some((video) => Number(video.id) === videoId);
-      if (!exists) {
-        router.replace(`/playlists/${props.playlistId}`, { scroll: false });
-        return;
-      }
-
-      // if valid, update to state
-      setSelectedVideoId(videoId);
-    } else {
-      setSelectedVideoId(null);
-    }
-  }, [videoIdParams, activeVideos, props.playlistId, router]);
+    const exists = activeVideos.some((video) => video.id === videoId);
+    return exists ? videoId : null;
+  }, [videoIdParams, activeVideos]);
 
   // Get Data from selected Video ID
   const selectedVideoData = useMemo(() => {
@@ -64,9 +49,7 @@ export default function PlaylistDetailsMobileLMS(
   // Handle Query Params Video ID
   const handleParamsQuery = (videoId: number) => {
     if (videoId !== selectedVideoId) {
-      setSelectedVideoId(videoId);
-      setIsLoadingVideo(videoId);
-
+      setLoadingVideoId(videoId);
       const params = new URLSearchParams(searchParams);
       params.set("videoId", videoId.toString());
       router.replace(`/playlists/${props.playlistId}?${params.toString()}`, {
@@ -75,9 +58,10 @@ export default function PlaylistDetailsMobileLMS(
     }
   };
 
+  // State Loading
   useEffect(() => {
-    setIsLoadingVideo(null);
-  }, [searchParams]);
+    queueMicrotask(() => setLoadingVideoId(null));
+  }, [selectedVideoId]);
 
   // Checking overflow for show more button
   useEffect(() => {
@@ -165,7 +149,7 @@ export default function PlaylistDetailsMobileLMS(
               videoImage={post.image_url}
               videoDuration={post.duration}
               onClick={() => handleParamsQuery(post.id)}
-              isLoading={isLoadingVideo === post.id}
+              isLoading={loadingVideoId === post.id}
             />
           ))}
         </div>

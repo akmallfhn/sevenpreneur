@@ -1,10 +1,10 @@
 "use client";
-import dayjs, { tz } from "dayjs";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { CalendarFold } from "lucide-react";
 import AppButton from "../buttons/AppButton";
 import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

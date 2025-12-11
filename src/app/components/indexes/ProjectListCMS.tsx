@@ -71,7 +71,7 @@ export default function ProjectListCMS(props: ProjectListCMSProps) {
           <>
             {(projectListData?.list ?? []).length > 0 ? (
               <div className="project-list flex flex-col gap-2">
-                {projectListData?.list.map((post, index) => (
+                {projectListData?.list.map((post) => (
                   <ProjectItemCMS
                     key={post.id}
                     sessionUserRole={props.sessionUserRole}

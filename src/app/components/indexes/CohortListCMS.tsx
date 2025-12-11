@@ -1,15 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import AppButton from "@/app/components/buttons/AppButton";
+import CreateCohortFormCMS from "@/app/components/forms/CreateCohortFormCMS";
+import CohortItemCardCMS from "@/app/components/items/CohortItemCardCMS";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import AppButton from "@/app/components/buttons/AppButton";
-import { ChevronRight, Loader2, PlusCircle } from "lucide-react";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
-import CohortItemCardCMS from "@/app/components/items/CohortItemCardCMS";
-import CreateCohortFormCMS from "@/app/components/forms/CreateCohortFormCMS";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import { ChevronRight, Loader2, PlusCircle } from "lucide-react";
+import React, { useState } from "react";
 
 dayjs.extend(isBetween);
 
@@ -74,7 +74,7 @@ export default function CohortListCMS({
         {cohortListData && !isLoading && !isError && (
           <div className="index w-full flex flex-col gap-4 bg-section-background px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
             <div className="cohort-list grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
-              {cohortListData?.list.map((post, index) => (
+              {cohortListData?.list.map((post) => (
                 <CohortItemCardCMS
                   key={post.id}
                   sessionToken={sessionToken}
