@@ -137,6 +137,7 @@ async function createTransaction(
       ],
     });
   } catch (e) {
+    console.error(e);
     // Undo transaction creation
     const deletedTransaction = await prisma.transaction.deleteMany({
       where: { id: theTransaction.id },
@@ -279,9 +280,9 @@ export const purchaseRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      let currentRole = opts.ctx.user.role.name;
+      const currentRole = opts.ctx.user.role.name;
       let selectedUserId = opts.ctx.user.id;
-      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+      if (["Administrator", "Class Manager"].includes(currentRole)) {
         if (opts.input.user_id) {
           selectedUserId = opts.input.user_id;
         }
@@ -342,9 +343,9 @@ export const purchaseRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      let currentRole = opts.ctx.user.role.name;
+      const currentRole = opts.ctx.user.role.name;
       let selectedUserId = opts.ctx.user.id;
-      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+      if (["Administrator", "Class Manager"].includes(currentRole)) {
         if (opts.input.user_id) {
           selectedUserId = opts.input.user_id;
         }
@@ -402,9 +403,9 @@ export const purchaseRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      let currentRole = opts.ctx.user.role.name;
+      const currentRole = opts.ctx.user.role.name;
       let selectedUserId = opts.ctx.user.id;
-      if (currentRole === "Administrator" || currentRole === "Class Manager") {
+      if (["Administrator", "Class Manager"].includes(currentRole)) {
         if (opts.input.user_id) {
           selectedUserId = opts.input.user_id;
         }
@@ -462,9 +463,15 @@ export const purchaseRouter = createTRPCRouter({
       })
     )
     .mutation(async (opts) => {
-      let whereClause = { id: opts.input.id };
+      let whereClause = {
+        id: opts.input.id,
+        user_id: undefined as undefined | string,
+      };
       if (opts.ctx.user.role.name !== "Administrator") {
-        Object.assign(whereClause, { user_id: opts.ctx.user.id });
+        whereClause = {
+          ...whereClause,
+          user_id: opts.ctx.user.id,
+        };
       }
       const theTransaction = await opts.ctx.prisma.transaction.findFirst({
         where: whereClause,
@@ -476,12 +483,12 @@ export const purchaseRouter = createTRPCRouter({
         };
       }
 
-      let xenditResponse: XenditInvoiceResponse;
       try {
-        xenditResponse = await xenditRequestExpireInvoice({
+        await xenditRequestExpireInvoice({
           invoice_id: theTransaction.invoice_number,
         });
       } catch (e) {
+        console.error(e);
         // Rethrow error using TRPCError
         throw new TRPCError({
           code: STATUS_INTERNAL_SERVER_ERROR,

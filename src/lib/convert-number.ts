@@ -1,4 +1,4 @@
-export function toNumber(value: any): number | null {
+export function toNumber(value: unknown): number | null {
   if (value === null || value === undefined) return null;
   if (typeof value === "number") return value;
   if (typeof value === "string") return parseFloat(value);
@@ -50,7 +50,7 @@ export function scaleToPercent(value: number) {
   return ((value + 5) / 10) * 100;
 }
 
-export function formatWithComma(value: any): string {
+export function formatWithComma(value: unknown): string {
   const num = toNumber(value);
   if (num === null || isNaN(num)) return "0";
 
