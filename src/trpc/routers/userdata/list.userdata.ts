@@ -21,16 +21,17 @@ export const listUserData = {
     .query(async (opts) => {
       const whereClause = {
         role_id: opts.input.role_id,
+        full_name: undefined as
+          | { contains: string; mode: "insensitive" }
+          | undefined,
         deleted_at: null,
       };
 
       if (opts.input.keyword !== undefined) {
-        Object.assign(whereClause, {
-          full_name: {
-            contains: opts.input.keyword,
-            mode: "insensitive",
-          },
-        });
+        whereClause.full_name = {
+          contains: opts.input.keyword,
+          mode: "insensitive",
+        };
       }
 
       const paging = calculatePage(
@@ -62,9 +63,10 @@ export const listUserData = {
         };
       });
 
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+      const returnedMetapaging = {
+        ...paging.metapaging,
         keyword: opts.input.keyword,
-      });
+      };
 
       return {
         code: STATUS_OK,

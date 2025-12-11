@@ -50,10 +50,11 @@ export const readLMS = {
         },
       },
     });
-    const theCohortWithCounts = Object.assign({}, theCohort, {
+    const theCohortWithCounts = {
+      ...theCohort,
       total_learning_session: learningsCount,
       total_materials: modulesCount + materialsCount,
-    });
+    };
     return {
       code: STATUS_OK,
       message: "Success",
@@ -112,10 +113,11 @@ export const readLMS = {
           },
         },
       });
-      const theCohortWithCounts = Object.assign({}, theCohort, {
+      const theCohortWithCounts = {
+        ...theCohort,
         total_learning_session: learningsCount,
         total_materials: modulesCount + materialsCount,
-      });
+      };
       return {
         code: STATUS_OK,
         message: "Success",

@@ -10,21 +10,17 @@ export const readPlaylist = {
     const whereClause = {
       id: opts.input.id,
       deleted_at: null,
+      status: undefined as StatusEnum | undefined,
     };
-    const videoWhereClause = {};
+    const videoWhereClause = { status: undefined as StatusEnum | undefined };
     const countVideoWhereClause = {
       playlist_id: opts.input.id,
+      status: undefined as StatusEnum | undefined,
     };
     if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
-      Object.assign(whereClause, {
-        status: StatusEnum.ACTIVE,
-      });
-      Object.assign(videoWhereClause, {
-        status: StatusEnum.ACTIVE,
-      });
-      Object.assign(countVideoWhereClause, {
-        status: StatusEnum.ACTIVE,
-      });
+      whereClause.status = StatusEnum.ACTIVE;
+      videoWhereClause.status = StatusEnum.ACTIVE;
+      countVideoWhereClause.status = StatusEnum.ACTIVE;
     }
 
     const thePlaylist = await opts.ctx.prisma.playlist.findFirst({
@@ -67,11 +63,12 @@ export const readPlaylist = {
       },
     });
 
-    const thePlaylistWithCounts = Object.assign({}, thePlaylist, {
+    const thePlaylistWithCounts = {
+      ...thePlaylist,
       total_video: videosCount,
       total_duration: durationsTotal,
       total_user_enrolled: usersCount,
-    });
+    };
     return {
       code: STATUS_OK,
       message: "Success",
@@ -136,11 +133,12 @@ export const readPlaylist = {
         },
       });
 
-      const thePlaylistWithCounts = Object.assign({}, thePlaylist, {
+      const thePlaylistWithCounts = {
+        ...thePlaylist,
         total_video: videosCount,
         total_duration: durationsTotal,
         total_user_enrolled: usersCount,
-      });
+      };
       return {
         code: STATUS_OK,
         message: "Success",

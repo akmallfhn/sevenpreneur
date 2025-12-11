@@ -19,21 +19,23 @@ export const listPlaylist = {
       })
     )
     .query(async (opts) => {
-      const whereClause = { deleted_at: null };
+      const whereClause = {
+        deleted_at: null,
+        status: undefined as StatusEnum | undefined,
+        name: undefined as
+          | { contains: string; mode: "insensitive" }
+          | undefined,
+      };
 
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
-        Object.assign(whereClause, {
-          status: StatusEnum.ACTIVE,
-        });
+        whereClause.status = StatusEnum.ACTIVE;
       }
 
       if (opts.input.keyword !== undefined) {
-        Object.assign(whereClause, {
-          name: {
-            contains: opts.input.keyword,
-            mode: "insensitive",
-          },
-        });
+        whereClause.name = {
+          contains: opts.input.keyword,
+          mode: "insensitive",
+        };
       }
 
       const paging = calculatePage(
@@ -63,9 +65,10 @@ export const listPlaylist = {
         };
       });
 
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+      const returnedMetapaging = {
+        ...paging.metapaging,
         keyword: opts.input.keyword,
-      });
+      };
 
       return {
         code: STATUS_OK,
@@ -111,16 +114,17 @@ export const listPlaylist = {
         user_id: opts.ctx.user.id,
         playlist: {
           deleted_at: null,
+          name: undefined as
+            | { contains: string; mode: "insensitive" }
+            | undefined,
         },
       };
 
       if (opts.input.keyword !== undefined) {
-        Object.assign(whereClause.playlist, {
-          name: {
-            contains: opts.input.keyword,
-            mode: "insensitive",
-          },
-        });
+        whereClause.playlist.name = {
+          contains: opts.input.keyword,
+          mode: "insensitive",
+        };
       }
 
       const paging = calculatePage(
@@ -151,9 +155,10 @@ export const listPlaylist = {
         };
       });
 
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+      const returnedMetapaging = {
+        ...paging.metapaging,
         keyword: opts.input.keyword,
-      });
+      };
 
       return {
         code: STATUS_OK,
