@@ -306,7 +306,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      let whereOr: { price_id: any }[] | undefined = undefined;
+      let whereOr: { price_id: number | null }[] | undefined = undefined;
       if (opts.ctx.user.role.name === "General User") {
         const theEnrolledCohort = await isEnrolledCohort(
           opts.ctx.prisma,

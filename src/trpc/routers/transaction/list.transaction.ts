@@ -45,7 +45,7 @@ async function fetchItems(
     }
   });
 
-  type Cohort = Prisma.CohortGetPayload<{}>;
+  type Cohort = Prisma.CohortGetPayload<object>;
   let cohortMap: Map<number, Cohort> | undefined;
   if (!useCohortPrice) {
     const cohortList = await prisma.cohort.findMany({
@@ -66,7 +66,7 @@ async function fetchItems(
     cohortPriceMap = new Map(cohortPriceList.map((entry) => [entry.id, entry]));
   }
 
-  type Event = Prisma.EventGetPayload<{}>;
+  type Event = Prisma.EventGetPayload<object>;
   let eventMap: Map<number, Event> | undefined;
   if (!useEventPrice) {
     const eventList = await prisma.event.findMany({
@@ -128,7 +128,7 @@ export const listTransaction = {
         take: paging.prisma.take,
       });
 
-      const { cohortMap, playlistMap, eventMap } = await fetchItems(
+      const { cohortMap, playlistMap } = await fetchItems(
         opts.ctx.prisma,
         discountList,
         false, // uses cohort ID

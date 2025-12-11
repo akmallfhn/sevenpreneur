@@ -8,12 +8,14 @@ export const readEvent = {
   event: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
     let whereClause = {
       id: opts.input.id,
+      status: undefined as StatusEnum | undefined,
       deleted_at: null,
     };
     if (!opts.ctx.user) {
-      Object.assign(whereClause, {
+      whereClause = {
+        ...whereClause,
         status: StatusEnum.ACTIVE,
-      });
+      };
     }
     const theEvent = await opts.ctx.prisma.event.findFirst({
       include: {

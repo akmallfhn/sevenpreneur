@@ -15,12 +15,14 @@ export const readLMS = {
   cohort: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
     let whereClause = {
       id: opts.input.id,
+      status: undefined as StatusEnum | undefined,
       deleted_at: null,
     };
     if (!opts.ctx.user) {
-      Object.assign(whereClause, {
+      whereClause = {
+        ...whereClause,
         status: StatusEnum.ACTIVE,
-      });
+      };
     }
     const theCohort = await opts.ctx.prisma.cohort.findFirst({
       include: {
