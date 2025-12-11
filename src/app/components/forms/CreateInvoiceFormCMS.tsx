@@ -7,7 +7,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
-import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
+import InputNumberSVP from "../fields/InputNumberSVP";
 import SelectCMS from "../fields/SelectCMS";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import AppSheet from "../modals/AppSheet";
@@ -420,7 +420,6 @@ export default function CreateInvoiceFormCMS({
         {!isLoading && !isError && (
           <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              {/* User */}
               <InputCMS
                 inputId="invoice-user-id"
                 inputName="Billed to"
@@ -430,20 +429,16 @@ export default function CreateInvoiceFormCMS({
                 onInputChange={handleInputChange("invoiceUserId")}
                 required
               />
-
-              {/* Phone Number */}
-              <PhoneNumberInputSVP
+              <InputNumberSVP
                 inputId="invoice-user-phone"
                 inputName="Phone Number"
-                inputIcon="🇮🇩"
-                inputCountryCode="62"
+                inputIcon="🇮🇩 62"
+                inputConfig="numeric"
                 inputPlaceholder="Enter Mobile or WhatsApp number"
                 value={formData.invoiceUserPhone}
                 onInputChange={handleInputChange("invoiceUserPhone")}
                 required
               />
-
-              {/* Order Item */}
               <div className="bg-section-background/50 border border-outline flex flex-col gap-2 p-4 rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">Order Item</h5>
                 <SelectCMS

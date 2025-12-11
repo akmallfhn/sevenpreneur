@@ -1,13 +1,13 @@
 "use client";
+import { SendAIChat } from "@/lib/actions";
+import { AIChatRole } from "@/lib/app-types";
+import { Loader2, MessageCircleMore } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import ChatSubmitterLMS from "./ChatSubmitterLMS";
 import ChatBubbleLMS from "./ChatBubbleLMS";
 import ChatResponseMarkdown from "./ChatResponseMarkdown";
-import { SendAIChat } from "@/lib/actions";
-import { Loader2, MessageCircleMore } from "lucide-react";
-import { AIChatRole } from "@/lib/app-types";
-import { useRouter } from "next/navigation";
+import ChatSubmitterLMS from "./ChatSubmitterLMS";
 
 interface Chats {
   role: AIChatRole;
@@ -68,7 +68,7 @@ export default function ChatConversationLMS({
         handleSubmitInitialMessage(message);
       }
     }
-  }, []);
+  });
 
   // Keeps local state in sync if new messages come in from the server or other sources.
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function ChatConversationLMS({
         router.replace(`/ai/chat/${sendChat.conv_id}`);
         setChats((prev) => [...prev, newAssistantChat]);
       }
-    } catch (err) {
+    } catch {
       toast.error("Failed to send initial message");
     } finally {
       setGeneratingAI(false);
@@ -134,7 +134,7 @@ export default function ChatConversationLMS({
         };
         setChats((prev) => [...prev, newAssistantChat]);
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to start conversation");
     } finally {
       setGeneratingAI(false);

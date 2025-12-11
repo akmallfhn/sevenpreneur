@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, TextareaHTMLAttributes } from "react";
+import React, { TextareaHTMLAttributes, useState } from "react";
 
 interface TextAreaCMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaId: string;
@@ -19,13 +19,19 @@ export default function TextAreaCMS({
   textAreaPlaceholder,
   characterLength,
   errorMessage,
-  value: propValue,
+  value,
   onTextAreaChange,
   required,
   ...rest
 }: TextAreaCMSProps) {
-  const [value, setValue] = useState(propValue);
+  const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
+
+  // Sync only when parent value changes AND it's different
+  if (textValue !== value) {
+    setTextValue(value ?? "");
+  }
+
   const maxLength = characterLength ?? 520;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -41,21 +47,14 @@ export default function TextAreaCMS({
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
+    setTextValue(newValue.slice(0, maxLength));
     if (onTextAreaChange) onTextAreaChange(newValue.slice(0, maxLength));
   };
 
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
-
   // Reset internalError if get any errorMessage from parent
-  useEffect(() => {
-    if (errorMessage) {
-      setInternalError("");
-    }
-  }, [errorMessage]);
+  if (errorMessage && internalError !== "") {
+    setInternalError("");
+  }
 
   // Compute error (parent > internal)
   const computedError = errorMessage || internalError;
@@ -80,7 +79,7 @@ export default function TextAreaCMS({
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-cms-primary"
           } `}
-          value={value}
+          value={textValue}
           onChange={handleTextAreaChange}
         />
         {computedError && (

@@ -1,10 +1,10 @@
 "use client";
-import Image from "next/image";
-import React, { useState, useEffect, TextareaHTMLAttributes } from "react";
-import AppButton from "../buttons/AppButton";
-import { Loader2, SendHorizonal } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
+import React, { TextareaHTMLAttributes, useState } from "react";
+import AppButton from "../buttons/AppButton";
 
 interface AppDiscussionTextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -29,14 +29,20 @@ export default function AppDiscussionTextArea({
   errorMessage,
   onTextAreaChange,
   onSubmit,
-  value: propValue,
+  value,
   disabled,
   isLoadingSubmit,
   ...rest
 }: AppDiscussionTextAreaProps) {
-  const [value, setValue] = useState(propValue);
+  const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
   const [isScrollable, setIsScrollable] = useState(false);
+
+  // Sync only when parent value changes AND it's different
+  if (textValue !== value) {
+    setTextValue(value ?? "");
+  }
+
   const maxLength = characterLength ?? 520;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -60,21 +66,14 @@ export default function AppDiscussionTextArea({
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
+    setTextValue(newValue.slice(0, maxLength));
     if (onTextAreaChange) onTextAreaChange(newValue.slice(0, maxLength));
   };
 
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
-
   // Reset internalError if get any errorMessage from parent
-  useEffect(() => {
-    if (errorMessage) {
-      setInternalError("");
-    }
-  }, [errorMessage]);
+  if (errorMessage && internalError !== "") {
+    setInternalError("");
+  }
 
   // Compute error (parent > internal)
   const computedError = errorMessage || internalError;
@@ -101,7 +100,7 @@ export default function AppDiscussionTextArea({
             className={`text-area-placeholder flex w-full max-h-40 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-sm border-b-2 resize-none transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
               computedError ? "border-destructive" : "border-outline"
             } ${isScrollable ? "overflow-y-auto" : "overflow-y-hidden"}`}
-            value={value}
+            value={textValue}
             onChange={handleTextAreaChange}
           />
           {computedError && (
@@ -115,7 +114,7 @@ export default function AppDiscussionTextArea({
         <AppButton
           className="w-fit"
           size="medium"
-          disabled={!value || isLoadingSubmit}
+          disabled={!textValue || isLoadingSubmit}
           onClick={onSubmit}
         >
           {isLoadingSubmit ? (
@@ -131,7 +130,7 @@ export default function AppDiscussionTextArea({
       <div className="submit-discussion-desktop hidden w-fit shrink-0 lg:flex">
         <AppButton
           size="largeIconRounded"
-          disabled={!value || isLoadingSubmit}
+          disabled={!textValue || isLoadingSubmit}
           onClick={onSubmit}
         >
           {isLoadingSubmit ? (

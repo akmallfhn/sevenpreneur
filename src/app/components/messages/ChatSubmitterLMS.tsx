@@ -1,13 +1,7 @@
 "use client";
-import {
-  FormEvent,
-  KeyboardEvent,
-  TextareaHTMLAttributes,
-  useEffect,
-  useState,
-} from "react";
-import AppButton from "../buttons/AppButton";
 import { ArrowUp, Paperclip, Square } from "lucide-react";
+import { FormEvent, KeyboardEvent, TextareaHTMLAttributes } from "react";
+import AppButton from "../buttons/AppButton";
 
 interface ChatSubmitterLMSProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {

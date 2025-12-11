@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 export interface OptionType {
   label: string;
-  value: any;
+  value: string | number | null;
   image?: string;
 }
 
@@ -14,8 +14,8 @@ interface SelectCMSProps {
   selectName?: string;
   selectIcon?: React.ReactNode;
   selectPlaceholder: string;
-  value: any;
-  onChange?: (value: any) => void;
+  value: string | number | null;
+  onChange?: (value: string | number | null) => void;
   disabled?: boolean;
   required?: boolean;
   options?: OptionType[];

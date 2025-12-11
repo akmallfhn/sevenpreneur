@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
+import InputNumberSVP from "../fields/InputNumberSVP";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
@@ -310,12 +310,12 @@ export default function EditUserForm({
                   required
                 />
                 {/* Phone Number */}
-                <PhoneNumberInputSVP
+                <InputNumberSVP
                   inputId={"phone-number"}
                   inputName={"Phone Number"}
-                  inputIcon={"🇮🇩"}
+                  inputIcon={"🇮🇩 62"}
                   inputPlaceholder="Enter Mobile or WhatsApp number"
-                  inputCountryCode={"62"}
+                  inputConfig="numeric"
                   value={formData.phoneNumber}
                   onInputChange={handleInputChange("phoneNumber")}
                 />

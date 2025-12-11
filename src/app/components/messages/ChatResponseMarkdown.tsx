@@ -1,10 +1,10 @@
 "use client";
 import { markdownToHtml } from "@/lib/markdown-to-html";
-import styles from "./Markdown.module.css";
-import Image from "next/image";
-import AppButton from "../buttons/AppButton";
 import { useClipboard } from "@/lib/use-clipboard";
 import { Check, CopyIcon } from "lucide-react";
+import Image from "next/image";
+import AppButton from "../buttons/AppButton";
+import styles from "./Markdown.module.css";
 
 interface ChatResponseMarkdownProps {
   chatMessage: string;

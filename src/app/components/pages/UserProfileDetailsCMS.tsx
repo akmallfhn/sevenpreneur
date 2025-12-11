@@ -1,37 +1,34 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
-import TitleRevealCMS from "../titles/TitleRevealCMS";
-import InputCMS from "../fields/InputCMS";
-import SelectCMS from "../fields/SelectCMS";
-import AppButton from "../buttons/AppButton";
-import TextAreaCMS from "../fields/TextAreaCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import { StatusType } from "@/lib/app-types";
+import { useClipboard } from "@/lib/use-clipboard";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
+import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
-import "dayjs/locale/en";
 import {
-  User2,
   AtSign,
-  KeyRound,
   Building2,
-  Sprout,
-  Flag,
-  Loader2,
-  Settings2,
   ChevronRight,
   Copy,
+  Flag,
+  KeyRound,
+  Loader2,
+  Settings2,
+  User2,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+import InputNumberSVP from "../fields/InputNumberSVP";
+import SelectCMS from "../fields/SelectCMS";
+import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import { StatusType } from "@/lib/app-types";
-import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
-import { useClipboard } from "@/lib/use-clipboard";
-import { getRupiahCurrency } from "@/lib/currency";
-import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
-import { toast } from "sonner";
+import TitleRevealCMS from "../titles/TitleRevealCMS";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -201,12 +198,12 @@ export default function UserProfileDetailsCMS({
                     value={userDetailData.user.email || ""}
                     disabled
                   />
-                  <PhoneNumberInputSVP
+                  <InputNumberSVP
                     inputId={"phone-number"}
                     inputName={"Phone Number"}
-                    inputIcon={"🇮🇩"}
+                    inputIcon={"🇮🇩 62"}
                     inputPlaceholder="None"
-                    inputCountryCode={"62"}
+                    inputConfig="numeric"
                     value={userDetailData.user.phone_number || ""}
                     disabled
                   />

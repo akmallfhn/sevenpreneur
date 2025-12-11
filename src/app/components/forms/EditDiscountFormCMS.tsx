@@ -52,7 +52,7 @@ export default function EditDiscountFormCMS({
     discountEndDate: string;
     discountStatus: StatusType | null;
     productCategory: ProductCategory | null;
-    productItem: number | undefined;
+    productItem?: number;
   }>({
     discountName: initialData?.name.trim() ? initialData.name : "",
     discountCode: initialData?.code.trim() ? initialData.code : "",
@@ -409,7 +409,7 @@ export default function EditDiscountFormCMS({
                     selectId="product-item"
                     selectName="Product Item"
                     selectPlaceholder="Select specific products"
-                    value={formData.productItem}
+                    value={formData.productItem ?? ""}
                     onChange={handleInputChange("productItem")}
                     options={itemOptions}
                     required

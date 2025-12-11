@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes, useState } from "react";
 
 interface InputCMSProps extends InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
@@ -21,13 +21,19 @@ export default function InputCMS({
   inputPlaceholder,
   characterLength,
   errorMessage,
-  value: propValue,
+  value,
   onInputChange,
   required,
   ...rest
 }: InputCMSProps) {
-  const [value, setValue] = useState(propValue);
+  const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
+
+  // Sync only when parent value changes AND it's different
+  if (textValue !== value) {
+    setTextValue(value ?? "");
+  }
+
   const maxLength = characterLength ?? 128;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -40,21 +46,14 @@ export default function InputCMS({
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
+    setTextValue(newValue.slice(0, maxLength));
     if (onInputChange) onInputChange(newValue.slice(0, maxLength));
   };
 
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
-
   // Reset internalError if get any errorMessage from parent
-  useEffect(() => {
-    if (errorMessage) {
-      setInternalError("");
-    }
-  }, [errorMessage]);
+  if (errorMessage && internalError !== "") {
+    setInternalError("");
+  }
 
   // Compute error (parent > internal)
   const computedError = errorMessage || internalError;
@@ -89,7 +88,7 @@ export default function InputCMS({
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-cms-primary"
           } ${inputIcon ? "pl-10" : ""} `}
-          value={value}
+          value={textValue}
           onChange={handleInputChange}
           suppressHydrationWarning
         />
