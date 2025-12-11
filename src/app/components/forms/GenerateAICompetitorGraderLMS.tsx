@@ -1,17 +1,17 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import { FormEvent, useState } from "react";
-import { toast } from "sonner";
 import { GenerateAICompetitorGrading } from "@/lib/actions";
-import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
-import TextAreaLMS from "../fields/TextAreaLMS";
-import AppButton from "../buttons/AppButton";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
 import SelectLMS from "../fields/SelectLMS";
+import TextAreaLMS from "../fields/TextAreaLMS";
+import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 
 interface IndustryList {
   name: string;
@@ -42,7 +42,7 @@ export default function GenerateAICompetitorGraderLMS(
   });
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

@@ -1,22 +1,22 @@
 "use client";
+import { Checkbox } from "@/components/ui/checkbox";
 import { GenerateAIMarketSize } from "@/lib/actions";
-import AppButton from "../buttons/AppButton";
 import {
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import InputLMS from "../fields/InputLMS";
-import TextAreaLMS from "../fields/TextAreaLMS";
-import SelectLMS from "../fields/SelectLMS";
-import { Checkbox } from "@/components/ui/checkbox";
+import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import Image from "next/image";
-import AppTableofContents from "../navigations/AppTableofContents";
 import AppCalloutBox from "../elements/AppCalloutBox";
+import InputLMS from "../fields/InputLMS";
+import SelectLMS from "../fields/SelectLMS";
+import TextAreaLMS from "../fields/TextAreaLMS";
+import AppTableofContents from "../navigations/AppTableofContents";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 
 interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
@@ -84,7 +84,7 @@ export default function GenerateAIMarketSizeLMS(
   };
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

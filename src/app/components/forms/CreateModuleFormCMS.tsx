@@ -62,7 +62,7 @@ export default function CreateModuleFormCMS({
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

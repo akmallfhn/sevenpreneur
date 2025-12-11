@@ -1,17 +1,17 @@
 "use client";
-import { useState, useEffect, FormEvent, useRef } from "react";
-import AppSheet from "../modals/AppSheet";
-import InputCMS from "../fields/InputCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
-import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-import UploadFilesCMS from "../fields/UploadFilesCMS";
-import RadioBoxCMS from "../fields/RadioBoxCMS";
-import { StatusType } from "@/lib/app-types";
 import { Switch } from "@/components/ui/switch";
+import { StatusType } from "@/lib/app-types";
+import { trpc } from "@/trpc/client";
+import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+import RadioBoxCMS from "../fields/RadioBoxCMS";
+import TextAreaCMS from "../fields/TextAreaCMS";
+import UploadFilesCMS from "../fields/UploadFilesCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppSheet from "../modals/AppSheet";
 
 interface EditModuleFormCMSProps {
   sessionToken: string;
@@ -104,7 +104,7 @@ export default function EditModuleFormCMS({
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

@@ -1,38 +1,36 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { setSessionToken, trpc } from "@/trpc/client";
+import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
-import { ChevronRight, Cog, Loader2, Quote, Settings } from "lucide-react";
-import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { StatusType } from "@/lib/app-types";
+import { setSessionToken, trpc } from "@/trpc/client";
 import {
   faBell,
   faCalendarDay,
   faPowerOff,
   faQuoteLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
-import { StatusType } from "@/lib/app-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
+import { ChevronRight, Loader2, Settings } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface WebMarketingToolsCMSProps {
   sessionToken: string;
 }
 
-export default function WebMarketingToolsCMS({
-  sessionToken,
-}: WebMarketingToolsCMSProps) {
+export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
   const [editTicker, setEditTicker] = useState(false);
 
   // Set Session Token to Header
   useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
+    if (props.sessionToken) {
+      setSessionToken(props.sessionToken);
     }
-  }, [sessionToken]);
+  }, [props.sessionToken]);
 
   // Fetch tRPC Detail Ticker
   const {
@@ -167,7 +165,8 @@ export default function WebMarketingToolsCMS({
       {/* Open Edit Ticker */}
       {editTicker && (
         <EditTickerMarketingFormCMS
-          initialData={tickerDetailsData}
+          sessionToken={props.sessionToken}
+          tickerId={1}
           isOpen={editTicker}
           onClose={() => setEditTicker(false)}
         />

@@ -3,12 +3,9 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-interface ApplyDiscountGatewaySVPProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
-
 export default function ApplyDiscountGatewaySVP({
   ...rest
-}: ApplyDiscountGatewaySVPProps) {
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className="discount-gateway flex w-full bg-[#F8FBFF] p-3 border border-primary/30 rounded-md dark:bg-surface-black dark:border-0 sm:hover:cursor-pointer"

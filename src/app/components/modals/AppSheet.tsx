@@ -1,6 +1,6 @@
 "use client";
 import { X } from "lucide-react";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
 interface AppSheetProps {
   sheetName: string;

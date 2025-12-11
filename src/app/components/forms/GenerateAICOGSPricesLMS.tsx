@@ -1,24 +1,28 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import { FormEvent, useEffect, useState } from "react";
-import { toast } from "sonner";
-import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
-import TextAreaLMS from "../fields/TextAreaLMS";
-import AppButton from "../buttons/AppButton";
+import {
+  CostList,
+  GenerateAIPriceStrategy,
+  GenerateCOGSStructure,
+} from "@/lib/actions";
+import { findIncompleteCosts } from "@/lib/array";
+import { setSessionToken, trpc } from "@/trpc/client";
+import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
-import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_tool";
+import InputNumberSVP from "../fields/InputNumberSVP";
 import RadioBoxLMS from "../fields/RadioBoxLMS";
-import { GenerateAIPriceStrategy, GenerateCOGSStructure } from "@/lib/actions";
-import { setSessionToken, trpc } from "@/trpc/client";
+import TextAreaLMS from "../fields/TextAreaLMS";
+import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 import AICostListStepperLMS, {
   CostListForm,
 } from "../stepper/AICostListStepperLMS";
-import InputNumberSVP from "../fields/InputNumberSVP";
-import { findIncompleteCosts } from "@/lib/array";
 
 interface GenerateAICOGSPricesLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
@@ -75,13 +79,24 @@ export default function GenerateAICOGSPricesLMS(
     }
   }, [props.sessionToken]);
 
-  const { data } = trpc.read.ai.COGSStructure.useQuery<any>(
+  const { data } = trpc.read.ai.COGSStructure.useQuery(
     { id: COGSId },
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken && !!COGSId,
     }
-  );
+  ) as unknown as {
+    data: {
+      code: string;
+      message: string;
+      result: {
+        name: string;
+        is_done: boolean;
+        result?: { variable_cost: CostList[]; fixed_cost: CostList[] };
+        created_at: string;
+      };
+    };
+  };
   const isDoneResult = data?.result.is_done;
 
   // Update State Costs
@@ -96,7 +111,7 @@ export default function GenerateAICOGSPricesLMS(
       setVariableCost((prev) => {
         const merged = [...prev];
 
-        newVariableCosts.forEach((cost: CostListForm) => {
+        newVariableCosts.forEach((cost) => {
           if (!merged.some((c) => c.name === cost.name)) {
             merged.push({
               ...cost,
@@ -121,7 +136,7 @@ export default function GenerateAICOGSPricesLMS(
       setFixedCost((prev) => {
         const merged = [...prev];
 
-        newFixedCosts.forEach((cost: CostListForm) => {
+        newFixedCosts.forEach((cost) => {
           if (!merged.some((c) => c.name === cost.name)) {
             merged.push({
               ...cost,
@@ -153,7 +168,7 @@ export default function GenerateAICOGSPricesLMS(
   ]);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

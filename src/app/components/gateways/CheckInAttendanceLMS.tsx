@@ -1,9 +1,5 @@
 "use client";
 import { CheckInSession } from "@/lib/actions";
-import AppButton, { VariantType } from "../buttons/AppButton";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Check,
   ClockFading,
@@ -12,6 +8,10 @@ import {
   LockKeyholeIcon,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import AppButton, { VariantType } from "../buttons/AppButton";
 
 interface CheckInAttendanceLMSProps {
   learningSessionId: number;
@@ -72,7 +72,7 @@ export default function CheckInAttendanceLMS(props: CheckInAttendanceLMSProps) {
       } else {
         toast.error("Unable to complete check-in. Please try again.");
       }
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong. Please try again later.");
     } finally {
       setCheckingIn(false);

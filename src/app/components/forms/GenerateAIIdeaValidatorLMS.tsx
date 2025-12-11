@@ -1,16 +1,16 @@
 "use client";
-import AppButton from "../buttons/AppButton";
+import { GenerateAIIdeaValidation } from "@/lib/actions";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import TextAreaLMS from "../fields/TextAreaLMS";
+import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import Image from "next/image";
-import AppTableofContents from "../navigations/AppTableofContents";
 import AppCalloutBox from "../elements/AppCalloutBox";
+import TextAreaLMS from "../fields/TextAreaLMS";
+import AppTableofContents from "../navigations/AppTableofContents";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
-import { GenerateAIIdeaValidation } from "@/lib/actions";
 
 interface GenerateAIIdeaValidatorLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -48,7 +48,7 @@ export default function GenerateAIIdeaValidatorLMS(
   ];
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

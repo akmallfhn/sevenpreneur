@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import AppButton from "../buttons/AppButton";
-import Link from "next/link";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import AppButton from "../buttons/AppButton";
 
 interface AppInterstitialBannerProps {
   bannerTimeInterval: number;
@@ -25,7 +24,7 @@ export default function AppInterstitialBanner({
     interstitialImageMobile
   );
 
-  // --- Determine if banner should show
+  // Determine if banner should show
   useEffect(() => {
     // Retrieves the timestamp value of the last time the popup was closed (saved previously) from localStorage.
     const lastShown = localStorage.getItem("interstitial_last_shown");
@@ -34,11 +33,11 @@ export default function AppInterstitialBanner({
     // now - parseInt(lastShown) → Calculate the difference between the current time and the last time the banner was closed.
     // > bannerTimeInterval → Compare whether the time difference has exceeded the set interval
     if (!lastShown || now - parseInt(lastShown) > bannerTimeInterval) {
-      setIsOpen(true);
+      queueMicrotask(() => setIsOpen(true));
     }
   }, [bannerTimeInterval]);
 
-  // --- Blocked scroll behind
+  // Blocked scroll behind
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -48,7 +47,7 @@ export default function AppInterstitialBanner({
     };
   }, [isOpen]);
 
-  // --- Dynamic KV
+  // Dynamic KV
   useEffect(() => {
     function updateImage() {
       if (window.innerWidth >= 640) {

@@ -1,16 +1,16 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
-import AppSheet from "../modals/AppSheet";
-import InputCMS from "../fields/InputCMS";
-import AppButton from "../buttons/AppButton";
-import { setSessionToken, trpc } from "@/trpc/client";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-import SelectCMS from "../fields/SelectCMS";
-import dayjs from "dayjs";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
 import { Switch } from "@/components/ui/switch";
 import { ProductCategory, StatusType } from "@/lib/app-types";
+import { setSessionToken, trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+import SelectCMS from "../fields/SelectCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppSheet from "../modals/AppSheet";
 
 interface CreateDiscountFormCMSProps {
   sessionToken: string;
@@ -102,15 +102,15 @@ export default function CreateDiscountFormCMS({
   useEffect(() => {
     if (formData.productCategory === "PLAYLIST") {
       setItemOptions(
-        playlistsData?.list.map((post: any) => ({
+        playlistsData?.list.map((post) => ({
           label: post.name,
           value: post.id,
         })) || []
       );
     } else if (formData.productCategory === "COHORT") {
       setItemOptions(
-        cohortsData?.list.flatMap((post: any) =>
-          post.prices.map((price: any) => ({
+        cohortsData?.list.flatMap((post) =>
+          post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
           }))
@@ -118,8 +118,8 @@ export default function CreateDiscountFormCMS({
       );
     } else if (formData.productCategory === "EVENT") {
       setItemOptions(
-        eventsData?.list.flatMap((post: any) =>
-          post.prices.map((price: any) => ({
+        eventsData?.list.flatMap((post) =>
+          post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
           }))
@@ -129,7 +129,7 @@ export default function CreateDiscountFormCMS({
   }, [formData.productCategory, playlistsData, cohortsData, eventsData]);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

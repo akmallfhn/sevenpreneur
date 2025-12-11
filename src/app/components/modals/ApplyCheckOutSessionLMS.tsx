@@ -64,7 +64,7 @@ export default function ApplyCheckOutSessionLMS(
       } else {
         toast.error("Something went wrong. Please try again later.");
       }
-    } catch (error) {
+    } catch {
       toast.error("Invalid check-out code");
     } finally {
       setCheckingOut(false);

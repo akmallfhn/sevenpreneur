@@ -1,12 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
-import AppButton, { VariantType } from "../buttons/AppButton";
-import React, { useState } from "react";
-import { Check, ClockPlus, Loader2, LockKeyholeIcon } from "lucide-react";
-import { toast } from "sonner";
 import { CheckInSession } from "@/lib/actions";
+import { Check, ClockPlus, Loader2, LockKeyholeIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { toast } from "sonner";
+import AppButton, { VariantType } from "../buttons/AppButton";
 import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
-import Image from "next/image";
 
 interface AttendanceGatewayMobileLMSProps {
   learningSessionId: number;
@@ -102,7 +101,7 @@ export default function AttendanceGatewayMobileLMS(
       } else {
         toast.error("Unable to complete check-in. Please try again.");
       }
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong. Please try again later.");
     } finally {
       setCheckingIn(false);

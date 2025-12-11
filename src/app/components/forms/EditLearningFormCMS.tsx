@@ -1,18 +1,18 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
-import AppSheet from "../modals/AppSheet";
-import InputCMS from "../fields/InputCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
+import { Switch } from "@/components/ui/switch";
+import { SessionMethod, StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
-import { SessionMethod, StatusType } from "@/lib/app-types";
-import { Switch } from "@/components/ui/switch";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import TextAreaCMS from "../fields/TextAreaCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppSheet from "../modals/AppSheet";
 
 interface EditLearningFormCMSProps {
   sessionToken: string;
@@ -135,7 +135,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

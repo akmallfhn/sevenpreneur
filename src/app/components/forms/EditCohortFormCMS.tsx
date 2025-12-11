@@ -1,18 +1,18 @@
 "use client";
+import { Switch } from "@/components/ui/switch";
+import { StatusType } from "@/lib/app-types";
+import { trpc } from "@/trpc/client";
+import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, { PriceTier } from "../stepper/PriceTierStepperCMS";
-import { toast } from "sonner";
-import { FormEvent, useEffect, useState } from "react";
-import { trpc } from "@/trpc/client";
-import dayjs from "dayjs";
-import { StatusType } from "@/lib/app-types";
-import { Switch } from "@/components/ui/switch";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
 
 interface EditCohortFormCMSProps {
   sessionToken: string;
@@ -108,7 +108,7 @@ export default function EditCohortFormCMS({
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
@@ -180,7 +180,7 @@ export default function EditCohortFormCMS({
       });
       // Use id to mapping initial Cohort Price data
       const initialPricesMap = initialData?.cohort_prices.map(
-        (post: any) => post.id
+        (post) => post.id
       );
       // Update & Create Cohort Prices
       await Promise.all(
@@ -220,7 +220,7 @@ export default function EditCohortFormCMS({
         deletedIds.map((id: number) => {
           try {
             deleteCohortPrices.mutateAsync({ id });
-          } catch (error) {
+          } catch {
             toast.error("Failed to delete price tier");
           }
         })
@@ -231,7 +231,7 @@ export default function EditCohortFormCMS({
       await utils.list.cohorts.invalidate();
       toast.success("Cohort updated successfully");
       onClose();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong. Failed to update cohort.");
       setIsSubmitting(false);
     } finally {

@@ -1,6 +1,5 @@
 "use client";
-import { BadgePercent, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
+import { BadgePercent, X } from "lucide-react";
 import React from "react";
 
 interface AppliedDiscountCardSVPProps
@@ -12,7 +11,6 @@ interface AppliedDiscountCardSVPProps
 }
 
 export default function AppliedDiscountCardSVP({
-  discountName,
   discountRate,
   discountCode,
   onClose,

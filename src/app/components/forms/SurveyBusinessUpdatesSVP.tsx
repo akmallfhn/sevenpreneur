@@ -1,21 +1,21 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
-import InputSVP from "../fields/InputSVP";
-import TextAreaSVP from "../fields/TextAreaSVP";
-import SelectSVP from "../fields/SelectSVP";
-import AppButton from "../buttons/AppButton";
-import RadioBoxSVP from "../fields/RadioBoxBooleanSVP";
+import { UpdateUserBusiness } from "@/lib/actions";
 import {
   BusinessEmployeeNumber,
   BusinessLegalEntity,
   BusinessYearlyRevenue,
   OccupationUser,
 } from "@/lib/app-types";
-import InputNumberSVP from "../fields/InputNumberSVP";
-import { toast } from "sonner";
-import { UpdateUserBusiness } from "@/lib/actions";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputNumberSVP from "../fields/InputNumberSVP";
+import InputSVP from "../fields/InputSVP";
+import RadioBoxSVP from "../fields/RadioBoxBooleanSVP";
+import SelectSVP from "../fields/SelectSVP";
+import TextAreaSVP from "../fields/TextAreaSVP";
 
 interface IndustryList {
   id: number;
@@ -65,7 +65,7 @@ export default function SurveyBusinessUpdateSVP(
     averageSellingPrice: "",
   });
 
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
@@ -178,7 +178,7 @@ export default function SurveyBusinessUpdateSVP(
             "Failed to update profile. Please try again."
         );
       }
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong while updating your profile");
     } finally {
       setIsSubmitting(false);

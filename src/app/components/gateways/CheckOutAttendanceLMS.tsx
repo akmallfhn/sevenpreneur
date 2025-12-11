@@ -1,11 +1,11 @@
 "use client";
-import AppButton, { VariantType } from "../buttons/AppButton";
-import { toast } from "sonner";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Check, ClockFading, ClockPlus, LockKeyholeIcon } from "lucide-react";
-import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { toast } from "sonner";
+import AppButton, { VariantType } from "../buttons/AppButton";
+import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
 
 interface CheckOutAttendanceLMSProps {
   learningSessionId: number;

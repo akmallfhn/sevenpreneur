@@ -1,15 +1,14 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
-import AppButton from "../buttons/AppButton";
-import { Loader2, X } from "lucide-react";
 import {
   CheckDiscountCohort,
   CheckDiscountEvent,
   CheckDiscountPlaylist,
 } from "@/lib/actions";
-import { toast } from "sonner";
-import InputSVP from "../fields/InputSVP";
 import { ProductCategory } from "@/lib/app-types";
+import { Loader2, X } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import AppButton from "../buttons/AppButton";
+import InputSVP from "../fields/InputSVP";
 
 interface DiscountType {
   name: string | undefined;
@@ -106,7 +105,7 @@ export default function ApplyDiscountModalSVP({
       } else {
         setErrorMessage("Invalid discount code");
       }
-    } catch (error) {
+    } catch {
       setErrorMessage("Invalid discount code");
     } finally {
       setIsLoadingApplyDiscount(false);

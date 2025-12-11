@@ -1,18 +1,18 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
-import AppSheet from "../modals/AppSheet";
-import InputCMS from "../fields/InputCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
-import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
-import PriceTierStepperCMS, { PriceTier } from "../stepper/PriceTierStepperCMS";
+import { Switch } from "@/components/ui/switch";
+import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
-import { StatusType } from "@/lib/app-types";
-import { Switch } from "@/components/ui/switch";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+import TextAreaCMS from "../fields/TextAreaCMS";
+import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppSheet from "../modals/AppSheet";
+import PriceTierStepperCMS, { PriceTier } from "../stepper/PriceTierStepperCMS";
 
 interface CreateCohortFormCMSProps {
   isOpen: boolean;
@@ -63,7 +63,7 @@ export default function CreateCohortFormCMS({
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

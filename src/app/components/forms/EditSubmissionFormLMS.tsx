@@ -1,13 +1,13 @@
 "use client";
+import { EditSubmission } from "@/lib/actions";
+import { getFileVariantFromURL } from "@/lib/file-variants";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import UploadSubmissionLMS from "../fields/UploadSubmissionLMS";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { EditSubmission } from "@/lib/actions";
-import { useRouter } from "next/navigation";
-import { getFileVariantFromURL } from "@/lib/file-variants";
 
 export interface InitialData {
   id?: number | undefined;

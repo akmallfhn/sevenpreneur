@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect, FormEvent } from "react";
-import AppSheet from "../modals/AppSheet";
-import InputCMS from "../fields/InputCMS";
-import AppButton from "../buttons/AppButton";
 import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+import AppSheet from "../modals/AppSheet";
 
 interface UpdateVideoRecordingFormCMSProps {
   sessionToken: string;
@@ -64,7 +64,7 @@ export default function UpdateVideoRecordingFormCMS({
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

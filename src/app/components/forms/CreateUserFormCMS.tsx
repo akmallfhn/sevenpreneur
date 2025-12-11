@@ -1,34 +1,31 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { setSessionToken, trpc } from "@/trpc/client";
 import AppButton from "@/app/components/buttons/AppButton";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import InputCMS from "@/app/components/fields/InputCMS";
 import SelectCMS from "@/app/components/fields/SelectCMS";
 import StatusLabelCMS from "@/app/components/labels/StatusLabelCMS";
-import TextAreaCMS from "@/app/components/fields/TextAreaCMS";
+import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import { Switch } from "@/components/ui/switch";
-import { toast } from "sonner";
+import { StatusType } from "@/lib/app-types";
+import { setSessionToken, trpc } from "@/trpc/client";
 import {
-  User2,
   AtSign,
-  KeyRound,
   Building2,
-  Sprout,
-  Flag,
   CalendarRange,
+  ChevronRight,
+  Flag,
+  KeyRound,
   Loader2,
   Save,
-  ChevronRight,
+  User2,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import { StatusType } from "@/lib/app-types";
-import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
 
 interface CreateUserFormProps {
   sessionToken: string;
@@ -98,7 +95,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
   const isError = isErrorRoles || isErrorIndustries;
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,

@@ -1,8 +1,8 @@
 "use client";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import ChatSubmitterLMS from "../messages/ChatSubmitterLMS";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 interface GenerateAIChatLMSProps {
   sessionUserName: string;

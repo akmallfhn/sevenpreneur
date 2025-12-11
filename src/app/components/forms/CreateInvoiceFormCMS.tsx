@@ -1,16 +1,16 @@
 "use client";
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import { Loader2 } from "lucide-react";
-import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
-import SelectCMS, { OptionType } from "../fields/SelectCMS";
-import AppSheet from "../modals/AppSheet";
-import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
-import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
+import { trpc } from "@/trpc/client";
+import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
 import PhoneNumberInputSVP from "../fields/PhoneNumberInputSVP";
+import SelectCMS from "../fields/SelectCMS";
+import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
+import AppSheet from "../modals/AppSheet";
 
 interface DiscountType {
   name: string | undefined;
@@ -38,7 +38,6 @@ export default function CreateInvoiceFormCMS({
   const [itemOptions, setItemOptions] = useState<
     { label: string; value: number; price: number }[]
   >([]);
-  const [userSelected, setUserSelected] = useState<OptionType | null>(null);
   const [isLoadingApplyDiscount, setIsLoadingApplyDiscount] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [discount, setDiscount] = useState<DiscountType | null>(null);
@@ -60,14 +59,6 @@ export default function CreateInvoiceFormCMS({
     paymentChannelId: "",
     paymentDiscount: "",
   });
-
-  // Fetch tRPC for User Id
-  // const {
-  //   data: userData,
-  //   isLoading: isLoadingUserData,
-  //   isError: isErrorUserData,
-  // } = trpc.list.users.useQuery({}, { enabled: !!sessionToken });
-  // const userList = userData?.list;
 
   // Fetch tRPC for Payment Channel
   const {
@@ -99,14 +90,11 @@ export default function CreateInvoiceFormCMS({
     {},
     { enabled: formData.invoiceProductCategory === "COHORT" && !!sessionToken }
   );
-  const {
-    data: eventsData,
-    isLoading: isLoadingEventsData,
-    isError: isErrorEventsData,
-  } = trpc.list.events.useQuery(
-    {},
-    { enabled: formData.invoiceProductCategory === "EVENT" && !!sessionToken }
-  );
+  const { data: eventsData, isLoading: isLoadingEventsData } =
+    trpc.list.events.useQuery(
+      {},
+      { enabled: formData.invoiceProductCategory === "EVENT" && !!sessionToken }
+    );
   const isLoadingProduct =
     isLoadingCohortsData || isLoadingPlaylistsData || isLoadingEventsData;
   const isErrorProduct =
@@ -139,29 +127,29 @@ export default function CreateInvoiceFormCMS({
   useEffect(() => {
     if (formData.invoiceProductCategory === "PLAYLIST") {
       setItemOptions(
-        playlistsData?.list.map((post: any) => ({
+        playlistsData?.list.map((post) => ({
           label: post.name,
           value: post.id,
-          price: post.price,
+          price: Number(post.price),
         })) || []
       );
     } else if (formData.invoiceProductCategory === "COHORT") {
       setItemOptions(
-        cohortsData?.list.flatMap((post: any) =>
-          post.prices.map((price: any) => ({
+        cohortsData?.list.flatMap((post) =>
+          post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
-            price: price.amount,
+            price: Number(price.amount),
           }))
         ) || []
       );
     } else if (formData.invoiceProductCategory === "EVENT") {
       setItemOptions(
-        eventsData?.list.flatMap((post: any) =>
-          post.prices.map((price: any) => ({
+        eventsData?.list.flatMap((post) =>
+          post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
-            price: price.amount,
+            price: Number(price.amount),
           }))
         ) || []
       );
@@ -198,7 +186,7 @@ export default function CreateInvoiceFormCMS({
   }, []);
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
@@ -336,10 +324,8 @@ export default function CreateInvoiceFormCMS({
         utils.list.transactions.invalidate();
         onClose();
       },
-      onError: (error: any) => {
-        toast.error("Something went wrong while creating the invoice", {
-          description: error.message,
-        });
+      onError: () => {
+        toast.error("Something went wrong while creating the invoice");
       },
     };
 
