@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -46,7 +47,7 @@ async function fetchItems(
   });
 
   type Cohort = Prisma.CohortGetPayload<object>;
-  let cohortMap: Map<number, Cohort> | undefined;
+  let cohortMap: Optional<Map<number, Cohort>>;
   if (!useCohortPrice) {
     const cohortList = await prisma.cohort.findMany({
       where: { id: { in: Array.from(cohortIdList) } },
@@ -57,7 +58,7 @@ async function fetchItems(
   type CohortPrice = Prisma.CohortPriceGetPayload<{
     include: { cohort: true };
   }>;
-  let cohortPriceMap: Map<number, CohortPrice> | undefined;
+  let cohortPriceMap: Optional<Map<number, CohortPrice>>;
   if (useCohortPrice) {
     const cohortPriceList = await prisma.cohortPrice.findMany({
       include: { cohort: true },
@@ -67,7 +68,7 @@ async function fetchItems(
   }
 
   type Event = Prisma.EventGetPayload<object>;
-  let eventMap: Map<number, Event> | undefined;
+  let eventMap: Optional<Map<number, Event>>;
   if (!useEventPrice) {
     const eventList = await prisma.event.findMany({
       where: { id: { in: Array.from(eventIdList) } },
@@ -76,7 +77,7 @@ async function fetchItems(
   }
 
   type EventPrice = Prisma.EventPriceGetPayload<{ include: { event: true } }>;
-  let eventPriceMap: Map<number, EventPrice> | undefined;
+  let eventPriceMap: Optional<Map<number, EventPrice>>;
   if (useEventPrice) {
     const eventPriceList = await prisma.eventPrice.findMany({
       include: { event: true },
@@ -136,7 +137,7 @@ export const listTransaction = {
       );
 
       const returnedList = discountList.map((entry) => {
-        let cohortBadge: CohortBadge | undefined;
+        let cohortBadge: Optional<CohortBadge>;
         if (entry.category === CategoryEnum.COHORT) {
           const selectedCohortPrice = cohortMap!.get(entry.item_id);
           if (selectedCohortPrice) {
@@ -149,7 +150,7 @@ export const listTransaction = {
           }
         }
 
-        let playlistBadge: PlaylistBadge | undefined;
+        let playlistBadge: Optional<PlaylistBadge>;
         if (entry.category === CategoryEnum.PLAYLIST) {
           const selectedPlaylist = playlistMap.get(entry.item_id);
           if (selectedPlaylist) {
@@ -223,11 +224,11 @@ export const listTransaction = {
 
       const whereClause = {
         user_id: selectedUserId,
-        category: undefined as CategoryEnum | undefined,
-        item_id: undefined as number | undefined,
+        category: undefined as Optional<CategoryEnum>,
+        item_id: undefined as Optional<number>,
         created_at: {
-          gte: undefined as Date | undefined,
-          lt: undefined as Date | undefined,
+          gte: undefined as Optional<Date>,
+          lt: undefined as Optional<Date>,
         },
       };
 
@@ -299,12 +300,12 @@ export const listTransaction = {
       }
 
       const returnedList = transactionsList.map((entry) => {
-        let invoiceUrl: string | undefined;
+        let invoiceUrl: Optional<string>;
         if (entry.status === TStatusEnum.PENDING) {
           invoiceUrl = `${checkoutPrefix}${entry.invoice_number}`;
         }
 
-        let cohortBadge: CohortBadgeWithPrice | undefined;
+        let cohortBadge: Optional<CohortBadgeWithPrice>;
         if (entry.category === CategoryEnum.COHORT) {
           const selectedCohortPrice = cohortPriceMap!.get(entry.item_id);
           if (selectedCohortPrice) {
@@ -318,7 +319,7 @@ export const listTransaction = {
           }
         }
 
-        let eventBadge: EventBadgeWithPrice | undefined;
+        let eventBadge: Optional<EventBadgeWithPrice>;
         if (entry.category === CategoryEnum.EVENT) {
           const selectedEventPrice = eventPriceMap!.get(entry.item_id);
           if (selectedEventPrice) {
@@ -332,7 +333,7 @@ export const listTransaction = {
           }
         }
 
-        let playlistBadge: PlaylistBadge | undefined;
+        let playlistBadge: Optional<PlaylistBadge>;
         if (entry.category === CategoryEnum.PLAYLIST) {
           const selectedPlaylist = playlistMap.get(entry.item_id);
           if (selectedPlaylist) {

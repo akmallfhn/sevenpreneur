@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { SaveQStashMessageID } from "@/lib/redis";
 import {
   STATUS_FORBIDDEN,
@@ -21,7 +22,7 @@ export enum AIModelName {
   GPT_4_1_NANO = "gpt-4.1-nano",
 }
 
-function getTool(model: AIModelName): [{ type: "web_search" }] | undefined {
+function getTool(model: AIModelName): Optional<[{ type: "web_search" }]> {
   switch (model) {
     case AIModelName.GPT_5:
     case AIModelName.GPT_5_MINI:
@@ -32,7 +33,7 @@ function getTool(model: AIModelName): [{ type: "web_search" }] | undefined {
   }
 }
 
-function getReasoningLevel(model: AIModelName): { effort: "low" } | undefined {
+function getReasoningLevel(model: AIModelName): Optional<{ effort: "low" }> {
   switch (model) {
     case AIModelName.GPT_5:
     case AIModelName.GPT_5_MINI:

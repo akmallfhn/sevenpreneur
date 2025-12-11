@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -322,8 +323,8 @@ export const updateLMS = {
       })
     )
     .mutation(async (opts) => {
-      let theDocumentUrl: string | null | undefined;
-      let theComment: string | null | undefined;
+      let theDocumentUrl: Optional<string | null>;
+      let theComment: Optional<string | null>;
       if (opts.ctx.user.role.name !== "Educator") {
         theDocumentUrl = opts.input.document_url;
       }
@@ -338,7 +339,7 @@ export const updateLMS = {
         });
       }
 
-      let selectedUserId: string | undefined = undefined;
+      let selectedUserId: Optional<string> = undefined;
       if (opts.ctx.user.role.name === "General User") {
         selectedUserId = opts.ctx.user.id;
       }

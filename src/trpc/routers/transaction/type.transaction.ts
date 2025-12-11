@@ -1,29 +1,29 @@
 export type CohortBadge = {
-  id: number | undefined;
-  name: string | undefined;
-  image: string | undefined;
-  slugUrl: string | undefined;
+  id?: number;
+  name?: string;
+  image?: string;
+  slugUrl?: string;
 };
 
 export type CohortBadgeWithPrice = CohortBadge & {
-  priceName: string | undefined;
+  priceName?: string;
 };
 
 export type EventBadge = {
-  id: number | undefined;
-  name: string | undefined;
-  image: string | undefined;
-  slugUrl: string | undefined;
+  id?: number;
+  name?: string;
+  image?: string;
+  slugUrl?: string;
 };
 
 export type EventBadgeWithPrice = EventBadge & {
-  priceName: string | undefined;
+  priceName?: string;
 };
 
 export type PlaylistBadge = {
-  id: number | undefined;
-  name: string | undefined;
-  image: string | undefined;
-  slugUrl: string | undefined;
-  totalVideo: number | undefined;
+  id?: number;
+  name?: string;
+  image?: string;
+  slugUrl?: string;
+  totalVideo?: number;
 };

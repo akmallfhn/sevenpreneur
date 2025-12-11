@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import {
   STATUS_CREATED,
   STATUS_FORBIDDEN,
@@ -39,7 +40,7 @@ async function isEnrolledTemplate(
 export const listTemplate = {
   templates: loggedInProcedure.query(async (opts) => {
     const whereClause = {
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
     };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
@@ -75,7 +76,7 @@ export const readTemplate = {
   template: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
     const whereClause = {
       id: opts.input.id,
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
     };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(

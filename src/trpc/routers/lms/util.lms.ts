@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN } from "@/lib/status_code";
 import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -41,7 +42,7 @@ export async function isEnrolledLearning(
   }
 
   let cohortId = theEnrolledLearning.cohort_id;
-  let cohortPriceId: number | undefined = undefined;
+  let cohortPriceId: Optional<number> = undefined;
   if (
     theEnrolledLearning.price_id !== null &&
     theEnrolledLearning.price !== null

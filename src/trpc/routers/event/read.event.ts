@@ -1,3 +1,4 @@
+import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
@@ -8,7 +9,7 @@ export const readEvent = {
   event: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
     let whereClause = {
       id: opts.input.id,
-      status: undefined as StatusEnum | undefined,
+      status: undefined as Optional<StatusEnum>,
       deleted_at: null,
     };
     if (!opts.ctx.user) {
