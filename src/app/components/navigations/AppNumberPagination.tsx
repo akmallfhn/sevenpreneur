@@ -24,10 +24,10 @@ export default function AppNumberPagination({
   const searchParams = useSearchParams();
 
   // Setter halaman
-  const handlePageChange = (newPage: any) => {
+  const handlePageChange = (newPage: number) => {
     if (newPage === currentPage || newPage < 1 || newPage > totalPages) return;
     const params = new URLSearchParams(searchParams);
-    params.set("page", newPage);
+    params.set("page", String(newPage));
     router.push(`?${params.toString()}`, { scroll: true });
     router.refresh();
   };
@@ -103,7 +103,7 @@ export default function AppNumberPagination({
             <PaginationItem key={`page-${page}`}>
               <PaginationLink
                 isActive={currentPage === page}
-                onClick={() => handlePageChange(page)}
+                onClick={() => handlePageChange(Number(page))}
                 className="cursor-pointer"
               >
                 {page}

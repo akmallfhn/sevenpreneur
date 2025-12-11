@@ -43,8 +43,13 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
-  const disallowedPath = ["/auth", "/checkout"];
+  const disallowedPath = ["/auth"];
   const isDisallowedPage = disallowedPath.some((path) =>
+    pathname.includes(path)
+  );
+
+  const constrainedPath = ["/checkout"];
+  const isConstrainedPath = constrainedPath.some((path) =>
     pathname.includes(path)
   );
 
@@ -131,109 +136,115 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                   />
                 </svg>
               </Link>
-              <nav className="desktop-menu hidden lg:flex">
-                <ul className="menu-item-list flex items-center gap-7">
-                  <HeaderNavbarItemSVP
-                    menuTitle="Program"
-                    menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
-                  />
-                  <HeaderNavbarItemSVP
-                    menuTitle="Learning Series"
-                    menuUrl="/playlists/restart-conference-2025/1"
-                  />
-                  <HeaderNavbarItemSVP
-                    menuTitle="Event"
-                    menuUrl="/events/sevenpreneur-business-network/1"
-                  />
-                  <HeaderNavbarItemSVP
-                    menuTitle="About Us"
-                    menuUrl="/company"
-                  />
-                  <HeaderNavbarItemSVP
-                    menuTitle="Collab with Us"
-                    menuUrl="/collaboration"
-                  />
-                  <Link href={`https://agora.${domain}`}>
-                    <AppButton size="mediumRounded" variant="primaryGradient">
-                      <p className="font-medium">My Learning</p>
-                    </AppButton>
-                  </Link>
-                </ul>
-              </nav>
-              <div className="navigation-control flex items-center gap-4">
-                <div className="theme-switcher hidden lg:flex">
-                  <AppThemeSwitcher />
-                </div>
-                {props.isLoggedIn ? (
-                  <div
-                    className="user-menu relative flex hover:cursor-pointer"
-                    ref={wrapperRef}
-                    onClick={handleActionsDropdown}
-                  >
-                    <AvatarBadgeSVP
-                      userAvatar={
-                        props.userAvatar ||
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                      }
-                      userName={nickName || "User"}
+              {!isConstrainedPath && (
+                <nav className="desktop-menu hidden lg:flex">
+                  <ul className="menu-item-list flex items-center gap-7">
+                    <HeaderNavbarItemSVP
+                      menuTitle="Program"
+                      menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
                     />
-                    <AppDropdown
-                      isOpen={accountMenuOpen}
-                      onClose={() => setAccountMenuOpen(false)}
-                      alignMobile="right"
+                    <HeaderNavbarItemSVP
+                      menuTitle="Learning Series"
+                      menuUrl="/playlists/restart-conference-2025/1"
+                    />
+                    <HeaderNavbarItemSVP
+                      menuTitle="Event"
+                      menuUrl="/events/sevenpreneur-business-network/1"
+                    />
+                    <HeaderNavbarItemSVP
+                      menuTitle="About Us"
+                      menuUrl="/company"
+                    />
+                    <HeaderNavbarItemSVP
+                      menuTitle="Collab with Us"
+                      menuUrl="/collaboration"
+                    />
+                    <Link href={`https://agora.${domain}`}>
+                      <AppButton size="mediumRounded" variant="primaryGradient">
+                        <p className="font-medium">My Learning</p>
+                      </AppButton>
+                    </Link>
+                  </ul>
+                </nav>
+              )}
+              {!isConstrainedPath && (
+                <div className="navigation-control flex items-center gap-4">
+                  <div className="theme-switcher hidden lg:flex">
+                    <AppThemeSwitcher />
+                  </div>
+                  {props.isLoggedIn ? (
+                    <div
+                      className="user-menu relative flex hover:cursor-pointer"
+                      ref={wrapperRef}
+                      onClick={handleActionsDropdown}
                     >
-                      {props.userRole !== 3 && (
-                        <Link href={`https://admin.${domain}`}>
+                      <AvatarBadgeSVP
+                        userAvatar={
+                          props.userAvatar ||
+                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                        }
+                        userName={nickName || "User"}
+                      />
+                      <AppDropdown
+                        isOpen={accountMenuOpen}
+                        onClose={() => setAccountMenuOpen(false)}
+                        alignMobile="right"
+                      >
+                        {props.userRole !== 3 && (
+                          <Link href={`https://admin.${domain}`}>
+                            <AppDropdownItemList
+                              menuIcon={<Blocks className="size-4" />}
+                              menuName="Dashboard Admin"
+                            />
+                          </Link>
+                        )}
+                        <Link href={`/transactions`}>
                           <AppDropdownItemList
-                            menuIcon={<Blocks className="size-4" />}
-                            menuName="Dashboard Admin"
+                            menuIcon={<Wallet className="size-4" />}
+                            menuName="Transaction"
                           />
                         </Link>
-                      )}
-                      <Link href={`/transactions`}>
+                        <hr className="my-1" />
                         <AppDropdownItemList
-                          menuIcon={<Wallet className="size-4" />}
-                          menuName="Transaction"
+                          menuIcon={<LogOut className="size-4" />}
+                          menuName="Sign out"
+                          isDestructive
+                          onClick={handleSignOut}
                         />
-                      </Link>
-                      <hr className="my-1" />
-                      <AppDropdownItemList
-                        menuIcon={<LogOut className="size-4" />}
-                        menuName="Sign out"
-                        isDestructive
-                        onClick={handleSignOut}
-                      />
-                    </AppDropdown>
-                  </div>
-                ) : (
-                  <Link href={`/auth/login?redirectTo=${pathname}`}>
-                    <div className="login-desktop hidden lg:flex">
-                      <AppButton variant="primary" size="mediumRounded">
-                        <UserCircle2 className="size-5" />
-                        Login
-                      </AppButton>
+                      </AppDropdown>
                     </div>
-                  </Link>
-                )}
-                <div className="mobile-menu-button flex lg:hidden">
-                  <AppButton
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setMobileMenuOpen(true)}
-                  >
-                    <AlignLeftIcon className="size-6" />
-                  </AppButton>
+                  ) : (
+                    <Link href={`/auth/login?redirectTo=${pathname}`}>
+                      <div className="login-desktop hidden lg:flex">
+                        <AppButton variant="primary" size="mediumRounded">
+                          <UserCircle2 className="size-5" />
+                          Login
+                        </AppButton>
+                      </div>
+                    </Link>
+                  )}
+                  <div className="mobile-menu-button flex lg:hidden">
+                    <AppButton
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setMobileMenuOpen(true)}
+                    >
+                      <AlignLeftIcon className="size-6" />
+                    </AppButton>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
-          {props.tickerStatus === "ACTIVE" && isValidTicker && (
-            <AnnouncementTickerSVP
-              tickerTitle={props.tickerTitle}
-              tickerCallout={props.tickerCallout}
-              tickerTargetURL={props.tickerTargetURL}
-            />
-          )}
+          {props.tickerStatus === "ACTIVE" &&
+            isValidTicker &&
+            !isConstrainedPath && (
+              <AnnouncementTickerSVP
+                tickerTitle={props.tickerTitle}
+                tickerCallout={props.tickerCallout}
+                tickerTargetURL={props.tickerTargetURL}
+              />
+            )}
         </div>
       )}
 

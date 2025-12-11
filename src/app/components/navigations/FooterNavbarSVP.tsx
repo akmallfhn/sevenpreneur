@@ -1,12 +1,12 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   faFacebookF,
   faInstagram,
   faLinkedinIn,
   faThreads,
 } from "@fortawesome/free-brands-svg-icons";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 import SocialButtonFooterSVP from "../buttons/SocialButtonFooterSVP";
 

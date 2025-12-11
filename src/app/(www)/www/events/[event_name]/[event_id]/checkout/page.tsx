@@ -1,5 +1,4 @@
 import CheckoutEventFormSVP from "@/app/components/forms/CheckoutEventFormSVP";
-import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -126,7 +125,6 @@ export default async function CheckoutEventPage({
   return (
     <div className="flex w-full min-h-screen bg-section-background">
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
-        <CheckoutHeaderSVP />
         <div className="flex-1 overflow-y-auto">
           <CheckoutEventFormSVP
             eventId={eventData.id}

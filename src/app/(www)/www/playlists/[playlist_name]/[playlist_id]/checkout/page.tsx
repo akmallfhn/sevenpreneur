@@ -1,5 +1,4 @@
 import CheckoutPlaylistFormSVP from "@/app/components/forms/CheckoutPlaylistFormSVP";
-import CheckoutHeaderSVP from "@/app/components/navigations/CheckoutHeaderSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -112,7 +111,6 @@ export default async function CheckoutPlaylistPage({
   return (
     <div className="flex w-full min-h-screen bg-section-background">
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
-        <CheckoutHeaderSVP />
         <div className="flex-1 overflow-y-auto">
           <CheckoutPlaylistFormSVP
             playlistId={playlistData.id}

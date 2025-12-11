@@ -1,13 +1,13 @@
 "use client";
-import Image from "next/image";
-import AppButton from "../buttons/AppButton";
-import { MapPinned, Video } from "lucide-react";
+import { SessionMethod } from "@/lib/app-types";
 import {
   getConferenceAttributes,
   getConferenceVariantFromURL,
 } from "@/lib/conference-variant";
 import dayjs from "dayjs";
-import { SessionMethod } from "@/lib/app-types";
+import { MapPinned, Video } from "lucide-react";
+import Image from "next/image";
+import AppButton from "../buttons/AppButton";
 
 interface HeroLearningDetailsLMSProps {
   learningSessionName: string;

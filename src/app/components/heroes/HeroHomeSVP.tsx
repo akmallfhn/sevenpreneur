@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
 import Link from "next/link";
+import AppButton from "../buttons/AppButton";
 
 interface HeroHomeSVPProps {
   imageHero: string;
 }
 
-export default function HeroHomeSVP({ imageHero }: HeroHomeSVPProps) {
+export default function HeroHomeSVP(props: HeroHomeSVPProps) {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-white overflow-hidden dark:bg-black">
       {/* Hero Container */}
@@ -62,7 +62,7 @@ export default function HeroHomeSVP({ imageHero }: HeroHomeSVPProps) {
         <div className="flex w-full max-w-[672px] aspect-thumbnail rounded-md overflow-hidden">
           <Image
             className="object-cover w-full h-full"
-            src={imageHero}
+            src={props.imageHero}
             alt="Sevenpreneur"
             width={2440}
             height={2440}

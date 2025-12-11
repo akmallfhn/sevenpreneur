@@ -1,10 +1,10 @@
 "use client";
-import Image from "next/image";
-import AppButton from "../buttons/AppButton";
-import Link from "next/link";
-import ScorecardItemSVP from "../items/ScorecardItemSVP";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
+import Link from "next/link";
+import AppButton from "../buttons/AppButton";
+import ScorecardItemSVP from "../items/ScorecardItemSVP";
 
 interface HeroBlueprintProgramSVPProps {
   cohortId: number;

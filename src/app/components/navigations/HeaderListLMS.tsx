@@ -1,18 +1,17 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Blocks, Compass, Wallet } from "lucide-react";
-import AppDropdown from "../elements/AppDropdown";
-import AppDropdownItemList from "../elements/AppDropdownItemList";
-import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Blocks, Compass, Wallet } from "lucide-react";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
 
 export interface HeaderListLMSProps extends AvatarBadgeLMSProps {
   headerTitle: string;

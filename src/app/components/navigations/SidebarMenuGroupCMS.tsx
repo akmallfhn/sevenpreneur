@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { ReactNode, useState } from "react";
 
 interface SidebarMenuGroupCMSProps {

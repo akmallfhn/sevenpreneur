@@ -1,10 +1,9 @@
 "use client";
-import Image from "next/image";
-import AppButton from "../buttons/AppButton";
-import Link from "next/link";
 import { Star, Volume2, VolumeOff } from "lucide-react";
-import { toSnakeCase } from "@/lib/convert-case";
+import Image from "next/image";
+import Link from "next/link";
 import { useRef, useState } from "react";
+import AppButton from "../buttons/AppButton";
 
 export type EducatorItem = {
   full_name: string;
