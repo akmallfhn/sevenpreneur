@@ -1,27 +1,20 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { trpc } from "@/trpc/client";
+import { faClock, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import { EllipsisVertical, PenTool, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import {
-  EllipsisVertical,
-  Pen,
-  PenLine,
-  PenTool,
-  Trash2,
-  Video,
-} from "lucide-react";
-import AppButton from "../buttons/AppButton";
-import { trpc } from "@/trpc/client";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppButton from "../buttons/AppButton";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import EditLearningFormCMS from "../forms/EditLearningFormCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 

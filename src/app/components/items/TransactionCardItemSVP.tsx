@@ -78,7 +78,6 @@ export default function TransactionCardItemSVP({
   invoiceURL,
 }: TransactionCardItemSVPProps) {
   const { statusColor, statusWord } = variantStyles[transactionStatus];
-  const isPaid = transactionStatus === "PAID";
   const isPending = transactionStatus === "PENDING";
   const isFailed = transactionStatus === "FAILED";
   const isCohort = productCategory === "COHORT";

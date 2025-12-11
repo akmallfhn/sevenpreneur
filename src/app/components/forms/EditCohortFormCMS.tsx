@@ -12,7 +12,9 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
-import PriceTierStepperCMS, { PriceTier } from "../stepper/PriceTierStepperCMS";
+import PriceTierStepperCMS, {
+  PriceTier,
+} from "../steppers/PriceTierStepperCMS";
 
 interface EditCohortFormCMSProps {
   sessionToken: string;

@@ -13,19 +13,11 @@ export interface LearningSessionItemMobileLMSProps {
   learningSessionEducatorName: string;
   learningSessionEducatorAvatar: string;
   learningSessionDate: string;
-  learningSessionPlace?: string;
 }
 
 export default function LearningSessionItemMobileLMS(
   props: LearningSessionItemMobileLMSProps
 ) {
-  let learningLocation;
-  if (props.learningSessionMethod === "ONLINE") {
-    learningLocation = "Online";
-  } else if (props.learningSessionPlace) {
-    learningLocation = props.learningSessionPlace;
-  }
-
   return (
     <Link
       href={`/cohorts/${props.cohortId}/learnings/${props.learningSessionId}`}

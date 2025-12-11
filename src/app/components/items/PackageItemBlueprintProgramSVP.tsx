@@ -1,10 +1,9 @@
 "use client";
+import { FeatureTrackingProps } from "@/lib/feature-tracking";
 import { Check } from "lucide-react";
-import AppButton from "../buttons/AppButton";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { FeatureTrackingProps } from "@/lib/feature-tracking";
-import AppCountdownTimer from "../elements/AppCountdownTimer";
+import AppButton from "../buttons/AppButton";
 
 interface PackageItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;
@@ -29,7 +28,7 @@ export default function PackageItemBlueprintProgramSVP({
   packageLabel,
   packageDescription,
   packageBenefits,
-  normalPrice,
+  // normalPrice,
   salePeriodPrice,
   isPriority,
   featureProductName,

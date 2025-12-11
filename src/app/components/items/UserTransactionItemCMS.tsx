@@ -46,7 +46,7 @@ interface UserTransactionItemCMSProps {
 }
 
 export default function UserTransactionItemCMS({
-  transactionId,
+  // transactionId,
   transactionStatus,
   netTransactionAmount,
   productCategory,

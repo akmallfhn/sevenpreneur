@@ -1,4 +1,4 @@
-import { CostListForm } from "@/app/components/stepper/AICostListStepperLMS";
+import { CostListForm } from "@/app/components/steppers/AICostListStepperLMS";
 
 export function findIncompleteCosts(costs: CostListForm[]) {
   return costs.filter((c) => {

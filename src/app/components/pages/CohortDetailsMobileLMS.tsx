@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
-import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
-import EmptyItemLMS from "../state/EmptyItemLMS";
 import LearningSessionItemMobileLMS from "../items/LearningSessionItemMobileLMS";
+import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
+import EmptyItemLMS from "../state/EmptyItemLMS";
+import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
 
 interface CohortDetailsMobileLMSProps {
   cohortId: number;
@@ -58,9 +57,6 @@ export default function CohortDetailsMobileLMS(
                       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
                     }
                     learningSessionDate={post.meeting_date}
-                    learningSessionPlace={
-                      post.location_name || "To Be Announced"
-                    }
                   />
                 ))}
             </>

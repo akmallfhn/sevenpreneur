@@ -1,19 +1,18 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { getFileIconAndType, getFileVariantFromURL } from "@/lib/file-variants";
+import { trpc } from "@/trpc/client";
+import { EllipsisVertical, Settings2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import AppButton from "../buttons/AppButton";
-import { EllipsisVertical, Settings2, Trash2 } from "lucide-react";
-import { trpc } from "@/trpc/client";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import EditModuleFormCMS from "../forms/EditModuleFormCMS";
-import EditMaterialFormCMS from "../forms/EditMaterialFormCMS";
+import AppButton from "../buttons/AppButton";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
+import EditMaterialFormCMS from "../forms/EditMaterialFormCMS";
+import EditModuleFormCMS from "../forms/EditModuleFormCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import { FileVariant } from "@/lib/app-types";
-import { getFileIconAndType, getFileVariantFromURL } from "@/lib/file-variants";
 
 interface FileItemCMSProps {
   sessionToken: string;

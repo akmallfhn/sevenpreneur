@@ -1,8 +1,8 @@
 "use client";
 import { getShortNumber } from "@/lib/convert-number";
-import { ChevronDown, ChevronUp, User } from "lucide-react";
-import AppButton from "../buttons/AppButton";
+import { ChevronDown, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import AppButton from "../buttons/AppButton";
 
 interface AISegmentItemLMSProps {
   segmentName: string;

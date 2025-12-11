@@ -1,15 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { getDateTimeRange } from "@/lib/date-time-manipulation";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import isBetween from "dayjs/plugin/isBetween";
 import "dayjs/locale/en";
-import { getDateTimeRange } from "@/lib/date-time-manipulation";
-import { ScheduleStatus } from "@/lib/app-types";
+import isBetween from "dayjs/plugin/isBetween";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(isBetween);
@@ -29,24 +28,16 @@ export default function CohortItemCardLMS({
   cohortStartDate,
   cohortEndDate,
 }: CohortItemCardLMSProps) {
-  const [scheduleStatus, setScheduleStatus] = useState<ScheduleStatus | null>(
-    null
-  );
-
   const { dateString } = getDateTimeRange({
     startDate: cohortStartDate,
     endDate: cohortEndDate,
   });
 
-  useEffect(() => {
-    if (dayjs().isBefore(cohortStartDate)) {
-      setScheduleStatus("UPCOMING");
-    } else if (dayjs().isBetween(cohortStartDate, cohortEndDate, null, "[]")) {
-      setScheduleStatus("ON GOING");
-    } else if (dayjs().isAfter(cohortEndDate)) {
-      setScheduleStatus("FINISHED");
-    }
-  }, [cohortStartDate, cohortEndDate]);
+  const scheduleStatus = dayjs().isBefore(cohortStartDate)
+    ? "UPCOMING"
+    : dayjs().isBetween(cohortStartDate, cohortEndDate, null, "[]")
+    ? "ON GOING"
+    : "FINISHED";
 
   return (
     <React.Fragment>

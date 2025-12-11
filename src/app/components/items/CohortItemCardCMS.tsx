@@ -1,21 +1,21 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { getDateTimeRange } from "@/lib/date-time-manipulation";
+import { trpc } from "@/trpc/client";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import { EllipsisVertical, PenTool, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { faCalendar, faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AppButton from "../buttons/AppButton";
-import { EllipsisVertical, MoveRight, PenTool, Trash2 } from "lucide-react";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import { trpc } from "@/trpc/client";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import { getDateTimeRange } from "@/lib/date-time-manipulation";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 

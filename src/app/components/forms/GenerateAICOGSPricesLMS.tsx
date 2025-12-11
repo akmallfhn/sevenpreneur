@@ -22,7 +22,7 @@ import TextAreaLMS from "../fields/TextAreaLMS";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 import AICostListStepperLMS, {
   CostListForm,
-} from "../stepper/AICostListStepperLMS";
+} from "../steppers/AICostListStepperLMS";
 
 interface GenerateAICOGSPricesLMSProps extends AvatarBadgeLMSProps {
   sessionToken: string;
