@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import InputNumberCMS from "../fields/InputNumberCMS";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
@@ -276,18 +276,12 @@ export default function EditUserForm({
             <h2 className="label-name text-xl text-black font-brand font-bold">
               Personal Information
             </h2>
-
-            {/* Upload Avatar */}
             <UploadAvatarUserCMS
               onUpload={handleImageForm}
               value={formData.avatar}
             />
-
-            {/* Personal Information Data */}
             <div className="personal-information-data flex gap-5">
-              {/* Data 1 */}
               <div className="data-1 flex flex-col w-full gap-4">
-                {/* Full Name */}
                 <InputCMS
                   inputId={"full-name"}
                   inputName={"Full Name"}
@@ -298,7 +292,6 @@ export default function EditUserForm({
                   onInputChange={handleInputChange("fullName")}
                   required
                 />
-                {/* Email */}
                 <InputCMS
                   inputId={"email"}
                   inputName={"Email"}
@@ -309,8 +302,7 @@ export default function EditUserForm({
                   onInputChange={handleInputChange("email")}
                   required
                 />
-                {/* Phone Number */}
-                <InputNumberSVP
+                <InputNumberCMS
                   inputId={"phone-number"}
                   inputName={"Phone Number"}
                   inputIcon={"🇮🇩 62"}
@@ -319,7 +311,6 @@ export default function EditUserForm({
                   value={formData.phoneNumber}
                   onInputChange={handleInputChange("phoneNumber")}
                 />
-                {/* Role */}
                 <SelectCMS
                   selectId={"role"}
                   selectName={"Role"}

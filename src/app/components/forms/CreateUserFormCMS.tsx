@@ -22,7 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import InputNumberCMS from "../fields/InputNumberCMS";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
@@ -289,7 +289,7 @@ export default function CreateUserForm({ sessionToken }: CreateUserFormProps) {
                   onInputChange={handleInputChange("email")}
                   required
                 />
-                <InputNumberSVP
+                <InputNumberCMS
                   inputId={"phone-number"}
                   inputName={"Phone Number"}
                   inputIcon={"🇮🇩 62"}

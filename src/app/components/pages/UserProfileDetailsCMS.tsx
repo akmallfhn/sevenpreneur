@@ -22,7 +22,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import InputNumberCMS from "../fields/InputNumberCMS";
 import SelectCMS from "../fields/SelectCMS";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
@@ -198,7 +198,7 @@ export default function UserProfileDetailsCMS({
                     value={userDetailData.user.email || ""}
                     disabled
                   />
-                  <InputNumberSVP
+                  <InputNumberCMS
                     inputId={"phone-number"}
                     inputName={"Phone Number"}
                     inputIcon={"🇮🇩 62"}

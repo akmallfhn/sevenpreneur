@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface InputSVPProps extends React.InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
@@ -21,14 +21,20 @@ export default function InputSVP({
   inputPlaceholder,
   characterLength,
   errorMessage,
-  value: propValue,
+  value,
   onInputChange,
   disabled,
   required,
   ...rest
 }: InputSVPProps) {
-  const [value, setValue] = useState(propValue);
+  const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
+
+  // Sync only when parent value changes AND it's different
+  if (textValue !== value) {
+    setTextValue(value ?? "");
+  }
+
   const maxLength = characterLength ?? 128;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -41,21 +47,14 @@ export default function InputSVP({
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
+    setTextValue(newValue.slice(0, maxLength));
     if (onInputChange) onInputChange(newValue.slice(0, maxLength));
   };
 
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
-
   // Reset internalError if get any errorMessage from parent
-  useEffect(() => {
-    if (errorMessage) {
-      setInternalError("");
-    }
-  }, [errorMessage]);
+  if (errorMessage && internalError !== "") {
+    setInternalError("");
+  }
 
   // Compute error (parent > internal)
   const computedError = errorMessage || internalError;
@@ -93,7 +92,7 @@ export default function InputSVP({
               ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"
               : "bg-white dark:bg-[#2C2C2C]"
           } ${inputIcon ? "pl-10" : ""}  `}
-          value={value}
+          value={textValue}
           onChange={handleInputChange}
           {...rest}
           suppressHydrationWarning

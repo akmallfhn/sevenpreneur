@@ -29,7 +29,7 @@ export const NumberVariant: Record<
   },
 };
 
-interface InputNumberSVPProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputNumberCMSProps extends InputHTMLAttributes<HTMLInputElement> {
   inputId: string;
   inputName?: string;
   inputIcon?: string;
@@ -41,7 +41,7 @@ interface InputNumberSVPProps extends InputHTMLAttributes<HTMLInputElement> {
   onInputChange?: (value: string) => void;
 }
 
-export default function InputNumberSVP({
+export default function InputNumberCMS({
   inputId,
   inputName,
   inputIcon,
@@ -54,7 +54,7 @@ export default function InputNumberSVP({
   disabled,
   required,
   ...rest
-}: InputNumberSVPProps) {
+}: InputNumberCMSProps) {
   const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
 
@@ -121,7 +121,7 @@ export default function InputNumberSVP({
           className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
-              : "border-outline focus:outline-primary/15 focus:border-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
+              : "border-outline focus:outline-cms-primary/15 focus:border-cms-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
           } ${
             disabled
               ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"

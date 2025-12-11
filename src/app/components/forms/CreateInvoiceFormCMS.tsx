@@ -7,7 +7,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import InputNumberCMS from "../fields/InputNumberCMS";
 import SelectCMS from "../fields/SelectCMS";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import AppSheet from "../modals/AppSheet";
@@ -429,7 +429,7 @@ export default function CreateInvoiceFormCMS({
                 onInputChange={handleInputChange("invoiceUserId")}
                 required
               />
-              <InputNumberSVP
+              <InputNumberCMS
                 inputId="invoice-user-phone"
                 inputName="Phone Number"
                 inputIcon="🇮🇩 62"

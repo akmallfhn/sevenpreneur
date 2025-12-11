@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, TextareaHTMLAttributes } from "react";
+import React, { TextareaHTMLAttributes, useState } from "react";
 
 interface TextAreaSVPProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaId: string;
@@ -19,14 +19,20 @@ export default function TextAreaSVP({
   textAreaPlaceholder,
   characterLength,
   errorMessage,
-  value: propValue,
+  value,
   onTextAreaChange,
   required,
   disabled,
   ...rest
 }: TextAreaSVPProps) {
-  const [value, setValue] = useState(propValue);
+  const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
+
+  // Sync only when parent value changes AND it's different
+  if (textValue !== value) {
+    setTextValue(value ?? "");
+  }
+
   const maxLength = characterLength ?? 520;
   const characterLimitErrorMessage =
     "Oops, you’ve reached the character limit.";
@@ -42,21 +48,14 @@ export default function TextAreaSVP({
     } else {
       setInternalError("");
     }
-    setValue(newValue.slice(0, maxLength));
+    setTextValue(newValue.slice(0, maxLength));
     if (onTextAreaChange) onTextAreaChange(newValue.slice(0, maxLength));
   };
 
-  // Sync on value change
-  useEffect(() => {
-    setValue(propValue || "");
-  }, [propValue]);
-
   // Reset internalError if get any errorMessage from parent
-  useEffect(() => {
-    if (errorMessage) {
-      setInternalError("");
-    }
-  }, [errorMessage]);
+  if (errorMessage && internalError !== "") {
+    setInternalError("");
+  }
 
   // Compute error (parent > internal)
   const computedError = errorMessage || internalError;
@@ -85,7 +84,7 @@ export default function TextAreaSVP({
               ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"
               : "bg-white dark:bg-[#2C2C2C]"
           }`}
-          value={value}
+          value={textValue}
           onChange={handleTextAreaChange}
         />
         {computedError && (
