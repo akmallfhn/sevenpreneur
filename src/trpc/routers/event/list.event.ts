@@ -19,24 +19,23 @@ export const listEvent = {
       })
     )
     .query(async (opts) => {
-      const whereClause = { deleted_at: null };
+      const whereClause = {
+        deleted_at: null,
+        status: undefined as StatusEnum | undefined,
+        name: undefined as
+          | { contains: string; mode: "insensitive" }
+          | undefined,
+      };
 
       if (!opts.ctx.user || opts.ctx.user.role.name !== "Administrator") {
-        Object.assign(whereClause, {
-          status: StatusEnum.ACTIVE,
-          event_prices: {
-            status: StatusEnum.ACTIVE,
-          },
-        });
+        whereClause.status = StatusEnum.ACTIVE;
       }
 
       if (opts.input.keyword !== undefined) {
-        Object.assign(whereClause, {
-          name: {
-            contains: opts.input.keyword,
-            mode: "insensitive",
-          },
-        });
+        whereClause.name = {
+          contains: opts.input.keyword,
+          mode: "insensitive",
+        };
       }
 
       const paging = calculatePage(
@@ -63,6 +62,7 @@ export const listEvent = {
               id: true,
               name: true,
               amount: true,
+              status: true,
             },
           },
         },
@@ -76,6 +76,19 @@ export const listEvent = {
         take: paging.prisma.take,
       });
       const returnedList = eventList.map((entry) => {
+        const returnedEventPrices = entry.event_prices
+          .filter((entry) =>
+            !opts.ctx.user || opts.ctx.user.role.name !== "Administrator"
+              ? entry.status === StatusEnum.ACTIVE
+              : true
+          )
+          .map((entry) => {
+            return {
+              id: entry.id,
+              name: entry.name,
+              amount: entry.amount,
+            };
+          });
         return {
           id: entry.id,
           name: entry.name,
@@ -84,13 +97,14 @@ export const listEvent = {
           slug_url: entry.slug_url,
           start_date: entry.start_date,
           end_date: entry.end_date,
-          prices: entry.event_prices,
+          prices: returnedEventPrices,
         };
       });
 
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+      const returnedMetapaging = {
+        ...paging.metapaging,
         keyword: opts.input.keyword,
-      });
+      };
 
       return {
         code: STATUS_OK,

@@ -223,7 +223,12 @@ export const listTransaction = {
 
       const whereClause = {
         user_id: selectedUserId,
-        created_at: {},
+        category: undefined as CategoryEnum | undefined,
+        item_id: undefined as number | undefined,
+        created_at: {
+          gte: undefined as Date | undefined,
+          lt: undefined as Date | undefined,
+        },
       };
 
       const providedFilters = [
@@ -240,36 +245,29 @@ export const listTransaction = {
       }
 
       if (opts.input.cohort_id) {
-        Object.assign(whereClause, {
-          category: CategoryEnum.COHORT,
-          item_id: opts.input.cohort_id,
-        });
+        whereClause.category = CategoryEnum.COHORT;
+        whereClause.item_id = opts.input.cohort_id;
       }
       if (opts.input.event_id) {
-        Object.assign(whereClause, {
-          category: CategoryEnum.EVENT,
-          item_id: opts.input.event_id,
-        });
+        whereClause.category = CategoryEnum.EVENT;
+        whereClause.item_id = opts.input.event_id;
       }
       if (opts.input.playlist_id) {
-        Object.assign(whereClause, {
-          category: CategoryEnum.PLAYLIST,
-          item_id: opts.input.playlist_id,
-        });
+        whereClause.category = CategoryEnum.PLAYLIST;
+        whereClause.item_id = opts.input.playlist_id;
       }
 
       if (opts.input.start_date) {
-        Object.assign(whereClause.created_at, {
-          gte: stringToDate(opts.input.start_date),
-        });
+        const startDate = stringToDate(opts.input.start_date);
+        if (startDate) {
+          whereClause.created_at.gte = startDate;
+        }
       }
       if (opts.input.end_date) {
         const endDate = stringToDate(opts.input.end_date);
         if (endDate) {
           endDate.setDate(endDate.getDate() + 1);
-          Object.assign(whereClause.created_at, {
-            lt: endDate, // exclusive less than
-          });
+          whereClause.created_at.lt = endDate; // exclusive less than
         }
       }
 
@@ -380,18 +378,18 @@ export const listTransaction = {
         };
       });
 
-      const wherePaid = Object.assign(
-        { status: TStatusEnum.PAID },
-        whereClause
-      );
-      const wherePending = Object.assign(
-        { status: TStatusEnum.PENDING },
-        whereClause
-      );
-      const whereFailed = Object.assign(
-        { status: TStatusEnum.FAILED },
-        whereClause
-      );
+      const wherePaid = {
+        ...whereClause,
+        status: TStatusEnum.PAID,
+      };
+      const wherePending = {
+        ...whereClause,
+        status: TStatusEnum.PENDING,
+      };
+      const whereFailed = {
+        ...whereClause,
+        status: TStatusEnum.FAILED,
+      };
 
       const totalAmounts = await opts.ctx.prisma.transaction.aggregate({
         _sum: { amount: true, discount_amount: true },
@@ -414,12 +412,13 @@ export const listTransaction = {
         where: whereFailed,
       });
 
-      const returnedMetapaging = Object.assign({}, paging.metapaging, {
+      const returnedMetapaging = {
+        ...paging.metapaging,
         total_revenue: totalAmount.sub(totalDiscountAmount),
         total_paid: totalPaid._count,
         total_pending: totalPending._count,
         total_failed: totalFailed._count,
-      });
+      };
 
       return {
         code: STATUS_OK,

@@ -38,16 +38,16 @@ async function isEnrolledTemplate(
 
 export const listTemplate = {
   templates: loggedInProcedure.query(async (opts) => {
-    const whereClause = {};
+    const whereClause = {
+      status: undefined as StatusEnum | undefined,
+    };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
         opts.ctx.prisma,
         opts.ctx.user.id,
         "You're not allowed to view templates."
       );
-      Object.assign(whereClause, {
-        status: StatusEnum.ACTIVE,
-      });
+      whereClause.status = StatusEnum.ACTIVE;
     }
     const templatesList = await opts.ctx.prisma.template.findMany({
       where: whereClause,
@@ -75,6 +75,7 @@ export const readTemplate = {
   template: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
     const whereClause = {
       id: opts.input.id,
+      status: undefined as StatusEnum | undefined,
     };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledTemplate(
@@ -82,9 +83,7 @@ export const readTemplate = {
         opts.ctx.user.id,
         "You're not allowed to view templates."
       );
-      Object.assign(whereClause, {
-        status: StatusEnum.ACTIVE,
-      });
+      whereClause.status = StatusEnum.ACTIVE;
     }
     const theTemplate = await opts.ctx.prisma.template.findFirst({
       where: whereClause,

@@ -12,16 +12,16 @@ import { isEnrolledAITool } from "./util.ai_tool";
 
 export const listAITool = {
   aiTools: loggedInProcedure.query(async (opts) => {
-    const whereClause = {};
+    const whereClause = {
+      status: undefined as StatusEnum | undefined,
+    };
     if (opts.ctx.user.role.name === "General User") {
       await isEnrolledAITool(
         opts.ctx.prisma,
         opts.ctx.user.id,
         "You're not allowed to view AI tools."
       );
-      Object.assign(whereClause, {
-        status: StatusEnum.ACTIVE,
-      });
+      whereClause.status = StatusEnum.ACTIVE;
     }
     const aiToolsList = await opts.ctx.prisma.aITool.findMany({
       select: {
