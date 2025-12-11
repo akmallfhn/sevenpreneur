@@ -76,7 +76,6 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       metaExternalId,
       metaFirstName,
       metaEmail,
-      metaPhoneNumber,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
     ref: ForwardedRef<HTMLButtonElement>
@@ -152,7 +151,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
     // Tracking Handle
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       // Google Tag Manager
-      const eventData: Record<string, any> = {
+      const eventData: Record<string, unknown> = {
         event: "click",
         feature_id: featureId,
         feature_name: featureName,
@@ -169,12 +168,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       window.dataLayer?.push(eventData);
 
       // Meta Pixel
-      if (
-        typeof window !== "undefined" &&
-        (window as any).fbq &&
-        metaEventName
-      ) {
-        const fbqData: Record<string, any> = {
+      if (typeof window !== "undefined" && window.fbq && metaEventName) {
+        const fbqData: Record<string, unknown> = {
           event_id: metaEventId,
           content_ids: metaContentIds,
           content_type: metaContentType,
@@ -190,7 +185,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         Object.keys(fbqData).forEach(
           (key) => fbqData[key] === null && delete fbqData[key]
         );
-        (window as any).fbq("track", metaEventName, fbqData);
+        window.fbq("track", metaEventName, fbqData);
       }
 
       // Panggil onClick props jika ada

@@ -1,33 +1,31 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import { SessionMethod } from "@/lib/app-types";
+import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { setSessionToken, trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   CalendarFold,
   ChevronRight,
-  Disc2,
   Loader2,
   PenTool,
-  Plus,
   TvMinimalPlay,
 } from "lucide-react";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import MaterialListCMS from "../indexes/MaterialListCMS";
-import UserBadgeCMS from "../buttons/UserBadgeCMS";
-import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
-import LocationItemCMS from "../items/LocationItemCMS";
+import AvatarBadgeCMS from "../buttons/AvatarBadgeCMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
 import EditLearningFormCMS from "../forms/EditLearningFormCMS";
 import UpdateVideoRecordingFormCMS from "../forms/UpdateVideoRecordingForm";
-import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
-import { SessionMethod } from "@/lib/app-types";
+import MaterialListCMS from "../indexes/MaterialListCMS";
 import ConferenceItemCMS from "../items/ConferenceItemCMS";
+import LocationItemCMS from "../items/LocationItemCMS";
+import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import EmptyRecordingCMS from "../state/EmptyRecordingCMS";
-import AppVideoPlayer from "../elements/AppVideoPlayer";
 
 dayjs.extend(localizedFormat);
 
@@ -213,7 +211,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                   <h2 className="section-name font-brand font-bold text-black">
                     Lectured by
                   </h2>
-                  <UserBadgeCMS
+                  <AvatarBadgeCMS
                     userName={
                       learningDetailsData?.learning.speaker?.full_name ||
                       "Sevenpreneur Educator"

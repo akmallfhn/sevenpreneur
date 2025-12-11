@@ -7,26 +7,22 @@ export interface AvatarBadgeLMSProps {
   sessionUserName: string;
 }
 
-export default function AvatarBadgeLMS({
-  sessionUserAvatar,
-  sessionUserName,
-}: AvatarBadgeLMSProps) {
-  // Get Nickname
-  const nickName = sessionUserName?.split(" ")[0];
+export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
+  const nickName = props.sessionUserName?.split(" ")[0];
 
   return (
     <div className="avatar-container flex items-center gap-3 bg-white py-2 px-3.5 rounded-full shadow-xs">
       <div className="avatar aspect-square size-7 rounded-full overflow-hidden ">
         <Image
           className="object-cover w-full h-full"
-          src={sessionUserAvatar}
+          src={props.sessionUserAvatar}
           alt="User Avatar"
           width={320}
           height={320}
         />
       </div>
       <div className="nickname items-center gap-1 lg:flex">
-        <p className="max-w-28 font-ui font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
+        <p className="max-w-28 font-bodycopy font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
           {nickName}
         </p>
         <ChevronDown className="size-3" />

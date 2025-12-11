@@ -1,10 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { DeleteSession } from "@/lib/actions";
+import AvatarBadgeCMS from "@/app/components/buttons/AvatarBadgeCMS";
 import SidebarMenuItemCMS from "@/app/components/navigations/SidebarMenuItemCMS";
-import UserBadgeCMS from "@/app/components/buttons/UserBadgeCMS";
+import { DeleteSession } from "@/lib/actions";
+import { setSessionToken, trpc } from "@/trpc/client";
 import {
   BanknoteArrowDown,
   CircleUserIcon,
@@ -15,7 +13,9 @@ import {
   Tags,
   Waypoints,
 } from "lucide-react";
-import { setSessionToken, trpc } from "@/trpc/client";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import SidebarMenuGroupCMS from "./SidebarMenuGroupCMS";
 
 interface SidebarCMSProps {
@@ -94,7 +94,7 @@ export default function SidebarCMS({
         )}
 
         {!isLoading && !isError && (
-          <UserBadgeCMS
+          <AvatarBadgeCMS
             userName={data?.user.full_name || ""}
             userRole={data?.user.role_name.toUpperCase() || ""}
             userAvatar={
