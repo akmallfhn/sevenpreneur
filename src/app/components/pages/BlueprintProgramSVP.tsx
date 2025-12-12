@@ -1,8 +1,8 @@
 "use client";
-import BatchScheduleBlueprintProgramSVP from "../templates/BatchScheduleBlueprintProgramSVP";
-import CuriculumSessionsBlueprintProgramSVP from "../templates/CuriculumSessionsBlueprintProgramSVP";
-import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
 import HeroBlueprintProgramSVP from "../heroes/HeroBlueprintProgramSVP";
+import BatchScheduleBlueprintProgramSVP from "../templates/BatchScheduleBlueprintProgramSVP";
+import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
+import LearningListBlueprintSVP from "../templates/LearningListBlueprintSVP";
 import OfferHighlightBlueprintProgramSVP from "../templates/OfferHighlightBlueprintProgramSVP";
 import OverviewBlueprintProgramSVP from "../templates/OverviewBlueprintProgramSVP";
 import PackagePlansBlueprintProgramSVP, {
@@ -28,7 +28,7 @@ export default function BlueprintProgramSVP({
       <OverviewBlueprintProgramSVP />
       <OfferHighlightBlueprintProgramSVP />
       <BatchScheduleBlueprintProgramSVP />
-      <CuriculumSessionsBlueprintProgramSVP />
+      <LearningListBlueprintSVP />
       <PackagePlansBlueprintProgramSVP
         cohortId={cohortId}
         cohortName={cohortName}
