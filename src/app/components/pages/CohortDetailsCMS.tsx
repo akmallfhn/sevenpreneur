@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import AppButton from "../buttons/AppButton";
+import { StatusType } from "@/lib/app-types";
+import { trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   CalendarFoldIcon,
   ChevronDown,
@@ -11,21 +12,21 @@ import {
   Loader2,
   PenTool,
 } from "lucide-react";
-import { trpc } from "@/trpc/client";
 import Image from "next/image";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import LearningListCMS from "../indexes/LearningListCMS";
+import { notFound } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import AppButton from "../buttons/AppButton";
+import AttendancesChartCMS from "../charts/AttendancesChartCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
 import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
+import LearningListCMS from "../indexes/LearningListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
-import { notFound } from "next/navigation";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
-import { StatusType } from "@/lib/app-types";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 dayjs.extend(localizedFormat);
 
@@ -35,26 +36,26 @@ interface CohortDetailsCMSProps {
   cohortId: number;
 }
 
-export default function CohortDetailsCMS({
-  cohortId,
-  sessionUserRole,
-  sessionToken,
-}: CohortDetailsCMSProps) {
+export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
   const [editCohort, setEditCohort] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
 
   const allowedRolesUpdateCohort = [0, 2];
-  const isAllowedUpdateCohort =
-    allowedRolesUpdateCohort.includes(sessionUserRole);
+  const isAllowedUpdateCohort = allowedRolesUpdateCohort.includes(
+    props.sessionUserRole
+  );
 
   // Call data from tRPC
   const {
     data: cohortDetailsData,
     isLoading,
     isError,
-  } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
+  } = trpc.read.cohort.useQuery(
+    { id: props.cohortId },
+    { enabled: !!props.sessionToken }
+  );
 
   // Checking height content description
   useEffect(() => {
@@ -208,13 +209,16 @@ export default function CohortDetailsCMS({
                 </div>
               </div>
             </div>
+            <AttendancesChartCMS
+              sessionToken={props.sessionToken}
+              cohortId={props.cohortId}
+            />
             <LearningListCMS
-              sessionToken={sessionToken}
-              sessionUserRole={sessionUserRole}
-              cohortId={cohortId}
+              sessionToken={props.sessionToken}
+              sessionUserRole={props.sessionUserRole}
+              cohortId={props.cohortId}
             />
           </main>
-
           <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
             <div className="cohort-stats flex flex-col gap-3">
               <ScorecardItemCMS
@@ -229,18 +233,18 @@ export default function CohortDetailsCMS({
               />
             </div>
             <ModuleListCMS
-              sessionToken={sessionToken}
-              sessionUserRole={sessionUserRole}
-              cohortId={cohortId}
+              sessionToken={props.sessionToken}
+              sessionUserRole={props.sessionUserRole}
+              cohortId={props.cohortId}
             />
             <ProjectListCMS
-              sessionToken={sessionToken}
-              sessionUserRole={sessionUserRole}
-              cohortId={cohortId}
+              sessionToken={props.sessionToken}
+              sessionUserRole={props.sessionUserRole}
+              cohortId={props.cohortId}
             />
             <EnrolledUserListCMS
-              sessionToken={sessionToken}
-              cohortId={cohortId}
+              sessionToken={props.sessionToken}
+              cohortId={props.cohortId}
             />
           </aside>
         </div>
@@ -249,8 +253,8 @@ export default function CohortDetailsCMS({
       {/* Edit Cohort */}
       {editCohort && (
         <EditCohortFormCMS
-          sessionToken={sessionToken}
-          cohortId={cohortId}
+          sessionToken={props.sessionToken}
+          cohortId={props.cohortId}
           isOpen={editCohort}
           onClose={() => setEditCohort(false)}
         />
