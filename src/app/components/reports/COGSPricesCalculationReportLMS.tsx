@@ -54,11 +54,6 @@ export default function COGSPricesCalculationReportLMS(
     setVolumeProduction(num || 0);
   };
 
-  useEffect(() => {
-    if (props.productionPerPeriod)
-      setVolumeProduction(props.productionPerPeriod);
-  }, [props.productionPerPeriod]);
-
   const fixedCostPerUnit = props.fixedCostPerPeriod / volumeProduction;
   const totalCostPerUnit = fixedCostPerUnit + props.variableCostPerUnit;
 
@@ -156,7 +151,7 @@ export default function COGSPricesCalculationReportLMS(
   useEffect(() => {
     if (isDoneResult) {
       router.refresh();
-      setIntervalMs(false);
+      queueMicrotask(() => setIntervalMs(false));
     }
   }, [isDoneResult, router]);
 

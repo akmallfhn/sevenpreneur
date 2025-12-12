@@ -1,20 +1,20 @@
 "use client";
-import styles from "./Report.module.css";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import { markdownToHtml } from "@/lib/markdown-to-html";
-import { Gauge, gaugeClasses } from "@mui/x-charts";
+import { setSessionToken, trpc } from "@/trpc/client";
 import {
   AIIdeaValidation_LongevityAlignment,
   AIIdeaValidation_ProblemFreq,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
-import { Minus, TrendingDown, TrendingUp, User } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import { Gauge, gaugeClasses } from "@mui/x-charts";
+import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { setSessionToken, trpc } from "@/trpc/client";
-import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
+import { ReactNode, useEffect, useState } from "react";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
 import AISegmentItemLMS from "../items/AISegmentItemLMS";
+import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
+import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
+import styles from "./Report.module.css";
 
 const freqAttributes: Record<
   AIIdeaValidation_ProblemFreq,
@@ -144,7 +144,7 @@ export default function IdeaValidationReportLMS(
   useEffect(() => {
     if (isDoneResult) {
       router.refresh();
-      setIntervalMs(false);
+      queueMicrotask(() => setIntervalMs(false));
     }
   }, [isDoneResult, router]);
 
@@ -244,7 +244,7 @@ export default function IdeaValidationReportLMS(
                 width={124}
                 height={124}
                 cornerRadius={50}
-                sx={(theme) => ({
+                sx={() => ({
                   [`& .${gaugeClasses.valueText}`]: {
                     display: "none",
                   },
@@ -339,7 +339,7 @@ export default function IdeaValidationReportLMS(
                 width={124}
                 height={124}
                 cornerRadius={50}
-                sx={(theme) => ({
+                sx={() => ({
                   [`& .${gaugeClasses.valueText}`]: {
                     display: "none",
                   },

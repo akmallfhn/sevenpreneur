@@ -48,7 +48,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
   useEffect(() => {
     if (isDoneResult) {
       router.refresh();
-      setIntervalMs(false);
+      queueMicrotask(() => setIntervalMs(false));
     }
   }, [isDoneResult, router]);
 

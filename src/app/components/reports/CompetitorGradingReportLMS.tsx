@@ -100,7 +100,7 @@ export default function CompetitorGradingReportLMS(
   useEffect(() => {
     if (isDoneResult) {
       router.refresh();
-      setIntervalMs(false);
+      queueMicrotask(() => setIntervalMs(false));
     }
   }, [isDoneResult, router]);
 
