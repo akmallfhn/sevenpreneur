@@ -4,7 +4,7 @@ import LearningSessionItemBlueprintProgramSVP, {
   LearningSessionVariantBlueprintProgramSVP,
 } from "../items/LearningSessionItemBlueprintProgramSVP";
 
-export default function LearningListBlueprintSVP() {
+export default function CuriculumSessionsBlueprintProgramSVP() {
   const data = [
     {
       session_number: "01.",
@@ -117,10 +117,10 @@ export default function LearningListBlueprintSVP() {
       session_number: "07+",
       session_name: "From Pitch Perfect to Investable Opportunity",
       session_description: "",
-      session_educator: "Alvin Evander",
-      session_educator_title: "Vice President MDI Ventures",
+      session_educator: "Wafa Taftazani",
+      session_educator_title: "Entrepreneur, Executive & Investor",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-alvin.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-wafa-taftazani.webp",
       session_variant: "extraordinary",
     },
     {
