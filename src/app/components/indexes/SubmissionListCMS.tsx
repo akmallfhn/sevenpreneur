@@ -1,20 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { setSessionToken, trpc } from "@/trpc/client";
-import { ChevronRight, Eye, Loader2, Settings2 } from "lucide-react";
+import { getSubmissionTiming } from "@/lib/date-time-manipulation";
+import { trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import { ChevronRight, Eye, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
+import AppButton from "../buttons/AppButton";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import SubmissionDetailsCMS from "../modals/SubmissionDetailsCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
-import TableCellCMS from "../elements/TableCellCMS";
-import Image from "next/image";
-import AppButton from "../buttons/AppButton";
-import { getSubmissionTiming } from "@/lib/date-time-manipulation";
-import { useRouter, useSearchParams } from "next/navigation";
-import SubmissionDetailsCMS from "../modals/SubmissionDetailsCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -31,11 +31,11 @@ export default function SubmissionListCMS({
   cohortId,
   projectId,
 }: SubmissionListCMSProps) {
+  const router = useRouter();
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
-  const router = useRouter();
-  const [isOpenDetails, setIsOpenDetails] = useState(false);
   const selectedId = searchParam.get("id");
+  const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
 
   const allowedRolesDetailsSubmission = [0, 1, 2, 3];
   const isAllowedDetailsSubmission =
@@ -43,18 +43,14 @@ export default function SubmissionListCMS({
 
   // Push Parameter to URL
   const viewSubmissionDetails = (submissionId: string) => {
+    setOpenDetailsId(submissionId);
     params.set("id", submissionId);
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  // Open modal when has id
-  useEffect(() => {
-    setIsOpenDetails(!!selectedId);
-  }, [selectedId]);
-
   // Close modal when close
   const handleClose = () => {
-    setIsOpenDetails(false);
+    setOpenDetailsId(null);
     params.delete("id");
     router.push(`?${params.toString()}`, { scroll: false });
   };
@@ -216,12 +212,12 @@ export default function SubmissionListCMS({
       )}
 
       {/* Open Submission Details */}
-      {isOpenDetails && (
+      {openDetailsId && (
         <SubmissionDetailsCMS
           sessionUserRole={sessionUserRole}
           projectDeadline={projectDetailsData?.deadline_at}
           submissionId={Number(selectedId)}
-          isOpen={isOpenDetails}
+          isOpen={!!openDetailsId}
           onClose={handleClose}
         />
       )}

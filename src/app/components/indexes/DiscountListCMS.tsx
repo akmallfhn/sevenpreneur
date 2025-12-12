@@ -1,32 +1,31 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { setSessionToken, trpc } from "@/trpc/client";
+import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import { setSessionToken, trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   ChevronRight,
-  Loader2,
   EllipsisVertical,
+  Loader2,
   PlusCircle,
-  Trash2,
   Settings2,
+  Trash2,
 } from "lucide-react";
-import TableHeadCMS from "../elements/TableHeadCMS";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import TableCellCMS from "../elements/TableCellCMS";
 import { useRouter, useSearchParams } from "next/navigation";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
 import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
 import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 
@@ -37,8 +36,13 @@ interface DiscountListCMSProps {
 export default function DiscountListCMS({
   sessionToken,
 }: DiscountListCMSProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedId = searchParams.get("id");
+  const [isOpenEditForm, setIsOpenEditForm] = useState<string | null>(
+    selectedId
+  );
   const [isOpenCreateForm, setIsOpenCreateForm] = useState(false);
-  const [isOpenEditForm, setIsOpenEditForm] = useState(false);
   const [actionsOpened, setActionsOpened] = useState<number | null>(null);
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
@@ -50,9 +54,7 @@ export default function DiscountListCMS({
   const setWrapperRef = (id: number) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;
   };
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const selectedId = searchParams.get("id");
+
   const utils = trpc.useUtils();
 
   // Set token for API
@@ -90,17 +92,13 @@ export default function DiscountListCMS({
 
   // Push Parameter to URL
   const editDiscountForm = (discountId: number) => {
+    setIsOpenEditForm(String(discountId));
     router.push(`/discounts?id=${discountId}`, { scroll: false });
   };
 
-  // Open edit form when has id
-  useEffect(() => {
-    setIsOpenEditForm(!!selectedId);
-  }, [selectedId]);
-
   // Close edit form when close
   const handleCloseEditDiscount = () => {
-    setIsOpenEditForm(false);
+    setIsOpenEditForm(null);
     router.push("/discounts", { scroll: false });
   };
 
@@ -219,15 +217,12 @@ export default function DiscountListCMS({
                         isOpen={actionsOpened === post.id}
                         alignDesktop="right"
                         onClose={() => setActionsOpened(null)}
-                        anchorEl={wrapperRef.current[post.id]}
                       >
-                        {/* Edit */}
                         <AppDropdownItemList
                           menuIcon={<Settings2 className="size-4" />}
                           menuName="Edit Details"
                           onClick={() => editDiscountForm(post.id)}
                         />
-                        {/* Delete */}
                         <AppDropdownItemList
                           menuIcon={<Trash2 className="size-4" />}
                           menuName="Delete"
@@ -264,7 +259,7 @@ export default function DiscountListCMS({
         <EditDiscountFormCMS
           sessionToken={sessionToken}
           discountId={Number(selectedId)}
-          isOpen={isOpenEditForm}
+          isOpen={!!isOpenEditForm}
           onClose={handleCloseEditDiscount}
         />
       )}

@@ -1,36 +1,36 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { setSessionToken, trpc } from "@/trpc/client";
+import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import { RolesUser, StatusType } from "@/lib/app-types";
+import { toCamelCase } from "@/lib/convert-case";
+import { trpc } from "@/trpc/client";
+import dayjs from "dayjs";
 import {
   ChevronRight,
-  PlusCircle,
-  Loader2,
   EllipsisVertical,
-  Settings2,
   Eye,
+  Loader2,
+  PlusCircle,
+  Settings2,
   Trash2,
   UserSearch,
 } from "lucide-react";
-import TableHeadCMS from "../elements/TableHeadCMS";
-import TableCellCMS from "../elements/TableCellCMS";
 import Image from "next/image";
-import RolesLabelCMS from "../labels/RolesLabelCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
-import dayjs from "dayjs";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import { toast } from "sonner";
-import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
 import InputCMS from "../fields/InputCMS";
-import { useRouter, useSearchParams } from "next/navigation";
+import RolesLabelCMS from "../labels/RolesLabelCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppNumberPagination from "../navigations/AppNumberPagination";
-import { RolesUser, StatusType } from "@/lib/app-types";
-import { toCamelCase } from "@/lib/convert-case";
 
 interface UserListCMSProps {
   sessionToken: string;
@@ -146,9 +146,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             </Link>
           </div>
         </div>
-
-        {/* Filter */}
-        <div className="filter flex w-full items-center">
+        <div className="filter-search flex w-full items-center">
           <div className="max-w-96 w-full">
             <InputCMS
               inputId="search-user"
@@ -165,7 +163,6 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             />
           </div>
         </div>
-
         {isLoading && (
           <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
             <Loader2 className="animate-spin size-5 " />
@@ -176,11 +173,9 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             No Data
           </div>
         )}
-
-        {/* TABLE */}
         {userList && !isLoading && !isError && (
-          <table className="relative w-full rounded-sm overflow-hidden">
-            <thead className="bg-[#FAFAFA] text-alternative/70">
+          <table className="table-users relative w-full rounded-sm">
+            <thead className="bg-[#FAFAFA] text-[#111111]/60">
               <tr>
                 <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`User`.toUpperCase()}</TableHeadCMS>
@@ -264,23 +259,20 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                         isOpen={actionsOpened === post.id}
                         alignDesktop="right"
                         onClose={() => setActionsOpened(null)}
-                        anchorEl={wrapperRef.current[post.id]}
+                        // anchorEl={wrapperRef.current[post.id]}
                       >
-                        {/* -- View */}
                         <Link href={`/users/${post.id}`}>
                           <AppDropdownItemList
                             menuIcon={<Eye className="size-4" />}
                             menuName="View Profile"
                           />
                         </Link>
-                        {/* -- Edit */}
                         <Link href={`/users/${post.id}/edit`}>
                           <AppDropdownItemList
                             menuIcon={<Settings2 className="size-4" />}
                             menuName="Edit Profile"
                           />
                         </Link>
-                        {/* -- Delete */}
                         <AppDropdownItemList
                           menuIcon={<Trash2 className="size-4" />}
                           menuName="Delete"
@@ -304,10 +296,8 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
         {userList?.length === 0 && (
           <p className="mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
         )}
-
-        {/* Pagination */}
         {!isLoading && !isError && (
-          <div className="pagination-container flex flex-col w-full items-center gap-3">
+          <div className="pagination flex flex-col w-full items-center gap-3">
             <AppNumberPagination
               currentPage={currentPage}
               totalPages={data?.metapaging.total_page ?? 1}

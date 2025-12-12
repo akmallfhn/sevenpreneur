@@ -1,35 +1,34 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { setSessionToken, trpc } from "@/trpc/client";
+import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import { ProductCategory } from "@/lib/app-types";
+import { getRupiahCurrency } from "@/lib/currency";
+import { trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   ChevronRight,
-  Loader2,
   Eye,
   FileSpreadsheet,
-  X,
   Funnel,
+  Loader2,
 } from "lucide-react";
-import TableHeadCMS from "../elements/TableHeadCMS";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import TableCellCMS from "../elements/TableCellCMS";
-import { getRupiahCurrency } from "@/lib/currency";
-import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
-import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
-import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import { useRouter, useSearchParams } from "next/navigation";
-import TransactionDetailsCMS from "../modals/TransactionDetailsCMS";
-import CreateInvoiceFormCMS from "../forms/CreateInvoiceFormCMS";
-import AppNumberPagination from "../navigations/AppNumberPagination";
-import SelectCMS from "../fields/SelectCMS";
-import FilterLabelCMS from "../labels/FilterLabelCMS";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import AppDropdown from "../elements/AppDropdown";
-import { ProductCategory } from "@/lib/app-types";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import SelectCMS from "../fields/SelectCMS";
+import CreateInvoiceFormCMS from "../forms/CreateInvoiceFormCMS";
+import ScorecardItemCMS from "../items/ScorecardItemCMS";
+import FilterLabelCMS from "../labels/FilterLabelCMS";
+import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
+import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
+import TransactionDetailsCMS from "../modals/TransactionDetailsCMS";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 dayjs.extend(localizedFormat);
 
@@ -40,17 +39,18 @@ interface TransactionListCMSProps {
 export default function TransactionListCMS({
   sessionToken,
 }: TransactionListCMSProps) {
-  const [isOpenDetails, setIsOpenDetails] = useState(false);
-  const [isOpenCreateInvoice, setIsOpenCreateInvoice] = useState(false);
-  const [isOpenFilter, setIsOpenFilter] = useState(false);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const pageSize = 20;
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
   const selectedId = searchParam.get("id");
   const pageParam = searchParam.get("page");
+  const [isOpenDetails, setIsOpenDetails] = useState<string | null>(selectedId);
+  const [isOpenCreateInvoice, setIsOpenCreateInvoice] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const pageSize = 20;
   const currentPage = Number(pageParam) || 1;
 
   // Beginning State
@@ -63,7 +63,7 @@ export default function TransactionListCMS({
   });
 
   // Handle data changes
-  const handleInputChange = (fieldName: string) => (value: any) => {
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
     setFilterData((prev) => ({
       ...prev,
       [fieldName]: value,
@@ -71,30 +71,27 @@ export default function TransactionListCMS({
   };
 
   // Fetch tRPC Product List
-  const {
-    data: playlistsData,
-    isLoading: isLoadingPlaylistsData,
-    isError: isErrorPlaylistsData,
-  } = trpc.list.playlists.useQuery({}, { enabled: !!sessionToken });
+  const { data: playlistsData } = trpc.list.playlists.useQuery(
+    {},
+    { enabled: !!sessionToken }
+  );
   const playlists = playlistsData?.list;
-  const {
-    data: cohortsData,
-    isLoading: isLoadingCohortsData,
-    isError: isErrorCohortsData,
-  } = trpc.list.cohorts.useQuery({}, { enabled: !!sessionToken });
+  const { data: cohortsData } = trpc.list.cohorts.useQuery(
+    {},
+    { enabled: !!sessionToken }
+  );
   const cohortList = cohortsData?.list;
-  const {
-    data: eventsData,
-    isLoading: isLoadingEventsData,
-    isError: isErrorEventsData,
-  } = trpc.list.events.useQuery({}, { enabled: !!sessionToken });
+  const { data: eventsData } = trpc.list.events.useQuery(
+    {},
+    { enabled: !!sessionToken }
+  );
   const eventList = eventsData?.list;
 
   // Join Product Options
   const productOptions = useMemo(() => {
     return [
       ...(cohortList?.flatMap((post) =>
-        post.prices.map((price: any) => ({
+        post.prices.map((price) => ({
           value: `COHORT-${price.id}`,
           label: `Cohort - ${post.name} ${price.name}`,
           type: "COHORT",
@@ -102,7 +99,7 @@ export default function TransactionListCMS({
         }))
       ) || []),
       ...(eventList?.flatMap((post) =>
-        post.prices.map((price: any) => ({
+        post.prices.map((price) => ({
           value: `EVENT-${price.id}`,
           label: `Event - ${post.name} ${price.name}`,
           type: "EVENT",
@@ -124,10 +121,12 @@ export default function TransactionListCMS({
       (opt) => String(opt.value) === String(filterData.productId)
     );
     if (selectedOption) {
-      setFilterData((prev) => ({
-        ...prev,
-        productType: selectedOption.type as ProductCategory,
-      }));
+      queueMicrotask(() => {
+        setFilterData((prev) => ({
+          ...prev,
+          productType: selectedOption.type as ProductCategory,
+        }));
+      });
     }
   }, [filterData.productId, productOptions]);
 
@@ -157,18 +156,14 @@ export default function TransactionListCMS({
 
   // Push Parameter to URL
   const viewTransactionDetails = (transactionId: string) => {
+    setIsOpenDetails(transactionId);
     params.set("id", transactionId);
     router.push(`/transactions?${params.toString()}`, { scroll: false });
   };
 
-  // Open modal when has id
-  useEffect(() => {
-    setIsOpenDetails(!!selectedId);
-  }, [selectedId]);
-
   // Close modal when close
   const handleClose = () => {
-    setIsOpenDetails(false);
+    setIsOpenDetails(null);
     params.delete("id");
     router.push(`/transactions?${params.toString()}`, { scroll: false });
   };
@@ -211,7 +206,6 @@ export default function TransactionListCMS({
   return (
     <React.Fragment>
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -220,7 +214,6 @@ export default function TransactionListCMS({
             </AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            {/* Page Title */}
             <TitleRevealCMS
               titlePage={"Transaction List"}
               descPage={"View and monitor all payment records in one place."}
@@ -234,9 +227,7 @@ export default function TransactionListCMS({
             </AppButton>
           </div>
         </div>
-
-        {/* Statistik */}
-        <div className="flex items-center gap-3">
+        <div className="stats-list flex items-center gap-3">
           <ScorecardItemCMS
             scorecardName="Total Revenue"
             scorecardValue={
@@ -269,8 +260,6 @@ export default function TransactionListCMS({
             scorecardBackground="bg-danger-foreground"
           />
         </div>
-
-        {/* Filter */}
         <div className="filter-button relative flex w-fit" ref={wrapperRef}>
           <AppButton
             variant="outline"
@@ -313,9 +302,7 @@ export default function TransactionListCMS({
             </div>
           </AppDropdown>
         </div>
-
-        {/* Table */}
-        <div className="table-group flex flex-col">
+        <div className="table-transactions flex flex-col">
           {filterData.productId && (
             <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
               <p className="text-sm text-alternative font-medium font-bodycopy">
@@ -413,9 +400,8 @@ export default function TransactionListCMS({
           </div>
         )}
 
-        {/* Pagination */}
         {!isLoadingTransactionsData && !isErrorTransactionsData && (
-          <div className="pagination-container flex flex-col w-full items-center gap-3">
+          <div className="pagination flex flex-col w-full items-center gap-3">
             <AppNumberPagination
               currentPage={currentPage}
               totalPages={transactionsData?.metapaging.total_page ?? 1}
@@ -437,8 +423,8 @@ export default function TransactionListCMS({
       {/* Open Transaction Details */}
       {isOpenDetails && (
         <TransactionDetailsCMS
-          transactionId={selectedId}
-          isOpen={isOpenDetails}
+          transactionId={selectedId || ""}
+          isOpen={!!isOpenDetails}
           onClose={handleClose}
         />
       )}

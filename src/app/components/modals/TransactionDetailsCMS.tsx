@@ -18,7 +18,7 @@ import { getRupiahCurrency } from "@/lib/currency";
 import SheetLineItemCMS from "../items/SheetLineItemCMS";
 
 interface TransactionDetailsCMSProps {
-  transactionId: string | null;
+  transactionId: string;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -33,8 +33,6 @@ export default function TransactionDetailsCMS({
     useState(false);
   const { copy, copied } = useClipboard();
   const utils = trpc.useUtils();
-
-  if (!transactionId) return;
 
   const { data, isLoading, isError } = trpc.read.transaction.useQuery(
     { id: transactionId },
@@ -84,6 +82,8 @@ export default function TransactionDetailsCMS({
       setLoadingCancelInvoice(false);
     }
   };
+
+  if (!transactionId) return;
 
   return (
     <AppSheet

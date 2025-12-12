@@ -8,14 +8,10 @@ dayjs.extend(duration);
 
 interface AppCountdownTimerProps {
   targetDateTime: string;
-  isIncludeDimension?: boolean;
 }
 
-export default function AppCountdownTimer({
-  targetDateTime,
-  isIncludeDimension = false,
-}: AppCountdownTimerProps) {
-  const [hasMounted, setHasMounted] = useState(false);
+export default function AppCountdownTimer(props: AppCountdownTimerProps) {
+  // const [hasMounted, setHasMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     days: "00",
     hours: "00",
@@ -24,9 +20,8 @@ export default function AppCountdownTimer({
   });
 
   useEffect(() => {
-    setHasMounted(true);
     // Define tanggal di masa depan
-    const targetDate = dayjs(targetDateTime);
+    const targetDate = dayjs(props.targetDateTime);
 
     // Fungsi untuk hitung waktu tersisa:
     const calculateCountdown = () => {
@@ -61,9 +56,7 @@ export default function AppCountdownTimer({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [targetDateTime]);
-
-  if (!hasMounted) return null;
+  }, [props.targetDateTime]);
 
   const countdownData = [
     { value: timeLeft.days, dimensions: "days" },
@@ -84,11 +77,6 @@ export default function AppCountdownTimer({
             >
               {post.value}
             </p>
-            {/* {isIncludeDimension && variant !== "extra_small" && (
-              <p className="font-bodycopy text-sm lg:text-sm">
-                {post.dimensions}
-              </p>
-            )} */}
           </div>
           {index < countdownData.length - 1 && (
             <p
