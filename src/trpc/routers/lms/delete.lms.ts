@@ -141,12 +141,19 @@ export const deleteLMS = {
   project: roleBasedProcedure(["Administrator", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
-      const deletedProject = await opts.ctx.prisma.project.deleteMany({
-        where: {
-          id: opts.input.id,
-        },
+      await opts.ctx.prisma.$transaction(async (tx) => {
+        await tx.submission.deleteMany({
+          where: {
+            project_id: opts.input.id,
+          },
+        });
+        const deletedProject = await tx.project.deleteMany({
+          where: {
+            id: opts.input.id,
+          },
+        });
+        checkDeleteResult(deletedProject.count, "projects", "project");
       });
-      checkDeleteResult(deletedProject.count, "projects", "project");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
