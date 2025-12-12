@@ -25,7 +25,7 @@ import LocationItemCMS from "../items/LocationItemCMS";
 import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import EmptyRecordingCMS from "../state/EmptyRecordingCMS";
+import EmptyRecordingCMS from "../states/EmptyRecordingCMS";
 
 dayjs.extend(localizedFormat);
 

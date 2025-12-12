@@ -5,7 +5,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import { useEffect, useState } from "react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
-import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import { BarChart } from "@mui/x-charts";
 import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { markdownToHtml } from "@/lib/markdown-to-html";

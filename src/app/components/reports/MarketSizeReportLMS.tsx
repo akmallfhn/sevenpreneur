@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
-import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import styles from "./Report.module.css";
 
 interface MarketSizeReportLMSProps extends AvatarBadgeLMSProps {

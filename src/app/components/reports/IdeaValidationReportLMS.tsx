@@ -12,7 +12,7 @@ import { Minus, TrendingDown, TrendingUp, User } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { setSessionToken, trpc } from "@/trpc/client";
-import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
 import AISegmentItemLMS from "../items/AISegmentItemLMS";
 

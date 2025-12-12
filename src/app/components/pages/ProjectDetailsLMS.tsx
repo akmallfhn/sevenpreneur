@@ -19,7 +19,7 @@ import EditSubmissionFormLMS, {
 } from "../forms/EditSubmissionFormLMS";
 import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
 import Image from "next/image";
-import DisallowedMobile from "../state/DisallowedMobile";
+import DisallowedMobile from "../states/DisallowedMobile";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);

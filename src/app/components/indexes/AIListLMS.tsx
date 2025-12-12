@@ -1,12 +1,12 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import EmptyListLMS from "../state/EmptyListLMS";
+import EmptyListLMS from "../states/EmptyListLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import DisallowedMobile from "../state/DisallowedMobile";
+import DisallowedMobile from "../states/DisallowedMobile";
 
 export interface AIList {
   id: number;

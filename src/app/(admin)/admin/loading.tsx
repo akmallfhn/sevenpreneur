@@ -1,4 +1,4 @@
-import LoadingStateCMS from "@/app/components/state/LoadingStateCMS";
+import LoadingStateCMS from "@/app/components/states/LoadingStateCMS";
 
 export default function Loading() {
   return (

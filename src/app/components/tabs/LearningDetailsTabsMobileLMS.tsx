@@ -19,8 +19,8 @@ import {
   DiscussionStarterList,
   MaterialList,
 } from "../pages/LearningDetailsLMS";
-import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
-import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
+import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
+import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
 
 export interface LearningDetailsTabsMobileLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;

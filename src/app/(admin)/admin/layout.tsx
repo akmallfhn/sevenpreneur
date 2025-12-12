@@ -1,6 +1,6 @@
 import SidebarCMS from "@/app/components/navigations/SidebarCMS";
-import ForbiddenComponent from "@/app/components/state/403Forbidden";
-import DisallowedMobile from "@/app/components/state/DisallowedMobile";
+import ForbiddenComponent from "@/app/components/states/403Forbidden";
+import DisallowedMobile from "@/app/components/states/DisallowedMobile";
 import "@/app/globals.css";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";

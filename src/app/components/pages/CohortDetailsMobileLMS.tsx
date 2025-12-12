@@ -2,7 +2,7 @@
 import Image from "next/image";
 import LearningSessionItemMobileLMS from "../items/LearningSessionItemMobileLMS";
 import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
-import EmptyItemLMS from "../state/EmptyItemLMS";
+import EmptyItemLMS from "../states/EmptyItemLMS";
 import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
 
 interface CohortDetailsMobileLMSProps {

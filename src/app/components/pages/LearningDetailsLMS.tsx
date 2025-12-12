@@ -15,8 +15,8 @@ import FileItemLMS from "../items/FileItemLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
 import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
-import EmptyDiscussionLMS from "../state/EmptyDiscussionLMS";
-import EmptyRecordingLMS from "../state/EmptyRecordingLMS";
+import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
+import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
 import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
 
 export interface MaterialList {

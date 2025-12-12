@@ -4,7 +4,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import { useEffect, useMemo, useState } from "react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
-import LoadingAIGeneratingResult from "../state/LoadingAIGeneratingResultLMS";
+import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import { getRupiahCurrency } from "@/lib/currency";
 import AIPriceItemLMS from "../items/AIPriceItemLMS";
 import { AIPriceType } from "@/lib/app-types";

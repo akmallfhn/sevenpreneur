@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { TRPCProvider } from "@/trpc/client";
-import DisallowedMobile from "@/app/components/state/DisallowedMobile";
+import DisallowedMobile from "@/app/components/states/DisallowedMobile";
 
 export const metadata: Metadata = {
   title: {

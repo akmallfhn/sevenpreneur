@@ -1,7 +1,7 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import EmptyListLMS from "../state/EmptyListLMS";
+import EmptyListLMS from "../states/EmptyListLMS";
 import CohortItemCardLMS from "../items/CohortItemCardLMS";
 
 interface CohortList {

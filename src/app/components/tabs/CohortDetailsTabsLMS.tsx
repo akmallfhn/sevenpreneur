@@ -5,7 +5,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import LearningSessionItemLMS from "../items/LearningSessionItemLMS";
 import ProjectItemLMS from "../items/ProjectItemLMS";
 import UserItemLMS from "../items/UserItemLMS";
-import EmptyItemLMS from "../state/EmptyItemLMS";
+import EmptyItemLMS from "../states/EmptyItemLMS";
 
 export interface LearningSessionEducator {
   full_name: string;

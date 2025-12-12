@@ -1,5 +1,5 @@
 import LearningDetailsCMS from "@/app/components/pages/LearningDetailsCMS";
-import ForbiddenComponent from "@/app/components/state/403Forbidden";
+import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 

@@ -1,5 +1,5 @@
 import TransactionCardItemSVP from "@/app/components/items/TransactionCardItemSVP";
-import EmptyTransactionsSVP from "@/app/components/state/EmptyTransactionsSVP";
+import EmptyTransactionsSVP from "@/app/components/states/EmptyTransactionsSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
