@@ -38,16 +38,16 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     try {
       const userSession = (await trpc.auth.checkSession()).user;
       userData = userSession ?? null;
-    } catch (error) {
+    } catch {
       userData = null;
     }
   }
 
-  let tickerDataRaw;
+  let tickerDataRaw = null;
   try {
     tickerDataRaw = (await trpc.read.ticker({ id: 1 })).ticker;
-  } catch (error) {
-    console.error;
+  } catch {
+    tickerDataRaw = null;
   }
   const tickerData = {
     ...tickerDataRaw,

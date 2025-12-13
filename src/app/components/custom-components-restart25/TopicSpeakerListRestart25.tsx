@@ -1,6 +1,6 @@
 "use client";
-import TopicSpeakerItemRestart25 from "./TopicSpeakerItemRestart25";
 import SectionTitleRestart25 from "./SectionTitleRestart25";
+import TopicSpeakerItemRestart25 from "./TopicSpeakerItemRestart25";
 
 export default function TopicSpeakerListRestart25() {
   const topicsData = [

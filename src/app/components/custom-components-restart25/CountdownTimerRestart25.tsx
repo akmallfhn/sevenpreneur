@@ -43,7 +43,6 @@ export default function CountdownTimerRestart25({
   const { countDownColor, countDownSize, countDownOutline } =
     variantStyles[variant];
 
-  const [hasMounted, setHasMounted] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     days: "00",
     hours: "00",
@@ -52,7 +51,6 @@ export default function CountdownTimerRestart25({
   });
 
   useEffect(() => {
-    setHasMounted(true);
     // Define tanggal di masa depan
     const targetDate = dayjs(targetDateTime);
 
@@ -90,8 +88,6 @@ export default function CountdownTimerRestart25({
 
     return () => clearInterval(interval);
   }, [targetDateTime]);
-
-  if (!hasMounted) return null;
 
   const countdownData = [
     { value: timeLeft.days, dimensions: "days" },

@@ -160,7 +160,7 @@ export default function TicketCarouselRestart25() {
                 ticketBenefit={ticket.benefit}
                 isPremium={ticket.is_premium}
                 isSoldOut={ticket.isSoldOut}
-                viewedTickets={viewedTickets.current}
+                viewedTicketsRef={viewedTickets}
               />
             ))}
           </div>

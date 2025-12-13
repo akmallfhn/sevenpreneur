@@ -1,9 +1,9 @@
 "use client";
-import { useRef, useEffect } from "react";
-import { ArrowDown, Ban, Check, LockOpen, ShieldCheck } from "lucide-react";
+import dayjs from "dayjs";
+import { Ban, Check, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import dayjs from "dayjs";
+import React, { useEffect, useRef } from "react";
 import AppButton from "../buttons/AppButton";
 import CountdownTimerRestart25 from "./CountdownTimerRestart25";
 
@@ -18,7 +18,7 @@ interface TicketItemCardRestart25Props {
   ticketBenefit: string[];
   isPremium: boolean;
   isSoldOut: boolean;
-  viewedTickets: Set<string>;
+  viewedTicketsRef: React.RefObject<Set<string>>;
 }
 
 export default function TicketItemCardRestart25({
@@ -32,7 +32,7 @@ export default function TicketItemCardRestart25({
   ticketBenefit,
   isPremium,
   isSoldOut,
-  viewedTickets,
+  viewedTicketsRef,
 }: TicketItemCardRestart25Props) {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -41,7 +41,13 @@ export default function TicketItemCardRestart25({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !viewedTickets.has(ticketId)) {
+          const viewedTickets = viewedTicketsRef.current;
+
+          if (
+            entry.isIntersecting &&
+            viewedTickets &&
+            !viewedTickets.has(ticketId)
+          ) {
             window.dataLayer?.push({
               event: "view",
               feature_name: `ticket_checkout_${ticketId}_view`,
@@ -58,7 +64,7 @@ export default function TicketItemCardRestart25({
     return () => {
       if (current) observer.unobserve(current);
     };
-  }, [ticketId, index, viewedTickets]);
+  }, [ticketId, index, viewedTicketsRef]);
 
   return (
     <div className="root py-3 pr-3 z-50 lg:pr-0" ref={ref}>

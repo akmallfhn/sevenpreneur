@@ -1,6 +1,6 @@
 "use client";
+import { MessageCircleQuestion } from "lucide-react";
 import Image from "next/image";
-import { HeartHandshake, MessageCircleQuestion } from "lucide-react";
 import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 

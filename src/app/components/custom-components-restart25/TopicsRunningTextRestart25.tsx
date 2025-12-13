@@ -8,7 +8,6 @@ import {
   LandPlot,
   Lightbulb,
   Radar,
-  Toilet,
   Waypoints,
 } from "lucide-react";
 import SectionTitleRestart25 from "./SectionTitleRestart25";
