@@ -1,10 +1,7 @@
 import LearningDetailsLMS from "@/app/components/pages/LearningDetailsLMS";
-import LearningDetailsMobileLMS from "@/app/components/pages/LearningDetailsMobileLMS";
-import { getDevice } from "@/lib/device";
 import { setSessionToken, trpc } from "@/trpc/server";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import React from "react";
 
 interface LearningDetailsPageLMSProps {
   params: Promise<{ cohort_id: string; learning_id: string }>;
@@ -16,10 +13,6 @@ export default async function LearningsDetailsPageLMS({
   const { cohort_id, learning_id } = await params;
   const cohortId = parseInt(cohort_id, 10);
   const learningId = parseInt(learning_id, 10);
-
-  const headersStore = await headers();
-  const userAgent = headersStore.get("user-agent");
-  const device = getDevice(userAgent);
 
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
@@ -36,7 +29,7 @@ export default async function LearningsDetailsPageLMS({
         id: learningId,
       })
     ).learning;
-  } catch (error) {
+  } catch {
     return notFound();
   }
 

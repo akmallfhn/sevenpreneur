@@ -27,7 +27,7 @@ export default async function ProjectDetailsPageLMS({
     projectDetailsRaw = await trpc.read.project({
       id: projectId,
     });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 
@@ -43,9 +43,7 @@ export default async function ProjectDetailsPageLMS({
     submissionUserRaw = (
       await trpc.read.submissionByProject({ project_id: projectId })
     ).submission;
-  } catch (error) {
-    console.error;
-  }
+  } catch {}
   const submissionUser = {
     ...submissionUserRaw,
     created_at: submissionUserRaw?.created_at
