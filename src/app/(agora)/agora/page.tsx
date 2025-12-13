@@ -1,8 +1,6 @@
 import HomeLMS from "@/app/components/pages/HomeLMS";
-import HomeMobileLMS from "@/app/components/pages/HomeMobileLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
-import React from "react";
 
 export default async function DashboardPageLMS() {
   const cookieStore = await cookies();
@@ -27,23 +25,15 @@ export default async function DashboardPageLMS() {
   }));
 
   return (
-    <React.Fragment>
-      <HomeMobileLMS
-        sessionUserName={userData.full_name}
-        sessionUserAvatar={
-          userData.avatar ||
-          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-        }
-        cohortList={enrolledCohortList}
-      />
-      <HomeLMS
-        sessionUserName={userData.full_name}
-        sessionUserAvatar={
-          userData.avatar ||
-          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-        }
-        sessionUserRole={userData.role_id}
-      />
-    </React.Fragment>
+    <HomeLMS
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
+        userData.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+      }
+      sessionUserRole={userData.role_id}
+      cohortList={enrolledCohortList}
+      playlist={enrolledPlaylists}
+    />
   );
 }

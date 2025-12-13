@@ -116,22 +116,20 @@ export default function PlaylistDetailsMobileLMS(
               : props.playlistDescription}
           </p>
         </div>
-        {isOverflowing && (
-          <div className="flex w-full px-5 justify-center transition-all transform z-10">
-            <AppButton
-              variant={"primaryLight"}
-              size="small"
-              onClick={() => setIsExpanded((prev) => !prev)}
-            >
-              <p>{isExpanded ? "Show less" : "Show more"}</p>
-              <ChevronDown
-                className={`size-4 transition-transform duration-300 ${
-                  isExpanded ? "rotate-180" : ""
-                }`}
-              />
-            </AppButton>
-          </div>
-        )}
+        <div className="show-more-less flex w-full px-5 justify-center transition-all transform z-10">
+          <AppButton
+            variant={"primaryLight"}
+            size="small"
+            onClick={() => setIsExpanded((prev) => !prev)}
+          >
+            <p>{isExpanded ? "Show less" : "Show more"}</p>
+            <ChevronDown
+              className={`size-4 transition-transform duration-300 ${
+                isExpanded ? "rotate-180" : ""
+              }`}
+            />
+          </AppButton>
+        </div>
         {!isExpanded && isOverflowing && (
           <div className="overlay absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-40% from-section-background to-100% to-transparent pointer-events-none" />
         )}

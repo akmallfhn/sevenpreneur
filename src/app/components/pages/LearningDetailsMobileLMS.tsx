@@ -161,7 +161,7 @@ export default function LearningDetailsMobileLMS(
               target="_blank"
               rel="noopener noreferrer"
             >
-              <AppButton className="shrink-0" variant="tertiary">
+              <AppButton className="shrink-0" variant="primary">
                 Rate us <Star className="size-6" fill="#FFB21D" stroke="0" />
               </AppButton>
             </a>

@@ -1,14 +1,13 @@
-import "@/app/globals.css";
 import SidebarLMS, {
   AIResultListProps,
 } from "@/app/components/navigations/SidebarLMS";
+import "@/app/globals.css";
+import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
-import { TRPCProvider } from "@/trpc/client";
-import DisallowedMobile from "@/app/components/states/DisallowedMobile";
 
 export const metadata: Metadata = {
   title: {
@@ -69,16 +68,15 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
       (a, b) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
-  } catch (error) {
+  } catch {
     aiResultList = [];
   }
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <div className="root relative w-full min-h-screen bg-section-background">
+      <div className="root relative w-full min-h-dvh bg-section-background">
         <SidebarLMS aiResultList={aiResultList} />
         {children}
-        {/* <DisallowedMobile /> */}
         <Toaster richColors position="top-center" />
       </div>
     </TRPCProvider>

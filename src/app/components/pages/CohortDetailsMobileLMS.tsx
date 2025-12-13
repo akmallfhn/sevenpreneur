@@ -31,9 +31,9 @@ export default function CohortDetailsMobileLMS(
           height={400}
         />
       </div>
-      <div className="cohort-sessions flex flex-col w-full gap-3 bg-white p-5">
+      <div className="cohort-sessions flex flex-col w-full gap-3 p-5">
         <h2 className="section-title font-bodycopy font-bold">Sessions</h2>
-        <div className="tab-content flex flex-col gap-3 w-full min-h-96">
+        <div className="tab-content flex flex-col gap-2 w-full min-h-96">
           {activeLearnings.length > 0 ? (
             <>
               {activeLearnings
