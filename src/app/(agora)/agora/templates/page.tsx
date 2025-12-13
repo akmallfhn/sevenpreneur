@@ -17,7 +17,7 @@ export default async function TemplatesPageLMS() {
   let templateLists: TemplateList[] = [];
   try {
     templateLists = (await trpc.list.templates()).list;
-  } catch (error) {
+  } catch {
     templateLists = [];
   }
 

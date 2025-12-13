@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUp, Paperclip, Square } from "lucide-react";
+import { ArrowUp, Square } from "lucide-react";
 import { FormEvent, KeyboardEvent, TextareaHTMLAttributes } from "react";
 import AppButton from "../buttons/AppButton";
 
@@ -57,10 +57,10 @@ export default function ChatSubmitterLMS({
           suppressHydrationWarning
         />
       </div>
-      <div className="chat-attachments flex items-center justify-between">
-        <AppButton size="largeIconRounded" variant="outline" type="button">
+      <div className="chat-attachments flex items-center justify-end">
+        {/* <AppButton size="largeIconRounded" variant="outline" type="button">
           <Paperclip className="size-5" />
-        </AppButton>
+        </AppButton> */}
         {isLoadingSubmit ? (
           <AppButton className="chat-end-submitting" size="largeIconRounded">
             <Square fill="#FFFFFF" className="size-5" />

@@ -2,7 +2,6 @@ import CohortDetailsLMS from "@/app/components/pages/CohortDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import React from "react";
 
 interface CohortDetailsPageLMSProps {
   params: Promise<{ cohort_id: string }>;
@@ -26,7 +25,7 @@ export default async function CohortDetailsPageLMS({
     enrolledCohortDetails = await trpc.read.enrolledCohort({
       id: cohortId,
     });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 
