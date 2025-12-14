@@ -5,7 +5,7 @@ import {
   CirclePercent,
   LandPlot,
   Lightbulb,
-  MessageSquare,
+  MessagesSquare,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -30,7 +30,7 @@ export default function AIItemCardLMS({
   } else if (aiSlug === "cogs-prices-calculator") {
     aiIcon = <CirclePercent className="size-6 text-primary" />;
   } else if (aiSlug === "chat") {
-    aiIcon = <MessageSquare className="size-6 text-primary" />;
+    aiIcon = <MessagesSquare className="size-6 text-primary" />;
   } else {
     aiIcon = <Atom className="size-6" />;
   }
