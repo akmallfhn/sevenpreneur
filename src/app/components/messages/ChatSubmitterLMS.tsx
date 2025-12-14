@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUp, Square } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { FormEvent, KeyboardEvent, TextareaHTMLAttributes } from "react";
 import AppButton from "../buttons/AppButton";
 
@@ -61,20 +61,20 @@ export default function ChatSubmitterLMS({
         {/* <AppButton size="largeIconRounded" variant="outline" type="button">
           <Paperclip className="size-5" />
         </AppButton> */}
-        {isLoadingSubmit ? (
+        {/* {isLoadingSubmit ? (
           <AppButton className="chat-end-submitting" size="largeIconRounded">
-            <Square fill="#FFFFFF" className="size-5" />
+            <Square fill="#FFFFFF" className="size-4" />
           </AppButton>
-        ) : (
-          <AppButton
-            className="chat-submitter"
-            type="submit"
-            size="largeIconRounded"
-            disabled={!value.trim()}
-          >
-            <ArrowUp className="size-5" />
-          </AppButton>
-        )}
+        ) : ( */}
+        <AppButton
+          className="chat-submitter"
+          type="submit"
+          size="largeIconRounded"
+          disabled={!value.trim() || isLoadingSubmit}
+        >
+          <ArrowUp className="size-5" />
+        </AppButton>
+        {/* )} */}
       </div>
     </div>
   );

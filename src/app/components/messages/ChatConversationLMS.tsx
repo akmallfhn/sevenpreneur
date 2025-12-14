@@ -1,37 +1,45 @@
 "use client";
-import { SendAIChat } from "@/lib/actions";
 import { AIChatRole } from "@/lib/app-types";
-import { Loader2, MessageCircleMore } from "lucide-react";
+import { useStreamAIChat } from "@/lib/parse-stream";
+import { MessageCircleMore } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "sonner";
 import ChatBubbleLMS from "./ChatBubbleLMS";
 import ChatResponseMarkdown from "./ChatResponseMarkdown";
 import ChatSubmitterLMS from "./ChatSubmitterLMS";
 
 interface Chats {
+  id?: string;
   role: AIChatRole;
   message: string;
   created_at: string;
 }
 
 interface ChatConversationLMSProps {
+  authToken: string;
   conversationId: string;
   conversationName: string;
   conversationChats: Chats[];
 }
 
-export default function ChatConversationLMS({
-  conversationId,
-  conversationName,
-  conversationChats,
-}: ChatConversationLMSProps) {
+export default function ChatConversationLMS(props: ChatConversationLMSProps) {
   const router = useRouter();
+  const { sendMessage } = useStreamAIChat();
   const hasSentInitial = useRef(false);
   const [textValue, setTextValue] = useState("");
   const [generatingAI, setGeneratingAI] = useState(false);
-  const [chats, setChats] = useState<Chats[]>(conversationChats);
+  const [chats, setChats] = useState<Chats[]>(props.conversationChats);
   const conversationRef = useRef<HTMLDivElement | null>(null);
+  const [title, setTitle] = useState("");
+  const newConvId = useRef<string | null>(null);
 
   // Auto-scrolls to the bottom whenever new chats arrive.
   useEffect(() => {
@@ -56,89 +64,139 @@ export default function ChatConversationLMS({
     }
   }, []);
 
-  // When there’s an initial message (from the previous page),
-  // it triggers the first AI message generation automatically.
-  useEffect(() => {
-    if (!hasSentInitial.current) {
-      const message = sessionStorage.getItem("initialMessage");
+  function appendToLastAssistant(text: string) {
+    setChats((prev) => {
+      const lastIndex = prev.length - 1;
+      if (prev[lastIndex]?.role !== "ASSISTANT") return prev;
 
-      if (message) {
-        hasSentInitial.current = true;
-        sessionStorage.removeItem("initialMessage");
-        handleSubmitInitialMessage(message);
-      }
-    }
-  });
+      const updated = [...prev];
+      updated[lastIndex] = {
+        ...updated[lastIndex],
+        message: updated[lastIndex].message + text,
+      };
 
-  // Keeps local state in sync if new messages come in from the server or other sources.
-  useEffect(() => {
-    if (conversationChats.length > 0) {
-      setChats(conversationChats);
-    }
-  }, [conversationChats]);
+      return updated;
+    });
+  }
 
   // Handles the first response when a conversation is created
-  const handleSubmitInitialMessage = async (message: string) => {
-    setGeneratingAI(true);
+  const handleInitialSubmit = useCallback(
+    async (message: string) => {
+      setGeneratingAI(true);
 
-    const newUserChat = {
-      role: "USER" as AIChatRole,
-      message,
-      created_at: new Date().toISOString(),
-    };
-    setChats([newUserChat]);
+      const newUserChat: Chats = {
+        role: "USER",
+        message,
+        created_at: new Date().toISOString(),
+      };
 
-    try {
-      const sendChat = await SendAIChat({ conversationId: undefined, message });
+      const newAssistantChat: Chats = {
+        role: "ASSISTANT",
+        message: "",
+        created_at: new Date().toISOString(),
+      };
 
-      if (sendChat.code === "OK") {
-        const newAssistantChat = {
-          role: "ASSISTANT" as AIChatRole,
-          message: sendChat.result,
-          created_at: new Date().toISOString(),
-        };
-        router.replace(`/ai/chat/${sendChat.conv_id}`);
-        setChats((prev) => [...prev, newAssistantChat]);
-      }
-    } catch {
-      toast.error("Failed to send initial message");
-    } finally {
-      setGeneratingAI(false);
-    }
-  };
+      setChats([newUserChat, newAssistantChat]);
+
+      await sendMessage(
+        {
+          model: "gpt-4.1-mini",
+          token: props.authToken,
+          conv_id: undefined,
+          message,
+        },
+        {
+          onEvent(event) {
+            switch (event.event) {
+              case "delta":
+                appendToLastAssistant(event.data);
+                break;
+
+              case "conv_id":
+                newConvId.current = event.data;
+                break;
+
+              case "title":
+                setTitle(event.data);
+                break;
+            }
+          },
+          onCompleted() {
+            setGeneratingAI(false);
+            if (newConvId) {
+              router.replace(`/ai/chat/${newConvId.current}`);
+            }
+          },
+          onError(err) {
+            console.error(err);
+            toast.error("Failed to generate AI response");
+            setGeneratingAI(false);
+          },
+        }
+      );
+    },
+    [sendMessage, props.authToken, router]
+  );
+
+  // When there’s an initial message (from the previous page), it triggers the first AI message generation automatically.
+  useEffect(() => {
+    if (hasSentInitial.current) return;
+
+    const message = sessionStorage.getItem("initialMessage");
+
+    if (!message) return;
+
+    hasSentInitial.current = true;
+    sessionStorage.removeItem("initialMessage");
+    queueMicrotask(() => handleInitialSubmit(message));
+  }, [handleInitialSubmit]);
 
   // Handles user message submissions within the chat.
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!textValue.trim()) return;
+
     setGeneratingAI(true);
 
     const newUserChat: Chats = {
-      role: "USER" as AIChatRole,
+      role: "USER",
       message: textValue,
       created_at: new Date().toISOString(),
     };
-    setChats((prev) => [...prev, newUserChat]);
 
+    const newAssistantChat: Chats = {
+      role: "ASSISTANT",
+      message: "",
+      created_at: new Date().toISOString(),
+    };
+
+    setChats((prev) => [...prev, newUserChat, newAssistantChat]);
     setTextValue("");
 
-    try {
-      const sendChat = await SendAIChat({
-        conversationId: conversationId,
+    await sendMessage(
+      {
+        model: "gpt-4.1-mini",
+        token: props.authToken,
+        conv_id: props.conversationId,
         message: newUserChat.message,
-      });
-      if (sendChat.code === "OK") {
-        const newAssistantChat = {
-          role: "ASSISTANT" as AIChatRole,
-          created_at: new Date().toISOString(),
-          message: sendChat.result,
-        };
-        setChats((prev) => [...prev, newAssistantChat]);
+      },
+      {
+        onEvent(event) {
+          switch (event.event) {
+            case "delta":
+              appendToLastAssistant(event.data);
+          }
+        },
+        onCompleted() {
+          setGeneratingAI(false);
+        },
+        onError(err) {
+          console.error(err);
+          toast.error("Failed to generate AI response");
+          setGeneratingAI(false);
+        },
       }
-    } catch {
-      toast.error("Failed to start conversation");
-    } finally {
-      setGeneratingAI(false);
-    }
+    );
   };
 
   return (
@@ -149,7 +207,7 @@ export default function ChatConversationLMS({
       <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-section-background border-b border-outline text-[#333333] z-10">
         <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold">
           <MessageCircleMore className="size-5" />
-          {conversationName}
+          {props.conversationName ? props.conversationName : title}
         </div>
       </div>
       <div className="conversation-page relative flex flex-col w-full max-w-[768px] mx-auto">
@@ -170,14 +228,13 @@ export default function ChatConversationLMS({
                 {post.role === "USER" ? (
                   <ChatBubbleLMS chatMessage={post.message} />
                 ) : (
-                  <ChatResponseMarkdown chatMessage={post.message} />
+                  <ChatResponseMarkdown
+                    chatMessage={post.message}
+                    isGeneratingMessage={generatingAI}
+                  />
                 )}
               </div>
             ))}
-
-          {generatingAI && (
-            <Loader2 className="animate-spin text-alternative" />
-          )}
         </div>
         <form
           className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-section-background items-center justify-center gap-6 rounded-t-xl z-10"

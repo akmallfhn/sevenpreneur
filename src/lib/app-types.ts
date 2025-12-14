@@ -64,3 +64,11 @@ export type BusinessYearlyRevenue =
   | "ABOVE_25B";
 export type NumberConfig = "numeric" | "decimal";
 export type AIPriceType = "value" | "cost" | "competition";
+export type AIChatEventType =
+  | "conv_id"
+  | "title"
+  | "created"
+  | "delta"
+  | "completed"
+  | "failed"
+  | "error";

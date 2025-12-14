@@ -1,18 +1,17 @@
 "use client";
 import { markdownToHtml } from "@/lib/markdown-to-html";
 import { useClipboard } from "@/lib/use-clipboard";
-import { Check, CopyIcon } from "lucide-react";
+import { Check, CopyIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import styles from "./Markdown.module.css";
 
 interface ChatResponseMarkdownProps {
   chatMessage: string;
+  isGeneratingMessage: boolean;
 }
 
-export default function ChatResponseMarkdown({
-  chatMessage,
-}: ChatResponseMarkdownProps) {
+export default function ChatResponseMarkdown(props: ChatResponseMarkdownProps) {
   const { copied, copy } = useClipboard();
 
   return (
@@ -32,20 +31,24 @@ export default function ChatResponseMarkdown({
         <div
           className={`${styles.markdown} w-full`}
           dangerouslySetInnerHTML={{
-            __html: markdownToHtml(chatMessage),
+            __html: markdownToHtml(props.chatMessage),
           }}
         />
-        <AppButton
-          variant="ghost"
-          size="icon"
-          onClick={() => copy(chatMessage)}
-        >
-          {copied ? (
-            <Check className="text-green-400 size-5" />
-          ) : (
-            <CopyIcon className="text-alternative size-5" />
-          )}
-        </AppButton>
+        {props.isGeneratingMessage ? (
+          <Loader2 className="animate-spin text-alternative size-6" />
+        ) : (
+          <AppButton
+            variant="ghost"
+            size="icon"
+            onClick={() => copy(props.chatMessage)}
+          >
+            {copied ? (
+              <Check className="text-green-400 size-5" />
+            ) : (
+              <CopyIcon className="text-alternative size-5" />
+            )}
+          </AppButton>
+        )}
       </div>
     </div>
   );
