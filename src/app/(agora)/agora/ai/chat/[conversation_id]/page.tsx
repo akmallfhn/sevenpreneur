@@ -17,11 +17,14 @@ export default async function AIChatConversationLMS({
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  const authToken = (await trpc.auth.createJWT()).token;
+
   if (conversation_id === "temp") {
     return (
       <ChatConversationLMS
+        authToken={authToken}
         conversationId={conversation_id}
-        conversationName="Agora AI"
+        conversationName=""
         conversationChats={[]}
       />
     );
@@ -32,7 +35,7 @@ export default async function AIChatConversationLMS({
     chatRaw = await trpc.list.aiChats({
       conv_id: conversation_id,
     });
-  } catch (error) {
+  } catch {
     return notFound();
   }
 
@@ -43,6 +46,7 @@ export default async function AIChatConversationLMS({
 
   return (
     <ChatConversationLMS
+      authToken={authToken}
       conversationId={conversation_id}
       conversationName={chatRaw.conversation_name}
       conversationChats={chatList}

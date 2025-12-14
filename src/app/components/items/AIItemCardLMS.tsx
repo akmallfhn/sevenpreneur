@@ -1,5 +1,12 @@
 "use client";
-import { Atom, Boxes, CirclePercent, LandPlot, Lightbulb } from "lucide-react";
+import {
+  Atom,
+  Boxes,
+  CirclePercent,
+  LandPlot,
+  Lightbulb,
+  MessageSquare,
+} from "lucide-react";
 import Link from "next/link";
 
 interface AIItemCardLMS {
@@ -22,6 +29,8 @@ export default function AIItemCardLMS({
     aiIcon = <LandPlot className="size-6 text-primary" />;
   } else if (aiSlug === "cogs-prices-calculator") {
     aiIcon = <CirclePercent className="size-6 text-primary" />;
+  } else if (aiSlug === "chat") {
+    aiIcon = <MessageSquare className="size-6 text-primary" />;
   } else {
     aiIcon = <Atom className="size-6" />;
   }

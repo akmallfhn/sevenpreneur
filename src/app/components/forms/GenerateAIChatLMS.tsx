@@ -20,9 +20,10 @@ export default function GenerateAIChatLMS({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const message = textValue;
+    if (!textValue.trim()) return;
+
+    sessionStorage.setItem("initialMessage", textValue);
     setTextValue("");
-    sessionStorage.setItem("initialMessage", message);
     setGeneratingAI(true);
 
     router.push("/ai/chat/temp");
@@ -42,12 +43,9 @@ export default function GenerateAIChatLMS({
             />
           </div>
           <h2 className="ai-name font-bodycopy font-semibold text-2xl">
-            Agora AI
+            Sevenpreneur Virtual Coach
           </h2>
-          <p className="ai-author text-[#6e6e6e] text-[15px] font-[450]">
-            by Sevenpreneur
-          </p>
-          <p className="ai-description text-[#6e6e6e] text-[15px] font-[450]">
+          <p className="ai-description text-[#111111]/70 text-[15px] font-[450]">
             Business mentor using Sevenpreneur Framework, built to solve
             real-world entrepreneurship gaps
           </p>

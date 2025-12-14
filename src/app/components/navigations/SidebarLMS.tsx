@@ -1,19 +1,22 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { DeleteSession } from "@/lib/actions";
 import {
   BotMessageSquare,
   BowArrow,
+  CircleFadingPlus,
   CirclePlay,
   LayoutDashboard,
   Loader2,
   LogOut,
   Presentation,
 } from "lucide-react";
-import SidebarMenuItemLMS from "./SidebarMenuItemLMS";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import AppButton from "../buttons/AppButton";
 import SidebarAIResultItemLMS from "./SidebarAIResultItemLMS";
+import SidebarMenuItemLMS from "./SidebarMenuItemLMS";
 
 export interface AIResultListProps {
   id: string;
@@ -136,13 +139,18 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
             />
           </div>
         </div>
-        <div className="sidebar-scroll-body w-full h-full mt-[308px] mb-[68px] px-3 overflow-y-auto">
+        <div className="sidebar-scroll-body flex flex-col w-full h-full gap-4 mt-[308px] mb-[68px] px-3 overflow-y-auto">
+          <hr />
+          <Link href="/ai/chat" className="w-full">
+            <AppButton className="w-full" size="medium" variant="primaryLight">
+              New Chat <CircleFadingPlus className="size-4.5" />
+            </AppButton>
+          </Link>
           {aiResultList.length > 0 && (
             <div className="sidebar-lms-ai-result flex flex-col w-full gap-4">
-              <hr />
               <div className="flex flex-col gap-1">
                 <h2 className="m-2 mt-0 text-sm text-alternative font-bodycopy font-medium">
-                  GENERATED RESULT
+                  Generated Result
                 </h2>
                 <div className="sidebar-ai-result flex flex-col h-full gap-2">
                   {aiResultList.map((post) => (
