@@ -6,9 +6,9 @@ import { setSessionToken, trpc } from "@/trpc/client";
 import {
   BanknoteArrowDown,
   CircleUserIcon,
-  DoorOpen,
   HouseIcon,
   Loader2,
+  LogOut,
   Presentation,
   Tags,
   Waypoints,
@@ -20,39 +20,55 @@ import SidebarMenuGroupCMS from "./SidebarMenuGroupCMS";
 
 interface SidebarCMSProps {
   sessionToken: string;
-  userSessionRole: number;
+  sessionUserRole: number;
 }
 
-export default function SidebarCMS({
-  sessionToken,
-  userSessionRole,
-}: SidebarCMSProps) {
-  // Defining React Hook
+export default function SidebarCMS(props: SidebarCMSProps) {
   const router = useRouter();
   const [isLoadingButton, setIsLoadingButton] = useState(false);
-  const isAdministrator = userSessionRole === 0;
 
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
   }
 
+  const allowedRolesMenuCohorts = [0, 1, 2];
+  const allowedRolesMenuUsers = [0, 1, 2];
+  const allowedRolesMenuTransactions = [0];
+  const allowedRolesMenuMarketing = [0];
+  const allowedRolesMenuDiscounts = [0];
+
+  const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
+    props.sessionUserRole
+  );
+  const isAllowedMenuUsers = allowedRolesMenuUsers.includes(
+    props.sessionUserRole
+  );
+  const isAllowedMenuTransactions = allowedRolesMenuTransactions.includes(
+    props.sessionUserRole
+  );
+  const isAllowedMenuMarketing = allowedRolesMenuMarketing.includes(
+    props.sessionUserRole
+  );
+  const isAllowedMenuDiscounts = allowedRolesMenuDiscounts.includes(
+    props.sessionUserRole
+  );
+
   useEffect(() => {
-    if (sessionToken) {
-      setSessionToken(sessionToken);
+    if (props.sessionToken) {
+      setSessionToken(props.sessionToken);
     }
-  }, [sessionToken]);
+  }, [props.sessionToken]);
 
   const { data, isLoading, isError } = trpc.auth.checkSession.useQuery(
     undefined,
-    { enabled: !!sessionToken }
+    { enabled: !!props.sessionToken }
   );
 
   // Logout function
   const handleLogout = async () => {
     setIsLoadingButton(true);
     const result = await DeleteSession();
-    // Redirect to login page
     if (result.code === "NO_CONTENT") {
       router.push(`https://www.${domain}/auth/login`);
     } else {
@@ -64,22 +80,21 @@ export default function SidebarCMS({
   return (
     <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">
       <div className="sidebar-cms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
-        <div className="brand-logo-platform flex w-full items-center gap-4">
-          <div className="logo size-14 aspect-square rounded-md overflow-hidden">
+        <div className="sidebar-logo flex items-center gap-4 pl-1">
+          <div className="sidebar-logo flex size-11 rounded-sm outline-4 outline-black/20 shrink-0 overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src={
-                "https://static.wixstatic.com/media/02a5b1_37f72798de574a0eac1c827c176225a0~mv2.webp"
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square-black.svg"
               }
               alt="logo-sevenpreneur"
-              width={200}
-              height={200}
+              width={400}
+              height={400}
             />
           </div>
-          <div className="platform max-w-[132px] text-black">
-            <p className="font-brand font-bold">Sevenpreneur</p>
-            <p className="font-brand text-xs">Content Management System</p>
-          </div>
+          <p className="font-bodycopy font-medium text-sm leading-tight">
+            Sevenpreneur Content Management System
+          </p>
         </div>
 
         {isLoading && (
@@ -103,7 +118,6 @@ export default function SidebarCMS({
             }
           />
         )}
-
         <div className="sidebar-menu flex flex-col h-full gap-1">
           <SidebarMenuItemCMS
             menuTitle="Dashboard"
@@ -111,48 +125,54 @@ export default function SidebarCMS({
             icon={<HouseIcon />}
             exact
           />
-          <SidebarMenuGroupCMS title="Product">
-            <SidebarMenuItemCMS
-              menuTitle="Cohorts"
-              url="/cohorts"
-              icon={<Presentation />}
-            />
-          </SidebarMenuGroupCMS>
-
-          {isAdministrator && (
-            <SidebarMenuGroupCMS title="Administration">
+          {isAllowedMenuCohorts && (
+            <SidebarMenuGroupCMS title="Product">
               <SidebarMenuItemCMS
-                menuTitle="Users"
-                url="/users"
-                icon={<CircleUserIcon />}
-              />
-              <SidebarMenuItemCMS
-                menuTitle="Transactions"
-                url="/transactions"
-                icon={<BanknoteArrowDown />}
+                menuTitle="Cohorts"
+                url="/cohorts"
+                icon={<Presentation />}
               />
             </SidebarMenuGroupCMS>
           )}
-          {isAdministrator && (
+          {(isAllowedMenuUsers || isAllowedMenuTransactions) && (
+            <SidebarMenuGroupCMS title="Administration">
+              {isAllowedMenuUsers && (
+                <SidebarMenuItemCMS
+                  menuTitle="Users"
+                  url="/users"
+                  icon={<CircleUserIcon />}
+                />
+              )}
+              {isAllowedMenuTransactions && (
+                <SidebarMenuItemCMS
+                  menuTitle="Transactions"
+                  url="/transactions"
+                  icon={<BanknoteArrowDown />}
+                />
+              )}
+            </SidebarMenuGroupCMS>
+          )}
+          {(isAllowedMenuMarketing || isAllowedMenuDiscounts) && (
             <SidebarMenuGroupCMS title="Promo">
-              <SidebarMenuItemCMS
-                menuTitle="Web Marketing"
-                url="/marketing"
-                icon={<Waypoints />}
-              />
-              <SidebarMenuItemCMS
-                menuTitle="Discounts"
-                url="/discounts"
-                icon={<Tags />}
-              />
+              {isAllowedMenuMarketing && (
+                <SidebarMenuItemCMS
+                  menuTitle="Web Marketing"
+                  url="/marketing"
+                  icon={<Waypoints />}
+                />
+              )}
+              {isAllowedMenuDiscounts && (
+                <SidebarMenuItemCMS
+                  menuTitle="Discounts"
+                  url="/discounts"
+                  icon={<Tags />}
+                />
+              )}
             </SidebarMenuGroupCMS>
           )}
         </div>
       </div>
-
-      {/* BOTTOM AREA */}
       <div className="sidebar-cms-bottom flex flex-col max-w-[224px] mx-auto w-full">
-        {/* Logout Button */}
         <div
           className={`logout-button flex w-full items-center p-2 gap-4 text-[#E62314] text-sm font-brand font-medium overflow-hidden rounded-md transition transform hover:cursor-pointer hover:bg-[#FFCDC9] active:bg-[#FFB9B4] active:scale-95 ${
             isLoadingButton ? "opacity-50 cursor-not-allowed" : ""
@@ -163,7 +183,7 @@ export default function SidebarCMS({
             {isLoadingButton ? (
               <Loader2 className="animate-spin" />
             ) : (
-              <DoorOpen />
+              <LogOut />
             )}
           </div>
           Logout

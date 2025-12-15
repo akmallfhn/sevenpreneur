@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import { DiscussionReplyList } from "./AppDiscussionStarterItem";
-import AppDiscussionTextArea from "./AppDiscussionTextArea";
+import AppDiscussionReplySubmitter from "./AppDiscussionReplySubmitter";
 
 dayjs.extend(relativeTime);
 
@@ -153,7 +153,7 @@ export default function AppDiscussionReplyItem(
               writeReply ? "opacity-100 mt-2" : "max-h-0 opacity-0"
             }`}
           >
-            <AppDiscussionTextArea
+            <AppDiscussionReplySubmitter
               sessionUserName={props.sessionUserName}
               sessionUserAvatar={props.sessionUserAvatar}
               textAreaId="reply"

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
+import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
 import LearningDetailsTabsMobileLMS from "../tabs/LearningDetailsTabsMobileLMS";
 import { DiscussionStarterList, MaterialList } from "./LearningDetailsLMS";
@@ -171,7 +171,7 @@ export default function LearningDetailsMobileLMS(
       {/* Create Discussion */}
       {currentTab === "discussions" && (
         <div className="discussions fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t border-outline transition-all z-[90]">
-          <AppDiscussionTextArea
+          <AppDiscussionStarterSubmitter
             sessionUserName={props.sessionUserName}
             sessionUserAvatar={props.sessionUserAvatar}
             textAreaId="reply"

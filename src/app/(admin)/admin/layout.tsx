@@ -54,7 +54,7 @@ export default async function AdminLayout(
       <div>
         <SidebarCMS
           sessionToken={sessionToken}
-          userSessionRole={checkUser.role_id}
+          sessionUserRole={checkUser.role_id}
         />
         {props.children}
         <DisallowedMobile />

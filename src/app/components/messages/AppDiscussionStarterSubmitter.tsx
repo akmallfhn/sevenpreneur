@@ -6,7 +6,7 @@ import Image from "next/image";
 import React, { TextareaHTMLAttributes, useState } from "react";
 import AppButton from "../buttons/AppButton";
 
-interface AppDiscussionTextAreaProps
+interface AppDiscussionStarterSubmitterProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   sessionUserName: string;
   sessionUserAvatar: string;
@@ -20,7 +20,7 @@ interface AppDiscussionTextAreaProps
   isLoadingSubmit: boolean;
 }
 
-export default function AppDiscussionTextArea({
+export default function AppDiscussionStarterSubmitter({
   sessionUserName,
   sessionUserAvatar,
   textAreaId,
@@ -33,7 +33,7 @@ export default function AppDiscussionTextArea({
   disabled,
   isLoadingSubmit,
   ...rest
-}: AppDiscussionTextAreaProps) {
+}: AppDiscussionStarterSubmitterProps) {
   const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
   const [isScrollable, setIsScrollable] = useState(false);
@@ -79,7 +79,7 @@ export default function AppDiscussionTextArea({
   const computedError = errorMessage || internalError;
 
   return (
-    <div className="text-area-box flex flex-col w-full gap-3 lg:flex-row">
+    <div className="text-area-box flex w-full gap-3">
       <div className="flex w-full gap-3">
         <div className="session-user-avatar size-8 aspect-square shrink-0 rounded-full overflow-hidden">
           <Image
@@ -110,24 +110,7 @@ export default function AppDiscussionTextArea({
           )}
         </div>
       </div>
-      <div className="submit-discussion-mobile flex w-full justify-end shrink-0 lg:hidden">
-        <AppButton
-          className="w-fit"
-          size="medium"
-          disabled={!textValue || isLoadingSubmit}
-          onClick={onSubmit}
-        >
-          {isLoadingSubmit ? (
-            <>
-              <Loader2 className="size-5 animate-spin" />
-              Sending..
-            </>
-          ) : (
-            "Submit"
-          )}
-        </AppButton>
-      </div>
-      <div className="submit-discussion-desktop hidden w-fit shrink-0 lg:flex">
+      <div className="submit-discussion-desktop flex w-fit shrink-0 ">
         <AppButton
           size="largeIconRounded"
           disabled={!textValue || isLoadingSubmit}

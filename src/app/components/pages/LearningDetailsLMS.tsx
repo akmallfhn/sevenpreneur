@@ -13,7 +13,7 @@ import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
 import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
-import AppDiscussionTextArea from "../messages/AppDiscussionTextArea";
+import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
 import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
 import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
@@ -236,7 +236,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                 Discussions
               </h3>
               <div className="discussions-box flex flex-col gap-6">
-                <AppDiscussionTextArea
+                <AppDiscussionStarterSubmitter
                   sessionUserName={props.sessionUserName}
                   sessionUserAvatar={props.sessionUserAvatar}
                   textAreaId="discussion"
