@@ -25,14 +25,17 @@ async function QStashResultHandler(req: Request) {
       assistantText += content.text;
     }
   }
-  const content = JSON.parse(assistantText) as { title: string; response: any };
+  const content = JSON.parse(assistantText) as {
+    title: string;
+    response: object;
+  };
 
   return { messageId, content };
 }
 
 type SaveResultFromQStash = (
   result: Awaited<ReturnType<typeof QStashResultHandler>>
-) => Promise<any>;
+) => Promise<unknown>;
 
 export default function QStashHandlerVerified(
   saveResultFn: SaveResultFromQStash
