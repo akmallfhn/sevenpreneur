@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
             cohort_price_id: theCohortPrice.id,
           },
         });
-      } catch (e) {
+      } catch {
         // The row might already exists.
       }
     } else if (theTransaction.category === CategoryEnum.EVENT) {
@@ -236,7 +236,7 @@ export async function POST(req: NextRequest) {
             event_id: theEventPrice.event_id,
           },
         });
-      } catch (e) {
+      } catch {
         // The row might already exists.
       }
     } else if (theTransaction.category === CategoryEnum.PLAYLIST) {
@@ -282,7 +282,7 @@ export async function POST(req: NextRequest) {
             playlist_id: thePlaylist.id,
           },
         });
-      } catch (e) {
+      } catch {
         // The row might already exists.
       }
     }
