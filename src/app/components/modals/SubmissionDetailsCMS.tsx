@@ -237,7 +237,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
             textAreaName="Mentor Feedback"
             textAreaHeight="h-40"
             textAreaPlaceholder="Write feedback for user assignment"
-            characterLength={4000}
+            characterLength={8000}
             value={commentDraft ?? ""}
             onTextAreaChange={handleCommentChange}
           />
