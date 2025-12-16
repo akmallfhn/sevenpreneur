@@ -3,7 +3,7 @@ import { getSubmissionTiming } from "@/lib/date-time-manipulation";
 import { trpc } from "@/trpc/client";
 import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
 import dayjs from "dayjs";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -12,6 +12,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import SheetLineItemCMS from "../items/SheetLineItemCMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "./AppSheet";
+import { AIResultSubmissionAnalysis } from "@/trpc/routers/ai_tool/prompt.ai_tool";
 
 interface SubmissionDetailsCMSProps {
   sessionToken: string;
@@ -73,19 +74,19 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
         code: string;
         message: string;
         result: {
-          comment: string | null;
+          result: AIResultSubmissionAnalysis | null;
           is_done: boolean;
-          expired_at: string;
+          expired_at: Date | null;
         };
       };
     };
-  const isDoneResult = submissionAnalysisData?.result?.is_done ?? false;
+  const isDoneResult = submissionAnalysisData?.result.is_done;
 
   // Update State New Comment
   useEffect(() => {
     if (!isDoneResult) return;
 
-    const aiComment = submissionAnalysisData?.result?.comment;
+    const aiComment = submissionAnalysisData?.result.result?.comment;
     if (!aiComment) return;
 
     setIntervalMs(false);
@@ -96,7 +97,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
     );
 
     toast.success("AI feedback generated.");
-  }, [isDoneResult, submissionAnalysisData?.result?.comment]);
+  }, [isDoneResult, submissionAnalysisData?.result?.result?.comment]);
 
   // Add event listener to prevent page refresh
   useEffect(() => {
@@ -249,6 +250,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
             >
               {generatingAI && <Loader2 className="animate-spin size-5" />}
               Get Feedback from AI
+              <Sparkles className="size-4" fill="#0165fc" stroke={"0"} />
             </AppButton>
           </div>
         </div>

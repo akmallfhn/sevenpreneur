@@ -805,6 +805,7 @@ export const aiToolPrompts = {
         "3. Analisis HARUS selalu merujuk langsung pada soal/perintah yang diberikan.\n" +
         "4. Jelaskan apakah hasil sudah sesuai, kurang sesuai, atau perlu perbaikan, beserta alasannya.\n" +
         "5. Jika ada kekurangan, sampaikan dengan nada membangun, seperti seorang coach yang membantu peserta berkembang.\n\n" +
+        "6. Jangan menggunakan tanda strip panjang / em dash (—) dalam kalimat apa pun. Gunakan tanda baca standar seperti titik atau koma.\n\n" +
         "Output WAJIB dalam format JSON berikut:\n" +
         AIFormatOutputText({
           comment: "<komentar mengenai hasil tugas yang dikumpulkan>",
