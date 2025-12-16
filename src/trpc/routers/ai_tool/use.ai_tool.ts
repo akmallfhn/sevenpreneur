@@ -3,9 +3,13 @@ import {
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_OK,
 } from "@/lib/status_code";
-import { loggedInProcedure } from "@/trpc/init";
+import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
 import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
-import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  stringIsNanoid,
+  stringNotBlank,
+} from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import {
@@ -16,6 +20,7 @@ import {
 import { aiToolPrompts } from "./prompt.ai_tool";
 import {
   AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE,
+  AI_TOOL_EPHEMERAL_ID_SUBMISSION_ANALYSIS,
   AI_TOOL_ID_COMPETITOR_GRADER,
   AI_TOOL_ID_IDEA_VAL,
   AI_TOOL_ID_MARKET_SIZE,
@@ -266,6 +271,71 @@ export const useAITool = {
         opts.ctx.prisma,
         opts.ctx.user.id,
         AI_TOOL_ID_PRICING_STRATEGY
+      );
+
+      return {
+        code: STATUS_CREATED,
+        message: "Queued",
+        result_id: resultId,
+      };
+    }),
+
+  submissionAnalysis: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(
+      z.object({
+        model: z.enum(AIModelName),
+        submission_id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      if (opts.ctx.user.role.name === "General User") {
+        await isEnrolledAITool(
+          opts.ctx.prisma,
+          opts.ctx.user.id,
+          "You're not allowed to use AI tools."
+        );
+      }
+
+      const theSubmission = await opts.ctx.prisma.submission.findFirst({
+        select: {
+          document_url: true,
+          project: {
+            select: {
+              name: true,
+              description: true,
+            },
+          },
+        },
+        where: {
+          id: opts.input.submission_id,
+        },
+      });
+      if (!theSubmission) {
+        throw readFailedNotFound("submission");
+      }
+
+      if (!theSubmission.document_url) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Document URL is empty.",
+        });
+      }
+
+      const projectDetail =
+        theSubmission.project.name + "\n" + theSubmission.project.description;
+
+      const resultId = await AIGenerate(
+        opts.input.model,
+        aiToolPrompts.submissionAnalysis(projectDetail),
+        [theSubmission.document_url],
+        {}, // should be empty (not supported)
+        opts.ctx.prisma,
+        opts.ctx.user.id,
+        AI_TOOL_EPHEMERAL_ID_SUBMISSION_ANALYSIS
       );
 
       return {

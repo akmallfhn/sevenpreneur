@@ -55,6 +55,7 @@ export const readRouter = createTRPCRouter({
     competitorGrading: readAIResult.competitorGrading,
     COGSStructure: readAIResult.COGSStructure,
     pricingStrategy: readAIResult.pricingStrategy,
+    submissionAnalysis: readAIResult.submissionAnalysis,
   },
 
   // Transaction-related //

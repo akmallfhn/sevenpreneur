@@ -50,6 +50,7 @@ export const AI_TOOL_ID_PRICING_STRATEGY = 4;
 
 // AI tools with ephemeral result
 export const AI_TOOL_EPHEMERAL_ID_COGS_STRUCTURE = -1;
+export const AI_TOOL_EPHEMERAL_ID_SUBMISSION_ANALYSIS = -2;
 
 export type AIChatRole = "user" | "assistant";
 

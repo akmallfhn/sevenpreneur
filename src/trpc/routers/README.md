@@ -377,24 +377,26 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## AI Tools and AI Conversations ✨
 
-| Procedure Name              | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :-------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `check.aiTools`             |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiTools`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiResults`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.ideaValidation`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.marketSize`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.competitorGrading` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.COGSStructure`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.pricingStrategy`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.ideaValidation`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.marketSize`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.competitorGrading`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.COGSStructure`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.pricingStrategy`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiConversations`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiChats`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.sendChat`           |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name               | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
+| :--------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
+| `check.aiTools`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiTools`               |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiResults`             |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.ideaValidation`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.marketSize`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.competitorGrading`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.COGSStructure`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.pricingStrategy`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.ai.submissionAnalysis` |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
+| `use.ai.ideaValidation`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.marketSize`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.competitorGrading`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.COGSStructure`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.pricingStrategy`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.submissionAnalysis`  |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
+| `list.aiConversations`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `list.aiChats`               |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `use.ai.sendChat`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 **Scopes:**
 
