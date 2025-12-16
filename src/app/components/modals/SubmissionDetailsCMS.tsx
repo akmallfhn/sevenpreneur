@@ -60,7 +60,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
     setCommentDraft(submissionDetails.comment ?? "");
   }, [submissionDetails]);
 
-  // Refetch Generating AI
+  // Refetch Result AI
   const { data: submissionAnalysisData } =
     trpc.read.ai.submissionAnalysis.useQuery(
       { id: submissionAnalysisId },
@@ -128,9 +128,6 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
         },
         {
           onSuccess: (data) => {
-            toast.success(
-              `Generating Feedback for ${submissionDetails?.submitter.full_name}...`
-            );
             setSubmissionAnalysisId(data.result_id);
           },
           onError: (err) => {
@@ -254,6 +251,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               Get Feedback from AI
             </AppButton>
           </div>
+          {submissionAnalysisId && <p>{submissionAnalysisId}</p>}
         </div>
       )}
       {isAllowedUpdateSubmission && (
