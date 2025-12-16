@@ -141,66 +141,74 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                 </tr>
               </thead>
               <tbody>
-                {submissionListAttributes?.map((post, index) => (
-                  <tr
-                    className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                    key={index}
-                  >
-                    <TableCellCMS>{index + 1}</TableCellCMS>
-                    <TableCellCMS>
-                      <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
-                        <div className="flex size-7 rounded-full overflow-hidden">
-                          <Image
-                            className="object-cover w-full h-full"
-                            src={
-                              post.avatar ||
-                              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                            }
-                            alt={`Image ${post.full_name}`}
-                            width={300}
-                            height={300}
-                          />
-                        </div>
-                        <div className="user-name-email flex flex-col">
-                          <h2 className="user-name font-semibold font-bodycopy text-black line-clamp-1">
-                            {post.full_name}
-                          </h2>
-                        </div>
-                      </div>
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      {dayjs(post.created_at).format("D MMM YYYY [at] HH:mm")}
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      <p className={post.isEarly ? "" : "text-destructive"}>
-                        {post.shortMessage}
-                      </p>
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      {!post.comment ? (
-                        <p className="label-container inline-flex py-[2px] px-[10px] w-fit rounded-full text-xs font-semibold font-bodycopy bg-danger-background text-danger-foreground">
-                          NOT REVIEWED
-                        </p>
-                      ) : (
-                        <p className="label-container inline-flex py-[2px] px-[10px] w-fit rounded-full text-xs font-semibold font-bodycopy bg-success-background text-success-foreground">
-                          REVIEWED
-                        </p>
-                      )}
-                    </TableCellCMS>
-                    {isAllowedDetailsSubmission && (
+                {submissionListAttributes
+                  ?.sort(
+                    (a, b) =>
+                      dayjs(a.created_at).valueOf() -
+                      dayjs(b.created_at).valueOf()
+                  )
+                  .map((post, index) => (
+                    <tr
+                      className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                      key={index}
+                    >
+                      <TableCellCMS>{index + 1}</TableCellCMS>
                       <TableCellCMS>
-                        <AppButton
-                          variant="outline"
-                          size="small"
-                          onClick={() => viewSubmissionDetails(String(post.id))}
-                        >
-                          <Eye className="size-4" />
-                          Preview
-                        </AppButton>
+                        <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
+                          <div className="flex size-7 rounded-full overflow-hidden">
+                            <Image
+                              className="object-cover w-full h-full"
+                              src={
+                                post.avatar ||
+                                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                              }
+                              alt={`Image ${post.full_name}`}
+                              width={300}
+                              height={300}
+                            />
+                          </div>
+                          <div className="user-name-email flex flex-col">
+                            <h2 className="user-name font-semibold font-bodycopy text-black line-clamp-1">
+                              {post.full_name}
+                            </h2>
+                          </div>
+                        </div>
                       </TableCellCMS>
-                    )}
-                  </tr>
-                ))}
+                      <TableCellCMS>
+                        {dayjs(post.created_at).format("D MMM YYYY [at] HH:mm")}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <p className={post.isEarly ? "" : "text-destructive"}>
+                          {post.shortMessage}
+                        </p>
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {!post.comment ? (
+                          <p className="label-container inline-flex py-[2px] px-[10px] w-fit rounded-full text-xs font-semibold font-bodycopy bg-danger-background text-danger-foreground">
+                            NOT REVIEWED
+                          </p>
+                        ) : (
+                          <p className="label-container inline-flex py-[2px] px-[10px] w-fit rounded-full text-xs font-semibold font-bodycopy bg-success-background text-success-foreground">
+                            REVIEWED
+                          </p>
+                        )}
+                      </TableCellCMS>
+                      {isAllowedDetailsSubmission && (
+                        <TableCellCMS>
+                          <AppButton
+                            variant="outline"
+                            size="small"
+                            onClick={() =>
+                              viewSubmissionDetails(String(post.id))
+                            }
+                          >
+                            <Eye className="size-4" />
+                            Preview
+                          </AppButton>
+                        </TableCellCMS>
+                      )}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
