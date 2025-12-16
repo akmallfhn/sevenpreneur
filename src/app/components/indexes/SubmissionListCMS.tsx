@@ -15,6 +15,7 @@ import SubmissionDetailsCMS from "../modals/SubmissionDetailsCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
+import ScorecardItemCMS from "../items/ScorecardItemCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -117,18 +118,40 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
               />
             </div>
           </div>
-          <div className="project-deadline flex flex-col w-full gap-1">
-            <h3 className="font-bold font-bodycopy">Project Deadline</h3>
-            <p className="font-bodycopy font-semibold text-[15px] text-[#333333]/75 whitespace-pre-line">
-              {dayjs(projectDetailsData?.deadline_at).format(
-                "dddd, D MMM YYYY HH:mm"
+          <div className="progress-review grid grid-cols-5 w-full gap-3">
+            <ScorecardItemCMS
+              scorecardName="Total Submissions"
+              scorecardValue={submissionListAttributes?.length || 0}
+              scorecardBackground="bg-primary"
+            />
+            <ScorecardItemCMS
+              scorecardName="Reviewed"
+              scorecardValue={
+                submissionListAttributes?.filter((item) => !!item.comment)
+                  .length || 0
+              }
+              scorecardBackground="bg-success-foreground"
+            />
+            <ScorecardItemCMS
+              scorecardName="Not Reviewed"
+              scorecardValue={
+                submissionListAttributes?.filter((item) => !item.comment)
+                  .length || 0
+              }
+              scorecardBackground="bg-secondary"
+            />
+            <ScorecardItemCMS
+              scorecardName="Deadline"
+              scorecardValue={dayjs(projectDetailsData?.deadline_at).format(
+                "D/MM/YYYY [-] HH:mm"
               )}
-            </p>
+              scorecardBackground="bg-warning-foreground"
+            />
           </div>
           <div className="submission-list flex flex-col gap-2">
             <h3 className="font-bold font-bodycopy">Users Submission</h3>
             <table className="table-submission relative w-full rounded-sm">
-              <thead className="bg-[#FAFAFA] text-alternative/70">
+              <thead className="bg-[#FAFAFA] text-[#111111]/70">
                 <tr>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
