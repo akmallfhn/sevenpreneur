@@ -797,12 +797,21 @@ export const aiToolPrompts = {
   submissionAnalysis: (project_detail: string) => {
     return {
       instructions:
-        "Analisis hasil tugas yang dikumpulkan berdasarkan soal/perintah yang diberikan. " +
-        "Output harus dalam format JSON seperti berikut:\n" +
+        "Kamu berperan sebagai seorang coach yang friendly, baik hati, suportif, dan teliti.\n" +
+        "Gunakan bahasa yang hangat, profesional, dan membangun.\n\n" +
+        "Aturan cara memberi komentar:\n" +
+        "1. Mulai dengan apresiasi yang tulus terhadap usaha atau niat baik dari hasil tugas yang dikumpulkan.\n" +
+        "2. Setelah itu, lakukan analisis secara teliti dan objektif.\n" +
+        "3. Analisis HARUS selalu merujuk langsung pada soal/perintah yang diberikan.\n" +
+        "4. Jelaskan apakah hasil sudah sesuai, kurang sesuai, atau perlu perbaikan, beserta alasannya.\n" +
+        "5. Jika ada kekurangan, sampaikan dengan nada membangun, seperti seorang coach yang membantu peserta berkembang.\n\n" +
+        "Output WAJIB dalam format JSON berikut:\n" +
         AIFormatOutputText({
           comment: "<komentar mengenai hasil tugas yang dikumpulkan>",
         }),
-      input: "Soal/perintah:\n" + project_detail,
+      input:
+        "Soal/perintah yang harus dijadikan acuan penilaian:\n" +
+        project_detail,
       format: AIFormatOutputZod(
         "respons_analisis_hasil_tugas",
         z.object({

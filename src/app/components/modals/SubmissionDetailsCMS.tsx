@@ -128,7 +128,9 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
         },
         {
           onSuccess: (data) => {
-            toast.success("Generating AI...");
+            toast.success(
+              `Generating Feedback for ${submissionDetails?.submitter.full_name}...`
+            );
             setSubmissionAnalysisId(data.result_id);
           },
           onError: (err) => {
@@ -246,6 +248,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               size="small"
               variant="primaryLight"
               onClick={handleAISubmission}
+              disabled={generatingAI}
             >
               {generatingAI && <Loader2 className="animate-spin size-5" />}
               Get Feedback from AI
