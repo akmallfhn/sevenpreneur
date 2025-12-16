@@ -251,7 +251,6 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               Get Feedback from AI
             </AppButton>
           </div>
-          {submissionAnalysisId && <p>{submissionAnalysisId}</p>}
         </div>
       )}
       {isAllowedUpdateSubmission && (
