@@ -25,12 +25,7 @@ interface SubmissionListCMSProps {
   projectId: number;
 }
 
-export default function SubmissionListCMS({
-  sessionToken,
-  sessionUserRole,
-  cohortId,
-  projectId,
-}: SubmissionListCMSProps) {
+export default function SubmissionListCMS(props: SubmissionListCMSProps) {
   const router = useRouter();
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
@@ -38,8 +33,9 @@ export default function SubmissionListCMS({
   const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
 
   const allowedRolesDetailsSubmission = [0, 1, 2, 3];
-  const isAllowedDetailsSubmission =
-    allowedRolesDetailsSubmission.includes(sessionUserRole);
+  const isAllowedDetailsSubmission = allowedRolesDetailsSubmission.includes(
+    props.sessionUserRole
+  );
 
   // Push Parameter to URL
   const viewSubmissionDetails = (submissionId: string) => {
@@ -61,8 +57,8 @@ export default function SubmissionListCMS({
     isLoading: isLoadingProjectDetails,
     isError: isErrorProjectDetails,
   } = trpc.read.project.useQuery(
-    { id: projectId },
-    { enabled: !!sessionToken }
+    { id: props.projectId },
+    { enabled: !!props.sessionToken }
   );
   const projectDetailsData = projectDetails?.project;
 
@@ -71,7 +67,7 @@ export default function SubmissionListCMS({
     data: submissionData,
     isLoading: isLoadingSubmissionData,
     isError: isErrorSubmissionData,
-  } = trpc.list.submissions.useQuery({ project_id: projectId });
+  } = trpc.list.submissions.useQuery({ project_id: props.projectId });
   const submissionList = submissionData?.list;
 
   const submissionListAttributes = submissionList?.map((post) => {
@@ -106,7 +102,7 @@ export default function SubmissionListCMS({
               <ChevronRight className="size-3.5" />
               <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
               <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href={`/cohorts/${cohortId}`}>
+              <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
                 Details
               </AppBreadcrumbItem>
               <ChevronRight className="size-3.5" />
@@ -214,7 +210,8 @@ export default function SubmissionListCMS({
       {/* Open Submission Details */}
       {openDetailsId && (
         <SubmissionDetailsCMS
-          sessionUserRole={sessionUserRole}
+          sessionToken={props.sessionToken}
+          sessionUserRole={props.sessionUserRole}
           projectDeadline={projectDetailsData?.deadline_at}
           submissionId={Number(selectedId)}
           isOpen={!!openDetailsId}

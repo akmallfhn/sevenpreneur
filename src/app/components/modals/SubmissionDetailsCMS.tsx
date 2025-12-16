@@ -1,18 +1,20 @@
 "use client";
-import { Loader2 } from "lucide-react";
-import AppSheet from "./AppSheet";
-import { trpc } from "@/trpc/client";
-import dayjs from "dayjs";
-import UserItemCMS from "../items/UserItemCMS";
-import SheetLineItemCMS from "../items/SheetLineItemCMS";
 import { getSubmissionTiming } from "@/lib/date-time-manipulation";
-import FileItemLMS from "../items/FileItemLMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
+import { trpc } from "@/trpc/client";
+import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
+import dayjs from "dayjs";
+import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import TextAreaCMS from "../fields/TextAreaCMS";
+import FileItemLMS from "../items/FileItemLMS";
+import SheetLineItemCMS from "../items/SheetLineItemCMS";
+import UserItemCMS from "../items/UserItemCMS";
+import AppSheet from "./AppSheet";
 
 interface SubmissionDetailsCMSProps {
+  sessionToken: string;
   sessionUserRole: number;
   projectDeadline?: string;
   submissionId: number;
@@ -20,41 +22,81 @@ interface SubmissionDetailsCMSProps {
   onClose: () => void;
 }
 
-export default function SubmissionDetailsCMS({
-  sessionUserRole,
-  projectDeadline,
-  submissionId,
-  isOpen,
-  onClose,
-}: SubmissionDetailsCMSProps) {
+export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
   const utils = trpc.useUtils();
+
   const updateComment = trpc.update.submission.useMutation();
+  const useAISubmission = trpc.use.ai.submissionAnalysis.useMutation();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [generatingAI, setGeneratingAI] = useState(false);
+  const [intervalMs, setIntervalMs] = useState<number | false>(2000);
+  const [submissionAnalysisId, setSubmissionAnalysisId] = useState("");
 
   const allowedRolesUpdateSubmission = [0, 1, 3];
-  const isAllowedUpdateSubmission =
-    allowedRolesUpdateSubmission.includes(sessionUserRole);
+  const isAllowedUpdateSubmission = allowedRolesUpdateSubmission.includes(
+    props.sessionUserRole
+  );
 
   // Return initial data
   const { data, isLoading, isError } = trpc.read.submission.useQuery(
-    { id: submissionId },
-    { enabled: !!submissionId }
+    { id: props.submissionId },
+    { enabled: !!props.submissionId }
   );
   const submissionDetails = data?.submission;
 
   const { isEarly, longMessage } = getSubmissionTiming(
     submissionDetails?.created_at,
-    projectDeadline
+    props.projectDeadline
   );
 
-  const [comment, setComment] = useState(submissionDetails?.comment);
+  // Comment State
+  const [commentDraft, setCommentDraft] = useState("");
 
-  // Iterate initial data (so it doesn't get lost)
+  // Side effect for update state draft comment
   useEffect(() => {
-    if (submissionDetails) {
-      setComment(submissionDetails.comment ?? "");
-    }
+    if (!submissionDetails) return;
+
+    setCommentDraft(submissionDetails.comment ?? "");
   }, [submissionDetails]);
+
+  // Refetch Generating AI
+  const { data: submissionAnalysisData } =
+    trpc.read.ai.submissionAnalysis.useQuery(
+      { id: submissionAnalysisId },
+      {
+        refetchInterval: intervalMs,
+        enabled: !!props.sessionToken && !!submissionAnalysisId,
+      }
+    ) as unknown as {
+      data: {
+        code: string;
+        message: string;
+        result: {
+          comment: string | null;
+          is_done: boolean;
+          expired_at: string;
+        };
+      };
+    };
+  const isDoneResult = submissionAnalysisData?.result?.is_done ?? false;
+
+  // Update State New Comment
+  useEffect(() => {
+    if (!isDoneResult) return;
+
+    const aiComment = submissionAnalysisData?.result?.comment;
+    if (!aiComment) return;
+
+    setIntervalMs(false);
+    setGeneratingAI(false);
+
+    setCommentDraft((prev) =>
+      prev?.trim() ? `${prev}\n\n---\n${aiComment}` : aiComment
+    );
+
+    toast.success("AI feedback generated.");
+  }, [isDoneResult, submissionAnalysisData?.result?.comment]);
 
   // Add event listener to prevent page refresh
   useEffect(() => {
@@ -67,11 +109,38 @@ export default function SubmissionDetailsCMS({
     };
   }, []);
 
-  if (!submissionId) return;
+  if (!props.submissionId) return;
 
   // Handle Comment Change
   const handleCommentChange = (value: string) => {
-    setComment(value);
+    setCommentDraft(value);
+  };
+
+  // Handle Analysis by AI
+  const handleAISubmission = async () => {
+    setGeneratingAI(true);
+
+    try {
+      useAISubmission.mutate(
+        {
+          model: "gpt-5-mini" as AIModelName,
+          submission_id: props.submissionId,
+        },
+        {
+          onSuccess: (data) => {
+            toast.success("Generating AI...");
+            setSubmissionAnalysisId(data.result_id);
+          },
+          onError: (err) => {
+            toast.error("Failed to generate AI", {
+              description: err.message,
+            });
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Handle update comment
@@ -79,28 +148,22 @@ export default function SubmissionDetailsCMS({
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!comment?.trim()) {
-      toast.error("Oops! Something's missing.", {
-        description: "Please write your feedback before submitting.",
-      });
-      setIsSubmitting(false);
-      return;
-    }
-
     try {
       updateComment.mutate(
         {
-          // Mandatory fields:
-          id: submissionId,
+          // Mandatory fields
+          id: props.submissionId,
           document_url: submissionDetails?.document_url,
-          comment: comment.trim(),
+
+          // Optional fields
+          comment: commentDraft.trim() ? commentDraft.trim() : null,
         },
         {
           onSuccess: () => {
             toast.success("Feedback updated successfully 🎉");
-            utils.read.submission.invalidate({ id: submissionId });
+            utils.read.submission.invalidate({ id: props.submissionId });
             utils.list.submissions.invalidate();
-            onClose();
+            props.onClose();
           },
           onError: (err) => {
             toast.error("Failed to update feedback", {
@@ -120,8 +183,8 @@ export default function SubmissionDetailsCMS({
     <AppSheet
       sheetName="Submission Details"
       sheetDescription={`ID User: ${submissionDetails?.submitter_id}`}
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
     >
       {isLoading && (
         <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -175,9 +238,19 @@ export default function SubmissionDetailsCMS({
             textAreaHeight="h-40"
             textAreaPlaceholder="Write feedback for user assignment"
             characterLength={4000}
-            value={comment ?? ""}
+            value={commentDraft ?? ""}
             onTextAreaChange={handleCommentChange}
           />
+          <div className="w-full">
+            <AppButton
+              size="small"
+              variant="primaryLight"
+              onClick={handleAISubmission}
+            >
+              {generatingAI && <Loader2 className="animate-spin size-5" />}
+              Get Feedback from AI
+            </AppButton>
+          </div>
         </div>
       )}
       {isAllowedUpdateSubmission && (
