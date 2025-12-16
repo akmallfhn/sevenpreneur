@@ -193,6 +193,12 @@ export interface AIResultPricingStrategy extends JsonObject {
   };
 }
 
+// Submission Analysis //
+
+export interface AIResultSubmissionAnalysis extends JsonObject {
+  comment: string;
+}
+
 // Prompts //
 
 export const aiToolPrompts = {
@@ -783,6 +789,24 @@ export const aiToolPrompts = {
               }),
             }),
           }),
+        })
+      ),
+    };
+  },
+
+  submissionAnalysis: (project_detail: string) => {
+    return {
+      instructions:
+        "Analisis hasil tugas yang dikumpulkan berdasarkan soal/perintah yang diberikan. " +
+        "Output harus dalam format JSON seperti berikut:\n" +
+        AIFormatOutputText({
+          comment: "<komentar mengenai hasil tugas yang dikumpulkan>",
+        }),
+      input: "Soal/perintah:\n" + project_detail,
+      format: AIFormatOutputZod(
+        "respons_analisis_hasil_tugas",
+        z.object({
+          comment: z.string(),
         })
       ),
     };
