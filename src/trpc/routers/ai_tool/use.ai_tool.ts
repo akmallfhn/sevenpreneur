@@ -57,6 +57,7 @@ export const useAITool = {
           opts.input.ideation,
           opts.input.resources
         ),
+        [], // no file input
         {}, // empty for now
         opts.ctx.prisma,
         opts.ctx.user.id,
@@ -103,6 +104,7 @@ export const useAITool = {
           opts.input.company_operating_area,
           opts.input.sales_channel
         ),
+        [], // no file input
         {
           product_name: opts.input.product_name,
         },
@@ -145,6 +147,7 @@ export const useAITool = {
           opts.input.country,
           opts.input.industry
         ),
+        [], // no file input
         {}, // empty for now
         opts.ctx.prisma,
         opts.ctx.user.id,
@@ -183,6 +186,7 @@ export const useAITool = {
           opts.input.description,
           opts.input.product_category
         ),
+        [], // no file input
         {}, // should be empty (not supported)
         opts.ctx.prisma,
         opts.ctx.user.id,
@@ -251,6 +255,7 @@ export const useAITool = {
           total_var_cost,
           total_fix_cost
         ),
+        [], // no file input
         {
           production_per_month: opts.input.production_per_month,
           total_cost: {

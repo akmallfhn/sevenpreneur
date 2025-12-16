@@ -111,6 +111,7 @@ if (process.env.DOMAIN_MODE === "local") {
 export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
   model: AIModelName,
   prompt: AIPrompt<T>,
+  file_inputs: string[],
   first_result: object, // Not supported for ephemeral results
   prisma: PrismaClient,
   user_id: string,
@@ -125,6 +126,21 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
       ? baseURL + "qstash/callback"
       : baseURL + "qstash/callback-redis";
 
+  let input = prompt.input as string | object[];
+  if (file_inputs.length > 0) {
+    input = [
+      {
+        role: "user",
+        content: [
+          { type: "input_text", text: prompt.input },
+          ...file_inputs.map((file_url) => {
+            return { type: "input_file", file_url };
+          }),
+        ],
+      },
+    ];
+  }
+
   const res = await QStashClient.publishJSON({
     url: "https://api.openai.com/v1/responses",
     headers: {
@@ -135,7 +151,7 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
       tools: getTool(model),
       reasoning: getReasoningLevel(model),
       instructions: prompt.instructions,
-      input: prompt.input,
+      input: input,
       text: { format: prompt.format },
     },
     callback: callbackUrl,
