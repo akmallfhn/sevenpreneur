@@ -9,6 +9,7 @@ import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
 import {
   numberIsID,
   stringIsTimestampTz,
+  stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
@@ -89,6 +90,38 @@ export const updateLMS = {
         code: STATUS_OK,
         message: "Success",
         cohort: updatedCohortPrice[0],
+      };
+    }),
+
+  cohortMember: roleBasedProcedure(["Administrator", "Class Manager"])
+    .input(
+      z.object({
+        user_id: stringIsUUID(),
+        cohort_id: numberIsID(),
+        certificate_url: stringNotBlank().nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedCohortMember =
+        await opts.ctx.prisma.userCohort.updateManyAndReturn({
+          data: {
+            certificate_url: opts.input.certificate_url,
+          },
+          where: {
+            user_id: opts.input.user_id,
+            cohort_id: opts.input.cohort_id,
+          },
+        });
+      checkUpdateResult(
+        updatedCohortMember.length,
+        "cohort member",
+        "cohort members",
+        "cohortMember"
+      );
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        member: updatedCohortMember[0],
       };
     }),
 
