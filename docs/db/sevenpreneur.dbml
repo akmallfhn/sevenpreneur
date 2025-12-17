@@ -443,6 +443,7 @@ Table users_cohorts {
   user_id          uuid     [ref: > users.id]
   cohort_id        integer  [ref: > cohorts.id]
   cohort_price_id  integer  [ref: > cohort_prices.id]
+  certificate_url  varchar
 }
 
 Table users_playlists {
