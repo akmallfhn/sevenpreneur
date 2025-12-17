@@ -1,4 +1,4 @@
-import UserProfileDetailsCMS from "@/app/components/pages/UserProfileDetailsCMS";
+import UserDetailsCMS from "@/app/components/pages/UserDetailsCMS";
 import { cookies } from "next/headers";
 
 interface UserDetailPageProps {
@@ -10,5 +10,5 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value ?? "";
 
-  return <UserProfileDetailsCMS sessionToken={sessionToken} userId={user_id} />;
+  return <UserDetailsCMS sessionToken={sessionToken} userId={user_id} />;
 }

@@ -8,14 +8,20 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {
   AtSign,
+  BriefcaseBusiness,
   Building2,
   ChevronRight,
+  CircleStar,
   Copy,
   Flag,
   KeyRound,
   Loader2,
+  Scale,
   Settings2,
   User2,
+  UserStar,
+  Vegan,
+  WalletCards,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,19 +35,17 @@ import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
+import TextAreaCMS from "../fields/TextAreaCMS";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 
-interface UserProfileDetailsCMSProps {
+interface UserDetailsCMSProps {
   sessionToken: string;
   userId: string;
 }
 
-export default function UserProfileDetailsCMS({
-  sessionToken,
-  userId,
-}: UserProfileDetailsCMSProps) {
+export default function UserDetailsCMS(props: UserDetailsCMSProps) {
   const { copy } = useClipboard();
 
   // Fetch tRPC data
@@ -50,28 +54,30 @@ export default function UserProfileDetailsCMS({
     isLoading: isLoadingUserDetail,
     isError: isErrorUserDetail,
   } = trpc.read.user.useQuery(
-    { id: userId },
+    { id: props.userId },
     {
-      enabled: !!sessionToken,
+      enabled: !!props.sessionToken,
     }
   );
   const {
     data: rolesData,
     isLoading: isLoadingRoles,
     isError: isErrorRoles,
-  } = trpc.list.roles.useQuery(undefined, { enabled: !!sessionToken });
+  } = trpc.list.roles.useQuery(undefined, { enabled: !!props.sessionToken });
   const {
     data: industriesData,
     isLoading: isLoadingIndustries,
     isError: isErrorIndustries,
-  } = trpc.list.industries.useQuery(undefined, { enabled: !!sessionToken });
+  } = trpc.list.industries.useQuery(undefined, {
+    enabled: !!props.sessionToken,
+  });
   const {
     data: transactionsData,
     isLoading: isLoadingTransactions,
     isError: isErrorTransactions,
   } = trpc.list.transactions.useQuery(
-    { user_id: userId },
-    { enabled: !!sessionToken }
+    { user_id: props.userId },
+    { enabled: !!props.sessionToken }
   );
 
   // Extract variable
@@ -103,7 +109,7 @@ export default function UserProfileDetailsCMS({
                 "View detailed user information, activity logs, and account status in a read-only profile view."
               }
             />
-            <Link href={`/users/${userId}/edit`} className="w-fit h-fit">
+            <Link href={`/users/${props.userId}/edit`} className="w-fit h-fit">
               <AppButton variant="cmsPrimary">
                 <Settings2 className="size-5" />
                 Edit Profile
@@ -124,8 +130,8 @@ export default function UserProfileDetailsCMS({
         )}
 
         {!isLoading && !isError && userDetailData && (
-          <div className="flex w-full gap-6">
-            <div className="left-side flex flex-col flex-1/2 gap-4">
+          <div className="flex w-full gap-4">
+            <div className="left-side flex flex-col flex-1 gap-4">
               <div className="profile-container relative flex w-full bg-section-background p-5 rounded-xl overflow-hidden">
                 <div className="background-image absolute flex top-0 left-0 w-full h-20 z-0">
                   <Image
@@ -208,6 +214,36 @@ export default function UserProfileDetailsCMS({
                     disabled
                   />
                   <SelectCMS
+                    selectId={"occupation"}
+                    selectName={"Occupation"}
+                    selectIcon={<BriefcaseBusiness className="size-5" />}
+                    selectPlaceholder="None"
+                    value={userDetailData.user.occupation}
+                    disabled
+                    options={[
+                      {
+                        label: "Employee",
+                        value: "EMPLOYEE",
+                      },
+                      {
+                        label: "Entrepreneur",
+                        value: "ENTREPRENEUR",
+                      },
+                      {
+                        label: "Student",
+                        value: "STUDENT",
+                      },
+                      {
+                        label: "Freelance",
+                        value: "FREELANCE",
+                      },
+                      {
+                        label: "Military",
+                        value: "MILITARY",
+                      },
+                    ]}
+                  />
+                  <SelectCMS
                     selectId={"role"}
                     selectName={"Role"}
                     selectIcon={<KeyRound className="size-5" />}
@@ -232,8 +268,6 @@ export default function UserProfileDetailsCMS({
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="right-side flex flex-col flex-1/2 gap-4">
               <div className="transactions-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl overflow-hidden">
                 <h2 className="label-name font-brand font-bold">
                   Transaction History
@@ -261,6 +295,8 @@ export default function UserProfileDetailsCMS({
                   </div>
                 )}
               </div>
+            </div>
+            <div className="right-side flex flex-col flex-1 gap-4">
               <div className="business-information-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl overflow-hidden">
                 <h2 className="label-name font-brand font-bold">
                   Business Information
@@ -275,19 +311,174 @@ export default function UserProfileDetailsCMS({
                     value={userDetailData.user.business_name || ""}
                     disabled
                   />
-                  <SelectCMS
-                    selectId={"industry"}
-                    selectName={"Business Industry"}
-                    selectIcon={<Flag className="size-5" />}
-                    selectPlaceholder="None"
-                    value={userDetailData.user.industry_id}
+                  <TextAreaCMS
+                    textAreaId="business-description"
+                    textAreaName="Business Description"
+                    textAreaHeight="h-44"
+                    textAreaPlaceholder="None"
+                    value={userDetailData.user.business_description || ""}
                     disabled
-                    options={
-                      industriesData?.list?.map((post) => ({
-                        label: post.name,
-                        value: post.id,
-                      })) || []
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <SelectCMS
+                      selectId={"industry"}
+                      selectName={"Industry"}
+                      selectIcon={<Flag className="size-5" />}
+                      selectPlaceholder="None"
+                      value={userDetailData.user.industry_id}
+                      disabled
+                      options={
+                        industriesData?.list?.map((post) => ({
+                          label: post.name,
+                          value: post.id,
+                        })) || []
+                      }
+                    />
+                    <InputCMS
+                      inputId="business-age-years"
+                      inputName="Business Age (years)"
+                      inputIcon={<Vegan className="size-5" />}
+                      inputType={"text"}
+                      inputPlaceholder="None"
+                      value={
+                        String(userDetailData.user.business_age_years) || "0"
+                      }
+                      disabled
+                    />
+                  </div>
+                  <SelectCMS
+                    selectId={"business-yearly-revenue"}
+                    selectName={"Yearly Revenue"}
+                    selectIcon={<WalletCards className="size-5" />}
+                    selectPlaceholder="None"
+                    value={userDetailData.user.yearly_revenue}
+                    disabled
+                    options={[
+                      {
+                        label: "<kurang dari> 50 juta",
+                        value: "BELOW_50M",
+                      },
+                      {
+                        label: "50 juta - 100 juta",
+                        value: "BETWEEN_50M_100M",
+                      },
+                      {
+                        label: "100 juta - 500 juta",
+                        value: "BETWEEN_100M_500M",
+                      },
+                      {
+                        label: "500 juta - 1 miliar",
+                        value: "BETWEEN_500M_1B",
+                      },
+                      {
+                        label: "1 miliar - 10 miliar",
+                        value: "BETWEEN_1B_10B",
+                      },
+                      {
+                        label: "10 miliar - 25 miliar",
+                        value: "BETWEEN_10B_25B",
+                      },
+                      {
+                        label: "> 25 miliar",
+                        value: "ABOVE_25B",
+                      },
+                    ]}
+                  />
+                  <SelectCMS
+                    selectId={"total-employees"}
+                    selectName={"Total Employees"}
+                    selectIcon={<UserStar className="size-5" />}
+                    selectPlaceholder="None"
+                    value={userDetailData.user.total_employees}
+                    disabled
+                    options={[
+                      {
+                        label: "1-10 employees",
+                        value: "SMALL",
+                      },
+                      {
+                        label: "11-50 employees",
+                        value: "MEDIUM",
+                      },
+                      {
+                        label: "51-100 employees",
+                        value: "LARGE",
+                      },
+                      {
+                        label: "101-500 employees",
+                        value: "XLARGE",
+                      },
+                      {
+                        label: ">500 employees",
+                        value: "XXLARGE",
+                      },
+                    ]}
+                  />
+                  <SelectCMS
+                    selectId={"business-legal-entity"}
+                    selectName={"Legal Entity"}
+                    selectIcon={<Scale className="size-5" />}
+                    selectPlaceholder="None"
+                    value={userDetailData.user.legal_entity_type}
+                    disabled
+                    options={[
+                      {
+                        label: "CV",
+                        value: "CV",
+                      },
+                      {
+                        label: "Perseroan Terbatas (PT)",
+                        value: "PT",
+                      },
+                      {
+                        label: "Perseroan Terbatas Terbuka (PT Tbk)",
+                        value: "PT_TBK",
+                      },
+                      {
+                        label: "Firma",
+                        value: "FIRMA",
+                      },
+                      {
+                        label: "Koperasi",
+                        value: "KOPERASI",
+                      },
+                      {
+                        label: "Yayasan",
+                        value: "YAYASAN",
+                      },
+                      {
+                        label: "Usaha Dagang (UD)",
+                        value: "UD",
+                      },
+                      {
+                        label: "Belum Berbadan Hukum",
+                        value: "NON_LEGAL_ENTITY",
+                      },
+                    ]}
+                  />
+                  <InputCMS
+                    inputId="average-selling-price"
+                    inputName="Average Selling Price"
+                    inputIcon={
+                      <p className="font-bodycopy text-sm font-medium">Rp</p>
                     }
+                    inputPlaceholder="None"
+                    inputType={"text"}
+                    value={
+                      String(userDetailData.user.average_selling_price) || "0"
+                    }
+                    disabled
+                  />
+                  <InputCMS
+                    inputId="company-profile"
+                    inputName="Company Profile"
+                    inputIcon={<CircleStar className="size-5" />}
+                    inputPlaceholder="None"
+                    inputType={"text"}
+                    value={
+                      String(userDetailData.user.company_profile_url) || ""
+                    }
+                    disabled
                   />
                 </div>
               </div>
