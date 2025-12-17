@@ -181,6 +181,7 @@ export const listLMS = {
           phone_number: entry.user.phone_number,
           avatar: entry.user.avatar,
           role_id: entry.user.role_id,
+          certificate_url: entry.certificate_url,
         };
       });
       return {
