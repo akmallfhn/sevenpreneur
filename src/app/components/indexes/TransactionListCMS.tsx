@@ -227,7 +227,7 @@ export default function TransactionListCMS({
             </AppButton>
           </div>
         </div>
-        <div className="stats-list flex items-center gap-3">
+        <div className="stats-list grid grid-cols-5 gap-3">
           <ScorecardItemCMS
             scorecardName="Total Revenue"
             scorecardValue={

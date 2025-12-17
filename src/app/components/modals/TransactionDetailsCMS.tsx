@@ -119,6 +119,7 @@ export default function TransactionDetailsCMS({
               Customer Details
             </h5>
             <UserItemCMS
+              userId={transactionDetails?.user_id || ""}
               userName={transactionDetails?.user_full_name || "-"}
               userAvatar={
                 transactionDetails?.user_avatar ||
@@ -126,7 +127,6 @@ export default function TransactionDetailsCMS({
               }
               userEmail={transactionDetails?.user_email || ""}
               userPhoneNumber={transactionDetails?.user_phone_number || ""}
-              isShowWhatsapp
             />
           </div>
           <div className="payment-status flex flex-col gap-4 p-3 border border-outline rounded-md">

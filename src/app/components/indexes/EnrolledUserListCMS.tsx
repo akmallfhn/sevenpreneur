@@ -42,14 +42,17 @@ export default function EnrolledUserListCMS({
         </div>
       )}
       <div className="user-list flex flex-col w-full gap-4 bg-white rounded-md p-4 max-h-[320px] overflow-y-auto">
-        {enrolledUserList?.map((post, index) => (
+        {enrolledUserList?.map((post) => (
           <UserItemCMS
-            key={index}
+            key={post.id}
+            userId={post.id}
             userName={post.full_name}
-            userAvatar={post.avatar!}
+            userAvatar={
+              post.avatar ||
+              "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+            }
             userEmail={post.email}
-            userPhoneNumber={post.phone_number!}
-            isShowWhatsapp
+            userPhoneNumber={post.phone_number || ""}
           />
         ))}
       </div>

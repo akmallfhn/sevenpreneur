@@ -21,6 +21,7 @@ dayjs.extend(localizedFormat);
 
 interface SubmissionListCMSProps {
   sessionToken: string;
+  sessionUserId: string;
   sessionUserRole: number;
   cohortId: number;
   projectId: number;
@@ -242,6 +243,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
       {openDetailsId && (
         <SubmissionDetailsCMS
           sessionToken={props.sessionToken}
+          sessionUserId={props.sessionUserId}
           sessionUserRole={props.sessionUserRole}
           projectDeadline={projectDetailsData?.deadline_at}
           submissionId={Number(selectedId)}

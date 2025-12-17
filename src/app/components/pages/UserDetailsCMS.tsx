@@ -341,7 +341,9 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       inputType={"text"}
                       inputPlaceholder="None"
                       value={
-                        String(userDetailData.user.business_age_years) || "0"
+                        userDetailData.user.business_age_years
+                          ? String(userDetailData.user.business_age_years)
+                          : ""
                       }
                       disabled
                     />
@@ -465,7 +467,9 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     inputPlaceholder="None"
                     inputType={"text"}
                     value={
-                      String(userDetailData.user.average_selling_price) || "0"
+                      userDetailData.user.average_selling_price
+                        ? String(userDetailData.user.average_selling_price)
+                        : ""
                     }
                     disabled
                   />
@@ -475,9 +479,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     inputIcon={<CircleStar className="size-5" />}
                     inputPlaceholder="None"
                     inputType={"text"}
-                    value={
-                      String(userDetailData.user.company_profile_url) || ""
-                    }
+                    value={userDetailData.user.company_profile_url || ""}
                     disabled
                   />
                 </div>

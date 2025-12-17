@@ -240,6 +240,7 @@ export const readTransaction = {
           playlist_total_video: playlistBadge?.totalVideo,
           payment_channel_name: paymentChannelName,
           payment_channel_image: paymentChannelImage,
+          user_id: theTransaction.user.id,
           user_full_name: theTransaction.user.full_name,
           user_email: theTransaction.user.email,
           user_phone_country: theTransaction.user.phone_country,

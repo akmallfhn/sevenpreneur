@@ -16,6 +16,7 @@ import { AIResultSubmissionAnalysis } from "@/trpc/routers/ai_tool/prompt.ai_too
 
 interface SubmissionDetailsCMSProps {
   sessionToken: string;
+  sessionUserId: string;
   sessionUserRole: number;
   projectDeadline?: string;
   submissionId: number;
@@ -203,6 +204,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               Submitter Details
             </h5>
             <UserItemCMS
+              userId={submissionDetails.submitter_id}
               userName={submissionDetails.submitter.full_name}
               userAvatar={
                 submissionDetails.submitter.avatar ||
