@@ -397,11 +397,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.aiConversations`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `list.aiChats`               |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 | `use.ai.sendChat`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `delete.aiResult`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `delete.aiConversation`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
 
 **Scopes:**
 
-- Administrators, Educators, and Class Managers can use/read results from AI tools.
+- Administrators, Educators, and Class Managers can use/read results/delete from AI tools.
 - General Users can use/read results from AI tools if the user is in the enrolled list.
+- General Users can always delete their results from AI tools.
 
 ## Discounts 🪙
 

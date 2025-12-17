@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
+import { deleteAITool } from "./ai_tool/delete.ai_tool";
 import { deleteEvent } from "./event/delete.event";
 import { deleteLMS } from "./lms/delete.lms";
 import { deletePlaylist } from "./playlist/delete.playlist";
@@ -37,6 +38,11 @@ export const deleteRouter = createTRPCRouter({
   // Template-related //
 
   template: deleteTemplate.template,
+
+  // AI-tool-related //
+
+  aiResult: deleteAITool.aiResult,
+  aiConversation: deleteAITool.aiConversation,
 
   // Transaction-related //
 
