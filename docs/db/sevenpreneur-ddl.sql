@@ -441,6 +441,7 @@ CREATE TABLE users_cohorts (
   user_id          UUID     NOT NULL,
   cohort_id        INTEGER  NOT NULL,
   cohort_price_id  INTEGER  NOT NULL,
+  certificate_url  VARCHAR      NULL,
   PRIMARY KEY (user_id, cohort_id)
 );
 
