@@ -4,9 +4,17 @@ import {
   STATUS_NOT_FOUND,
   STATUS_OK,
 } from "@/lib/status_code";
-import { loggedInProcedure, publicProcedure } from "@/trpc/init";
+import {
+  loggedInProcedure,
+  publicProcedure,
+  roleBasedProcedure,
+} from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
-import { numberIsID, objectHasOnlyID } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  objectHasOnlyID,
+  stringIsUUID,
+} from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
@@ -79,6 +87,83 @@ export const readLMS = {
         code: STATUS_OK,
         message: "Success",
         cohortPrice: theCohortPrice,
+      };
+    }),
+
+  cohortMember: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(
+      z.object({
+        user_id: stringIsUUID(),
+        cohort_id: numberIsID(),
+      })
+    )
+    .query(async (opts) => {
+      const theCohortMember = await opts.ctx.prisma.userCohort.findFirst({
+        include: {
+          user: { include: { phone_country: true } },
+          cohort_price: { select: { name: true } },
+        },
+        where: {
+          user_id: opts.input.user_id,
+          cohort_id: opts.input.cohort_id,
+        },
+      });
+      if (!theCohortMember) {
+        throw readFailedNotFound("cohort member");
+      }
+      const learningsList = await opts.ctx.prisma.learning.findMany({
+        select: {
+          name: true,
+          attendances: {
+            select: { check_in_at: true, check_out_at: true },
+            where: { user_id: opts.input.user_id },
+          },
+        },
+        where: {
+          cohort_id: opts.input.cohort_id,
+          OR: [
+            { price_id: null },
+            { price_id: theCohortMember.cohort_price_id },
+          ],
+        },
+        orderBy: [{ meeting_date: "asc" }, { created_at: "asc" }],
+      });
+      const attendancesList = learningsList.map((entry) => {
+        if (entry.attendances.length < 1) {
+          return {
+            learning_name: entry.name,
+            check_in_at: null,
+            check_out_at: null,
+            status: false,
+          };
+        }
+        const attendance = entry.attendances[0];
+        return {
+          learning_name: entry.name,
+          check_in_at: attendance.check_in_at,
+          check_out_at: attendance.check_out_at,
+          status: !!attendance.check_in_at && !!attendance.check_out_at,
+        };
+      });
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        cohortMember: {
+          id: theCohortMember.user_id,
+          full_name: theCohortMember.user.full_name,
+          email: theCohortMember.user.email,
+          phone_country: theCohortMember.user.phone_country,
+          phone_number: theCohortMember.user.phone_number,
+          avatar: theCohortMember.user.avatar,
+          cohort_id: theCohortMember.cohort_id,
+          cohort_price_name: theCohortMember.cohort_price.name,
+          certificate_url: theCohortMember.certificate_url,
+          attendances: attendancesList,
+        },
       };
     }),
 

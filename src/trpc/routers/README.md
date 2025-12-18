@@ -122,13 +122,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | Procedure Name        | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
 | :-------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
 | `list.cohortMembers`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| `read.cohortMember`   |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
 | `update.cohortMember` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators and Class Managers can update all cohort members given the cohort ID and the user ID.
 - Administrators, Educators, and Class Managers can see all cohort members given the cohort ID.
-- General Users can see all cohort members given the cohort ID which the users are enrolled.
+- General Users can see cohort members list given the cohort ID which the users are enrolled.
 
 ### Enrolled Cohorts 🎓
 
