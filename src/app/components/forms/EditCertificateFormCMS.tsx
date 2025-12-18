@@ -1,10 +1,11 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
+import FileItemLMS from "../items/FileItemLMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
 
@@ -30,11 +31,17 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
   );
 
   // Return initial data
-  const { data, isLoading, isError } = trpc.read.user.useQuery(
-    { id: props.userId },
+  const { data, isLoading, isError } = trpc.read.cohortMember.useQuery(
+    { user_id: props.userId, cohort_id: props.cohortId },
     { enabled: !!props.sessionToken }
   );
-  const memberDetails = data?.user;
+  const memberDetails = data?.cohortMember;
+
+  useEffect(() => {
+    if (memberDetails?.certificate_url) {
+      setCertificateURL(memberDetails.certificate_url);
+    }
+  }, [memberDetails?.certificate_url]);
 
   const handleCertificateChange = (value: string | null) => {
     setCertificateURL(value ?? "");
@@ -71,6 +78,7 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
           onSuccess: () => {
             toast.success("Certificate updated successfully");
             utils.list.cohortMembers.invalidate();
+            utils.read.cohortMember.invalidate();
             props.onClose();
           },
           onError: (err) => {
@@ -121,13 +129,34 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
               userPhoneNumber={memberDetails.phone_number || ""}
             />
           </div>
-          <div className="upload-certificate flex flex-col gap-2 pt-4">
-            <h3 className="font-bold font-bodycopy">Upload Certificate</h3>
-            <UploadFilesCMS
-              value={certificateURL}
-              onUpload={handleCertificateChange}
-            />
-          </div>
+          {certificateURL ? (
+            <div className="certificate flex flex-col gap-2 p-4 border border-outline rounded-md">
+              <h3 className="font-bold font-bodycopy">Certificate</h3>
+              <div className="certificate-file relative w-full">
+                <FileItemLMS
+                  fileName="Completion Certificate"
+                  fileURL={certificateURL}
+                />
+                <div className="absolute -top-2 -right-2">
+                  <AppButton
+                    variant="semiDestructive"
+                    size="smallIconRounded"
+                    onClick={() => setCertificateURL("")}
+                  >
+                    <X className="size-4" />
+                  </AppButton>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="upload-certificate flex flex-col gap-2 pt-4">
+              <h3 className="font-bold font-bodycopy">Upload Certificate</h3>
+              <UploadFilesCMS
+                value={certificateURL}
+                onUpload={handleCertificateChange}
+              />
+            </div>
+          )}
         </div>
       )}
       {isAllowedUpdateCertificate && (
