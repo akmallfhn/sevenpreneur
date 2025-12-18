@@ -33,7 +33,7 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
   const selectedId = searchParam.get("id");
   const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
 
-  const allowedRolesDetailsMembers = [0, 1, 2, 3];
+  const allowedRolesDetailsMembers = [0, 1, 2];
   const isAllowedDetailsMembers = allowedRolesDetailsMembers.includes(
     props.sessionUserRole
   );

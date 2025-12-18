@@ -24,7 +24,7 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [certificateURL, setCertificateURL] = useState("");
 
-  const allowedRolesUpdateCertificate = [0, 1, 2];
+  const allowedRolesUpdateCertificate = [0, 2];
   const isAllowedUpdateCertificate = allowedRolesUpdateCertificate.includes(
     props.sessionUserRole
   );

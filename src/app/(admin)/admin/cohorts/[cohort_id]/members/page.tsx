@@ -18,7 +18,7 @@ export default async function MembersPage({ params }: MembersPageProps) {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesMemberList = [0, 1, 2, 3];
+  const allowedRolesMemberList = [0, 1, 2];
 
   if (!allowedRolesMemberList.includes(userSession.user.role_id)) {
     return (

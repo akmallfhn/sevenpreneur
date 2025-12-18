@@ -1,6 +1,7 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -18,12 +19,11 @@ import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AttendancesChartCMS from "../charts/AttendancesChartCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
-import EnrolledUserListCMS from "../indexes/EnrolledUserListCMS";
+import StatGatewayCMS from "../gateways/StatGatewayCMS";
 import LearningListCMS from "../indexes/LearningListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
 import PriceItemCardCMS from "../items/PriceItemCardCMS";
-import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
@@ -47,15 +47,29 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
     props.sessionUserRole
   );
 
-  // Call data from tRPC
+  // Fetch data from tRPC
   const {
     data: cohortDetailsData,
-    isLoading,
-    isError,
+    isLoading: isLoadingCohortDetails,
+    isError: isErrorCohortDetails,
   } = trpc.read.cohort.useQuery(
     { id: props.cohortId },
     { enabled: !!props.sessionToken }
   );
+  const {
+    data: cohortMembersData,
+    isError: isErrorCohortMembers,
+    isLoading: isLoadingCohortMembers,
+  } = trpc.list.cohortMembers.useQuery(
+    { cohort_id: props.cohortId },
+    { enabled: !!props.sessionToken }
+  );
+  const cohortMemberList = cohortMembersData?.list.filter(
+    (item) => item.role_id === 3
+  );
+
+  const isLoading = isLoadingCohortDetails || isLoadingCohortMembers;
+  const isError = isErrorCohortDetails || isErrorCohortMembers;
 
   // Checking height content description
   useEffect(() => {
@@ -220,18 +234,13 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
             />
           </main>
           <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
-            <div className="cohort-stats flex flex-col gap-3">
-              <ScorecardItemCMS
-                scorecardName="Total Learning Sessions"
-                scorecardValue={cohortDetailsData.cohort.total_learning_session}
-                scorecardBackground="bg-success-foreground"
-              />
-              <ScorecardItemCMS
-                scorecardName="Total Materials"
-                scorecardValue={cohortDetailsData.cohort.total_materials}
-                scorecardBackground="bg-warning-foreground"
-              />
-            </div>
+            <StatGatewayCMS
+              statsName="Enrolled Members"
+              statsIcon={faUser}
+              statsIconColor="bg-[#FEE5D7] text-[#FF7830]"
+              statsValue={cohortMemberList?.length || "-"}
+              statsURL={`/cohorts/${props.cohortId}/members`}
+            />
             <ModuleListCMS
               sessionToken={props.sessionToken}
               sessionUserRole={props.sessionUserRole}
@@ -240,10 +249,6 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
             <ProjectListCMS
               sessionToken={props.sessionToken}
               sessionUserRole={props.sessionUserRole}
-              cohortId={props.cohortId}
-            />
-            <EnrolledUserListCMS
-              sessionToken={props.sessionToken}
               cohortId={props.cohortId}
             />
           </aside>
