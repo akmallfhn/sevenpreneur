@@ -98,6 +98,22 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
               scorecardValue={cohortMemberList?.length || 0}
               scorecardBackground="bg-primary"
             />
+            <ScorecardItemCMS
+              scorecardName="Certified Members"
+              scorecardValue={
+                cohortMemberList?.filter((item) => !!item.certificate_url)
+                  .length || 0
+              }
+              scorecardBackground="bg-success-foreground"
+            />
+            <ScorecardItemCMS
+              scorecardName="Uncertified Members"
+              scorecardValue={
+                cohortMemberList?.filter((item) => !item.certificate_url)
+                  .length || 0
+              }
+              scorecardBackground="bg-destructive"
+            />
           </div>
           <div className="submission-list flex flex-col gap-2">
             <table className="table-submission relative w-full rounded-sm">

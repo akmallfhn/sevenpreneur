@@ -44,7 +44,7 @@ export default function NearestScheduleCardLMS({
           <p className="section-title font-bodycopy text-white/50 text-[15px]">
             Next learning topic
           </p>
-          <h2 className="learning-name font-brand text-xl font-bold text-white">
+          <h2 className="learning-name font-bodycopy text-xl font-bold text-white">
             {nearestSchedule.name}
           </h2>
           <div className="learning-date flex gap-2 items-center text-white/70">
@@ -59,11 +59,11 @@ export default function NearestScheduleCardLMS({
           </div>
         </div>
       ) : (
-        <div className="nearest-schedule-container flex flex-col gap-2">
+        <div className="nearest-schedule-container flex flex-col gap-1">
           <p className="section-title font-bodycopy text-alternative text-[15px]">
             Congratulations🎉
           </p>
-          <h2 className="learning-name font-brand text-xl font-bold text-white">
+          <h2 className="learning-name font-bodycopy text-lg font-bold text-white">
             Program Fully Completed
           </h2>
           <p className="flex font-bodycopy font-medium text-[15px] text-alternative">
@@ -72,7 +72,7 @@ export default function NearestScheduleCardLMS({
         </div>
       )}
 
-      {nearestSchedule ? (
+      {nearestSchedule && (
         <a
           href={
             nearestSchedule.method !== "ONSITE"
@@ -85,8 +85,6 @@ export default function NearestScheduleCardLMS({
         >
           <AppButton className="w-full">Launch Meeting</AppButton>
         </a>
-      ) : (
-        <AppButton>Rate the experience🌟</AppButton>
       )}
     </div>
   );
