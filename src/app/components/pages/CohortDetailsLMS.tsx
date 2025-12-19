@@ -11,6 +11,9 @@ import AttendanceProgressBarLMS from "../elements/AttendanceProgressBarLMS";
 import NearestScheduleCardLMS from "../elements/NearestScheduleCardLMS";
 import { useEffect, useState } from "react";
 import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
+import Image from "next/image";
+import AppButton from "../buttons/AppButton";
+import { Eye } from "lucide-react";
 
 interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
@@ -18,6 +21,7 @@ interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   cohortId: number;
   cohortName: string;
   cohorImage: string;
+  userCertificate: string;
   attendanceCount: number;
   learningList: LearningSessionList[];
   moduleList: ModuleList[];
@@ -78,6 +82,31 @@ export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
               attendanceCount={props.attendanceCount}
             />
             <NearestScheduleCardLMS learningList={props.learningList} />
+            {props.userCertificate && (
+              <div className="certificate-gateway relative flex w-full aspect-[1280/494] rounded-lg overflow-hidden">
+                <Image
+                  className="object-cover w-full h-full"
+                  src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/gateway-certificate.webp"
+                  alt="Certificate Gateway"
+                  width={600}
+                  height={600}
+                />
+                <div className="absolute flex flex-col top-1/2 -translate-y-1/2 left-4 text-white gap-3 z-10">
+                  <h4 className="font-bodycopy font-semibold max-w-32 leading-tight">
+                    Certificate of Completion
+                  </h4>
+                  <a
+                    href={props.userCertificate}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <AppButton variant="outline" size="small">
+                      <Eye className="size-4" /> View Certificate
+                    </AppButton>
+                  </a>
+                </div>
+              </div>
+            )}
           </div>
         </aside>
       </div>
