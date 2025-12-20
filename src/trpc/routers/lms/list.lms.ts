@@ -654,8 +654,9 @@ export const listLMS = {
           submitter_id: entry.submitter_id,
           full_name: entry.submitter.full_name,
           avatar: entry.submitter.avatar,
-          created_at: entry.created_at,
           comment: entry.comment,
+          is_favorite: entry.is_favorite,
+          created_at: entry.created_at,
         };
       });
       return {

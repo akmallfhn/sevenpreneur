@@ -260,6 +260,7 @@ CREATE TABLE submissions (
   submitter_id  UUID         NOT NULL,
   document_url  VARCHAR          NULL,
   comment       TEXT             NULL,
+  is_favorite   BOOLEAN      NOT NULL  DEFAULT FALSE,
   created_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at    TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
