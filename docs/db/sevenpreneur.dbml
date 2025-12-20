@@ -263,6 +263,7 @@ Table submissions {
   submitter_id  uuid         [ref: > users.id]
   document_url  varchar
   comment       text
+  is_favorite   boolean      [note: 'default false']
   created_at    timestamptz
   updated_at    timestamptz
 }

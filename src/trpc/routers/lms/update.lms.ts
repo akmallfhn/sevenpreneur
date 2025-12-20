@@ -353,19 +353,26 @@ export const updateLMS = {
         id: numberIsID(),
         document_url: stringNotBlank().nullable().optional(),
         comment: stringNotBlank().nullable().optional(),
+        is_favorite: z.boolean().optional(),
       })
     )
     .mutation(async (opts) => {
       let theDocumentUrl: Optional<string | null>;
       let theComment: Optional<string | null>;
+      let isFavorite: Optional<boolean>;
       if (opts.ctx.user.role.name !== "Educator") {
         theDocumentUrl = opts.input.document_url;
       }
       if (opts.ctx.user.role.name !== "General User") {
         theComment = opts.input.comment;
+        isFavorite = opts.input.is_favorite;
       }
 
-      if (theDocumentUrl === undefined && theComment === undefined) {
+      if (
+        theDocumentUrl === undefined &&
+        theComment === undefined &&
+        isFavorite === undefined
+      ) {
         throw new TRPCError({
           code: STATUS_BAD_REQUEST,
           message: "Bad request",
@@ -409,6 +416,7 @@ export const updateLMS = {
           data: {
             document_url: theDocumentUrl,
             comment: theComment,
+            is_favorite: isFavorite,
           },
           where: {
             id: opts.input.id,

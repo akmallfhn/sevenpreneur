@@ -364,6 +364,7 @@ model Submission {
   submitter_id String   @db.Uuid
   document_url String?  @db.VarChar()
   comment      String?  @db.Text
+  is_favorite  Boolean  @default(false) @db.Boolean
   created_at   DateTime @default(now()) @db.Timestamptz()
   updated_at   DateTime @default(now()) @updatedAt @db.Timestamptz()
 
