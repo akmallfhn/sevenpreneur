@@ -443,6 +443,7 @@ CREATE TABLE users_cohorts (
   cohort_id        INTEGER  NOT NULL,
   cohort_price_id  INTEGER  NOT NULL,
   certificate_url  VARCHAR      NULL,
+  is_scout         BOOLEAN  NOT NULL  DEFAULT FALSE,
   PRIMARY KEY (user_id, cohort_id)
 );
 

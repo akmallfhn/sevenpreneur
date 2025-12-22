@@ -99,6 +99,7 @@ export const updateLMS = {
         user_id: stringIsUUID(),
         cohort_id: numberIsID(),
         certificate_url: stringNotBlank().nullable().optional(),
+        is_scout: z.boolean().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -106,6 +107,7 @@ export const updateLMS = {
         await opts.ctx.prisma.userCohort.updateManyAndReturn({
           data: {
             certificate_url: opts.input.certificate_url,
+            is_scout: opts.input.is_scout,
           },
           where: {
             user_id: opts.input.user_id,

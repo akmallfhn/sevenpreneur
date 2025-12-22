@@ -162,6 +162,7 @@ export const readLMS = {
           cohort_id: theCohortMember.cohort_id,
           cohort_price_name: theCohortMember.cohort_price.name,
           certificate_url: theCohortMember.certificate_url,
+          is_scout: theCohortMember.is_scout,
           attendances: attendancesList,
         },
       };
