@@ -445,6 +445,7 @@ Table users_cohorts {
   cohort_id        integer  [ref: > cohorts.id]
   cohort_price_id  integer  [ref: > cohort_prices.id]
   certificate_url  varchar
+  is_scout         boolean  [note: 'default false']
 }
 
 Table users_playlists {

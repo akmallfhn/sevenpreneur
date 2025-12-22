@@ -598,6 +598,7 @@ model UserCohort {
   cohort_price    CohortPrice @relation(fields: [cohort_price_id], references: [id])
   cohort_price_id Int         @db.Integer
   certificate_url String?     @db.VarChar()
+  is_scout        Boolean     @default(false) @db.Boolean
 
   @@id([user_id, cohort_id])
   @@map("users_cohorts")
