@@ -159,9 +159,9 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                       </TableCellCMS>
                       <TableCellCMS>
                         {!!post.certificate_url ? (
-                          <BooleanLabelCMS label="Certified" value={true} />
+                          <BooleanLabelCMS label="CERTIFIED" value={true} />
                         ) : (
-                          <BooleanLabelCMS label="Uncertified" value={false} />
+                          <BooleanLabelCMS label="UNCERTIFIED" value={false} />
                         )}
                       </TableCellCMS>
                       {isAllowedDetailsMembers && (

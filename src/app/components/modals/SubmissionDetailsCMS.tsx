@@ -3,7 +3,7 @@ import { getSubmissionTiming } from "@/lib/date-time-manipulation";
 import { trpc } from "@/trpc/client";
 import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
 import dayjs from "dayjs";
-import { Loader2, Sparkles } from "lucide-react";
+import { Heart, Loader2, Sparkles } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -34,8 +34,10 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
   const [generatingAI, setGeneratingAI] = useState(false);
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
   const [submissionAnalysisId, setSubmissionAnalysisId] = useState("");
+  const [commentDraft, setCommentDraft] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  const allowedRolesUpdateSubmission = [0, 1, 3];
+  const allowedRolesUpdateSubmission = [0, 1];
   const isAllowedUpdateSubmission = allowedRolesUpdateSubmission.includes(
     props.sessionUserRole
   );
@@ -52,14 +54,12 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
     props.projectDeadline
   );
 
-  // Comment State
-  const [commentDraft, setCommentDraft] = useState("");
-
   // Side effect for update state draft comment
   useEffect(() => {
     if (!submissionDetails) return;
 
     setCommentDraft(submissionDetails.comment ?? "");
+    setIsFavorite(submissionDetails.is_favorite);
   }, [submissionDetails]);
 
   // Refetch Result AI
@@ -155,6 +155,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
           // Mandatory fields
           id: props.submissionId,
           document_url: submissionDetails?.document_url,
+          is_favorite: isFavorite,
 
           // Optional fields
           comment: commentDraft.trim() ? commentDraft.trim() : null,
@@ -189,7 +190,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
     >
       {isLoading && (
         <div className="flex w-full h-full items-center justify-center text-alternative">
-          <Loader2 className="animate-spin size-5 " />
+          <Loader2 className="animate-spin size-5" />
         </div>
       )}
       {isError && (
@@ -213,7 +214,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               userEmail={submissionDetails.submitter.email}
             />
           </div>
-          <div className="submitter-details flex flex-col gap-2">
+          <div className="submission-documents flex flex-col gap-2">
             <h5 className="font-bodycopy font-bold text-[15px]">
               Submission Document
             </h5>
@@ -221,6 +222,23 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               fileName={`Assignment - ${submissionDetails.submitter.full_name}`}
               fileURL={submissionDetails.document_url || ""}
             />
+            <button
+              className={`like-button flex w-fit items-center justify-center gap-1.5 py-1 px-2 transition-transform ease-in-out rounded-full active:scale-90 hover:cursor-pointer ${
+                isFavorite
+                  ? "border-0 bg-[#FCEDF1] text-secondary"
+                  : "border border-outline text-[#333333]"
+              }`}
+              onClick={() => setIsFavorite((prev) => !prev)}
+            >
+              <Heart
+                className="size-5"
+                fill={isFavorite ? "#e74d79" : "none"}
+                strokeWidth={isFavorite ? 0 : 2}
+              />
+              <p className="font-bodycopy font-medium text-sm">
+                {isFavorite ? "Favorited" : "Favorite"}
+              </p>
+            </button>
           </div>
           <SheetLineItemCMS itemName="Submitted at">
             {dayjs(submissionDetails?.created_at).format(
@@ -237,28 +255,26 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
           <TextAreaCMS
             textAreaId="submission-comment"
             textAreaName="Mentor Feedback"
-            textAreaHeight="h-40"
+            textAreaHeight="h-80"
             textAreaPlaceholder="Write feedback for user assignment"
             characterLength={8000}
             value={commentDraft ?? ""}
             onTextAreaChange={handleCommentChange}
           />
-          <div className="w-full">
-            <AppButton
-              size="small"
-              variant="primaryLight"
-              onClick={handleAISubmission}
-              disabled={generatingAI}
-            >
-              {generatingAI && <Loader2 className="animate-spin size-5" />}
-              Get Feedback from AI
-              <Sparkles className="size-4" fill="#0165fc" stroke={"0"} />
-            </AppButton>
-          </div>
         </div>
       )}
       {isAllowedUpdateSubmission && (
-        <div className="update-comment sticky bottom-0 w-full p-4 bg-white z-40">
+        <div className="update-comment sticky flex flex-col bottom-0 w-full p-4 gap-3 border-t bg-white border-outline z-40">
+          <AppButton
+            className="w-full"
+            variant="primaryLight"
+            onClick={handleAISubmission}
+            disabled={generatingAI}
+          >
+            {generatingAI && <Loader2 className="animate-spin size-4" />}
+            Get Feedback from AI
+            <Sparkles className="size-4" />
+          </AppButton>
           <AppButton
             className="w-full"
             variant="cmsPrimary"
@@ -266,7 +282,7 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Update Feedback
+            Save Changes
           </AppButton>
         </div>
       )}

@@ -4,7 +4,7 @@ import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { ChevronRight, Eye, Loader2 } from "lucide-react";
+import { ChevronRight, Eye, Heart, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -16,6 +16,7 @@ import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
+import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -34,7 +35,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
   const selectedId = searchParam.get("id");
   const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
 
-  const allowedRolesDetailsSubmission = [0, 1, 2, 3];
+  const allowedRolesDetailsSubmission = [0, 1, 2];
   const isAllowedDetailsSubmission = allowedRolesDetailsSubmission.includes(
     props.sessionUserRole
   );
@@ -119,12 +120,13 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
               />
             </div>
           </div>
-          <div className="progress-review grid grid-cols-5 w-full gap-3">
+          <div className="progress-review grid grid-cols-3 w-full gap-3 xl:grid-cols-4 2xl:grid-cols-5">
             <ScorecardItemCMS
               scorecardName="Total Submissions"
               scorecardValue={submissionListAttributes?.length || 0}
               scorecardBackground="bg-primary"
             />
+
             <ScorecardItemCMS
               scorecardName="Reviewed"
               scorecardValue={
@@ -137,6 +139,14 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
               scorecardName="Not Reviewed"
               scorecardValue={
                 submissionListAttributes?.filter((item) => !item.comment)
+                  .length || 0
+              }
+              scorecardBackground="bg-[#F97348]"
+            />
+            <ScorecardItemCMS
+              scorecardName="Favorite"
+              scorecardValue={
+                submissionListAttributes?.filter((item) => !!item.is_favorite)
                   .length || 0
               }
               scorecardBackground="bg-secondary"
@@ -159,6 +169,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                   <TableHeadCMS>{`Submitted at`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Timing Status`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Review Status`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Fav`.toUpperCase()}</TableHeadCMS>
                   {isAllowedDetailsSubmission && (
                     <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
                   )}
@@ -207,14 +218,19 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                         </p>
                       </TableCellCMS>
                       <TableCellCMS>
-                        {!post.comment ? (
-                          <p className="label-container inline-flex py-[2px] px-[10px] w-fit rounded-full text-xs font-semibold font-bodycopy bg-danger-background text-danger-foreground">
-                            NOT REVIEWED
-                          </p>
+                        {!!post.comment ? (
+                          <BooleanLabelCMS label="REVIEWED" value={true} />
                         ) : (
-                          <p className="label-container inline-flex py-[2px] px-[10px] w-fit rounded-full text-xs font-semibold font-bodycopy bg-success-background text-success-foreground">
-                            REVIEWED
-                          </p>
+                          <BooleanLabelCMS label="NOT REVIEWED" value={false} />
+                        )}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {!!post.is_favorite && (
+                          <Heart
+                            className="size-5"
+                            fill={!!post.is_favorite ? "#e74d79" : "none"}
+                            strokeWidth={!!post.is_favorite ? 0 : 2}
+                          />
                         )}
                       </TableCellCMS>
                       {isAllowedDetailsSubmission && (

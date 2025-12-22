@@ -20,7 +20,7 @@ export default async function SubmissionsPageCMS({
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListSubmission = [0, 1, 2, 3];
+  const allowedRolesListSubmission = [0, 1, 2];
 
   if (!allowedRolesListSubmission.includes(userSession.user.role_id)) {
     return (

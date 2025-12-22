@@ -10,7 +10,7 @@ import { BarChart } from "@mui/x-charts";
 import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { markdownToHtml } from "@/lib/markdown-to-html";
 import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
-import XYMapLMS, { CompetitorList } from "../elements/XYMapLMS";
+import XYMapLMS, { CompetitorList } from "../charts/XYMapLMS";
 import AICompetitorItemLMS from "../items/AICompetitorItemLMS";
 
 const maturityAttributes: Record<

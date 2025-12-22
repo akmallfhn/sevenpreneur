@@ -35,7 +35,7 @@ export default function AppSheet({
       onClick={onClose}
     >
       <div
-        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 gap-4 bg-white  transition transform ease-in-out sm:max-w-md`}
+        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 bg-white transition transform ease-in-out sm:max-w-md`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet-header relative flex flex-col p-4 px-6">
