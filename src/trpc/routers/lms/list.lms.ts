@@ -182,6 +182,7 @@ export const listLMS = {
           avatar: entry.user.avatar,
           role_id: entry.user.role_id,
           certificate_url: entry.certificate_url,
+          has_completed_survey: !!entry.user.occupation,
         };
       });
       return {
