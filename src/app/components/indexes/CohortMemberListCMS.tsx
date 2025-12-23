@@ -16,6 +16,7 @@ import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
+import { Progress } from "@/components/ui/progress";
 
 dayjs.extend(localizedFormat);
 
@@ -121,8 +122,9 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                 <tr>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-                  {/* <TableHeadCMS>{`Tier`.toUpperCase()}</TableHeadCMS> */}
                   <TableHeadCMS>{`Biz Info`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Attendance`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Assignment`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Certificate`.toUpperCase()}</TableHeadCMS>
                   {isAllowedDetailsMembers && (
                     <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
@@ -139,8 +141,8 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                     >
                       <TableCellCMS>{index + 1}</TableCellCMS>
                       <TableCellCMS>
-                        <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
-                          <div className="flex size-7 rounded-full overflow-hidden">
+                        <div className="user-id flex items-center gap-4 w-full">
+                          <div className="flex size-6 rounded-full shrink-0 overflow-hidden">
                             <Image
                               className="object-cover w-full h-full"
                               src={
@@ -152,20 +154,45 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                               height={300}
                             />
                           </div>
-                          <div className="user-name-email flex flex-col">
-                            <h2 className="user-name font-semibold font-bodycopy text-black line-clamp-1">
-                              {post.full_name}
-                            </h2>
-                          </div>
+                          <p className="user-name font-semibold line-clamp-1">
+                            {post.full_name}
+                          </p>
                         </div>
                       </TableCellCMS>
-                      {/* <TableCellCMS>{post.cohort_price_name}</TableCellCMS> */}
                       <TableCellCMS>
                         {post.has_completed_survey ? (
                           <BooleanLabelCMS label="COMPLETED" value={true} />
                         ) : (
                           <BooleanLabelCMS label="UNFINISHED" value={false} />
                         )}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <div className="flex items-center gap-2 w-full">
+                          <Progress
+                            value={Math.round(
+                              (post.attended_learning_count /
+                                post.learning_count) *
+                                100
+                            )}
+                          />
+                          <p className="text-xs">
+                            {post.attended_learning_count}/{post.learning_count}
+                          </p>
+                        </div>
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <div className="flex items-center gap-2 w-full">
+                          <Progress
+                            value={Math.round(
+                              (post.submitted_project_count /
+                                post.project_count) *
+                                100
+                            )}
+                          />
+                          <p className="text-xs">
+                            {post.submitted_project_count}/{post.project_count}
+                          </p>
+                        </div>
                       </TableCellCMS>
                       <TableCellCMS>
                         {!!post.certificate_url ? (
