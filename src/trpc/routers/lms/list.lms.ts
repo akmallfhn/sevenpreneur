@@ -167,23 +167,80 @@ export const listLMS = {
           "You're not allowed to read members of a cohort which you aren't enrolled."
         );
       }
-      const cohortMemberList = await opts.ctx.prisma.userCohort.findMany({
-        include: { user: { include: { phone_country: true } } },
+      type CohortMemberItem = {
+        id: string;
+        full_name: string;
+        email: string;
+        phone_country_country_name: string | null;
+        phone_country_phone_code: string | null;
+        phone_country_emoji: string | null;
+        phone_number: string | null;
+        avatar: string | null;
+        role_id: number;
+        has_completed_survey: boolean;
+        certificate_url: string | null;
+        is_scout: boolean;
+        attendance_count: number;
+        submission_count: number;
+      };
+      // OR NULL: https://stackoverflow.com/a/29022738
+      const memberList = await opts.ctx.prisma.$queryRaw<CohortMemberItem[]>`
+SELECT
+  users.id, users.full_name, users.email,
+  phone_country_codes.country_name, phone_country_codes.phone_code, phone_country_codes.emoji,
+  users.phone_number, users.avatar, users.role_id, users.occupation IS NOT NULL,
+  users_cohorts.certificate_url, users_cohorts.is_scout,
+  COALESCE(attendances_count.attendance_count, 0)::INTEGER AS attendance_count,
+  COALESCE(submissions_count.submission_count, 0)::INTEGER AS submission_count
+FROM users_cohorts
+  LEFT JOIN users ON users_cohorts.user_id = users.id
+  LEFT JOIN phone_country_codes ON users.phone_country_id = phone_country_codes.id
+  LEFT JOIN (
+    SELECT user_id,
+      COUNT(check_in_at IS NOT NULL AND check_out_at IS NOT NULL OR NULL) AS attendance_count
+    FROM attendances
+      LEFT JOIN learnings ON attendances.learning_id = learnings.id
+    WHERE learnings.cohort_id = ${opts.input.cohort_id}
+    GROUP BY attendances.user_id
+  ) AS attendances_count ON users.id = attendances_count.user_id
+  LEFT JOIN (
+    SELECT submitter_id, COUNT(submissions.document_url IS NOT NULL OR NULL) AS submission_count
+    FROM submissions
+      LEFT JOIN projects ON submissions.project_id = projects.id
+    WHERE projects.cohort_id = ${opts.input.cohort_id}
+    GROUP BY submissions.submitter_id
+  ) AS submissions_count ON users.id = submissions_count.submitter_id
+WHERE users_cohorts.cohort_id = ${opts.input.cohort_id}
+ORDER BY users.role_id ASC, users.full_name ASC;`;
+      const learningCount = await opts.ctx.prisma.learning.count({
         where: { cohort_id: opts.input.cohort_id },
-        orderBy: [{ user: { role_id: "asc" } }, { user: { full_name: "asc" } }],
       });
-      const returnedList = cohortMemberList.map((entry) => {
+      const projectCount = await opts.ctx.prisma.project.count({
+        where: { cohort_id: opts.input.cohort_id },
+      });
+      const returnedList = memberList.map((entry) => {
+        const phoneCountry = !!entry.phone_country_phone_code
+          ? {
+              country_name: entry.phone_country_country_name,
+              phone_code: entry.phone_country_phone_code,
+              emoji: entry.phone_country_emoji,
+            }
+          : null;
         return {
-          id: entry.user_id,
-          full_name: entry.user.full_name,
-          email: entry.user.email,
-          phone_country: entry.user.phone_country,
-          phone_number: entry.user.phone_number,
-          avatar: entry.user.avatar,
-          role_id: entry.user.role_id,
-          has_completed_survey: !!entry.user.occupation,
+          id: entry.id,
+          full_name: entry.full_name,
+          email: entry.email,
+          phone_country: phoneCountry,
+          phone_number: entry.phone_number,
+          avatar: entry.avatar,
+          role_id: entry.role_id,
+          has_completed_survey: entry.has_completed_survey,
           certificate_url: entry.certificate_url,
           is_scout: entry.is_scout,
+          learning_count: learningCount,
+          attended_learning_count: entry.attendance_count,
+          project_count: projectCount,
+          submitted_project_count: entry.submission_count,
         };
       });
       return {
