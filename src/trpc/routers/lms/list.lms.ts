@@ -187,8 +187,11 @@ export const listLMS = {
       const memberList = await opts.ctx.prisma.$queryRaw<CohortMemberItem[]>`
 SELECT
   users.id, users.full_name, users.email,
-  phone_country_codes.country_name, phone_country_codes.phone_code, phone_country_codes.emoji,
-  users.phone_number, users.avatar, users.role_id, users.occupation IS NOT NULL,
+  phone_country_codes.country_name AS phone_country_country_name,
+  phone_country_codes.phone_code AS phone_country_phone_code,
+  phone_country_codes.emoji AS phone_country_emoji,
+  users.phone_number, users.avatar, users.role_id,
+  users.occupation IS NOT NULL AS has_completed_survey,
   users_cohorts.certificate_url, users_cohorts.is_scout,
   COALESCE(attendances_count.attendance_count, 0)::INTEGER AS attendance_count,
   COALESCE(submissions_count.submission_count, 0)::INTEGER AS submission_count
