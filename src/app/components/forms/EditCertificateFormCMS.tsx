@@ -9,6 +9,7 @@ import AttendanceItemAccordionLMS from "../items/AttendanceItemAccordionLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
+import SubmissionItemAccordionLMS from "../items/SubmissionItemAccordionLMS";
 
 interface EditCertificateFormCMS {
   sessionToken: string;
@@ -98,7 +99,7 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
 
   return (
     <AppSheet
-      sheetName="Member Details"
+      sheetName="Performance Details"
       sheetDescription={`ID User: ${props.userId}`}
       isOpen={props.isOpen}
       onClose={props.onClose}
@@ -139,6 +140,17 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
                 attendanceStatus={post.status}
                 attendanceCheckInAt={post.check_in_at || ""}
                 attendanceCheckOutAt={post.check_out_at || ""}
+              />
+            ))}
+          </div>
+          <div className="projects flex flex-col gap-2.5">
+            <h3 className="font-bold font-bodycopy">Task & Assignment</h3>
+            {memberDetails.projects.map((post) => (
+              <SubmissionItemAccordionLMS
+                key={post.name}
+                projectName={post.name}
+                submissionStatus={post.has_submitted}
+                submissionCreatedAt={post.created_at}
               />
             ))}
           </div>
