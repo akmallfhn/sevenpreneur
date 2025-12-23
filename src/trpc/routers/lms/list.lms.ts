@@ -180,6 +180,7 @@ export const listLMS = {
         has_completed_survey: boolean;
         certificate_url: string | null;
         is_scout: boolean;
+        learning_count: number;
         attendance_count: number;
         submission_count: number;
       };
@@ -193,11 +194,18 @@ SELECT
   users.phone_number, users.avatar, users.role_id,
   users.occupation IS NOT NULL AS has_completed_survey,
   users_cohorts.certificate_url, users_cohorts.is_scout,
+  COALESCE(learning_count, 0)::INTEGER AS learning_count,
   COALESCE(attendances_count.attendance_count, 0)::INTEGER AS attendance_count,
   COALESCE(submissions_count.submission_count, 0)::INTEGER AS submission_count
 FROM users_cohorts
   LEFT JOIN users ON users_cohorts.user_id = users.id
   LEFT JOIN phone_country_codes ON users.phone_country_id = phone_country_codes.id
+  LEFT JOIN (
+    SELECT cohort_prices.id AS price_id, COUNT(*) AS learning_count
+    FROM cohort_prices
+    LEFT JOIN learnings ON learnings.price_id IS NULL OR cohort_prices.id = learnings.price_id
+    GROUP BY cohort_prices.id
+  ) AS learnings_count ON users_cohorts.cohort_price_id = learnings_count.price_id
   LEFT JOIN (
     SELECT user_id,
       COUNT(check_in_at IS NOT NULL AND check_out_at IS NOT NULL OR NULL) AS attendance_count
@@ -215,9 +223,6 @@ FROM users_cohorts
   ) AS submissions_count ON users.id = submissions_count.submitter_id
 WHERE users_cohorts.cohort_id = ${opts.input.cohort_id}
 ORDER BY users.role_id ASC, users.full_name ASC;`;
-      const learningCount = await opts.ctx.prisma.learning.count({
-        where: { cohort_id: opts.input.cohort_id },
-      });
       const projectCount = await opts.ctx.prisma.project.count({
         where: { cohort_id: opts.input.cohort_id },
       });
@@ -240,7 +245,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           has_completed_survey: entry.has_completed_survey,
           certificate_url: entry.certificate_url,
           is_scout: entry.is_scout,
-          learning_count: learningCount,
+          learning_count: entry.learning_count,
           attended_learning_count: entry.attendance_count,
           project_count: projectCount,
           submitted_project_count: entry.submission_count,
