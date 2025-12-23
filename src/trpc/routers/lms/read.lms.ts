@@ -152,9 +152,8 @@ export const readLMS = {
       const projectsList = await opts.ctx.prisma.project.findMany({
         select: {
           name: true,
-          created_at: true,
           submissions: {
-            select: { document_url: true },
+            select: { document_url: true, is_favorite: true, created_at: true },
             where: { submitter_id: opts.input.user_id },
           },
         },
@@ -165,15 +164,17 @@ export const readLMS = {
         if (entry.submissions.length < 1) {
           return {
             name: entry.name,
-            has_submitted: false,
-            created_at: entry.created_at,
+            has_submitted: false as const,
+            is_favorite: null,
+            submitted_at: null,
           };
         }
         const submission = entry.submissions[0];
         return {
           name: entry.name,
           has_submitted: !!submission.document_url,
-          created_at: entry.created_at,
+          is_favorite: submission.is_favorite,
+          submitted_at: submission.created_at,
         };
       });
       return {
