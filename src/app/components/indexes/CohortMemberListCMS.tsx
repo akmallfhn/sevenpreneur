@@ -83,23 +83,23 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                 Details
               </AppBreadcrumbItem>
               <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>Members</AppBreadcrumbItem>
+              <AppBreadcrumbItem isCurrentPage>Performance</AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
               <TitleRevealCMS
-                titlePage="Cohort Members"
-                descPage={`Browse and review all submissions for `}
+                titlePage="Student Performance Tracker"
+                descPage="Track student attendance, assignment progress, and overall learning performance"
               />
             </div>
           </div>
           <div className="progress-review grid grid-cols-5 w-full gap-3">
             <ScorecardItemCMS
-              scorecardName="Total Members"
+              scorecardName="Total Students"
               scorecardValue={cohortMemberList?.length || 0}
               scorecardBackground="bg-primary"
             />
             <ScorecardItemCMS
-              scorecardName="Certified Members"
+              scorecardName="Certified Students"
               scorecardValue={
                 cohortMemberList?.filter((item) => !!item.certificate_url)
                   .length || 0
@@ -107,12 +107,12 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
               scorecardBackground="bg-success-foreground"
             />
             <ScorecardItemCMS
-              scorecardName="Uncertified Members"
+              scorecardName="Completed Information"
               scorecardValue={
-                cohortMemberList?.filter((item) => !item.certificate_url)
+                cohortMemberList?.filter((item) => item.has_completed_survey)
                   .length || 0
               }
-              scorecardBackground="bg-destructive"
+              scorecardBackground="bg-cms-primary"
             />
           </div>
           <div className="submission-list flex flex-col gap-2">
@@ -121,7 +121,9 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                 <tr>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Certified`.toUpperCase()}</TableHeadCMS>
+                  {/* <TableHeadCMS>{`Tier`.toUpperCase()}</TableHeadCMS> */}
+                  <TableHeadCMS>{`Biz Info`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Certificate`.toUpperCase()}</TableHeadCMS>
                   {isAllowedDetailsMembers && (
                     <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
                   )}
@@ -157,11 +159,19 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                           </div>
                         </div>
                       </TableCellCMS>
+                      {/* <TableCellCMS>{post.cohort_price_name}</TableCellCMS> */}
+                      <TableCellCMS>
+                        {post.has_completed_survey ? (
+                          <BooleanLabelCMS label="COMPLETED" value={true} />
+                        ) : (
+                          <BooleanLabelCMS label="UNFINISHED" value={false} />
+                        )}
+                      </TableCellCMS>
                       <TableCellCMS>
                         {!!post.certificate_url ? (
-                          <BooleanLabelCMS label="CERTIFIED" value={true} />
+                          <BooleanLabelCMS label="UPLOADED" value={true} />
                         ) : (
-                          <BooleanLabelCMS label="UNCERTIFIED" value={false} />
+                          <BooleanLabelCMS label="NOT UPLOADED" value={false} />
                         )}
                       </TableCellCMS>
                       {isAllowedDetailsMembers && (

@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
+import AttendanceItemAccordionLMS from "../items/AttendanceItemAccordionLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
@@ -129,10 +130,22 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
               userPhoneNumber={memberDetails.phone_number || ""}
             />
           </div>
+          <div className="attendances flex flex-col gap-2.5">
+            <h3 className="font-bold font-bodycopy">Attendances</h3>
+            {memberDetails.attendances.map((post) => (
+              <AttendanceItemAccordionLMS
+                key={post.learning_name}
+                learningSessionName={post.learning_name}
+                attendanceStatus={post.status}
+                attendanceCheckInAt={post.check_in_at || ""}
+                attendanceCheckOutAt={post.check_out_at || ""}
+              />
+            ))}
+          </div>
           {certificateURL ? (
-            <div className="certificate flex flex-col gap-2 p-4 border border-outline rounded-md">
+            <div className="certificate flex flex-col gap-2 p-3 border border-outline rounded-md">
               <h3 className="font-bold font-bodycopy">Certificate</h3>
-              <div className="certificate-file relative w-full">
+              <div className="certificate-file relative w-full text-[15px]">
                 <FileItemLMS
                   fileName="Completion Certificate"
                   fileURL={certificateURL}
@@ -160,7 +173,7 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
         </div>
       )}
       {isAllowedUpdateCertificate && (
-        <div className="update-certificate sticky bottom-0 w-full p-4 bg-white z-40">
+        <div className="update-certificate sticky bottom-0 w-full p-4 bg-white border-t border-outline z-40">
           <AppButton
             className="w-full"
             variant="cmsPrimary"
@@ -168,7 +181,7 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
             disabled={isSubmitting}
           >
             {isSubmitting && <Loader2 className="animate-spin size-4" />}
-            Update Certificaate
+            Save Changes
           </AppButton>
         </div>
       )}
