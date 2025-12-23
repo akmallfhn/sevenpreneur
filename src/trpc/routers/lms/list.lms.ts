@@ -739,35 +739,39 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
       })
     )
     .query(async (opts) => {
-      type MemberCount = {
-        member_count: number;
-      };
-      const cohortMemberCount = await opts.ctx.prisma.$queryRaw<MemberCount[]>`
-SELECT COUNT(*)::INTEGER AS member_count
-FROM users_cohorts
-  LEFT JOIN users ON users_cohorts.user_id = users.id
-WHERE cohort_id = ${opts.input.cohort_id}
-  AND users.role_id = 3 /* General User */;`;
-      const memberCount = cohortMemberCount[0].member_count;
-
-      const returnedList = await opts.ctx.prisma.$queryRaw<AttendanceCount[]>`
+      const countsList = await opts.ctx.prisma.$queryRaw<AttendanceCount[]>`
 SELECT
   learnings.id AS learning_id,
   COUNT(check_in_at)::INTEGER AS check_in_count,
   COUNT(check_out_at)::INTEGER AS check_out_count,
-  (${memberCount} - COUNT(users.id))::INTEGER AS has_no_attendance
+  COALESCE((member_counts.member_count - COUNT(users.id)), 0)::INTEGER AS has_no_attendance
 FROM learnings
   LEFT JOIN attendances ON learnings.id = attendances.learning_id
   LEFT JOIN users ON attendances.user_id = users.id
+  LEFT JOIN (
+      SELECT cohort_prices.id AS price_id, COUNT(users.id) AS member_count
+      FROM cohort_prices
+        LEFT JOIN users_cohorts ON cohort_prices.id = users_cohorts.cohort_price_id
+        INNER JOIN users ON users_cohorts.user_id = users.id
+      WHERE cohort_prices.cohort_id = ${opts.input.cohort_id}
+        AND users.role_id = 3 /* General User */
+      GROUP BY cohort_prices.id
+    UNION
+      SELECT 0::INTEGER AS price_id, COUNT(users.id) AS member_count
+      FROM users_cohorts
+        INNER JOIN users ON users_cohorts.user_id = users.id
+      WHERE cohort_id = ${opts.input.cohort_id}
+        AND users.role_id = 3 /* General User */
+  ) AS member_counts ON COALESCE(learnings.price_id, 0) = member_counts.price_id
 WHERE cohort_id = ${opts.input.cohort_id}
   AND (users.role_id IS NULL OR users.role_id = 3 /* General User */)
-GROUP BY learnings.id
+GROUP BY learnings.id, member_counts.member_count
 ORDER BY meeting_date ASC, learnings.created_at ASC;`;
 
       return {
         code: STATUS_OK,
         message: "Success",
-        list: returnedList,
+        list: countsList,
       };
     }),
 };
