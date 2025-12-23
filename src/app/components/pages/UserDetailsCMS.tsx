@@ -357,7 +357,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     disabled
                     options={[
                       {
-                        label: "<kurang dari> 50 juta",
+                        label: "< 50 juta",
                         value: "BELOW_50M",
                       },
                       {
