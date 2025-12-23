@@ -149,6 +149,33 @@ export const readLMS = {
           status: !!attendance.check_in_at && !!attendance.check_out_at,
         };
       });
+      const projectsList = await opts.ctx.prisma.project.findMany({
+        select: {
+          name: true,
+          created_at: true,
+          submissions: {
+            select: { document_url: true },
+            where: { submitter_id: opts.input.user_id },
+          },
+        },
+        where: { cohort_id: opts.input.cohort_id },
+        orderBy: [{ created_at: "asc" }, { updated_at: "asc" }],
+      });
+      const submissionsList = projectsList.map((entry) => {
+        if (entry.submissions.length < 1) {
+          return {
+            name: entry.name,
+            has_submitted: false,
+            created_at: entry.created_at,
+          };
+        }
+        const submission = entry.submissions[0];
+        return {
+          name: entry.name,
+          has_submitted: !!submission.document_url,
+          created_at: entry.created_at,
+        };
+      });
       return {
         code: STATUS_OK,
         message: "Success",
@@ -164,6 +191,7 @@ export const readLMS = {
           certificate_url: theCohortMember.certificate_url,
           is_scout: theCohortMember.is_scout,
           attendances: attendancesList,
+          projects: submissionsList,
         },
       };
     }),
