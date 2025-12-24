@@ -1,7 +1,6 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -19,11 +18,10 @@ import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AttendancesChartCMS from "../charts/AttendancesChartCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
-import StatGatewayCMS from "../gateways/StatGatewayCMS";
 import LearningListCMS from "../indexes/LearningListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
-import PriceItemCardCMS from "../items/PriceItemCardCMS";
+import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
@@ -208,7 +206,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                 )}
               </div>
             </div>
-            <div className="cohort-prices flex flex-col gap-3">
+            {/* <div className="cohort-prices flex flex-col gap-3">
               <h2 className="section-name font-brand font-bold">Price Tiers</h2>
               <div className="w-full overflow-x-auto scroll-smooth">
                 <div className="cohort-price-list flex gap-4 w-fit max-w-full pb-4 snap-x snap-mandatory">
@@ -222,9 +220,10 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
             <AttendancesChartCMS
               sessionToken={props.sessionToken}
+              sessionUserRole={props.sessionUserRole}
               cohortId={props.cohortId}
             />
             <LearningListCMS
@@ -234,12 +233,10 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
             />
           </main>
           <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
-            <StatGatewayCMS
-              statsName="Enrolled Members"
-              statsIcon={faUser}
-              statsIconColor="bg-[#FEE5D7] text-[#FF7830]"
-              statsValue={cohortMemberList?.length || "-"}
-              statsURL={`/cohorts/${props.cohortId}/members`}
+            <ScorecardItemCMS
+              scorecardName="Enrolled Students"
+              scorecardBackground="bg-[#FF7830]"
+              scorecardValue={cohortMemberList?.length || "-"}
             />
             <ModuleListCMS
               sessionToken={props.sessionToken}

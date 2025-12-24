@@ -11,7 +11,7 @@ import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
 import SubmissionItemAccordionLMS from "../items/SubmissionItemAccordionLMS";
 
-interface EditCertificateFormCMS {
+interface EditCohortMemberFormCMSProps {
   sessionToken: string;
   sessionUserId: string;
   sessionUserRole: number;
@@ -21,7 +21,9 @@ interface EditCertificateFormCMS {
   onClose: () => void;
 }
 
-export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
+export default function EditCohortMemberFormCMS(
+  props: EditCohortMemberFormCMSProps
+) {
   const utils = trpc.useUtils();
   const updateCohortMember = trpc.update.cohortMember.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -150,7 +152,7 @@ export default function EditCertificateFormCMS(props: EditCertificateFormCMS) {
                 key={post.name}
                 projectName={post.name}
                 submissionStatus={post.has_submitted}
-                submissionCreatedAt={post.created_at}
+                submittedAt={post.submitted_at ?? ""}
               />
             ))}
           </div>

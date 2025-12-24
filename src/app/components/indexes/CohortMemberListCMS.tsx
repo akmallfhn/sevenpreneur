@@ -1,4 +1,5 @@
 "use client";
+import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -10,13 +11,12 @@ import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import EditCertificateFormCMS from "../forms/EditCertificateFormCMS";
+import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
-import { Progress } from "@/components/ui/progress";
 
 dayjs.extend(localizedFormat);
 
@@ -223,7 +223,7 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
 
       {/* Open Submission Details */}
       {openDetailsId && (
-        <EditCertificateFormCMS
+        <EditCohortMemberFormCMS
           sessionToken={props.sessionToken}
           sessionUserId={props.sessionUserId}
           sessionUserRole={props.sessionUserRole}

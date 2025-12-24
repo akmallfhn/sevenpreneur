@@ -7,7 +7,7 @@ import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 interface SubmissionItemAccordionLMSProps {
   projectName: string;
   submissionStatus: boolean;
-  submissionCreatedAt: string;
+  submittedAt: string;
 }
 
 export default function SubmissionItemAccordionLMS(
@@ -50,8 +50,8 @@ export default function SubmissionItemAccordionLMS(
               <p className="font-bodycopy font-medium text-sm">Submitted at</p>
             </div>
             <p className="font-bodycopy font-medium text-sm text-[#333333]/80 shrink-0">
-              {!!props.submissionCreatedAt
-                ? dayjs(props.submissionCreatedAt).format("DD/MMM/YY [-] HH:mm")
+              {!!props.submittedAt
+                ? dayjs(props.submittedAt).format("DD/MMM/YY [-] HH:mm")
                 : "-"}
             </p>
           </div>
