@@ -72,3 +72,4 @@ export type AIChatEventType =
   | "completed"
   | "failed"
   | "error";
+export type ReactionVariant = "favorite" | "scout";

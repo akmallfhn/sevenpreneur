@@ -10,6 +10,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
 import SubmissionItemAccordionLMS from "../items/SubmissionItemAccordionLMS";
+import AppReactionButton from "../buttons/AppReactionButton";
 
 interface EditCohortMemberFormCMSProps {
   sessionToken: string;
@@ -27,6 +28,7 @@ export default function EditCohortMemberFormCMS(
   const utils = trpc.useUtils();
   const updateCohortMember = trpc.update.cohortMember.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isScout, setIsScout] = useState(false);
   const [certificateURL, setCertificateURL] = useState("");
 
   const allowedRolesUpdateCertificate = [0, 2];
@@ -42,10 +44,13 @@ export default function EditCohortMemberFormCMS(
   const memberDetails = data?.cohortMember;
 
   useEffect(() => {
+    if (!memberDetails) return;
+
+    setIsScout(memberDetails.is_scout);
     if (memberDetails?.certificate_url) {
       setCertificateURL(memberDetails.certificate_url);
     }
-  }, [memberDetails?.certificate_url]);
+  }, [memberDetails, memberDetails?.certificate_url]);
 
   const handleCertificateChange = (value: string | null) => {
     setCertificateURL(value ?? "");
@@ -74,6 +79,7 @@ export default function EditCohortMemberFormCMS(
           // Mandatory fields
           user_id: props.userId,
           cohort_id: props.cohortId,
+          is_scout: isScout,
 
           // Optional fields
           certificate_url: certificateURL ? certificateURL : null,
@@ -131,6 +137,16 @@ export default function EditCohortMemberFormCMS(
               }
               userEmail={memberDetails.email}
               userPhoneNumber={memberDetails.phone_number || ""}
+            />
+          </div>
+          <div className="user-details flex flex-col gap-2">
+            <h5 className="font-bodycopy font-bold text-[15px]">
+              Marks as Scout
+            </h5>
+            <AppReactionButton
+              isSelected={isScout}
+              variant="scout"
+              onClick={() => setIsScout((prev) => !prev)}
             />
           </div>
           <div className="attendances flex flex-col gap-2.5">

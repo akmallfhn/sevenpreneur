@@ -1,18 +1,19 @@
 "use client";
 import { getSubmissionTiming } from "@/lib/date-time-manipulation";
 import { trpc } from "@/trpc/client";
+import { AIResultSubmissionAnalysis } from "@/trpc/routers/ai_tool/prompt.ai_tool";
 import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
 import dayjs from "dayjs";
-import { Heart, Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
+import AppReactionButton from "../buttons/AppReactionButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import FileItemLMS from "../items/FileItemLMS";
 import SheetLineItemCMS from "../items/SheetLineItemCMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "./AppSheet";
-import { AIResultSubmissionAnalysis } from "@/trpc/routers/ai_tool/prompt.ai_tool";
 
 interface SubmissionDetailsCMSProps {
   sessionToken: string;
@@ -222,23 +223,11 @@ export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
               fileName={`Assignment - ${submissionDetails.submitter.full_name}`}
               fileURL={submissionDetails.document_url || ""}
             />
-            <button
-              className={`like-button flex w-fit items-center justify-center gap-1.5 py-1 px-2 transition-transform ease-in-out rounded-full active:scale-90 hover:cursor-pointer ${
-                isFavorite
-                  ? "border-0 bg-[#FCEDF1] text-secondary"
-                  : "border border-outline text-[#333333]"
-              }`}
+            <AppReactionButton
+              isSelected={isFavorite}
+              variant="favorite"
               onClick={() => setIsFavorite((prev) => !prev)}
-            >
-              <Heart
-                className="size-5"
-                fill={isFavorite ? "#e74d79" : "none"}
-                strokeWidth={isFavorite ? 0 : 2}
-              />
-              <p className="font-bodycopy font-medium text-sm">
-                {isFavorite ? "Favorited" : "Favorite"}
-              </p>
-            </button>
+            />
           </div>
           <SheetLineItemCMS itemName="Submitted at">
             {dayjs(submissionDetails?.created_at).format(

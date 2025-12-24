@@ -4,7 +4,7 @@ import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { ChevronRight, Eye, Loader2 } from "lucide-react";
+import { ChevronRight, Eye, Loader2, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -122,6 +122,7 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                 <tr>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Sct`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Biz Info`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Attendance`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Assignment`.toUpperCase()}</TableHeadCMS>
@@ -158,6 +159,15 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                             {post.full_name}
                           </p>
                         </div>
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {!!post.is_scout && (
+                          <Star
+                            className="size-5"
+                            fill={!!post.is_scout ? "#E5BA39" : "none"}
+                            strokeWidth={!!post.is_scout ? 0 : 2}
+                          />
+                        )}
                       </TableCellCMS>
                       <TableCellCMS>
                         {post.has_completed_survey ? (
