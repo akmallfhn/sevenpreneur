@@ -93,19 +93,18 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
               />
             </div>
           </div>
-          <div className="progress-review grid grid-cols-5 w-full gap-3">
+          <div className="progress-review grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
             <ScorecardItemCMS
               scorecardName="Total Students"
               scorecardValue={cohortMemberList?.length || 0}
               scorecardBackground="bg-primary"
             />
             <ScorecardItemCMS
-              scorecardName="Certified Students"
+              scorecardName="Student Scouts"
               scorecardValue={
-                cohortMemberList?.filter((item) => !!item.certificate_url)
-                  .length || 0
+                cohortMemberList?.filter((item) => item.is_scout).length || 0
               }
-              scorecardBackground="bg-success-foreground"
+              scorecardBackground="bg-warning-foreground"
             />
             <ScorecardItemCMS
               scorecardName="Completed Information"
@@ -114,6 +113,14 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                   .length || 0
               }
               scorecardBackground="bg-cms-primary"
+            />
+            <ScorecardItemCMS
+              scorecardName="Certified Students"
+              scorecardValue={
+                cohortMemberList?.filter((item) => !!item.certificate_url)
+                  .length || 0
+              }
+              scorecardBackground="bg-success-foreground"
             />
           </div>
           <div className="submission-list flex flex-col gap-2">
