@@ -11,12 +11,12 @@ import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import SubmissionDetailsCMS from "../modals/SubmissionDetailsCMS";
+import EditSubmissionFormCMS from "../forms/EditSubmissionFormCMS";
+import ScorecardItemCMS from "../items/ScorecardItemCMS";
+import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
-import ScorecardItemCMS from "../items/ScorecardItemCMS";
-import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -257,7 +257,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
 
       {/* Open Submission Details */}
       {openDetailsId && (
-        <SubmissionDetailsCMS
+        <EditSubmissionFormCMS
           sessionToken={props.sessionToken}
           sessionUserId={props.sessionUserId}
           sessionUserRole={props.sessionUserRole}

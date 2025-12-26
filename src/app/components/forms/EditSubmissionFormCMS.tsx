@@ -13,9 +13,9 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import FileItemLMS from "../items/FileItemLMS";
 import SheetLineItemCMS from "../items/SheetLineItemCMS";
 import UserItemCMS from "../items/UserItemCMS";
-import AppSheet from "./AppSheet";
+import AppSheet from "../modals/AppSheet";
 
-interface SubmissionDetailsCMSProps {
+interface EditSubmissionFormCMSProps {
   sessionToken: string;
   sessionUserId: string;
   sessionUserRole: number;
@@ -25,7 +25,9 @@ interface SubmissionDetailsCMSProps {
   onClose: () => void;
 }
 
-export default function SubmissionDetailsCMS(props: SubmissionDetailsCMSProps) {
+export default function EditSubmissionFormCMS(
+  props: EditSubmissionFormCMSProps
+) {
   const utils = trpc.useUtils();
 
   const updateComment = trpc.update.submission.useMutation();
