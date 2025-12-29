@@ -22,32 +22,30 @@ export const listUserData = {
     .query(async (opts) => {
       const whereClause = {
         role_id: opts.input.role_id,
-        OR: [
-          {
-            full_name: undefined as Optional<{
-              contains: string;
-              mode: "insensitive";
-            }>,
-          },
-          {
-            email: undefined as Optional<{
-              contains: string;
-              mode: "insensitive";
-            }>,
-          },
-        ],
+        OR: undefined as Optional<
+          [
+            { full_name: { contains: string; mode: "insensitive" } },
+            { email: { contains: string; mode: "insensitive" } }
+          ]
+        >,
         deleted_at: null,
       };
 
       if (opts.input.keyword !== undefined) {
-        whereClause.OR[0].full_name = {
-          contains: opts.input.keyword,
-          mode: "insensitive",
-        };
-        whereClause.OR[1].email = {
-          contains: opts.input.keyword,
-          mode: "insensitive",
-        };
+        whereClause.OR = [
+          {
+            full_name: {
+              contains: opts.input.keyword,
+              mode: "insensitive",
+            },
+          },
+          {
+            email: {
+              contains: opts.input.keyword,
+              mode: "insensitive",
+            },
+          },
+        ];
       }
 
       const paging = calculatePage(
