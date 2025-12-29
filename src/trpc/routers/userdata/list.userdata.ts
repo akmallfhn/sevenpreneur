@@ -22,15 +22,29 @@ export const listUserData = {
     .query(async (opts) => {
       const whereClause = {
         role_id: opts.input.role_id,
-        full_name: undefined as Optional<{
-          contains: string;
-          mode: "insensitive";
-        }>,
+        OR: [
+          {
+            full_name: undefined as Optional<{
+              contains: string;
+              mode: "insensitive";
+            }>,
+          },
+          {
+            email: undefined as Optional<{
+              contains: string;
+              mode: "insensitive";
+            }>,
+          },
+        ],
         deleted_at: null,
       };
 
       if (opts.input.keyword !== undefined) {
-        whereClause.full_name = {
+        whereClause.OR[0].full_name = {
+          contains: opts.input.keyword,
+          mode: "insensitive",
+        };
+        whereClause.OR[1].email = {
           contains: opts.input.keyword,
           mode: "insensitive",
         };
