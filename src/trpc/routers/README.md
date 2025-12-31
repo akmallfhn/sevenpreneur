@@ -4,18 +4,18 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Hello, World! 🌏
 
-| Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `hello.getHello` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name   | Logged-In User | Public/Not Logged-In |
+| :--------------- | :------------: | :------------------: |
+| `hello.getHello` |       ✅       |          ❌          |
 
 ## Authentication 🔐
 
-| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `auth.login`        |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `auth.checkSession` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `auth.createJWT`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `auth.logout`       |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
+| Procedure Name      | Logged-In User | Public/Not Logged-In |
+| :------------------ | :------------: | :------------------: |
+| `auth.login`        |       ✅       |          ✅          |
+| `auth.checkSession` |       ✅       |          ❌          |
+| `auth.createJWT`    |       ✅       |          ❌          |
+| `auth.logout`       |       ✅       |          ✅          |
 
 **Scopes:**
 
@@ -24,35 +24,35 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Roles 👥
 
-| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.roles`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.role`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name | Logged-In User | Public/Not Logged-In |
+| :------------- | :------------: | :------------------: |
+| `list.roles`   |       ✅       |          ❌          |
+| `read.role`    |       ✅       |          ❌          |
 
 **Scopes:** All logged-in users have read access to all roles.
 
 ## Industries 🏭
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.industries` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.industry`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name    | Logged-In User | Public/Not Logged-In |
+| :---------------- | :------------: | :------------------: |
+| `list.industries` |       ✅       |          ❌          |
+| `read.industry`   |       ✅       |          ❌          |
 
 **Scopes:** All logged-in users have read access to all industries.
 
 ## Phone Country Codes ☎️
 
-| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.phoneCountryCodes` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Logged-In User | Public/Not Logged-In |
+| :----------------------- | :------------: | :------------------: |
+| `list.phoneCountryCodes` |       ✅       |          ❌          |
 
 **Scopes:** All logged-in users have read access to all phone country codes.
 
 ## Payment Channels 🏦
 
-| Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.paymentChannels` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name         | Logged-In User | Public/Not Logged-In |
+| :--------------------- | :------------: | :------------------: |
+| `list.paymentChannels` |       ✅       |          ❌          |
 
 **Scopes:** All logged-in users have read access to all payment channels.
 
@@ -74,9 +74,9 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### User Businesses 👤
 
-| Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `update.user_business` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name         | Logged-In User | Public/Not Logged-In |
+| :--------------------- | :------------: | :------------------: |
+| `update.user_business` |       ✅       |          ❌          |
 
 **Scopes:**
 
@@ -133,10 +133,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Enrolled Cohorts 🎓
 
-| Procedure Name         | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.enrolledCohorts` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.enrolledCohort`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name         | Logged-In User | Public/Not Logged-In |
+| :--------------------- | :------------: | :------------------: |
+| `list.enrolledCohorts` |       ✅       |          ❌          |
+| `read.enrolledCohort`  |       ✅       |          ❌          |
 
 **Scopes:** Logged-in users can see all their own paid/enrolled cohorts.
 
@@ -191,12 +191,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Discussion Starters 💬
 
-| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.discussionStarter` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.discussionStarters`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.discussionStarter` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `delete.discussionStarter` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name             | Logged-In User | Public/Not Logged-In |
+| :------------------------- | :------------: | :------------------: |
+| `create.discussionStarter` |       ✅       |          ❌          |
+| `list.discussionStarters`  |       ✅       |          ❌          |
+| `update.discussionStarter` |       ✅       |          ❌          |
+| `delete.discussionStarter` |       ✅       |          ❌          |
 
 **Scopes:**
 
@@ -208,12 +208,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Discussion Replies 🗪
 
-| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.discussionReply` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.discussionReplies` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.discussionReply` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `delete.discussionReply` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Logged-In User | Public/Not Logged-In |
+| :----------------------- | :------------: | :------------------: |
+| `create.discussionReply` |       ✅       |          ❌          |
+| `list.discussionReplies` |       ✅       |          ❌          |
+| `update.discussionReply` |       ✅       |          ❌          |
+| `delete.discussionReply` |       ✅       |          ❌          |
 
 **Scopes:**
 
@@ -305,10 +305,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Enrolled Playlists 📺
 
-| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.enrolledPlaylists` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.enrolledPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Logged-In User | Public/Not Logged-In |
+| :----------------------- | :------------: | :------------------: |
+| `list.enrolledPlaylists` |       ✅       |          ❌          |
+| `read.enrolledPlaylist`  |       ✅       |          ❌          |
 
 **Scopes:** Logged-in users can see all their own paid/enrolled playlists.
 
@@ -411,27 +411,27 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Discounts 🪙
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `list.discounts`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `read.discount`   |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `update.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.discount` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name    | Administrator (`0`) | Non-Administrator/Not Logged-In |
+| :---------------- | :-----------------: | :-----------------------------: |
+| `create.discount` |         ✅          |               ❌                |
+| `list.discounts`  |         ✅          |               ❌                |
+| `read.discount`   |         ✅          |               ❌                |
+| `update.discount` |         ✅          |               ❌                |
+| `delete.discount` |         ✅          |               ❌                |
 
 **Scopes:** Only Administrators have access to all discounts' data.
 
 ## Transactions 💰
 
-| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `purchase.checkDiscount` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `purchase.cohort`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `purchase.playlist`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `purchase.event`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `purchase.cancel`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.transactions`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.transaction`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Logged-In User | Public/Not Logged-In |
+| :----------------------- | :------------: | :------------------: |
+| `purchase.checkDiscount` |       ✅       |          ❌          |
+| `purchase.cohort`        |       ✅       |          ❌          |
+| `purchase.playlist`      |       ✅       |          ❌          |
+| `purchase.event`         |       ✅       |          ❌          |
+| `purchase.cancel`        |       ✅       |          ❌          |
+| `list.transactions`      |       ✅       |          ❌          |
+| `read.transaction`       |       ✅       |          ❌          |
 
 **Scopes:**
 
