@@ -480,9 +480,9 @@ CREATE VIEW users_ai_tools AS
 -- User data
 
 ALTER TABLE users
-  ADD FOREIGN KEY (phone_country_id)   REFERENCES phone_country_codes (id),
-  ADD FOREIGN KEY (role_id)            REFERENCES roles (id),
-  ADD FOREIGN KEY (industry_id)        REFERENCES industries (id);
+  ADD FOREIGN KEY (phone_country_id) REFERENCES phone_country_codes (id),
+  ADD FOREIGN KEY (role_id)          REFERENCES roles (id),
+  ADD FOREIGN KEY (industry_id)      REFERENCES industries (id);
 
 ALTER TABLE tokens
   ADD FOREIGN KEY (user_id) REFERENCES users (id);
@@ -558,7 +558,7 @@ ALTER TABLE ai_chats
 -- Transaction-related
 
 ALTER TABLE transactions
-  ADD FOREIGN KEY (user_id) REFERENCES users (id),
+  ADD FOREIGN KEY (user_id)     REFERENCES users (id),
   ADD FOREIGN KEY (discount_id) REFERENCES discounts (id);
 
 -- Relation Tables --
@@ -569,15 +569,15 @@ ALTER TABLE users_cohorts
   ADD FOREIGN KEY (cohort_price_id) REFERENCES cohort_prices (id);
 
 ALTER TABLE users_events
-  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
-  ADD FOREIGN KEY (event_id)  REFERENCES events (id);
+  ADD FOREIGN KEY (user_id)  REFERENCES users (id),
+  ADD FOREIGN KEY (event_id) REFERENCES events (id);
 
 ALTER TABLE users_playlists
-  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (user_id)     REFERENCES users (id),
   ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
 
 ALTER TABLE educators_playlists
-  ADD FOREIGN KEY (user_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (user_id)     REFERENCES users (id),
   ADD FOREIGN KEY (playlist_id) REFERENCES playlists (id);
 
 ---------------
