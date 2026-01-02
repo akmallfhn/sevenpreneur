@@ -339,7 +339,7 @@ Table event_prices {
 // Template-related
 
 Table templates {
-  id            serial       [primary key]
+  id            integer      [primary key]
   name          varchar
   description   varchar
   image         varchar
@@ -353,7 +353,7 @@ Table templates {
 // AI-tool-related
 
 Table ai_tools {
-  id           smallserial  [primary key]
+  id           smallint    [primary key]
   name         varchar
   description  varchar
   slug_url     varchar
