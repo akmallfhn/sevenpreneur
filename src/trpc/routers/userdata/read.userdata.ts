@@ -9,7 +9,7 @@ export const readUserData = {
     .input(z.object({ id: stringIsUUID().optional() }))
     .query(async (opts) => {
       let selectedUserId = opts.input.id || opts.ctx.user.id;
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         selectedUserId = opts.ctx.user.id;
       }
       const theUser = await opts.ctx.prisma.user.findFirst({

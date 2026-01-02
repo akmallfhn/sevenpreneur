@@ -1,5 +1,5 @@
 import { STATUS_OK } from "@/lib/status_code";
-import { administratorProcedure } from "@/trpc/init";
+import { roleBasedProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
   numberIsID,
@@ -10,7 +10,7 @@ import { StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const updateTicker = {
-  ticker: administratorProcedure
+  ticker: roleBasedProcedure(["Administrator", "Marketer"])
     .input(
       z.object({
         id: numberIsID(),

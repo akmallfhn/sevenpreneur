@@ -242,7 +242,7 @@ export const readLMS = {
     }),
 
   module: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name === "General User") {
+    if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
       const checkModule = await opts.ctx.prisma.module.findFirst({
         select: { cohort_id: true },
         where: { id: opts.input.id },
@@ -286,7 +286,7 @@ export const readLMS = {
     if (!theLearning) {
       throw readFailedNotFound("learning");
     }
-    if (opts.ctx.user.role.name === "General User") {
+    if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
       const theEnrolledCohort = await isEnrolledCohort(
         opts.ctx.prisma,
         opts.ctx.user.id,
@@ -312,7 +312,7 @@ export const readLMS = {
   }),
 
   material: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name === "General User") {
+    if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
       const checkMaterial = await opts.ctx.prisma.material.findFirst({
         select: { learning_id: true },
         where: { id: opts.input.id },
@@ -344,7 +344,7 @@ export const readLMS = {
   }),
 
   project: loggedInProcedure.input(objectHasOnlyID()).query(async (opts) => {
-    if (opts.ctx.user.role.name === "General User") {
+    if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
       const checkProject = await opts.ctx.prisma.project.findFirst({
         select: { cohort_id: true },
         where: { id: opts.input.id },
