@@ -123,7 +123,6 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   return (
     <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -133,10 +132,8 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
             <TitleRevealCMS
-              titlePage={"User List"}
-              descPage={
-                "View and manage all registered users in one place, with quick access to actions like edit or delete."
-              }
+              titlePage="User List"
+              descPage="View and manage all registered users in one place, with quick access to actions like edit or delete."
             />
             <Link href={"/users/create"} className="w-fit h-fit">
               <AppButton variant="cmsPrimary">

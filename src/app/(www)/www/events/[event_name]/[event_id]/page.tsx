@@ -10,12 +10,12 @@ interface EventDetailsPageProps {
 export async function generateMetadata({
   params,
 }: EventDetailsPageProps): Promise<Metadata> {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { event_id } = await params;
   const eventId = parseInt(event_id);
 
-  // --- Get Data
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   setSecretKey(secretKey!);
+
   const eventData = (await trpc.read.event({ id: eventId })).event;
 
   if (eventData.status !== "ACTIVE") {
@@ -78,12 +78,13 @@ export async function generateMetadata({
 export default async function EventDetailsPage({
   params,
 }: EventDetailsPageProps) {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   const { event_id, event_name } = await params;
   const eventId = parseInt(event_id);
 
   // Get Data
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   setSecretKey(secretKey!);
+
   let eventDataRaw;
   try {
     eventDataRaw = (await trpc.read.event({ id: eventId })).event;
