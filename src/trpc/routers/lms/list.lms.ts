@@ -159,7 +159,7 @@ export const listLMS = {
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -345,7 +345,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -381,7 +381,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     )
     .query(async (opts) => {
       let whereOr: Optional<{ price_id: number | null }[]> = undefined;
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         const theEnrolledCohort = await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -478,7 +478,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         await isEnrolledLearning(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -625,7 +625,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
       })
     )
     .query(async (opts) => {
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         await isEnrolledCohort(
           opts.ctx.prisma,
           opts.ctx.user.id,
@@ -694,7 +694,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     )
     .query(async (opts) => {
       let selectedUserId = opts.input.submitter_id;
-      if (opts.ctx.user.role.name === "General User") {
+      if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
         if (!selectedUserId) {
           selectedUserId = opts.ctx.user.id;
         }

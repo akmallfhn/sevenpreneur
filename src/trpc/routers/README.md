@@ -58,19 +58,19 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Users 👤
 
-| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `list.users`   |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
-| `read.user`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.user`  |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.user`  |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `list.users`   |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `read.user`    |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.user`  |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `delete.user`  |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators have write access to all users' data.
 - Administrators, Educators, and Class Managers have read access to all users' data.
-- General Users can only read their own user data.
+- Marketers and General Users can only read their own user data.
 
 ### User Businesses 👤
 
@@ -84,13 +84,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Cohorts 🎓
 
-| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.cohorts`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `read.cohort`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `update.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.cohort` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :-------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.cohort` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.cohorts`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `read.cohort`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.cohort` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.cohort` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -104,13 +104,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Cohort Prices 💵
 
-| Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.cohortPrices`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.cohortPrice`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.cohortPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name       | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.cohortPrice` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.cohortPrices`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.cohortPrice`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.cohortPrice` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.cohortPrice` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -119,17 +119,17 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Cohort Members 👥
 
-| Procedure Name        | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :-------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `list.cohortMembers`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.cohortMember`   |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
-| `update.cohortMember` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name        | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :-------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `list.cohortMembers`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.cohortMember`   |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `update.cohortMember` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators and Class Managers can update all cohort members given the cohort ID and the user ID.
 - Administrators, Educators, and Class Managers can see all cohort members given the cohort ID.
-- General Users can see cohort members list given the cohort ID which the users are enrolled.
+- Marketers and General Users can see cohort members list given the cohort ID which the users are enrolled.
 
 ### Enrolled Cohorts 🎓
 
@@ -142,30 +142,30 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Modules 📕
 
-| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.modules`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.module`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.module` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :-------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.module` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.modules`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.module`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.module` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.module` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators and Class Manager have write access to all modules' data.
 - Administrators, Educators, and Class Managers can see all modules given the cohort ID.
-- General Users can see all modules given the cohort ID which the users are enrolled.
+- Marketers and General Users can see all modules given the cohort ID which the users are enrolled.
 
 ## Learnings 📅
 
-| Procedure Name          | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.learnings`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.learnings_public` |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `read.learning`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.learning`       |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name          | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :---------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.learning`       |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.learnings`        |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `list.learnings_public` |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `read.learning`         |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.learning`       |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.learning`       |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -175,19 +175,19 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Materials 📖
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.materials`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.material`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.material` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.material` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.materials`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.material`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.material` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.material` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators and Class Manager have write access to all materials' data.
 - Administrators, Educators, and Class Managers can see all materials given the learning ID.
-- General Users can see all materials given the learning ID which the users are enrolled.
+- Marketer and General Users can see all materials given the learning ID which the users are enrolled.
 
 ### Discussion Starters 💬
 
@@ -225,12 +225,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Attendances 📋
 
-| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :----------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.checkIn`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `create.checkOut`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.attendance_counts` |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
-| `read.attendance`        |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.checkIn`         |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `create.checkOut`        |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `list.attendance_counts` |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `read.attendance`        |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
 
 **Scopes:**
 
@@ -239,46 +239,47 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Projects 🗂️
 
-| Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.projects`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.project`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.project` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :--------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.project` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.projects`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.project`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.project` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.project` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators and Class Manager have write access to all projects' data.
 - Administrators, Educators, and Class Managers can see all projects given the cohort ID.
-- General Users can see all projects given the cohort ID which the users are enrolled.
+- Marketers and General Users can see all projects given the cohort ID which the users are enrolled.
 
 ## Submissions 🗒️
 
-| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.submission`        |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
-| `list.submissions`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.submission`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.submissionByProject` |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.submission`        |         ✅          |       ✅       |         ❌          |         ✅         |          ❌          |
-| `delete.submission`        |         ✅          |       ❌       |         ❌          |         ✅         |          ❌          |
+| Procedure Name             | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.submission`        |         ✅          |       ❌       |         ❌          |       ❌       |         ✅         |          ❌          |
+| `list.submissions`         |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.submission`          |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.submissionByProject` |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.submission`        |         ✅          |       ✅       |         ❌          |       ❌       |         ✅         |          ❌          |
+| `delete.submission`        |         ✅          |       ❌       |         ❌          |       ❌       |         ✅         |          ❌          |
 
 **Scopes:**
 
 - Administrators have write access to all submissions' data.
 - Administrators, Educators, and Class Managers have read access to all submissions' data.
+- Marketers have read access to their own submission data.
 - General Users have read/write access to their own submission data.
 
 ## Playlists 📺
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `list.playlists`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `read.playlist`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `update.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.playlist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.playlist` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `list.playlists`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `read.playlist`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.playlist` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `delete.playlist` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -292,11 +293,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Educators Playlists 👥
 
-| Procedure Name            | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `list.educatorsPlaylist`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `delete.educatorPlaylist` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name            | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------------------ | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.educatorPlaylist` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `list.educatorsPlaylist`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `delete.educatorPlaylist` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -314,28 +315,28 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Videos 🎞️
 
-| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `read.video`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.video` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.video` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `read.video`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.video` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `delete.video` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Only Administrators have write access to all videos' data.
-- Administrators, Educators, and Class Managers can see all videos given the playlist ID.
+- Administrators, Educators, Class Managers, and Marketers can see all videos given the playlist ID.
 - General Users can see all active videos given the playlist ID which the users are enrolled.
 
 ## Events 📅
 
-| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.event` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.events`  |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `read.event`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `update.event` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.event` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.event` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.events`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `read.event`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.event` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.event` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -349,13 +350,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ### Event Prices 💵
 
-| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :------------------ | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.eventPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `list.eventPrices`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.eventPrice`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.eventPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
-| `delete.eventPrice` |         ✅          |       ❌       |         ✅          |         ❌         |          ❌          |
+| Procedure Name      | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :------------------ | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.eventPrice` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.eventPrices`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.eventPrice`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.eventPrice` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.eventPrice` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
@@ -364,48 +365,48 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Templates 📊
 
-| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :---------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `create.template` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `list.templates`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.template`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `update.template` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
-| `delete.template` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :---------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.template` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `list.templates`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.template`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `update.template` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `delete.template` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Only Administrators have write access to all templates' data.
-- Administrators, Educators, and Class Managers can see all templates.
+- Administrators, Educators, Class Managers, and Marketers can see all templates.
 - General Users can see all active templates if the user is in the enrolled list.
 
 ## AI Tools and AI Conversations ✨
 
-| Procedure Name               | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :--------------------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `check.aiTools`              |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiTools`               |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiResults`             |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.ideaValidation`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.marketSize`         |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.competitorGrading`  |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.COGSStructure`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.pricingStrategy`    |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `read.ai.submissionAnalysis` |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
-| `use.ai.ideaValidation`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.marketSize`          |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.competitorGrading`   |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.COGSStructure`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.pricingStrategy`     |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.submissionAnalysis`  |         ✅          |       ✅       |         ✅          |         ❌         |          ❌          |
-| `list.aiConversations`       |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `list.aiChats`               |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `use.ai.sendChat`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `delete.aiResult`            |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
-| `delete.aiConversation`      |         ✅          |       ✅       |         ✅          |         ✅         |          ❌          |
+| Procedure Name               | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :--------------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `check.aiTools`              |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `list.aiTools`               |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `list.aiResults`             |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.ai.ideaValidation`     |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.ai.marketSize`         |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.ai.competitorGrading`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.ai.COGSStructure`      |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.ai.pricingStrategy`    |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `read.ai.submissionAnalysis` |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `use.ai.ideaValidation`      |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `use.ai.marketSize`          |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `use.ai.competitorGrading`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `use.ai.COGSStructure`       |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `use.ai.pricingStrategy`     |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `use.ai.submissionAnalysis`  |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `list.aiConversations`       |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `list.aiChats`               |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `use.ai.sendChat`            |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `delete.aiResult`            |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
+| `delete.aiConversation`      |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
 
 **Scopes:**
 
-- Administrators, Educators, and Class Managers can use/read results/delete from AI tools.
+- Administrators, Educators, Class Managers, and Marketers can use/read results/delete from AI tools.
 - General Users can use/read results from AI tools if the user is in the enrolled list.
 - General Users can always delete their results from AI tools.
 
@@ -442,12 +443,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Tickers 🚨
 
-| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | General User (`3`) | Public/Not Logged-In |
-| :-------------- | :-----------------: | :------------: | :-----------------: | :----------------: | :------------------: |
-| `read.ticker`   |         ✅          |       ✅       |         ✅          |         ✅         |          ✅          |
-| `update.ticker` |         ✅          |       ❌       |         ❌          |         ❌         |          ❌          |
+| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :-------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `read.ticker`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.ticker` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
 
 **Scopes:**
 
-- Only Administrators can update tickers.
+- Administrators and Marketers can update tickers.
 - Non-Administrators can only read tickers.

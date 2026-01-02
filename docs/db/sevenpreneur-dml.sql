@@ -34,6 +34,12 @@ VALUES (
   /* created_at */ '2025-05-27 09:00:00+07:00',
   /* updated_at */ '2025-05-27 09:00:00+07:00'
 ), (
+  /* id            4 (automatic) */
+  /* name       */ 'Marketer',
+  /* permission */ 31, -- bit: 0000 0000 0001 1111
+  /* created_at */ '2025-12-31 12:00:00+07:00',
+  /* updated_at */ '2025-12-31 12:00:00+07:00'
+), (
   /* id            3 (automatic) */
   /* name       */ 'General User',
   /* permission */ 7, -- bit: 0000 0000 0000 0111
