@@ -202,7 +202,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators can see all discussion starters.
 - Logged-in users can post a discussion starter.
-- Logged-in users can see all discussions given the learning ID which the users are enrolled.
+- Administrators, Educators, Class Managers, and Marketers can see all discussions.
+- General Users can see all discussions given the learning ID which the users are enrolled.
 - Logged-in users can only update and delete their own discussion starters.
 - Administrators can delete all discussion starters.
 
@@ -219,7 +220,8 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators can see all discussion replies.
 - Logged-in users can post a discussion reply.
-- Logged-in users can see all discussions given the learning ID which the users are enrolled.
+- Administrators, Educators, Class Managers, and Marketers can see all discussions.
+- General Users can see all discussions given the learning ID which the users are enrolled.
 - Logged-in users can only update and delete their own discussion replies.
 - Administrators can delete all discussion replies.
 
@@ -436,10 +438,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 **Scopes:**
 
-- Administrators can see all transactions.
+- Administrators can see and cancel all transactions.
 - Administrators and Class Manager can purchase items for other users.
 - Logged-in users can purchase items for their own.
-- Logged-in users can see all their own transactions.
+- Logged-in users can see and cancel all their own transactions.
 
 ## Tickers 🚨
 
