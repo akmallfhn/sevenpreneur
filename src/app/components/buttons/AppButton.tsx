@@ -90,7 +90,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       primaryLight:
         "bg-primary-light text-primary hover:bg-[#A0C7FF] active:bg-[#A0C7FF] disabled:text-[#6BA6FF]",
       primaryGradient:
-        "bg-gradient-to-br from-0% from-[#267EFF] via-19% via-[#2D4BF1] to-100% to-[#5E17E3] text-white before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:skew-x-12 before:translate-x-[-200%] hover:before:translate-x-[300%] before:transition-transform before:duration-700",
+        "bg-gradient-to-br from-0% from-[#267EFF] via-19% via-[#2D4BF1] to-100% to-[#5E17E3] text-white before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:skew-x-12 before:translate-x-[-200%] hover:before:translate-x-[300%] before:transition-transform before:duration-700 disabled:from-[#93BEFF] disabled:via-[#96A4F7] disabled:to-[#AE8BF1]",
       secondary:
         "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A] disabled:bg-[#E4AEBD]",
       tertiary:
@@ -98,7 +98,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       quarternary:
         "bg-success-foreground text-white hover:bg-[#418E86] active:bg-[#418E86] disabled:bg-[#9ABEBA]",
       outline:
-        "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5] dark:text-white dark:bg-surface-black dark:border-outline-dark disabled:text-[#909090] disabled:dark:text-[#262626]",
+        "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5] disabled:text-[#909090] disabled:dark:text-[#8F8F8F] dark:text-white dark:bg-surface-black dark:border-outline-dark dark:disabled:bg-[#2A2A2A]",
       ghost:
         "hover:bg-white/10 active:bg-white/10 dark:hover:bg-black/5 dark:active:bg-black/5",
       whatsapp:

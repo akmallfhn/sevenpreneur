@@ -27,7 +27,7 @@ export default function AppThemeSwitcher({
   const menuName = isDark ? "Light Mode" : "Dark Mode";
 
   return (
-    <>
+    <div suppressHydrationWarning>
       {isIcon && (
         <div
           className="switcher-theme-icon flex p-1.5 rounded-full hover:cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
@@ -47,6 +47,6 @@ export default function AppThemeSwitcher({
           </label>
         </div>
       )}
-    </>
+    </div>
   );
 }

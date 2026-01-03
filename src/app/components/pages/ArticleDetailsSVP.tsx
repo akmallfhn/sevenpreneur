@@ -24,7 +24,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
             <h1 className="title font-bodycopy font-extrabold leading-snug text-3xl">
               {props.articleTitle}
             </h1>
-            <p className="date-publish font-bodycopy font-medium text-[#474747] text-[15px]">
+            <p className="date-publish font-bodycopy font-medium text-[#474747] text-[15px] dark:text-[#BCBCBC]">
               Dipublikasi {props.articleDate} · 5 mins read
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
         </main>
         <aside className="desktop-aside sticky flex flex-1 flex-col w-full gap-3">
           <div className="flex items-center gap-4">
-            <p className="font-semibold font-bodycopy text-[#474747] text-[15px]">
+            <p className="font-semibold font-bodycopy text-[#474747] text-[15px] dark:text-[#BCBCBC]">
               Share
             </p>
             <div className="flex items-center gap-2">

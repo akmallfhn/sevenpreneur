@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-
   setSecretKey(secretKey!);
 
   const cohortData = (await trpc.read.cohort({ id: 36 })).cohort;
@@ -69,7 +68,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BlueprintProgramPage() {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-
   setSecretKey(secretKey!);
 
   let cohortDataRaw;
@@ -84,7 +82,6 @@ export default async function BlueprintProgramPage() {
     return notFound();
   }
 
-  // Sanitize data type
   const cohortData = {
     ...cohortDataRaw,
     cohort_prices: cohortDataRaw.cohort_prices.map((price) => ({

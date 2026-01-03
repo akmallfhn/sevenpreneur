@@ -5,9 +5,9 @@ import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintPro
 import LearningListBlueprintSVP from "../templates/LearningListBlueprintSVP";
 import OfferHighlightBlueprintProgramSVP from "../templates/OfferHighlightBlueprintProgramSVP";
 import OverviewBlueprintProgramSVP from "../templates/OverviewBlueprintProgramSVP";
-import PackagePlansBlueprintProgramSVP, {
+import PriceTiersBlueprintProgramSVP, {
   PackageItem,
-} from "../templates/PackagePlansBlueprintProgramSVP";
+} from "../templates/PriceTiersBlueprintProgramSVP";
 
 interface BlueprintProgramSVPProps {
   cohortId: number;
@@ -29,7 +29,7 @@ export default function BlueprintProgramSVP({
       <OfferHighlightBlueprintProgramSVP />
       <BatchScheduleBlueprintProgramSVP />
       <LearningListBlueprintSVP />
-      <PackagePlansBlueprintProgramSVP
+      <PriceTiersBlueprintProgramSVP
         cohortId={cohortId}
         cohortName={cohortName}
         cohortSlug={cohortSlug}

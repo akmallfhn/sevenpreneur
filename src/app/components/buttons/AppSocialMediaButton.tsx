@@ -38,11 +38,11 @@ export default function AppSocialMediaButton(props: AppSocialMediaButtonProps) {
 
   return (
     <a href={props.link} target="_blank" rel="noopener noreferrer">
-      <div className="button-socmed group flex items-center justify-center size-9 bg-[#F1F5F9] rounded-full transition transform duration-200 hover:bg-primary active:bg-primary-dark active:scale-95 lg:size-10">
-        <div className="flex items-center justify-center p-1 bg-[#8B95A5] text-[#F1F5F9] aspect-square rounded-full transition transform duration-200 group-hover:bg-primary group-hover:text-white">
+      <button className="button-socmed group flex items-center justify-center size-9 bg-[#F1F5F9] rounded-full transition transform duration-200 hover:cursor-pointer hover:bg-primary active:bg-primary-dark active:scale-95 dark:bg-[#585858] dark:hover:bg-primary dark:active:bg-primary-dark lg:size-10">
+        <div className="flex items-center justify-center p-1 bg-[#8B95A5] text-[#F1F5F9] aspect-square rounded-full transition transform duration-200 group-hover:bg-primary group-hover:text-white dark:bg-[#434040] dark:group-hover:bg-primary dark:group-hover:text-white">
           <FontAwesomeIcon icon={icon} />
         </div>
-      </div>
+      </button>
     </a>
   );
 }

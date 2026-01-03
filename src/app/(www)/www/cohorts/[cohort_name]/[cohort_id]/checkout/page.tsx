@@ -14,6 +14,7 @@ export async function generateMetadata({
 }: CheckoutCohortPageProps): Promise<Metadata> {
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
+
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -71,7 +72,6 @@ export default async function CheckoutCohortPage({
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
-  // Redirect if not login
   if (!sessionToken) {
     redirect(
       `/auth/login?redirectTo=/cohorts/${cohort_name}/${cohort_id}/checkout`
@@ -80,12 +80,14 @@ export default async function CheckoutCohortPage({
   setSessionToken(sessionToken);
 
   const checkUser = (await trpc.auth.checkSession()).user;
+
   let cohortData;
   try {
     cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
   } catch {
     return notFound();
   }
+
   const ticketListRaw = cohortData.cohort_prices;
   const ticketList = ticketListRaw.map((item) => ({
     ...item,
