@@ -78,6 +78,14 @@ CREATE TYPE legal_entity_enum AS ENUM (
   'non_legal_entity'
 );
 
+-- Enumeration for the articles table (a_*)
+
+CREATE TYPE a_status_enum AS ENUM (
+  'draft',
+  'published',
+  'unpublished'
+);
+
 ------------
 -- Tables --
 ------------
@@ -436,6 +444,32 @@ CREATE TABLE ticker (
   updated_at  TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Article-related
+
+CREATE TABLE article_categories (
+  id          SMALLSERIAL  PRIMARY KEY,
+  name        VARCHAR      NOT NULL,
+  status      status_enum  NOT NULL,
+  slug        VARCHAR      NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE articles (
+  id            SERIAL         PRIMARY KEY,
+  title         VARCHAR        NOT NULL,
+  insight       VARCHAR        NOT NULL,
+  image_url     VARCHAR        NOT NULL,
+  body_content  TEXT           NOT NULL,
+  status        a_status_enum  NOT NULL,
+  category_id   SMALLINT       NOT NULL,
+  keywords      VARCHAR        NOT NULL,
+  author_id     UUID           NOT NULL,
+  reviewer_id   UUID           NOT NULL,
+  slug_url      VARCHAR        NOT NULL,
+  published_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (
@@ -560,6 +594,13 @@ ALTER TABLE ai_chats
 ALTER TABLE transactions
   ADD FOREIGN KEY (user_id)     REFERENCES users (id),
   ADD FOREIGN KEY (discount_id) REFERENCES discounts (id);
+
+-- Article-related
+
+ALTER TABLE articles
+  ADD FOREIGN KEY (category_id) REFERENCES article_categories (id),
+  ADD FOREIGN KEY (author_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (reviewer_id) REFERENCES users (id);
 
 -- Relation Tables --
 
@@ -692,6 +733,13 @@ CREATE TRIGGER update_ticker_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
+-- Article-related
+
+CREATE TRIGGER update_articles_updated_at_trigger
+  BEFORE UPDATE ON articles
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
 ------------------
 -- Unique Index --
 ------------------
@@ -707,3 +755,12 @@ CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, categor
 -- Tickers
 
 CREATE UNIQUE INDEX one_row_only ON ticker ((true));
+
+
+--------------------------------
+-- Other Table Configurations --
+--------------------------------
+
+-- Article-related
+
+ALTER SEQUENCE articles_id_seq RESTART WITH 77777;

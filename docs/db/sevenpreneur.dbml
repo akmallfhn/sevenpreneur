@@ -81,6 +81,14 @@ enum legal_entity_enum {
   non_legal_entity
 }
 
+// Enumeration for the articles table (a_*)
+
+enum a_status_enum {
+  draft
+  published
+  unpublished
+}
+
 ////////////
 // Tables //
 ////////////
@@ -436,6 +444,32 @@ Table ticker {
   start_date  timestamptz
   end_date    timestamptz
   updated_at  timestamptz
+}
+
+// Article-related
+
+Table article_categories {
+  id          smallint    [primary key]
+  name        varchar
+  status      status_enum
+  slug        varchar
+  created_at  timestamptz
+}
+
+Table articles {
+  id            integer       [primary key, note: 'starts at 77777']
+  title         varchar
+  insight       varchar
+  image_url     varchar
+  body_content  text
+  status        a_status_enum
+  category_id   smallint      [ref: > article_categories.id]
+  keywords      varchar
+  author_id     uuid          [ref: > users.id]
+  reviewer_id   uuid          [ref: > users.id]
+  slug_url      varchar
+  published_at  timestamptz
+  updated_at    timestamptz
 }
 
 // Relation Tables //
