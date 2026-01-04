@@ -24,7 +24,7 @@ export async function generateMetadata({
   ).transaction;
 
   return {
-    title: "Transaction Detail | Sevenpreneur",
+    title: "Transaction Details | Sevenpreneur",
     description:
       "Detail transaksi tersedia di sini. Cek status, nominal, dan informasi produk dengan mudah.",
     authors: [{ name: "Sevenpreneur Team" }],
@@ -77,11 +77,6 @@ export default async function TransactionDetailsPage({
     redirect(`/auth/login?redirectTo=/transactions/${transaction_id}`);
   }
   setSessionToken(sessionToken);
-
-  // Redirect 404 if invalid transaction_id
-  if (!transaction_id || transaction_id.length < 21) {
-    return notFound();
-  }
 
   let transactionDetailsData;
   try {

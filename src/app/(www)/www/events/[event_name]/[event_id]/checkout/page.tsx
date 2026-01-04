@@ -1,4 +1,5 @@
 import CheckoutEventFormSVP from "@/app/components/forms/CheckoutEventFormSVP";
+import UnavailableProductSVP from "@/app/components/states/UnavailableProductSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -20,6 +21,28 @@ export async function generateMetadata({
   setSessionToken(sessionToken!);
 
   const eventData = (await trpc.read.event({ id: eventId })).event;
+
+  const hasActiveTicket = eventData.event_prices.some(
+    (post) => post.status === "ACTIVE"
+  );
+  const expiredEvent = dayjs().isAfter(eventData.end_date);
+
+  // Unavailable Product
+  if (!hasActiveTicket || expiredEvent) {
+    return {
+      title: "Tickets Are Sold Out",
+      description:
+        "All tickets for this event have been sold. Please check back for future events.",
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    };
+  }
 
   return {
     title: `Checkout ${eventData.name} - Event | Sevenpreneur`,
@@ -107,13 +130,19 @@ export default async function CheckoutEventPage({
         : post.calc_flat,
   }));
 
-  // Redirect 404 if has no active ticket & expired event
   const hasActiveTicket = eventData.event_prices.some(
     (post) => post.status === "ACTIVE"
   );
   const expiredEvent = dayjs().isAfter(eventData.end_date);
+
+  // Unavailable Product
   if (!hasActiveTicket || expiredEvent) {
-    return notFound();
+    return (
+      <UnavailableProductSVP
+        stateTitle="Tickets Are Sold Out"
+        stateDesc="All tickets for this event have been sold. Please check back for future events."
+      />
+    );
   }
 
   // Auto Correction Slug

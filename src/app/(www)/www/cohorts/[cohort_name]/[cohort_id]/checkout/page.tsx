@@ -1,4 +1,5 @@
 import CheckoutCohortFormSVP from "@/app/components/forms/CheckoutCohortFormSVP";
+import UnavailableProductSVP from "@/app/components/states/UnavailableProductSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -21,6 +22,28 @@ export async function generateMetadata({
   setSessionToken(sessionToken!);
 
   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
+
+  const hasActivePrice = cohortData.cohort_prices.some(
+    (post) => post.status === "ACTIVE"
+  );
+  const expiredCohort = dayjs().isAfter(cohortData.end_date);
+
+  // Unavailable Product
+  if (!hasActivePrice || expiredCohort) {
+    return {
+      title: "This Class Is Sold Out",
+      description:
+        "All available slots for this class have been filled. New session will be available soon.",
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    };
+  }
 
   return {
     title: `Checkout ${cohortData.name} - Program | Sevenpreneur`,
@@ -109,13 +132,19 @@ export default async function CheckoutCohortPage({
         : post.calc_flat,
   }));
 
-  // Redirect 404 if has no active ticket & expired cohort
-  const hasActiveTicket = cohortData.cohort_prices.some(
+  const hasActivePrice = cohortData.cohort_prices.some(
     (post) => post.status === "ACTIVE"
   );
   const expiredCohort = dayjs().isAfter(cohortData.end_date);
-  if (!hasActiveTicket || expiredCohort) {
-    return notFound();
+
+  if (!hasActivePrice || expiredCohort) {
+    return (
+      <UnavailableProductSVP
+        stateTitle="This Class Is Sold Out"
+        stateDesc="All available slots for this class have been filled. New sessions
+            will be available soon."
+      />
+    );
   }
 
   // Auto Correction Slug

@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (cohortData.status !== "ACTIVE") {
     return {
-      title: `404 Not Found`,
+      title: "404 Not Found",
       description:
         "Sorry, the page you’re looking for doesn’t exist or may have been moved.",
       robots: {

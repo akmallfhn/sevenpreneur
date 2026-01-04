@@ -32,12 +32,16 @@ export default function AppThemeSwitcher({
         <div
           className="switcher-theme-icon flex p-1.5 rounded-full hover:cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
           onClick={() => setTheme(isDark ? "light" : "dark")}
+          suppressHydrationWarning
         >
           {menuIcon}
         </div>
       )}
       {isSwitch && (
-        <div className="switcher-theme-toggle flex items-center space-x-2">
+        <div
+          className="switcher-theme-toggle flex items-center space-x-2"
+          suppressHydrationWarning
+        >
           <Switch
             checked={isDark}
             onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
