@@ -459,7 +459,7 @@ CREATE TABLE articles (
   title         VARCHAR        NOT NULL,
   insight       VARCHAR        NOT NULL,
   image_url     VARCHAR        NOT NULL,
-  body_content  TEXT           NOT NULL,
+  body_content  JSON           NOT NULL,
   status        a_status_enum  NOT NULL,
   category_id   SMALLINT       NOT NULL,
   keywords      VARCHAR        NOT NULL,

@@ -461,7 +461,7 @@ Table articles {
   title         varchar
   insight       varchar
   image_url     varchar
-  body_content  text
+  body_content  json
   status        a_status_enum
   category_id   smallint      [ref: > article_categories.id]
   keywords      varchar

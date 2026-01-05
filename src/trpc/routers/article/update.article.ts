@@ -2,6 +2,7 @@ import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure, roleBasedProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
+  arrayArticleBodyContent,
   numberIsID,
   stringIsTimestampTz,
   stringIsUUID,
@@ -51,7 +52,7 @@ export const updateArticle = {
         title: stringNotBlank().optional(),
         insight: stringNotBlank().optional(),
         image_url: stringNotBlank().optional(),
-        body_content: stringNotBlank().optional(),
+        body_content: arrayArticleBodyContent(),
         status: z.enum(AStatusEnum).optional(),
         category_id: numberIsID().optional(),
         keywords: z.string().optional(),
