@@ -49,3 +49,15 @@ export function objectHasOnlyUUID() {
   // Object only has one property which is UUID
   return z.object({ id: z.uuid() });
 }
+
+export function arrayArticleBodyContent() {
+  return z.array(
+    z.object({
+      index_order: numberIsPositive(),
+      sub_heading: stringNotBlank().nullable(),
+      image_path: stringNotBlank().nullable(),
+      image_desc: stringNotBlank().nullable(),
+      content: stringNotBlank().nullable(),
+    })
+  );
+}

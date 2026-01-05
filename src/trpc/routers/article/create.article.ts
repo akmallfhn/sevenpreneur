@@ -5,6 +5,7 @@ import {
 import { administratorProcedure, roleBasedProcedure } from "@/trpc/init";
 import { createSlugFromTitle } from "@/trpc/utils/slug";
 import {
+  arrayArticleBodyContent,
   numberIsID,
   stringIsTimestampTz,
   stringIsUUID,
@@ -60,7 +61,7 @@ export const createArticle = {
         title: stringNotBlank(),
         insight: stringNotBlank(),
         image_url: stringNotBlank(),
-        body_content: stringNotBlank(),
+        body_content: arrayArticleBodyContent(),
         status: z.enum(AStatusEnum),
         category_id: numberIsID(),
         keywords: z.string(),
