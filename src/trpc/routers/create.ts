@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
+import { createArticle } from "./article/create.article";
 import { createEvent } from "./event/create.event";
 import { createLMS } from "./lms/create.lms";
 import { createPlaylist } from "./playlist/create.playlist";
@@ -43,4 +44,9 @@ export const createRouter = createTRPCRouter({
   // Transaction-related //
 
   discount: createTransaction.discount,
+
+  // Article-related //
+
+  articleCategory: createArticle.articleCategory,
+  article: createArticle.article,
 });

@@ -454,3 +454,38 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators and Marketers can update tickers.
 - Non-Administrators can only read tickers.
+
+## Article Categories 📺
+
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.articleCategory` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `list.articleCategories` |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.articleCategory` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+| `delete.articleCategory` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Only Administrators have write access to all article categories' data.
+- Only Administrators can see all article categories.
+- Non-Administrators can see all active article categories.
+
+## Articles 📺
+
+| Procedure Name   | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :--------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.article` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
+| `list.articles`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `read.article`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.article` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
+| `delete.article` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Administrators and Marketers have write access to all articles' data.
+- `list.articles`:
+  - Administrators and Marketers can see all articles.
+  - Others can only see active articles.
+- `read.article`:
+  - Administrators and Marketers can read all articles.
+  - Others can only read active articles given the article ID.

@@ -1,0 +1,51 @@
+import { Optional } from "@/lib/optional-type";
+import { STATUS_OK } from "@/lib/status_code";
+import { publicProcedure } from "@/trpc/init";
+import { readFailedNotFound } from "@/trpc/utils/errors";
+import { objectHasOnlyID } from "@/trpc/utils/validation";
+import { AStatusEnum } from "@prisma/client";
+
+export const readArticle = {
+  article: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
+    let articleStatus = AStatusEnum.PUBLISHED as Optional<AStatusEnum>;
+
+    if (
+      opts.ctx.user &&
+      ["Administrator", "Marketer"].includes(opts.ctx.user.role.name)
+    ) {
+      articleStatus = undefined;
+    }
+
+    const theArticle = await opts.ctx.prisma.article.findFirst({
+      select: {
+        id: true,
+        title: true,
+        insight: true,
+        image_url: true,
+        body_content: true,
+        status: true,
+        category: { select: { id: true, name: true, slug: true } },
+        keywords: true,
+        author: { select: { full_name: true, avatar: true } },
+        reviewer: { select: { full_name: true, avatar: true } },
+        slug_url: true,
+        published_at: true,
+        updated_at: true,
+      },
+      where: {
+        id: opts.input.id,
+        status: articleStatus,
+      },
+    });
+
+    if (!theArticle) {
+      throw readFailedNotFound("article");
+    }
+
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      article: theArticle,
+    };
+  }),
+};
