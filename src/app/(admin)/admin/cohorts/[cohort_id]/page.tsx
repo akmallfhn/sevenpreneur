@@ -19,7 +19,7 @@ export default async function CohortDetailsPage({
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesDetailsCohort = [0, 1, 2, 3];
+  const allowedRolesDetailsCohort = [0, 1, 2];
 
   if (!allowedRolesDetailsCohort.includes(userSession.user.role_id)) {
     return (

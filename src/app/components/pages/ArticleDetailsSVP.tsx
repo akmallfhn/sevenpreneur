@@ -41,9 +41,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
           {/* BODY CONTENT */}
           {/* {readData.data.map((post) => (
             <div
-              className={`body-content px-4 ${
-                variants === "arab" ? "text-end" : ""
-              }`}
+              className="body-content px-4"
               key={post.index_order}
             >
               {post.sub_heading && (

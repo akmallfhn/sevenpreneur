@@ -6,12 +6,13 @@ import { setSessionToken, trpc } from "@/trpc/client";
 import {
   BanknoteArrowDown,
   CircleUserIcon,
+  Globe,
   HouseIcon,
   Loader2,
   LogOut,
+  PenTool,
   Presentation,
   Tags,
-  Waypoints,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -33,12 +34,16 @@ export default function SidebarCMS(props: SidebarCMSProps) {
   }
 
   const allowedRolesMenuCohorts = [0, 1, 2];
+  const allowedRolesMenuDiscounts = [0];
   const allowedRolesMenuUsers = [0, 1, 2];
   const allowedRolesMenuTransactions = [0];
-  const allowedRolesMenuMarketing = [0];
-  const allowedRolesMenuDiscounts = [0];
+  const allowedRolesMenuWebMarketing = [0];
+  const allowedRolesMenuArticles = [0];
 
   const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
+    props.sessionUserRole
+  );
+  const isAllowedMenuDiscounts = allowedRolesMenuDiscounts.includes(
     props.sessionUserRole
   );
   const isAllowedMenuUsers = allowedRolesMenuUsers.includes(
@@ -47,10 +52,10 @@ export default function SidebarCMS(props: SidebarCMSProps) {
   const isAllowedMenuTransactions = allowedRolesMenuTransactions.includes(
     props.sessionUserRole
   );
-  const isAllowedMenuMarketing = allowedRolesMenuMarketing.includes(
+  const isAllowedMenuWebMarketing = allowedRolesMenuWebMarketing.includes(
     props.sessionUserRole
   );
-  const isAllowedMenuDiscounts = allowedRolesMenuDiscounts.includes(
+  const isAllowedMenuArticles = allowedRolesMenuArticles.includes(
     props.sessionUserRole
   );
 
@@ -120,52 +125,59 @@ export default function SidebarCMS(props: SidebarCMSProps) {
         )}
         <div className="sidebar-menu flex flex-col h-full gap-1">
           <SidebarMenuItemCMS
-            menuTitle="Dashboard"
-            url="/"
-            icon={<HouseIcon />}
+            menuName="Dashboard"
+            menuURL="/"
+            menuIcon={<HouseIcon />}
             exact
           />
-          {isAllowedMenuCohorts && (
-            <SidebarMenuGroupCMS title="Product">
+          {(isAllowedMenuCohorts || isAllowedMenuDiscounts) && (
+            <SidebarMenuGroupCMS groupName="Product">
               <SidebarMenuItemCMS
-                menuTitle="Cohorts"
-                url="/cohorts"
-                icon={<Presentation />}
+                menuName="Cohorts"
+                menuURL="/cohorts"
+                menuIcon={<Presentation />}
               />
+              {isAllowedMenuDiscounts && (
+                <SidebarMenuItemCMS
+                  menuName="Discounts"
+                  menuURL="/discounts"
+                  menuIcon={<Tags />}
+                />
+              )}
             </SidebarMenuGroupCMS>
           )}
           {(isAllowedMenuUsers || isAllowedMenuTransactions) && (
-            <SidebarMenuGroupCMS title="Administration">
+            <SidebarMenuGroupCMS groupName="Administration">
               {isAllowedMenuUsers && (
                 <SidebarMenuItemCMS
-                  menuTitle="Users"
-                  url="/users"
-                  icon={<CircleUserIcon />}
+                  menuName="Users"
+                  menuURL="/users"
+                  menuIcon={<CircleUserIcon />}
                 />
               )}
               {isAllowedMenuTransactions && (
                 <SidebarMenuItemCMS
-                  menuTitle="Transactions"
-                  url="/transactions"
-                  icon={<BanknoteArrowDown />}
+                  menuName="Transactions"
+                  menuURL="/transactions"
+                  menuIcon={<BanknoteArrowDown />}
                 />
               )}
             </SidebarMenuGroupCMS>
           )}
-          {(isAllowedMenuMarketing || isAllowedMenuDiscounts) && (
-            <SidebarMenuGroupCMS title="Promo">
-              {isAllowedMenuMarketing && (
+          {(isAllowedMenuWebMarketing || isAllowedMenuArticles) && (
+            <SidebarMenuGroupCMS groupName="Marketing">
+              {isAllowedMenuWebMarketing && (
                 <SidebarMenuItemCMS
-                  menuTitle="Web Marketing"
-                  url="/marketing"
-                  icon={<Waypoints />}
+                  menuName="Web Marketing"
+                  menuURL="/web-marketing"
+                  menuIcon={<Globe />}
                 />
               )}
-              {isAllowedMenuDiscounts && (
+              {isAllowedMenuArticles && (
                 <SidebarMenuItemCMS
-                  menuTitle="Discounts"
-                  url="/discounts"
-                  icon={<Tags />}
+                  menuName="SEO Articles"
+                  menuURL="/articles"
+                  menuIcon={<PenTool />}
                 />
               )}
             </SidebarMenuGroupCMS>

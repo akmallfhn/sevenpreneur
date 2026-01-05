@@ -1,9 +1,9 @@
-import CohortListCMS from "@/app/components/indexes/CohortListCMS";
+import ArticleListCMS from "@/app/components/indexes/ArticleListCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
-export default async function CohortsPageCMS() {
+export default async function ArticlesPageCMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -11,9 +11,9 @@ export default async function CohortsPageCMS() {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListCohort = [0, 1, 2];
+  const allowedRolesListArticle = [0];
 
-  if (!allowedRolesListCohort.includes(userSession.user.role_id)) {
+  if (!allowedRolesListArticle.includes(userSession.user.role_id)) {
     return (
       <div className="forbidden flex w-full h-full pl-64">
         <ForbiddenComponent />
@@ -21,12 +21,5 @@ export default async function CohortsPageCMS() {
     );
   }
 
-  return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <CohortListCMS
-        sessionToken={sessionToken}
-        sessionUserRole={userSession.user.role_id}
-      />
-    </div>
-  );
+  return <ArticleListCMS sessionToken={sessionToken} />;
 }

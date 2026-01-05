@@ -3,14 +3,11 @@ import { ChevronDown } from "lucide-react";
 import { ReactNode, useState } from "react";
 
 interface SidebarMenuGroupCMSProps {
-  title: string;
+  groupName: string;
   children: ReactNode;
 }
 
-export default function SidebarMenuGroupCMS({
-  title,
-  children,
-}: SidebarMenuGroupCMSProps) {
+export default function SidebarMenuGroupCMS(props: SidebarMenuGroupCMSProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
 
   const toggleDropdown = () => {
@@ -23,8 +20,8 @@ export default function SidebarMenuGroupCMS({
         className="sidebar-group-name p-2 flex items-center rounded-md justify-between hover:bg-black/5 hover:cursor-pointer"
         onClick={toggleDropdown}
       >
-        <p className="font-brand text-xs text-black/35  font-semibold tracking-widest">
-          {title.toUpperCase()}
+        <p className="font-bodycopy text-xs text-black/35  font-semibold tracking-widest">
+          {props.groupName.toUpperCase()}
         </p>
         <ChevronDown
           className={`size-5 transform transition-transform text-black/35 duration-300 ${
@@ -38,7 +35,7 @@ export default function SidebarMenuGroupCMS({
             isDropdownOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          {children}
+          {props.children}
         </div>
       )}
     </div>

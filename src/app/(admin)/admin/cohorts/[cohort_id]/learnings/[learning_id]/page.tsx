@@ -20,7 +20,7 @@ export default async function LearningDetailsPage({
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesDetailsLearning = [0, 1, 2, 3];
+  const allowedRolesDetailsLearning = [0, 1, 2];
 
   if (!allowedRolesDetailsLearning.includes(userSession.user.role_id)) {
     return (
