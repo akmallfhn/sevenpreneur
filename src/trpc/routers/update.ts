@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
+import { updateArticle } from "./article/update.article";
 import { updateEvent } from "./event/update.event";
 import { updateLMS } from "./lms/update.lms";
 import { updatePlaylist } from "./playlist/update.playlist";
@@ -47,4 +48,9 @@ export const updateRouter = createTRPCRouter({
   // Tickers //
 
   ticker: updateTicker.ticker,
+
+  // Article-related //
+
+  articleCategory: updateArticle.articleCategory,
+  article: updateArticle.article,
 });
