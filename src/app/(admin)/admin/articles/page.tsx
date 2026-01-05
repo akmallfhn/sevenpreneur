@@ -11,7 +11,7 @@ export default async function ArticlesPageCMS() {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListArticle = [0];
+  const allowedRolesListArticle = [0, 4];
 
   if (!allowedRolesListArticle.includes(userSession.user.role_id)) {
     return (
@@ -21,5 +21,10 @@ export default async function ArticlesPageCMS() {
     );
   }
 
-  return <ArticleListCMS sessionToken={sessionToken} />;
+  return (
+    <ArticleListCMS
+      sessionToken={sessionToken}
+      sessionUserRole={userSession.user.role_id}
+    />
+  );
 }

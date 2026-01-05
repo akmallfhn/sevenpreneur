@@ -1,6 +1,7 @@
 export type ProductCategory = "COHORT" | "PLAYLIST" | "AI" | "EVENT";
 export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
 export type StatusType = "ACTIVE" | "INACTIVE";
+export type ArticleStatus = "DRAFT" | "PUBLISHED" | "UNPUBLISHED";
 export type SessionMethod = "ONLINE" | "ONSITE" | "HYBRID";
 export type ScheduleStatus = "UPCOMING" | "ON GOING" | "FINISHED";
 export type SubmissionStatus = "SUBMITTED" | "NOT_SUBMITTED";

@@ -132,7 +132,6 @@ export default function DiscountListCMS({
   return (
     <React.Fragment>
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />

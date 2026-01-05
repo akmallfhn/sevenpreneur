@@ -3,15 +3,29 @@ import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  ExternalLink,
+  FilePenLine,
+  Loader2,
+  PlusCircle,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect } from "react";
-import ArticleItemCMS from "../items/ArticleItemCMS";
+import AppButton from "../buttons/AppButton";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import dayjs from "dayjs";
 
 interface ArticleListCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
 }
 
 export default function ArticleListCMS(props: ArticleListCMSProps) {
+  const allowedRolesCreateArticle = [0, 4];
+
   // Set Session Token to Header
   useEffect(() => {
     if (props.sessionToken) {
@@ -20,15 +34,11 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
   }, [props.sessionToken]);
 
   // Fetch tRPC List Article
-  // const {
-  //   data: tickerData,
-  //   isLoading: isLoadingTickerData,
-  //   isError: isErrorTickerData,
-  // } = trpc.read.ticker.useQuery({ id: 1 });
-  // const tickerDetailsData = tickerData?.ticker;
-
-  // const isLoading = isLoadingTickerData;
-  // const isError = isErrorTickerData;
+  const { data, isLoading, isError } = trpc.list.articles.useQuery(
+    {},
+    { enabled: !!props.sessionToken }
+  );
+  const articleList = data?.list;
 
   return (
     <React.Fragment>
@@ -44,11 +54,17 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                 titlePage="SEO Articles"
                 descPage=" SEO content management hub to create, optimize, and drive organic traffic."
               />
+              {allowedRolesCreateArticle.includes(props.sessionUserRole) && (
+                <AppButton variant="cmsPrimary">
+                  <PlusCircle className="size-5" />
+                  Create Article
+                </AppButton>
+              )}
             </div>
           </div>
 
           {/* Loading & Error State */}
-          {/* {isLoading && (
+          {isLoading && (
             <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
               <Loader2 className="animate-spin size-5 " />
             </div>
@@ -57,22 +73,142 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
             <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
               No Data
             </div>
-          )} */}
+          )}
 
-          <div className="flex flex-col w-full">
-            <ArticleItemCMS
-              articleId={777777777}
-              articleTitle={
-                "Jenis-Jenis Supply Chain Management Berdasarkan Model Bisnis"
-              }
-              articleImage={
-                "https://mekari.com/wp-content/uploads/2025/01/efisiensi-produksi-54.webp"
-              }
-              articleDescription={
-                "Hampir setiap produk—mulai dari pakaian hingga perangkat elektronik—melalui ratusan bahkan ribuan langkah untuk sampai ke tangan Anda. Supply chain menghubungkan proses mulai dari bahan mentah, produksi, pemasaran, hingga pengiriman."
-              }
-            />
-          </div>
+          {/* Table */}
+          {!isLoading && !isError && (
+            <table className="relative w-full rounded-sm">
+              <thead className="bg-[#FAFAFA] text-alternative/70">
+                <tr>
+                  <TableHeadCMS>{`Image`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Metadata`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Person`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
+                </tr>
+              </thead>
+              <tbody>
+                {articleList?.map((post) => (
+                  <tr
+                    className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                    key={post.id}
+                  >
+                    <TableCellCMS>
+                      <div className="image flex max-w-44 aspect-video rounded-sm overflow-hidden">
+                        <Image
+                          className="w-full h-full object-cover"
+                          src={post.image_url}
+                          alt={post.title}
+                          width={300}
+                          height={300}
+                        />
+                      </div>
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <div className="metadata flex flex-col gap-1.5">
+                        <h2 className="article-title font-bold font-bodycopy text-[15px] line-clamp-2 leading-snug">
+                          {post.title}
+                        </h2>
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`article-categories flex rounded-full items-center text-xs py-[2px] px-[10px] text-white font-bodycopy font-medium`}
+                            style={{
+                              backgroundImage:
+                                "linear-gradient(to right, rgb(37, 98, 231) 0%, rgb(110, 0, 255) 100%)",
+                            }}
+                          >
+                            {post.category.name}
+                          </div>
+                          <div
+                            className={`article-id flex rounded-full items-center text-xs py-[2px] px-[10px] text-[#333333] border border-[#D8D8D8] font-bodycopy font-medium`}
+                            style={{
+                              backgroundImage: "#FAFAFA",
+                            }}
+                          >
+                            {post.id}
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="article-keywords font-bodycopy font-[440] text-[#686868] text-sm line-clamp-1">
+                            Keywords: {post.keywords}
+                          </p>
+                          <p className="article-keywords font-bodycopy font-[440] text-[#686868] text-sm line-clamp-1">
+                            Published at{" "}
+                            {dayjs(post.published_at).format(
+                              "dddd, D MMM YYYY - HH:mm"
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <div className="author flex flex-col gap-3">
+                        <div className="author flex flex-col gap-1">
+                          <p className="text-sm font-bodycopy font-semibold">
+                            Author:
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <div className="flex size-5 rounded-full overflow-hidden">
+                              <Image
+                                src={
+                                  post.author.avatar ||
+                                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                                }
+                                alt={post.author.full_name}
+                                className="aspect-video object-cover"
+                                width={300}
+                                height={300}
+                              />
+                            </div>
+                            <p className="text-sm font-bodycopy font-medium line-clamp-1">
+                              {post.author.full_name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="reviewer flex flex-col gap-1">
+                          <p className="text-sm font-bodycopy font-semibold">
+                            Reviewer:
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <div className="flex size-5 rounded-full overflow-hidden">
+                              <Image
+                                src={
+                                  post.reviewer.avatar ||
+                                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                                }
+                                alt={post.reviewer.full_name}
+                                className="aspect-video object-cover"
+                                width={300}
+                                height={300}
+                              />
+                            </div>
+                            <p className="text-sm font-bodycopy font-medium line-clamp-1">
+                              {post.reviewer.full_name}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <div className="flex flex-col gap-2">
+                        <Link href={`/articles/${post.id}/edit`}>
+                          <AppButton variant="cmsPrimary" size="small">
+                            <FilePenLine className="size-4" />
+                            Edit
+                          </AppButton>
+                        </Link>
+                        <Link href={`https://www.sevenpreneur.com`}>
+                          <AppButton variant="cmsPrimaryLight" size="small">
+                            <ExternalLink className="size-4" />
+                            Preview
+                          </AppButton>
+                        </Link>
+                      </div>
+                    </TableCellCMS>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </React.Fragment>
