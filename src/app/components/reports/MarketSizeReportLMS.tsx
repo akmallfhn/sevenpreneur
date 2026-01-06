@@ -1,6 +1,6 @@
 "use client";
 import { getShortRupiahCurrency } from "@/lib/currency";
-import { markdownToHtml } from "@/lib/markdown-to-html";
+import { useMarkdown } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -55,6 +55,9 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
   const somValue = 0.01 * props.samValue;
   const conservativeScenario = 0.7 * somValue;
   const aggresiveScenario = 1.5 * somValue;
+  const tamInsight = useMarkdown(props.tamInsight);
+  const samInsight = useMarkdown(props.samInsight);
+  const somInsight = useMarkdown(props.somInsight);
 
   if (!props.resultStatus) {
     return (
@@ -144,7 +147,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(props.tamInsight),
+                    __html: tamInsight,
                   }}
                 />
               </div>
@@ -165,7 +168,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(props.samInsight),
+                    __html: samInsight,
                   }}
                 />
               </div>
@@ -186,7 +189,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(props.somInsight),
+                    __html: somInsight,
                   }}
                 />
               </div>

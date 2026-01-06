@@ -1,5 +1,6 @@
 import ArticleDetailsSVP from "@/app/components/pages/ArticleDetailsSVP";
-import { setSecretKey } from "@/trpc/server";
+import { setSecretKey, trpc } from "@/trpc/server";
+import { notFound, redirect } from "next/navigation";
 
 interface ArticleDetailsPageLMSProps {
   params: Promise<{ article_id: string; article_slug: string }>;
@@ -14,16 +15,38 @@ export default async function ArticleDetailsPageLMS({
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   setSecretKey(secretKey!);
 
+  let articleDataRaw;
+  try {
+    articleDataRaw = (await trpc.read.article({ id: articleId })).article;
+  } catch {
+    return notFound();
+  }
+
+  const articleData = {
+    ...articleDataRaw,
+    published_at: articleDataRaw.published_at.toISOString(),
+    updated_at: articleDataRaw.updated_at.toISOString(),
+  };
+
+  // Return 404 if INACTIVE status
+  if (articleData.status !== "PUBLISHED") {
+    return notFound();
+  }
+
+  // Auto Correction Slug
+  const correctSlug = articleData.slug_url;
+  if (article_slug !== correctSlug) {
+    redirect(`/insights/${correctSlug}/${articleId}`);
+  }
+
   return (
     <ArticleDetailsSVP
-      articleId={articleId}
-      articleTitle={
-        "11 Rekomendasi Aplikasi Perjalanan Dinas untuk PNS & Karyawan"
-      }
-      articleImage="https://mekari.com/wp-content/uploads/2025/12/mekari-expense-aplikasi-perjalaan-dinas-featured-image.webp"
-      articleDate="10 Sep 2020"
-      articleSlug={article_slug}
-      articleBody={"test"}
+      articleId={articleData.id}
+      articleTitle={articleData.title}
+      articleImage={articleData.image_url}
+      articleDate={articleData.published_at}
+      articleSlug={articleData.slug_url}
+      articleBody={articleData.body_content}
     />
   );
 }

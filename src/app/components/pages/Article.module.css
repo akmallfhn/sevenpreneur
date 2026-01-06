@@ -1,0 +1,159 @@
+.content {
+  font-family: "Inter", sans-serif;
+  line-height: 1.5;
+  color: #333333;
+  font-size: 18px;
+  word-break: break-word;
+}
+
+.content > *:first-child {
+  margin-top: 0 !important;
+}
+
+.content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Headings */
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  font-family: var(--font-bodycopy);
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+/* Paragraphs */
+.content p {
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+/* Inline text styles */
+.content b,
+.content strong {
+  font-weight: 600;
+  color: #333333;
+}
+.content i,
+.content em {
+  font-style: italic;
+}
+.content u {
+  text-decoration: underline;
+}
+.content s {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+.content del {
+  text-decoration: none;
+}
+
+/* Blockquote */
+.content blockquote {
+  border-left: 4px solid #d1d5db;
+  padding: 1px 14px;
+  margin: 12px 0;
+  color: #111111;
+}
+
+/* Code inline */
+.content code {
+  background-color: #f3f4f6;
+  color: #111111;
+  padding: 0.2rem 0.35rem;
+  border-radius: 0.25rem;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9em;
+}
+
+/* Code block */
+.content pre {
+  background-color: #1e293b;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 1em 0;
+}
+
+.content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Lists */
+.content ul {
+  margin: 12px 0 12px 22px;
+  padding-left: 6px;
+  list-style: disc;
+}
+.content ol {
+  margin: 12px 0 12px 22px;
+  padding-left: 6px;
+  list-style: decimal;
+}
+.content li {
+  margin: 5px 0;
+}
+
+/* Tables */
+.content table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.content th,
+.content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+}
+
+.content th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.content tr:nth-child(even) td {
+  background-color: #fafafa;
+}
+
+/* Links */
+.content a {
+  color: #2563eb;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s;
+}
+.content a:hover {
+  border-bottom: 1px solid #2563eb;
+}
+
+/* Horizontal rule */
+.content hr {
+  border: none;
+  border-top: 1px solid #cbd5e1;
+  margin: 18px 0;
+}
+
+/* Images */
+.content img {
+  max-width: 100%;
+  border-radius: 0.4rem;
+  margin: 0.8em 0;
+  display: block;
+}

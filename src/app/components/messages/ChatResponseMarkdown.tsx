@@ -1,5 +1,5 @@
 "use client";
-import { markdownToHtml } from "@/lib/markdown-to-html";
+import { useMarkdown } from "@/lib/markdown-to-html";
 import { useClipboard } from "@/lib/use-clipboard";
 import { Check, CopyIcon, Loader2 } from "lucide-react";
 import Image from "next/image";
@@ -31,7 +31,7 @@ export default function ChatResponseMarkdown(props: ChatResponseMarkdownProps) {
         <div
           className={`${styles.markdown} w-full`}
           dangerouslySetInnerHTML={{
-            __html: markdownToHtml(props.chatMessage),
+            __html: useMarkdown(props.chatMessage),
           }}
         />
         {props.isGeneratingMessage ? (

@@ -1,5 +1,5 @@
 "use client";
-import { markdownToHtml } from "@/lib/markdown-to-html";
+import { useMarkdown } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
   AIIdeaValidation_LongevityAlignment,
@@ -150,6 +150,13 @@ export default function IdeaValidationReportLMS(
 
   const freq = freqAttributes[props.problemFrequency];
   const longevity = longevityAttributes[props.longevityAlignment];
+  const problemDiscovery = useMarkdown(props.problemDiscovery);
+  const solutionValue = useMarkdown(props.solutionValue);
+  const solutionFeasibility = useMarkdown(props.solutionFeasibility);
+  const industryDirection = useMarkdown(props.industryDirection);
+  const longevityReason = useMarkdown(
+    `${longevity.description} ${props.longevityReason}`
+  );
 
   let problemScoreDesc;
   if (props.problemFitScore >= 75) {
@@ -212,7 +219,7 @@ export default function IdeaValidationReportLMS(
             <div
               className={`${styles.report} overflow-y-auto pb-10`}
               dangerouslySetInnerHTML={{
-                __html: markdownToHtml(props.problemDiscovery),
+                __html: problemDiscovery,
               }}
             />
           </div>
@@ -325,7 +332,7 @@ export default function IdeaValidationReportLMS(
             <div
               className={`${styles.report} overflow-y-auto pb-10`}
               dangerouslySetInnerHTML={{
-                __html: markdownToHtml(props.solutionValue),
+                __html: solutionValue,
               }}
             />
           </div>
@@ -370,7 +377,7 @@ export default function IdeaValidationReportLMS(
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(props.solutionFeasibility),
+                  __html: solutionFeasibility,
                 }}
               />
             </div>
@@ -381,7 +388,7 @@ export default function IdeaValidationReportLMS(
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(props.industryDirection),
+                  __html: industryDirection,
                 }}
               />
             </div>
@@ -398,9 +405,7 @@ export default function IdeaValidationReportLMS(
             <div
               className={styles.report}
               dangerouslySetInnerHTML={{
-                __html: markdownToHtml(
-                  `${longevity.description} ${props.longevityReason}`
-                ),
+                __html: longevityReason,
               }}
             />
           </div>

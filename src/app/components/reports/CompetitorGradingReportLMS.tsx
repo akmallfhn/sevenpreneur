@@ -1,17 +1,17 @@
 "use client";
-import styles from "./Report.module.css";
-import { useRouter } from "next/navigation";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import { useEffect, useState } from "react";
+import { useMarkdown } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
+import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
+import { BarChart } from "@mui/x-charts";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import XYMapLMS, { CompetitorList } from "../charts/XYMapLMS";
+import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
+import AICompetitorItemLMS from "../items/AICompetitorItemLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
-import { BarChart } from "@mui/x-charts";
-import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
-import { markdownToHtml } from "@/lib/markdown-to-html";
-import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
-import XYMapLMS, { CompetitorList } from "../charts/XYMapLMS";
-import AICompetitorItemLMS from "../items/AICompetitorItemLMS";
+import styles from "./Report.module.css";
 
 const maturityAttributes: Record<
   AICompetitorGrader_MarketMaturity,
@@ -104,6 +104,12 @@ export default function CompetitorGradingReportLMS(
     }
   }, [isDoneResult, router]);
 
+  const industryCAGRReason = useMarkdown(props.industryCAGRReason);
+  const industryMarketMaturityReason = useMarkdown(
+    props.industryMarketMaturityReason
+  );
+  const industryCurrentCondition = useMarkdown(props.industryCurrentCondition);
+  const growthOpportunity = useMarkdown(props.growthOpportunity);
   const maturity = maturityAttributes[props.industryMarketMaturity];
 
   if (!props.resultStatus) {
@@ -155,7 +161,7 @@ export default function CompetitorGradingReportLMS(
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(props.industryCAGRReason),
+                  __html: industryCAGRReason,
                 }}
               />
             </div>
@@ -172,7 +178,7 @@ export default function CompetitorGradingReportLMS(
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
-                    __html: markdownToHtml(props.industryMarketMaturityReason),
+                    __html: industryMarketMaturityReason,
                   }}
                 />
               </div>
@@ -215,7 +221,7 @@ export default function CompetitorGradingReportLMS(
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(props.industryCurrentCondition),
+                  __html: industryCurrentCondition,
                 }}
               />
             </div>
@@ -230,7 +236,7 @@ export default function CompetitorGradingReportLMS(
               <div
                 className={styles.report}
                 dangerouslySetInnerHTML={{
-                  __html: markdownToHtml(props.growthOpportunity),
+                  __html: growthOpportunity,
                 }}
               />
             </div>
