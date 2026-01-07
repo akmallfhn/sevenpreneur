@@ -4,7 +4,7 @@ import { publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
 import { AStatusEnum } from "@prisma/client";
-import { ArticleBodyContent } from "./util.article";
+import { ArticleBodyContent, estimateReadingTime } from "./util.article";
 
 export const readArticle = {
   article: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
@@ -43,12 +43,20 @@ export const readArticle = {
       throw readFailedNotFound("article");
     }
 
+    const bodyContent = theArticle.body_content as ArticleBodyContent;
+
+    const allContentStr = bodyContent
+      .map((entry) => (entry.image_desc ?? "") + " " + (entry.content ?? ""))
+      .reduce((prev, cur) => prev + " " + cur, "");
+    const readingTime = estimateReadingTime(allContentStr);
+
     return {
       code: STATUS_OK,
       message: "Success",
       article: {
         ...theArticle,
-        body_content: theArticle.body_content as ArticleBodyContent,
+        body_content: bodyContent,
+        reading_time: readingTime,
       },
     };
   }),
