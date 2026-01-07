@@ -4,7 +4,11 @@ import { publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
 import { AStatusEnum } from "@prisma/client";
-import { ArticleBodyContent, estimateReadingTime } from "./util.article";
+import {
+  ArticleBodyContent,
+  estimateReadingTime,
+  getTableOfContents,
+} from "./util.article";
 
 export const readArticle = {
   article: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
@@ -50,6 +54,8 @@ export const readArticle = {
       .reduce((prev, cur) => prev + " " + cur, "");
     const readingTime = estimateReadingTime(allContentStr);
 
+    const toc = getTableOfContents(theArticle.title, bodyContent);
+
     return {
       code: STATUS_OK,
       message: "Success",
@@ -57,6 +63,7 @@ export const readArticle = {
         ...theArticle,
         body_content: bodyContent,
         reading_time: readingTime,
+        table_of_contents: toc,
       },
     };
   }),
