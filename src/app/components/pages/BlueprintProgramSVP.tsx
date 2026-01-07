@@ -1,13 +1,13 @@
 "use client";
 import HeroBlueprintProgramSVP from "../heroes/HeroBlueprintProgramSVP";
-import BatchScheduleBlueprintProgramSVP from "../templates/BatchScheduleBlueprintProgramSVP";
-import FAQCustomerBlueprintProgramSVP from "../templates/FAQCustomerBlueprintProgramSVP";
-import LearningListBlueprintSVP from "../templates/LearningListBlueprintSVP";
-import OfferHighlightBlueprintProgramSVP from "../templates/OfferHighlightBlueprintProgramSVP";
-import OverviewBlueprintProgramSVP from "../templates/OverviewBlueprintProgramSVP";
+import AboutBlueprintProgramSVP from "../static-sections/AboutBlueprintProgramSVP";
+import FAQBlueprintProgramSVP from "../static-sections/FAQBlueprintProgramSVP";
+import LearningListBlueprintSVP from "../static-sections/LearningListBlueprintSVP";
 import PriceTiersBlueprintProgramSVP, {
   PackageItem,
-} from "../templates/PriceTiersBlueprintProgramSVP";
+} from "../static-sections/PriceTiersBlueprintProgramSVP";
+import ScheduleBlueprintProgramSVP from "../static-sections/ScheduleBlueprintProgramSVP";
+import OffersBlueprintProgramSVP from "../static-sections/OffersBlueprintProgramSVP";
 
 interface BlueprintProgramSVPProps {
   cohortId: number;
@@ -16,26 +16,21 @@ interface BlueprintProgramSVPProps {
   cohortPrices: PackageItem[];
 }
 
-export default function BlueprintProgramSVP({
-  cohortId,
-  cohortName,
-  cohortSlug,
-  cohortPrices,
-}: BlueprintProgramSVPProps) {
+export default function BlueprintProgramSVP(props: BlueprintProgramSVPProps) {
   return (
     <div className="root relative items-center">
-      <HeroBlueprintProgramSVP cohortId={cohortId} />
-      <OverviewBlueprintProgramSVP />
-      <OfferHighlightBlueprintProgramSVP />
-      <BatchScheduleBlueprintProgramSVP />
+      <HeroBlueprintProgramSVP cohortId={props.cohortId} />
+      <AboutBlueprintProgramSVP />
+      <OffersBlueprintProgramSVP />
+      <ScheduleBlueprintProgramSVP />
       <LearningListBlueprintSVP />
       <PriceTiersBlueprintProgramSVP
-        cohortId={cohortId}
-        cohortName={cohortName}
-        cohortSlug={cohortSlug}
-        cohortPrices={cohortPrices}
+        cohortId={props.cohortId}
+        cohortName={props.cohortName}
+        cohortSlug={props.cohortSlug}
+        cohortPrices={props.cohortPrices}
       />
-      <FAQCustomerBlueprintProgramSVP cohortId={cohortId} />
+      <FAQBlueprintProgramSVP cohortId={props.cohortId} />
     </div>
   );
 }

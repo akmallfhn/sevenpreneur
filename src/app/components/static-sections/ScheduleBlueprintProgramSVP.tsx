@@ -1,8 +1,7 @@
 "use client";
-
 import Image from "next/image";
 
-export default function BatchScheduleBlueprintProgramSVP() {
+export default function ScheduleBlueprintProgramSVP() {
   return (
     <div className="section-root relative flex items-center justify-center bg-black">
       <div className="batch-outline p-[1px] w-full h-full max-w-[378px] m-5 my-10 bg-gradient-to-br from-0% from-[#575757] to-100% to-[#3C3C3C] rounded-md overflow-hidden lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">

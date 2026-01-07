@@ -1,8 +1,7 @@
 "use client";
-
 import OfferItemBlueprintProgramSVP from "../items/OfferItemBlueprintProgramSVP";
 
-export default function OfferHighlightBlueprintProgramSVP() {
+export default function OffersBlueprintProgramSVP() {
   return (
     <div className="section-root relative flex items-center justify-center bg-black overflow-hidden">
       <div className="section-container flex flex-col w-full items-center gap-8 p-5 py-10 z-20 lg:px-0 lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
