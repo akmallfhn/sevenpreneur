@@ -1,14 +1,10 @@
 "use client";
 import HeroHomeSVP from "../heroes/HeroHomeSVP";
 
-interface HomeSVPProps {
-  imageHero: string;
-}
-
-export default function HomeSVP({ imageHero }: HomeSVPProps) {
+export default function HomeSVP() {
   return (
     <div className="root relative items-center">
-      <HeroHomeSVP imageHero={imageHero} />
+      <HeroHomeSVP />
     </div>
   );
 }

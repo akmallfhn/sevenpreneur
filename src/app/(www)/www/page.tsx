@@ -1,7 +1,5 @@
-import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
-import { setSecretKey, trpc } from "@/trpc/server";
+import HomeSVP from "@/app/components/pages/HomeSVP";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sevenpreneur | All-in-One Business Learning Platform",
@@ -48,40 +46,5 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
-
-  // Get Data
-  setSecretKey(secretKey!);
-  let cohortDataRaw;
-  try {
-    cohortDataRaw = (await trpc.read.cohort({ id: 36 })).cohort;
-  } catch {
-    return notFound();
-  }
-
-  // Return 404 if INACTIVE status
-  if (cohortDataRaw.status !== "ACTIVE") {
-    return notFound();
-  }
-
-  // Sanitize data type
-  const cohortData = {
-    ...cohortDataRaw,
-    cohort_prices: cohortDataRaw.cohort_prices.map((price) => ({
-      ...price,
-      amount: Number(price.amount),
-    })),
-  };
-
-  return (
-    // <HomeSVP imageHero={cohortData.image} />
-
-    // Temp during sales period blueprint
-    <BlueprintProgramSVP
-      cohortId={cohortData.id}
-      cohortName={cohortData.name}
-      cohortSlug={cohortData.slug_url}
-      cohortPrices={cohortData.cohort_prices}
-    />
-  );
+  return <HomeSVP />;
 }
