@@ -17,7 +17,6 @@ export default function HeroBlueprintProgramSVP({
     <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
       {/* Hero Container */}
       <div className="hero-container relative flex w-full items-center py-10 px-4 z-[70] lg:px-0 lg:pt-20 lg:pb-24 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-        {/* Content */}
         <div className="hero-content flex flex-col w-full items-center gap-60 lg:gap-[28px] lg:items-start">
           <div className="flex flex-col gap-3 items-center text-white lg:items-start ">
             <div className="flex flex-col items-center text-center gap-2.5 lg:flex-row lg:text-left">
@@ -160,7 +159,7 @@ export default function HeroBlueprintProgramSVP({
           </div>
         </div>
 
-        {/* All Speakers 2XL */}
+        {/* All Speakers Desktop XL */}
         <Image
           className="all-speakers absolute hidden max-w-[672px] -bottom-5 -right-10 2xl:flex"
           src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-new%20(1).webp"
@@ -171,7 +170,7 @@ export default function HeroBlueprintProgramSVP({
       </div>
 
       {/* Absolute Decoration */}
-      {/* All Speakers */}
+      {/* All Speakers Mobile */}
       <Image
         className="all-speakers absolute flex max-w-[424px] bottom-0 left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:translate-x-0 lg:max-w-[600px] lg:-bottom-5 lg:-right-8 xl:max-w-[662px] xl:right-5 2xl:hidden"
         src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-new%20(1).webp"
