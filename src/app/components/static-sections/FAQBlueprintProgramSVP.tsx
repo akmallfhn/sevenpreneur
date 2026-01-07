@@ -3,13 +3,13 @@ import Image from "next/image";
 import FAQItemBlueprintProgramSVP from "../items/FAQItemBlueprintProgramSVP";
 import AppButton from "../buttons/AppButton";
 
-interface FAQCustomerBlueprintProgramSVPProps {
+interface FAQBlueprintProgramSVPProps {
   cohortId: number;
 }
 
-export default function FAQCustomerBlueprintProgramSVP({
-  cohortId,
-}: FAQCustomerBlueprintProgramSVPProps) {
+export default function FAQBlueprintProgramSVP(
+  props: FAQBlueprintProgramSVPProps
+) {
   const faqSevenpreneur = [
     {
       question: "Apakah program ini dapat dicicil pembayarannya?",
@@ -96,14 +96,14 @@ export default function FAQCustomerBlueprintProgramSVP({
                 className="w-full"
                 // GTM
                 featureName="whatsapp_consultation"
-                featureId={String(cohortId)}
+                featureId={String(props.cohortId)}
                 featureProductCategory="COHORT"
                 featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
                 featurePagePoint="Product Detail Page"
                 featurePlacement="page-end-desktop"
                 // Meta
                 metaEventName="Contact"
-                metaContentIds={[String(cohortId)]}
+                metaContentIds={[String(props.cohortId)]}
                 metaContentType="service"
                 metaContentCategory="Business Education Program"
                 metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
@@ -152,14 +152,14 @@ export default function FAQCustomerBlueprintProgramSVP({
             className="w-full"
             // GTM
             featureName="whatsapp_consultation"
-            featureId={String(cohortId)}
+            featureId={String(props.cohortId)}
             featureProductCategory="COHORT"
             featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
             featurePagePoint="Product Detail Page"
             featurePlacement="page-end-mobile"
             // Meta
             metaEventName="Contact"
-            metaContentIds={[String(cohortId)]}
+            metaContentIds={[String(props.cohortId)]}
             metaContentType="service"
             metaContentCategory="Business Education Program"
             metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
