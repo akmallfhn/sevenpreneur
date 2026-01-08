@@ -51,7 +51,7 @@ export default function CoachEducatorListSVP() {
   return (
     <div className="section-root relative flex items-center justify-center overflow-hidden dark:bg-coal-black">
       <div className="section-container flex flex-col w-full items-center gap-20 p-5 py-10 z-20 lg:px-0 lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-        <div className="section-item flex flex-col w-full items-center gap-8 lg:gap-[64px]">
+        <div className="section-item flex flex-col w-full items-center gap-8 lg:gap-[48px]">
           <h2 className="section-title w-fit text-transparent leading-snug bg-clip-text bg-gradient-to-r from-40% from-black to-100% to-primary font-brand font-bold text-center text-xl sm:text-2xl lg:text-4xl lg:max-w-[680px] dark:from-white">
             Dipandu langsung oleh para coach dan expert bisnis berpengalaman.
           </h2>
