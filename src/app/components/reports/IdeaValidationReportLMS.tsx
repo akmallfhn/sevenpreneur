@@ -148,16 +148,6 @@ export default function IdeaValidationReportLMS(
     }
   }, [isDoneResult, router]);
 
-  const freq = freqAttributes[props.problemFrequency];
-  const longevity = longevityAttributes[props.longevityAlignment];
-  const problemDiscovery = useMarkdown(props.problemDiscovery);
-  const solutionValue = useMarkdown(props.solutionValue);
-  const solutionFeasibility = useMarkdown(props.solutionFeasibility);
-  const industryDirection = useMarkdown(props.industryDirection);
-  const longevityReason = useMarkdown(
-    `${longevity.description} ${props.longevityReason}`
-  );
-
   let problemScoreDesc;
   if (props.problemFitScore >= 75) {
     problemScoreDesc = "sangat kuat dan layak menjadi prioritas utama.";
@@ -180,6 +170,21 @@ export default function IdeaValidationReportLMS(
     solutionScoreDesc =
       "kurang cocok dengan masalah yang ada dan dampaknya terhadap pengguna kemungkinan kecil.";
   }
+
+  const freq = freqAttributes[props.problemFrequency];
+  const longevity = longevityAttributes[props.longevityAlignment] || {
+    name: "",
+    description: "",
+    icon: "",
+    icon_background: "",
+  };
+  const problemDiscovery = useMarkdown(props.problemDiscovery);
+  const solutionValue = useMarkdown(props.solutionValue);
+  const solutionFeasibility = useMarkdown(props.solutionFeasibility);
+  const industryDirection = useMarkdown(props.industryDirection);
+  const longevityReason = useMarkdown(
+    `${longevity.description} ${props.longevityReason}`
+  );
 
   if (!props.resultStatus) {
     return (
