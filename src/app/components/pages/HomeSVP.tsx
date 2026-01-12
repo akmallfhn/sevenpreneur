@@ -1,7 +1,7 @@
 "use client";
 import HeroHomeSVP from "../heroes/HeroHomeSVP";
-import BusinessesAlumniSVP from "../static-sections/BusinessesAlumniSVP";
 import CoachEducatorListSVP from "../static-sections/CoachEducatorListSVP";
+import InstagramTypeContentSVP from "../static-sections/InstagramTypeContentSVP";
 import ProductListSVP from "../static-sections/ProductListSVP";
 
 export default function HomeSVP() {
@@ -11,6 +11,7 @@ export default function HomeSVP() {
       <ProductListSVP />
       {/* <BusinessesAlumniSVP /> */}
       <CoachEducatorListSVP />
+      <InstagramTypeContentSVP />
     </div>
   );
 }
