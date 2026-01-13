@@ -16,6 +16,8 @@ export async function generateMetadata({
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   setSecretKey(secretKey!);
 
+  const BASE_URL = "https://www.sevenpreneur.com";
+
   let articleDataRaw;
   try {
     articleDataRaw = (await trpc.read.article({ id: articleId })).article;
@@ -53,18 +55,18 @@ export async function generateMetadata({
     publisher: "Sevenpreneur",
     referrer: "origin-when-cross-origin",
     alternates: {
-      canonical: `/insights/${articleData.slug_url}/${articleData.id}`,
+      canonical: `${BASE_URL}/insights/${articleData.slug_url}/${articleData.id}`,
     },
     openGraph: {
       title: `${articleData.title} | Sevenpreneur Insights`,
       description: articleData.insight,
-      url: `/insights/${articleData.slug_url}/${articleData.id}`,
+      url: `${BASE_URL}/insights/${articleData.slug_url}/${articleData.id}`,
       siteName: "Sevenpreneur",
       images: [
         {
           url: articleData.image_url,
-          width: 800,
-          height: 600,
+          width: 1200,
+          height: 630,
         },
       ],
     },
