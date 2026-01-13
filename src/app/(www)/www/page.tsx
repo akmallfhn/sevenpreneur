@@ -1,3 +1,4 @@
+import AppInterstitialBanner from "@/app/components/modals/AppInterstitialBanner";
 import HomeSVP from "@/app/components/pages/HomeSVP";
 import { Metadata } from "next";
 
@@ -46,5 +47,25 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  return <HomeSVP />;
+  let bannerTimeInterval = 1000 * 60 * 60; // 1 hour
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    bannerTimeInterval = 1000 * 40; // 40 seconds
+  }
+
+  const status = false;
+
+  return (
+    <div>
+      <HomeSVP />
+      {!!status && (
+        <AppInterstitialBanner
+          interstitialImageMobile="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//insterstitial-dseven.webp"
+          interstitialImageDesktop="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//web-popup-dseven.webp"
+          interstitialAction="Buy Now!"
+          interstitialTimeInterval={bannerTimeInterval}
+          interstitialURL="https://vesta.halofans.id/event/v2/re-start"
+        />
+      )}
+    </div>
+  );
 }
