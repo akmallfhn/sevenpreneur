@@ -23,6 +23,7 @@ interface ArticleDetailsSVP {
   articleDate: string;
   articleSlug: string;
   articleBody: ArticleBodyContent[];
+  articleReadingTime: number;
 }
 
 export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
@@ -31,24 +32,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
       <div className="page-container flex w-full justify-between gap-6 py-3.5 max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <aside className="desktop-aside sticky flex flex-1 flex-col w-full gap-3">
           <div className="flex items-center gap-4">
-            <p className="font-semibold font-bodycopy text-[#474747] text-[15px] dark:text-[#BCBCBC]">
-              Share
-            </p>
-            <div className="flex items-center gap-2">
-              <AppSocialMediaButton
-                link="https://instagram.com"
-                variant="whatsapp"
-              />
-              <AppSocialMediaButton link="https://instagram.com" variant="x" />
-              <AppSocialMediaButton
-                link="https://instagram.com"
-                variant="linkedin"
-              />
-              <AppSocialMediaButton
-                link="https://instagram.com"
-                variant="facebook"
-              />
-            </div>
+            <p className="font-semibold font-bodycopy text-[#474747] text-[15px] dark:text-[#BCBCBC]"></p>
           </div>
         </aside>
         <main className="main flex flex-3 flex-col pb-20 gap-4">
@@ -57,8 +41,8 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
               {props.articleTitle}
             </h1>
             <p className="date-publish font-bodycopy font-medium text-[#474747] text-base dark:text-[#BCBCBC]">
-              Dipublikasi {dayjs(props.articleDate).format("D MMMM YYYY")} · 5
-              mins read
+              Dipublikasi {dayjs(props.articleDate).format("D MMMM YYYY")} ·{" "}
+              {Math.round(props.articleReadingTime)} mins read
             </p>
           </div>
           <div className="article-image relative gap-2 flex flex-col aspect-video rounded-md overflow-hidden">
@@ -115,16 +99,19 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
             </p>
             <div className="flex items-center gap-2">
               <AppSocialMediaButton
-                link="https://instagram.com"
+                link={`https://wa.me/?text=${props.articleTitle}.%20Read%20more%20on%20https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
                 variant="whatsapp"
               />
-              <AppSocialMediaButton link="https://instagram.com" variant="x" />
               <AppSocialMediaButton
-                link="https://instagram.com"
+                link={`https://twitter.com/intent/tweet?text=${props.articleTitle}.%20Read%20more%20on&url=https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
+                variant="x"
+              />
+              <AppSocialMediaButton
+                link={`https://www.linkedin.com/shareArticle?mini=true&url=https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
                 variant="linkedin"
               />
               <AppSocialMediaButton
-                link="https://instagram.com"
+                link={`https://www.facebook.com/sharer/sharer.php?u=https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
                 variant="facebook"
               />
             </div>

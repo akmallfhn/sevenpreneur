@@ -1,9 +1,88 @@
 import ArticleDetailsSVP from "@/app/components/pages/ArticleDetailsSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
+import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 interface ArticleDetailsPageLMSProps {
   params: Promise<{ article_id: string; article_slug: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ArticleDetailsPageLMSProps): Promise<Metadata> {
+  const { article_id } = await params;
+  const articleId = parseInt(article_id, 10);
+
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
+  setSecretKey(secretKey!);
+
+  let articleDataRaw;
+  try {
+    articleDataRaw = (await trpc.read.article({ id: articleId })).article;
+  } catch {
+    return notFound();
+  }
+
+  const articleData = {
+    ...articleDataRaw,
+    published_at: articleDataRaw.published_at.toISOString(),
+    updated_at: articleDataRaw.updated_at.toISOString(),
+  };
+
+  if (articleData.status !== "PUBLISHED") {
+    return {
+      title: `404 Not Found`,
+      description:
+        "Sorry, the page you’re looking for doesn’t exist or may have been moved.",
+      robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+          index: false,
+          follow: false,
+        },
+      },
+    };
+  }
+
+  return {
+    title: `${articleData.title} | Sevenpreneur Insights`,
+    description: articleData.insight,
+    keywords: articleData.keywords,
+    authors: [{ name: "Sevenpreneur" }],
+    publisher: "Sevenpreneur",
+    referrer: "origin-when-cross-origin",
+    alternates: {
+      canonical: `/insights/${articleData.slug_url}/${articleData.id}`,
+    },
+    openGraph: {
+      title: `${articleData.title} | Sevenpreneur Insights`,
+      description: articleData.insight,
+      url: `/insights/${articleData.slug_url}/${articleData.id}`,
+      siteName: "Sevenpreneur",
+      images: [
+        {
+          url: articleData.image_url,
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${articleData.title} | Sevenpreneur Insights`,
+      description: articleData.insight,
+      images: articleData.image_url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
+  };
 }
 
 export default async function ArticleDetailsPageLMS({
@@ -47,6 +126,7 @@ export default async function ArticleDetailsPageLMS({
       articleDate={articleData.published_at}
       articleSlug={articleData.slug_url}
       articleBody={articleData.body_content}
+      articleReadingTime={articleData.reading_time}
     />
   );
 }
