@@ -167,3 +167,13 @@
   margin: 0.8em 0;
   display: block;
 }
+
+@media (max-width: 1024px) {
+  .content {
+    font-size: 17px;
+  }
+
+  .content p {
+    font-size: 17px;
+  }
+}

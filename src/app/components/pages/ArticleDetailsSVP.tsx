@@ -6,10 +6,12 @@ import Image from "next/image";
 import Link from "next/link";
 import AppSocialMediaButton from "../buttons/AppSocialMediaButton";
 import styles from "./Article.module.css";
+import { useEffect, useState } from "react";
+import ArticleDetailsMobileSVP from "./ArticleDetailsMobileSVP";
 
 dayjs.extend(duration);
 
-interface ArticleBodyContent {
+export interface ArticleBodyContent {
   index_order: number;
   sub_heading: string | null;
   image_path: string | null;
@@ -32,7 +34,39 @@ interface ArticleDetailsSVP {
 }
 
 export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  // Dynamic mobile rendering
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    check();
+    window.addEventListener("resize", check);
+
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const insight = props.articleInsight.split(". ");
+
+  if (isMobile) {
+    return (
+      <ArticleDetailsMobileSVP
+        articleId={props.articleId}
+        articleTitle={props.articleTitle}
+        articleImage={props.articleImage}
+        articleCategory={props.articleCategory}
+        articleDate={props.articleDate}
+        articleInsight={props.articleInsight}
+        articleSlug={props.articleSlug}
+        articleBody={props.articleBody}
+        articleReadingTime={props.articleReadingTime}
+        articleAuthorName={props.articleAuthorName}
+        articleAuthorAvatar={props.articleAuthorAvatar}
+      />
+    );
+  }
 
   return (
     <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
@@ -74,7 +108,6 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
               width={800}
               height={800}
             />
-            <div className="overlay absolute bottom-0 w-full bg-" />
           </div>
           <div className="insight flex flex-col w-full p-6 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-4 rounded-lg border border-primary-light dark:border-outline-dark dark:from-[#0F0641] dark:to-surface-black">
             <h3 className="w-fit font-bodycopy font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-40% from-primary to-120% to-secondary">
