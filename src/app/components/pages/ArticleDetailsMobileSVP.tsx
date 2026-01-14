@@ -1,13 +1,13 @@
 "use client";
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
 import DOMPurify from "isomorphic-dompurify";
+import { Share2 } from "lucide-react";
 import Image from "next/image";
-import AppSocialMediaButton from "../buttons/AppSocialMediaButton";
+import React from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
 import styles from "./Article.module.css";
 import { ArticleBodyContent } from "./ArticleDetailsSVP";
-
-dayjs.extend(duration);
 
 interface ArticleDetailsSVP {
   articleId: number;
@@ -25,6 +25,47 @@ interface ArticleDetailsSVP {
 
 export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
   const insight = props.articleInsight.split(". ");
+
+  // Open navigator share
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!navigator.share) {
+      toast.error("Sharing is not supported on this device or browser.");
+      return;
+    }
+
+    try {
+      await navigator.share({
+        title: props.articleTitle,
+        text: props.articleInsight,
+        url: `https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`,
+      });
+    } catch (error) {
+      if (error instanceof DOMException) {
+        switch (error.name) {
+          case "AbortError":
+            toast("Share cancelled", { icon: "⚠️" });
+            break;
+
+          case "NotAllowedError":
+            toast.error("Sharing permission was denied.");
+            break;
+
+          case "SecurityError":
+            toast.error("Sharing is blocked due to security restrictions.");
+            break;
+
+          default:
+            toast.error("Failed to share the article. Please try again.");
+        }
+      } else {
+        toast.error("Unexpected error occurred while sharing.");
+        console.error("Share error:", error);
+      }
+    }
+  };
+
   return (
     <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
       <main className="page-container flex flex-col w-full pb-20 gap-6">
@@ -41,37 +82,29 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
             {dayjs(props.articleDate).format("D MMMM YYYY")} ·{" "}
             {Math.round(props.articleReadingTime)} mins read
           </p>
-          <div className="author flex items-center gap-3">
-            <div className="author-avatar w-10 aspect-square rounded-full overflow-hidden">
-              <Image
-                className="w-full h-full object-cover"
-                src={props.articleAuthorAvatar}
-                alt={props.articleAuthorName}
-                width={300}
-                height={300}
-              />
+          <div className="flex items-center justify-between">
+            <div className="author flex items-center gap-3">
+              <div className="author-avatar w-10 aspect-square rounded-full overflow-hidden">
+                <Image
+                  className="w-full h-full object-cover"
+                  src={props.articleAuthorAvatar}
+                  alt={props.articleAuthorName}
+                  width={300}
+                  height={300}
+                />
+              </div>
+              <p className="author-name font-bodycopy font-medium text-[#333333] text-base dark:text-[#BCBCBC]">
+                {props.articleAuthorName}
+              </p>
             </div>
-            <p className="author-name font-bodycopy font-medium text-[#333333] text-base dark:text-[#BCBCBC]">
-              {props.articleAuthorName}
-            </p>
-          </div>
-          <div className="share flex items-center gap-4">
-            <AppSocialMediaButton
-              link={`https://wa.me/?text=${props.articleTitle}.%20Read%20more%20on%20https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
-              variant="whatsapp"
-            />
-            <AppSocialMediaButton
-              link={`https://twitter.com/intent/tweet?text=${props.articleTitle}.%20Read%20more%20on&url=https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
-              variant="x"
-            />
-            <AppSocialMediaButton
-              link={`https://www.linkedin.com/shareArticle?mini=true&url=https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
-              variant="linkedin"
-            />
-            <AppSocialMediaButton
-              link={`https://www.facebook.com/sharer/sharer.php?u=https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}
-              variant="facebook"
-            />
+            <AppButton
+              className="share-button shrink-0"
+              variant="outline"
+              size="largeIconRounded"
+              onClick={handleShare}
+            >
+              <Share2 className="size-5" />
+            </AppButton>
           </div>
         </div>
         <div className="article-image relative gap-2 flex flex-col aspect-video">
