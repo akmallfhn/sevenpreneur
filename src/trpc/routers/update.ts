@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
+import { updateAdv } from "./ads/update.ads";
 import { updateArticle } from "./article/update.article";
 import { updateEvent } from "./event/update.event";
 import { updateLMS } from "./lms/update.lms";
@@ -53,4 +54,10 @@ export const updateRouter = createTRPCRouter({
 
   articleCategory: updateArticle.articleCategory,
   article: updateArticle.article,
+
+  // Interstitial Ads //
+
+  ad: {
+    interstitial: updateAdv.interstitial,
+  },
 });

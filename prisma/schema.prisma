@@ -634,6 +634,23 @@ model Article {
   @@map("articles")
 }
 
+// Interstitial Ads
+
+model InterstitialAd {
+  id             Int        @id @default(1)
+  title          String     @db.VarChar()
+  call_to_action String?    @db.VarChar()
+  target_url     String     @db.VarChar()
+  image_desktop  String?    @db.VarChar()
+  image_mobile   String?    @db.VarChar()
+  status         StatusEnum
+  start_date     DateTime   @db.Timestamptz()
+  end_date       DateTime   @db.Timestamptz()
+  updated_at     DateTime   @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("interstitial_ads")
+}
+
 // Relation Tables //
 
 model UserCohort {

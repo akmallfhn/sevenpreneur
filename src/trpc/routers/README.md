@@ -453,7 +453,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 **Scopes:**
 
 - Administrators and Marketers can update tickers.
-- Non-Administrators can only read tickers.
+- Others can only read tickers.
 
 ## Article Categories 📺
 
@@ -489,3 +489,15 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - `read.article`:
   - Administrators and Marketers can read all articles.
   - Others can only read active articles given the article ID.
+
+## Interstitial Ads 📢
+
+| Procedure Name           | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :----------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `read.ad.interstitial`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.ad.interstitial` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
+
+**Scopes:**
+
+- Administrators and Marketers can update interstitial ads.
+- Others can only read interstitial ads.

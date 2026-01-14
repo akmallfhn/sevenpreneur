@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
+import { readAdv } from "./ads/read.ads";
 import { readAIResult } from "./ai_tool/read.ai_tool";
 import { readArticle } from "./article/read.article";
 import { readEvent } from "./event/read.event";
@@ -72,4 +73,10 @@ export const readRouter = createTRPCRouter({
   // Article-related //
 
   article: readArticle.article,
+
+  // Interstitial Ads //
+
+  ad: {
+    interstitial: readAdv.interstitial,
+  },
 });

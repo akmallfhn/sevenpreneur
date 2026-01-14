@@ -470,6 +470,21 @@ CREATE TABLE articles (
   updated_at    TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Interstitial Ads
+
+CREATE TABLE interstitial_ads (
+  id              INTEGER      PRIMARY KEY  DEFAULT 1,
+  title           VARCHAR      NOT NULL,
+  call_to_action  VARCHAR          NULL,
+  target_url      VARCHAR      NOT NULL,
+  image_desktop   VARCHAR          NULL,
+  image_mobile    VARCHAR          NULL,
+  status          status_enum  NOT NULL,
+  start_date      TIMESTAMPTZ  NOT NULL,
+  end_date        TIMESTAMPTZ  NOT NULL,
+  updated_at      TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (
@@ -740,6 +755,13 @@ CREATE TRIGGER update_articles_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
+-- Interstitial Ads
+
+CREATE TRIGGER update_interstitial_ads_updated_at_trigger
+  BEFORE UPDATE ON interstitial_ads
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
 ------------------
 -- Unique Index --
 ------------------
@@ -754,8 +776,11 @@ CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, categor
 
 -- Tickers
 
-CREATE UNIQUE INDEX one_row_only ON ticker ((true));
+CREATE UNIQUE INDEX one_row_only ON ticker ((TRUE));
 
+-- Interstitial Ads
+
+CREATE UNIQUE INDEX interstitial_ads_one_row_only ON interstitial_ads ((TRUE));
 
 --------------------------------
 -- Other Table Configurations --

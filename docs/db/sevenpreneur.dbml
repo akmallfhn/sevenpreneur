@@ -472,6 +472,21 @@ Table articles {
   updated_at    timestamptz
 }
 
+// Interstitial Ads
+
+Table interstitial_ads {
+  id              integer [primary key, note: 'default 1']
+  title           varchar
+  call_to_action  varchar
+  target_url      varchar
+  image_desktop   varchar
+  image_mobile    varchar
+  status          status_enum
+  start_date      timestamptz
+  end_date        timestamptz
+  updated_at      timestamptz
+}
+
 // Relation Tables //
 
 Table users_cohorts {
