@@ -2,7 +2,7 @@ import "@/app/globals.css";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Metadata } from "next";
-import { Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Mona_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import { ReactNode } from "react";
@@ -14,6 +14,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -83,7 +88,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} antialiased`}
+      className={`scroll-smooth ${monaSans.variable} ${plusJakartaSans.variable} ${openSauceOne.variable} ${inter.variable} antialiased`}
       suppressHydrationWarning
     >
       <GoogleTagManager gtmId={googleTagManagerId!} />

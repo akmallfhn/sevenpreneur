@@ -125,10 +125,17 @@ export default async function ArticleDetailsPageLMS({
       articleId={articleData.id}
       articleTitle={articleData.title}
       articleImage={articleData.image_url}
+      articleCategory={articleData.category.name}
       articleDate={articleData.published_at}
+      articleInsight={articleData.insight}
       articleSlug={articleData.slug_url}
       articleBody={articleData.body_content}
       articleReadingTime={articleData.reading_time}
+      articleAuthorName={articleData.author.full_name}
+      articleAuthorAvatar={
+        articleData.author.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+      }
     />
   );
 }

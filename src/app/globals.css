@@ -30,6 +30,7 @@
   --color-cms-secondary: #65d6ca;
   --color-cms-primary-light: #cde2ff;
   --color-section-background: #f5f7fb;
+  --color-word-black: #9e9a9a;
   --color-surface-black: #171616;
   --color-coal-black: #0c0d0e;
   --color-warning-background: #fef2d0;
@@ -48,6 +49,7 @@
   --color-foreground: var(--foreground);
   --font-brand: var(--font-mona-sans);
   --font-bodycopy: var(--font-plus-jakarta-sans);
+  --font-read: var(--font-inter);
   --font-ui: var(--font-open-sauce-one);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

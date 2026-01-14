@@ -6,6 +6,10 @@
   word-break: break-word;
 }
 
+:global(.dark) .content {
+  color: var(--color-word-black);
+}
+
 .content > *:first-child {
   margin-top: 0 !important;
 }
@@ -38,6 +42,12 @@
   font-weight: 600;
   color: #333333;
 }
+
+:global(.dark) .content b,
+.content strong {
+  color: var(--color-word-black);
+}
+
 .content i,
 .content em {
   font-style: italic;
@@ -73,7 +83,7 @@
 
 /* Code block */
 .content pre {
-  background-color: #1e293b;
+  background-color: #111111;
   color: #f8fafc;
   padding: 1rem;
   border-radius: 0.5rem;
