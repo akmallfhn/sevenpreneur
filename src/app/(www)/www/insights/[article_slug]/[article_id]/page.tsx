@@ -18,18 +18,7 @@ export async function generateMetadata({
 
   const BASE_URL = "https://www.sevenpreneur.com";
 
-  let articleDataRaw;
-  try {
-    articleDataRaw = (await trpc.read.article({ id: articleId })).article;
-  } catch {
-    return notFound();
-  }
-
-  const articleData = {
-    ...articleDataRaw,
-    published_at: articleDataRaw.published_at.toISOString(),
-    updated_at: articleDataRaw.updated_at.toISOString(),
-  };
+  const articleData = (await trpc.read.article({ id: articleId })).article;
 
   if (articleData.status !== "PUBLISHED") {
     return {
