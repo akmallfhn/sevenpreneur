@@ -44,10 +44,6 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
     } catch (error) {
       if (error instanceof DOMException) {
         switch (error.name) {
-          case "AbortError":
-            toast("Share cancelled", { icon: "⚠️" });
-            break;
-
           case "NotAllowedError":
             toast.error("Sharing permission was denied.");
             break;

@@ -14,28 +14,34 @@ export function GET() {
       priority: 1.0,
     },
     {
-      url: `https://www.${domain}/events/restart-conference`,
+      url: `https://www.${domain}/privacy-policy`,
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 1.0,
     },
     {
-      url: `https://www.${domain}/cohorts/sevenpreneur-business-blueprint-program`,
+      url: `https://www.${domain}/terms-conditions`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: "yearly",
+      priority: 1.0,
+    },
+    {
+      url: `https://www.${domain}/company`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
       priority: 1.0,
     },
   ];
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-  sitemaps.forEach((sitemapItem) => {
+  sitemaps.forEach((item) => {
     xml += `
         <url>
-            <loc>${sitemapItem.url}</loc>
-            <lastmod>${sitemapItem.lastModified.toISOString()}</lastmod>
-            <changefreq>${sitemapItem.changeFrequency}</changefreq>
-            <priority>${sitemapItem.priority.toFixed(1)}</priority>
+            <loc>${item.url}</loc>
+            <lastmod>${item.lastModified.toISOString()}</lastmod>
+            <changefreq>${item.changeFrequency}</changefreq>
+            <priority>${item.priority.toFixed(1)}</priority>
         </url>`;
   });
   xml += "</urlset>";

@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 
+interface SitemapItem {
+  url: string;
+  lastModified: Date;
+}
+
 export async function GET() {
   let domain = "sevenpreneur.com";
   if (process.env.DOMAIN_MODE === "local") {
@@ -9,7 +14,23 @@ export async function GET() {
   try {
     const sitemaps = [
       {
-        url: `https://www.${domain}/sitemap-basic.xml`,
+        url: `https://www.${domain}/basic/sitemap.xml`,
+        lastModified: new Date(),
+      },
+      {
+        url: `https://www.${domain}/cohorts/sitemap.xml`,
+        lastModified: new Date(),
+      },
+      {
+        url: `https://www.${domain}/events/sitemap.xml`,
+        lastModified: new Date(),
+      },
+      {
+        url: `https://www.${domain}/playlists/sitemap.xml`,
+        lastModified: new Date(),
+      },
+      {
+        url: `https://www.${domain}/insights/sitemap.xml`,
         lastModified: new Date(),
       },
     ];
@@ -26,13 +47,14 @@ export async function GET() {
   }
 }
 
-async function buildSitemap(sitemaps) {
+async function buildSitemap(sitemaps: SitemapItem[]) {
   let xml = '<?xml version="1.0" encoding="UTF-8"?>';
   xml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-  for (const sitemapItem of sitemaps) {
-    (xml += "<sitemap>"), (xml += `<loc>${sitemapItem.url}</loc>`);
-    xml += `<lastmod>${sitemapItem.lastModified.toISOString()}</lastmod>`;
+  for (const item of sitemaps) {
+    xml += "<sitemap>";
+    xml += `<loc>${item.url}</loc>`;
+    xml += `<lastmod>${item.lastModified.toISOString()}</lastmod>`;
     xml += "</sitemap>";
   }
   xml += "</sitemapindex>";
