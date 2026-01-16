@@ -1,5 +1,6 @@
 import AppInterstitialBanner from "@/app/components/modals/AppInterstitialBanner";
 import HomeSVP from "@/app/components/pages/HomeSVP";
+import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -47,23 +48,31 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  let bannerTimeInterval = 1000 * 60 * 60; // 1 hour
-  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
-    bannerTimeInterval = 1000 * 40; // 40 seconds
-  }
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
+  setSecretKey(secretKey!);
 
-  const status = false;
+  let interstitialAdsRaw = null;
+  try {
+    interstitialAdsRaw = (await trpc.read.ad.interstitial({ id: 1 }))
+      .interstitial;
+  } catch {
+    interstitialAdsRaw = null;
+  }
+  const interstitialAds = {
+    ...interstitialAdsRaw,
+    start_date: interstitialAdsRaw?.start_date.toISOString(),
+    end_date: interstitialAdsRaw?.end_date.toISOString(),
+  };
 
   return (
     <div>
       <HomeSVP />
-      {!!status && (
+      {interstitialAds.status === "ACTIVE" && (
         <AppInterstitialBanner
-          interstitialImageMobile="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//insterstitial-dseven.webp"
-          interstitialImageDesktop="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//web-popup-dseven.webp"
-          interstitialAction="Buy Now!"
-          interstitialTimeInterval={bannerTimeInterval}
-          interstitialURL="https://vesta.halofans.id/event/v2/re-start"
+          interstitialImageMobile={interstitialAds.image_mobile!}
+          interstitialImageDesktop={interstitialAds.image_desktop!}
+          interstitialAction={interstitialAds.call_to_action ?? "More Details"}
+          interstitialURL={interstitialAds.target_url!}
         />
       )}
     </div>

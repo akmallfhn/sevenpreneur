@@ -9,7 +9,6 @@ interface AppInterstitialBannerProps {
   interstitialImageMobile: string;
   interstitialImageDesktop: string;
   interstitialURL: string;
-  interstitialTimeInterval: number;
   interstitialAction: string;
 }
 
@@ -21,6 +20,11 @@ export default function AppInterstitialBanner(
     props.interstitialImageMobile
   );
 
+  let timeInterval = 1000 * 60 * 60; // 1 hour
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    timeInterval = 1000 * 40; // 40 seconds
+  }
+
   // Determine if banner should show
   useEffect(() => {
     // Retrieves the timestamp value of the last time the popup was closed (saved previously) from localStorage.
@@ -29,13 +33,10 @@ export default function AppInterstitialBanner(
     // !lastShown → If no timestamp has been saved before, it means the banner has never been closed → show the banner.
     // now - parseInt(lastShown) → Calculate the difference between the current time and the last time the banner was closed.
     // > bannerTimeInterval → Compare whether the time difference has exceeded the set interval
-    if (
-      !lastShown ||
-      now - parseInt(lastShown) > props.interstitialTimeInterval
-    ) {
+    if (!lastShown || now - parseInt(lastShown) > timeInterval) {
       queueMicrotask(() => setIsOpen(true));
     }
-  }, [props.interstitialTimeInterval]);
+  }, [timeInterval]);
 
   // Blocked scroll behind
   useEffect(() => {
@@ -117,7 +118,7 @@ export default function AppInterstitialBanner(
                 variant="outline"
                 featureName="interstitial_banner_promotion"
               >
-                Buy Ticket Now
+                {props.interstitialAction}
               </AppButton>
             </div>
             <div
@@ -128,7 +129,7 @@ export default function AppInterstitialBanner(
             className="interstitial-close absolute flex p-1.5 text-white bg-[#3E3E3E] -top-4 -right-4 rounded-full hover:cursor-pointer"
             onClick={handleClose}
           >
-            <X className="size-6" />
+            <X className="size-5" />
           </div>
         </div>
       </div>

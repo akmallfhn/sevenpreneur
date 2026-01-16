@@ -12,8 +12,8 @@ export async function generateMetadata({
 }: PlaylistDetailsPageProps): Promise<Metadata> {
   const { playlist_id } = await params;
   const playlistId = parseInt(playlist_id);
-  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
 
+  const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   setSecretKey(secretKey!);
 
   const playlistData = (await trpc.read.playlist({ id: playlistId })).playlist;
