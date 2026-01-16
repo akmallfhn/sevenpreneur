@@ -170,6 +170,31 @@ async function createTransaction(
     console.error("purchase: More-than-one transactions are updated at once.");
   }
 
+  try {
+    const hookUrl = process.env.N8N_PAYMENT_REMINDER_HOOK_URL;
+    const hookToken = process.env.N8N_WEBHOOK_VERIFICATION_TOKEN;
+    if (!hookUrl) {
+      console.warn("Payment reminder hook URL is not set!");
+    } else if (!hookToken) {
+      console.warn("Payment reminder hook token is not set!");
+    } else {
+      const paymentReminderResponse = await fetch(hookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-webhook-token": hookToken,
+        },
+        body: JSON.stringify({
+          tid: theTransaction.id,
+        }),
+      });
+      const paymentReminderBody = await paymentReminderResponse.json();
+      console.log("Payment reminder response:", paymentReminderBody);
+    }
+  } catch (err) {
+    console.error("Failed to call payment reminder hook:", err);
+  }
+
   return {
     transactionId: theTransaction.id,
     invoiceUrl: xenditResponse.invoice_url,
