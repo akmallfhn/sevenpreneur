@@ -6,8 +6,9 @@ import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { ChevronRight, Loader2, Settings } from "lucide-react";
+import { ChevronRight, Loader2, Pen } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import EditInterstitialAdsFormCMS from "../forms/EditInterstitialAdsFormCMS";
 import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 
@@ -131,8 +132,8 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                     size="medium"
                     onClick={() => setEditTicker(true)}
                   >
-                    <Settings className="size-4" />
-                    Update Ticker
+                    <Pen className="size-4" />
+                    Update
                   </AppButton>
                 </div>
               )}
@@ -192,10 +193,10 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                   <AppButton
                     variant="cmsPrimary"
                     size="medium"
-                    onClick={() => setEditTicker(true)}
+                    onClick={() => setEditInterstitial(true)}
                   >
-                    <Settings className="size-4" />
-                    Update Ticker
+                    <Pen className="size-4" />
+                    Update
                   </AppButton>
                 </div>
               )}
@@ -214,7 +215,15 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
         />
       )}
 
-      {/* To Do: Edit Interstitial */}
+      {/* Edit Interstitial */}
+      {editInterstitial && (
+        <EditInterstitialAdsFormCMS
+          sessionToken={props.sessionToken}
+          interstitialId={1}
+          isOpen={editInterstitial}
+          onClose={() => setEditInterstitial(false)}
+        />
+      )}
     </React.Fragment>
   );
 }
