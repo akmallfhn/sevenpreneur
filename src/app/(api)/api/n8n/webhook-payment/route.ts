@@ -1,6 +1,8 @@
+import { Optional } from "@/lib/optional-type";
 import GetPrismaClient from "@/lib/prisma";
-import { TStatusEnum } from "@prisma/client";
+import { CategoryEnum, TStatusEnum } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { getProductName } from "./util.n8n.payment";
 
 type n8nPaymentReminderCheck = {
   tid: string;
@@ -25,6 +27,13 @@ export async function POST(req: NextRequest) {
 
   const theTransaction = await prisma.transaction.findFirst({
     select: {
+      category: true,
+      item_id: true,
+      amount: true,
+      discount_amount: true,
+      admin_fee: true,
+      vat: true,
+      invoice_number: true,
       status: true,
       user: { select: { full_name: true, email: true } },
     },
@@ -44,12 +53,54 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  let productCategory = "unknown"; // generic product category
+  switch (theTransaction.category) {
+    case CategoryEnum.COHORT:
+      productCategory = "cohort";
+      break;
+    case CategoryEnum.PLAYLIST:
+      productCategory = "playlist";
+      break;
+    case CategoryEnum.EVENT:
+      productCategory = "event";
+      break;
+    case CategoryEnum.AI:
+      productCategory = "AI";
+      break;
+    default:
+      break;
+  }
+
+  const productName =
+    (await getProductName(
+      prisma,
+      theTransaction.category,
+      theTransaction.item_id
+    )) ?? "Product"; // generic product name
+
+  let checkoutPrefix = "https://checkout.xendit.co/web/";
+  if (process.env.XENDIT_MODE === "test") {
+    checkoutPrefix = "https://checkout-staging.xendit.co/v2/";
+  }
+
+  let invoiceUrl: Optional<string>;
+  if (theTransaction.status === TStatusEnum.PENDING) {
+    invoiceUrl = `${checkoutPrefix}${theTransaction.invoice_number}`;
+  }
+
   return new NextResponse(
     JSON.stringify({
       is_pending: theTransaction.status === TStatusEnum.PENDING,
       status: theTransaction.status,
       full_name: theTransaction.user.full_name,
       email: theTransaction.user.email,
+      product_category: productCategory,
+      product_name: productName,
+      product_price: theTransaction.amount
+        .sub(theTransaction.discount_amount)
+        .plus(theTransaction.admin_fee)
+        .plus(theTransaction.vat),
+      invoice_url: invoiceUrl,
     }),
     {
       status: 200,
