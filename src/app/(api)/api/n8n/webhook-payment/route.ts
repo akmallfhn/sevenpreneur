@@ -1,3 +1,4 @@
+import { getRupiahCurrency } from "@/lib/currency";
 import { Optional } from "@/lib/optional-type";
 import GetPrismaClient from "@/lib/prisma";
 import { CategoryEnum, TStatusEnum } from "@prisma/client";
@@ -78,6 +79,14 @@ export async function POST(req: NextRequest) {
       theTransaction.item_id
     )) ?? "Product"; // generic product name
 
+  const productPrice = theTransaction.amount
+    .sub(theTransaction.discount_amount)
+    .plus(theTransaction.admin_fee)
+    .plus(theTransaction.vat)
+    .toNumber();
+
+  const productPriceFormatted = getRupiahCurrency(productPrice);
+
   let checkoutPrefix = "https://checkout.xendit.co/web/";
   if (process.env.XENDIT_MODE === "test") {
     checkoutPrefix = "https://checkout-staging.xendit.co/v2/";
@@ -96,10 +105,7 @@ export async function POST(req: NextRequest) {
       email: theTransaction.user.email,
       product_category: productCategory,
       product_name: productName,
-      product_price: theTransaction.amount
-        .sub(theTransaction.discount_amount)
-        .plus(theTransaction.admin_fee)
-        .plus(theTransaction.vat),
+      product_price: productPriceFormatted,
       invoice_url: invoiceUrl,
     }),
     {
