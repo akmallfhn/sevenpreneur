@@ -84,9 +84,9 @@ export async function POST(req: NextRequest) {
     .plus(theTransaction.admin_fee)
     .plus(theTransaction.vat)
     .toNumber();
+  const productPriceRounded = Math.round(productPrice);
 
-  const productPriceFormatted = getRupiahCurrency(productPrice);
-
+  const productPriceFormatted = getRupiahCurrency(productPriceRounded);
   let checkoutPrefix = "https://checkout.xendit.co/web/";
   if (process.env.XENDIT_MODE === "test") {
     checkoutPrefix = "https://checkout-staging.xendit.co/v2/";
