@@ -1,7 +1,7 @@
 "use client";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 import Image from "next/image";
 import Link from "next/link";
 import AppSocialMediaButton from "../buttons/AppSocialMediaButton";

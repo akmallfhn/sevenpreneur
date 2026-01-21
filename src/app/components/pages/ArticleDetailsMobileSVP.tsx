@@ -1,6 +1,6 @@
 "use client";
 import dayjs from "dayjs";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 import { Share2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
