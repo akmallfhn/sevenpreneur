@@ -196,7 +196,9 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                             Edit
                           </AppButton>
                         </Link>
-                        <Link href={`https://www.sevenpreneur.com`}>
+                        <Link
+                          href={`https://www.sevenpreneur.com/insights/${post.slug_url}/${post.id}`}
+                        >
                           <AppButton variant="cmsPrimaryLight" size="small">
                             <ExternalLink className="size-4" />
                             Preview

@@ -1,6 +1,5 @@
 "use client";
 import dayjs from "dayjs";
-import DOMPurify from "dompurify";
 import { Share2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -157,7 +156,7 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
                 <div
                   className={styles.content}
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(post.content),
+                    __html: post.content,
                   }}
                 />
               )}

@@ -1,5 +1,5 @@
 "use client";
-import { useMarkdown } from "@/lib/markdown-to-html";
+import { markdownToHtml } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
   AIIdeaValidation_LongevityAlignment,
@@ -121,7 +121,7 @@ interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function IdeaValidationReportLMS(
-  props: IdeaValidationReportLMSProps
+  props: IdeaValidationReportLMSProps,
 ) {
   const router = useRouter();
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
@@ -137,7 +137,7 @@ export default function IdeaValidationReportLMS(
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken,
-    }
+    },
   );
   const isDoneResult = data?.result.is_done;
 
@@ -178,12 +178,12 @@ export default function IdeaValidationReportLMS(
     icon: "",
     icon_background: "",
   };
-  const problemDiscovery = useMarkdown(props.problemDiscovery);
-  const solutionValue = useMarkdown(props.solutionValue);
-  const solutionFeasibility = useMarkdown(props.solutionFeasibility);
-  const industryDirection = useMarkdown(props.industryDirection);
-  const longevityReason = useMarkdown(
-    `${longevity.description} ${props.longevityReason}`
+  const problemDiscovery = markdownToHtml(props.problemDiscovery);
+  const solutionValue = markdownToHtml(props.solutionValue);
+  const solutionFeasibility = markdownToHtml(props.solutionFeasibility);
+  const industryDirection = markdownToHtml(props.industryDirection);
+  const longevityReason = markdownToHtml(
+    `${longevity.description} ${props.longevityReason}`,
   );
 
   if (!props.resultStatus) {

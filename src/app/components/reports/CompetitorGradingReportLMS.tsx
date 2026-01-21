@@ -1,5 +1,5 @@
 "use client";
-import { useMarkdown } from "@/lib/markdown-to-html";
+import { markdownToHtml } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { BarChart } from "@mui/x-charts";
@@ -77,7 +77,7 @@ interface CompetitorGradingReportLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function CompetitorGradingReportLMS(
-  props: CompetitorGradingReportLMSProps
+  props: CompetitorGradingReportLMSProps,
 ) {
   const router = useRouter();
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
@@ -93,7 +93,7 @@ export default function CompetitorGradingReportLMS(
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken,
-    }
+    },
   );
   const isDoneResult = data?.result.is_done;
 
@@ -104,12 +104,14 @@ export default function CompetitorGradingReportLMS(
     }
   }, [isDoneResult, router]);
 
-  const industryCAGRReason = useMarkdown(props.industryCAGRReason);
-  const industryMarketMaturityReason = useMarkdown(
-    props.industryMarketMaturityReason
+  const industryCAGRReason = markdownToHtml(props.industryCAGRReason);
+  const industryMarketMaturityReason = markdownToHtml(
+    props.industryMarketMaturityReason,
   );
-  const industryCurrentCondition = useMarkdown(props.industryCurrentCondition);
-  const growthOpportunity = useMarkdown(props.growthOpportunity);
+  const industryCurrentCondition = markdownToHtml(
+    props.industryCurrentCondition,
+  );
+  const growthOpportunity = markdownToHtml(props.growthOpportunity);
   const maturity = maturityAttributes[props.industryMarketMaturity];
 
   if (!props.resultStatus) {

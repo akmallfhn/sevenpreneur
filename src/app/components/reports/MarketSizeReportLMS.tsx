@@ -1,6 +1,7 @@
 "use client";
 import { getShortRupiahCurrency } from "@/lib/currency";
-import { useMarkdown } from "@/lib/markdown-to-html";
+
+import { markdownToHtml } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,7 +42,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken,
-    }
+    },
   );
   const isDoneResult = data?.result.is_done;
 
@@ -55,9 +56,9 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
   const somValue = 0.01 * props.samValue;
   const conservativeScenario = 0.7 * somValue;
   const aggresiveScenario = 1.5 * somValue;
-  const tamInsight = useMarkdown(props.tamInsight);
-  const samInsight = useMarkdown(props.samInsight);
-  const somInsight = useMarkdown(props.somInsight);
+  const tamInsight = markdownToHtml(props.tamInsight);
+  const samInsight = markdownToHtml(props.samInsight);
+  const somInsight = markdownToHtml(props.somInsight);
 
   if (!props.resultStatus) {
     return (

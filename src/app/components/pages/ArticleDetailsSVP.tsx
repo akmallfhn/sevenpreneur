@@ -1,12 +1,11 @@
 "use client";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import DOMPurify from "dompurify";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import AppSocialMediaButton from "../buttons/AppSocialMediaButton";
 import styles from "./Article.module.css";
-import { useEffect, useState } from "react";
 import ArticleDetailsMobileSVP from "./ArticleDetailsMobileSVP";
 
 dayjs.extend(duration);
@@ -35,6 +34,9 @@ interface ArticleDetailsSVP {
 
 export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  // const DOMPurify =
+  //   typeof window !== "undefined" ? createDOMPurify(window) : null;
 
   // Dynamic mobile rendering
   useEffect(() => {
@@ -153,7 +155,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
                 <div
                   className={styles.content}
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(post.content),
+                    __html: post.content,
                   }}
                 />
               )}

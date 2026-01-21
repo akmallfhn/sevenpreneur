@@ -1,18 +1,20 @@
-import DOMPurify from "dompurify";
 import { marked } from "marked";
-import { useEffect, useState } from "react";
 
-export async function markdownToHtml(markdown: string): Promise<string> {
-  const html = await marked.parse(markdown);
-  return DOMPurify.sanitize(html);
+export function markdownToHtml(markdown: string) {
+  return marked.parse(markdown);
 }
 
-export function useMarkdown(markdown: string) {
-  const [html, setHtml] = useState("");
+// export async function parsedMarkdownToHtml(markdown: string): Promise<string> {
+//   const html = await marked.parse(markdown);
+//   return DOMPurify.sanitize(html);
+// }
 
-  useEffect(() => {
-    markdownToHtml(markdown).then(setHtml);
-  }, [markdown]);
+// export function useMarkdown(markdown: string) {
+//   const [html, setHtml] = useState("");
 
-  return html;
-}
+//   useEffect(() => {
+//     parsedMarkdownToHtml(markdown).then(setHtml);
+//   }, [markdown]);
+
+//   return html;
+// }
