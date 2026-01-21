@@ -36,7 +36,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
   // Fetch tRPC List Article
   const { data, isLoading, isError } = trpc.list.articles.useQuery(
     {},
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
   const articleList = data?.list;
 
@@ -104,7 +104,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                       </div>
                     </TableCellCMS>
                     <TableCellCMS>
-                      <div className="metadata flex flex-col gap-1.5">
+                      <div className="metadata flex flex-col max-w-72 gap-1.5 xl:max-w-96 2xl:max-w-[502px]">
                         <h2 className="article-title font-bold font-bodycopy text-[15px] line-clamp-2 leading-snug">
                           {post.title}
                         </h2>
@@ -134,7 +134,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                           <p className="article-keywords font-bodycopy font-[440] text-[#686868] text-sm line-clamp-1">
                             Published at{" "}
                             {dayjs(post.published_at).format(
-                              "dddd, D MMM YYYY - HH:mm"
+                              "dddd, D MMM YYYY - HH:mm",
                             )}
                           </p>
                         </div>

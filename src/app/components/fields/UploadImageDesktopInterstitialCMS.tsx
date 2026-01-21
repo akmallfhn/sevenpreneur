@@ -11,7 +11,7 @@ interface UploadImageDesktopInterstitialCMSProps {
 }
 
 export default function UploadImageDesktopInterstitialCMS(
-  props: UploadImageDesktopInterstitialCMSProps
+  props: UploadImageDesktopInterstitialCMSProps,
 ) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false); // State upload to Supabase
@@ -32,7 +32,7 @@ export default function UploadImageDesktopInterstitialCMS(
 
   // Upload File to Supabase
   const handleUploadFiles = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
 
@@ -56,7 +56,7 @@ export default function UploadImageDesktopInterstitialCMS(
       return;
     }
     const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `cohort/${fileName}`;
+    const filePath = `ads/${fileName}`;
 
     // Upload to Supabase
     try {

@@ -11,7 +11,7 @@ interface UploadImageMobileInterstitialCMSProps {
 }
 
 export default function UploadImageMobileInterstitialCMS(
-  props: UploadImageMobileInterstitialCMSProps
+  props: UploadImageMobileInterstitialCMSProps,
 ) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false); // State upload to Supabase
@@ -32,7 +32,7 @@ export default function UploadImageMobileInterstitialCMS(
 
   // Upload File to Supabase
   const handleUploadFiles = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
 
@@ -56,7 +56,7 @@ export default function UploadImageMobileInterstitialCMS(
       return;
     }
     const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `cohort/${fileName}`;
+    const filePath = `ads/${fileName}`;
 
     // Upload to Supabase
     try {
