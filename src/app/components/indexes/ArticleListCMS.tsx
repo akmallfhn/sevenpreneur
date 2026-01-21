@@ -2,9 +2,12 @@
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
+import dayjs from "dayjs";
 import {
   ChevronRight,
+  Copy,
   ExternalLink,
   FilePenLine,
   Loader2,
@@ -13,10 +16,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
+import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import dayjs from "dayjs";
 
 interface ArticleListCMSProps {
   sessionToken: string;
@@ -25,6 +28,7 @@ interface ArticleListCMSProps {
 
 export default function ArticleListCMS(props: ArticleListCMSProps) {
   const allowedRolesCreateArticle = [0, 4];
+  const { copy } = useClipboard();
 
   // Set Session Token to Header
   useEffect(() => {
@@ -39,6 +43,11 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
     { enabled: !!props.sessionToken },
   );
   const articleList = data?.list;
+
+  let domain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
 
   return (
     <React.Fragment>
@@ -93,14 +102,29 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                     key={post.id}
                   >
                     <TableCellCMS>
-                      <div className="image flex max-w-44 aspect-video rounded-sm overflow-hidden">
-                        <Image
-                          className="w-full h-full object-cover"
-                          src={post.image_url}
-                          alt={post.title}
-                          width={300}
-                          height={300}
-                        />
+                      <div className="flex flex-col items-center max-w-44 gap-2">
+                        <div className="image flex aspect-video rounded-sm overflow-hidden">
+                          <Image
+                            className="w-full h-full object-cover"
+                            src={post.image_url}
+                            alt={post.title}
+                            width={300}
+                            height={300}
+                          />
+                        </div>
+                        <AppButton
+                          variant="outline"
+                          size="small"
+                          onClick={() => {
+                            copy(
+                              `https://www.${domain}/insights/${post.slug_url}/${post.id}`,
+                            );
+                            toast.success("Link copied!");
+                          }}
+                        >
+                          <Copy className="size-4" />
+                          Copy Link
+                        </AppButton>
                       </div>
                     </TableCellCMS>
                     <TableCellCMS>
@@ -197,7 +221,9 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                           </AppButton>
                         </Link>
                         <Link
-                          href={`https://www.sevenpreneur.com/insights/${post.slug_url}/${post.id}`}
+                          href={`https://www.${domain}/insights/${post.slug_url}/${post.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
                           <AppButton variant="cmsPrimaryLight" size="small">
                             <ExternalLink className="size-4" />
