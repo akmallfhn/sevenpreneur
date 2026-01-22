@@ -41,7 +41,7 @@ export async function generateMetadata({
       siteName: "Sevenpreneur",
       images: [
         {
-          url: "https://static.wixstatic.com/media/02a5b1_d0f0ef7195ce4fa0ada080a1bd432f17~mv2.webp",
+          url: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/meta-og-image-sevenpreneur-1.webp",
           width: 1200,
           height: 630,
         },
@@ -53,7 +53,7 @@ export async function generateMetadata({
       description:
         "Detail transaksi tersedia di sini. Cek status, nominal, dan informasi produk dengan mudah.",
       images:
-        "https://static.wixstatic.com/media/02a5b1_d0f0ef7195ce4fa0ada080a1bd432f17~mv2.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/meta-og-image-sevenpreneur-1.webp",
     },
     robots: {
       index: false,

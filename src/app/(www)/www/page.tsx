@@ -4,11 +4,11 @@ import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sevenpreneur | All-in-One Business Learning Platform",
+  title: "Sevenpreneur | The 1st AI-Integrated Business Training Program",
   description:
     "All-in-one business learning platform untuk founder dan entrepreneur. Dapatkan roadmap, modul praktis, dan strategi eksekusi agar bisnismu bisa level up.",
   keywords:
-    "Sevenpreneur, Business Blueprint, Raymond Chin, Video On Demand Bisnis",
+    "Sevenpreneur, Business Blueprint, Raymond Chin, Video On Demand Bisnis, kelas bisnis, course bisnis",
   authors: [{ name: "Sevenpreneur" }],
   publisher: "Sevenpreneur",
   referrer: "origin-when-cross-origin",

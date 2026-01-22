@@ -3,13 +3,13 @@ import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
-interface ArticleDetailsPageLMSProps {
+interface ArticleDetailsPageProps {
   params: Promise<{ article_id: string; article_slug: string }>;
 }
 
 export async function generateMetadata({
   params,
-}: ArticleDetailsPageLMSProps): Promise<Metadata> {
+}: ArticleDetailsPageProps): Promise<Metadata> {
   const { article_id } = await params;
   const articleId = parseInt(article_id, 10);
 
@@ -76,9 +76,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticleDetailsPageLMS({
+export default async function ArticleDetailsPage({
   params,
-}: ArticleDetailsPageLMSProps) {
+}: ArticleDetailsPageProps) {
   const { article_id, article_slug } = await params;
   const articleId = parseInt(article_id, 10);
 
