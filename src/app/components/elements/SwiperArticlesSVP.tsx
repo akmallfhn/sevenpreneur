@@ -20,7 +20,6 @@ export default function SwiperArticlesSVP(props: SwiperArticlesSVPProps) {
     <>
       <Swiper
         slidesPerView={"auto"}
-        centeredSlides={true}
         spaceBetween={30}
         pagination={{
           clickable: true,
