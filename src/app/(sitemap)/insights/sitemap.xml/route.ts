@@ -15,6 +15,7 @@ export async function GET() {
   const articles = articleListData.list.map((post) => ({
     url: `https://www.${domain}/insights/${post.slug_url}/${post.id}`,
     lastModified: new Date(),
+    changeFreq: "daily",
   }));
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -23,6 +24,7 @@ export async function GET() {
     xml += `
         <url>
             <loc>${item.url}</loc>
+            <changefreq>${item.changeFreq}</changefreq>
             <lastmod>${item.lastModified.toISOString()}</lastmod>
         </url>`;
   });
