@@ -1,9 +1,8 @@
 "use client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AppButton from "../buttons/AppButton";
 import { faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import MapsVector from "../svg-logos/MapsVector";
+import AppButton from "../buttons/AppButton";
 
 export default function InstagramTypeContentSVP() {
   return (
@@ -92,10 +91,6 @@ export default function InstagramTypeContentSVP() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="maps-vector absolute w-full h-auto top-1/2 -translate-y-1/2">
-        <MapsVector />
       </div>
     </div>
   );
