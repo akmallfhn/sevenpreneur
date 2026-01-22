@@ -46,12 +46,12 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
 
   const disallowedPath = ["/auth"];
   const isDisallowedPage = disallowedPath.some((path) =>
-    pathname.includes(path)
+    pathname.includes(path),
   );
 
   const constrainedPath = ["/checkout"];
   const isConstrainedPath = constrainedPath.some((path) =>
-    pathname.includes(path)
+    pathname.includes(path),
   );
 
   const nickName = props.userName?.split(" ")[0];
@@ -65,7 +65,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
   // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (
-      event: MouseEvent | (MouseEvent & { target: Node })
+      event: MouseEvent | (MouseEvent & { target: Node }),
     ) => {
       if (
         wrapperRef.current &&
@@ -95,7 +95,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
     props.tickerStartDate,
     props.tickerEndDate,
     null,
-    "[]"
+    "[]",
   );
 
   return (
@@ -123,12 +123,12 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                       menuUrl="/events/sevenpreneur-business-network/1"
                     />
                     <HeaderNavbarItemSVP
-                      menuTitle="About Us"
-                      menuUrl="/company"
+                      menuTitle="Insights"
+                      menuUrl="/insights"
                     />
                     <HeaderNavbarItemSVP
-                      menuTitle="Collab with Us"
-                      menuUrl="/collaboration"
+                      menuTitle="About Us"
+                      menuUrl="/company"
                     />
                     <Link href={`https://agora.${domain}`}>
                       <AppButton size="mediumRounded" variant="primaryGradient">

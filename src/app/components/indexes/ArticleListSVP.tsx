@@ -1,15 +1,15 @@
 "use client";
 import { ArticleStatus } from "@/lib/app-types";
 import dayjs from "dayjs";
-import { Clock } from "lucide-react";
+import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import relativeTime from "dayjs/plugin/relativeTime";
+import ArticleListMobileSVP from "./ArticleListMobileSVP";
 
 dayjs.extend(relativeTime);
 
-interface ArticleList {
+export interface ArticleList {
   id: number;
   title: string;
   image_url: string;
@@ -49,7 +49,7 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
   );
 
   if (isMobile) {
-    return null;
+    return <ArticleListMobileSVP articleList={activeArticles} />;
   }
 
   return (
@@ -60,29 +60,14 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
             className="main-article flex h-full shrink-0"
             href={`/insights/${activeArticles[0].slug_url}/${activeArticles[0].id}`}
           >
-            <div className="relative flex w-full h-full overflow-hidden group">
+            <div className="relative flex w-full h-full overflow-hidden">
               <Image
-                className="article-image w-full object-cover aspect-headlineDesktop transition transform duration-500 ease-in-out group-hover:scale-110"
+                className="article-image w-full object-cover object-left xl:object-center"
                 src={activeArticles[0].image_url}
                 alt={activeArticles[0].title}
                 width={800}
                 height={800}
               />
-              <div className="article-attributes absolute flex flex-col rounded-md bottom-4 max-w-[420px] z-20 p-4 gap-2 bg-neutral-white/5 backdrop-blur-sm left-4">
-                <div className="flex items-center gap-1">
-                  <p className="article-category px-2 py-1 font-bodycopy text-white text-sm rounded-full">
-                    {activeArticles[0].category.name}
-                  </p>
-                  <Clock className="text-white size-4" />
-                  <p className="timestamp text-white font-bodycopy font-light text-sm">
-                    {dayjs(activeArticles[0].published_at).fromNow()}
-                  </p>
-                </div>
-                <p className="text-white font-content font-semibold text-xl line-clamp-3 transition transform hover:underline hover:underline-offset-4">
-                  {activeArticles[0].title}
-                </p>
-              </div>
-              <div className="overlay absolute inset-0 bg-linear-to-t from-black to-55% to-transparent z-10" />
             </div>
           </Link>
           <div className="aside-articles flex flex-col flex-1 w-full gap-4 py-4">
@@ -109,7 +94,7 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
                     <p className="category text-sm font-semibold text-primary">
                       {post.category.name}
                     </p>
-                    <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-4">
+                    <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3">
                       {post.title}
                     </p>
                     <p className="timestamp font-bodycopy text-[#333333] text-sm dark:text-word-black">

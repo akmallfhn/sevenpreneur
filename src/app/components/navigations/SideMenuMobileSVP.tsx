@@ -3,6 +3,7 @@ import {
   Flag,
   HouseIcon,
   LayoutDashboard,
+  LayoutList,
   LogOut,
   PlayCircle,
   Presentation,
@@ -137,6 +138,13 @@ export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
               menuName="Event"
               menuIcon={<Flag className="size-5" />}
               menuURL="/events/sevenpreneur-business-network/1"
+              onClick={props.onClose}
+            />
+            <hr className="border-t border-outline dark:border-outline-dark" />
+            <SideMenuItemMobileSVP
+              menuName="Insights"
+              menuIcon={<LayoutList className="size-5" />}
+              menuURL="/insights"
               onClick={props.onClose}
             />
           </ul>
