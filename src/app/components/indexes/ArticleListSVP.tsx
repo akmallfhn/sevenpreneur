@@ -111,7 +111,7 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
             Trending News
           </h2>
           <div className="grid grid-cols-4 w-full gap-5">
-            {activeArticles.slice(5, 12).map((post) => (
+            {activeArticles.slice(4, 12).map((post) => (
               <Link
                 className="article-item w-full flex flex-col gap-2"
                 href={`/insights/${post.slug_url}/${post.id}`}

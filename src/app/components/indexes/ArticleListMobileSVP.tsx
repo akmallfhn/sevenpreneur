@@ -22,7 +22,7 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
             Trending News
           </h2>
           <div className="article-list flex flex-col gap-5">
-            {props.articleList.slice(5).map((post) => (
+            {props.articleList.slice(4).map((post) => (
               <Link
                 href={`/insights/${post.slug_url}/${post.id}`}
                 key={post.id}
