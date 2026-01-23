@@ -74,7 +74,7 @@ interface TransactionStatusDetailsSVPProps {
 }
 
 export default function TransactionStatusDetailsSVP(
-  props: TransactionStatusDetailsSVPProps
+  props: TransactionStatusDetailsSVPProps,
 ) {
   const router = useRouter();
   const { theme } = useTheme();
@@ -164,7 +164,7 @@ export default function TransactionStatusDetailsSVP(
   } else if (isEvent && props.eventSlug && props.eventId) {
     productPage = `/events/${props.eventSlug}/${props.eventId}/checkout`;
   } else if (isPlaylist && props.playlistSlug && props.playlistId) {
-    productPage = `/playlist/${props.playlistSlug}/${props.playlistId}/checkout`;
+    productPage = `/playlists/${props.playlistSlug}/${props.playlistId}/checkout`;
   }
 
   return (
@@ -205,7 +205,7 @@ export default function TransactionStatusDetailsSVP(
                   <p className="payment-deadline text-alternative">
                     {isPaid &&
                       dayjs(props.paidTransactionAt).format(
-                        "DD MMM YYYY [at] HH:mm"
+                        "DD MMM YYYY [at] HH:mm",
                       )}
                     {isPending &&
                       paymentDeadline.format("DD MMM YYYY [at] HH:mm")}
@@ -255,7 +255,7 @@ export default function TransactionStatusDetailsSVP(
                   <ReceiptLineItemSVP
                     receiptName="Discount"
                     receiptValue={`-${getRupiahCurrency(
-                      Math.round(props.productDiscount)
+                      Math.round(props.productDiscount),
                     )}`}
                     isDiscount
                   />
@@ -263,7 +263,7 @@ export default function TransactionStatusDetailsSVP(
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
                   receiptValue={getRupiahCurrency(
-                    Math.round(props.productAdminFee)
+                    Math.round(props.productAdminFee),
                   )}
                 />
                 <ReceiptLineItemSVP
@@ -323,7 +323,7 @@ export default function TransactionStatusDetailsSVP(
             <ReceiptLineItemSVP
               receiptName="Transaction Date"
               receiptValue={dayjs(props.createTransactionAt).format(
-                "DD MMM YYYY HH:mm"
+                "DD MMM YYYY HH:mm",
               )}
             />
             <ReceiptLineItemSVP

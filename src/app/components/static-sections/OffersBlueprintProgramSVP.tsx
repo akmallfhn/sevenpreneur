@@ -10,7 +10,6 @@ export default function OffersBlueprintProgramSVP() {
           Not Just a Business Class. <br /> It’s The Perfect Ecosystem for
           Entrepreneurs.
         </h2>
-
         {/* Offer List */}
         <div className="offers flex flex-col items-center gap-4 lg:gap-6">
           <div className="offer-list flex flex-col w-full items-center gap-4 lg:grid lg:grid-cols-[594px_300px] lg:gap-6 lg:justify-center">

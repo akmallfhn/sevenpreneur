@@ -40,7 +40,7 @@ export async function generateMetadata({
     title: `${articleData.title} | Sevenpreneur Insights`,
     description: articleData.insight,
     keywords: articleData.keywords,
-    authors: [{ name: "Sevenpreneur" }],
+    authors: [{ name: articleData.author.full_name }],
     publisher: "Sevenpreneur",
     referrer: "origin-when-cross-origin",
     alternates: {
