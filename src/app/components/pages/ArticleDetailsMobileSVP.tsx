@@ -62,7 +62,7 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
   };
 
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
+    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black lg:hidden">
       <main className="page-container flex flex-col w-full pb-20 gap-6">
         <div className="title-section flex flex-col px-5 pt-5 gap-4">
           <div className="title-category flex flex-col gap-3">

@@ -14,7 +14,7 @@ interface ArticleListMobileSVPProps {
 
 export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
+    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black lg:hidden">
       <div className="page-container flex flex-col w-full gap-5 z-10">
         <SwiperArticlesSVP articleList={props.articleList.slice(0, 4)} />
         <div className="trending-news flex flex-col gap-4 px-5 pb-20">

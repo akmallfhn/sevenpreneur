@@ -53,7 +53,7 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
   }
 
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
+    <div className="page-root relative hidden flex-col items-center w-full bg-white dark:bg-coal-black lg:flex">
       <div className="page-container flex flex-col px-5 py-5 w-full gap-10 z-10 lg:px-0 lg:py-10 lg:pb-20 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="headline-articles grid grid-cols-[1.6fr_1fr] gap-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-30% to-section-background rounded-xl overflow-hidden border border-primary-light dark:border-0 dark:from-[#0F0641] dark:to-surface-black">
           <Link

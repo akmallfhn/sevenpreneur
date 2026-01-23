@@ -71,7 +71,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
   }
 
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
+    <div className="page-root relative hidden flex-col items-center w-full bg-white dark:bg-coal-black lg:flex">
       <div className="page-container flex w-full justify-between gap-10 py-5 px-24 max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <main className="main flex flex-[2.5] flex-col pb-20 gap-6 shrink-0">
           <div className="title-category flex flex-col gap-3">
