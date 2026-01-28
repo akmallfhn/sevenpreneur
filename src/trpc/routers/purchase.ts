@@ -1,3 +1,4 @@
+import { afterPaidTrigger } from "@/lib/after-payment";
 import { Optional } from "@/lib/optional-type";
 import { calculateFinalPrice } from "@/lib/price-calc";
 import {
@@ -7,6 +8,7 @@ import {
   STATUS_NO_CONTENT,
   STATUS_NOT_FOUND,
   STATUS_OK,
+  errorStatusCodeToName,
 } from "@/lib/status_code";
 import {
   XenditInvoiceResponse,
@@ -40,17 +42,27 @@ async function createTransaction(
     name: string;
     amount: Decimal;
   },
-  paymentChannelId: number,
+  paymentChannelId: number | null,
   discountCode: Optional<string>
 ): Promise<{ transactionId: string; invoiceUrl: string }> {
-  const selectedPayment = await prisma.paymentChannel.findFirst({
-    where: { id: paymentChannelId },
-  });
-  if (!selectedPayment) {
-    throw new TRPCError({
-      code: STATUS_NOT_FOUND,
-      message: "The payment channel with the given ID is not found.",
+  const selectedPayment = {
+    code: "-",
+    method: "-",
+    calc_percent: new Prisma.Decimal(0),
+    calc_flat: new Prisma.Decimal(0),
+    calc_vat: false,
+  };
+  if (paymentChannelId) {
+    const thePayment = await prisma.paymentChannel.findFirst({
+      where: { id: paymentChannelId },
     });
+    if (!thePayment) {
+      throw new TRPCError({
+        code: STATUS_NOT_FOUND,
+        message: "The payment channel with the given ID is not found.",
+      });
+    }
+    Object.assign(selectedPayment, thePayment);
   }
 
   let discountId: number | null = null;
@@ -114,90 +126,128 @@ async function createTransaction(
     });
   }
 
-  let domain = "sevenpreneur.com";
-  if (process.env.DOMAIN_MODE === "local") {
-    domain = "example.com:3000";
-  }
-  let xenditResponse: XenditInvoiceResponse;
-  try {
-    xenditResponse = await xenditRequestCreateInvoice({
-      external_id: theTransaction.id,
-      amount: calculatedPrice.finalPrice.toNumber(),
-      description: item.name,
-      invoice_duration: 12 * 60 * 60, // 12 hours
-      success_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
-      failure_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
-      payment_methods: [selectedPayment.code],
-      currency: theTransaction.currency,
-      items: [
-        {
-          name: item.name,
-          quantity: 1,
-          price: calculatedPrice.finalPrice.toNumber(),
-        },
-      ],
-    });
-  } catch (e) {
-    console.error(e);
-    // Undo transaction creation
-    const deletedTransaction = await prisma.transaction.deleteMany({
+  const needToPay = !calculatedPrice.finalPrice.isZero();
+  let invoiceUrl = "-";
+  if (needToPay) {
+    let domain = "sevenpreneur.com";
+    if (process.env.DOMAIN_MODE === "local") {
+      domain = "example.com:3000";
+    }
+    let xenditResponse: XenditInvoiceResponse;
+    try {
+      xenditResponse = await xenditRequestCreateInvoice({
+        external_id: theTransaction.id,
+        amount: calculatedPrice.finalPrice.toNumber(),
+        description: item.name,
+        invoice_duration: 12 * 60 * 60, // 12 hours
+        success_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
+        failure_redirect_url: `https://www.${domain}/transactions/${theTransaction.id}`,
+        payment_methods: [selectedPayment.code],
+        currency: theTransaction.currency,
+        items: [
+          {
+            name: item.name,
+            quantity: 1,
+            price: calculatedPrice.finalPrice.toNumber(),
+          },
+        ],
+      });
+      invoiceUrl = xenditResponse.invoice_url;
+    } catch (e) {
+      console.error(e);
+      // Undo transaction creation
+      const deletedTransaction = await prisma.transaction.deleteMany({
+        where: { id: theTransaction.id },
+      });
+      if (deletedTransaction.count > 1) {
+        console.error(
+          "purchase: More-than-one transactions are deleted at once."
+        );
+      }
+      // Rethrow error using TRPCError
+      throw new TRPCError({
+        code: STATUS_INTERNAL_SERVER_ERROR,
+        message: "Failed to create a new invoice.",
+      });
+    }
+
+    const updatedTransaction = await prisma.transaction.updateManyAndReturn({
+      data: {
+        invoice_number: xenditResponse.id,
+        status: TStatusEnum.PENDING,
+      },
       where: { id: theTransaction.id },
     });
-    if (deletedTransaction.count > 1) {
+    if (updatedTransaction.length < 1) {
+      throw new TRPCError({
+        code: STATUS_NOT_FOUND,
+        message: "The selected transaction is not found.",
+      });
+    } else if (updatedTransaction.length > 1) {
       console.error(
-        "purchase: More-than-one transactions are deleted at once."
+        "purchase: More-than-one transactions are updated at once."
       );
     }
-    // Rethrow error using TRPCError
-    throw new TRPCError({
-      code: STATUS_INTERNAL_SERVER_ERROR,
-      message: "Failed to create a new invoice.",
-    });
-  }
 
-  const updatedTransaction = await prisma.transaction.updateManyAndReturn({
-    data: {
-      invoice_number: xenditResponse.id,
-    },
-    where: { id: theTransaction.id },
-  });
-  if (updatedTransaction.length < 1) {
-    throw new TRPCError({
-      code: STATUS_NOT_FOUND,
-      message: "The selected transaction is not found.",
-    });
-  } else if (updatedTransaction.length > 1) {
-    console.error("purchase: More-than-one transactions are updated at once.");
-  }
-
-  try {
-    const hookUrl = process.env.N8N_PAYMENT_REMINDER_HOOK_URL;
-    const hookToken = process.env.N8N_WEBHOOK_VERIFICATION_TOKEN;
-    if (!hookUrl) {
-      console.warn("Payment reminder hook URL is not set!");
-    } else if (!hookToken) {
-      console.warn("Payment reminder hook token is not set!");
-    } else {
-      const paymentReminderResponse = await fetch(hookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-webhook-token": hookToken,
-        },
-        body: JSON.stringify({
-          tid: theTransaction.id,
-        }),
-      });
-      const paymentReminderBody = await paymentReminderResponse.json();
-      console.log("Payment reminder response:", paymentReminderBody);
+    try {
+      const hookUrl = process.env.N8N_PAYMENT_REMINDER_HOOK_URL;
+      const hookToken = process.env.N8N_WEBHOOK_VERIFICATION_TOKEN;
+      if (!hookUrl) {
+        console.warn("Payment reminder hook URL is not set!");
+      } else if (!hookToken) {
+        console.warn("Payment reminder hook token is not set!");
+      } else {
+        const paymentReminderResponse = await fetch(hookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-webhook-token": hookToken,
+          },
+          body: JSON.stringify({
+            tid: theTransaction.id,
+          }),
+        });
+        const paymentReminderBody = await paymentReminderResponse.json();
+        console.log("Payment reminder response:", paymentReminderBody);
+      }
+    } catch (err) {
+      console.error("Failed to call payment reminder hook:", err);
     }
-  } catch (err) {
-    console.error("Failed to call payment reminder hook:", err);
+  } else {
+    const updatedTransaction = await prisma.transaction.updateManyAndReturn({
+      data: {
+        status: TStatusEnum.PAID,
+        payment_method: "-",
+        payment_channel: "-",
+        paid_at: new Date(),
+      },
+      where: {
+        id: theTransaction.id,
+      },
+    });
+    if (updatedTransaction.length < 1) {
+      throw new TRPCError({
+        code: STATUS_NOT_FOUND,
+        message: "The selected transaction is not found.",
+      });
+    } else if (updatedTransaction.length > 1) {
+      console.error(
+        "purchase: More-than-one transactions are updated at once."
+      );
+    }
+
+    const triggerResult = await afterPaidTrigger(prisma, theTransaction.id);
+    if (triggerResult !== true) {
+      throw new TRPCError({
+        code: errorStatusCodeToName(triggerResult.status),
+        message: triggerResult.message,
+      });
+    }
   }
 
   return {
     transactionId: theTransaction.id,
-    invoiceUrl: xenditResponse.invoice_url,
+    invoiceUrl: invoiceUrl,
   };
 }
 
@@ -301,7 +351,7 @@ export const purchaseRouter = createTRPCRouter({
         phone_country_id: numberIsID().nullable().optional(),
         phone_number: stringNotBlank().nullable().optional(),
         cohort_price_id: numberIsID(),
-        payment_channel_id: numberIsID(),
+        payment_channel_id: numberIsID().nullable(),
         discount_code: stringNotBlank().optional(),
       })
     )
@@ -364,7 +414,7 @@ export const purchaseRouter = createTRPCRouter({
         phone_country_id: numberIsID().nullable().optional(),
         phone_number: stringNotBlank().nullable().optional(),
         playlist_id: numberIsID(),
-        payment_channel_id: numberIsID(),
+        payment_channel_id: numberIsID().nullable(),
         discount_code: stringNotBlank().optional(),
       })
     )
@@ -424,7 +474,7 @@ export const purchaseRouter = createTRPCRouter({
         phone_country_id: numberIsID().nullable().optional(),
         phone_number: stringNotBlank().nullable().optional(),
         event_price_id: numberIsID(),
-        payment_channel_id: numberIsID(),
+        payment_channel_id: numberIsID().nullable(),
         discount_code: stringNotBlank().optional(),
       })
     )
