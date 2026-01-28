@@ -320,9 +320,7 @@ export default function TransactionStatusDetailsSVP(
             />
             <ReceiptLineItemSVP
               receiptName="Invoice Number"
-              receiptValue={
-                props.invoiceNumber === "?" ? "-" : props.invoiceNumber
-              }
+              receiptValue={props.invoiceNumber}
             />
             <ReceiptLineItemSVP
               receiptName="Transaction Date"
