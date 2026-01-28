@@ -30,6 +30,8 @@ interface EventDetailsSVPProps {
   eventStartDate: string;
   eventEndDate: string;
   eventPrice: EventPrice[];
+  eventLocation: string;
+  eventLocationURL: string;
 }
 
 export default function EventDetailsSVP(props: EventDetailsSVPProps) {
@@ -66,13 +68,15 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                 eventEndDate={props.eventEndDate}
                 eventSlug={props.eventSlug}
                 eventPrice={props.eventPrice}
+                eventLocation={props.eventLocation}
+                eventLocationURL={props.eventLocationURL}
               />
             </div>
             <div className="section-description relative flex flex-col gap-4">
               <h2 className="section-title font-bodycopy font-bold text-xl leading-tight">
                 Event Description
               </h2>
-              <div className="event-description flex flex-col gap-4 items-center lg:items-start">
+              <div className="event-description flex flex-col gap-4 items-center whitespace-pre-wrap lg:items-start">
                 <div>
                   <p
                     className={`ratings text-[15px] font-bodycopy dark:text-white/80 ${
@@ -116,6 +120,8 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
               eventEndDate={props.eventEndDate}
               eventSlug={props.eventSlug}
               eventPrice={props.eventPrice}
+              eventLocation={props.eventLocation}
+              eventLocationURL={props.eventLocationURL}
             />
           </aside>
         </div>

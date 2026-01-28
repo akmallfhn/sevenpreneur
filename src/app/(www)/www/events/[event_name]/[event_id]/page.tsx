@@ -124,6 +124,8 @@ export default async function EventDetailsPage({
       eventEndDate={eventData.end_date}
       eventSlug={eventData.slug_url}
       eventPrice={eventData.event_prices}
+      eventLocation={eventData.location_name ?? ""}
+      eventLocationURL={eventData.location_url ?? ""}
     />
   );
 }

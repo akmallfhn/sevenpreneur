@@ -14,6 +14,8 @@ interface EventInfoSVP {
   eventStartDate: string;
   eventEndDate: string;
   eventPrice: EventPrice[];
+  eventLocation: string;
+  eventLocationURL: string;
 }
 
 export default function EventInfoSVP(props: EventInfoSVP) {
@@ -23,6 +25,7 @@ export default function EventInfoSVP(props: EventInfoSVP) {
     startDate: props.eventStartDate,
     endDate: props.eventEndDate,
   });
+
   return (
     <div className="container-info flex flex-col gap-3 bg-white  rounded-md dark:bg-coal-black lg:dark:bg-surface-black lg:border lg:border-outline lg:p-5 lg:sticky lg:top-24 lg:dark:border-outline-dark">
       <h1 className="event-title font-brand font-bold text-2xl leading-tight">
@@ -46,19 +49,21 @@ export default function EventInfoSVP(props: EventInfoSVP) {
             <MapPin className="size-5 text-alternative" />
           </div>
           <a
-            href="https://share.google/0bmF735Lzrx86jgq4"
+            href={props.eventLocationURL}
             className="text-[15px] font-medium"
             target="_blank"
             rel="noopenner noreferrer"
           >
-            Connext Space, Cyber 2 Tower, Kuningan
+            {props.eventLocation}
           </a>
         </div>
         <div className="event-facility flex gap-1 items-center font-bodycopy">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <Wine className="size-5 text-alternative" />
           </div>
-          <p className="text-[15px] font-medium">Include Snacks & Drinks</p>
+          <p className="text-[15px] font-medium">
+            Include Snacks, Foods, and Drinks
+          </p>
         </div>
       </div>
       <hr className="divider hidden border-t-1 border-outline dark:border-outline-dark lg:flex" />
