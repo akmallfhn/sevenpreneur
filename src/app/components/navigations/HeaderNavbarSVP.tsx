@@ -120,7 +120,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                     />
                     <HeaderNavbarItemSVP
                       menuTitle="Event"
-                      menuUrl="/events/sevenpreneur-business-network/1"
+                      menuUrl="/events/spill-your-bizz-iftar-meet-2026/5"
                     />
                     <HeaderNavbarItemSVP
                       menuTitle="Insights"

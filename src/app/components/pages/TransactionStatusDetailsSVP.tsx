@@ -83,6 +83,7 @@ export default function TransactionStatusDetailsSVP(
   const [loadingCancelation, setLoadingCancelation] = useState(false);
   const [isOpenCancelConfirmation, setIsOpenCancelConfirmation] =
     useState(false);
+
   const { statusWord, statusDescription } =
     variantStyles[props.transactionStatus];
   const isPaid = props.transactionStatus === "PAID";
@@ -91,6 +92,7 @@ export default function TransactionStatusDetailsSVP(
   const isCohort = props.productCategory === "COHORT";
   const isPlaylist = props.productCategory === "PLAYLIST";
   const isEvent = props.productCategory === "EVENT";
+  const isFreeCharge = props.productTotalAmount === 0;
 
   // Refresh data without full page reload
   const handleRefresh = () => {
@@ -169,9 +171,8 @@ export default function TransactionStatusDetailsSVP(
 
   return (
     <React.Fragment>
-      <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] dark:bg-coal-black lg:mx-auto lg:w-full lg:max-w-[960px] lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 xl:max-w-[1208px]">
+      <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] dark:bg-coal-black lg:mx-auto lg:w-full lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="flex flex-col gap-1 lg:flex-1 lg:gap-3">
-          {/* Transaction Status */}
           <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
             <div className="status-guidance flex flex-col items-center text-center font-ui">
               <PaymentStatusAnimationSVP variant={props.transactionStatus} />
@@ -220,27 +221,28 @@ export default function TransactionStatusDetailsSVP(
               </div>
             )}
           </div>
-          {/* Payment Method & Details*/}
-          <div className="payment flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
-            <div className="payment-channel flex items-center gap-3 pb-4">
-              <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
-                <Image
-                  className="object-cover w-full h-full"
-                  src={
-                    props.paymentChannelImage ||
-                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/payment-icon/payment-mandiri.svg"
-                  }
-                  alt="Icon Payment"
-                  width={100}
-                  height={100}
-                />
+          <div className="payment-details flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
+            {!isFreeCharge && (
+              <div className="payment-channel flex items-center gap-3 pb-4">
+                <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      props.paymentChannelImage ||
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/payment-icon/payment-mandiri.svg"
+                    }
+                    alt="Icon Payment"
+                    width={100}
+                    height={100}
+                  />
+                </div>
+                <p className="payment-channel-name font-ui font-[450px] text-sm">
+                  {props.paymentChannelName}
+                </p>
               </div>
-              <p className="payment-channel-name font-ui font-[450px] text-sm">
-                {props.paymentChannelName}
-              </p>
-            </div>
+            )}
             <div
-              className={`amount-details-wrapper overflow-hidden transition-all duration-500 ease-in-out ${
+              className={`payment-details overflow-hidden transition-all duration-500 ease-in-out ${
                 openAmountDetails
                   ? "max-h-96 opacity-100 pb-4"
                   : "max-h-0 opacity-0"
@@ -274,7 +276,7 @@ export default function TransactionStatusDetailsSVP(
               </div>
             </div>
             <div
-              className="payment-details flex items-center justify-between"
+              className="payment-details flex items-center justify-between hover:cursor-pointer"
               onClick={() => setOpenAmountDetails(!openAmountDetails)}
             >
               <div className="amount flex flex-col font-ui text-sm">
@@ -318,7 +320,9 @@ export default function TransactionStatusDetailsSVP(
             />
             <ReceiptLineItemSVP
               receiptName="Invoice Number"
-              receiptValue={props.invoiceNumber}
+              receiptValue={
+                props.invoiceNumber === "?" ? "-" : props.invoiceNumber
+              }
             />
             <ReceiptLineItemSVP
               receiptName="Transaction Date"

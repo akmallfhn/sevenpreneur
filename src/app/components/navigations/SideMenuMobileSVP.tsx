@@ -137,7 +137,7 @@ export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
             <SideMenuItemMobileSVP
               menuName="Event"
               menuIcon={<Flag className="size-5" />}
-              menuURL="/events/sevenpreneur-business-network/1"
+              menuURL="/events/spill-your-bizz-iftar-meet-2026/5"
               onClick={props.onClose}
             />
             <hr className="border-t border-outline dark:border-outline-dark" />
