@@ -15,3 +15,20 @@ export const STATUS_NOT_FOUND   = "NOT_FOUND"   as const; // 404 Not Found
 // 5xx //
 
 export const STATUS_INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR" as const; // 500 Internal Server Error
+
+// Helper function //
+
+export function errorStatusCodeToName(statusCode: number) {
+  switch (statusCode) {
+    // 4xx //
+    case 400: return "BAD_REQUEST";
+    case 403: return "FORBIDDEN";
+    case 404: return "NOT_FOUND";
+
+    // 5xx //
+    case 500: return "INTERNAL_SERVER_ERROR";
+
+    // Unknown //
+    default: return "INTERNAL_SERVER_ERROR";
+  }
+}

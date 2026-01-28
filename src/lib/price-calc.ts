@@ -20,6 +20,11 @@ export function calculateFinalPrice(
     finalPrice: ZERO,
   };
 
+  // If the price is already zero (free of charge), return zero for all prices.
+  if (initialPrice.equals(ZERO)) {
+    return calculatedPrices;
+  }
+
   const percentValue = paymentChannel.calc_percent.dividedBy(100);
   const flatValue = paymentChannel.calc_flat;
 

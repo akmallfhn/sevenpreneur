@@ -550,7 +550,7 @@ model Discount {
   code         String        @db.VarChar()
   category     CategoryEnum
   item_id      Int           @db.Integer
-  calc_percent Decimal       @db.Decimal(6, 4)
+  calc_percent Decimal       @db.Decimal(7, 4)
   status       StatusEnum
   start_date   DateTime      @db.Timestamptz()
   end_date     DateTime      @db.Timestamptz()

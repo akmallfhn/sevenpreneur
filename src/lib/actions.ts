@@ -156,7 +156,7 @@ export async function CheckOutSession(props: CheckOutSessionProps) {
 // MAKE PAYMENT COHORT AT XENDIT
 interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
-  paymentChannelId: number;
+  paymentChannelId: number | null;
   phoneNumber?: string | null | undefined;
   discountCode?: string | undefined;
 }
@@ -193,7 +193,7 @@ export async function MakePaymentCohortXendit({
 // MAKE PAYMENT EVENT AT XENDIT
 interface MakePaymentEventXenditProps {
   eventPriceId: number;
-  paymentChannelId: number;
+  paymentChannelId: number | null;
   phoneNumber?: string | null | undefined;
   discountCode?: string | undefined;
 }
@@ -227,7 +227,7 @@ export async function MakePaymentEventXenditProps({
 // MAKE PAYMENT PLAYLIST AT XENDIT
 interface MakePaymentPlaylistXenditProps {
   playlistId: number;
-  paymentChannelId: number;
+  paymentChannelId: number | null;
   phoneNumber?: string | null | undefined;
   discountCode?: string | undefined;
 }
