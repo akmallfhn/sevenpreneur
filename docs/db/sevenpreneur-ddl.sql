@@ -403,7 +403,7 @@ CREATE TABLE discounts (
   code          VARCHAR        NOT NULL,
   category      category_enum  NOT NULL,
   item_id       INTEGER        NOT NULL,
-  calc_percent  DECIMAL(6, 4)  NOT NULL,
+  calc_percent  DECIMAL(7, 4)  NOT NULL,
   status        status_enum    NOT NULL,
   start_date    TIMESTAMPTZ    NOT NULL,
   end_date      TIMESTAMPTZ    NOT NULL,

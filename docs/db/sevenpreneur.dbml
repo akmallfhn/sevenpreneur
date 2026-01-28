@@ -405,7 +405,7 @@ Table discounts {
   code          varchar
   category      category_enum
   item_id       integer        [note: 'items ID based on category']
-  calc_percent  decimal(6,4)
+  calc_percent  decimal(7,4)
   status        status_enum
   start_date    timestamptz
   end_date      timestamptz
