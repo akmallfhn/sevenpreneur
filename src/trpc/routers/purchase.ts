@@ -216,6 +216,7 @@ async function createTransaction(
   } else {
     const updatedTransaction = await prisma.transaction.updateManyAndReturn({
       data: {
+        invoice_number: "-",
         status: TStatusEnum.PAID,
         payment_method: "-",
         payment_channel: "-",
