@@ -1,11 +1,11 @@
 "use client";
 import { getRupiahCurrency } from "@/lib/currency";
-import { CalendarFold, Clock3, LockKeyhole, MapPin, Wine } from "lucide-react";
+import { getDateTimeRange } from "@/lib/date-time-manipulation";
+import dayjs from "dayjs";
+import { CalendarFold, Clock3, LockKeyhole, MapPin } from "lucide-react";
 import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 import { EventPrice } from "../pages/EventDetailsSVP";
-import { getDateTimeRange } from "@/lib/date-time-manipulation";
-import dayjs from "dayjs";
 
 interface EventInfoSVP {
   eventId: number;
@@ -27,44 +27,59 @@ export default function EventInfoSVP(props: EventInfoSVP) {
   });
 
   return (
-    <div className="container-info flex flex-col gap-3 bg-white  rounded-md dark:bg-coal-black lg:dark:bg-surface-black lg:border lg:border-outline lg:p-5 lg:sticky lg:top-24 lg:dark:border-outline-dark">
+    <div className="container-info flex flex-col gap-4 bg-white  rounded-md dark:bg-coal-black lg:dark:bg-surface-black lg:border lg:border-outline lg:p-5 lg:sticky lg:top-24 lg:dark:border-outline-dark">
       <h1 className="event-title font-brand font-bold text-2xl leading-tight">
         {props.eventName}
       </h1>
-      <div className="list-info flex flex-col gap-1">
-        <div className="event-date flex gap-1 items-center font-bodycopy">
-          <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
-            <CalendarFold className="size-5 text-alternative" />
+      <div className="list-info flex flex-col gap-3">
+        <div className="event-date flex gap-3 items-center font-bodycopy">
+          <div className="flex aspect-square items-center justify-center shrink-0 p-2 bg-primary-light rounded-full overflow-hidden">
+            <CalendarFold className="size-5 text-primary" />
           </div>
-          <p className="text-[15px] font-medium">{dateString}</p>
-        </div>
-        <div className="event-time flex gap-1 items-center font-bodycopy">
-          <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
-            <Clock3 className="size-5 text-alternative" />
+          <div className="flex flex-col">
+            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-word-black">
+              DATE
+            </p>
+            <p className="text-[15px] font-medium leading-snug">{dateString}</p>
           </div>
-          <p className="text-[15px] font-medium">{timeString}</p>
         </div>
-        <div className="event-place flex gap-1 items-center font-bodycopy">
-          <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
-            <MapPin className="size-5 text-alternative" />
+        <div className="event-time flex gap-3 items-center font-bodycopy">
+          <div className="flex aspect-square items-center justify-center shrink-0 p-2 bg-primary-light rounded-full overflow-hidden">
+            <Clock3 className="size-5 text-primary" />
           </div>
-          <a
-            href={props.eventLocationURL}
-            className="text-[15px] font-medium"
-            target="_blank"
-            rel="noopenner noreferrer"
-          >
-            {props.eventLocation}
-          </a>
+          <div className="flex flex-col">
+            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-word-black">
+              TIME
+            </p>
+            <p className="text-[15px] font-medium leading-snug">{timeString}</p>
+          </div>
         </div>
-        <div className="event-facility flex gap-1 items-center font-bodycopy">
+        <div className="event-place flex gap-3 items-center font-bodycopy">
+          <div className="flex aspect-square items-center justify-center shrink-0 p-2 bg-primary-light rounded-full overflow-hidden">
+            <MapPin className="size-5 text-primary" />
+          </div>
+          <div className="flex flex-col">
+            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-word-black">
+              LOCATION
+            </p>
+            <a
+              href={props.eventLocationURL}
+              className="text-[15px] font-medium leading-snug hover:text-primary hover:underline hover:underline-offset-2"
+              target="_blank"
+              rel="noopenner noreferrer"
+            >
+              {props.eventLocation}
+            </a>
+          </div>
+        </div>
+        {/* <div className="event-facility flex gap-1 items-center font-bodycopy">
           <div className="flex w-8 h-8 items-center justify-center shrink-0 overflow-hidden">
             <Wine className="size-5 text-alternative" />
           </div>
           <p className="text-[15px] font-medium">
             Include Snacks, Foods, and Drinks
           </p>
-        </div>
+        </div> */}
       </div>
       <hr className="divider hidden border-t-1 border-outline dark:border-outline-dark lg:flex" />
       <div className="add-to-cart hidden flex-col gap-3 lg:flex">
