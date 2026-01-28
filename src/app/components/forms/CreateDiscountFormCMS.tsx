@@ -11,6 +11,7 @@ import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
+import InputNumberCMS from "../fields/InputNumberCMS";
 
 interface CreateDiscountFormCMSProps {
   sessionToken: string;
@@ -75,7 +76,7 @@ export default function CreateDiscountFormCMS({
     isError: isErrorPlaylistsData,
   } = trpc.list.playlists.useQuery(
     {},
-    { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken }
+    { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken },
   );
   const {
     data: cohortsData,
@@ -83,7 +84,7 @@ export default function CreateDiscountFormCMS({
     isError: isErrorCohortsData,
   } = trpc.list.cohorts.useQuery(
     {},
-    { enabled: formData.productCategory === "COHORT" && !!sessionToken }
+    { enabled: formData.productCategory === "COHORT" && !!sessionToken },
   );
   const {
     data: eventsData,
@@ -91,7 +92,7 @@ export default function CreateDiscountFormCMS({
     isError: isErrorEventsData,
   } = trpc.list.events.useQuery(
     {},
-    { enabled: formData.productCategory === "EVENT" && !!sessionToken }
+    { enabled: formData.productCategory === "EVENT" && !!sessionToken },
   );
   const isLoading =
     isLoadingCohortsData || isLoadingPlaylistsData || isLoadingEventsData;
@@ -105,7 +106,7 @@ export default function CreateDiscountFormCMS({
         playlistsData?.list.map((post) => ({
           label: post.name,
           value: post.id,
-        })) || []
+        })) || [],
       );
     } else if (formData.productCategory === "COHORT") {
       setItemOptions(
@@ -113,8 +114,8 @@ export default function CreateDiscountFormCMS({
           post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
-          }))
-        ) || []
+          })),
+        ) || [],
       );
     } else if (formData.productCategory === "EVENT") {
       setItemOptions(
@@ -122,8 +123,8 @@ export default function CreateDiscountFormCMS({
           post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
-          }))
-        ) || []
+          })),
+        ) || [],
       );
     }
   }, [formData.productCategory, playlistsData, cohortsData, eventsData]);
@@ -184,7 +185,7 @@ export default function CreateDiscountFormCMS({
     }
     if (
       dayjs(formData.discountEndDate).isBefore(
-        dayjs(formData.discountStartDate)
+        dayjs(formData.discountStartDate),
       )
     ) {
       toast.error("Oops! End date must come after the start date");
@@ -228,7 +229,7 @@ export default function CreateDiscountFormCMS({
               description: err.message,
             });
           },
-        }
+        },
       );
     } catch (error) {
       console.error(error);
@@ -272,16 +273,14 @@ export default function CreateDiscountFormCMS({
                 />
               </div>
               <div className="w-full flex-1">
-                <InputCMS
+                <InputNumberCMS
                   inputId="discount-rate"
                   inputName="Discount Percentage (%)"
-                  inputType="text"
-                  inputMode="numeric"
-                  pattern="\d*"
+                  inputConfig="decimal"
                   inputPlaceholder="e.g. 20"
                   value={formData.discountRate}
                   onInputChange={handleInputChange("discountRate")}
-                  characterLength={2}
+                  characterLength={5}
                   required
                 />
               </div>
@@ -315,7 +314,7 @@ export default function CreateDiscountFormCMS({
                   checked={formData.discountStatus === "ACTIVE"}
                   onCheckedChange={(checked) =>
                     handleInputChange("discountStatus")(
-                      checked ? "ACTIVE" : "INACTIVE"
+                      checked ? "ACTIVE" : "INACTIVE",
                     )
                   }
                 />

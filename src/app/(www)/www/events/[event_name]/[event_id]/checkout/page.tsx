@@ -1,4 +1,4 @@
-import CheckoutEventFormSVP from "@/app/components/forms/CheckoutEventFormSVP";
+import CheckoutEventFormMobileSVP from "@/app/components/forms/CheckoutEventFormMobileSVP";
 import UnavailableProductSVP from "@/app/components/states/UnavailableProductSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
@@ -23,7 +23,7 @@ export async function generateMetadata({
   const eventData = (await trpc.read.event({ id: eventId })).event;
 
   const hasActiveTicket = eventData.event_prices.some(
-    (post) => post.status === "ACTIVE"
+    (post) => post.status === "ACTIVE",
   );
   const expiredEvent = dayjs().isAfter(eventData.end_date);
 
@@ -97,7 +97,7 @@ export default async function CheckoutEventPage({
   // Redirect if not login
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/events/${event_name}/${event_id}/checkout`
+      `/auth/login?redirectTo=/events/${event_name}/${event_id}/checkout`,
     );
   }
   setSessionToken(sessionToken);
@@ -131,7 +131,7 @@ export default async function CheckoutEventPage({
   }));
 
   const hasActiveTicket = eventData.event_prices.some(
-    (post) => post.status === "ACTIVE"
+    (post) => post.status === "ACTIVE",
   );
   const expiredEvent = dayjs().isAfter(eventData.end_date);
 
@@ -155,7 +155,7 @@ export default async function CheckoutEventPage({
     <div className="flex w-full min-h-screen bg-section-background">
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <div className="flex-1 overflow-y-auto">
-          <CheckoutEventFormSVP
+          <CheckoutEventFormMobileSVP
             eventId={eventData.id}
             eventName={eventData.name}
             eventImage={eventData.image}

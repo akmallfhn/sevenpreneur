@@ -2,9 +2,7 @@
 import { BadgePercent, X } from "lucide-react";
 import React from "react";
 
-interface AppliedDiscountCardSVPProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  discountName: string;
+interface AppliedDiscountCardSVPProps extends React.HTMLAttributes<HTMLDivElement> {
   discountRate: number;
   discountCode: string;
   onClose: () => void;

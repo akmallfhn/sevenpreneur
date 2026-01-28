@@ -1,4 +1,4 @@
-import CheckoutPlaylistFormSVP from "@/app/components/forms/CheckoutPlaylistFormSVP";
+import CheckoutPlaylistFormMobileSVP from "@/app/components/forms/CheckoutPlaylistFormMobileSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -73,7 +73,7 @@ export default async function CheckoutPlaylistPage({
   // Redirect if not login
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/playlists/${playlist_name}/${playlist_id}/checkout`
+      `/auth/login?redirectTo=/playlists/${playlist_name}/${playlist_id}/checkout`,
     );
   }
   setSessionToken(sessionToken);
@@ -112,7 +112,7 @@ export default async function CheckoutPlaylistPage({
     <div className="flex w-full min-h-screen bg-section-background">
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <div className="flex-1 overflow-y-auto">
-          <CheckoutPlaylistFormSVP
+          <CheckoutPlaylistFormMobileSVP
             playlistId={playlistData.id}
             playlistName={playlistData.name}
             playlistImage={playlistData.image_url}

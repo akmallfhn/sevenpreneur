@@ -58,7 +58,7 @@ interface CheckoutCohortFormSVPProps {
   paymentMethodData: PaymentMethodItem[];
 }
 
-export default function CheckoutCohortFormSVP({
+export default function CheckoutCohortFormMobileSVP({
   cohortName,
   cohortImage,
   initialUserId,
@@ -147,11 +147,11 @@ export default function CheckoutCohortFormSVP({
   // --- Get Data from Chosen Payment Channel
   const chosenPaymentChannelData = useMemo(() => {
     return paymentMethodData.find(
-      (item: PaymentMethodItem) => item.code === selectedPaymentChannel
+      (item: PaymentMethodItem) => item.code === selectedPaymentChannel,
     );
   }, [selectedPaymentChannel, paymentMethodData]);
 
-  // --- Calculating price
+  // Calculating Discount
   const totalItem = 1;
   const programPrice = selectedTicket?.amount || 0;
   let subtotal = totalItem * programPrice;
@@ -159,7 +159,10 @@ export default function CheckoutCohortFormSVP({
     const discountRate = discount.calc_percent / 100;
     subtotal = Math.round(totalItem * programPrice * (1 - discountRate));
   }
+  const isFreeCharge = subtotal === 0;
   const vatRate = 0.11;
+
+  // Calculating final price
   const paymentCalculation = useMemo(() => {
     if (!chosenPaymentChannelData) {
       return { adminFee: 0, valueAddedTax: 0, totalAmount: 0 };
@@ -195,7 +198,8 @@ export default function CheckoutCohortFormSVP({
       const percentRate = chosenPaymentChannelData.calc_percent / 100;
       const flatFee = chosenPaymentChannelData.calc_flat;
       const total = Math.round(
-        (subtotal + flatFee * (1 + vatRate)) / (1 - percentRate * (1 + vatRate))
+        (subtotal + flatFee * (1 + vatRate)) /
+          (1 - percentRate * (1 + vatRate)),
       );
       const percentFee = percentRate * total;
       const allFee = Math.round(flatFee + percentFee);
@@ -206,11 +210,10 @@ export default function CheckoutCohortFormSVP({
     return { adminFee: 0, valueAddedTax: 0, totalAmount: subtotal };
   }, [chosenPaymentChannelData, subtotal]);
 
-  // --- Make Payment on Xendit
+  // Make Payment on Xendit
   const handlePayment = async () => {
     setIsLoadingPayment(true);
 
-    // -- Validation
     if (!formData.userPhoneNumber) {
       toast.error("Phone number is required before making a payment");
       setIsLoadingPayment(false);
@@ -221,7 +224,32 @@ export default function CheckoutCohortFormSVP({
       return;
     }
 
-    // -- Call tRPC Payment
+    if (isFreeCharge) {
+      try {
+        const freeCharge = await MakePaymentCohortXendit({
+          cohortPriceId: selectedTicket.id,
+          paymentChannelId: null,
+          phoneNumber: formData.userPhoneNumber.trim(),
+          discountCode: discount?.code,
+        });
+
+        if (freeCharge.code === "CREATED") {
+          router.replace(`/transactions/${freeCharge.transaction_id}`);
+          return;
+        } else {
+          toast.error("Failed to create invoice", {
+            description: freeCharge.message,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Error during payment:", error);
+        toast.error("Unexpected error occurred during payment.");
+        return;
+      }
+    }
+
+    // Xendit Payment
     try {
       const makePayment = await MakePaymentCohortXendit({
         // Mandatory fields
@@ -354,123 +382,121 @@ export default function CheckoutCohortFormSVP({
                 />
               </div>
             </div>
-            {/* Payment Method */}
-            <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
-              <h1 className="font-bodycopy font-bold">Payment Method</h1>
-              <div className="flex flex-col gap-5">
-                <PaymentChannelGroupSVP
-                  groupPaymentName="Bank Virtual Account"
-                  defaultState
-                >
-                  {paymentMethodData
-                    .filter(
-                      (post: PaymentMethodItem) =>
-                        post.method === "BANK_TRANSFER"
-                    )
-                    .map((post: PaymentMethodItem, index: number) => (
-                      <RadioBoxPaymentChannelSVP
-                        key={index}
-                        paymentChannelName={post.label}
-                        paymentIcon={post.image}
-                        value={post.code}
-                        selectedValue={selectedPaymentChannel}
-                        onChange={setSelectedPaymentChannel}
-                      />
-                    ))}
-                </PaymentChannelGroupSVP>
-                <PaymentChannelGroupSVP groupPaymentName="Instant Payment">
-                  {paymentMethodData
-                    .filter(
-                      (post: PaymentMethodItem) => post.method === "QR_CODE"
-                    )
-                    .map((post: PaymentMethodItem, index: number) => (
-                      <RadioBoxPaymentChannelSVP
-                        key={index}
-                        paymentChannelName={post.label}
-                        paymentIcon={post.image}
-                        value={post.code}
-                        selectedValue={selectedPaymentChannel}
-                        onChange={setSelectedPaymentChannel}
-                      />
-                    ))}
-                </PaymentChannelGroupSVP>
-                <PaymentChannelGroupSVP groupPaymentName="E-Wallet">
-                  {paymentMethodData
-                    .filter(
-                      (post: PaymentMethodItem) => post.method === "EWALLET"
-                    )
-                    .map((post: PaymentMethodItem, index: number) => (
-                      <RadioBoxPaymentChannelSVP
-                        key={index}
-                        paymentChannelName={post.label}
-                        paymentIcon={post.image}
-                        value={post.code}
-                        selectedValue={selectedPaymentChannel}
-                        onChange={setSelectedPaymentChannel}
-                      />
-                    ))}
-                </PaymentChannelGroupSVP>
-                <PaymentChannelGroupSVP groupPaymentName="Credit Card">
-                  {paymentMethodData
-                    .filter(
-                      (post: PaymentMethodItem) => post.method === "CREDIT_CARD"
-                    )
-                    .map((post: PaymentMethodItem, index: number) => (
-                      <RadioBoxPaymentChannelSVP
-                        key={index}
-                        paymentChannelName={post.label}
-                        paymentIcon={post.image}
-                        value={post.code}
-                        selectedValue={selectedPaymentChannel}
-                        onChange={setSelectedPaymentChannel}
-                      />
-                    ))}
-                </PaymentChannelGroupSVP>
-                <PaymentChannelGroupSVP groupPaymentName="Paylater">
-                  {paymentMethodData
-                    .filter(
-                      (post: PaymentMethodItem) => post.method === "PAYLATER"
-                    )
-                    .map((post: PaymentMethodItem, index: number) => (
-                      <RadioBoxPaymentChannelSVP
-                        key={index}
-                        paymentChannelName={post.label}
-                        paymentIcon={post.image}
-                        value={post.code}
-                        selectedValue={selectedPaymentChannel}
-                        onChange={setSelectedPaymentChannel}
-                      />
-                    ))}
-                </PaymentChannelGroupSVP>
-              </div>
-            </div>
 
-            {/* Promo Discount */}
+            {!isFreeCharge && (
+              <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
+                <h1 className="font-bodycopy font-bold">Payment Method</h1>
+                <div className="flex flex-col gap-5">
+                  <PaymentChannelGroupSVP
+                    groupPaymentName="Bank Virtual Account"
+                    defaultState
+                  >
+                    {paymentMethodData
+                      .filter(
+                        (post: PaymentMethodItem) =>
+                          post.method === "BANK_TRANSFER",
+                      )
+                      .map((post: PaymentMethodItem, index: number) => (
+                        <RadioBoxPaymentChannelSVP
+                          key={index}
+                          paymentChannelName={post.label}
+                          paymentIcon={post.image}
+                          value={post.code}
+                          selectedValue={selectedPaymentChannel}
+                          onChange={setSelectedPaymentChannel}
+                        />
+                      ))}
+                  </PaymentChannelGroupSVP>
+                  <PaymentChannelGroupSVP groupPaymentName="Instant Payment">
+                    {paymentMethodData
+                      .filter(
+                        (post: PaymentMethodItem) => post.method === "QR_CODE",
+                      )
+                      .map((post: PaymentMethodItem, index: number) => (
+                        <RadioBoxPaymentChannelSVP
+                          key={index}
+                          paymentChannelName={post.label}
+                          paymentIcon={post.image}
+                          value={post.code}
+                          selectedValue={selectedPaymentChannel}
+                          onChange={setSelectedPaymentChannel}
+                        />
+                      ))}
+                  </PaymentChannelGroupSVP>
+                  <PaymentChannelGroupSVP groupPaymentName="E-Wallet">
+                    {paymentMethodData
+                      .filter(
+                        (post: PaymentMethodItem) => post.method === "EWALLET",
+                      )
+                      .map((post: PaymentMethodItem, index: number) => (
+                        <RadioBoxPaymentChannelSVP
+                          key={index}
+                          paymentChannelName={post.label}
+                          paymentIcon={post.image}
+                          value={post.code}
+                          selectedValue={selectedPaymentChannel}
+                          onChange={setSelectedPaymentChannel}
+                        />
+                      ))}
+                  </PaymentChannelGroupSVP>
+                  <PaymentChannelGroupSVP groupPaymentName="Credit Card">
+                    {paymentMethodData
+                      .filter(
+                        (post: PaymentMethodItem) =>
+                          post.method === "CREDIT_CARD",
+                      )
+                      .map((post: PaymentMethodItem, index: number) => (
+                        <RadioBoxPaymentChannelSVP
+                          key={index}
+                          paymentChannelName={post.label}
+                          paymentIcon={post.image}
+                          value={post.code}
+                          selectedValue={selectedPaymentChannel}
+                          onChange={setSelectedPaymentChannel}
+                        />
+                      ))}
+                  </PaymentChannelGroupSVP>
+                  <PaymentChannelGroupSVP groupPaymentName="Paylater">
+                    {paymentMethodData
+                      .filter(
+                        (post: PaymentMethodItem) => post.method === "PAYLATER",
+                      )
+                      .map((post: PaymentMethodItem, index: number) => (
+                        <RadioBoxPaymentChannelSVP
+                          key={index}
+                          paymentChannelName={post.label}
+                          paymentIcon={post.image}
+                          value={post.code}
+                          selectedValue={selectedPaymentChannel}
+                          onChange={setSelectedPaymentChannel}
+                        />
+                      ))}
+                  </PaymentChannelGroupSVP>
+                </div>
+              </div>
+            )}
             <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
-              {/* Discount Gateway */}
               {!discount && (
                 <ApplyDiscountGatewaySVP
                   onClick={() => setOpenDiscount(true)}
                 />
               )}
-              {/* Applied Discount */}
               {discount && (
                 <AppliedDiscountCardSVP
-                  discountName={discount.name || ""}
                   discountRate={discount.calc_percent || 0}
                   discountCode={discount.code || ""}
                   onClose={() => setDiscount(null)}
                 />
               )}
             </div>
-
-            {/* Payment Details */}
             <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">
               <h1 className="font-bodycopy font-bold">Payment Details</h1>
               <div className="calculation-price flex flex-col gap-2">
                 <ReceiptLineItemSVP
                   receiptName="Payment Method"
-                  receiptValue={chosenPaymentChannelData?.label}
+                  receiptValue={
+                    isFreeCharge ? "-" : chosenPaymentChannelData?.label
+                  }
                 />
                 <ReceiptLineItemSVP
                   receiptName="Program Price"
@@ -480,7 +506,7 @@ export default function CheckoutCohortFormSVP({
                   <ReceiptLineItemSVP
                     receiptName={`Discount (${discount.calc_percent}%)`}
                     receiptValue={`- ${getRupiahCurrency(
-                      Math.round(programPrice - subtotal)
+                      Math.round(programPrice - subtotal),
                     )}`}
                     isDiscount
                   />
@@ -492,20 +518,28 @@ export default function CheckoutCohortFormSVP({
                 />
                 <ReceiptLineItemSVP
                   receiptName="Admin Fee"
-                  receiptValue={getRupiahCurrency(paymentCalculation.adminFee)}
+                  receiptValue={
+                    isFreeCharge
+                      ? getRupiahCurrency(0)
+                      : getRupiahCurrency(paymentCalculation.adminFee)
+                  }
                 />
                 <ReceiptLineItemSVP
                   receiptName="VAT"
-                  receiptValue={getRupiahCurrency(
-                    paymentCalculation.valueAddedTax
-                  )}
+                  receiptValue={
+                    isFreeCharge
+                      ? getRupiahCurrency(0)
+                      : getRupiahCurrency(paymentCalculation.valueAddedTax)
+                  }
                 />
                 <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
                 <ReceiptLineItemSVP
                   receiptName="Total Amount"
-                  receiptValue={getRupiahCurrency(
-                    paymentCalculation.totalAmount
-                  )}
+                  receiptValue={
+                    isFreeCharge
+                      ? getRupiahCurrency(0)
+                      : getRupiahCurrency(paymentCalculation.totalAmount)
+                  }
                 />
               </div>
             </div>
@@ -548,7 +582,9 @@ export default function CheckoutCohortFormSVP({
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">
-              {getRupiahCurrency(paymentCalculation.totalAmount)}
+              {isFreeCharge
+                ? getRupiahCurrency(0)
+                : getRupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
           <AppButton

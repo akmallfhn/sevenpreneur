@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { CreditCard, Loader2, ShieldCheck } from "lucide-react";
-import { MakePaymentEventXenditProps } from "@/lib/actions";
+import { Loader2, ShieldCheck } from "lucide-react";
+import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
-import RadioBoxPriceTierSVP from "../fields/RadioBoxPriceTierSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
@@ -15,8 +14,8 @@ import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
 import { encodeSHA256 } from "@/lib/encode";
-import { getRupiahCurrency } from "@/lib/currency";
 import { ProductCategory } from "@/lib/app-types";
+import { getRupiahCurrency } from "@/lib/currency";
 import InputNumberSVP from "../fields/InputNumberSVP";
 
 interface PaymentMethodItem {
@@ -38,45 +37,36 @@ interface DiscountType {
   item_id: number | undefined;
 }
 
-interface PriceItem {
-  id: number;
-  name: string;
-  amount: number;
-  event_id: number;
-  status: string;
-}
-
-interface CheckoutEventFormSVPProps {
-  eventId: number;
-  eventName: string;
-  eventImage: string;
+interface CheckoutPlaylistFormSVPProps {
+  playlistId: number;
+  playlistName: string;
+  playlistImage: string;
+  playlistPrice: number;
+  playlistTotalVideo: number;
   initialUserId: string;
   initialUserName: string;
   initialUserEmail: string;
   initialUserPhone: string | null;
-  ticketListData: PriceItem[];
   paymentMethodData: PaymentMethodItem[];
 }
 
-export default function CheckoutEventFormSVP({
-  eventName,
-  eventImage,
+export default function CheckoutPlaylistFormMobileSVP({
+  playlistId,
+  playlistName,
+  playlistImage,
+  playlistPrice,
+  playlistTotalVideo,
   initialUserId,
   initialUserName,
   initialUserEmail,
   initialUserPhone,
-  ticketListData,
   paymentMethodData,
-}: CheckoutEventFormSVPProps) {
-  const [selectedPriceTierId, setSelectedPriceTierId] = useState(0);
+}: CheckoutPlaylistFormSVPProps) {
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
-  const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   const [openDiscount, setOpenDiscount] = useState(false);
   const [discount, setDiscount] = useState<DiscountType | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const ticketIdParams = searchParams.get("ticketId");
 
   // --- Beginning State
   const [formData, setFormData] = useState<{
@@ -89,27 +79,6 @@ export default function CheckoutEventFormSVP({
     userPhoneNumber: initialUserPhone || "",
   });
 
-  // --- Validating params ticketId based on Event Data
-  // --- ticketId not included on Event Data will be fallback to Programs Tier Form
-  const isValidTicketId = useMemo(() => {
-    const ticketId = parseInt(ticketIdParams || "");
-    return (
-      !isNaN(ticketId) && ticketListData.some((item) => item.id === ticketId)
-    );
-  }, [ticketIdParams, ticketListData]);
-
-  // --- Get Data from selected TicketId
-  const selectedTicket = useMemo(() => {
-    return ticketListData.find((item) => item.id === selectedPriceTierId);
-  }, [selectedPriceTierId, ticketListData]);
-
-  // --- Iterating selected ticket based on params ticketId
-  useEffect(() => {
-    if (isValidTicketId && ticketIdParams) {
-      setSelectedPriceTierId(parseInt(ticketIdParams));
-    }
-  }, [isValidTicketId, ticketIdParams]);
-
   // --- Set default payment channel to QRIS
   const defaultPaymentChannel = useMemo(() => {
     return paymentMethodData.find((item) => item.code === "QRIS")?.code ?? "";
@@ -119,20 +88,6 @@ export default function CheckoutEventFormSVP({
       setSelectedPaymentChannel(defaultPaymentChannel);
     }
   }, [defaultPaymentChannel, selectedPaymentChannel]);
-
-  // --- Handle Query Params ticketId
-  const handleParamsQuery = () => {
-    if (
-      selectedPriceTierId !== 0 &&
-      ticketIdParams !== String(selectedPriceTierId)
-    ) {
-      setIsLoadingCheckout(true);
-      router.replace(`?ticketId=${selectedPriceTierId}`);
-    }
-  };
-  useEffect(() => {
-    setIsLoadingCheckout(false);
-  }, [searchParams]);
 
   // --- Handle data changes
   const handleInputChange = (fieldName: string) => (value: unknown) => {
@@ -145,24 +100,26 @@ export default function CheckoutEventFormSVP({
   // --- Get Data from Chosen Payment Channel
   const chosenPaymentChannelData = useMemo(() => {
     return paymentMethodData.find(
-      (item: PaymentMethodItem) => item.code === selectedPaymentChannel
+      (item: PaymentMethodItem) => item.code === selectedPaymentChannel,
     );
   }, [selectedPaymentChannel, paymentMethodData]);
 
-  // --- Calculating price
+  // Calculating Discount
   const totalItem = 1;
-  const programPrice = selectedTicket?.amount || 0;
+  const programPrice = playlistPrice || 0;
   let subtotal = totalItem * programPrice;
   if (discount?.calc_percent) {
     const discountRate = discount.calc_percent / 100;
     subtotal = Math.round(totalItem * programPrice * (1 - discountRate));
   }
+  const isFreeCharge = subtotal === 0;
   const vatRate = 0.11;
+
+  // Calculating final price
   const paymentCalculation = useMemo(() => {
     if (!chosenPaymentChannelData) {
       return { adminFee: 0, valueAddedTax: 0, totalAmount: 0 };
     }
-
     if (
       chosenPaymentChannelData.calc_flat === 0 &&
       chosenPaymentChannelData.calc_percent > 0
@@ -193,7 +150,8 @@ export default function CheckoutEventFormSVP({
       const percentRate = chosenPaymentChannelData.calc_percent / 100;
       const flatFee = chosenPaymentChannelData.calc_flat;
       const total = Math.round(
-        (subtotal + flatFee * (1 + vatRate)) / (1 - percentRate * (1 + vatRate))
+        (subtotal + flatFee * (1 + vatRate)) /
+          (1 - percentRate * (1 + vatRate)),
       );
       const percentFee = percentRate * total;
       const allFee = Math.round(flatFee + percentFee);
@@ -204,26 +162,50 @@ export default function CheckoutEventFormSVP({
     return { adminFee: 0, valueAddedTax: 0, totalAmount: subtotal };
   }, [chosenPaymentChannelData, subtotal]);
 
-  // --- Make Payment on Xendit
+  // Make Payment on Xendit
   const handlePayment = async () => {
     setIsLoadingPayment(true);
 
-    // -- Validation
     if (!formData.userPhoneNumber) {
       toast.error("Phone number is required before making a payment");
       setIsLoadingPayment(false);
       return;
     }
-    if (!selectedTicket?.id || !chosenPaymentChannelData?.id) {
-      toast.error("Please select a ticket or a payment method first");
+    if (!chosenPaymentChannelData?.id) {
+      toast.error("Please select a payment method first");
       return;
     }
 
-    // -- Call tRPC Payment
+    if (isFreeCharge) {
+      try {
+        const freeCharge = await MakePaymentPlaylistXendit({
+          playlistId: playlistId,
+          paymentChannelId: null,
+          phoneNumber: formData.userPhoneNumber.trim(),
+          discountCode: discount?.code,
+        });
+
+        if (freeCharge.code === "CREATED") {
+          router.replace(`/transactions/${freeCharge.transaction_id}`);
+          return;
+        } else {
+          toast.error("Failed to create invoice", {
+            description: freeCharge.message,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Error during payment:", error);
+        toast.error("Unexpected error occurred during payment.");
+        return;
+      }
+    }
+
+    // Xendit Payment
     try {
-      const makePayment = await MakePaymentEventXenditProps({
+      const makePayment = await MakePaymentPlaylistXendit({
         // Mandatory fields
-        eventPriceId: selectedTicket.id,
+        playlistId: playlistId,
         paymentChannelId: chosenPaymentChannelData.id,
         phoneNumber: formData.userPhoneNumber.trim(),
 
@@ -249,121 +231,68 @@ export default function CheckoutEventFormSVP({
   return (
     <React.Fragment>
       <div className="checkout-form relative flex flex-col min-h-full pb-36 bg-[#F9F9F9] dark:bg-[#121212]">
-        {!isValidTicketId ? (
-          // Programs Tier Ticketing
-          <div className="programs-tier-box flex p-5 pt-8">
-            <div className="programs-tier flex flex-col gap-4 bg-white p-4 rounded-md shadow-sm z-10">
-              <div className="flex flex-col font-bodycopy">
-                <h1 className="font-bold text-black">Event Pass</h1>
-                <p className="font-medium text-alternative text-sm">
-                  Make the most of the event. Choose the pass that works best
-                  for you.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                {ticketListData
-                  .filter((post) => post.status === "ACTIVE")
-                  .map((post, index) => (
-                    <RadioBoxPriceTierSVP
-                      key={index}
-                      priceTierName={post.name}
-                      productName={eventName}
-                      priceTierAmount={post.amount}
-                      value={post.id}
-                      selectedValue={selectedPriceTierId}
-                      onChange={setSelectedPriceTierId}
-                    />
-                  ))}
-              </div>
-              <div className="pt-10">
-                <AppButton
-                  size={"defaultRounded"}
-                  className="select_price_tier w-full"
-                  onClick={handleParamsQuery}
-                  disabled={isLoadingCheckout || selectedPriceTierId === 0}
-                  featureName="select_price_tier"
-                  featureId={String(selectedPriceTierId)}
-                  featureProductCategory="EVENT"
-                  featureProductName={`${eventName} - ${selectedTicket?.name}`}
-                  featureProductAmount={selectedTicket?.amount}
-                  featurePagePoint="Checkout Page"
-                >
-                  {isLoadingCheckout ? (
-                    <Loader2 className="animate-spin size-5" />
-                  ) : (
-                    <CreditCard className="size-5" />
-                  )}
-                  Proceed to Checkout
-                </AppButton>
-              </div>
+        <div className="payment-details relative flex flex-col gap-1 z-10">
+          {/* Payment Summary */}
+          <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm dark:bg-surface-black dark:border-outline-dark">
+            <div className="aspect-square size-16 rounded-md overflow-hidden">
+              <Image
+                className="object-cover w-full h-full"
+                src={playlistImage}
+                alt={playlistName}
+                height={400}
+                width={400}
+              />
+            </div>
+            <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
+              <p className="font-bold line-clamp-1">{playlistName || "-"}</p>
+              <p className="text-alternative text-sm font-medium line-clamp-2">
+                {`Learning Series - ${playlistTotalVideo} episodes`}
+              </p>
             </div>
           </div>
-        ) : (
-          // Payment Details
-          <div className="payment-details relative flex flex-col gap-1 z-10">
-            {/* Payment Summary */}
-            <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm dark:bg-surface-black dark:border-outline-dark">
-              <div className="aspect-square size-16 rounded-md overflow-hidden">
-                <Image
-                  className="object-cover w-full h-full"
-                  src={eventImage}
-                  alt={eventName}
-                  height={400}
-                  width={400}
-                />
-              </div>
-              <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
-                <p className="font-bold line-clamp-1">
-                  {selectedTicket?.name || "-"}
-                </p>
-                <p className="text-alternative text-sm font-medium line-clamp-2">
-                  {eventName}
-                </p>
-              </div>
+          {/* Personal Information */}
+          <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
+            <h2 className="font-bodycopy font-bold">Personal Information</h2>
+            <div className="flex flex-col gap-3">
+              <InputSVP
+                inputId="user-full-name"
+                inputName="Full Name"
+                inputType="text"
+                value={initialUserName}
+                disabled
+              />
+              <InputSVP
+                inputId="user-email"
+                inputName="Email"
+                inputType="email"
+                value={initialUserEmail}
+                disabled
+              />
+              <InputNumberSVP
+                inputId="user-phone-number"
+                inputName="Phone Number"
+                inputIcon="🇮🇩 62"
+                inputPlaceholder="Enter Mobile or WhatsApp number"
+                inputConfig="numeric"
+                characterLength={15}
+                value={formData.userPhoneNumber}
+                onInputChange={handleInputChange("userPhoneNumber")}
+                required
+              />
             </div>
-            {/* Personal Information */}
-            <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
-              <h2 className="font-bodycopy font-bold">Personal Information</h2>
-              <div className="flex flex-col gap-3">
-                <InputSVP
-                  inputId="user-full-name"
-                  inputName="Full Name"
-                  inputType="text"
-                  value={initialUserName}
-                  disabled
-                />
-                <InputSVP
-                  inputId="user-email"
-                  inputName="Email"
-                  inputType="email"
-                  value={initialUserEmail}
-                  disabled
-                />
-                <InputNumberSVP
-                  inputId="user-phone-number"
-                  inputName="Phone Number"
-                  inputIcon="🇮🇩 62"
-                  inputPlaceholder="Enter Mobile or WhatsApp number"
-                  inputConfig="numeric"
-                  characterLength={15}
-                  value={formData.userPhoneNumber}
-                  onInputChange={handleInputChange("userPhoneNumber")}
-                  required
-                />
-              </div>
-            </div>
-            {/* Payment Method */}
+          </div>
+
+          {!isFreeCharge && (
             <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
               <h1 className="font-bodycopy font-bold">Payment Method</h1>
               <div className="flex flex-col gap-5">
                 <PaymentChannelGroupSVP
-                  groupPaymentName="Bank Virtual Account"
+                  groupPaymentName="Instant Payment"
                   defaultState
                 >
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) =>
-                        post.method === "BANK_TRANSFER"
+                      (post: PaymentMethodItem) => post.method === "QR_CODE",
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -377,12 +306,13 @@ export default function CheckoutEventFormSVP({
                     ))}
                 </PaymentChannelGroupSVP>
                 <PaymentChannelGroupSVP
-                  groupPaymentName="Instant Payment"
+                  groupPaymentName="Bank Virtual Account"
                   defaultState
                 >
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "QR_CODE"
+                      (post: PaymentMethodItem) =>
+                        post.method === "BANK_TRANSFER",
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -398,7 +328,7 @@ export default function CheckoutEventFormSVP({
                 <PaymentChannelGroupSVP groupPaymentName="E-Wallet">
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "EWALLET"
+                      (post: PaymentMethodItem) => post.method === "EWALLET",
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -414,7 +344,8 @@ export default function CheckoutEventFormSVP({
                 <PaymentChannelGroupSVP groupPaymentName="Credit Card">
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "CREDIT_CARD"
+                      (post: PaymentMethodItem) =>
+                        post.method === "CREDIT_CARD",
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -430,7 +361,7 @@ export default function CheckoutEventFormSVP({
                 <PaymentChannelGroupSVP groupPaymentName="Paylater">
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "PAYLATER"
+                      (post: PaymentMethodItem) => post.method === "PAYLATER",
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -445,73 +376,75 @@ export default function CheckoutEventFormSVP({
                 </PaymentChannelGroupSVP>
               </div>
             </div>
-
-            {/* Promo Discount */}
-            <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
-              {/* Discount Gateway */}
-              {!discount && (
-                <ApplyDiscountGatewaySVP
-                  onClick={() => setOpenDiscount(true)}
+          )}
+          <div className="discount-promo flex bg-white p-5 dark:bg-coal-black">
+            {!discount && (
+              <ApplyDiscountGatewaySVP onClick={() => setOpenDiscount(true)} />
+            )}
+            {discount && (
+              <AppliedDiscountCardSVP
+                discountRate={discount.calc_percent || 0}
+                discountCode={discount.code || ""}
+                onClose={() => setDiscount(null)}
+              />
+            )}
+          </div>
+          <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">
+            <h1 className="font-bodycopy font-bold">Payment Details</h1>
+            <div className="calculation-price flex flex-col gap-2">
+              <ReceiptLineItemSVP
+                receiptName="Payment Method"
+                receiptValue={
+                  isFreeCharge ? "-" : chosenPaymentChannelData?.label
+                }
+              />
+              <ReceiptLineItemSVP
+                receiptName="Learning Series Price"
+                receiptValue={getRupiahCurrency(programPrice)}
+              />
+              {discount?.calc_percent && (
+                <ReceiptLineItemSVP
+                  receiptName={`Discount (${discount.calc_percent}%)`}
+                  receiptValue={`- ${getRupiahCurrency(
+                    programPrice - subtotal,
+                  )}`}
+                  isDiscount
                 />
               )}
-              {/* Applied Discount */}
-              {discount && (
-                <AppliedDiscountCardSVP
-                  discountName={discount.name || ""}
-                  discountRate={discount.calc_percent || 0}
-                  discountCode={discount.code || ""}
-                  onClose={() => setDiscount(null)}
-                />
-              )}
-            </div>
-
-            {/* Payment Details */}
-            <div className="payment-details flex flex-col gap-2 bg-white p-5 dark:bg-coal-black">
-              <h1 className="font-bodycopy font-bold">Payment Details</h1>
-              <div className="calculation-price flex flex-col gap-2">
-                <ReceiptLineItemSVP
-                  receiptName="Payment Method"
-                  receiptValue={chosenPaymentChannelData?.label}
-                />
-                <ReceiptLineItemSVP
-                  receiptName="Program Price"
-                  receiptValue={getRupiahCurrency(programPrice)}
-                />
-                {discount?.calc_percent && (
-                  <ReceiptLineItemSVP
-                    receiptName={`Discount (${discount.calc_percent}%)`}
-                    receiptValue={`- ${getRupiahCurrency(
-                      Math.round(programPrice - subtotal)
-                    )}`}
-                    isDiscount
-                  />
-                )}
-                <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
-                <ReceiptLineItemSVP
-                  receiptName="Subtotal"
-                  receiptValue={getRupiahCurrency(subtotal)}
-                />
-                <ReceiptLineItemSVP
-                  receiptName="Admin Fee"
-                  receiptValue={getRupiahCurrency(paymentCalculation.adminFee)}
-                />
-                <ReceiptLineItemSVP
-                  receiptName="VAT"
-                  receiptValue={getRupiahCurrency(
-                    paymentCalculation.valueAddedTax
-                  )}
-                />
-                <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
-                <ReceiptLineItemSVP
-                  receiptName="Total Amount"
-                  receiptValue={getRupiahCurrency(
-                    paymentCalculation.totalAmount
-                  )}
-                />
-              </div>
+              <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
+              <ReceiptLineItemSVP
+                receiptName="Subtotal"
+                receiptValue={getRupiahCurrency(subtotal)}
+              />
+              <ReceiptLineItemSVP
+                receiptName="Admin Fee"
+                receiptValue={
+                  isFreeCharge
+                    ? getRupiahCurrency(0)
+                    : getRupiahCurrency(paymentCalculation.adminFee)
+                }
+              />
+              <ReceiptLineItemSVP
+                receiptName="VAT"
+                receiptValue={
+                  isFreeCharge
+                    ? getRupiahCurrency(0)
+                    : getRupiahCurrency(paymentCalculation.valueAddedTax)
+                }
+              />
+              <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
+              <ReceiptLineItemSVP
+                receiptName="Total Amount"
+                receiptValue={
+                  isFreeCharge
+                    ? getRupiahCurrency(0)
+                    : getRupiahCurrency(paymentCalculation.totalAmount)
+                }
+                isGrandTotal
+              />
             </div>
           </div>
-        )}
+        </div>
 
         {/* Background */}
         <div className="absolute top-0 left-0 w-full h-[78px] bg-linear-to-r from-0% from-primary to-100% to-primary-deep" />
@@ -541,34 +474,34 @@ export default function CheckoutEventFormSVP({
             </p>
           </div>
         </div>
-      </div>
 
-      {/* Floating CTA */}
-      {isValidTicketId && (
+        {/* Floating CTA */}
         <div className="floating-cta fixed flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">
-              {getRupiahCurrency(paymentCalculation.totalAmount)}
+              {isFreeCharge
+                ? getRupiahCurrency(0)
+                : getRupiahCurrency(paymentCalculation.totalAmount)}
             </p>
           </div>
           <AppButton
             onClick={handlePayment}
             disabled={isLoadingPayment}
             // GTM
-            featureName="checkout_payment_event"
-            featureId={String(selectedTicket?.id)}
-            featureProductCategory="EVENT"
-            featureProductName={`${eventName} - ${selectedTicket?.name}`}
+            featureName="checkout_payment_playlist"
+            featureId={String(playlistId)}
+            featureProductCategory="PLAYLIST"
+            featureProductName={playlistName}
             featureProductAmount={subtotal}
             featurePagePoint="Checkout Page"
             // Meta
             metaEventName="InitiateCheckout"
             metaEventId={initialUserId}
-            metaContentIds={[String(selectedTicket?.id)]}
-            metaContentType="event"
-            metaContentName={`${eventName} - ${selectedTicket?.name}`}
-            metaContentCategory="Business Event"
+            metaContentIds={[String(playlistId)]}
+            metaContentType="digital"
+            metaContentName={playlistName}
+            metaContentCategory="Video On Demand Playlist"
             metaCurrency="IDR"
             metaValue={subtotal}
             metaNumItems={1}
@@ -584,11 +517,11 @@ export default function CheckoutEventFormSVP({
             Pay Now
           </AppButton>
         </div>
-      )}
+      </div>
 
       {/* Modal Discount */}
       <ApplyDiscountModalSVP
-        eventId={selectedTicket?.id}
+        playlistId={playlistId}
         isOpen={openDiscount}
         onClose={() => setOpenDiscount(false)}
         onApplyDiscount={(discountData) => {
