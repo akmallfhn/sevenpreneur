@@ -8,7 +8,7 @@ export default function LearningListBlueprintSVP() {
   const data = [
     {
       session_number: "01.",
-      session_name: "Founder Foundations",
+      session_name: "Growth Foundations",
       session_description:
         "Before building a business, build the mindset that keeps it alive.",
       session_educator: "Raymond Chin",
@@ -19,19 +19,19 @@ export default function LearningListBlueprintSVP() {
     },
     {
       session_number: "02.",
-      session_name: "Business Ideation",
+      session_name: "Market Intelligence",
       session_description:
         "Great businesses don’t start with luck, they start with structured ideas.",
-      session_educator: "Vicktor Aritonang",
-      session_educator_title: "CEO SSPACE Media",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
+      session_educator: "-",
+      session_educator_title: "-",
+      session_educator_avatar: "",
       session_variant: "frameworkSecondary",
     },
     {
-      session_number: "",
-      session_name: "From Personal Readiness to Strong Business Ideas",
-      session_description: "",
+      session_number: "03.",
+      session_name: "Business Model",
+      session_description:
+        "Start validating, so the idea stands on real ground.",
       session_educator: "Zaky Muhammad Syah",
       session_educator_title: "CEO Dibimbing & Cakrawala University",
       session_educator_avatar:
@@ -39,39 +39,7 @@ export default function LearningListBlueprintSVP() {
       session_variant: "founderSeries",
     },
     {
-      session_number: "03.",
-      session_name: "Research Validation",
-      session_description:
-        "Start validating, so the idea stands on real ground.",
-      session_educator: "Yusuf Arezany",
-      session_educator_title: "Market Researcher Consultant",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-yusuf-arezany.webp",
-      session_variant: "frameworkPrimary",
-    },
-    {
-      session_number: "",
-      session_name: "Turning Market Research Into Business Strategies",
-      session_description: "",
-      session_educator: "Inu Ranuatmadja",
-      session_educator_title: "Research Head BMI Research",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-inu.webp",
-      session_variant: "founderSeries",
-    },
-    {
       session_number: "04.",
-      session_name: "Product & Offer",
-      session_description:
-        "Turn what you have into what people can’t wait to pay for.",
-      session_educator: "Vicktor Aritonang",
-      session_educator_title: "CEO SSPACE Media",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
-      session_variant: "frameworkSecondary",
-    },
-    {
-      session_number: "05.",
       session_name: "Brand, Sales, & Marketing",
       session_description:
         "Master the art of attracting, converting, and retaining customers",
@@ -85,15 +53,14 @@ export default function LearningListBlueprintSVP() {
       session_number: "",
       session_name: "Ways To Build Powerful Business Connections",
       session_description: "",
-      session_educator: "Adythia Pratama",
-      session_educator_title: "Guerilla Marketing Specialist",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-adythia.webp",
+      session_educator: "Fanbul",
+      session_educator_title: "CEO of Infipop",
+      session_educator_avatar: "",
       session_variant: "founderSeries",
     },
     {
-      session_number: "06.",
-      session_name: "Operations & Finance",
+      session_number: "05.",
+      session_name: "People Management & Ops",
       session_description:
         "Build the systems that keep your business running smoothly as it scales.",
       session_educator: "Berry Boen",
@@ -101,6 +68,16 @@ export default function LearningListBlueprintSVP() {
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-berry-boen.webp",
       session_variant: "frameworkSecondary",
+    },
+    {
+      session_number: "06.",
+      session_name: "Finance and Tax Planning",
+      session_description:
+        "Scaling isn’t just bigger. It’s smarter, faster, and sustainable.",
+      session_educator: "Krisna Herdiana",
+      session_educator_title: "Founder Sevenpreneur",
+      session_educator_avatar: "",
+      session_variant: "frameworkPrimary",
     },
     {
       session_number: "07.",
@@ -114,35 +91,30 @@ export default function LearningListBlueprintSVP() {
       session_variant: "frameworkPrimary",
     },
     {
-      session_number: "07+",
-      session_name: "From Pitch Perfect to Investable Opportunity",
+      session_number: "",
+      session_name: "",
       session_description: "",
-      session_educator: "Alvin Evander",
-      session_educator_title: "Vice President MDI Ventures",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/speakers-alvin.webp",
+      session_educator: "",
+      session_educator_title: "",
+      session_educator_avatar: "",
       session_variant: "extraordinary",
     },
     {
       session_number: "",
-      session_name:
-        "The Secrets Investors for Businesses Worth Funding and Go Global",
+      session_name: "",
       session_description: "",
-      session_educator: "Tom Lembong",
-      session_educator_title: "Former Minister of Trade of Indonesia",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tom.webp",
+      session_educator: "",
+      session_educator_title: "",
+      session_educator_avatar: "",
       session_variant: "extraordinary",
     },
     {
       session_number: "",
-      session_name:
-        "Ethics & Effectiveness: Drivers of Businesses and Investment",
+      session_name: "",
       session_description: "",
-      session_educator: "Basuki T. Purnama",
-      session_educator_title: "Governor of DKI Jakarta 2014-2017",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-basuki-btp.webp",
+      session_educator: "",
+      session_educator_title: "",
+      session_educator_avatar: "",
       session_variant: "extraordinary",
     },
   ];

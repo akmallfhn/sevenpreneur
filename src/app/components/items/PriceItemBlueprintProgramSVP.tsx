@@ -53,18 +53,19 @@ export default function PriceItemBlueprintProgramSVP(
         <p className="price-description font-bodycopy text-white text-[15px] text-center leading-tight">
           {props.priceDescription}
         </p>
-        {/* <div className="price-discount flex items-center gap-2 font-brand text-white">
+        <div className="price-discount flex items-center gap-2 font-brand text-white">
           <p className="discount-rate bg-secondary font-bold text-xs px-1 py-0.5 rounded-sm lg:text-sm">
-            {Math.round(100 - (salePeriodPrice / normalPrice) * 100)}% OFF
+            {Math.round(100 - (props.priceAmount / props.priceAnchor) * 100)}%
+            OFF
           </p>
           <div className="normal-price relative flex items-center gap-0.5">
             <p className="text-[10px] font-medium text-xs lg:text-sm">Rp</p>
             <p className="font-semibold lg:text-lg">
-              {normalPrice.toLocaleString("id-ID")}
+              {props.priceAnchor.toLocaleString("id-ID")}
             </p>
             <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
           </div>
-        </div> */}
+        </div>
         <AppCountdownTimer targetDateTime={"2025-12-12T23:59:00+07:00"} />
         <div className="price-amount flex items-center gap-0.5 font-brand text-white">
           <p className="font-bold text-lg">Rp</p>

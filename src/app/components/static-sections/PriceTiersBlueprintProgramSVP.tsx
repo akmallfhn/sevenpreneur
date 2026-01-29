@@ -92,7 +92,7 @@ export default function PriceTiersBlueprintProgramSVP(
                 priceLabel={<PackageLabelBlueprintProgramSVP variant="vip" />}
                 priceStatus={vipPrice.status}
                 priceAmount={vipPrice.amount}
-                priceAnchor={10000000}
+                priceAnchor={8500000}
                 priceBenefits={[
                   <>
                     <b>1 hari offline event di Jakarta</b>, kuasai investasi &
