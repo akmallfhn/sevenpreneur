@@ -72,7 +72,7 @@ export default async function BlueprintProgramPage() {
 
   let cohortDataRaw;
   try {
-    cohortDataRaw = (await trpc.read.cohort({ id: 36 })).cohort;
+    cohortDataRaw = (await trpc.read.cohort({ id: 37 })).cohort;
   } catch {
     return notFound();
   }

@@ -10,7 +10,7 @@ export default function AboutBlueprintProgramSVP() {
           {/* Section Image */}
           <div className="section-image w-full lg:max-w-[548px] shrink-0">
             <Image
-              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/overview-image.webp"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/Frame%201686552289.webp"
               alt="Program Overview Sevenpreneur Business Blueprint Program"
               width={1000}
               height={1000}

@@ -23,7 +23,7 @@ interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
 }
 
 export default function PriceItemBlueprintProgramSVP(
-  props: PriceItemBlueprintProgramSVPProps
+  props: PriceItemBlueprintProgramSVPProps,
 ) {
   const purchaseAction = props.isPriority
     ? "Best Value – Choose Plan"
@@ -31,7 +31,7 @@ export default function PriceItemBlueprintProgramSVP(
 
   let callToAction = purchaseAction;
   if (props.priceStatus === "INACTIVE") {
-    callToAction = "Sold Out";
+    callToAction = "Coming soon";
   }
 
   return (

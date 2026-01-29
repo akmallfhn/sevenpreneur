@@ -9,7 +9,7 @@ export default function ScheduleBlueprintProgramSVP() {
           <h2 className="batch-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl z-10 sm:text-3xl xl:text-4xl">
             Program Schedule
             <br />
-            Batch 7
+            Batch 8
           </h2>
           <div className="hidden w-0.5 h-[167px] bg-gradient-to-b from-0% from-white/0 via-50% via-white/80 to-100% to-white/0 z-10 lg:flex" />
           <div className="schedule-group flex flex-col gap-6 z-10 lg:flex-row lg:bg-white lg:p-7 lg:gap-9 lg:rounded-md">
@@ -19,7 +19,7 @@ export default function ScheduleBlueprintProgramSVP() {
                   ONLINE
                 </p>
                 <p className="session-date text-white font-bold font-brand text-[22px] lg:text-black">
-                  27 NOV-12 DEC 2025
+                  27 APR-17 MAY 2025
                 </p>
               </div>
               <div className="hidden border-b border-dashed border-outline lg:flex" />
@@ -47,7 +47,7 @@ export default function ScheduleBlueprintProgramSVP() {
                   OFFLINE
                 </p>
                 <p className="session-date font-bold font-brand text-[22px] text-white lg:text-black">
-                  14 DEC 2025
+                  17 MAY 2025
                 </p>
               </div>
               <div className="hidden border-b border-dashed border-outline lg:flex" />
@@ -72,9 +72,7 @@ export default function ScheduleBlueprintProgramSVP() {
           <div className="background-desktop absolute hidden inset-0 w-full h-full lg:flex">
             <Image
               className="flex object-cover w-full h-full"
-              src={
-                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-desktop.webp"
-              }
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-desktop%20(1).webp"
               alt="Schedule Calendar"
               width={1000}
               height={1000}
@@ -83,9 +81,7 @@ export default function ScheduleBlueprintProgramSVP() {
           <div className="background-mobile absolute flex inset-0 w-full h-full lg:hidden">
             <Image
               className="flex object-cover w-full h-full"
-              src={
-                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-mobile.webp"
-              }
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-mobile.webp"
               alt="Schedule Calendar"
               width={1000}
               height={1000}

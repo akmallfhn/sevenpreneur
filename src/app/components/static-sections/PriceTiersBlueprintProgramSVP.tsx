@@ -18,10 +18,10 @@ interface PriceTiersBlueprintProgramSVPProps {
 }
 
 export default function PriceTiersBlueprintProgramSVP(
-  props: PriceTiersBlueprintProgramSVPProps
+  props: PriceTiersBlueprintProgramSVPProps,
 ) {
-  const regularPrice = props.cohortPrices.find((item) => item.id === 55);
-  const vipPrice = props.cohortPrices.find((item) => item.id === 58);
+  const regularPrice = props.cohortPrices.find((item) => item.id === 59);
+  const vipPrice = props.cohortPrices.find((item) => item.id === 60);
 
   return (
     <section id="package-plans">
