@@ -14,7 +14,7 @@ export default function FooterNavbarSVP() {
   const pathname = usePathname();
 
   const isDisallowedPage = ["/auth", "/checkout"].some((path) =>
-    pathname.includes(path)
+    pathname.includes(path),
   );
 
   const socialMediaData = [
@@ -119,8 +119,7 @@ export default function FooterNavbarSVP() {
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-col">
                       <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
-                        Got questions about RE:START Conference? We’re happy to
-                        help at
+                        Got questions about our program? We’re happy to help at
                       </p>
                       <p className="font-brand font-bold text-white lg:text-lg">
                         event@sevenpreneur.com
@@ -148,6 +147,11 @@ export default function FooterNavbarSVP() {
                   <Link href={"/terms-conditions"}>
                     <li className="hover:cursor-pointer hover:underline hover:text-primary">
                       Terms & Conditions
+                    </li>
+                  </Link>
+                  <Link href={"/refund-return-policy"}>
+                    <li className="hover:cursor-pointer hover:underline hover:text-primary">
+                      Refund and Return Policy
                     </li>
                   </Link>
                 </ul>

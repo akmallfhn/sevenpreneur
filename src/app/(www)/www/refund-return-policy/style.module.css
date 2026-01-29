@@ -1,0 +1,122 @@
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sauce One";
+  src: url("../../../fonts/OpenSauceOne-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* --- Styling Mobile */
+.refund_return {
+  display: flex;
+  flex-direction: column;
+  padding: 64px 20px;
+  justify-content: center;
+  max-width: 768px;
+  margin: 0 auto;
+  gap: 2px;
+  font-family: "Open Sauce One", sans-serif;
+}
+
+.refund_return h1 {
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.refund_return h2 {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.refund_return h3 {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.refund_return hr {
+  border: none;
+  border-top: 1px solid #e3e3e3;
+  margin: 20px 0;
+}
+
+.refund_return p {
+  color: #333333;
+  font-size: 14px;
+}
+
+.refund_return ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.refund_return li {
+  font-size: 14px;
+}
+
+.refund_return a {
+  color: #0165fc;
+  text-decoration: underline;
+}
+
+/* --- Responsive to Desktop */
+@media (min-width: 1024px) {
+  .refund_return {
+    gap: 4px;
+    padding: 100px 20px;
+  }
+
+  .refund_return h1 {
+    font-size: 32px;
+  }
+
+  .refund_return h2 {
+    font-size: 24px;
+  }
+
+  .refund_return h3 {
+    font-size: 20px;
+  }
+
+  .refund_return p {
+    font-size: 16px;
+  }
+
+  .refund_return li {
+    font-size: 16px;
+  }
+}
