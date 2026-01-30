@@ -95,20 +95,14 @@ export default function PriceTiersBlueprintProgramSVP(
                 priceAnchor={8500000}
                 priceBenefits={[
                   <>
-                    <b>1 hari offline event di Jakarta</b>, kuasai investasi &
-                    fundraising
+                    <b>1 hari offline event di Jakarta</b>
                   </>,
                   <>
-                    <b>Pitch Perfect Workshop</b> eksklusif bersama Wafa
-                    Taftazani.
+                    <b>3 sesi eksklusif</b> bersama para speakers berpengalaman
                   </>,
                   <>
-                    <b>2 sesi eksklusif</b> bersama Tom Lembong & Basuki T.
-                    Purnama (Ahok)
-                  </>,
-                  <>
-                    <b>Intimate Dinner & Networking</b> bersama Tom Lembong,
-                    Basuki T. Purnama (Ahok), & para business leader visioner.
+                    <b>Intimate Dinner & Networking</b> bersama business leader
+                    visioner.
                   </>,
                   <>
                     <b>Mentoring privat 1-on-1</b> dengan business coach
