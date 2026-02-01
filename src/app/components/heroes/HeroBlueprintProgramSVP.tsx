@@ -26,7 +26,7 @@ export default function HeroBlueprintProgramSVP({
               <div className="p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-100% to-[#30266D] rounded-full">
                 <div className="flex text-white items-center gap-1 py-1 px-3.5 bg-gradient-to-tr from-0% from-[#2B0E6E] to-100% to-[#1C125F] rounded-full">
                   <p className="text-[13px] font-brand font-bold">
-                    INTEGRATED WITH AI
+                    INTEGRATED WITH AI TOOLS
                   </p>
                   <div className="flex size-4">
                     <Image
@@ -44,10 +44,10 @@ export default function HeroBlueprintProgramSVP({
             </div>
             <div className="hero-title flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] sm:text-3xl lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[52px] xl:max-w-[720px]">
               <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0]">
-                Start & Grow Your Business.
+                The Growth Blueprint
               </h2>
               <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-90% to-secondary">
-                Build a Blueprint.
+                For 1B/Month Scale
               </h2>
             </div>
             <p className="hero-description w-[317px] text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
@@ -162,7 +162,7 @@ export default function HeroBlueprintProgramSVP({
         {/* All Speakers Desktop XL */}
         <Image
           className="all-speakers absolute hidden max-w-[672px] -bottom-5 -right-10 2xl:flex"
-          src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-new%20(1).webp"
+          src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-8.webp"
           alt="Sevenpreneur Coach and Mentor"
           width={2440}
           height={2440}
@@ -173,7 +173,7 @@ export default function HeroBlueprintProgramSVP({
       {/* All Speakers Mobile */}
       <Image
         className="all-speakers absolute flex max-w-[424px] bottom-0 left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:translate-x-0 lg:max-w-[600px] lg:-bottom-5 lg:-right-8 xl:max-w-[662px] xl:right-5 2xl:hidden"
-        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-new%20(1).webp"
+        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-8.webp"
         alt="Sevenpreneur Coach and Mentor"
         width={2440}
         height={2440}
