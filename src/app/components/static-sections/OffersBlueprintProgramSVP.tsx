@@ -50,7 +50,7 @@ export default function OffersBlueprintProgramSVP() {
     <div className="section-root relative flex items-center justify-center bg-black overflow-hidden">
       <div className="section-container flex flex-col w-full items-center gap-8 p-5 py-10 z-20 lg:px-0 lg:py-[60px] lg:gap-[64px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-center text-2xl sm:max-w-[662px] sm:text-3xl lg:max-w-[788px] lg:text-4xl">
-          Not Just a Business Class. <br /> It’s The Perfect Ecosystem for
+          Not Just a Business Class. <br /> It’s The Ecosystem for
           Entrepreneurs.
         </h2>
         <div className="offers relative flex flex-col w-fit justify-center items-center gap-10 lg:gap-14">

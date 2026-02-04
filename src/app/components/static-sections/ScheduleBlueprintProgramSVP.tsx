@@ -4,8 +4,8 @@ import Image from "next/image";
 export default function ScheduleBlueprintProgramSVP() {
   return (
     <div className="section-root relative flex items-center justify-center bg-black">
-      <div className="batch-outline p-[1px] w-full h-full max-w-[378px] m-5 my-10 bg-gradient-to-br from-0% from-[#575757] to-100% to-[#3C3C3C] rounded-md overflow-hidden lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-        <div className="batch-container relative flex flex-col w-full h-full p-5 gap-8 bg-gradient-to-br from-0% from-[#0B0B0B] to-100% to-[#2D2D2E] rounded-md overflow-hidden lg:flex-row lg:items-center lg:justify-between lg:p-9">
+      <div className="batch-outline p-[1px] w-full h-full max-w-[565px] m-5 my-10 bg-gradient-to-br from-0% from-[#575757] to-100% to-[#3C3C3C] rounded-md overflow-hidden lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+        <div className="batch-container relative flex flex-col w-full h-full p-5 gap-8 rounded-md overflow-hidden lg:flex-row lg:items-center lg:justify-between lg:p-9">
           <h2 className="batch-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl z-10 sm:text-3xl xl:text-4xl">
             Program Schedule
             <br />
@@ -19,19 +19,19 @@ export default function ScheduleBlueprintProgramSVP() {
                   ONLINE
                 </p>
                 <p className="session-date text-white font-bold font-brand text-[22px] lg:text-black">
-                  27 APR-17 MAY 2025
+                  27 APR - 17 MAY 2025
                 </p>
               </div>
               <div className="hidden border-b border-dashed border-outline lg:flex" />
-              <div className="schedule flex font-bodycopy gap-4 text-white lg:text-black">
-                <div className="day-schedule flex flex-col gap-1 w-fit text-sm lg:text-base">
+              <div className="schedule flex font-bodycopy gap-8 text-white lg:text-black">
+                <div className="day-schedule flex flex-col gap-1 w-fit text-[15px] lg:text-base">
                   <p className="font-bold">Day</p>
                   <div className="font-medium">
                     <p>Mon - Fri</p>
                     <p>Saturday</p>
                   </div>
                 </div>
-                <div className="time-schedule flex flex-col gap-1 w-fit text-sm lg:text-base">
+                <div className="time-schedule flex flex-col gap-1 w-fit text-[15px] lg:text-base">
                   <p className="font-bold">Class Session</p>
                   <div className="font-medium">
                     <p>19.00 - 21.00</p>
@@ -51,14 +51,14 @@ export default function ScheduleBlueprintProgramSVP() {
                 </p>
               </div>
               <div className="hidden border-b border-dashed border-outline lg:flex" />
-              <div className="schedule flex font-bodycopy gap-4 text-white lg:text-black">
-                <div className="day-schedule flex flex-col gap-1 w-fit text-sm lg:text-base">
+              <div className="schedule flex font-bodycopy gap-8 text-white lg:text-black">
+                <div className="day-schedule flex flex-col gap-1 w-fit text-[15px] lg:text-base">
                   <p className="font-bold">Days</p>
                   <div className="font-medium">
                     <p>Sunday</p>
                   </div>
                 </div>
-                <div className="time-schedule flex flex-col gap-1 w-fit text-sm lg:text-base">
+                <div className="time-schedule flex flex-col gap-1 w-fit text-[15px] lg:text-base">
                   <p className="font-bold">Class Sessions</p>
                   <div className="font-medium">
                     <p>15.00 - 22.00</p>
@@ -81,7 +81,7 @@ export default function ScheduleBlueprintProgramSVP() {
           <div className="background-mobile absolute flex inset-0 w-full h-full lg:hidden">
             <Image
               className="flex object-cover w-full h-full"
-              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-mobile.webp"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-mobile%20(1).webp"
               alt="Schedule Calendar"
               width={1000}
               height={1000}

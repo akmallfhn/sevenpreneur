@@ -18,7 +18,7 @@ export default function HeroBlueprintProgramSVP({
       {/* Hero Container */}
       <div className="hero-container relative flex w-full items-center py-10 px-4 z-[70] lg:px-0 lg:pt-20 lg:pb-24 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="hero-content flex flex-col w-full items-center gap-60 lg:gap-[28px] lg:items-start">
-          <div className="flex flex-col gap-3 items-center text-white lg:items-start ">
+          <div className="flex flex-col gap-4 items-center text-white lg:items-start lg:gap-5">
             <div className="flex flex-col items-center text-center gap-2.5 lg:flex-row lg:text-left">
               <h1 className="text-sm font-brand font-semibold tracking-widest lg:text-lg xl:text-xl">
                 BUSINESS BLUEPRINT PROGRAM
@@ -44,10 +44,10 @@ export default function HeroBlueprintProgramSVP({
             </div>
             <div className="hero-title flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] sm:text-3xl lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[52px] xl:max-w-[720px]">
               <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0]">
-                The Growth Blueprint
+                Tumbuhkan Skala Bisnis
               </h2>
               <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-90% to-secondary">
-                For 1B/Month Scale
+                Hingga 1 M per bulan
               </h2>
             </div>
             <p className="hero-description w-[317px] text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
@@ -61,8 +61,8 @@ export default function HeroBlueprintProgramSVP({
                 isMoreValue
               />
               <ScorecardItemSVP
-                scorecardValue={20}
-                scorecardName="Modules & AI Tools"
+                scorecardValue={7}
+                scorecardName="AI Business Tools"
                 isMoreValue
               />
               <ScorecardItemSVP
@@ -71,7 +71,7 @@ export default function HeroBlueprintProgramSVP({
                 isMoreValue
               />
               <ScorecardItemSVP
-                scorecardValue={5000}
+                scorecardValue={5500}
                 scorecardName="Program Alumnee"
                 isMoreValue
               />

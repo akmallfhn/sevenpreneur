@@ -49,7 +49,7 @@ export default function ScorecardItemSVP({
       },
       {
         threshold: 0.5,
-      }
+      },
     );
 
     if (containerRef.current) {
@@ -70,7 +70,7 @@ export default function ScorecardItemSVP({
         {displayedNumber.toLocaleString()}
         {isMoreValue && <span>+</span>}
       </h5>
-      <p className="text-white text-xs font-bodycopy lg:text-lg">
+      <p className="text-white text-xs font-bodycopy lg:text-base">
         {scorecardName}
       </p>
     </div>
