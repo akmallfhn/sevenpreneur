@@ -56,6 +56,16 @@ enum CRoleEnum {
   @@map("c_role_enum")
 }
 
+// Enumeration for the ba_answer_sheets table (ba_*)
+
+enum BAPeriodEnum {
+  ASESMEN_PERTAMA @map("asesmen_pertama")
+  ASESMEN_KEDUA   @map("asesmen_kedua")
+  ASESMEN_KETIGA  @map("asesmen_ketiga")
+
+  @@map("ba_period_enum")
+}
+
 // Enumeration for the users table
 
 enum OccupationEnum {
@@ -204,6 +214,7 @@ model User {
   discussion_starters   DiscussionStarter[]
   discussion_replies    DiscussionReply[]
   submissions           Submission[]
+  ba_answer_sheets      BAAnswerSheet[]
   playlists             UserPlaylist[]      @relation("watch_playlist")
   Event                 Event[]
   UserEvent             UserEvent[]
@@ -393,6 +404,75 @@ model Attendance {
 
   @@id([learning_id, user_id])
   @@map("attendances")
+}
+
+// Business-assessment-related
+
+model BACategory {
+  id            Int             @id @default(autoincrement()) @db.SmallInt
+  name          String          @db.VarChar()
+  weight        Decimal         @db.Decimal(5, 2)
+  num_order     Int?            @db.SmallInt
+  created_at    DateTime        @default(now()) @db.Timestamptz()
+  updated_at    DateTime        @default(now()) @updatedAt @db.Timestamptz()
+  subcategories BASubcategory[]
+
+  @@map("ba_categories")
+}
+
+model BASubcategory {
+  id          Int          @id @default(autoincrement()) @db.SmallInt
+  category    BACategory   @relation(fields: [category_id], references: [id])
+  category_id Int          @db.SmallInt
+  name        String       @db.VarChar()
+  num_order   Int?         @db.SmallInt
+  created_at  DateTime     @default(now()) @db.Timestamptz()
+  updated_at  DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  questions   BAQuestion[]
+
+  @@map("ba_subcategories")
+}
+
+model BAQuestion {
+  id             Int            @id @default(autoincrement()) @db.Integer
+  subcategory    BASubcategory  @relation(fields: [subcategory_id], references: [id])
+  subcategory_id Int            @db.SmallInt
+  question       String         @db.VarChar()
+  hint           String         @db.VarChar()
+  weight         Decimal        @db.Decimal(4, 2)
+  status         StatusEnum
+  num_order      Int?           @db.SmallInt
+  created_at     DateTime       @default(now()) @db.Timestamptz()
+  updated_at     DateTime       @default(now()) @updatedAt @db.Timestamptz()
+  answers        BAAnswerItem[]
+
+  @@map("ba_questions")
+}
+
+model BAAnswerSheet {
+  id         Int            @id @default(autoincrement()) @db.Integer
+  user       User           @relation(fields: [user_id], references: [id])
+  user_id    String         @db.Uuid
+  period     BAPeriodEnum
+  score      Decimal        @db.Decimal(5, 2)
+  created_at DateTime       @default(now()) @db.Timestamptz()
+  updated_at DateTime       @default(now()) @updatedAt @db.Timestamptz()
+  answers    BAAnswerItem[]
+
+  @@map("ba_answer_sheets")
+}
+
+model BAAnswerItem {
+  id          Int           @id @default(autoincrement()) @db.Integer
+  sheet       BAAnswerSheet @relation(fields: [sheet_id], references: [id])
+  sheet_id    Int           @db.Integer
+  question    BAQuestion    @relation(fields: [question_id], references: [id])
+  question_id Int           @db.Integer
+  score       Int           @db.SmallInt
+  created_at  DateTime      @default(now()) @db.Timestamptz()
+  updated_at  DateTime      @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("ba_answer_items")
 }
 
 // Playlist-related
