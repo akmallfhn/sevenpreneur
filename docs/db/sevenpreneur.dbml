@@ -277,8 +277,8 @@ Table submissions {
 }
 
 Table attendances {
-  learning_id  integer      [ref: > users.id]
-  user_id      uuid         [ref: > cohorts.id]
+  learning_id  integer      [ref: > learnings.id]
+  user_id      uuid         [ref: > users.id]
   check_in_at  timestamptz
   check_out_at timestamptz
 }
