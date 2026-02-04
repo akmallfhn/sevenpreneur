@@ -40,6 +40,14 @@ enum c_role_enum {
   assistant
 }
 
+// Enumeration for the ba_answer_sheets table (ba_*)
+
+enum ba_period_enum {
+  'asesmen_pertama',
+  'asesmen_kedua',
+  'asesmen_ketiga'
+}
+
 // Enumeration for the users table
 
 enum occupation_enum {
@@ -281,6 +289,56 @@ Table attendances {
   user_id      uuid         [ref: > users.id]
   check_in_at  timestamptz
   check_out_at timestamptz
+}
+
+// Business-assessment-related
+
+Table ba_categories {
+  id          smallint      [primary key]
+  category    varchar
+  weight      decimal(5,2)
+  num_order   smallint
+  created_at  timestamptz
+  updated_at  timestamptz
+}
+
+Table ba_subcategories {
+  id           smallint     [primary key]
+  category_id  smallint     [ref: > ba_categories.id]
+  subcategory  varchar
+  num_order    smallint
+  created_at   timestamptz
+  updated_at   timestamptz
+}
+
+Table ba_questions {
+  id              integer       [primary key]
+  subcategory_id  smallint      [ref: > ba_subcategories.id]
+  question        varchar
+  hint            varchar
+  weight          decimal(4,2)
+  status          status_enum
+  num_order       smallint
+  created_at      timestamptz
+  updated_at      timestamptz
+}
+
+Table ba_answer_sheets {
+  id          integer         [primary key]
+  user_id     uuid            [ref: > users.id]
+  period      ba_period_enum
+  score       decimal(5,2)
+  created_at  timestamptz
+  updated_at  timestamptz
+}
+
+Table ba_answer_items {
+  id           integer      [primary key]
+  sheet_id     integer      [ref: > ba_answer_sheets.id]
+  question_id  integer      [ref: > ba_questions.id]
+  score        smallint
+  created_at   timestamptz
+  updated_at   timestamptz
 }
 
 // Playlist-related
