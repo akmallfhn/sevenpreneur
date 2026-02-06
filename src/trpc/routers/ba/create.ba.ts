@@ -5,6 +5,7 @@ import {
 import { administratorProcedure } from "@/trpc/init";
 import {
   numberIsID,
+  numberIsPosInt,
   numberIsPositive,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -18,7 +19,7 @@ export const createBA = {
       z.object({
         name: stringNotBlank(),
         weight: numberIsPositive(),
-        num_order: numberIsPositive().nullable().optional(),
+        num_order: numberIsPosInt().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -52,7 +53,7 @@ export const createBA = {
       z.object({
         category_id: numberIsID(),
         name: stringNotBlank(),
-        num_order: numberIsPositive().nullable().optional(),
+        num_order: numberIsPosInt().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -89,7 +90,7 @@ export const createBA = {
         hint: stringNotBlank(),
         weight: numberIsPositive(),
         status: z.enum(StatusEnum),
-        num_order: numberIsPositive().nullable().optional(),
+        num_order: numberIsPosInt().nullable().optional(),
       })
     )
     .mutation(async (opts) => {

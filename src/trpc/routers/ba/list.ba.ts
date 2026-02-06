@@ -4,7 +4,7 @@ import { loggedInProcedure } from "@/trpc/init";
 import { calculatePage } from "@/trpc/utils/paging";
 import {
   numberIsID,
-  numberIsPositive,
+  numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import { StatusEnum } from "@prisma/client";
@@ -65,8 +65,8 @@ export const listBA = {
   questions: loggedInProcedure
     .input(
       z.object({
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
         keyword: stringNotBlank().optional(),
         category_id: numberIsID().optional(),
       })

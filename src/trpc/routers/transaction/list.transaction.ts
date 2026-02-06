@@ -9,7 +9,7 @@ import { calculatePage } from "@/trpc/utils/paging";
 import { stringToDate } from "@/trpc/utils/string_date";
 import {
   numberIsID,
-  numberIsPositive,
+  numberIsPosInt,
   stringIsUUID,
 } from "@/trpc/utils/validation";
 import {
@@ -113,8 +113,8 @@ export const listTransaction = {
   discounts: administratorProcedure
     .input(
       z.object({
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
       })
     )
     .query(async (opts) => {
@@ -203,8 +203,8 @@ export const listTransaction = {
         event_id: numberIsID().optional(),
         start_date: z.iso.date().optional(),
         end_date: z.iso.date().optional(),
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
       })
     )
     .query(async (opts) => {
