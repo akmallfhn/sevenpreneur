@@ -15,7 +15,7 @@ export default function SpecialTopicArticleSVP(
   props: SpecialTopicArticleSVPProps,
 ) {
   return (
-    <div className="special-topic relative flex w-full aspect-[2/3] rounded-lg overflow-hidden sm:aspect-[4/1.2]">
+    <div className="special-topic relative flex w-full aspect-[2/3] rounded-lg overflow-hidden dark:border dark:border-outline-dark sm:aspect-[4/1.2]">
       <div className="special-topic-image absolute flex w-full aspect-video top-0 z-10 sm:top-auto sm:left-0 sm:w-fit sm:h-full">
         <Image
           className="flex object-cover w-full h-full"
@@ -35,7 +35,7 @@ export default function SpecialTopicArticleSVP(
             <Link
               href={`/insights/${post.slug_url}/${post.id}`}
               key={index}
-              className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-surface-black`}
+              className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-coal-black`}
             >
               <div className="image-container flex w-[80px] aspect-square shrink-0 overflow-hidden rounded-lg lg:w-24">
                 <Image

@@ -92,7 +92,7 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
                 <Link
                   href={`/insights/${post.slug_url}/${post.id}`}
                   key={index}
-                  className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2]`}
+                  className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-coal-black`}
                 >
                   <div className="image-container flex max-w-[180px] aspect-video shrink-0 overflow-hidden rounded-lg">
                     <Image

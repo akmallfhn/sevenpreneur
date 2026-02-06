@@ -63,7 +63,7 @@ export default function OffersBlueprintProgramSVP() {
                 {index + 1}
               </p>
               <div className="offer-metadata flex flex-col gap-4 lg:gap-10 lg:flex-row lg:items-center">
-                <div className="flex w-fit max-h-[334px] aspect-[500/334] shrink-0 xl:max-h-[348px]">
+                <div className="offer-image flex w-fit h-[334px] aspect-[500/334] shrink-0 xl:h-[348px]">
                   <Image
                     className="object-cover w-full h-full"
                     src={post.image}

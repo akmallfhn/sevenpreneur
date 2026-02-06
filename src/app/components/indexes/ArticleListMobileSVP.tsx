@@ -30,7 +30,7 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
                 <Link
                   href={`/insights/${post.slug_url}/${post.id}`}
                   key={post.id}
-                  className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2]`}
+                  className="article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-surface-black"
                 >
                   <div className="image-container flex w-[80px] aspect-square shrink-0 overflow-hidden rounded-lg">
                     <Image
@@ -66,7 +66,7 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
               <Link
                 href={`/insights/${post.slug_url}/${post.id}`}
                 key={post.id}
-                className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2]`}
+                className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-surface-black`}
               >
                 <div className="image-container flex w-[80px] aspect-square shrink-0 overflow-hidden rounded-lg">
                   <Image

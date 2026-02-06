@@ -23,7 +23,7 @@ export default function LearningListBlueprintSVP() {
       session_description:
         "Identify real market problems worth solving and scaling.",
       session_educator: "To Be Announced",
-      session_educator_title: "ex Director at Nielsen",
+      session_educator_title: "Director at Nielsen",
       session_educator_avatar:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tba.webp",
       session_variant: "frameworkSecondary",
@@ -96,12 +96,12 @@ export default function LearningListBlueprintSVP() {
     },
     {
       session_number: "",
-      session_name: "",
+      session_name: "Managing Complexity in High-Growth Businesses",
       session_description: "",
-      session_educator: "To Be Announced",
-      session_educator_title: "",
+      session_educator: "Suwandi Soh",
+      session_educator_title: "CEO of Mekari",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tba.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-suwandi.webp",
       session_variant: "extraordinary",
     },
     {
