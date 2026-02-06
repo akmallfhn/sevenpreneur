@@ -310,6 +310,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `create.ba.question` |         ✅          |        ❌         |          ❌          |
 | `list.ba.questions`  |         ✅          |        ✅         |          ❌          |
 | `read.ba.question`   |         ✅          |        ✅         |          ❌          |
+| `read.ba.sheet`      |         ✅          |        ✅         |          ❌          |
 | `update.ba.question` |         ✅          |        ❌         |          ❌          |
 | `delete.ba.question` |         ✅          |        ❌         |          ❌          |
 
@@ -322,6 +323,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - `read.ba.question`:
   - Administrators can read all business assessment questions.
   - Non-Administrators can only read active business assessment questions given the question ID.
+- `read.ba.sheet`: Only active business assessment questions are shown.
 
 ## Playlists 📺
 
