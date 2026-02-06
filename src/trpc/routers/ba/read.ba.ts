@@ -84,4 +84,42 @@ export const readBA = {
       question: returnedQuestion,
     };
   }),
+
+  sheet: loggedInProcedure.query(async (opts) => {
+    const completeList = await opts.ctx.prisma.bACategory.findMany({
+      select: {
+        id: true,
+        name: true,
+        weight: true,
+        num_order: true,
+        subcategories: {
+          select: {
+            id: true,
+            name: true,
+            num_order: true,
+            questions: {
+              select: {
+                id: true,
+                question: true,
+                hint: true,
+                weight: true,
+                num_order: true,
+              },
+              where: {
+                status: StatusEnum.ACTIVE,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      sheet: {
+        categories: completeList,
+      },
+    };
+  }),
 };

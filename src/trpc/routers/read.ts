@@ -42,6 +42,7 @@ export const readRouter = createTRPCRouter({
     category: readBA.category,
     subcategory: readBA.subcategory,
     question: readBA.question,
+    sheet: readBA.sheet,
   },
 
   // Playlist-related //
