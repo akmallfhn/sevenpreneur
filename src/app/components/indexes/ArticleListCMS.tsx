@@ -12,14 +12,18 @@ import {
   FilePenLine,
   Loader2,
   PlusCircle,
+  Search,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
+import AppNumberPagination from "../navigations/AppNumberPagination";
+import { useRouter, useSearchParams } from "next/navigation";
+import InputCMS from "../fields/InputCMS";
 
 interface ArticleListCMSProps {
   sessionToken: string;
@@ -27,8 +31,26 @@ interface ArticleListCMSProps {
 }
 
 export default function ArticleListCMS(props: ArticleListCMSProps) {
-  const allowedRolesCreateArticle = [0, 4];
   const { copy } = useClipboard();
+  const router = useRouter();
+  const pageSize = 20;
+  const searchParam = useSearchParams();
+  const pageParam = searchParam.get("page");
+  const currentPage = Number(pageParam) || 1;
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
+    "",
+  );
+
+  const allowedRolesCreateArticle = [0, 4];
+
+  // Debounce Typing for 1 second
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword.trim() === "" ? undefined : keyword);
+    }, 600);
+    return () => clearTimeout(handler);
+  }, [keyword]);
 
   // Set Session Token to Header
   useEffect(() => {
@@ -39,7 +61,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
 
   // Fetch tRPC List Article
   const { data, isLoading, isError } = trpc.list.articles.useQuery(
-    {},
+    { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
     { enabled: !!props.sessionToken },
   );
   const articleList = data?.list;
@@ -71,6 +93,23 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
               )}
             </div>
           </div>
+          <div className="filter-search flex w-full items-center">
+            <div className="max-w-96 w-full">
+              <InputCMS
+                inputId="search-article"
+                inputType="search"
+                inputIcon={<Search className="size-5" />}
+                inputPlaceholder="Search articles..."
+                value={keyword}
+                onInputChange={(value) => {
+                  setKeyword(value);
+                  const params = new URLSearchParams(searchParam.toString());
+                  params.set("page", "1");
+                  router.push(`?${params.toString()}`);
+                }}
+              />
+            </div>
+          </div>
 
           {/* Loading & Error State */}
           {isLoading && (
@@ -84,7 +123,6 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
             </div>
           )}
 
-          {/* Table */}
           {!isLoading && !isError && (
             <table className="relative w-full rounded-sm">
               <thead className="bg-[#FAFAFA] text-alternative/70">
@@ -236,6 +274,18 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                 ))}
               </tbody>
             </table>
+          )}
+          {articleList?.length === 0 && (
+            <p className="empty-state mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+          )}
+          {!isLoading && !isError && (
+            <div className="pagination flex flex-col w-full items-center gap-3">
+              <AppNumberPagination
+                currentPage={currentPage}
+                totalPages={data?.metapaging.total_page ?? 1}
+              />
+              <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} articles`}</p>
+            </div>
           )}
         </div>
       </div>

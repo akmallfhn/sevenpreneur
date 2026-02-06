@@ -13,9 +13,9 @@ import {
   Eye,
   Loader2,
   PlusCircle,
+  Search,
   Settings2,
   Trash2,
-  UserSearch,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   } | null>(null);
   const [keyword, setKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
-    ""
+    "",
   );
   const wrapperRef = useRef<Record<string, HTMLDivElement | null>>({});
   const setWrapperRef = (id: string) => (el: HTMLDivElement | null) => {
@@ -70,7 +70,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   // Open and close dropdown
   const handleActionsDropdown = (
     e: React.MouseEvent<HTMLButtonElement>,
-    userId: string
+    userId: string,
   ) => {
     e.stopPropagation();
     setActionsOpened((prev) => (prev === userId ? null : userId));
@@ -81,7 +81,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node | null;
       const clickedInsideAny = Object.values(wrapperRef.current).some(
-        (el) => el && target && el.contains(target)
+        (el) => el && target && el.contains(target),
       );
       if (!clickedInsideAny) {
         setActionsOpened(null);
@@ -96,7 +96,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   // Fetch tRPC User List
   const { data, isLoading, isError } = trpc.list.users.useQuery(
     { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
-    { enabled: !!sessionToken }
+    { enabled: !!sessionToken },
   );
   const userList = data?.list;
 
@@ -116,7 +116,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             description: `${err}`,
           });
         },
-      }
+      },
     );
   };
 
@@ -148,7 +148,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             <InputCMS
               inputId="search-user"
               inputType="search"
-              inputIcon={<UserSearch className="size-5" />}
+              inputIcon={<Search className="size-5" />}
               inputPlaceholder="Search users..."
               value={keyword}
               onInputChange={(value) => {
@@ -160,6 +160,8 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             />
           </div>
         </div>
+
+        {/* Loading & Error State */}
         {isLoading && (
           <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
             <Loader2 className="animate-spin size-5 " />
@@ -170,6 +172,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
             No Data
           </div>
         )}
+
         {userList && !isLoading && !isError && (
           <table className="table-users relative w-full rounded-sm">
             <thead className="bg-[#FAFAFA] text-[#111111]/60">
@@ -291,7 +294,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
           </table>
         )}
         {userList?.length === 0 && (
-          <p className="mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+          <p className="empty-state mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
         )}
         {!isLoading && !isError && (
           <div className="pagination flex flex-col w-full items-center gap-3">
