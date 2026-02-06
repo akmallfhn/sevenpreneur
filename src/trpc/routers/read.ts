@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { readAdv } from "./ads/read.ads";
 import { readAIResult } from "./ai_tool/read.ai_tool";
 import { readArticle } from "./article/read.article";
+import { readBA } from "./ba/read.ba";
 import { readEvent } from "./event/read.event";
 import { readLMS } from "./lms/read.lms";
 import { readLookup } from "./lookup/read.lookup";
@@ -34,6 +35,14 @@ export const readRouter = createTRPCRouter({
   submission: readLMS.submission,
   submissionByProject: readLMS.submissionByProject,
   attendance: readLMS.attendance,
+
+  // Business-assessment-related //
+
+  ba: {
+    category: readBA.category,
+    subcategory: readBA.subcategory,
+    question: readBA.question,
+  },
 
   // Playlist-related //
 
