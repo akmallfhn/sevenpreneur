@@ -39,6 +39,7 @@
   --color-success-foreground: #499e95;
   --color-danger-background: #f6d7e0;
   --color-danger-foreground: #df396a;
+  --breakpoint-xs: 31.75rem;
   --breakpoint-3xl: 120rem;
   --breakpoint-4xl: 160rem;
   --breakpoint-5xl: 215rem;
