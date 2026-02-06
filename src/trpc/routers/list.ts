@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { listAITool } from "./ai_tool/list.ai_tool";
 import { listArticle } from "./article/list.article";
+import { listBA } from "./ba/list.ba";
 import { listEvent } from "./event/list.event";
 import { listLMS } from "./lms/list.lms";
 import { listLookup } from "./lookup/list.lookup";
@@ -36,6 +37,14 @@ export const listRouter = createTRPCRouter({
   projects: listLMS.projects,
   submissions: listLMS.submissions,
   attendance_counts: listLMS.attendance_counts,
+
+  // Business-assessment-related //
+
+  ba: {
+    categories: listBA.categories,
+    subcategories: listBA.subcategories,
+    questions: listBA.questions,
+  },
 
   // Playlist-related //
 

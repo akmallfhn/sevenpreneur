@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { deleteAITool } from "./ai_tool/delete.ai_tool";
 import { deleteArticle } from "./article/delete.article";
+import { deleteBA } from "./ba/delete.ba";
 import { deleteEvent } from "./event/delete.event";
 import { deleteLMS } from "./lms/delete.lms";
 import { deletePlaylist } from "./playlist/delete.playlist";
@@ -24,6 +25,14 @@ export const deleteRouter = createTRPCRouter({
   discussionReply: deleteLMS.discussionReply,
   project: deleteLMS.project,
   submission: deleteLMS.submission,
+
+  // Business-assessment-related //
+
+  ba: {
+    category: deleteBA.category,
+    subcategory: deleteBA.subcategory,
+    question: deleteBA.question,
+  },
 
   // Playlist-related //
 

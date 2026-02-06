@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { createArticle } from "./article/create.article";
+import { createBA } from "./ba/create.ba";
 import { createEvent } from "./event/create.event";
 import { createLMS } from "./lms/create.lms";
 import { createPlaylist } from "./playlist/create.playlist";
@@ -25,6 +26,14 @@ export const createRouter = createTRPCRouter({
   submission: createLMS.submission,
   checkIn: createLMS.checkIn,
   checkOut: createLMS.checkOut,
+
+  // Business-assessment-related //
+
+  ba: {
+    category: createBA.category,
+    subcategory: createBA.subcategory,
+    question: createBA.question,
+  },
 
   // Playlist-related //
 

@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { updateAdv } from "./ads/update.ads";
 import { updateArticle } from "./article/update.article";
+import { updateBA } from "./ba/update.ba";
 import { updateEvent } from "./event/update.event";
 import { updateLMS } from "./lms/update.lms";
 import { updatePlaylist } from "./playlist/update.playlist";
@@ -27,6 +28,14 @@ export const updateRouter = createTRPCRouter({
   discussionReply: updateLMS.discussionReply,
   project: updateLMS.project,
   submission: updateLMS.submission,
+
+  // Business-assessment-related //
+
+  ba: {
+    category: updateBA.category,
+    subcategory: updateBA.subcategory,
+    question: updateBA.question,
+  },
 
   // Playlist-related //
 
