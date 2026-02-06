@@ -3,7 +3,7 @@ import { STATUS_OK } from "@/lib/status_code";
 import { roleBasedProcedure } from "@/trpc/init";
 import { calculatePage } from "@/trpc/utils/paging";
 import {
-  numberIsPositive,
+  numberIsPosInt,
   numberIsRoleID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -14,8 +14,8 @@ export const listUserData = {
     .input(
       z.object({
         role_id: numberIsRoleID().optional(),
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
         keyword: stringNotBlank().optional(),
       })
     )

@@ -9,7 +9,7 @@ import { readFailedNotFound } from "@/trpc/utils/errors";
 import { calculatePage } from "@/trpc/utils/paging";
 import {
   numberIsID,
-  numberIsPositive,
+  numberIsPosInt,
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -29,8 +29,8 @@ export const listLMS = {
   cohorts: publicProcedure
     .input(
       z.object({
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
         keyword: stringNotBlank().optional(),
       })
     )
@@ -261,8 +261,8 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
   enrolledCohorts: loggedInProcedure
     .input(
       z.object({
-        page: numberIsPositive().optional(),
-        page_size: numberIsPositive().optional(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
         keyword: stringNotBlank().optional(),
       })
     )

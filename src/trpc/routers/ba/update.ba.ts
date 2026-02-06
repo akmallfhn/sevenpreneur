@@ -3,6 +3,7 @@ import { administratorProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
   numberIsID,
+  numberIsPosInt,
   numberIsPositive,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -16,7 +17,7 @@ export const updateBA = {
         id: numberIsID(),
         name: stringNotBlank().optional(),
         weight: numberIsPositive().optional(),
-        num_order: numberIsPositive().nullable().optional(),
+        num_order: numberIsPosInt().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -47,7 +48,7 @@ export const updateBA = {
         id: numberIsID(),
         category_id: numberIsID().optional(),
         name: stringNotBlank().optional(),
-        num_order: numberIsPositive().nullable().optional(),
+        num_order: numberIsPosInt().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -85,7 +86,7 @@ export const updateBA = {
         hint: stringNotBlank().optional(),
         weight: numberIsPositive().optional(),
         status: z.enum(StatusEnum).optional(),
-        num_order: numberIsPositive().nullable().optional(),
+        num_order: numberIsPosInt().nullable().optional(),
       })
     )
     .mutation(async (opts) => {

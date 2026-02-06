@@ -19,20 +19,25 @@ export function stringIsNanoid(): z.ZodString {
   return z.string().trim().min(21);
 }
 
-export function numberIsID(): z.ZodNumber {
-  // Number should be 1 or bigger
-  return z.number().finite().min(1);
+export function numberIsID(): z.ZodInt {
+  // Number should be an integer, 1 or bigger
+  return z.int().min(1);
 }
 
-export function numberIsRoleID(): z.ZodNumber {
-  // Number should be 0 or bigger
+export function numberIsRoleID(): z.ZodInt {
+  // Number should be an integer, 0 or bigger
   // Administrator role has ID 0
-  return z.number().finite().min(0);
+  return z.int().min(0);
+}
+
+export function numberIsPosInt(): z.ZodInt {
+  // Number should be an integer, 1 or bigger
+  return z.int().min(1);
 }
 
 export function numberIsPositive(): z.ZodNumber {
-  // Number should be 1 or bigger
-  return z.number().finite().min(1);
+  // Number should be greater than 0
+  return z.number().gt(0);
 }
 
 export function objectHasOnlyID() {
@@ -53,7 +58,7 @@ export function objectHasOnlyUUID() {
 export function arrayArticleBodyContent() {
   return z.array(
     z.object({
-      index_order: numberIsPositive(),
+      index_order: numberIsPosInt(),
       sub_heading: stringNotBlank().nullable(),
       image_path: stringNotBlank().nullable(),
       image_desc: stringNotBlank().nullable(),
