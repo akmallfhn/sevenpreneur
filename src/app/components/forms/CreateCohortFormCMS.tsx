@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
+import UploadImageCohortCMS from "../fields/UploadImageCohortCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
@@ -117,7 +117,7 @@ export default function CreateCohortFormCMS({
       return;
     }
     const invalidTier = formData.cohortPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim()
+      (tier) => !tier.name.trim() || !tier.amount.trim(),
     );
     if (formData.cohortPriceTiers.length === 0 || invalidTier) {
       toast.error("A cohort with no price? Sounds generous");
@@ -153,7 +153,7 @@ export default function CreateCohortFormCMS({
               description: err.message,
             });
           },
-        }
+        },
       );
     } catch (error) {
       console.error(error);
@@ -175,7 +175,7 @@ export default function CreateCohortFormCMS({
       >
         <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
-            <UploadThumbnailCohortCMS
+            <UploadImageCohortCMS
               value={formData.cohortImage}
               onUpload={handleImageForm}
             />
@@ -210,7 +210,7 @@ export default function CreateCohortFormCMS({
                   checked={formData.cohortStatus === "ACTIVE"}
                   onCheckedChange={(checked) =>
                     handleInputChange("cohortStatus")(
-                      checked ? "ACTIVE" : "INACTIVE"
+                      checked ? "ACTIVE" : "INACTIVE",
                     )
                   }
                 />

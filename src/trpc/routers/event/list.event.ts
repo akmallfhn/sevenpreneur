@@ -17,7 +17,7 @@ export const listEvent = {
         page: numberIsPositive().optional(),
         page_size: numberIsPositive().optional(),
         keyword: stringNotBlank().optional(),
-      })
+      }),
     )
     .query(async (opts) => {
       const whereClause = {
@@ -42,7 +42,7 @@ export const listEvent = {
         await opts.ctx.prisma.event.aggregate({
           _count: true,
           where: whereClause,
-        })
+        }),
       );
 
       const eventList = await opts.ctx.prisma.event.findMany({
@@ -79,13 +79,14 @@ export const listEvent = {
           .filter((entry) =>
             !opts.ctx.user || opts.ctx.user.role.name !== "Administrator"
               ? entry.status === StatusEnum.ACTIVE
-              : true
+              : true,
           )
           .map((entry) => {
             return {
               id: entry.id,
               name: entry.name,
               amount: entry.amount,
+              status: entry.status,
             };
           });
         return {
@@ -94,6 +95,7 @@ export const listEvent = {
           image: entry.image,
           status: entry.status,
           slug_url: entry.slug_url,
+          location_name: entry.location_name,
           start_date: entry.start_date,
           end_date: entry.end_date,
           prices: returnedEventPrices,
@@ -117,7 +119,7 @@ export const listEvent = {
     .input(
       z.object({
         event_id: numberIsID(),
-      })
+      }),
     )
     .query(async (opts) => {
       const eventPricesList = await opts.ctx.prisma.eventPrice.findMany({

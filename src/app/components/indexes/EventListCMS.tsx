@@ -22,20 +22,17 @@ import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
-import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import CreateEventFormCMS from "../forms/CreateEventFormCMS";
 
 dayjs.extend(localizedFormat);
 
-interface DiscountListCMSProps {
+interface EventListCMSProps {
   sessionToken: string;
 }
 
-export default function DiscountListCMS({
-  sessionToken,
-}: DiscountListCMSProps) {
+export default function EventListCMS({ sessionToken }: EventListCMSProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("id");
@@ -67,10 +64,10 @@ export default function DiscountListCMS({
   // Open and close dropdown
   const handleActionsDropdown = (
     e: React.MouseEvent<HTMLButtonElement>,
-    discountId: number,
+    eventId: number,
   ) => {
     e.stopPropagation();
-    setActionsOpened((prev) => (prev === discountId ? null : discountId));
+    setActionsOpened((prev) => (prev === eventId ? null : eventId));
   };
 
   // Close dropdown outside
@@ -91,37 +88,37 @@ export default function DiscountListCMS({
   }, []);
 
   // Push Parameter to URL
-  const editDiscountForm = (discountId: number) => {
-    setIsOpenEditForm(String(discountId));
-    router.push(`/discounts?id=${discountId}`, { scroll: false });
+  const editEventForm = (eventId: number) => {
+    setIsOpenEditForm(String(eventId));
+    router.push(`/events?id=${eventId}`, { scroll: false });
   };
 
   // Close edit form when close
-  const handleCloseEditDiscount = () => {
+  const handleCloseEditEvent = () => {
     setIsOpenEditForm(null);
-    router.push("/discounts", { scroll: false });
+    router.push("/events", { scroll: false });
   };
 
-  // Fetch tRPC for Discount List
-  const { data, isLoading, isError } = trpc.list.discounts.useQuery(
+  // Fetch tRPC for Event List
+  const { data, isLoading, isError } = trpc.list.events.useQuery(
     {},
     { enabled: !!sessionToken },
   );
-  const discountList = data?.list;
+  const eventList = data?.list;
 
-  // Function to delete discount
-  const deleteDiscount = trpc.delete.discount.useMutation();
+  // Function to delete user
+  const deleteEvent = trpc.delete.event.useMutation();
   const handleDelete = () => {
     if (!deleteTargetItem) return;
-    deleteDiscount.mutate(
+    deleteEvent.mutate(
       { id: deleteTargetItem.id },
       {
         onSuccess: () => {
           toast.success("Delete success");
-          utils.list.discounts.invalidate();
+          utils.list.events.invalidate();
         },
         onError: (err) => {
-          toast.error("Failed to delete discount", {
+          toast.error("Failed to delete event", {
             description: `${err}`,
           });
         },
@@ -136,21 +133,19 @@ export default function DiscountListCMS({
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href="/discounts" isCurrentPage>
-                Discounts
-              </AppBreadcrumbItem>
+              <AppBreadcrumbItem isCurrentPage>Events</AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
               <TitleRevealCMS
-                titlePage="Discount List"
-                descPage="Manage discounts for all product easily"
+                titlePage="Event List"
+                descPage="Manage event listings, details, and maintain content efficiently"
               />
               <AppButton
                 variant="cmsPrimary"
                 onClick={() => setIsOpenCreateForm(true)}
               >
                 <PlusCircle className="size-5" />
-                New Discount
+                Create Event
               </AppButton>
             </div>
           </div>
@@ -174,33 +169,27 @@ export default function DiscountListCMS({
                 <tr>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Discount Code`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Rate`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Event date`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Start date`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Expired date`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Location`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
                 </tr>
               </thead>
               <tbody>
-                {discountList?.map((post, index) => (
+                {eventList?.map((post, index) => (
                   <tr
                     className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
                     key={index}
                   >
                     <TableCellCMS>{index + 1}</TableCellCMS>
                     <TableCellCMS>{post.name}</TableCellCMS>
-                    <TableCellCMS>{post.code}</TableCellCMS>
-                    <TableCellCMS>{`${post.calc_percent}%`}</TableCellCMS>
-                    <TableCellCMS>
-                      <StatusLabelCMS variants={post.status} />
-                    </TableCellCMS>
                     <TableCellCMS>
                       {dayjs(post.start_date).format("D MMM YYYY HH:mm")}
                     </TableCellCMS>
                     <TableCellCMS>
-                      {dayjs(post.end_date).format("D MMM YYYY HH:mm")}
+                      <StatusLabelCMS variants={post.status} />
                     </TableCellCMS>
+                    <TableCellCMS>{post.location_name}</TableCellCMS>
                     <TableCellCMS>
                       <div
                         className="actions-button flex relative"
@@ -221,7 +210,7 @@ export default function DiscountListCMS({
                           <AppDropdownItemList
                             menuIcon={<Settings2 className="size-4" />}
                             menuName="Edit Details"
-                            onClick={() => editDiscountForm(post.id)}
+                            onClick={() => editEventForm(post.id)}
                           />
                           <AppDropdownItemList
                             menuIcon={<Trash2 className="size-4" />}
@@ -248,22 +237,21 @@ export default function DiscountListCMS({
 
       {/* Open Create Form */}
       {isOpenCreateForm && (
-        <CreateDiscountFormCMS
-          sessionToken={sessionToken}
+        <CreateEventFormCMS
           isOpen={isOpenCreateForm}
           onClose={() => setIsOpenCreateForm(false)}
         />
       )}
 
       {/* Open Edit Form */}
-      {isOpenEditForm && (
+      {/* {isOpenEditForm && (
         <EditDiscountFormCMS
           sessionToken={sessionToken}
           discountId={Number(selectedId)}
           isOpen={!!isOpenEditForm}
-          onClose={handleCloseEditDiscount}
+          onClose={handleCloseEditEvent}
         />
-      )}
+      )} */}
 
       {/* Open Dropdown */}
       {isOpenDeleteConfirmation && (

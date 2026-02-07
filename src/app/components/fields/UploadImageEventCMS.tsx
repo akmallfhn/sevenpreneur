@@ -5,15 +5,15 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-interface UploadThumbnailCohortCMSProps {
+interface UploadImageEventCMSProps {
   onUpload: (url: string | null) => void;
   value: string;
 }
 
-export default function UploadThumbnailCohortCMS({
+export default function UploadImageEventCMS({
   onUpload,
   value,
-}: UploadThumbnailCohortCMSProps) {
+}: UploadImageEventCMSProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false); // State upload to Supabase
   const [loaded, setLoaded] = useState(false); // State rendering in browser
@@ -33,15 +33,15 @@ export default function UploadThumbnailCohortCMS({
 
   // Upload File to Supabase
   const handleUploadFiles = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
 
     // File validation
     if (!file) return;
     if (file?.size < 1) return;
-    if (file?.size > 1024 * 1024 * 2) {
-      toast.error("Image must be smaller than 2MB");
+    if (file?.size > 1024 * 624) {
+      toast.error("Image must be smaller than 500 KB");
       return;
     }
     if (!allowedFormat.includes(file.type)) {
@@ -57,7 +57,7 @@ export default function UploadThumbnailCohortCMS({
       return;
     }
     const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `cohort/${fileName}`;
+    const filePath = `events/${fileName}`;
 
     // Upload to Supabase
     try {
@@ -117,7 +117,7 @@ export default function UploadThumbnailCohortCMS({
                 <span className="text-destructive">*</span>
               </p>
               <p className="text-sm font-medium text-black/50">
-                Upload a 1280x720 px image and keep it under 2 MB
+                Upload a 1280x720 px image and keep it under 500 KB
               </p>
             </div>
           </div>

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import UploadThumbnailCohortCMS from "../fields/UploadThumbnailCohortCMS";
+import UploadThumbnailCohortCMS from "../fields/UploadImageCohortCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
@@ -70,7 +70,7 @@ export default function EditCohortFormCMS({
           id: post.id,
           name: post.name,
           amount: post.amount,
-        })
+        }),
       ) || [],
   });
 
@@ -92,7 +92,7 @@ export default function EditCohortFormCMS({
             id: post.id,
             name: post.name,
             amount: post.amount,
-          })
+          }),
         ),
       });
     }
@@ -162,7 +162,7 @@ export default function EditCohortFormCMS({
       return;
     }
     const invalidTier = formData.cohortPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim()
+      (tier) => !tier.name.trim() || !tier.amount.trim(),
     );
     if (formData.cohortPriceTiers.length === 0 || invalidTier) {
       toast.error("A cohort with no price? Sounds generous");
@@ -182,7 +182,7 @@ export default function EditCohortFormCMS({
       });
       // Use id to mapping initial Cohort Price data
       const initialPricesMap = initialData?.cohort_prices.map(
-        (post) => post.id
+        (post) => post.id,
       );
       // Update & Create Cohort Prices
       await Promise.all(
@@ -207,7 +207,7 @@ export default function EditCohortFormCMS({
               status: "ACTIVE",
             });
           }
-        })
+        }),
       );
       // Get all id of tier that are on change in current form → This is the list that should remain in the database.
       const currentIds = formData.cohortPriceTiers
@@ -225,7 +225,7 @@ export default function EditCohortFormCMS({
           } catch {
             toast.error("Failed to delete price tier");
           }
-        })
+        }),
       );
 
       // Final toast & refetch
@@ -301,7 +301,7 @@ export default function EditCohortFormCMS({
                     checked={formData.cohortStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("cohortStatus")(
-                        checked ? "ACTIVE" : "INACTIVE"
+                        checked ? "ACTIVE" : "INACTIVE",
                       )
                     }
                   />

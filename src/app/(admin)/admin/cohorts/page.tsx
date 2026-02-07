@@ -22,11 +22,9 @@ export default async function CohortsPageCMS() {
   }
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <CohortListCMS
-        sessionToken={sessionToken}
-        sessionUserRole={userSession.user.role_id}
-      />
-    </div>
+    <CohortListCMS
+      sessionToken={sessionToken}
+      sessionUserRole={userSession.user.role_id}
+    />
   );
 }

@@ -1,9 +1,9 @@
-import DiscountListCMS from "@/app/components/indexes/DiscountListCMS";
+import EventListCMS from "@/app/components/indexes/EventListCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
-export default async function DiscountsPageCMS() {
+export default async function EventsPageCMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -11,9 +11,9 @@ export default async function DiscountsPageCMS() {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListDiscount = [0];
+  const allowedRolesListEvent = [0, 2];
 
-  if (!allowedRolesListDiscount.includes(userSession.user.role_id)) {
+  if (!allowedRolesListEvent.includes(userSession.user.role_id)) {
     return (
       <div className="forbidden flex w-full h-full pl-64">
         <ForbiddenComponent />
@@ -21,5 +21,5 @@ export default async function DiscountsPageCMS() {
     );
   }
 
-  return <DiscountListCMS sessionToken={sessionToken} />;
+  return <EventListCMS sessionToken={sessionToken} />;
 }

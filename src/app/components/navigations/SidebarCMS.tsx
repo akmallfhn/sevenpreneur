@@ -6,6 +6,7 @@ import { setSessionToken, trpc } from "@/trpc/client";
 import {
   BanknoteArrowDown,
   CircleUserIcon,
+  FlagTriangleRight,
   Globe,
   HouseIcon,
   Loader2,
@@ -33,30 +34,35 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     domain = "example.com:3000";
   }
 
+  // Access Mapping
   const allowedRolesMenuCohorts = [0, 1, 2];
+  const allowedRolesMenuEvents = [0, 2];
   const allowedRolesMenuDiscounts = [0];
   const allowedRolesMenuUsers = [0, 1, 2];
   const allowedRolesMenuTransactions = [0];
-  const allowedRolesMenuWebMarketing = [0];
+  const allowedRolesMenuWebMarketing = [0, 4];
   const allowedRolesMenuArticles = [0];
 
   const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
+  );
+  const isAllowedMenuEvents = allowedRolesMenuEvents.includes(
+    props.sessionUserRole,
   );
   const isAllowedMenuDiscounts = allowedRolesMenuDiscounts.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
   const isAllowedMenuUsers = allowedRolesMenuUsers.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
   const isAllowedMenuTransactions = allowedRolesMenuTransactions.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
   const isAllowedMenuWebMarketing = allowedRolesMenuWebMarketing.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
   const isAllowedMenuArticles = allowedRolesMenuArticles.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
 
   useEffect(() => {
@@ -67,7 +73,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
 
   const { data, isLoading, isError } = trpc.auth.checkSession.useQuery(
     undefined,
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
 
   // Logout function
@@ -130,13 +136,24 @@ export default function SidebarCMS(props: SidebarCMSProps) {
             menuIcon={<HouseIcon />}
             exact
           />
-          {(isAllowedMenuCohorts || isAllowedMenuDiscounts) && (
+          {(isAllowedMenuCohorts ||
+            isAllowedMenuDiscounts ||
+            isAllowedMenuEvents) && (
             <SidebarMenuGroupCMS groupName="Product">
-              <SidebarMenuItemCMS
-                menuName="Cohorts"
-                menuURL="/cohorts"
-                menuIcon={<Presentation />}
-              />
+              {isAllowedMenuCohorts && (
+                <SidebarMenuItemCMS
+                  menuName="Cohorts"
+                  menuURL="/cohorts"
+                  menuIcon={<Presentation />}
+                />
+              )}
+              {isAllowedMenuEvents && (
+                <SidebarMenuItemCMS
+                  menuName="Events"
+                  menuURL="/events"
+                  menuIcon={<FlagTriangleRight />}
+                />
+              )}
               {isAllowedMenuDiscounts && (
                 <SidebarMenuItemCMS
                   menuName="Discounts"
