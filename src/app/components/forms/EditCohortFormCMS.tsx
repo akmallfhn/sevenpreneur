@@ -23,12 +23,7 @@ interface EditCohortFormCMSProps {
   onClose: () => void;
 }
 
-export default function EditCohortFormCMS({
-  sessionToken,
-  cohortId,
-  isOpen,
-  onClose,
-}: EditCohortFormCMSProps) {
+export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editCohort = trpc.update.cohort.useMutation();
   const editCohortPrices = trpc.update.cohortPrice.useMutation();
@@ -41,7 +36,10 @@ export default function EditCohortFormCMS({
     data: cohortDetailsData,
     isLoading: isLoadingInitial,
     isError: isErrorInitial,
-  } = trpc.read.cohort.useQuery({ id: cohortId }, { enabled: !!sessionToken });
+  } = trpc.read.cohort.useQuery(
+    { id: props.cohortId },
+    { enabled: !!props.sessionToken },
+  );
   const initialData = cohortDetailsData?.cohort;
 
   // Beginning State
@@ -58,7 +56,7 @@ export default function EditCohortFormCMS({
     cohortImage: initialData?.image || "",
     cohortDescription: initialData?.description || "",
     cohortStartDate: initialData?.start_date
-      ? dayjs(initialData?.start_date).format("YYYY-MM-DDTHH:mm")
+      ? dayjs(initialData.start_date).format("YYYY-MM-DDTHH:mm")
       : "",
     cohortEndDate: initialData?.end_date
       ? dayjs(initialData.end_date).format("YYYY-MM-DDTHH:mm")
@@ -66,14 +64,21 @@ export default function EditCohortFormCMS({
     cohortStatus: initialData?.status as StatusType,
     cohortPriceTiers:
       initialData?.cohort_prices.map(
-        (post: { id: number; name: string; amount: string }) => ({
+        (post: {
+          id: number;
+          name: string;
+          amount: string;
+          status: StatusType;
+        }) => ({
           id: post.id,
           name: post.name,
           amount: post.amount,
+          status: post.status,
         }),
       ) || [],
   });
 
+  // Keep updated data
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -88,10 +93,16 @@ export default function EditCohortFormCMS({
           : "",
         cohortStatus: initialData.status as StatusType,
         cohortPriceTiers: initialData.cohort_prices.map(
-          (post: { id: number; name: string; amount: string }) => ({
+          (post: {
+            id: number;
+            name: string;
+            amount: string;
+            status: StatusType;
+          }) => ({
             id: post.id,
             name: post.name,
             amount: post.amount,
+            status: post.status,
           }),
         ),
       });
@@ -128,6 +139,10 @@ export default function EditCohortFormCMS({
     e.preventDefault();
     setIsSubmitting(true);
 
+    const invalidTier = formData.cohortPriceTiers.some(
+      (tier) => !tier.name.trim() || !tier.amount.trim(),
+    );
+
     // Required field checking
     if (!formData.cohortName) {
       toast.error("Don't leave your cohort nameless");
@@ -161,9 +176,6 @@ export default function EditCohortFormCMS({
       setIsSubmitting(false);
       return;
     }
-    const invalidTier = formData.cohortPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim(),
-    );
     if (formData.cohortPriceTiers.length === 0 || invalidTier) {
       toast.error("A cohort with no price? Sounds generous");
       setIsSubmitting(false);
@@ -172,7 +184,7 @@ export default function EditCohortFormCMS({
 
     try {
       await editCohort.mutateAsync({
-        id: cohortId,
+        id: props.cohortId,
         name: formData.cohortName.trim(),
         description: formData.cohortDescription.trim(),
         status: formData.cohortStatus,
@@ -180,10 +192,12 @@ export default function EditCohortFormCMS({
         start_date: new Date(formData.cohortStartDate).toISOString(),
         end_date: new Date(formData.cohortEndDate).toISOString(),
       });
+
       // Use id to mapping initial Cohort Price data
       const initialPricesMap = initialData?.cohort_prices.map(
         (post) => post.id,
       );
+
       // Update & Create Cohort Prices
       await Promise.all(
         formData.cohortPriceTiers.map(async (tier) => {
@@ -191,20 +205,20 @@ export default function EditCohortFormCMS({
           // If the tier has an id → it means this is old data, so do an update.
           if (tier.id) {
             await editCohortPrices.mutateAsync({
-              cohort_id: cohortId,
+              cohort_id: props.cohortId,
               id: tier.id,
               name: tier.name.trim(),
               amount: Number(tier.amount),
-              status: "ACTIVE",
+              status: tier.status,
             });
           } else {
             // new → create
             // If the id doesn't exist → it means this is new data, so create it.
             await createCohortPrices.mutateAsync({
-              cohort_id: cohortId,
+              cohort_id: props.cohortId,
               name: tier.name.trim(),
               amount: Number(tier.amount),
-              status: "ACTIVE",
+              status: tier.status,
             });
           }
         }),
@@ -232,7 +246,7 @@ export default function EditCohortFormCMS({
       await utils.read.cohort.invalidate();
       await utils.list.cohorts.invalidate();
       toast.success("Cohort updated successfully");
-      onClose();
+      props.onClose();
     } catch {
       toast.error("Something went wrong. Failed to update cohort.");
       setIsSubmitting(false);
@@ -245,8 +259,8 @@ export default function EditCohortFormCMS({
     <AppSheet
       sheetName="Edit Cohort"
       sheetDescription="Update your cohort's details to keep everything current and aligned."
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
     >
       {isLoadingInitial && (
         <div className="flex w-full h-full py-10 items-center justify-center text-alternative">

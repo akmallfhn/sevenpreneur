@@ -55,6 +55,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
       {
         name: "",
         amount: "",
+        status: "ACTIVE",
       },
     ],
   });
@@ -216,7 +217,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
           event_prices: formData.eventPriceTiers.map((tier: PriceTier) => ({
             name: tier.name.trim(),
             amount: Number(tier.amount),
-            status: "ACTIVE",
+            status: tier.status,
           })),
 
           // Optional field
@@ -254,7 +255,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
   return (
     <AppSheet
       sheetName="Create Event"
-      sheetDescription=""
+      sheetDescription="Add a new event and configure the information."
       isOpen={props.isOpen}
       onClose={props.onClose}
     >

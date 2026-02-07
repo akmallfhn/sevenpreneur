@@ -9,10 +9,10 @@ export const deleteEvent = {
     .mutation(async (opts) => {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedEvent: number = await opts.ctx.prisma
-        .$executeRaw`UPDATE events SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
+        .$executeRaw`UPDATE events SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id}::uuid WHERE id = ${opts.input.id};`;
       if (deletedEvent > 1) {
         console.error(
-          "delete.event: More-than-one events are deleted at once."
+          "delete.event: More-than-one events are deleted at once.",
         );
       }
       return {

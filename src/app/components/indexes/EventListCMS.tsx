@@ -25,6 +25,7 @@ import TableHeadCMS from "../elements/TableHeadCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import CreateEventFormCMS from "../forms/CreateEventFormCMS";
+import EditEventFormCMS from "../forms/EditEventFormCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -244,14 +245,14 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
       )}
 
       {/* Open Edit Form */}
-      {/* {isOpenEditForm && (
-        <EditDiscountFormCMS
+      {isOpenEditForm && (
+        <EditEventFormCMS
           sessionToken={sessionToken}
-          discountId={Number(selectedId)}
+          eventId={Number(selectedId)}
           isOpen={!!isOpenEditForm}
           onClose={handleCloseEditEvent}
         />
-      )} */}
+      )}
 
       {/* Open Dropdown */}
       {isOpenDeleteConfirmation && (

@@ -21,10 +21,7 @@ interface CreateCohortFormCMSProps {
   onClose: () => void;
 }
 
-export default function CreateCohortFormCMS({
-  isOpen,
-  onClose,
-}: CreateCohortFormCMSProps) {
+export default function CreateCohortFormCMS(props: CreateCohortFormCMSProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const createCohort = trpc.create.cohort.useMutation();
   const utils = trpc.useUtils();
@@ -49,6 +46,7 @@ export default function CreateCohortFormCMS({
       {
         name: "",
         amount: "",
+        status: "ACTIVE",
       },
     ],
   });
@@ -138,7 +136,7 @@ export default function CreateCohortFormCMS({
           cohort_prices: formData.cohortPriceTiers.map((tier: PriceTier) => ({
             name: tier.name.trim(),
             amount: Number(tier.amount),
-            status: "ACTIVE",
+            status: tier.status,
           })),
         },
         {
@@ -146,7 +144,7 @@ export default function CreateCohortFormCMS({
             toast.success("All set! Your cohort is now live and ready to grow");
             setIsSubmitting(false);
             utils.list.cohorts.invalidate();
-            onClose();
+            props.onClose();
           },
           onError: (err) => {
             toast.error("Failed to create cohort", {
@@ -166,8 +164,8 @@ export default function CreateCohortFormCMS({
     <AppSheet
       sheetName="Create Cohort Program"
       sheetDescription="Define your program and launch a new cohort now"
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
     >
       <form
         className="relative w-full h-full flex flex-col"
