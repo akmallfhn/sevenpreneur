@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import UploadThumbnailCohortCMS from "../fields/UploadImageCohortCMS";
+import UploadImageCMS from "../fields/UploadImageCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
@@ -280,9 +280,13 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
         >
           <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              <UploadThumbnailCohortCMS
+              <UploadImageCMS
+                fileValue={formData.cohortImage}
                 onUpload={handleImageForm}
-                value={formData.cohortImage}
+                folderPath="cohorts"
+                fileBytes={1024 * 624}
+                fileSize="500 KB"
+                imageRatio="16/9"
               />
               <InputCMS
                 inputId="cohort-name"

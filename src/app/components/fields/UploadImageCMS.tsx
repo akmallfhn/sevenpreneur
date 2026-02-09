@@ -5,15 +5,16 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-interface UploadImageEventCMSProps {
+interface UploadImageCMSProps {
+  fileBytes: number;
+  fileSize: string;
+  fileValue: string;
+  folderPath: string;
+  imageRatio: string;
   onUpload: (url: string | null) => void;
-  value: string;
 }
 
-export default function UploadImageEventCMS({
-  onUpload,
-  value,
-}: UploadImageEventCMSProps) {
+export default function UploadImageCMS(props: UploadImageCMSProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false); // State upload to Supabase
   const [loaded, setLoaded] = useState(false); // State rendering in browser
@@ -21,7 +22,7 @@ export default function UploadImageEventCMS({
   // Iteration render
   useEffect(() => {
     setLoaded(false);
-  }, [value]);
+  }, [props.fileValue]);
 
   // Trigger input via button
   const handleUploadClick = () => {
@@ -40,8 +41,8 @@ export default function UploadImageEventCMS({
     // File validation
     if (!file) return;
     if (file?.size < 1) return;
-    if (file?.size > 1024 * 624) {
-      toast.error("Image must be smaller than 500 KB");
+    if (file?.size > props.fileBytes) {
+      toast.error(`Image must be smaller than ${props.fileSize}`);
       return;
     }
     if (!allowedFormat.includes(file.type)) {
@@ -57,7 +58,7 @@ export default function UploadImageEventCMS({
       return;
     }
     const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `events/${fileName}`;
+    const filePath = `${props.folderPath}/${fileName}`;
 
     // Upload to Supabase
     try {
@@ -77,7 +78,7 @@ export default function UploadImageEventCMS({
         .from("sevenpreneur")
         .getPublicUrl(filePath);
       if (publicUrlData?.publicUrl) {
-        onUpload(publicUrlData.publicUrl);
+        props.onUpload(publicUrlData.publicUrl);
       }
     } catch (error) {
       toast.error("Error", { description: `${error}` });
@@ -88,17 +89,18 @@ export default function UploadImageEventCMS({
 
   // Remove image
   const handleRemoveImage = () => {
-    onUpload(null);
+    props.onUpload(null);
   };
 
   return (
     <div className="upload-file-container flex flex-col gap-1">
       <div
-        className="upload-photo-container flex relative aspect-thumbnail bg-white w-full h-full border border-dashed border-outline cursor-pointer rounded-md overflow-hidden"
+        className={`upload-photo-container flex relative bg-white w-full h-full border border-dashed border-outline cursor-pointer rounded-md overflow-hidden`}
+        style={{ aspectRatio: props.imageRatio }}
         onClick={handleUploadClick}
       >
         {/* Upload message */}
-        {!value && (
+        {!props.fileValue && (
           <div className="upload-helper flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">
             <div className="flex max-w-[86px] aspect-square">
               <Image
@@ -111,27 +113,27 @@ export default function UploadImageEventCMS({
                 height={200}
               />
             </div>
-            <div className="flex flex-col max-w-[300px]">
+            <div className="flex flex-col max-w-[320px]">
               <p className="text-sm font-bold">
-                Upload Thumbnail Image{" "}
-                <span className="text-destructive">*</span>
+                Upload Image <span className="text-destructive">*</span>
               </p>
               <p className="text-sm font-medium text-black/50">
-                Upload a 1280x720 px image and keep it under 500 KB
+                Images should be {props.imageRatio} ratio and under{" "}
+                {props.fileSize}
               </p>
             </div>
           </div>
         )}
 
         {/* Display image */}
-        {value && (
-          <div className="absolute inset-0 z-0">
+        {props.fileValue && (
+          <div className="display-image absolute inset-0 z-0">
             <Image
               className={`object-cover w-full h-full transition-opacity duration-300 ${
                 loaded ? "opacity-100" : "opacity-0"
               }`}
-              src={value}
-              alt="Avatar"
+              src={props.fileValue}
+              alt="Image Upload"
               width={400}
               height={400}
               onLoadingComplete={() => setLoaded(true)}
@@ -140,7 +142,7 @@ export default function UploadImageEventCMS({
         )}
 
         {/* Remove photo button */}
-        {value && !isUploading && (
+        {props.fileValue && !isUploading && (
           <div
             className="remove-photo absolute right-2 top-2 p-1 bg-semi-destructive rounded-full cursor-pointer z-20"
             onClick={(e) => {

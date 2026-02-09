@@ -8,10 +8,9 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
+import UploadImageCMS from "../fields/UploadImageCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
-import UploadImageMobileInterstitialCMS from "../fields/UploadImageMobileInterstitialCMS";
-import UploadImageDesktopInterstitialCMS from "../fields/UploadImageDesktopInterstitialCMS";
 
 interface EditInterstitialAdsFormCMS {
   sessionToken: string;
@@ -21,7 +20,7 @@ interface EditInterstitialAdsFormCMS {
 }
 
 export default function EditInterstitialAdsFormCMS(
-  props: EditInterstitialAdsFormCMS
+  props: EditInterstitialAdsFormCMS,
 ) {
   const editInterstitial = trpc.update.ad.interstitial.useMutation();
   const utils = trpc.useUtils();
@@ -29,7 +28,7 @@ export default function EditInterstitialAdsFormCMS(
 
   const { data, isLoading, isError } = trpc.read.ad.interstitial.useQuery(
     { id: props.interstitialId },
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
   const initialData = data?.interstitial;
 
@@ -163,7 +162,7 @@ export default function EditInterstitialAdsFormCMS(
     }
     if (
       dayjs(formData.interstitialEndDate).isBefore(
-        dayjs(formData.interstitialStartDate)
+        dayjs(formData.interstitialStartDate),
       )
     ) {
       toast.error("Oops! End date must come after the start date");
@@ -198,10 +197,10 @@ export default function EditInterstitialAdsFormCMS(
               "Something went wrong while updating interstitial ads",
               {
                 description: error.message,
-              }
+              },
             );
           },
-        }
+        },
       );
     } catch (error) {
       console.error(error);
@@ -254,13 +253,21 @@ export default function EditInterstitialAdsFormCMS(
                     <span className="label-required text-destructive">*</span>
                   </label>
                   <div className="interstitial-images flex flex-col w-full gap-4">
-                    <UploadImageDesktopInterstitialCMS
-                      value={formData.interstitialImageDesktop}
+                    <UploadImageCMS
+                      fileValue={formData.interstitialImageDesktop}
                       onUpload={handleImageForm("interstitialImageDesktop")}
+                      folderPath="ads"
+                      fileBytes={1024 * 624}
+                      fileSize="500 KB"
+                      imageRatio="17/10"
                     />
-                    <UploadImageMobileInterstitialCMS
-                      value={formData.interstitialImageMobile}
+                    <UploadImageCMS
+                      fileValue={formData.interstitialImageMobile}
                       onUpload={handleImageForm("interstitialImageMobile")}
+                      folderPath="ads"
+                      fileBytes={1024 * 624}
+                      fileSize="500 KB"
+                      imageRatio="9/16"
                     />
                   </div>
                 </div>
@@ -311,7 +318,7 @@ export default function EditInterstitialAdsFormCMS(
                       checked={formData.interstitialStatus === "ACTIVE"}
                       onCheckedChange={(checked) =>
                         handleInputChange("interstitialStatus")(
-                          checked ? "ACTIVE" : "INACTIVE"
+                          checked ? "ACTIVE" : "INACTIVE",
                         )
                       }
                     />

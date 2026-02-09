@@ -42,7 +42,8 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
     "",
   );
 
-  const allowedRolesCreateArticle = [0, 4];
+  // Client-side Authorization
+  const allowedRolesMutateArticle = [0, 4];
 
   // Debounce Typing for 1 second
   useEffect(() => {
@@ -85,11 +86,13 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                 titlePage="SEO Articles"
                 descPage=" SEO content management hub to create, optimize, and drive organic traffic."
               />
-              {allowedRolesCreateArticle.includes(props.sessionUserRole) && (
-                <AppButton variant="cmsPrimary">
-                  <PlusCircle className="size-5" />
-                  Create Article
-                </AppButton>
+              {allowedRolesMutateArticle.includes(props.sessionUserRole) && (
+                <Link href="/articles/create">
+                  <AppButton variant="cmsPrimary">
+                    <PlusCircle className="size-5" />
+                    Create Article
+                  </AppButton>
+                </Link>
               )}
             </div>
           </div>
@@ -252,12 +255,16 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                     </TableCellCMS>
                     <TableCellCMS>
                       <div className="flex flex-col gap-2">
-                        <Link href={`/articles/${post.id}/edit`}>
-                          <AppButton variant="cmsPrimary" size="small">
-                            <FilePenLine className="size-4" />
-                            Edit
-                          </AppButton>
-                        </Link>
+                        {allowedRolesMutateArticle.includes(
+                          props.sessionUserRole,
+                        ) && (
+                          <Link href={`/articles/${post.id}/edit`}>
+                            <AppButton variant="cmsPrimary" size="small">
+                              <FilePenLine className="size-4" />
+                              Edit
+                            </AppButton>
+                          </Link>
+                        )}
                         <Link
                           href={`https://www.${domain}/insights/${post.slug_url}/${post.id}`}
                           target="_blank"

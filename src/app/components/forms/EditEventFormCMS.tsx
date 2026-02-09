@@ -8,14 +8,14 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
+import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import UploadImageEventCMS from "../fields/UploadImageEventCMS";
+import UploadImageCMS from "../fields/UploadImageCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
   PriceTier,
 } from "../steppers/PriceTierStepperCMS";
-import SelectCMS from "../fields/SelectCMS";
 
 interface EditEventFormCMSProps {
   sessionToken: string;
@@ -374,9 +374,13 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
         >
           <div className="form-container flex flex-col px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              <UploadImageEventCMS
-                value={formData.eventImage}
+              <UploadImageCMS
+                fileValue={formData.eventImage}
                 onUpload={handleImageForm}
+                folderPath="events"
+                fileBytes={1024 * 624}
+                fileSize="500 KB"
+                imageRatio="16/9"
               />
               <InputCMS
                 inputId="event-name"

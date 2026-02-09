@@ -34,7 +34,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     domain = "example.com:3000";
   }
 
-  // Access Mapping
+  // Client-side Authorization
   const allowedRolesMenuCohorts = [0, 1, 2];
   const allowedRolesMenuEvents = [0, 2];
   const allowedRolesMenuDiscounts = [0];

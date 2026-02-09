@@ -34,9 +34,10 @@ import AppNumberPagination from "../navigations/AppNumberPagination";
 
 interface UserListCMSProps {
   sessionToken: string;
+  sessionUserRole: number;
 }
 
-export default function UserListCMS({ sessionToken }: UserListCMSProps) {
+export default function UserListCMS(props: UserListCMSProps) {
   const router = useRouter();
   const pageSize = 20;
   const searchParam = useSearchParams();
@@ -58,6 +59,17 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   const setWrapperRef = (id: string) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;
   };
+
+  // Client-side Authorization
+  const allowedRolesMutateUser = [0];
+  const allowedRolesReadUser = [0, 1, 2];
+
+  const isAllowedMutateUser = allowedRolesMutateUser.includes(
+    props.sessionUserRole,
+  );
+  const isAllowedReadUser = allowedRolesReadUser.includes(
+    props.sessionUserRole,
+  );
 
   // Debounce Typing for 1 second
   useEffect(() => {
@@ -96,7 +108,7 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
   // Fetch tRPC User List
   const { data, isLoading, isError } = trpc.list.users.useQuery(
     { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
-    { enabled: !!sessionToken },
+    { enabled: !!props.sessionToken },
   );
   const userList = data?.list;
 
@@ -135,12 +147,14 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
               titlePage="User List"
               descPage="View and manage all registered users in one place, with quick access to actions like edit or delete."
             />
-            <Link href={"/users/create"} className="w-fit h-fit">
-              <AppButton variant="cmsPrimary">
-                <PlusCircle className="size-5" />
-                Add Account
-              </AppButton>
-            </Link>
+            {isAllowedMutateUser && (
+              <Link href={"/users/create"} className="w-fit h-fit">
+                <AppButton variant="cmsPrimary">
+                  <PlusCircle className="size-5" />
+                  Add Account
+                </AppButton>
+              </Link>
+            )}
           </div>
         </div>
         <div className="filter-search flex w-full items-center">
@@ -182,7 +196,9 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                 <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`Register at`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
+                {isAllowedMutateUser && (
+                  <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -191,12 +207,9 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                   className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
                   key={index}
                 >
-                  {/* No */}
                   <TableCellCMS>
                     {(currentPage - 1) * pageSize + (index + 1)}
                   </TableCellCMS>
-
-                  {/* Name & Email */}
                   <TableCellCMS>
                     <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
                       <div className="flex size-9 rounded-full overflow-hidden">
@@ -223,71 +236,70 @@ export default function UserListCMS({ sessionToken }: UserListCMSProps) {
                       </div>
                     </div>
                   </TableCellCMS>
-
-                  {/* Roles */}
                   <TableCellCMS>
                     <RolesLabelCMS
                       labelName={post.role_name}
                       variants={toCamelCase(post.role_name) as RolesUser}
                     />
                   </TableCellCMS>
-
-                  {/* Status */}
                   <TableCellCMS>
                     <StatusLabelCMS variants={post.status as StatusType} />
                   </TableCellCMS>
-
-                  {/* Last Login */}
                   <TableCellCMS>
                     {dayjs(post.created_at).format("D MMM YYYY HH:mm")}
                   </TableCellCMS>
-
-                  {/* Actions */}
-                  <TableCellCMS>
-                    <div
-                      className="actions-button flex relative"
-                      ref={setWrapperRef(post.id)}
-                    >
-                      <AppButton
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => handleActionsDropdown(e, post.id)}
+                  {(isAllowedMutateUser || isAllowedReadUser) && (
+                    <TableCellCMS>
+                      <div
+                        className="actions-button flex relative"
+                        ref={setWrapperRef(post.id)}
                       >
-                        <EllipsisVertical className="size-5" />
-                      </AppButton>
-                      <AppDropdown
-                        isOpen={actionsOpened === post.id}
-                        alignDesktop="right"
-                        onClose={() => setActionsOpened(null)}
-                        // anchorEl={wrapperRef.current[post.id]}
-                      >
-                        <Link href={`/users/${post.id}`}>
-                          <AppDropdownItemList
-                            menuIcon={<Eye className="size-4" />}
-                            menuName="View Profile"
-                          />
-                        </Link>
-                        <Link href={`/users/${post.id}/edit`}>
-                          <AppDropdownItemList
-                            menuIcon={<Settings2 className="size-4" />}
-                            menuName="Edit Profile"
-                          />
-                        </Link>
-                        <AppDropdownItemList
-                          menuIcon={<Trash2 className="size-4" />}
-                          menuName="Delete"
-                          isDestructive
-                          onClick={() => {
-                            setDeleteTargetUser({
-                              id: post.id,
-                              name: post.full_name,
-                            });
-                            setIsOpenDeleteConfirmation(true);
-                          }}
-                        />
-                      </AppDropdown>
-                    </div>
-                  </TableCellCMS>
+                        <AppButton
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => handleActionsDropdown(e, post.id)}
+                        >
+                          <EllipsisVertical className="size-5" />
+                        </AppButton>
+                        <AppDropdown
+                          isOpen={actionsOpened === post.id}
+                          alignDesktop="right"
+                          onClose={() => setActionsOpened(null)}
+                        >
+                          {isAllowedReadUser && (
+                            <Link href={`/users/${post.id}`}>
+                              <AppDropdownItemList
+                                menuIcon={<Eye className="size-4" />}
+                                menuName="View Profile"
+                              />
+                            </Link>
+                          )}
+                          {isAllowedMutateUser && (
+                            <Link href={`/users/${post.id}/edit`}>
+                              <AppDropdownItemList
+                                menuIcon={<Settings2 className="size-4" />}
+                                menuName="Edit Profile"
+                              />
+                            </Link>
+                          )}
+                          {isAllowedMutateUser && (
+                            <AppDropdownItemList
+                              menuIcon={<Trash2 className="size-4" />}
+                              menuName="Delete"
+                              isDestructive
+                              onClick={() => {
+                                setDeleteTargetUser({
+                                  id: post.id,
+                                  name: post.full_name,
+                                });
+                                setIsOpenDeleteConfirmation(true);
+                              }}
+                            />
+                          )}
+                        </AppDropdown>
+                      </div>
+                    </TableCellCMS>
+                  )}
                 </tr>
               ))}
             </tbody>
