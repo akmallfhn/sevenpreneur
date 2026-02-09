@@ -10,9 +10,10 @@ import { toast } from "sonner";
 import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
+import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
+import UploadImageCMS from "../fields/UploadImageCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import UploadImageCMS from "../fields/UploadImageCMS";
 
 export interface BodyContentArticle {
   index_order: number | string;
@@ -301,6 +302,13 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
         {!isLoading && !isError && (
           <div className="editing-area flex w-full gap-6">
             <main className="main-content flex flex-2 flex-col gap-6">
+              <TextAreaTitleCMS
+                textAreaId="title"
+                textAreaPlaceholder="Write title..."
+                characterLength={255}
+                value={formData.articleTitle}
+                onTextAreaChange={handleInputChange("articleTitle")}
+              />
               <div className="image w-full xl:w-3/5">
                 <UploadImageCMS
                   fileValue={formData.articleImage}
