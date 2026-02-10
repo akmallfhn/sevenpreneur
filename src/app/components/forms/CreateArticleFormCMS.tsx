@@ -14,6 +14,7 @@ import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 
 export interface BodyContentArticle {
   index_order: number | string;
@@ -328,9 +329,13 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                 onTextAreaChange={handleInputChange("articleInsight")}
                 required
               />
+              <TextAreaRichEditorCMS
+                value={formData.articleKeyword}
+                onTextAreaChange={handleInputChange("articleKeyword")}
+              />
             </main>
             <aside className="aside-content flex flex-1 flex-col gap-5">
-              <div className="flex flex-col w-full h-full gap-4 border border-outline rounded-lg">
+              <div className="flex flex-col w-full gap-4 border border-outline rounded-lg">
                 <div className="section-title flex gap-3 px-6 py-3 items-center bg-black text-white rounded-t-lg">
                   <ListMinus />
                   <h2 className="font-bodycopy font-semibold text-sm">
