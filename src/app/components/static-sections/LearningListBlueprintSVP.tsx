@@ -22,10 +22,10 @@ export default function LearningListBlueprintSVP() {
       session_name: "Market Intelligence",
       session_description:
         "Identify real market problems worth solving and scaling.",
-      session_educator: "To Be Announced",
+      session_educator: "Rivan Wijaya",
       session_educator_title: "Director at Nielsen",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tba.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-rivan.webp",
       session_variant: "frameworkSecondary",
     },
     {
