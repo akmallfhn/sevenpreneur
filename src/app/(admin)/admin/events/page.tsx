@@ -10,6 +10,7 @@ export default async function EventsPageCMS() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
   const allowedRolesListEvent = [0, 2];
 

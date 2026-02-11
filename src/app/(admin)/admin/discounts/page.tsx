@@ -10,6 +10,7 @@ export default async function DiscountsPageCMS() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
   const allowedRolesListDiscount = [0];
 

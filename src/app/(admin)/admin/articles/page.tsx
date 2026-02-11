@@ -10,6 +10,7 @@ export default async function ArticlesPageCMS() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
   const allowedRolesListArticle = [0, 4];
 

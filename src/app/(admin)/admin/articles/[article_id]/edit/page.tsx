@@ -18,6 +18,7 @@ export default async function EditArticlePage({
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
   const allowedRolesUpdateArticle = [0, 4];
 

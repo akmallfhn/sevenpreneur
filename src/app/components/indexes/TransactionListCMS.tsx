@@ -73,17 +73,17 @@ export default function TransactionListCMS({
   // Fetch tRPC Product List
   const { data: playlistsData } = trpc.list.playlists.useQuery(
     {},
-    { enabled: !!sessionToken }
+    { enabled: !!sessionToken },
   );
   const playlists = playlistsData?.list;
   const { data: cohortsData } = trpc.list.cohorts.useQuery(
     {},
-    { enabled: !!sessionToken }
+    { enabled: !!sessionToken },
   );
   const cohortList = cohortsData?.list;
   const { data: eventsData } = trpc.list.events.useQuery(
     {},
-    { enabled: !!sessionToken }
+    { enabled: !!sessionToken },
   );
   const eventList = eventsData?.list;
 
@@ -96,7 +96,7 @@ export default function TransactionListCMS({
           label: `Cohort - ${post.name} ${price.name}`,
           type: "COHORT",
           raw_id: price.id,
-        }))
+        })),
       ) || []),
       ...(eventList?.flatMap((post) =>
         post.prices.map((price) => ({
@@ -104,7 +104,7 @@ export default function TransactionListCMS({
           label: `Event - ${post.name} ${price.name}`,
           type: "EVENT",
           raw_id: price.id,
-        }))
+        })),
       ) || []),
       ...(playlists?.map((post) => ({
         value: `PLAYLIST-${post.id}`,
@@ -118,7 +118,7 @@ export default function TransactionListCMS({
   // Handle Product Type
   useEffect(() => {
     const selectedOption = productOptions.find(
-      (opt) => String(opt.value) === String(filterData.productId)
+      (opt) => String(opt.value) === String(filterData.productId),
     );
     if (selectedOption) {
       queueMicrotask(() => {
@@ -139,7 +139,7 @@ export default function TransactionListCMS({
   // Close dropdown outside
   useEffect(() => {
     const handleClickOutside = (
-      event: MouseEvent | (MouseEvent & { target: Node })
+      event: MouseEvent | (MouseEvent & { target: Node }),
     ) => {
       if (
         wrapperRef.current &&
@@ -181,234 +181,236 @@ export default function TransactionListCMS({
         filterData.productType === "PLAYLIST"
           ? Number(
               productOptions.find((opt) => opt.value === filterData.productId)
-                ?.raw_id
+                ?.raw_id,
             )
           : undefined,
       cohort_id:
         filterData.productType === "COHORT"
           ? Number(
               productOptions.find((opt) => opt.value === filterData.productId)
-                ?.raw_id
+                ?.raw_id,
             )
           : undefined,
       event_id:
         filterData.productType === "EVENT"
           ? Number(
               productOptions.find((opt) => opt.value === filterData.productId)
-                ?.raw_id
+                ?.raw_id,
             )
           : undefined,
     },
-    { enabled: !!sessionToken }
+    { enabled: !!sessionToken },
   );
   const transactionList = transactionsData?.list;
 
   return (
     <React.Fragment>
-      <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/transactions" isCurrentPage>
-              Transactions
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage={"Transaction List"}
-              descPage={"View and monitor all payment records in one place."}
+      <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+        <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+          <div className="page-header flex flex-col gap-3">
+            <AppBreadcrumb>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem href="/transactions" isCurrentPage>
+                Transactions
+              </AppBreadcrumbItem>
+            </AppBreadcrumb>
+            <div className="page-title-actions flex justify-between items-center">
+              <TitleRevealCMS
+                titlePage={"Transaction List"}
+                descPage={"View and monitor all payment records in one place."}
+              />
+              <AppButton
+                variant="cmsPrimary"
+                onClick={() => setIsOpenCreateInvoice(true)}
+              >
+                <FileSpreadsheet className="size-5" />
+                Create Invoice
+              </AppButton>
+            </div>
+          </div>
+          <div className="stats-list grid grid-cols-5 gap-3">
+            <ScorecardItemCMS
+              scorecardName="Total Revenue"
+              scorecardValue={
+                transactionsData?.metapaging.total_revenue
+                  ? getRupiahCurrency(
+                      Number(transactionsData?.metapaging.total_revenue),
+                    )
+                  : 0
+              }
+              scorecardBackground="bg-[#400FDF]"
             />
+            <ScorecardItemCMS
+              scorecardName="Transactions Attempt"
+              scorecardValue={transactionsData?.metapaging.total_data || 0}
+              scorecardBackground="bg-primary"
+            />
+            <ScorecardItemCMS
+              scorecardName="Paid Transactions"
+              scorecardValue={transactionsData?.metapaging.total_paid || 0}
+              scorecardBackground="bg-success-foreground"
+            />
+            <ScorecardItemCMS
+              scorecardName="Pending Transactions"
+              scorecardValue={transactionsData?.metapaging.total_pending || 0}
+              scorecardBackground="bg-warning-foreground"
+            />
+            <ScorecardItemCMS
+              scorecardName="Failed Transactions"
+              scorecardValue={transactionsData?.metapaging.total_failed || 0}
+              scorecardBackground="bg-danger-foreground"
+            />
+          </div>
+          <div className="filter-button relative flex w-fit" ref={wrapperRef}>
             <AppButton
-              variant="cmsPrimary"
-              onClick={() => setIsOpenCreateInvoice(true)}
+              variant="outline"
+              size="medium"
+              onClick={handleActionsDropdown}
             >
-              <FileSpreadsheet className="size-5" />
-              Create Invoice
+              <Funnel className="size-4" />
+              Filter
             </AppButton>
-          </div>
-        </div>
-        <div className="stats-list grid grid-cols-5 gap-3">
-          <ScorecardItemCMS
-            scorecardName="Total Revenue"
-            scorecardValue={
-              transactionsData?.metapaging.total_revenue
-                ? getRupiahCurrency(
-                    Number(transactionsData?.metapaging.total_revenue)
-                  )
-                : 0
-            }
-            scorecardBackground="bg-[#400FDF]"
-          />
-          <ScorecardItemCMS
-            scorecardName="Transactions Attempt"
-            scorecardValue={transactionsData?.metapaging.total_data || 0}
-            scorecardBackground="bg-primary"
-          />
-          <ScorecardItemCMS
-            scorecardName="Paid Transactions"
-            scorecardValue={transactionsData?.metapaging.total_paid || 0}
-            scorecardBackground="bg-success-foreground"
-          />
-          <ScorecardItemCMS
-            scorecardName="Pending Transactions"
-            scorecardValue={transactionsData?.metapaging.total_pending || 0}
-            scorecardBackground="bg-warning-foreground"
-          />
-          <ScorecardItemCMS
-            scorecardName="Failed Transactions"
-            scorecardValue={transactionsData?.metapaging.total_failed || 0}
-            scorecardBackground="bg-danger-foreground"
-          />
-        </div>
-        <div className="filter-button relative flex w-fit" ref={wrapperRef}>
-          <AppButton
-            variant="outline"
-            size="medium"
-            onClick={handleActionsDropdown}
-          >
-            <Funnel className="size-4" />
-            Filter
-          </AppButton>
-          {filterData.productId && (
-            <div className="filter-indikator absolute size-2.5 bg-primary outline-3 outline-primary-light top-0 right-0 rounded-full" />
-          )}
-          <AppDropdown
-            isOpen={isOpenFilter}
-            onClose={() => setIsOpenFilter(false)}
-            alignDesktop="left"
-          >
-            <div
-              className={`flex flex-col w-96 gap-3 ${
-                isSelectOpen ? "h-[321px]" : ""
-              }`}
-            >
-              <p className="font-bold font-bodycopy text-sm pl-1">
-                Filter by Product
-              </p>
-              <SelectCMS
-                selectId="select-product"
-                selectIcon={<Funnel className="size-4" />}
-                selectPlaceholder="Filter by Product"
-                value={filterData.productId}
-                onChange={(value) => {
-                  handleInputChange("productId")(value);
-                  setIsOpenFilter(false);
-                  params.set("page", "1");
-                  router.push(`?${params.toString()}`);
-                }}
-                options={productOptions}
-                onOpenChange={(open) => setIsSelectOpen(open)}
-              />
-            </div>
-          </AppDropdown>
-        </div>
-        <div className="table-transactions flex flex-col">
-          {filterData.productId && (
-            <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
-              <p className="text-sm text-alternative font-medium font-bodycopy">
-                Active filter:
-              </p>
-              <FilterLabelCMS
-                filterName={
-                  productOptions.find(
-                    (post) => post.value === filterData.productId
-                  )?.label || ""
-                }
-                removeFilter={() =>
-                  setFilterData({
-                    productId: "",
-                    productType: "",
-                  })
-                }
-              />
-            </div>
-          )}
-          <table className="table-component relative w-full overflow-hidden">
-            <thead className="bg-[#FAFAFA] text-alternative/70">
-              <tr>
-                <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Transaction Id`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Product Name`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Category`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Amount`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Created At`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Paid At`.toUpperCase()}</TableHeadCMS>
-                <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
-              </tr>
-            </thead>
-            {/* Table Body */}
-            {!isLoadingTransactionsData && !isErrorTransactionsData && (
-              <tbody>
-                {transactionList?.map((post, index) => (
-                  <tr
-                    className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                    key={index}
-                  >
-                    <TableCellCMS>
-                      {(currentPage - 1) * pageSize + (index + 1)}
-                    </TableCellCMS>
-                    <TableCellCMS>{post.id}</TableCellCMS>
-                    <TableCellCMS>
-                      {post.cohort_name ||
-                        post.playlist_name ||
-                        post.event_name}
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      <ProductCategoryLabelCMS variants={post.category} />
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      {getRupiahCurrency(Math.round(Number(post.net_amount)))}
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      <TransactionStatusLabelCMS variants={post.status} />
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      {dayjs(post.created_at).format("D MMM YYYY HH:mm")}
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      {post.paid_at
-                        ? dayjs(post.paid_at).format("D MMM YYYY HH:mm")
-                        : "-"}
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      <AppButton
-                        variant="outline"
-                        size="small"
-                        onClick={() => viewTransactionDetails(post.id)}
-                      >
-                        <Eye className="size-4" />
-                        View
-                      </AppButton>
-                    </TableCellCMS>
-                  </tr>
-                ))}
-              </tbody>
+            {filterData.productId && (
+              <div className="filter-indikator absolute size-2.5 bg-primary outline-3 outline-primary-light top-0 right-0 rounded-full" />
             )}
-          </table>
+            <AppDropdown
+              isOpen={isOpenFilter}
+              onClose={() => setIsOpenFilter(false)}
+              alignDesktop="left"
+            >
+              <div
+                className={`flex flex-col w-96 gap-3 ${
+                  isSelectOpen ? "h-[321px]" : ""
+                }`}
+              >
+                <p className="font-bold font-bodycopy text-sm pl-1">
+                  Filter by Product
+                </p>
+                <SelectCMS
+                  selectId="select-product"
+                  selectIcon={<Funnel className="size-4" />}
+                  selectPlaceholder="Filter by Product"
+                  value={filterData.productId}
+                  onChange={(value) => {
+                    handleInputChange("productId")(value);
+                    setIsOpenFilter(false);
+                    params.set("page", "1");
+                    router.push(`?${params.toString()}`);
+                  }}
+                  options={productOptions}
+                  onOpenChange={(open) => setIsSelectOpen(open)}
+                />
+              </div>
+            </AppDropdown>
+          </div>
+          <div className="table-transactions flex flex-col">
+            {filterData.productId && (
+              <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
+                <p className="text-sm text-alternative font-medium font-bodycopy">
+                  Active filter:
+                </p>
+                <FilterLabelCMS
+                  filterName={
+                    productOptions.find(
+                      (post) => post.value === filterData.productId,
+                    )?.label || ""
+                  }
+                  removeFilter={() =>
+                    setFilterData({
+                      productId: "",
+                      productType: "",
+                    })
+                  }
+                />
+              </div>
+            )}
+            <table className="table-component relative w-full overflow-hidden">
+              <thead className="bg-[#FAFAFA] text-alternative/70">
+                <tr>
+                  <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Transaction Id`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Product Name`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Category`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Amount`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Status`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Created At`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Paid At`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
+                </tr>
+              </thead>
+              {/* Table Body */}
+              {!isLoadingTransactionsData && !isErrorTransactionsData && (
+                <tbody>
+                  {transactionList?.map((post, index) => (
+                    <tr
+                      className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                      key={index}
+                    >
+                      <TableCellCMS>
+                        {(currentPage - 1) * pageSize + (index + 1)}
+                      </TableCellCMS>
+                      <TableCellCMS>{post.id}</TableCellCMS>
+                      <TableCellCMS>
+                        {post.cohort_name ||
+                          post.playlist_name ||
+                          post.event_name}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <ProductCategoryLabelCMS variants={post.category} />
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {getRupiahCurrency(Math.round(Number(post.net_amount)))}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <TransactionStatusLabelCMS variants={post.status} />
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {dayjs(post.created_at).format("D MMM YYYY HH:mm")}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {post.paid_at
+                          ? dayjs(post.paid_at).format("D MMM YYYY HH:mm")
+                          : "-"}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <AppButton
+                          variant="outline"
+                          size="small"
+                          onClick={() => viewTransactionDetails(post.id)}
+                        >
+                          <Eye className="size-4" />
+                          View
+                        </AppButton>
+                      </TableCellCMS>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </table>
+          </div>
+
+          {/* Conditional Rendering */}
+          {isLoadingTransactionsData && (
+            <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+              <Loader2 className="animate-spin size-5 " />
+            </div>
+          )}
+          {isErrorTransactionsData && (
+            <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+              No Data
+            </div>
+          )}
+
+          {!isLoadingTransactionsData && !isErrorTransactionsData && (
+            <div className="pagination flex flex-col w-full items-center gap-3">
+              <AppNumberPagination
+                currentPage={currentPage}
+                totalPages={transactionsData?.metapaging.total_page ?? 1}
+              />
+              <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${transactionsData?.metapaging.total_data} transactions`}</p>
+            </div>
+          )}
         </div>
-
-        {/* Conditional Rendering */}
-        {isLoadingTransactionsData && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isErrorTransactionsData && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
-
-        {!isLoadingTransactionsData && !isErrorTransactionsData && (
-          <div className="pagination flex flex-col w-full items-center gap-3">
-            <AppNumberPagination
-              currentPage={currentPage}
-              totalPages={transactionsData?.metapaging.total_page ?? 1}
-            />
-            <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${transactionsData?.metapaging.total_data} transactions`}</p>
-          </div>
-        )}
       </div>
 
       {/* Open Create Invoice */}

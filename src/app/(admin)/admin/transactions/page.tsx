@@ -1,5 +1,6 @@
 import TransactionListCMS from "@/app/components/indexes/TransactionListCMS";
-import { setSessionToken } from "@/trpc/server";
+import ForbiddenComponent from "@/app/components/states/403Forbidden";
+import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
 export default async function TransactionsPageCMS() {
@@ -9,9 +10,17 @@ export default async function TransactionsPageCMS() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
-  return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <TransactionListCMS sessionToken={sessionToken} />
-    </div>
-  );
+  // Client-side Authorization
+  const userSession = await trpc.auth.checkSession();
+  const allowedRolesListTransactions = [0];
+
+  if (!allowedRolesListTransactions.includes(userSession.user.role_id)) {
+    return (
+      <div className="forbidden flex w-full h-full pl-64">
+        <ForbiddenComponent />
+      </div>
+    );
+  }
+
+  return <TransactionListCMS sessionToken={sessionToken} />;
 }
