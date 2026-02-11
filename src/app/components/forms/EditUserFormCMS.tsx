@@ -197,7 +197,7 @@ export default function EditUserForm({
               description: err.message,
             });
           },
-        }
+        },
       );
     } catch (error) {
       console.error(error);
@@ -207,200 +207,202 @@ export default function EditUserForm({
   };
 
   return (
-    <form
-      className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
-      onSubmit={handleSubmit}
-    >
-      {/* PAGE HEADER */}
-      <div className="page-header flex flex-col gap-3">
-        <AppBreadcrumb>
-          <ChevronRight className="size-3.5" />
-          <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
-          <ChevronRight className="size-3.5" />
-          <AppBreadcrumbItem href={`/users/${userId}`}>
-            Profile
-          </AppBreadcrumbItem>
-          <ChevronRight className="size-3.5" />
-          <AppBreadcrumbItem href={`/users/${userId}/edit`} isCurrentPage>
-            Edit
-          </AppBreadcrumbItem>
-        </AppBreadcrumb>
-        <div className="page-title-actions flex justify-between items-center">
-          <TitleRevealCMS
-            titlePage={"Edit User"}
-            descPage={
-              "Update user details, adjust roles or permissions, and manage account status easily."
-            }
-          />
-          <div className="page-actions flex items-center gap-4">
-            <Link href={"/users"}>
+    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+      <form
+        className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
+        onSubmit={handleSubmit}
+      >
+        {/* PAGE HEADER */}
+        <div className="page-header flex flex-col gap-3">
+          <AppBreadcrumb>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem href={`/users/${userId}`}>
+              Profile
+            </AppBreadcrumbItem>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem href={`/users/${userId}/edit`} isCurrentPage>
+              Edit
+            </AppBreadcrumbItem>
+          </AppBreadcrumb>
+          <div className="page-title-actions flex justify-between items-center">
+            <TitleRevealCMS
+              titlePage={"Edit User"}
+              descPage={
+                "Update user details, adjust roles or permissions, and manage account status easily."
+              }
+            />
+            <div className="page-actions flex items-center gap-4">
+              <Link href={"/users"}>
+                <AppButton
+                  onClick={() => router.back()}
+                  variant="outline"
+                  type="button"
+                >
+                  Cancel
+                </AppButton>
+              </Link>
               <AppButton
-                onClick={() => router.back()}
-                variant="outline"
-                type="button"
+                variant="cmsPrimary"
+                type="submit"
+                disabled={isSubmitting}
               >
-                Cancel
+                {isSubmitting ? (
+                  <Loader2 className="animate-spin size-5" />
+                ) : (
+                  <Save className="size-5" />
+                )}
+                Save Changes
               </AppButton>
-            </Link>
-            <AppButton
-              variant="cmsPrimary"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <Loader2 className="animate-spin size-5" />
-              ) : (
-                <Save className="size-5" />
-              )}
-              Save Changes
-            </AppButton>
+            </div>
           </div>
         </div>
-      </div>
 
-      {isLoading && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
-          <Loader2 className="animate-spin size-5 " />
-        </div>
-      )}
-      {isError && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
-          No Data
-        </div>
-      )}
+        {isLoading && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+            No Data
+          </div>
+        )}
 
-      {!isLoading && !isError && (
-        <div className="flex flex-col w-full gap-8 pb-20">
-          {/* Personal Information */}
-          <div className="personal-information-container flex flex-col w-full gap-5">
-            <h2 className="label-name text-xl text-black font-brand font-bold">
-              Personal Information
-            </h2>
-            <UploadAvatarUserCMS
-              onUpload={handleImageForm}
-              value={formData.avatar}
-            />
-            <div className="personal-information-data flex gap-5">
-              <div className="data-1 flex flex-col w-full gap-4">
+        {!isLoading && !isError && (
+          <div className="flex flex-col w-full gap-8 pb-20">
+            {/* Personal Information */}
+            <div className="personal-information-container flex flex-col w-full gap-5">
+              <h2 className="label-name text-xl text-black font-brand font-bold">
+                Personal Information
+              </h2>
+              <UploadAvatarUserCMS
+                onUpload={handleImageForm}
+                value={formData.avatar}
+              />
+              <div className="personal-information-data flex gap-5">
+                <div className="data-1 flex flex-col w-full gap-4">
+                  <InputCMS
+                    inputId={"full-name"}
+                    inputName={"Full Name"}
+                    inputType={"text"}
+                    inputPlaceholder={"Type user name..."}
+                    inputIcon={<User2 className="size-5" />}
+                    value={formData.fullName}
+                    onInputChange={handleInputChange("fullName")}
+                    required
+                  />
+                  <InputCMS
+                    inputId={"email"}
+                    inputName={"Email"}
+                    inputType={"email"}
+                    inputPlaceholder={"Drop valid email..."}
+                    inputIcon={<AtSign className="size-5" />}
+                    value={formData.email}
+                    onInputChange={handleInputChange("email")}
+                    required
+                  />
+                  <InputNumberCMS
+                    inputId={"phone-number"}
+                    inputName={"Phone Number"}
+                    inputIcon={"🇮🇩 62"}
+                    inputPlaceholder="Enter Mobile or WhatsApp number"
+                    inputConfig="numeric"
+                    value={formData.phoneNumber}
+                    onInputChange={handleInputChange("phoneNumber")}
+                  />
+                  <SelectCMS
+                    selectId={"role"}
+                    selectName={"Role"}
+                    selectPlaceholder="Pick a user role"
+                    selectIcon={<KeyRound className="size-5" />}
+                    value={formData.roleId}
+                    onChange={handleInputChange("roleId")}
+                    required
+                    options={
+                      rolesData?.list?.map((role) => ({
+                        label: role.name,
+                        value: role.id,
+                      })) || []
+                    }
+                  />
+                  {/* Status */}
+                  <div className="select-group-component flex flex-col gap-1">
+                    <label
+                      htmlFor={"status"}
+                      className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                    >
+                      Status <span className="text-red-700">*</span>
+                    </label>
+                    <div className="switch-button flex pl-1 gap-2">
+                      <Switch
+                        className="data-[state=checked]:bg-cms-primary"
+                        checked={formData.status === "ACTIVE"}
+                        onCheckedChange={(checked) =>
+                          handleInputChange("status")(
+                            checked ? "ACTIVE" : "INACTIVE",
+                          )
+                        }
+                      />
+                      <StatusLabelCMS
+                        variants={formData.status as "ACTIVE" | "INACTIVE"}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Data 2 */}
+                <div className="data-2 flex flex-col w-full gap-4">
+                  {/* Date of Birth */}
+                  <InputCMS
+                    inputId={"date-of-birth"}
+                    inputName={"Date of Birth"}
+                    inputType={"date"}
+                    inputIcon={<CalendarRange className="size-5" />}
+                    value={formData.dateOfBirth}
+                    onInputChange={handleInputChange("dateOfBirth")}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Business Information */}
+            <div className="business-information-container flex flex-col w-full gap-5">
+              <h2 className="label-name text-xl text-black font-brand font-bold">
+                Business Information
+              </h2>
+              <div className="data flex flex-col w-full gap-4">
+                {/* Business Name */}
                 <InputCMS
-                  inputId={"full-name"}
-                  inputName={"Full Name"}
+                  inputId={"business-name"}
+                  inputName={"Business Name"}
                   inputType={"text"}
-                  inputPlaceholder={"Type user name..."}
-                  inputIcon={<User2 className="size-5" />}
-                  value={formData.fullName}
-                  onInputChange={handleInputChange("fullName")}
-                  required
+                  inputPlaceholder={"Enter company name..."}
+                  inputIcon={<Building2 className="size-5" />}
+                  value={formData.businessName}
+                  onInputChange={handleInputChange("businessName")}
                 />
-                <InputCMS
-                  inputId={"email"}
-                  inputName={"Email"}
-                  inputType={"email"}
-                  inputPlaceholder={"Drop valid email..."}
-                  inputIcon={<AtSign className="size-5" />}
-                  value={formData.email}
-                  onInputChange={handleInputChange("email")}
-                  required
-                />
-                <InputNumberCMS
-                  inputId={"phone-number"}
-                  inputName={"Phone Number"}
-                  inputIcon={"🇮🇩 62"}
-                  inputPlaceholder="Enter Mobile or WhatsApp number"
-                  inputConfig="numeric"
-                  value={formData.phoneNumber}
-                  onInputChange={handleInputChange("phoneNumber")}
-                />
+                {/* Industry */}
                 <SelectCMS
-                  selectId={"role"}
-                  selectName={"Role"}
-                  selectPlaceholder="Pick a user role"
-                  selectIcon={<KeyRound className="size-5" />}
-                  value={formData.roleId}
-                  onChange={handleInputChange("roleId")}
-                  required
+                  selectId={"industry"}
+                  selectName={"Business Industry"}
+                  selectPlaceholder="Choose business industry"
+                  selectIcon={<Flag className="size-5" />}
+                  value={formData.industry}
+                  onChange={handleInputChange("industry")}
                   options={
-                    rolesData?.list?.map((role) => ({
+                    industriesData?.list?.map((role) => ({
                       label: role.name,
                       value: role.id,
                     })) || []
                   }
                 />
-                {/* Status */}
-                <div className="select-group-component flex flex-col gap-1">
-                  <label
-                    htmlFor={"status"}
-                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-                  >
-                    Status <span className="text-red-700">*</span>
-                  </label>
-                  <div className="switch-button flex pl-1 gap-2">
-                    <Switch
-                      className="data-[state=checked]:bg-cms-primary"
-                      checked={formData.status === "ACTIVE"}
-                      onCheckedChange={(checked) =>
-                        handleInputChange("status")(
-                          checked ? "ACTIVE" : "INACTIVE"
-                        )
-                      }
-                    />
-                    <StatusLabelCMS
-                      variants={formData.status as "ACTIVE" | "INACTIVE"}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Data 2 */}
-              <div className="data-2 flex flex-col w-full gap-4">
-                {/* Date of Birth */}
-                <InputCMS
-                  inputId={"date-of-birth"}
-                  inputName={"Date of Birth"}
-                  inputType={"date"}
-                  inputIcon={<CalendarRange className="size-5" />}
-                  value={formData.dateOfBirth}
-                  onInputChange={handleInputChange("dateOfBirth")}
-                />
               </div>
             </div>
           </div>
-
-          {/* Business Information */}
-          <div className="business-information-container flex flex-col w-full gap-5">
-            <h2 className="label-name text-xl text-black font-brand font-bold">
-              Business Information
-            </h2>
-            <div className="data flex flex-col w-full gap-4">
-              {/* Business Name */}
-              <InputCMS
-                inputId={"business-name"}
-                inputName={"Business Name"}
-                inputType={"text"}
-                inputPlaceholder={"Enter company name..."}
-                inputIcon={<Building2 className="size-5" />}
-                value={formData.businessName}
-                onInputChange={handleInputChange("businessName")}
-              />
-              {/* Industry */}
-              <SelectCMS
-                selectId={"industry"}
-                selectName={"Business Industry"}
-                selectPlaceholder="Choose business industry"
-                selectIcon={<Flag className="size-5" />}
-                value={formData.industry}
-                onChange={handleInputChange("industry")}
-                options={
-                  industriesData?.list?.map((role) => ({
-                    label: role.name,
-                    value: role.id,
-                  })) || []
-                }
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </form>
+        )}
+      </form>
+    </div>
   );
 }
