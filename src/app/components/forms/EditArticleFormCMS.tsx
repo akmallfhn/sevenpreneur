@@ -366,12 +366,12 @@ export default function EditArticleForm(props: EditArticleFormProps) {
             <ChevronRight className="size-3.5" />
             <AppBreadcrumbItem href="/articles">Articles</AppBreadcrumbItem>
             <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>Create</AppBreadcrumbItem>
+            <AppBreadcrumbItem isCurrentPage>Edit</AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
             <TitleRevealCMS
-              titlePage="Create SEO Article"
-              descPage="Write and manage a new SEO article by optimizing keywords, metadata, and structure"
+              titlePage="Edit SEO Article"
+              descPage="Improve search performance by updating keywords, metadata, and on-page structure"
             />
             <div className="page-actions flex items-center gap-4">
               {initialData?.status === "DRAFT" && (

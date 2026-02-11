@@ -10,6 +10,7 @@ export default async function CreateUserPage() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
   const allowedRolesCreateUser = [0];
 

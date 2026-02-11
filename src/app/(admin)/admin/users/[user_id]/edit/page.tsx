@@ -15,6 +15,7 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
+  // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
   const allowedRolesUpdateUser = [0];
 
