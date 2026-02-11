@@ -3,7 +3,14 @@ import AppButton from "@/app/components/buttons/AppButton";
 import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
 import { ArticleStatus } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { ChevronRight, ListMinus, Loader2, Send } from "lucide-react";
+import {
+  ChevronRight,
+  ListMinus,
+  Loader2,
+  PlusCircle,
+  Send,
+  Trash2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -17,6 +24,7 @@ import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 
 export interface BodyContentArticle {
+  id?: number;
   index_order: number | string;
   sub_heading: string | null;
   image_path: string | null;
@@ -86,11 +94,12 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     articlePublishDate: "",
     articleBodyContent: [
       {
+        id: Date.now(),
         index_order: "",
-        sub_heading: null,
+        sub_heading: "",
         image_path: null,
         image_desc: null,
-        content: null,
+        content: "",
       },
     ],
   });
@@ -120,6 +129,49 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     }));
   };
 
+  // Add remove body-content
+  const handleAddBodyContent = () => {
+    if (formData.articleBodyContent.length >= 7) return;
+    setFormData((prev) => ({
+      ...prev,
+      articleBodyContent: [
+        ...prev.articleBodyContent,
+        {
+          id: Date.now(),
+          index_order: prev.articleBodyContent.length + 1,
+          sub_heading: "",
+          image_path: null,
+          image_desc: null,
+          content: "",
+        },
+      ],
+    }));
+  };
+  const handleDeleteBodyContent = (id: number) => {
+    setFormData((prev) => {
+      if (formData.articleBodyContent.length <= 1) return prev;
+      const updated = prev.articleBodyContent
+        .filter((item) => item.id !== id)
+        .map((item, i) => ({
+          ...item,
+          index_order: i + 1,
+        }));
+      return {
+        ...prev,
+        articleBodyContent: updated,
+      };
+    });
+  };
+  const handleChangeBodyContent =
+    (id: number, field: keyof BodyContentArticle) => (value: unknown) => {
+      setFormData((prev) => ({
+        ...prev,
+        articleBodyContent: prev.articleBodyContent.map((item) =>
+          item.id === id ? { ...item, [field]: value } : item,
+        ),
+      }));
+    };
+
   // Handle form submit
   const handleSubmit = async (e: FormEvent, status: ArticleStatus) => {
     e.preventDefault();
@@ -129,6 +181,15 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     } else {
       setIsSubmittingPublished(true);
     }
+
+    const invalidBodyContent = formData.articleBodyContent.some(
+      (item, index) => {
+        if (index === 0) {
+          return !item.content?.trim();
+        }
+        return !item.sub_heading?.trim() || !item.content?.trim();
+      },
+    );
 
     // Required field checking
     if (!formData.articleTitle) {
@@ -194,6 +255,15 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
       }
       return;
     }
+    if (formData.articleBodyContent.length === 0 || invalidBodyContent) {
+      toast.error("Subheading or body content cannot be empty");
+      if (status === "DRAFT") {
+        setIsSubmittingDraft(false);
+      } else {
+        setIsSubmittingPublished(false);
+      }
+      return;
+    }
 
     // POST to Database
     try {
@@ -204,11 +274,12 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
           insight: formData.articleInsight.trim(),
           image_url: formData.articleImage,
           body_content: formData.articleBodyContent.map(
-            (item: BodyContentArticle) => ({
+            (item: BodyContentArticle, index) => ({
               index_order: Number(item.index_order),
-              sub_heading: item.sub_heading,
-              image_path: item.image_path,
-              image_desc: item.image_desc,
+              sub_heading:
+                index === 0 ? null : item.sub_heading?.trim() || null,
+              image_path: null,
+              image_desc: null,
               content: item.content,
             }),
           ),
@@ -217,7 +288,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
           author_id: formData.articleAuthorId,
           reviewer_id: formData.articleReviewerId,
           keywords: formData.articleKeyword.trim(),
-          status: formData.articleStatus as ArticleStatus,
+          status,
         },
         {
           onSuccess: () => {
@@ -320,19 +391,62 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   imageRatio="16/9"
                 />
               </div>
-              <TextAreaCMS
-                textAreaId="insight"
-                textAreaName="Content Summary"
-                textAreaPlaceholder="Write a 3-sentence summary that captures the article’s main topic and overall takeaway"
-                textAreaHeight="h-32"
-                value={formData.articleInsight}
-                onTextAreaChange={handleInputChange("articleInsight")}
-                required
-              />
-              <TextAreaRichEditorCMS
-                value={formData.articleKeyword}
-                onTextAreaChange={handleInputChange("articleKeyword")}
-              />
+              <div className="body-content flex flex-col gap-4 bg-white rounded-md">
+                {formData.articleBodyContent.map((post, index) => (
+                  <div
+                    className="flex flex-col p-4 gap-4 bg-section-background/50 rounded-md border border-outline"
+                    key={post.id}
+                  >
+                    {index !== 0 && (
+                      <InputCMS
+                        inputId="publish-date"
+                        inputName="Sub-Heading"
+                        inputPlaceholder="Write section sub-title…"
+                        inputType="text"
+                        value={post.sub_heading || ""}
+                        onInputChange={handleChangeBodyContent(
+                          post.id!,
+                          "sub_heading",
+                        )}
+                        required
+                      />
+                    )}
+                    <TextAreaRichEditorCMS
+                      textAreaId="body-content"
+                      textAreaName="Body Content"
+                      value={post.content || ""}
+                      onTextAreaChange={handleChangeBodyContent(
+                        post.id!,
+                        "content",
+                      )}
+                      required
+                    />
+                    {formData.articleBodyContent.length > 1 && (
+                      <AppButton
+                        className="w-fit"
+                        type="button"
+                        variant="destructive"
+                        size="medium"
+                        onClick={() => handleDeleteBodyContent(post.id!)}
+                      >
+                        <Trash2 className="size-4" />
+                        Delete
+                      </AppButton>
+                    )}
+                  </div>
+                ))}
+                {formData.articleBodyContent.length < 7 && (
+                  <AppButton
+                    variant="cmsPrimary"
+                    size="medium"
+                    onClick={handleAddBodyContent}
+                    type="button"
+                  >
+                    <PlusCircle className="size-4" />
+                    Add Paragraph
+                  </AppButton>
+                )}
+              </div>
             </main>
             <aside className="aside-content flex flex-1 flex-col gap-5">
               <div className="flex flex-col w-full gap-4 border border-outline rounded-lg">
@@ -343,6 +457,15 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   </h2>
                 </div>
                 <div className="flex flex-col gap-5 p-4 pt-0">
+                  <TextAreaCMS
+                    textAreaId="insight"
+                    textAreaName="Content Summary"
+                    textAreaPlaceholder="Write a 3-sentence summary that captures the article’s main topic and overall takeaway"
+                    textAreaHeight="h-44"
+                    value={formData.articleInsight}
+                    onTextAreaChange={handleInputChange("articleInsight")}
+                    required
+                  />
                   <InputCMS
                     inputId="publish-date"
                     inputName="Publish Date"

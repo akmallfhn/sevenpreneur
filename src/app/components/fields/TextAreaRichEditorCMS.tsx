@@ -28,11 +28,14 @@ import {
   UnderlineIcon,
   Undo,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 
-interface TextAreaRichEditorCMSProps {
+interface TextAreaRichEditorCMSProps extends HTMLAttributes<HTMLTextAreaElement> {
+  textAreaId: string;
+  textAreaName: string;
   value: string;
   onTextAreaChange: (value: string) => void;
+  required?: boolean;
 }
 
 export default function TextAreaRichEditorCMS(
@@ -202,100 +205,113 @@ export default function TextAreaRichEditorCMS(
   ];
 
   return (
-    <div className="text-area-box relative w-full border border-outline rounded-md overflow-hidden">
-      <div className="text-area-toolbar absolute flex top-0 inset-x-0 p-1 gap-1 w-full h-fit border-b z-10">
-        <ToggleGroup type="multiple" size="sm">
-          {editor &&
-            historyActions(editor).map((post) => (
-              <TooltipProvider key={post.value}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <ToggleGroupItem
-                      className="hover:bg-black/5"
-                      value={post.value}
-                      aria-label={`Toggle ${post.label}`}
-                      disabled={post.disabled}
-                      onClick={post.onClick}
-                    >
-                      {post.icon}
-                    </ToggleGroupItem>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="font-bodycopy">{post.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-        </ToggleGroup>
-        <ToggleGroup type="multiple" size="sm">
-          {editor &&
-            textActions(editor).map((post) => (
-              <TooltipProvider key={post.value}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <ToggleGroupItem
-                      value={post.value}
-                      aria-label={`Toggle ${post.label}`}
-                      data-state={post.isActive ? "on" : "off"}
-                      onClick={post.onClick}
-                    >
-                      {post.icon}
-                    </ToggleGroupItem>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="font-bodycopy">{post.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-        </ToggleGroup>
-        <ToggleGroup type="multiple" size="sm">
-          {editor &&
-            paragraphActions(editor).map((post) => (
-              <TooltipProvider key={post.value}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <ToggleGroupItem
-                      value={post.value}
-                      aria-label={`Toggle ${post.label}`}
-                      data-state={post.isActive ? "on" : "off"}
-                      onClick={post.onClick}
-                    >
-                      {post.icon}
-                    </ToggleGroupItem>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="font-bodycopy">{post.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-        </ToggleGroup>
-        <ToggleGroup type="multiple" size="sm">
-          {editor &&
-            listActions(editor).map((post) => (
-              <TooltipProvider key={post.value}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <ToggleGroupItem
-                      value={post.value}
-                      aria-label={`Toggle ${post.label}`}
-                      data-state={post.isActive ? "on" : "off"}
-                      onClick={post.onClick}
-                    >
-                      {post.icon}
-                    </ToggleGroupItem>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="font-bodycopy">{post.label}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            ))}
-        </ToggleGroup>
-      </div>
-      <div className="text-area-editor p-3 mt-[40px] border-none">
-        <EditorContent editor={editor} />
+    <div className="text-area-box flex flex-col gap-1">
+      {props.textAreaName && (
+        <label
+          htmlFor={props.textAreaId}
+          className="label-input flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        >
+          {props.textAreaName}
+          {props.required && (
+            <span className="label-required text-destructive">*</span>
+          )}
+        </label>
+      )}
+      <div className="text-area-container relative w-full bg-white border border-outline rounded-md overflow-hidden">
+        <div className="text-area-toolbar absolute flex top-0 inset-x-0 p-1 gap-1 w-full h-fit border-b z-10">
+          <ToggleGroup type="multiple" size="sm">
+            {editor &&
+              historyActions(editor).map((post) => (
+                <TooltipProvider key={post.value}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ToggleGroupItem
+                        className="hover:bg-black/5"
+                        value={post.value}
+                        aria-label={`Toggle ${post.label}`}
+                        disabled={post.disabled}
+                        onClick={post.onClick}
+                      >
+                        {post.icon}
+                      </ToggleGroupItem>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="font-bodycopy">{post.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+          </ToggleGroup>
+          <ToggleGroup type="multiple" size="sm">
+            {editor &&
+              textActions(editor).map((post) => (
+                <TooltipProvider key={post.value}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ToggleGroupItem
+                        value={post.value}
+                        aria-label={`Toggle ${post.label}`}
+                        data-state={post.isActive ? "on" : "off"}
+                        onClick={post.onClick}
+                      >
+                        {post.icon}
+                      </ToggleGroupItem>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="font-bodycopy">{post.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+          </ToggleGroup>
+          <ToggleGroup type="multiple" size="sm">
+            {editor &&
+              paragraphActions(editor).map((post) => (
+                <TooltipProvider key={post.value}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ToggleGroupItem
+                        value={post.value}
+                        aria-label={`Toggle ${post.label}`}
+                        data-state={post.isActive ? "on" : "off"}
+                        onClick={post.onClick}
+                      >
+                        {post.icon}
+                      </ToggleGroupItem>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="font-bodycopy">{post.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+          </ToggleGroup>
+          <ToggleGroup type="multiple" size="sm">
+            {editor &&
+              listActions(editor).map((post) => (
+                <TooltipProvider key={post.value}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <ToggleGroupItem
+                        value={post.value}
+                        aria-label={`Toggle ${post.label}`}
+                        data-state={post.isActive ? "on" : "off"}
+                        onClick={post.onClick}
+                      >
+                        {post.icon}
+                      </ToggleGroupItem>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="font-bodycopy">{post.label}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ))}
+          </ToggleGroup>
+        </div>
+        <div className="text-area-editor p-3 mt-[40px] border-none">
+          <EditorContent editor={editor} />
+        </div>
       </div>
     </div>
   );

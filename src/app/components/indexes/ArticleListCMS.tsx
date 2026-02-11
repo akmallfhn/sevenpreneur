@@ -163,7 +163,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                             toast.success("Link copied!");
                           }}
                         >
-                          <Copy className="size-4" />
+                          <Copy className="size-3" />
                           Copy Link
                         </AppButton>
                       </div>
