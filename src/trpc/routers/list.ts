@@ -44,6 +44,7 @@ export const listRouter = createTRPCRouter({
     categories: listBA.categories,
     subcategories: listBA.subcategories,
     questions: listBA.questions,
+    answerSheets: listBA.answerSheets,
   },
 
   // Playlist-related //

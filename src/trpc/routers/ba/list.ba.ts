@@ -154,4 +154,70 @@ export const listBA = {
         metapaging: returnedMetapaging,
       };
     }),
+
+  answerSheets: loggedInProcedure
+    .input(
+      z.object({
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
+        keyword: stringNotBlank().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const userId = ["Administrator"].includes(opts.ctx.user.role.name)
+        ? undefined
+        : opts.ctx.user.id;
+
+      const whereClause = {
+        user: {
+          full_name: undefined as Optional<{
+            contains: string;
+            mode: "insensitive";
+          }>,
+        },
+        user_id: userId,
+      };
+
+      if (opts.input.keyword !== undefined) {
+        whereClause.user.full_name = {
+          contains: opts.input.keyword,
+          mode: "insensitive",
+        };
+      }
+
+      const paging = calculatePage(
+        opts.input,
+        await opts.ctx.prisma.bAAnswerSheet.aggregate({
+          _count: true,
+          where: whereClause,
+        })
+      );
+
+      const answerSheetList = await opts.ctx.prisma.bAAnswerSheet.findMany({
+        select: {
+          id: true,
+          user: { select: { full_name: true, avatar: true } },
+          period: true,
+          score: true,
+          created_at: true,
+          updated_at: true,
+        },
+        orderBy: [{ created_at: "desc" }],
+        where: whereClause,
+        skip: paging.prisma.skip,
+        take: paging.prisma.take,
+      });
+
+      const returnedMetapaging = {
+        ...paging.metapaging,
+        keyword: opts.input.keyword,
+      };
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: answerSheetList,
+        metapaging: returnedMetapaging,
+      };
+    }),
 };

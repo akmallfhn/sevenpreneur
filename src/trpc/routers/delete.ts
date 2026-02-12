@@ -32,6 +32,7 @@ export const deleteRouter = createTRPCRouter({
     category: deleteBA.category,
     subcategory: deleteBA.subcategory,
     question: deleteBA.question,
+    answerSheet: deleteBA.answerSheet,
   },
 
   // Playlist-related //
