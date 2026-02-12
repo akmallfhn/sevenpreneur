@@ -411,7 +411,7 @@ model Attendance {
 model BACategory {
   id            Int             @id @default(autoincrement()) @db.SmallInt
   name          String          @db.VarChar()
-  weight        Decimal         @db.Decimal(5, 2)
+  weight        Decimal         @db.Decimal(5, 2) // in percent (%)
   num_order     Int?            @db.SmallInt
   created_at    DateTime        @default(now()) @db.Timestamptz()
   updated_at    DateTime        @default(now()) @updatedAt @db.Timestamptz()
@@ -454,7 +454,7 @@ model BAAnswerSheet {
   user       User           @relation(fields: [user_id], references: [id])
   user_id    String         @db.Uuid
   period     BAPeriodEnum
-  score      Decimal        @db.Decimal(5, 2)
+  score      Decimal        @db.Decimal(5, 2) // in percent (%)
   created_at DateTime       @default(now()) @db.Timestamptz()
   updated_at DateTime       @default(now()) @updatedAt @db.Timestamptz()
   answers    BAAnswerItem[]
@@ -468,7 +468,7 @@ model BAAnswerItem {
   sheet_id    Int           @db.Integer
   question    BAQuestion    @relation(fields: [question_id], references: [id])
   question_id Int           @db.Integer
-  score       Int           @db.SmallInt
+  score       Int           @db.SmallInt // in [0, 5] range
   created_at  DateTime      @default(now()) @db.Timestamptz()
   updated_at  DateTime      @default(now()) @updatedAt @db.Timestamptz()
 

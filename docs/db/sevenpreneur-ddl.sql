@@ -294,7 +294,7 @@ CREATE TABLE attendances (
 CREATE TABLE ba_categories (
   id          SMALLSERIAL    PRIMARY KEY,
   name        VARCHAR        NOT NULL,
-  weight      DECIMAL(5, 2)  NOT NULL,
+  weight      DECIMAL(5, 2)  NOT NULL, -- in percent (%)
   num_order   SMALLINT           NULL,
   created_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
@@ -325,7 +325,7 @@ CREATE TABLE ba_answer_sheets (
   id          SERIAL          PRIMARY KEY,
   user_id     UUID            NOT NULL,
   period      ba_period_enum  NOT NULL,
-  score       DECIMAL(5, 2)   NOT NULL,
+  score       DECIMAL(5, 2)   NOT NULL, -- in percent (%)
   created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
@@ -334,7 +334,7 @@ CREATE TABLE ba_answer_items (
   id           SERIAL       PRIMARY KEY,
   sheet_id     INTEGER      NOT NULL,
   question_id  INTEGER      NOT NULL,
-  score        SMALLINT     NOT NULL,
+  score        SMALLINT     NOT NULL, -- in [0, 5] range
   created_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
