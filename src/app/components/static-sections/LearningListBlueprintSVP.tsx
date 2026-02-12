@@ -18,6 +18,17 @@ export default function LearningListBlueprintSVP() {
       session_variant: "frameworkPrimary",
     },
     {
+      session_number: "",
+      session_name:
+        "Why People Choose Your Business Instead of Your Competitors",
+      session_description: "",
+      session_educator: "Stephanie Regina",
+      session_educator_title: "Founder & CEO - Haloka Group",
+      session_educator_avatar:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-stephanie.webp",
+      session_variant: "founderSeries",
+    },
+    {
       session_number: "02.",
       session_name: "Market Intelligence",
       session_description:
@@ -50,17 +61,17 @@ export default function LearningListBlueprintSVP() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
       session_variant: "frameworkSecondary",
     },
-    {
-      session_number: "",
-      session_name:
-        "Why People Choose Your Business Instead of Your Competitors",
-      session_description: "",
-      session_educator: "Fanbul Prabowo",
-      session_educator_title: "CEO of Infipop",
-      session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-fanbul.webp",
-      session_variant: "founderSeries",
-    },
+    // {
+    //   session_number: "",
+    //   session_name:
+    //     "Why People Choose Your Business Instead of Your Competitors",
+    //   session_description: "",
+    //   session_educator: "Fanbul Prabowo",
+    //   session_educator_title: "CEO of Infipop",
+    //   session_educator_avatar:
+    //     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-fanbul.webp",
+    //   session_variant: "founderSeries",
+    // },
     {
       session_number: "05.",
       session_name: "People Management & Ops",

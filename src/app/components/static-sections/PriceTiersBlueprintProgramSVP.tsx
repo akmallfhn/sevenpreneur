@@ -44,8 +44,8 @@ export default function PriceTiersBlueprintProgramSVP(
                 cohortName={regularPrice.name}
                 cohortSlug={props.cohortSlug}
                 priceId={regularPrice.id}
-                priceName="Batch 7"
-                priceDescription="Kuasai 7 framework lengkap untuk upgrade mindset & skill bisnismu."
+                priceName="Batch 8"
+                priceDescription="Kuasai 7 framework lengkap untuk upgrade skala bisnismu."
                 priceLabel={
                   <PackageLabelBlueprintProgramSVP variant="regular" />
                 }
@@ -54,27 +54,28 @@ export default function PriceTiersBlueprintProgramSVP(
                 priceAnchor={3000000}
                 priceBenefits={[
                   <>
-                    <b>7 sesi interaktif</b> membahas 7 Framework, dipandu oleh
-                    Professional Business Coach.
+                    <b>8 sesi interaktif</b> membahas 7 Framework khusus Growth
+                    Business, dipandu oleh expert coach.
                   </>,
                   <>
-                    <b>3 insightful talk</b> tentang founder readiness, market
-                    research, & smart networking bersama expert.
+                    <b>Q&A interaktif, </b> bebas tanya apa saja tentang
+                    bisnismu ke expert coach.
                   </>,
                   <>
-                    <b>Lifetime Access</b> ke semua materi dan rekaman kelas.
+                    <b>AI Business Tools</b> di setiap tahap pembelajaran dan
+                    dapat diakses secara lifetime.
                   </>,
                   <>
-                    <b>20+ Modul, Framework, & Tools AI Praktis</b> dari real
-                    case bisnis
+                    <b>Video rekaman dan materi</b> yang tersimpan di LMS dan
+                    dapat dipelajari kapan saja tanpa batas waktu.
                   </>,
                   <>
-                    <b>Q&A interaktif </b> – bebas tanya apa saja tentang
-                    bisnismu ke coach & expert
+                    <b>2 Business Assessment</b> untuk evaluasi kesehatan dan
+                    kesiapan bisnis
                   </>,
                   <>
-                    <b>Koneksi & Kolaborasi </b> dengan sesama entrepreneur
-                    ambisius dan expert industri.
+                    <b>Koneksi & Kolaborasi </b> dengan menjadi bagian dari
+                    komunitas entrepreneur di Sevenpreneur.
                   </>,
                 ]}
                 featureProductName={regularPrice.name}
@@ -87,7 +88,7 @@ export default function PriceTiersBlueprintProgramSVP(
                 cohortName={vipPrice.name}
                 cohortSlug={props.cohortSlug}
                 priceId={vipPrice.id}
-                priceName="Batch 7"
+                priceName="Batch 8"
                 priceDescription="Pengalaman lebih eksklusif dalam satu paket lengkap."
                 priceLabel={<PackageLabelBlueprintProgramSVP variant="vip" />}
                 priceStatus={vipPrice.status}
@@ -95,17 +96,19 @@ export default function PriceTiersBlueprintProgramSVP(
                 priceAnchor={8500000}
                 priceBenefits={[
                   <>
-                    <b>1 hari offline event di Jakarta</b>
-                  </>,
-                  <>
-                    <b>3 sesi eksklusif</b> bersama para speakers berpengalaman
+                    <b>1 hari offline event</b> di Jakarta dengan 3 sesi
+                    eksklusif bersama para speakers berpengalaman
                   </>,
                   <>
                     <b>Intimate Dinner & Networking</b> bersama business leader
                     visioner.
                   </>,
                   <>
-                    <b>Mentoring privat 1-on-1</b> dengan business coach
+                    <b>Mentoring privat 1-on-1</b> dengan business coach.
+                  </>,
+                  <>
+                    <b>Insight praktis</b> tentang bisnismu berdasarkan hasil
+                    assessment.
                   </>,
                 ]}
                 featureProductName={vipPrice.name}
