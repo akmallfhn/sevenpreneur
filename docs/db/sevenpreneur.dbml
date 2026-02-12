@@ -145,7 +145,7 @@ Table users {
   phone_country_id       smallint           [ref: > phone_country_codes.id]
   phone_number           varchar
   avatar                 varchar
-  role_id                smallint           [ref: > roles.id, note: 'default 3']
+  role_id                smallint           [ref: > roles.id, note: 'default 3 (General User)']
   status                 status_enum        [note: 'default active']
   date_of_birth          date
   business_name          varchar
@@ -296,7 +296,7 @@ Table attendances {
 Table ba_categories {
   id          smallint      [primary key]
   category    varchar
-  weight      decimal(5,2)
+  weight      decimal(5,2)  [note: 'in percent (%)']
   num_order   smallint
   created_at  timestamptz
   updated_at  timestamptz
@@ -327,7 +327,7 @@ Table ba_answer_sheets {
   id          integer         [primary key]
   user_id     uuid            [ref: > users.id]
   period      ba_period_enum
-  score       decimal(5,2)
+  score       decimal(5,2)    [note: 'in percent (%)']
   created_at  timestamptz
   updated_at  timestamptz
 }
@@ -336,7 +336,7 @@ Table ba_answer_items {
   id           integer      [primary key]
   sheet_id     integer      [ref: > ba_answer_sheets.id]
   question_id  integer      [ref: > ba_questions.id]
-  score        smallint
+  score        smallint     [note: 'in [0, 5] range']
   created_at   timestamptz
   updated_at   timestamptz
 }
