@@ -35,6 +35,7 @@ export const updateRouter = createTRPCRouter({
     category: updateBA.category,
     subcategory: updateBA.subcategory,
     question: updateBA.question,
+    answerSheet: updateBA.answerSheet,
   },
 
   // Playlist-related //

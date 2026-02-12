@@ -2,16 +2,17 @@ import {
   STATUS_CREATED,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
-import { administratorProcedure } from "@/trpc/init";
+import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import {
   numberIsID,
   numberIsPosInt,
   numberIsPositive,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import { BAPeriodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
+import { calculateBAScore } from "./util.ba";
 
 export const createBA = {
   category: administratorProcedure
@@ -119,6 +120,52 @@ export const createBA = {
         code: STATUS_CREATED,
         message: "Success",
         question: theQuestion,
+      };
+    }),
+
+  answerSheet: loggedInProcedure
+    .input(
+      z.object({
+        period: z.enum(BAPeriodEnum),
+        answers: z.array(
+          z.object({
+            question_id: numberIsID(),
+            score: z.int().min(0).max(5),
+          })
+        ),
+      })
+    )
+    .mutation(async (opts) => {
+      const totalScore = await calculateBAScore(
+        opts.ctx.prisma,
+        opts.input.answers
+      );
+
+      const createdAnswerSheet = await opts.ctx.prisma.bAAnswerSheet.create({
+        data: {
+          user_id: opts.ctx.user.id,
+          period: opts.input.period,
+          score: totalScore,
+          answers: {
+            create: opts.input.answers,
+          },
+        },
+      });
+
+      const theAnswerSheet = await opts.ctx.prisma.bAAnswerSheet.findFirst({
+        where: { id: createdAnswerSheet.id },
+      });
+      if (!theAnswerSheet) {
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to create a new BA answer sheet.",
+        });
+      }
+
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        sheet: theAnswerSheet,
       };
     }),
 };

@@ -1,5 +1,5 @@
 import { STATUS_CREATED } from "@/lib/status_code";
-import { administratorProcedure } from "@/trpc/init";
+import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
   numberIsID,
@@ -7,8 +7,9 @@ import {
   numberIsPositive,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import { BAPeriodEnum, StatusEnum } from "@prisma/client";
 import z from "zod";
+import { calculateBAScore } from "./util.ba";
 
 export const updateBA = {
   category: administratorProcedure
@@ -111,6 +112,71 @@ export const updateBA = {
         code: STATUS_CREATED,
         message: "Success",
         question: updatedQuestion[0],
+      };
+    }),
+
+  answerSheet: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        period: z.enum(BAPeriodEnum),
+        answers: z.array(
+          z.object({
+            question_id: numberIsID(),
+            score: z.int().min(0).max(5),
+          })
+        ),
+      })
+    )
+    .mutation(async (opts) => {
+      const totalScore = await calculateBAScore(
+        opts.ctx.prisma,
+        opts.input.answers
+      );
+
+      let updatedAnswerSheet = [{}];
+      await opts.ctx.prisma.$transaction(async (tx) => {
+        updatedAnswerSheet = await tx.bAAnswerSheet.updateManyAndReturn({
+          data: {
+            user_id: opts.ctx.user.id,
+            period: opts.input.period,
+            score: totalScore,
+          },
+          where: {
+            id: opts.input.id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+
+        checkUpdateResult(
+          updatedAnswerSheet.length,
+          "BA answer sheet",
+          "BA answer sheets"
+        );
+
+        for (const answer of opts.input.answers) {
+          const updatedAnswerItem = await tx.bAAnswerItem.updateManyAndReturn({
+            data: {
+              score: answer.score,
+            },
+            where: {
+              sheet_id: opts.input.id,
+              question_id: answer.question_id,
+            },
+          });
+
+          checkUpdateResult(
+            updatedAnswerItem.length,
+            "BA answer item",
+            "BA answer items"
+          );
+        }
+      });
+
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        sheet: updatedAnswerSheet[0],
       };
     }),
 };

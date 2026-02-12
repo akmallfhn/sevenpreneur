@@ -325,6 +325,21 @@ These table below shows all routes/endpoints/procedures, categorized by object t
   - Non-Administrators can only read active business assessment questions given the question ID.
 - `read.ba.sheet`: Only active business assessment questions are shown.
 
+## Business Assessment Answer Sheet/Item 📝
+
+| Procedure Name          | Logged-In User | Public/Not Logged-In |
+| :---------------------- | :------------: | :------------------: |
+| `create.ba.answerSheet` |       ✅       |          ❌          |
+| `list.ba.answerSheets`  |       ✅       |          ❌          |
+| `read.ba.answerSheet`   |       ✅       |          ❌          |
+| `update.ba.answerSheet` |       ✅       |          ❌          |
+| `delete.ba.answerSheet` |       ✅       |          ❌          |
+
+**Scopes:**
+
+- Only Administrators can see all business assessment answer sheets.
+- Logged-in users have read/write access to their own business assessment answer sheet/item data.
+
 ## Playlists 📺
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |

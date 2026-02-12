@@ -33,6 +33,7 @@ export const createRouter = createTRPCRouter({
     category: createBA.category,
     subcategory: createBA.subcategory,
     question: createBA.question,
+    answerSheet: createBA.answerSheet,
   },
 
   // Playlist-related //

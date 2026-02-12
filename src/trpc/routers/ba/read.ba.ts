@@ -122,4 +122,85 @@ export const readBA = {
       },
     };
   }),
+
+  answerSheet: loggedInProcedure
+    .input(objectHasOnlyID())
+    .query(async (opts) => {
+      const theAnswerSheet = await opts.ctx.prisma.bAAnswerSheet.findFirst({
+        where: {
+          id: opts.input.id,
+        },
+      });
+      if (!theAnswerSheet) {
+        throw readFailedNotFound("answer sheet");
+      }
+
+      const completeList = await opts.ctx.prisma.bACategory.findMany({
+        select: {
+          id: true,
+          name: true,
+          weight: true,
+          num_order: true,
+          subcategories: {
+            select: {
+              id: true,
+              name: true,
+              num_order: true,
+              questions: {
+                select: {
+                  id: true,
+                  question: true,
+                  hint: true,
+                  weight: true,
+                  num_order: true,
+                  answers: {
+                    select: {
+                      id: true,
+                      score: true,
+                      created_at: true,
+                      updated_at: true,
+                    },
+                    where: {
+                      sheet_id: opts.input.id,
+                    },
+                  },
+                },
+                where: {
+                  status: StatusEnum.ACTIVE,
+                },
+              },
+            },
+          },
+        },
+      });
+      const returnedList = completeList.map((cat) => {
+        return {
+          ...cat,
+          subcategories: cat.subcategories.map((subcat) => {
+            return {
+              ...subcat,
+              questions: subcat.questions.map((question) => {
+                return {
+                  ...question,
+                  answers: undefined,
+                  answer:
+                    question.answers.length > 0
+                      ? question.answers[0]
+                      : undefined,
+                };
+              }),
+            };
+          }),
+        };
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        sheet: {
+          ...theAnswerSheet,
+          categories: returnedList,
+        },
+      };
+    }),
 };
