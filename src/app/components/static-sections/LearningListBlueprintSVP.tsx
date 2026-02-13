@@ -61,17 +61,16 @@ export default function LearningListBlueprintSVP() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-vicktor.webp",
       session_variant: "frameworkSecondary",
     },
-    // {
-    //   session_number: "",
-    //   session_name:
-    //     "Why People Choose Your Business Instead of Your Competitors",
-    //   session_description: "",
-    //   session_educator: "Fanbul Prabowo",
-    //   session_educator_title: "CEO of Infipop",
-    //   session_educator_avatar:
-    //     "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-fanbul.webp",
-    //   session_variant: "founderSeries",
-    // },
+    {
+      session_number: "",
+      session_name: "Ways To Build Powerful Business Connections",
+      session_description: "",
+      session_educator: "Adythia Pratama",
+      session_educator_title: "Guerilla Marketing Specialist",
+      session_educator_avatar:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-adythia.webp",
+      session_variant: "founderSeries",
+    },
     {
       session_number: "05.",
       session_name: "People Management & Ops",
