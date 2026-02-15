@@ -3,7 +3,7 @@ import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import {
-  numberIsPositive,
+  numberIsPosInt,
   stringIsNanoid,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -125,7 +125,7 @@ export const listAITool = {
     .input(
       z.object({
         conv_id: stringIsNanoid(),
-        size: numberIsPositive().min(1).optional(),
+        size: numberIsPosInt().optional(),
         before: stringIsNanoid().optional(),
       })
     )

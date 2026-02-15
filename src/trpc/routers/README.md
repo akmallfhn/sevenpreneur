@@ -273,6 +273,73 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Marketers have read access to their own submission data.
 - General Users have read/write access to their own submission data.
 
+## Business Assessment Category 🔍
+
+| Procedure Name       | Administrator (`0`) | Non-Administrator | Public/Not Logged-In |
+| :------------------- | :-----------------: | :---------------: | :------------------: |
+| `create.ba.category` |         ✅          |        ❌         |          ❌          |
+| `list.ba.categories` |         ✅          |        ✅         |          ❌          |
+| `read.ba.category`   |         ✅          |        ✅         |          ❌          |
+| `update.ba.category` |         ✅          |        ❌         |          ❌          |
+| `delete.ba.category` |         ✅          |        ❌         |          ❌          |
+
+**Scopes:**
+
+- Only Administrators have write access to all business assessment categories.
+- All logged-in users can see all business assessment categories.
+
+## Business Assessment Subcategory 📋
+
+| Procedure Name          | Administrator (`0`) | Non-Administrator | Public/Not Logged-In |
+| :---------------------- | :-----------------: | :---------------: | :------------------: |
+| `create.ba.subcategory` |         ✅          |        ❌         |          ❌          |
+| `list.ba.subcategories` |         ✅          |        ✅         |          ❌          |
+| `read.ba.subcategory`   |         ✅          |        ✅         |          ❌          |
+| `update.ba.subcategory` |         ✅          |        ❌         |          ❌          |
+| `delete.ba.subcategory` |         ✅          |        ❌         |          ❌          |
+
+**Scopes:**
+
+- Only Administrators have write access to all business assessment subcategories.
+- All logged-in users can see all business assessment subcategories.
+
+## Business Assessment Question 🎯
+
+| Procedure Name       | Administrator (`0`) | Non-Administrator | Public/Not Logged-In |
+| :------------------- | :-----------------: | :---------------: | :------------------: |
+| `create.ba.question` |         ✅          |        ❌         |          ❌          |
+| `list.ba.questions`  |         ✅          |        ✅         |          ❌          |
+| `read.ba.question`   |         ✅          |        ✅         |          ❌          |
+| `read.ba.sheet`      |         ✅          |        ✅         |          ❌          |
+| `update.ba.question` |         ✅          |        ❌         |          ❌          |
+| `delete.ba.question` |         ✅          |        ❌         |          ❌          |
+
+**Scopes:**
+
+- Only Administrators have write access to all business assessment questions.
+- `list.ba.questions`:
+  - Administrators can see all business assessment questions.
+  - Non-Administrators can only see active business assessment questions.
+- `read.ba.question`:
+  - Administrators can read all business assessment questions.
+  - Non-Administrators can only read active business assessment questions given the question ID.
+- `read.ba.sheet`: Only active business assessment questions are shown.
+
+## Business Assessment Answer Sheet/Item 📝
+
+| Procedure Name          | Logged-In User | Public/Not Logged-In |
+| :---------------------- | :------------: | :------------------: |
+| `create.ba.answerSheet` |       ✅       |          ❌          |
+| `list.ba.answerSheets`  |       ✅       |          ❌          |
+| `read.ba.answerSheet`   |       ✅       |          ❌          |
+| `update.ba.answerSheet` |       ✅       |          ❌          |
+| `delete.ba.answerSheet` |       ✅       |          ❌          |
+
+**Scopes:**
+
+- Only Administrators can see all business assessment answer sheets.
+- Logged-in users have read/write access to their own business assessment answer sheet/item data.
+
 ## Playlists 📺
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
