@@ -1,3 +1,4 @@
+import AppInterstitialBanner from "@/app/components/modals/AppInterstitialBanner";
 import ArticleDetailsSVP from "@/app/components/pages/ArticleDetailsSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -91,11 +92,23 @@ export default async function ArticleDetailsPage({
   } catch {
     return notFound();
   }
-
   const articleData = {
     ...articleDataRaw,
     published_at: articleDataRaw.published_at.toISOString(),
     updated_at: articleDataRaw.updated_at.toISOString(),
+  };
+
+  let interstitialAdsRaw = null;
+  try {
+    interstitialAdsRaw = (await trpc.read.ad.interstitial({ id: 1 }))
+      .interstitial;
+  } catch {
+    interstitialAdsRaw = null;
+  }
+  const interstitialAds = {
+    ...interstitialAdsRaw,
+    start_date: interstitialAdsRaw?.start_date.toISOString(),
+    end_date: interstitialAdsRaw?.end_date.toISOString(),
   };
 
   // Return 404 if INACTIVE status
@@ -110,21 +123,31 @@ export default async function ArticleDetailsPage({
   }
 
   return (
-    <ArticleDetailsSVP
-      articleId={articleData.id}
-      articleTitle={articleData.title}
-      articleImage={articleData.image_url}
-      articleCategory={articleData.category.name}
-      articleDate={articleData.published_at}
-      articleInsight={articleData.insight}
-      articleSlug={articleData.slug_url}
-      articleBody={articleData.body_content}
-      articleReadingTime={articleData.reading_time}
-      articleAuthorName={articleData.author.full_name}
-      articleAuthorAvatar={
-        articleData.author.avatar ||
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-      }
-    />
+    <div>
+      <ArticleDetailsSVP
+        articleId={articleData.id}
+        articleTitle={articleData.title}
+        articleImage={articleData.image_url}
+        articleCategory={articleData.category.name}
+        articleDate={articleData.published_at}
+        articleInsight={articleData.insight}
+        articleSlug={articleData.slug_url}
+        articleBody={articleData.body_content}
+        articleReadingTime={articleData.reading_time}
+        articleAuthorName={articleData.author.full_name}
+        articleAuthorAvatar={
+          articleData.author.avatar ||
+          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+        }
+      />
+      {interstitialAds.status === "ACTIVE" && (
+        <AppInterstitialBanner
+          interstitialImageMobile={interstitialAds.image_mobile!}
+          interstitialImageDesktop={interstitialAds.image_desktop!}
+          interstitialAction={interstitialAds.call_to_action ?? "More Details"}
+          interstitialURL={interstitialAds.target_url!}
+        />
+      )}
+    </div>
   );
 }

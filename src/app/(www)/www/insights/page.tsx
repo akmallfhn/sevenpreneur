@@ -1,4 +1,5 @@
 import ArticleListSVP from "@/app/components/indexes/ArticleListSVP";
+import AppInterstitialBanner from "@/app/components/modals/AppInterstitialBanner";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 
@@ -49,11 +50,35 @@ export default async function ArticlesPage() {
   setSecretKey(secretKey!);
 
   const articleData = (await trpc.list.articles({})).list;
-
   const articleList = articleData.map((item) => ({
     ...item,
     published_at: item.published_at ? item.published_at.toISOString() : "",
   }));
 
-  return <ArticleListSVP articleList={articleList} />;
+  let interstitialAdsRaw = null;
+  try {
+    interstitialAdsRaw = (await trpc.read.ad.interstitial({ id: 1 }))
+      .interstitial;
+  } catch {
+    interstitialAdsRaw = null;
+  }
+  const interstitialAds = {
+    ...interstitialAdsRaw,
+    start_date: interstitialAdsRaw?.start_date.toISOString(),
+    end_date: interstitialAdsRaw?.end_date.toISOString(),
+  };
+
+  return (
+    <div>
+      <ArticleListSVP articleList={articleList} />
+      {interstitialAds.status === "ACTIVE" && (
+        <AppInterstitialBanner
+          interstitialImageMobile={interstitialAds.image_mobile!}
+          interstitialImageDesktop={interstitialAds.image_desktop!}
+          interstitialAction={interstitialAds.call_to_action ?? "More Details"}
+          interstitialURL={interstitialAds.target_url!}
+        />
+      )}
+    </div>
+  );
 }
