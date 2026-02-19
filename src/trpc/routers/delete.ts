@@ -18,6 +18,7 @@ export const deleteRouter = createTRPCRouter({
 
   cohort: deleteLMS.cohort,
   cohortPrice: deleteLMS.cohortPrice,
+  cohortMember: deleteLMS.cohortMember,
   module: deleteLMS.module,
   learning: deleteLMS.learning,
   material: deleteLMS.material,

@@ -124,12 +124,14 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `list.cohortMembers`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
 | `read.cohortMember`   |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
 | `update.cohortMember` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
+| `delete.cohortMember` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 
 **Scopes:**
 
 - Administrators and Class Managers can update all cohort members given the cohort ID and the user ID.
 - Administrators, Educators, and Class Managers can see all cohort members given the cohort ID.
 - Marketers and General Users can see cohort members list given the cohort ID which the users are enrolled.
+- `delete.cohortMember`: Only removes selected member from the member list. No other data is deleted.
 
 ### Enrolled Cohorts 🎓
 
