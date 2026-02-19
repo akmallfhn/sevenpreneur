@@ -16,7 +16,8 @@ export type RolesUser =
   | "administrator"
   | "educator"
   | "classManager"
-  | "generalUser";
+  | "generalUser"
+  | "marketer";
 export type FileVariant =
   | "DOCX"
   | "XLSX"

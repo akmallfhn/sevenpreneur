@@ -2,6 +2,7 @@
 import { RolesUser } from "@/lib/app-types";
 import {
   faBuildingUser,
+  faBullhorn,
   faChalkboardUser,
   faPenNib,
   faUser,
@@ -37,6 +38,11 @@ const variantStyles: Record<
     labelColor: "text-[#41474E]",
     labelIcon: <FontAwesomeIcon icon={faUser} />,
   },
+  marketer: {
+    backgroundColor: "bg-secondary-light",
+    labelColor: "text-secondary",
+    labelIcon: <FontAwesomeIcon icon={faBullhorn} />,
+  },
 };
 
 interface RolesLabelCMSProps {
@@ -48,7 +54,6 @@ export default function RolesLabelCMS({
   labelName,
   variants,
 }: RolesLabelCMSProps) {
-  // --- Variant declaration
   const { backgroundColor, labelColor, labelIcon } = variantStyles[variants];
 
   return (
