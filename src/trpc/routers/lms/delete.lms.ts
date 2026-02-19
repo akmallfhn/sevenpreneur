@@ -1,9 +1,18 @@
 import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN, STATUS_NO_CONTENT } from "@/lib/status_code";
-import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
+import {
+  administratorProcedure,
+  loggedInProcedure,
+  roleBasedProcedure,
+} from "@/trpc/init";
 import { checkDeleteResult, readFailedNotFound } from "@/trpc/utils/errors";
-import { objectHasOnlyID } from "@/trpc/utils/validation";
+import {
+  numberIsID,
+  objectHasOnlyID,
+  stringIsUUID,
+} from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
+import z from "zod";
 
 export const deleteLMS = {
   cohort: roleBasedProcedure(["Administrator", "Class Manager"])
@@ -31,6 +40,31 @@ export const deleteLMS = {
         deletedCohortPrice.count,
         "cohort prices",
         "cohortPrice"
+      );
+      return {
+        code: STATUS_NO_CONTENT,
+        message: "Success",
+      };
+    }),
+
+  cohortMember: administratorProcedure
+    .input(
+      z.object({
+        user_id: stringIsUUID(),
+        cohort_id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const deletedCohortMember = await opts.ctx.prisma.userCohort.deleteMany({
+        where: {
+          user_id: opts.input.user_id,
+          cohort_id: opts.input.cohort_id,
+        },
+      });
+      checkDeleteResult(
+        deletedCohortMember.count,
+        "cohort members",
+        "cohortMember"
       );
       return {
         code: STATUS_NO_CONTENT,
