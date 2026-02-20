@@ -1,5 +1,6 @@
 import {
   CategoryEnum,
+  Cohort,
   Event,
   Playlist,
   PrismaClient,
@@ -15,7 +16,7 @@ type TransactionWithUser = Transaction & {
 
 export async function afterPaidTrigger(
   prisma: PrismaClient,
-  transactionId: string
+  transactionId: string,
 ) {
   const theTransaction = await prisma.transaction.findFirst({
     where: { id: transactionId },
@@ -33,7 +34,7 @@ export async function afterPaidTrigger(
     });
     if (!theCohortPrice) {
       console.error(
-        "afterPaidTrigger: The selected cohort price is not found."
+        "afterPaidTrigger: The selected cohort price is not found.",
       );
       return {
         status: 404,
@@ -41,18 +42,26 @@ export async function afterPaidTrigger(
       };
     }
 
+    const theCohort = await prisma.cohort.findFirst({
+      where: { id: theCohortPrice.cohort_id },
+    });
+    if (!theCohort) {
+      console.error("afterPaidTrigger: The selected cohort is not found.");
+      return { status: 404, message: "The selected cohort is not found." };
+    }
+
     notifyMetaEvent(
       theTransaction,
       "Purchase",
       "service",
-      "Business Education Program"
+      "Business Education Program",
     );
 
     try {
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
         mailSubject: welcomeMail.cohort.subject,
-        mailBody: welcomeMail.cohort.body(theTransaction),
+        mailBody: welcomeMail.cohort.body(theTransaction, theCohort),
       });
     } catch (error) {
       console.error("afterPaidTrigger: Failed to send email", error);
@@ -152,7 +161,7 @@ export async function afterPaidTrigger(
   else {
     console.warn(
       "afterPaidTrigger: Unsupported category",
-      theTransaction.category
+      theTransaction.category,
     );
   }
 
@@ -163,7 +172,7 @@ async function notifyMetaEvent(
   transaction: TransactionWithUser,
   eventName: string,
   contentType: string,
-  contentCategory: string
+  contentCategory: string,
 ) {
   try {
     const metaResponse = await fetch(
@@ -194,7 +203,7 @@ async function notifyMetaEvent(
             },
           ],
         }),
-      }
+      },
     );
     const metaResult = await metaResponse.json();
     console.log("Meta Result:", metaResult);
@@ -206,18 +215,18 @@ async function notifyMetaEvent(
 const welcomeMail = {
   cohort: {
     subject: "You’re In! Here’s What’s Next for Business Blueprint Program 🎉",
-    body: (transaction: TransactionWithUser) =>
+    body: (transaction: TransactionWithUser, cohort: Cohort) =>
       `Hi ${transaction.user.full_name},\n\n` +
       "Welcome aboard! 🎉\n" +
-      "Terima kasih sudah melakukan checkout dan resmi bergabung di Sevenpreneur Business Blueprint Program Batch 7.\n\n" +
+      `Terima kasih sudah melakukan checkout dan resmi bergabung di ${cohort.name}.\n\n` +
       "Di program ini, kamu akan mendapatkan:\n" +
-      "✅ 7 sesi blueprint membahas Seven Framework, dipandu oleh Professional Business Coach\n" +
+      "✅ Sesi blueprint membahas Seven Framework dipandu oleh Professional Business Coach\n" +
       "✅ Akses ke komunitas entrepreneur inspiratif\n" +
       "✅ Insight & strategi langsung dari para praktisi\n" +
       "✅ Pembelajaran bisnis dengan integrasi penggunaan AI\n\n" +
       "✨ Jika kamu terdaftar dalam paket VIP, kamu akan mendapatkan kesempatan untuk:\n" +
       "🌟 Sesi offline di Jakarta\n" +
-      "🌟 Sesi eksklusif bersama Ahok, Tom Lembong, dan Wafa Taftazani\n" +
+      "🌟 Sesi eksklusif bersama para top speaker and business leader\n" +
       "🌟 Intimate Dinner & Networking\n" +
       "🌟 Mentoring privat 1-on-1 dengan business coach\n\n" +
       "📌 What’s Next?\n" +
