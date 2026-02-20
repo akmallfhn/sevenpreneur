@@ -428,4 +428,103 @@ export const listTransaction = {
         metapaging: returnedMetapaging,
       };
     }),
+
+  enrolledProducts: loggedInProcedure.query(async (opts) => {
+    const cohortList = await opts.ctx.prisma.userCohort.findMany({
+      select: {
+        cohort: {
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            start_date: true,
+            end_date: true,
+            published_at: true,
+            learnings: { select: { id: true } },
+          },
+        },
+      },
+      where: {
+        user_id: opts.ctx.user.id,
+        cohort: {
+          deleted_at: null,
+        },
+      },
+    });
+
+    const playlistList = await opts.ctx.prisma.userPlaylist.findMany({
+      select: {
+        playlist: {
+          select: {
+            id: true,
+            name: true,
+            image_url: true,
+            published_at: true,
+            videos: { select: { duration: true } },
+          },
+        },
+      },
+      where: {
+        user_id: opts.ctx.user.id,
+        playlist: {
+          deleted_at: null,
+        },
+      },
+    });
+
+    const returnedComposite = [] as {
+      category: CategoryEnum;
+      slug_category: "cohorts" | "playlists";
+      id: number;
+      name: string;
+      image_url: string;
+      total_item: number;
+      published_at: Date;
+      cohort_start_date: Date | null;
+      cohort_end_date: Date | null;
+      playlist_duration: number | null;
+    }[];
+    for (const entry of cohortList) {
+      returnedComposite.push({
+        category: CategoryEnum.COHORT,
+        slug_category: "cohorts",
+        id: entry.cohort.id,
+        name: entry.cohort.name,
+        image_url: entry.cohort.image,
+        total_item: entry.cohort.learnings.length,
+        published_at: entry.cohort.published_at,
+        cohort_start_date: entry.cohort.start_date,
+        cohort_end_date: entry.cohort.end_date,
+        playlist_duration: null,
+      });
+    }
+    for (const entry of playlistList) {
+      const totalDuration = entry.playlist.videos.reduce(
+        (prev, entry) => prev + entry.duration,
+        0
+      );
+      returnedComposite.push({
+        category: CategoryEnum.PLAYLIST,
+        slug_category: "playlists",
+        id: entry.playlist.id,
+        name: entry.playlist.name,
+        image_url: entry.playlist.image_url,
+        total_item: entry.playlist.videos.length,
+        published_at: entry.playlist.published_at,
+        cohort_start_date: null,
+        cohort_end_date: null,
+        playlist_duration: totalDuration,
+      });
+    }
+
+    returnedComposite.sort(
+      (a, b) => b.published_at.getTime() - a.published_at.getTime()
+    );
+
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      list: returnedComposite,
+    };
+  }),
 };
