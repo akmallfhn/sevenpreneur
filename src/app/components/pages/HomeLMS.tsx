@@ -3,17 +3,12 @@ import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeroHomeLMS from "../heroes/HeroHomeLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
-import HomeMobileLMS, {
-  CohortListMobile,
-  PlaylistMobile,
-} from "./HomeMobileLMS";
 import CourseTabsLMS, { CourseList } from "../tabs/CourseTabsLMS";
+import HomeMobileLMS from "./HomeMobileLMS";
 
 interface HomeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   courseList: CourseList[];
-  cohortList: CohortListMobile[];
-  playlist: PlaylistMobile[];
 }
 
 export default function HomeLMS(props: HomeLMSProps) {
@@ -36,8 +31,7 @@ export default function HomeLMS(props: HomeLMSProps) {
       <HomeMobileLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
-        cohortList={props.cohortList}
-        playlist={props.playlist}
+        courseList={props.courseList}
       />
     );
   }

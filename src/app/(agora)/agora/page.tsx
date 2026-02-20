@@ -12,9 +12,6 @@ export default async function DashboardPageLMS() {
   const userData = (await trpc.auth.checkSession()).user;
 
   const enrolledCourseData = (await trpc.list.enrolledCourses()).list;
-  const enrolledCohortData = (await trpc.list.enrolledCohorts({})).list;
-  const enrolledPlaylistsData = (await trpc.list.enrolledPlaylists({})).list;
-
   const enrolledCourseList = enrolledCourseData.map((item) => ({
     ...item,
     cohort_start_date: item.cohort_start_date
@@ -23,16 +20,6 @@ export default async function DashboardPageLMS() {
     cohort_end_date: item.cohort_end_date
       ? item.cohort_end_date.toISOString()
       : "",
-  }));
-
-  const enrolledCohortList = enrolledCohortData.map((variable) => ({
-    ...variable,
-    start_date: variable.start_date ? variable.start_date.toISOString() : "",
-    end_date: variable.end_date ? variable.end_date.toISOString() : "",
-  }));
-  const enrolledPlaylists = enrolledPlaylistsData.map((item) => ({
-    ...item,
-    price: Number(item.price),
   }));
 
   return (
@@ -44,8 +31,6 @@ export default async function DashboardPageLMS() {
       }
       sessionUserRole={userData.role_id}
       courseList={enrolledCourseList}
-      cohortList={enrolledCohortList}
-      playlist={enrolledPlaylists}
     />
   );
 }

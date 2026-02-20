@@ -1,36 +1,18 @@
 "use client";
-import { StatusType } from "@/lib/app-types";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import ProductItemMobileLMS from "../items/ProductItemMobileLMS";
 import EmptyListLMS from "../states/EmptyListLMS";
-
-export interface CohortListMobile {
-  id: number;
-  name: string;
-  image: string;
-  status: StatusType;
-}
-
-export interface PlaylistMobile {
-  id: number;
-  name: string;
-  image_url: string;
-  status: StatusType;
-}
+import { CourseList } from "../tabs/CourseTabsLMS";
 
 interface HomeMobileLMSProps extends AvatarBadgeLMSProps {
-  cohortList: CohortListMobile[];
-  playlist: PlaylistMobile[];
+  courseList: CourseList[];
 }
 
 export default function HomeMobileLMS(props: HomeMobileLMSProps) {
   const nickName = props.sessionUserName.split(" ")[0];
 
-  const activeCohorts = props.cohortList.filter(
-    (cohort) => cohort.status === "ACTIVE"
-  );
-  const activePlaylists = props.playlist.filter(
-    (playlist) => playlist.status === "ACTIVE"
+  const activeCourse = props.courseList.filter(
+    (course) => course.status === "ACTIVE",
   );
 
   return (
@@ -47,26 +29,17 @@ export default function HomeMobileLMS(props: HomeMobileLMSProps) {
         <h2 className="section-title font-bodycopy font-bold">My Learning</h2>
         <div className="index w-full flex flex-col">
           <div className="product-list flex flex-col gap-2">
-            {activeCohorts.map((post, index) => (
+            {activeCourse.map((post) => (
               <ProductItemMobileLMS
-                key={index}
-                productId={post.id}
-                productName={post.name}
-                productImage={post.image}
-                productCategory="COHORT"
-              />
-            ))}
-            {activePlaylists.map((post, index) => (
-              <ProductItemMobileLMS
-                key={index}
+                key={post.id}
                 productId={post.id}
                 productName={post.name}
                 productImage={post.image_url}
-                productCategory="PLAYLIST"
+                productCategory={post.category}
               />
             ))}
           </div>
-          {activeCohorts.length === 0 && activePlaylists.length === 0 && (
+          {activeCourse.length === 0 && (
             <EmptyListLMS
               stateTitle="No Program Purchased Yet"
               stateDescription="Looks like you haven’t bought any products. Explore our collections
