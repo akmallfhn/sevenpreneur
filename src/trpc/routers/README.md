@@ -512,13 +512,13 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Logged-in users can purchase items for their own.
 - Logged-in users can see and cancel all their own transactions.
 
-### Enrolled Products 🛒
+### Enrolled Courses 🛒
 
-| Procedure Name          | Logged-In User | Public/Not Logged-In |
-| :---------------------- | :------------: | :------------------: |
-| `list.enrolledProducts` |       ✅       |          ❌          |
+| Procedure Name         | Logged-In User | Public/Not Logged-In |
+| :--------------------- | :------------: | :------------------: |
+| `list.enrolledCourses` |       ✅       |          ❌          |
 
-**Scopes:** Logged-in users can see all their own paid/enrolled products.
+**Scopes:** Logged-in users can see all their own paid/enrolled courses (cohorts and playlists).
 
 ## Tickers 🚨
 
