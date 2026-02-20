@@ -429,7 +429,7 @@ export const listTransaction = {
       };
     }),
 
-  enrolledProducts: loggedInProcedure.query(async (opts) => {
+  enrolledCourses: loggedInProcedure.query(async (opts) => {
     const cohortList = await opts.ctx.prisma.userCohort.findMany({
       select: {
         cohort: {
@@ -473,7 +473,7 @@ export const listTransaction = {
     });
 
     const returnedComposite = [] as {
-      category: CategoryEnum;
+      category: "COHORT" | "PLAYLIST";
       slug_category: "cohorts" | "playlists";
       id: number;
       name: string;
