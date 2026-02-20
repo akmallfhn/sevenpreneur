@@ -73,6 +73,7 @@ export const listRouter = createTRPCRouter({
 
   discounts: listTransaction.discounts,
   transactions: listTransaction.transactions,
+  enrolledProducts: listTransaction.enrolledProducts,
 
   // Article-related //
 
