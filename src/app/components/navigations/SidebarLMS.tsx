@@ -4,11 +4,9 @@ import {
   BotMessageSquare,
   BowArrow,
   CircleFadingPlus,
-  CirclePlay,
   LayoutDashboard,
   Loader2,
   LogOut,
-  Presentation,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -112,15 +110,10 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
           </div>
           <div className="sidebar-lms-menu flex flex-col w-full h-full gap-2">
             <SidebarMenuItemLMS
-              menuTitle="Dashboard"
+              menuTitle="Courses"
               url="/"
               icon={<LayoutDashboard />}
               isHome
-            />
-            <SidebarMenuItemLMS
-              menuTitle="Bootcamp Programs"
-              url="/cohorts"
-              icon={<Presentation />}
             />
             <SidebarMenuItemLMS
               menuTitle="Business Templates"
@@ -131,11 +124,6 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
               menuTitle="AI"
               url="/ai"
               icon={<BotMessageSquare />}
-            />
-            <SidebarMenuItemLMS
-              menuTitle="Learning Series"
-              url="/playlists"
-              icon={<CirclePlay />}
             />
           </div>
         </div>

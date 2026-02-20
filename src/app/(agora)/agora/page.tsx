@@ -11,8 +11,19 @@ export default async function DashboardPageLMS() {
 
   const userData = (await trpc.auth.checkSession()).user;
 
+  const enrolledCourseData = (await trpc.list.enrolledCourses()).list;
   const enrolledCohortData = (await trpc.list.enrolledCohorts({})).list;
   const enrolledPlaylistsData = (await trpc.list.enrolledPlaylists({})).list;
+
+  const enrolledCourseList = enrolledCourseData.map((item) => ({
+    ...item,
+    cohort_start_date: item.cohort_start_date
+      ? item.cohort_start_date.toISOString()
+      : "",
+    cohort_end_date: item.cohort_end_date
+      ? item.cohort_end_date.toISOString()
+      : "",
+  }));
 
   const enrolledCohortList = enrolledCohortData.map((variable) => ({
     ...variable,
@@ -32,6 +43,7 @@ export default async function DashboardPageLMS() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
+      courseList={enrolledCourseList}
       cohortList={enrolledCohortList}
       playlist={enrolledPlaylists}
     />

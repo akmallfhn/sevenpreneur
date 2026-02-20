@@ -32,7 +32,7 @@ export default function HeroPlaylistDetailsLMS({
   // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (
-      event: MouseEvent | (MouseEvent & { target: Node })
+      event: MouseEvent | (MouseEvent & { target: Node }),
     ) => {
       if (
         wrapperRef.current &&
@@ -69,10 +69,6 @@ export default function HeroPlaylistDetailsLMS({
       <div className="hero-container absolute flex w-full max-w-[calc(100%-4rem)] top-4 left-1/2 -translate-x-1/2 items-center justify-between px-0 py-4 z-20">
         <div className="hero-breadcrumb flex items-center gap-4">
           <AppBreadcrumb className="text-white">
-            <p className="slash font-bodycopy">/</p>
-            <AppBreadcrumbItem href="/playlists">
-              Learning Series
-            </AppBreadcrumbItem>
             <p className="slash font-bodycopy">/</p>
             <AppBreadcrumbItem isCurrentPage>{playlistName}</AppBreadcrumbItem>
           </AppBreadcrumb>

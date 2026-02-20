@@ -7,9 +7,11 @@ import HomeMobileLMS, {
   CohortListMobile,
   PlaylistMobile,
 } from "./HomeMobileLMS";
+import CourseTabsLMS, { CourseList } from "../tabs/CourseTabsLMS";
 
 interface HomeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
+  courseList: CourseList[];
   cohortList: CohortListMobile[];
   playlist: PlaylistMobile[];
 }
@@ -42,13 +44,14 @@ export default function HomeLMS(props: HomeLMSProps) {
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
       <HeaderListLMS
-        headerTitle="Dashboard"
+        headerTitle="Courses"
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
       />
-      <div className="body-home max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+      <div className="body-home max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
         <HeroHomeLMS sessionUserName={props.sessionUserName} />
+        <CourseTabsLMS courseList={props.courseList} />
       </div>
     </div>
   );

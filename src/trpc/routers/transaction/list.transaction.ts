@@ -16,6 +16,7 @@ import {
   CategoryEnum,
   Prisma,
   PrismaClient,
+  StatusEnum,
   TStatusEnum,
 } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
@@ -31,7 +32,7 @@ async function fetchItems(
   prisma: PrismaClient,
   list: { category: CategoryEnum; item_id: number }[],
   useCohortPrice: boolean,
-  useEventPrice: boolean
+  useEventPrice: boolean,
 ) {
   const cohortIdList: Set<number> = new Set();
   const eventIdList: Set<number> = new Set();
@@ -97,13 +98,13 @@ async function fetchItems(
     },
   });
   const videosCountMap = new Map(
-    videosCountList.map((entry) => [entry.playlist_id, entry._count])
+    videosCountList.map((entry) => [entry.playlist_id, entry._count]),
   );
   const playlistMap = new Map(
     playlistList.map((entry) => {
       const videosCount = videosCountMap.get(entry.id) || 0;
       return [entry.id, { entry, videosCount }];
-    })
+    }),
   );
 
   return { cohortMap, cohortPriceMap, eventMap, eventPriceMap, playlistMap };
@@ -115,12 +116,12 @@ export const listTransaction = {
       z.object({
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
-      })
+      }),
     )
     .query(async (opts) => {
       const paging = calculatePage(
         opts.input,
-        await opts.ctx.prisma.discount.aggregate({ _count: true })
+        await opts.ctx.prisma.discount.aggregate({ _count: true }),
       );
 
       const discountList = await opts.ctx.prisma.discount.findMany({
@@ -133,7 +134,7 @@ export const listTransaction = {
         opts.ctx.prisma,
         discountList,
         false, // uses cohort ID
-        false
+        false,
       );
 
       const returnedList = discountList.map((entry) => {
@@ -205,7 +206,7 @@ export const listTransaction = {
         end_date: z.iso.date().optional(),
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
-      })
+      }),
     )
     .query(async (opts) => {
       let selectedUserId = opts.input.user_id;
@@ -277,7 +278,7 @@ export const listTransaction = {
         await opts.ctx.prisma.transaction.aggregate({
           _count: true,
           where: whereClause,
-        })
+        }),
       );
 
       const transactionsList = await opts.ctx.prisma.transaction.findMany({
@@ -291,7 +292,7 @@ export const listTransaction = {
         opts.ctx.prisma,
         transactionsList,
         true, // uses cohort price ID
-        true
+        true,
       );
 
       let checkoutPrefix = "https://checkout.xendit.co/web/";
@@ -439,6 +440,7 @@ export const listTransaction = {
             image: true,
             start_date: true,
             end_date: true,
+            status: true,
             published_at: true,
             learnings: { select: { id: true } },
           },
@@ -460,6 +462,7 @@ export const listTransaction = {
             name: true,
             image_url: true,
             published_at: true,
+            status: true,
             videos: { select: { duration: true } },
           },
         },
@@ -483,6 +486,7 @@ export const listTransaction = {
       cohort_start_date: Date | null;
       cohort_end_date: Date | null;
       playlist_duration: number | null;
+      status: StatusEnum;
     }[];
     for (const entry of cohortList) {
       returnedComposite.push({
@@ -496,12 +500,13 @@ export const listTransaction = {
         cohort_start_date: entry.cohort.start_date,
         cohort_end_date: entry.cohort.end_date,
         playlist_duration: null,
+        status: entry.cohort.status,
       });
     }
     for (const entry of playlistList) {
       const totalDuration = entry.playlist.videos.reduce(
         (prev, entry) => prev + entry.duration,
-        0
+        0,
       );
       returnedComposite.push({
         category: CategoryEnum.PLAYLIST,
@@ -514,11 +519,12 @@ export const listTransaction = {
         cohort_start_date: null,
         cohort_end_date: null,
         playlist_duration: totalDuration,
+        status: entry.playlist.status,
       });
     }
 
     returnedComposite.sort(
-      (a, b) => b.published_at.getTime() - a.published_at.getTime()
+      (a, b) => b.published_at.getTime() - a.published_at.getTime(),
     );
 
     return {

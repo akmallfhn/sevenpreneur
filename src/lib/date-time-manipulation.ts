@@ -8,6 +8,7 @@ dayjs.locale("id");
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
+// Format 04:28:21
 export function getDurationFromSeconds(seconds: number): string {
   const dur = dayjs.duration(seconds, "seconds");
   const hours = dur.hours().toString().padStart(2, "0");
@@ -21,8 +22,24 @@ export function getDurationFromSeconds(seconds: number): string {
   }
 }
 
+export function formatDurationFromSeconds(seconds: number): string {
+  const duration = dayjs.duration(seconds, "seconds");
+
+  const days = Math.floor(duration.asDays());
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+
+  const parts: string[] = [];
+
+  if (days > 0) parts.push(`${days} d`);
+  if (hours > 0) parts.push(`${hours} h`);
+  if (minutes > 0) parts.push(`${minutes} m`);
+
+  return parts.join(" ") || "0 min";
+}
+
 export function useCountdownHours(
-  targetDateTime: string | dayjs.Dayjs
+  targetDateTime: string | dayjs.Dayjs,
 ): string {
   const calculate = (targetDateTime: string | dayjs.Dayjs) => {
     const now = dayjs();
@@ -97,7 +114,7 @@ export function getDateTimeRange({
 
 export function getSubmissionTiming(
   submittedDate?: string,
-  deadlineDate?: string
+  deadlineDate?: string,
 ) {
   const submittedAt = dayjs(submittedDate);
   const deadlineAt = dayjs(deadlineDate);
