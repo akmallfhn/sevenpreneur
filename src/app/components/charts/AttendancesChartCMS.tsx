@@ -1,9 +1,6 @@
 "use client";
 import { trpc } from "@/trpc/client";
 import { LineChart } from "@mui/x-charts";
-import AppButton from "../buttons/AppButton";
-import { Eye } from "lucide-react";
-import Link from "next/link";
 
 interface AttendancesChartCMSProps {
   sessionToken: string;
@@ -12,15 +9,11 @@ interface AttendancesChartCMSProps {
 }
 
 export default function AttendancesChartCMS(props: AttendancesChartCMSProps) {
-  const allowedRolesDetailsMembers = [0, 1, 2];
-  const isAllowedDetailsMembers = allowedRolesDetailsMembers.includes(
-    props.sessionUserRole
-  );
   const { data: attendanceCount } = trpc.list.attendance_counts.useQuery(
     {
       cohort_id: props.cohortId,
     },
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
 
   const attendanceList = attendanceCount?.list ?? [];
@@ -31,14 +24,6 @@ export default function AttendancesChartCMS(props: AttendancesChartCMSProps) {
         <h2 className="label-name font-brand font-bold">
           Participants Attendance
         </h2>
-        {isAllowedDetailsMembers && (
-          <Link href={`/cohorts/${props.cohortId}/members`}>
-            <AppButton variant="outline" size="small">
-              <Eye className="size-4" />
-              Check Details
-            </AppButton>
-          </Link>
-        )}
       </div>
       <div className="attendance-charts bg-white w-full rounded-md overflow-hidden">
         <LineChart

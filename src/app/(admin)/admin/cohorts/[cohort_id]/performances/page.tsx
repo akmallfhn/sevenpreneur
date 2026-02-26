@@ -1,4 +1,4 @@
-import CohortMemberListCMS from "@/app/components/indexes/CohortMemberListCMS";
+import CohortMembersPerformanceCMS from "@/app/components/indexes/CohortMembersPerformanceCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
@@ -7,7 +7,7 @@ interface MembersPageProps {
   params: Promise<{ cohort_id: string }>;
 }
 
-export default async function MembersPage({ params }: MembersPageProps) {
+export default async function PerformancePage({ params }: MembersPageProps) {
   const { cohort_id } = await params;
   const cohortId = parseInt(cohort_id);
 
@@ -18,9 +18,9 @@ export default async function MembersPage({ params }: MembersPageProps) {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesMemberList = [0];
+  const allowedRolesPerformanceList = [0, 1, 2];
 
-  if (!allowedRolesMemberList.includes(userSession.user.role_id)) {
+  if (!allowedRolesPerformanceList.includes(userSession.user.role_id)) {
     return (
       <div className="forbidden flex w-full h-full pl-64">
         <ForbiddenComponent />
@@ -29,13 +29,11 @@ export default async function MembersPage({ params }: MembersPageProps) {
   }
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <CohortMemberListCMS
-        sessionToken={sessionToken}
-        sessionUserId={userSession.user.id}
-        sessionUserRole={userSession.user.role_id}
-        cohortId={cohortId}
-      />
-    </div>
+    <CohortMembersPerformanceCMS
+      sessionToken={sessionToken}
+      sessionUserId={userSession.user.id}
+      sessionUserRole={userSession.user.role_id}
+      cohortId={cohortId}
+    />
   );
 }

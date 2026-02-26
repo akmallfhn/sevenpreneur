@@ -1,22 +1,29 @@
 "use client";
-import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { ChevronRight, Eye, Loader2, Star } from "lucide-react";
+import {
+  ChevronRight,
+  Loader2,
+  Search,
+  UserPlus,
+  UserRoundMinus,
+} from "lucide-react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
-import BooleanLabelCMS from "../labels/BooleanLabelCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
+import InputCMS from "../fields/InputCMS";
+import { useRouter, useSearchParams } from "next/navigation";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 dayjs.extend(localizedFormat);
 
@@ -28,115 +35,156 @@ interface CohortMemberListCMSProps {
 }
 
 export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
-  const router = useRouter();
-  const searchParam = useSearchParams();
-  const params = new URLSearchParams(searchParam.toString());
-  const selectedId = searchParam.get("id");
-  const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
+  // State for Revoke Access Users
+  const utils = trpc.useUtils();
+  const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
+    useState(false);
+  const [deleteTargetItem, setDeleteTargetItem] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
-  const allowedRolesDetailsMembers = [0, 1, 2];
-  const isAllowedDetailsMembers = allowedRolesDetailsMembers.includes(
-    props.sessionUserRole
+  // State for Search Users
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
+    "",
   );
 
-  // Push Parameter to URL
-  const viewMemberDetails = (userId: string) => {
-    setOpenDetailsId(userId);
-    params.set("id", userId);
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
+  // State for Pagination
+  const router = useRouter();
+  const pageSize = 20;
+  const searchParam = useSearchParams();
+  const pageParam = searchParam.get("page");
+  const currentPage = Number(pageParam) || 1;
 
-  // Close modal when close
-  const handleClose = () => {
-    setOpenDetailsId(null);
-    params.delete("id");
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
+  // Debounce Typing for 1 second
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword.trim() === "" ? undefined : keyword);
+    }, 600);
+    return () => clearTimeout(handler);
+  }, [keyword]);
 
   // Fetch tRPC for Cohort Member List
   const { data, isLoading, isError } = trpc.list.cohortMembers.useQuery({
     cohort_id: props.cohortId,
   });
+  const cohortMemberList = data?.list;
 
-  const cohortMemberList = data?.list.filter((item) => item.role_id === 3);
+  // Function to delete discount
+  const revokeMembers = trpc.delete.cohortMember.useMutation();
+  const handleDelete = () => {
+    if (!deleteTargetItem) return;
+    revokeMembers.mutate(
+      { user_id: deleteTargetItem.id, cohort_id: props.cohortId },
+      {
+        onSuccess: () => {
+          toast.success("Revoke access success");
+          utils.list.cohortMembers.invalidate();
+        },
+        onError: (err) => {
+          toast.error("Failed to revoke access", {
+            description: `${err}`,
+          });
+        },
+      },
+    );
+  };
 
   return (
     <React.Fragment>
-      {isLoading && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
-          <Loader2 className="animate-spin size-5 " />
+      <div className="root container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+        <div className="page-header flex flex-col gap-3">
+          <AppBreadcrumb>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
+              Details
+            </AppBreadcrumbItem>
+            <ChevronRight className="size-3.5" />
+            <AppBreadcrumbItem isCurrentPage>Manage Members</AppBreadcrumbItem>
+          </AppBreadcrumb>
+          <div className="page-title-actions flex justify-between items-center">
+            <TitleRevealCMS
+              titlePage="Manage Members"
+              descPage="Invite fast. Revoke smarter. Stay in control."
+            />
+            <AppButton variant="cmsPrimary">
+              <UserPlus className="size-5" />
+              Add Members
+            </AppButton>
+          </div>
         </div>
-      )}
-      {isError && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
-          No Data
-        </div>
-      )}
 
-      {!isLoading && !isError && (
-        <div className="root container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
-                Details
-              </AppBreadcrumbItem>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>Performance</AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage="Student Performance Tracker"
-                descPage="Track student attendance, assignment progress, and overall learning performance"
-              />
-            </div>
-          </div>
-          <div className="progress-review grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
-            <ScorecardItemCMS
-              scorecardName="Total Students"
-              scorecardValue={cohortMemberList?.length || 0}
-              scorecardBackground="bg-primary"
-            />
-            <ScorecardItemCMS
-              scorecardName="Student Scouts"
-              scorecardValue={
-                cohortMemberList?.filter((item) => item.is_scout).length || 0
-              }
-              scorecardBackground="bg-warning-foreground"
-            />
-            <ScorecardItemCMS
-              scorecardName="Completed Information"
-              scorecardValue={
-                cohortMemberList?.filter((item) => item.has_completed_survey)
-                  .length || 0
-              }
-              scorecardBackground="bg-cms-primary"
-            />
-            <ScorecardItemCMS
-              scorecardName="Certified Students"
-              scorecardValue={
-                cohortMemberList?.filter((item) => !!item.certificate_url)
-                  .length || 0
-              }
-              scorecardBackground="bg-success-foreground"
+        {/* <div className="filter-search flex w-full items-center">
+          <div className="max-w-96 w-full">
+            <InputCMS
+              inputId="search-user"
+              inputType="search"
+              inputIcon={<Search className="size-5" />}
+              inputPlaceholder="Search users..."
+              value={keyword}
+              onInputChange={(value) => {
+                setKeyword(value);
+                const params = new URLSearchParams(searchParam.toString());
+                params.set("page", "1");
+                router.push(`?${params.toString()}`);
+              }}
             />
           </div>
+        </div> */}
+
+        <div className="members-stats grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
+          <ScorecardItemCMS
+            scorecardName="Total Members"
+            scorecardValue={cohortMemberList?.length || 0}
+            scorecardBackground="bg-primary"
+          />
+          <ScorecardItemCMS
+            scorecardName="Total Students"
+            scorecardValue={
+              cohortMemberList?.filter((item) => item.role_id === 3).length || 0
+            }
+            scorecardBackground="bg-warning-foreground"
+          />
+          <ScorecardItemCMS
+            scorecardName="Total Educators"
+            scorecardValue={
+              cohortMemberList?.filter((item) => item.role_id === 1).length || 0
+            }
+            scorecardBackground="bg-success-foreground"
+          />
+          <ScorecardItemCMS
+            scorecardName="Total Class Manager"
+            scorecardValue={
+              cohortMemberList?.filter((item) => item.role_id === 2).length || 0
+            }
+            scorecardBackground="bg-secondary"
+          />
+        </div>
+
+        {/* Loading & Error State */}
+        {isLoading && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <Loader2 className="animate-spin size-5 " />
+          </div>
+        )}
+        {isError && (
+          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+            No Data
+          </div>
+        )}
+
+        {cohortMemberList && !isLoading && !isError && (
           <div className="submission-list flex flex-col gap-2">
             <table className="table-submission relative w-full rounded-sm">
               <thead className="bg-[#FAFAFA] text-[#111111]/70">
                 <tr>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Sct`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Biz Info`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Attendance`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Assignment`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Certificate`.toUpperCase()}</TableHeadCMS>
-                  {isAllowedDetailsMembers && (
-                    <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
-                  )}
+                  <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
                 </tr>
               </thead>
               <tbody>
@@ -167,87 +215,55 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                           </p>
                         </div>
                       </TableCellCMS>
+                      <TableCellCMS>Roles</TableCellCMS>
                       <TableCellCMS>
-                        {!!post.is_scout && (
-                          <Star
-                            className="size-5"
-                            fill={!!post.is_scout ? "#E5BA39" : "none"}
-                            strokeWidth={!!post.is_scout ? 0 : 2}
-                          />
-                        )}
+                        <AppButton
+                          variant="destructive"
+                          size="small"
+                          onClick={() => {
+                            setDeleteTargetItem({
+                              id: post.id,
+                              name: post.full_name,
+                            });
+                            setIsOpenDeleteConfirmation(true);
+                          }}
+                        >
+                          <UserRoundMinus className="size-4" />
+                          Revoke Access
+                        </AppButton>
                       </TableCellCMS>
-                      <TableCellCMS>
-                        {post.has_completed_survey ? (
-                          <BooleanLabelCMS label="COMPLETED" value={true} />
-                        ) : (
-                          <BooleanLabelCMS label="UNFINISHED" value={false} />
-                        )}
-                      </TableCellCMS>
-                      <TableCellCMS>
-                        <div className="flex items-center gap-2 w-full">
-                          <Progress
-                            value={Math.round(
-                              (post.attended_learning_count /
-                                post.learning_count) *
-                                100
-                            )}
-                          />
-                          <p className="text-xs">
-                            {post.attended_learning_count}/{post.learning_count}
-                          </p>
-                        </div>
-                      </TableCellCMS>
-                      <TableCellCMS>
-                        <div className="flex items-center gap-2 w-full">
-                          <Progress
-                            value={Math.round(
-                              (post.submitted_project_count /
-                                post.project_count) *
-                                100
-                            )}
-                          />
-                          <p className="text-xs">
-                            {post.submitted_project_count}/{post.project_count}
-                          </p>
-                        </div>
-                      </TableCellCMS>
-                      <TableCellCMS>
-                        {!!post.certificate_url ? (
-                          <BooleanLabelCMS label="UPLOADED" value={true} />
-                        ) : (
-                          <BooleanLabelCMS label="NOT UPLOADED" value={false} />
-                        )}
-                      </TableCellCMS>
-                      {isAllowedDetailsMembers && (
-                        <TableCellCMS>
-                          <AppButton
-                            variant="outline"
-                            size="small"
-                            onClick={() => viewMemberDetails(post.id)}
-                          >
-                            <Eye className="size-4" />
-                            Preview
-                          </AppButton>
-                        </TableCellCMS>
-                      )}
                     </tr>
                   ))}
               </tbody>
             </table>
           </div>
-        </div>
-      )}
+        )}
+        {cohortMemberList?.length === 0 && (
+          <p className="empty-state mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+        )}
+        {/* {!isLoading && !isError && (
+          <div className="pagination flex flex-col w-full items-center gap-3">
+            <AppNumberPagination
+              currentPage={currentPage}
+              totalPages={data?.metapaging.total_page ?? 1}
+            />
+            <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
+          </div>
+        )} */}
+      </div>
 
-      {/* Open Submission Details */}
-      {openDetailsId && (
-        <EditCohortMemberFormCMS
-          sessionToken={props.sessionToken}
-          sessionUserId={props.sessionUserId}
-          sessionUserRole={props.sessionUserRole}
-          userId={openDetailsId}
-          cohortId={props.cohortId}
-          isOpen={!!openDetailsId}
-          onClose={handleClose}
+      {isOpenDeleteConfirmation && (
+        <AppAlertConfirmDialog
+          alertDialogHeader="Permanently revoke access this member?"
+          alertDialogMessage={`Are you sure you want to revoke acess ${deleteTargetItem?.name}? This action cannot be undone.`}
+          alertCancelLabel="Cancel"
+          alertConfirmLabel="Delete"
+          isOpen={isOpenDeleteConfirmation}
+          onClose={() => setIsOpenDeleteConfirmation(false)}
+          onConfirm={() => {
+            handleDelete();
+            setIsOpenDeleteConfirmation(false);
+          }}
         />
       )}
     </React.Fragment>

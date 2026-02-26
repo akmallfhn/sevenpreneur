@@ -18,10 +18,10 @@ import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AttendancesChartCMS from "../charts/AttendancesChartCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
+import EnrollmentScorecardListCMS from "../indexes/EnrollmentScorecardListCMS";
 import LearningListCMS from "../indexes/LearningListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
-import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
@@ -42,7 +42,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
 
   const allowedRolesUpdateCohort = [0, 2];
   const isAllowedUpdateCohort = allowedRolesUpdateCohort.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
 
   // Fetch data from tRPC
@@ -52,22 +52,11 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
     isError: isErrorCohortDetails,
   } = trpc.read.cohort.useQuery(
     { id: props.cohortId },
-    { enabled: !!props.sessionToken }
-  );
-  const {
-    data: cohortMembersData,
-    isError: isErrorCohortMembers,
-    isLoading: isLoadingCohortMembers,
-  } = trpc.list.cohortMembers.useQuery(
-    { cohort_id: props.cohortId },
-    { enabled: !!props.sessionToken }
-  );
-  const cohortMemberList = cohortMembersData?.list.filter(
-    (item) => item.role_id === 3
+    { enabled: !!props.sessionToken },
   );
 
-  const isLoading = isLoadingCohortDetails || isLoadingCohortMembers;
-  const isError = isErrorCohortDetails || isErrorCohortMembers;
+  const isLoading = isLoadingCohortDetails;
+  const isError = isErrorCohortDetails;
 
   // Checking height content description
   useEffect(() => {
@@ -233,10 +222,10 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
             />
           </main>
           <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
-            <ScorecardItemCMS
-              scorecardName="Enrolled Students"
-              scorecardBackground="bg-[#FF7830]"
-              scorecardValue={cohortMemberList?.length || "-"}
+            <EnrollmentScorecardListCMS
+              sessionToken={props.sessionToken}
+              sessionUserRole={props.sessionUserRole}
+              cohortId={props.cohortId}
             />
             <ModuleListCMS
               sessionToken={props.sessionToken}
