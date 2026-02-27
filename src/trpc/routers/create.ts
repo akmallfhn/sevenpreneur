@@ -17,6 +17,7 @@ export const createRouter = createTRPCRouter({
 
   cohort: createLMS.cohort,
   cohortPrice: createLMS.cohortPrice,
+  cohortMember: createLMS.cohortMember,
   module: createLMS.module,
   learning: createLMS.learning,
   material: createLMS.material,
