@@ -177,6 +177,7 @@ export const listLMS = {
         phone_number: string | null;
         avatar: string | null;
         role_id: number;
+        role_name: string;
         has_completed_survey: boolean;
         certificate_url: string | null;
         is_scout: boolean;
@@ -192,6 +193,7 @@ SELECT
   phone_country_codes.phone_code AS phone_country_phone_code,
   phone_country_codes.emoji AS phone_country_emoji,
   users.phone_number, users.avatar, users.role_id,
+  roles.name AS role_name,
   users.occupation IS NOT NULL AS has_completed_survey,
   users_cohorts.certificate_url, users_cohorts.is_scout,
   COALESCE(learning_count, 0)::INTEGER AS learning_count,
@@ -199,6 +201,7 @@ SELECT
   COALESCE(submissions_count.submission_count, 0)::INTEGER AS submission_count
 FROM users_cohorts
   LEFT JOIN users ON users_cohorts.user_id = users.id
+  LEFT JOIN roles ON users.role_id = roles.id
   LEFT JOIN phone_country_codes ON users.phone_country_id = phone_country_codes.id
   LEFT JOIN (
     SELECT cohort_prices.id AS price_id, COUNT(*) AS learning_count
@@ -242,6 +245,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           phone_number: entry.phone_number,
           avatar: entry.avatar,
           role_id: entry.role_id,
+          role_name: entry.role_name,
           has_completed_survey: entry.has_completed_survey,
           certificate_url: entry.certificate_url,
           is_scout: entry.is_scout,

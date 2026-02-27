@@ -39,22 +39,30 @@ interface UserListCMSProps {
 
 export default function UserListCMS(props: UserListCMSProps) {
   const router = useRouter();
+  const utils = trpc.useUtils();
+
+  // State for Pagination
   const pageSize = 20;
   const searchParam = useSearchParams();
   const pageParam = searchParam.get("page");
   const currentPage = Number(pageParam) || 1;
-  const utils = trpc.useUtils();
-  const [actionsOpened, setActionsOpened] = useState<string | null>(null);
+
+  // State for Filter Search
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
+    "",
+  );
+
+  // State for Delete User
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
     useState(false);
   const [deleteTargetUser, setDeleteTargetUser] = useState<{
     id: string;
     name: string;
   } | null>(null);
-  const [keyword, setKeyword] = useState("");
-  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
-    "",
-  );
+
+  // State for Dropdown
+  const [actionsOpened, setActionsOpened] = useState<string | null>(null);
   const wrapperRef = useRef<Record<string, HTMLDivElement | null>>({});
   const setWrapperRef = (id: string) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;

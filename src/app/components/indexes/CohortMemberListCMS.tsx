@@ -3,27 +3,22 @@ import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import {
-  ChevronRight,
-  Loader2,
-  Search,
-  UserPlus,
-  UserRoundMinus,
-} from "lucide-react";
+import { ChevronRight, Loader2, UserPlus, UserRoundMinus } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
+import AddCohortMemberFormCMS from "../forms/AddCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import TitleRevealCMS from "../titles/TitleRevealCMS";
-import InputCMS from "../fields/InputCMS";
-import { useRouter, useSearchParams } from "next/navigation";
-import AppNumberPagination from "../navigations/AppNumberPagination";
+import RolesLabelCMS from "../labels/RolesLabelCMS";
+import { toCamelCase } from "@/lib/convert-case";
+import { RolesUser } from "@/lib/app-types";
 
 dayjs.extend(localizedFormat);
 
@@ -35,6 +30,9 @@ interface CohortMemberListCMSProps {
 }
 
 export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
+  // State for Add Users
+  const [isOpenInvitationForm, setIsOpenInvitationForm] = useState(false);
+
   // State for Revoke Access Users
   const utils = trpc.useUtils();
   const [isOpenDeleteConfirmation, setIsOpenDeleteConfirmation] =
@@ -43,27 +41,6 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
     id: string;
     name: string;
   } | null>(null);
-
-  // State for Search Users
-  const [keyword, setKeyword] = useState("");
-  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
-    "",
-  );
-
-  // State for Pagination
-  const router = useRouter();
-  const pageSize = 20;
-  const searchParam = useSearchParams();
-  const pageParam = searchParam.get("page");
-  const currentPage = Number(pageParam) || 1;
-
-  // Debounce Typing for 1 second
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedKeyword(keyword.trim() === "" ? undefined : keyword);
-    }, 600);
-    return () => clearTimeout(handler);
-  }, [keyword]);
 
   // Fetch tRPC for Cohort Member List
   const { data, isLoading, isError } = trpc.list.cohortMembers.useQuery({
@@ -110,30 +87,15 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
               titlePage="Manage Members"
               descPage="Invite fast. Revoke smarter. Stay in control."
             />
-            <AppButton variant="cmsPrimary">
+            <AppButton
+              variant="cmsPrimary"
+              onClick={() => setIsOpenInvitationForm(true)}
+            >
               <UserPlus className="size-5" />
               Add Members
             </AppButton>
           </div>
         </div>
-
-        {/* <div className="filter-search flex w-full items-center">
-          <div className="max-w-96 w-full">
-            <InputCMS
-              inputId="search-user"
-              inputType="search"
-              inputIcon={<Search className="size-5" />}
-              inputPlaceholder="Search users..."
-              value={keyword}
-              onInputChange={(value) => {
-                setKeyword(value);
-                const params = new URLSearchParams(searchParam.toString());
-                params.set("page", "1");
-                router.push(`?${params.toString()}`);
-              }}
-            />
-          </div>
-        </div> */}
 
         <div className="members-stats grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
           <ScorecardItemCMS
@@ -189,7 +151,7 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
               </thead>
               <tbody>
                 {cohortMemberList
-                  ?.sort((a, b) => a.full_name.localeCompare(b.full_name))
+                  ?.sort((a, b) => a.role_id - b.role_id)
                   .map((post, index) => (
                     <tr
                       className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
@@ -215,7 +177,12 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                           </p>
                         </div>
                       </TableCellCMS>
-                      <TableCellCMS>Roles</TableCellCMS>
+                      <TableCellCMS>
+                        <RolesLabelCMS
+                          labelName={post.role_name}
+                          variants={toCamelCase(post.role_name) as RolesUser}
+                        />
+                      </TableCellCMS>
                       <TableCellCMS>
                         <AppButton
                           variant="destructive"
@@ -238,20 +205,19 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
             </table>
           </div>
         )}
-        {cohortMemberList?.length === 0 && (
-          <p className="empty-state mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
-        )}
-        {/* {!isLoading && !isError && (
-          <div className="pagination flex flex-col w-full items-center gap-3">
-            <AppNumberPagination
-              currentPage={currentPage}
-              totalPages={data?.metapaging.total_page ?? 1}
-            />
-            <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
-          </div>
-        )} */}
       </div>
 
+      {/* Add User */}
+      {isOpenInvitationForm && (
+        <AddCohortMemberFormCMS
+          sessionToken={props.sessionToken}
+          cohortId={props.cohortId}
+          isOpen={isOpenInvitationForm}
+          onClose={() => setIsOpenInvitationForm(false)}
+        />
+      )}
+
+      {/* Revoke Access User */}
       {isOpenDeleteConfirmation && (
         <AppAlertConfirmDialog
           alertDialogHeader="Permanently revoke access this member?"
