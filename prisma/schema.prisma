@@ -66,6 +66,25 @@ enum BAPeriodEnum {
   @@map("ba_period_enum")
 }
 
+// Enumeration for the bd_fin_cost_mtds table (cost_*)
+
+enum CostCategoryEnum {
+  // TODO: use actual values
+  TODO @map("todo")
+
+  @@map("cost_category_enum")
+}
+
+// Enumeration for the bd_north_star_indicators table (ns_*)
+
+enum NSStatusEnum {
+  ON_TRACK  @map("on_track")
+  AT_RISK   @map("at_risk")
+  OFF_TRACK @map("off_track")
+
+  @@map("ns_status_enum")
+}
+
 // Enumeration for the users table
 
 enum OccupationEnum {
@@ -178,51 +197,54 @@ model PaymentChannel {
 // User data
 
 model User {
-  id                    String              @id @default(uuid()) @db.Uuid
-  full_name             String              @db.VarChar()
-  email                 String              @unique @db.VarChar()
-  phone_country         PhoneCountryCode?   @relation(fields: [phone_country_id], references: [id])
-  phone_country_id      Int?                @db.SmallInt
-  phone_number          String?             @db.VarChar()
-  avatar                String?             @db.VarChar()
-  role                  Role                @relation(fields: [role_id], references: [id])
-  role_id               Int                 @default(3) @db.SmallInt // General User
-  status                StatusEnum          @default(ACTIVE)
-  date_of_birth         DateTime?           @db.Date
-  business_name         String?             @db.VarChar()
-  industry              Industry?           @relation(fields: [industry_id], references: [id])
-  industry_id           Int?                @db.SmallInt
-  business_description  String?             @db.Text
-  occupation            OccupationEnum?
-  yearly_revenue        RevenueEnum?
-  total_employees       NumEmployeeEnum?
-  company_profile_url   String?             @db.VarChar()
-  business_age_years    Int?                @db.Integer
-  legal_entity_type     LegalEntityEnum?
-  average_selling_price Decimal?            @db.Decimal(12, 2)
-  created_at            DateTime            @default(now()) @db.Timestamptz()
-  updated_at            DateTime            @default(now()) @updatedAt @db.Timestamptz()
-  last_login            DateTime            @default(now()) @updatedAt @db.Timestamptz()
-  deleted_at            DateTime?           @db.Timestamptz()
-  tokens                Token[]
-  deleted_cohorts       Cohort[]
-  deleted_playlists     Playlist[]
-  speaker_at            Learning[]
-  speaker_in            EducatorPlaylist[]  @relation("host_playlist")
-  transactions          Transaction[]
-  cohorts               UserCohort[]
-  discussion_starters   DiscussionStarter[]
-  discussion_replies    DiscussionReply[]
-  submissions           Submission[]
-  ba_answer_sheets      BAAnswerSheet[]
-  playlists             UserPlaylist[]      @relation("watch_playlist")
-  Event                 Event[]
-  UserEvent             UserEvent[]
-  ai_results            AIResult[]
-  ai_conversations      AIConversation[]
-  attendances           Attendance[]
-  authored_articles     Article[]           @relation("author_article")
-  reviewed_articles     Article[]           @relation("reviewer_article")
+  id                       String                 @id @default(uuid()) @db.Uuid
+  full_name                String                 @db.VarChar()
+  email                    String                 @unique @db.VarChar()
+  phone_country            PhoneCountryCode?      @relation(fields: [phone_country_id], references: [id])
+  phone_country_id         Int?                   @db.SmallInt
+  phone_number             String?                @db.VarChar()
+  avatar                   String?                @db.VarChar()
+  role                     Role                   @relation(fields: [role_id], references: [id])
+  role_id                  Int                    @default(3) @db.SmallInt // General User
+  status                   StatusEnum             @default(ACTIVE)
+  date_of_birth            DateTime?              @db.Date
+  business_name            String?                @db.VarChar()
+  industry                 Industry?              @relation(fields: [industry_id], references: [id])
+  industry_id              Int?                   @db.SmallInt
+  business_description     String?                @db.Text
+  occupation               OccupationEnum?
+  yearly_revenue           RevenueEnum?
+  total_employees          NumEmployeeEnum?
+  company_profile_url      String?                @db.VarChar()
+  business_age_years       Int?                   @db.Integer
+  legal_entity_type        LegalEntityEnum?
+  average_selling_price    Decimal?               @db.Decimal(12, 2)
+  created_at               DateTime               @default(now()) @db.Timestamptz()
+  updated_at               DateTime               @default(now()) @updatedAt @db.Timestamptz()
+  last_login               DateTime               @default(now()) @updatedAt @db.Timestamptz()
+  deleted_at               DateTime?              @db.Timestamptz()
+  tokens                   Token[]
+  deleted_cohorts          Cohort[]
+  deleted_playlists        Playlist[]
+  speaker_at               Learning[]
+  speaker_in               EducatorPlaylist[]     @relation("host_playlist")
+  transactions             Transaction[]
+  cohorts                  UserCohort[]
+  discussion_starters      DiscussionStarter[]
+  discussion_replies       DiscussionReply[]
+  submissions              Submission[]
+  ba_answer_sheets         BAAnswerSheet[]
+  playlists                UserPlaylist[]         @relation("watch_playlist")
+  Event                    Event[]
+  UserEvent                UserEvent[]
+  ai_results               AIResult[]
+  ai_conversations         AIConversation[]
+  attendances              Attendance[]
+  authored_articles        Article[]              @relation("author_article")
+  reviewed_articles        Article[]              @relation("reviewer_article")
+  bd_fin_revenue_mtds      BDFinRevenueMTD[]
+  bd_fin_cost_mtds         BDFinCostMTD[]
+  bd_north_star_indicators BDNorthStarIndicator[]
 
   @@map("users")
 }
@@ -473,6 +495,71 @@ model BAAnswerItem {
   updated_at  DateTime      @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("ba_answer_items")
+}
+
+// Business-metric-related
+
+model BDFinRevenueMTD {
+  id         Int      @id @default(autoincrement()) @db.Integer
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    String   @db.Uuid
+  year       Int      @db.SmallInt
+  month      Int      @db.SmallInt
+  amount     Decimal  @db.Decimal(12, 2)
+  currency   String   @db.VarChar()
+  by_product Json     @db.Json
+  by_channel Json     @db.Json
+  note       String?  @db.VarChar()
+  created_at DateTime @default(now()) @db.Timestamptz()
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("bd_fin_revenue_mtds")
+}
+
+model BDFinCostMTD {
+  id         Int              @id @default(autoincrement()) @db.Integer
+  user       User             @relation(fields: [user_id], references: [id])
+  user_id    String           @db.Uuid
+  year       Int              @db.SmallInt
+  month      Int              @db.SmallInt
+  amount     Decimal          @db.Decimal(12, 2)
+  currency   String           @db.VarChar()
+  category   CostCategoryEnum
+  note       String?          @db.VarChar()
+  created_at DateTime         @default(now()) @db.Timestamptz()
+  updated_at DateTime         @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("bd_fin_cost_mtds")
+}
+
+model BDNorthStarIndicator {
+  id            Int              @id @default(autoincrement()) @db.Integer
+  user          User             @relation(fields: [user_id], references: [id])
+  user_id       String           @db.Uuid
+  name          String           @db.VarChar()
+  description   String           @db.Text
+  annual_target Decimal          @db.Decimal(12, 2)
+  unit          String           @db.VarChar()
+  status        NSStatusEnum
+  created_at    DateTime         @default(now()) @db.Timestamptz()
+  updated_at    DateTime         @default(now()) @updatedAt @db.Timestamptz()
+  mtds          BDNorthStarMTD[]
+
+  @@map("bd_north_star_indicators")
+}
+
+model BDNorthStarMTD {
+  id           Int                  @id @default(autoincrement()) @db.Integer
+  indicator    BDNorthStarIndicator @relation(fields: [indicator_id], references: [id])
+  indicator_id Int                  @db.Integer
+  year         Int                  @db.SmallInt
+  month        Int                  @db.SmallInt
+  actual_value Decimal              @db.Decimal(12, 2)
+  note         String?              @db.VarChar()
+  created_at   DateTime             @default(now()) @db.Timestamptz()
+  updated_at   DateTime             @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("bd_north_star_mtds")
 }
 
 // Playlist-related

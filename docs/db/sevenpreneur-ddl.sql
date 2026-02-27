@@ -45,6 +45,21 @@ CREATE TYPE ba_period_enum AS ENUM (
   'asesmen_ketiga'
 );
 
+-- Enumeration for the bd_fin_cost_mtds table (cost_*)
+
+CREATE TYPE cost_category_enum AS ENUM (
+  -- TODO: use actual values
+  'todo'
+);
+
+-- Enumeration for the bd_north_star_indicators table (ns_*)
+
+CREATE TYPE ns_status_enum AS ENUM (
+  'on_track',
+  'at_risk',
+  'off_track'
+);
+
 -- Enumeration for the users table
 
 CREATE TYPE occupation_enum AS ENUM (
@@ -337,6 +352,58 @@ CREATE TABLE ba_answer_items (
   score        SMALLINT     NOT NULL, -- in [0, 5] range
   created_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Business-metric-related
+
+CREATE TABLE bd_fin_revenue_mtds (
+  id          SERIAL          PRIMARY KEY,
+  user_id     UUID            NOT NULL,
+  year        SMALLINT        NOT NULL,
+  month       SMALLINT        NOT NULL,
+  amount      DECIMAL(12, 2)  NOT NULL,
+  currency    VARCHAR         NOT NULL,
+  by_product  JSON            NOT NULL,
+  by_channel  JSON            NOT NULL,
+  note        VARCHAR             NULL,
+  created_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bd_fin_cost_mtds (
+  id          SERIAL              PRIMARY KEY,
+  user_id     UUID                NOT NULL,
+  year        SMALLINT            NOT NULL,
+  month       SMALLINT            NOT NULL,
+  amount      DECIMAL(12, 2)      NOT NULL,
+  currency    VARCHAR             NOT NULL,
+  category    cost_category_enum  NOT NULL,
+  note        VARCHAR                 NULL,
+  created_at  TIMESTAMPTZ         NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ         NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bd_north_star_indicators (
+  id             SERIAL          PRIMARY KEY,
+  user_id        UUID            NOT NULL,
+  name           VARCHAR         NOT NULL,
+  description    TEXT            NOT NULL,
+  annual_target  DECIMAL(12, 2)  NOT NULL,
+  unit           VARCHAR         NOT NULL,
+  status         ns_status_enum  NOT NULL,
+  created_at     TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at     TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE bd_north_star_mtds (
+  id            SERIAL          PRIMARY KEY,
+  indicator_id  SERIAL          NOT NULL,
+  year          SMALLINT        NOT NULL,
+  month         SMALLINT        NOT NULL,
+  actual_value  DECIMAL(12, 2)  NOT NULL,
+  note          VARCHAR             NULL,
+  created_at    TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Playlist-related
@@ -645,6 +712,20 @@ ALTER TABLE ba_answer_items
   ADD FOREIGN KEY (sheet_id)    REFERENCES ba_answer_sheets (id),
   ADD FOREIGN KEY (question_id) REFERENCES ba_questions (id);
 
+-- Business-metric-related
+
+ALTER TABLE bd_fin_revenue_mtds
+  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE bd_fin_cost_mtds
+  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE bd_north_star_indicators
+  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE bd_north_star_mtds
+  ADD FOREIGN KEY (indicator_id) REFERENCES bd_north_star_indicators (id);
+
 -- Playlist-related
 
 ALTER TABLE playlists
@@ -801,6 +882,28 @@ CREATE TRIGGER update_ba_answer_sheets_updated_at_trigger
 
 CREATE TRIGGER update_ba_answer_items_updated_at_trigger
   BEFORE UPDATE ON ba_answer_items
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+-- Business-metric-related
+
+CREATE TRIGGER update_bd_fin_revenue_mtds_updated_at_trigger
+  BEFORE UPDATE ON bd_fin_revenue_mtds
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_bd_fin_cost_mtds_updated_at_trigger
+  BEFORE UPDATE ON bd_fin_cost_mtds
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_bd_north_star_indicators_updated_at_trigger
+  BEFORE UPDATE ON bd_north_star_indicators
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_bd_north_star_mtds_updated_at_trigger
+  BEFORE UPDATE ON bd_north_star_mtds
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
