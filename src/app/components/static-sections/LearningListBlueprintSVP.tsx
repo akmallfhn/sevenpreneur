@@ -116,12 +116,12 @@ export default function LearningListBlueprintSVP() {
     },
     {
       session_number: "",
-      session_name: "",
+      session_name: "Intellectual Capital as a Growth Asset",
       session_description: "",
-      session_educator: "To Be Announced",
-      session_educator_title: "",
+      session_educator: "Ferry Irwandi",
+      session_educator_title: "Influencer & Founder of Malaka",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tba.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-ferry.webp",
       session_variant: "extraordinary",
     },
     {
