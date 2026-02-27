@@ -3,12 +3,17 @@ import {
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
-import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
+import {
+  administratorProcedure,
+  loggedInProcedure,
+  roleBasedProcedure,
+} from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { createSlugFromTitle } from "@/trpc/utils/slug";
 import {
   numberIsID,
   stringIsTimestampTz,
+  stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
@@ -114,6 +119,42 @@ export const createLMS = {
         code: STATUS_CREATED,
         message: "Success",
         cohortPrice: theCohortPrice,
+      };
+    }),
+
+  cohortMember: administratorProcedure
+    .input(
+      z.object({
+        user_id: stringIsUUID(),
+        cohort_id: numberIsID(),
+        cohort_price_id: numberIsID(),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdCohortMember = await opts.ctx.prisma.userCohort.create({
+        data: {
+          user_id: opts.input.user_id,
+          cohort_id: opts.input.cohort_id,
+          cohort_price_id: opts.input.cohort_price_id,
+        },
+      });
+      const theCohortMember = await opts.ctx.prisma.userCohort.findFirst({
+        where: {
+          user_id: createdCohortMember.user_id,
+          cohort_id: createdCohortMember.cohort_id,
+          cohort_price_id: createdCohortMember.cohort_price_id,
+        },
+      });
+      if (!theCohortMember) {
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to create a new cohort member.",
+        });
+      }
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        cohortMember: theCohortMember,
       };
     }),
 

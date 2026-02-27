@@ -121,6 +121,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 | Procedure Name        | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
 | :-------------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `create.cohortMember` |         ✅          |       ❌       |         ❌          |       ❌       |         ❌         |          ❌          |
 | `list.cohortMembers`  |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ❌          |
 | `read.cohortMember`   |         ✅          |       ✅       |         ✅          |       ❌       |         ❌         |          ❌          |
 | `update.cohortMember` |         ✅          |       ❌       |         ✅          |       ❌       |         ❌         |          ❌          |
