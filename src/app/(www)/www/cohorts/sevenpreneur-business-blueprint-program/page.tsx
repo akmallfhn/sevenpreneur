@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const secretKey = process.env.SECRET_KEY_PUBLIC_API;
   setSecretKey(secretKey!);
 
-  const cohortData = (await trpc.read.cohort({ id: 36 })).cohort;
+  const cohortData = (await trpc.read.cohort({ id: 37 })).cohort;
 
   if (cohortData.status !== "ACTIVE") {
     return {
