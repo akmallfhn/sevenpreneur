@@ -276,7 +276,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Marketers have read access to their own submission data.
 - General Users have read/write access to their own submission data.
 
-## Business Assessment Category 🔍
+## Business Assessment Categories 🔍
 
 | Procedure Name       | Administrator (`0`) | Non-Administrator | Public/Not Logged-In |
 | :------------------- | :-----------------: | :---------------: | :------------------: |
@@ -291,7 +291,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Only Administrators have write access to all business assessment categories.
 - All logged-in users can see all business assessment categories.
 
-## Business Assessment Subcategory 📋
+## Business Assessment Subcategories 📋
 
 | Procedure Name          | Administrator (`0`) | Non-Administrator | Public/Not Logged-In |
 | :---------------------- | :-----------------: | :---------------: | :------------------: |
@@ -306,7 +306,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Only Administrators have write access to all business assessment subcategories.
 - All logged-in users can see all business assessment subcategories.
 
-## Business Assessment Question 🎯
+## Business Assessment Questions 🎯
 
 | Procedure Name       | Administrator (`0`) | Non-Administrator | Public/Not Logged-In |
 | :------------------- | :-----------------: | :---------------: | :------------------: |
@@ -328,7 +328,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
   - Non-Administrators can only read active business assessment questions given the question ID.
 - `read.ba.sheet`: Only active business assessment questions are shown.
 
-## Business Assessment Answer Sheet/Item 📝
+## Business Assessment Answer Sheets/Items 📝
 
 | Procedure Name          | Logged-In User | Public/Not Logged-In |
 | :---------------------- | :------------: | :------------------: |
@@ -343,7 +343,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Only Administrators can see all business assessment answer sheets.
 - Logged-in users have read/write access to their own business assessment answer sheet/item data.
 
-## Business Financial Metric: Revenue MTD 📝
+## Business Financial Metric: Revenue MTDs 📈
 
 | Procedure Name              | Logged-In User | Public/Not Logged-In |
 | :-------------------------- | :------------: | :------------------: |
@@ -359,7 +359,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Logged-in users have read/write access to their own financial metric: revenue MTD (month to date) data.
 
-## Business Financial Metric: Cost MTD 📝
+## Business Financial Metric: Cost MTDs 📉
 
 | Procedure Name       | Logged-In User | Public/Not Logged-In |
 | :------------------- | :------------: | :------------------: |
