@@ -1,4 +1,4 @@
-import { STATUS_CREATED } from "@/lib/status_code";
+import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
@@ -37,7 +37,7 @@ export const updateBA = {
       checkUpdateResult(updatedCategory.length, "BA category", "BA categories");
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         category: updatedCategory[0],
       };
@@ -72,7 +72,7 @@ export const updateBA = {
       );
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         subcategory: updatedSubcategory[0],
       };
@@ -109,7 +109,7 @@ export const updateBA = {
       checkUpdateResult(updatedQuestion.length, "BA question", "BA questions");
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         question: updatedQuestion[0],
       };
@@ -174,7 +174,7 @@ export const updateBA = {
       });
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         sheet: updatedAnswerSheet[0],
       };
