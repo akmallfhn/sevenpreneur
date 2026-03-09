@@ -1,4 +1,4 @@
-import { STATUS_CREATED } from "@/lib/status_code";
+import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
@@ -50,7 +50,7 @@ export const updateBD = {
       );
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         revenue_mtd: updatedRevenueMTD[0],
       };
@@ -100,7 +100,7 @@ export const updateBD = {
       );
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         revenue_mtd: updatedRevenueMTD[0],
       };
@@ -137,7 +137,7 @@ export const updateBD = {
       checkUpdateResult(updatedCostMTD.length, "BD cost MTD", "BD cost MTDs");
 
       return {
-        code: STATUS_CREATED,
+        code: STATUS_OK,
         message: "Success",
         cost_mtd: updatedCostMTD[0],
       };
