@@ -42,6 +42,7 @@ export const createRouter = createTRPCRouter({
   // Business data (bd)
   bd: {
     revenue_mtd: createBD.revenue_mtd,
+    revenue_mtd_csv: createBD.revenue_mtd_csv,
     cost_mtd: createBD.cost_mtd,
   },
 
