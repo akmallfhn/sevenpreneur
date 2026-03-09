@@ -345,13 +345,15 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Business Financial Metric: Revenue MTD 📝
 
-| Procedure Name          | Logged-In User | Public/Not Logged-In |
-| :---------------------- | :------------: | :------------------: |
-| `create.bd.revenue_mtd` |       ✅       |          ❌          |
-| `list.bd.revenue_mtds`  |       ✅       |          ❌          |
-| `read.bd.revenue_mtd`   |       ✅       |          ❌          |
-| `update.bd.revenue_mtd` |       ✅       |          ❌          |
-| `delete.bd.revenue_mtd` |       ✅       |          ❌          |
+| Procedure Name              | Logged-In User | Public/Not Logged-In |
+| :-------------------------- | :------------: | :------------------: |
+| `create.bd.revenue_mtd`     |       ✅       |          ❌          |
+| `create.bd.revenue_mtd_csv` |       ✅       |          ❌          |
+| `list.bd.revenue_mtds`      |       ✅       |          ❌          |
+| `read.bd.revenue_mtd`       |       ✅       |          ❌          |
+| `update.bd.revenue_mtd`     |       ✅       |          ❌          |
+| `update.bd.revenue_mtd_csv` |       ✅       |          ❌          |
+| `delete.bd.revenue_mtd`     |       ✅       |          ❌          |
 
 **Scopes:**
 
