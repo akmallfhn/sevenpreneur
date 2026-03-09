@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { updateAdv } from "./ads/update.ads";
 import { updateArticle } from "./article/update.article";
 import { updateBA } from "./ba/update.ba";
+import { updateBD } from "./bd/update.bd";
 import { updateEvent } from "./event/update.event";
 import { updateLMS } from "./lms/update.lms";
 import { updatePlaylist } from "./playlist/update.playlist";
@@ -36,6 +37,14 @@ export const updateRouter = createTRPCRouter({
     subcategory: updateBA.subcategory,
     question: updateBA.question,
     answerSheet: updateBA.answerSheet,
+  },
+
+  // Business-metric-related //
+
+  // Business data (bd)
+  bd: {
+    revenue_mtd: updateBD.revenue_mtd,
+    cost_mtd: updateBD.cost_mtd,
   },
 
   // Playlist-related //

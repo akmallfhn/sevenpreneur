@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { deleteAITool } from "./ai_tool/delete.ai_tool";
 import { deleteArticle } from "./article/delete.article";
 import { deleteBA } from "./ba/delete.ba";
+import { deleteBD } from "./bd/delete.bd";
 import { deleteEvent } from "./event/delete.event";
 import { deleteLMS } from "./lms/delete.lms";
 import { deletePlaylist } from "./playlist/delete.playlist";
@@ -34,6 +35,14 @@ export const deleteRouter = createTRPCRouter({
     subcategory: deleteBA.subcategory,
     question: deleteBA.question,
     answerSheet: deleteBA.answerSheet,
+  },
+
+  // Business-metric-related //
+
+  // Business data (bd)
+  bd: {
+    revenue_mtd: deleteBD.revenue_mtd,
+    cost_mtd: deleteBD.cost_mtd,
   },
 
   // Playlist-related //

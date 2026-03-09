@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { createArticle } from "./article/create.article";
 import { createBA } from "./ba/create.ba";
+import { createBD } from "./bd/create.bd";
 import { createEvent } from "./event/create.event";
 import { createLMS } from "./lms/create.lms";
 import { createPlaylist } from "./playlist/create.playlist";
@@ -34,6 +35,14 @@ export const createRouter = createTRPCRouter({
     subcategory: createBA.subcategory,
     question: createBA.question,
     answerSheet: createBA.answerSheet,
+  },
+
+  // Business-metric-related //
+
+  // Business data (bd)
+  bd: {
+    revenue_mtd: createBD.revenue_mtd,
+    cost_mtd: createBD.cost_mtd,
   },
 
   // Playlist-related //

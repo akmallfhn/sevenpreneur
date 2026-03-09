@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { listAITool } from "./ai_tool/list.ai_tool";
 import { listArticle } from "./article/list.article";
 import { listBA } from "./ba/list.ba";
+import { listBD } from "./bd/list.bd";
 import { listEvent } from "./event/list.event";
 import { listLMS } from "./lms/list.lms";
 import { listLookup } from "./lookup/list.lookup";
@@ -45,6 +46,14 @@ export const listRouter = createTRPCRouter({
     subcategories: listBA.subcategories,
     questions: listBA.questions,
     answerSheets: listBA.answerSheets,
+  },
+
+  // Business-metric-related //
+
+  // Business data (bd)
+  bd: {
+    revenue_mtds: listBD.revenue_mtds,
+    cost_mtds: listBD.cost_mtds,
   },
 
   // Playlist-related //
