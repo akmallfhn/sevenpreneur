@@ -343,6 +343,34 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 - Only Administrators can see all business assessment answer sheets.
 - Logged-in users have read/write access to their own business assessment answer sheet/item data.
 
+## Business Financial Metric: Revenue MTD 📝
+
+| Procedure Name          | Logged-In User | Public/Not Logged-In |
+| :---------------------- | :------------: | :------------------: |
+| `create.bd.revenue_mtd` |       ✅       |          ❌          |
+| `list.bd.revenue_mtds`  |       ✅       |          ❌          |
+| `read.bd.revenue_mtd`   |       ✅       |          ❌          |
+| `update.bd.revenue_mtd` |       ✅       |          ❌          |
+| `delete.bd.revenue_mtd` |       ✅       |          ❌          |
+
+**Scopes:**
+
+- Logged-in users have read/write access to their own financial metric: revenue MTD (month to date) data.
+
+## Business Financial Metric: Cost MTD 📝
+
+| Procedure Name       | Logged-In User | Public/Not Logged-In |
+| :------------------- | :------------: | :------------------: |
+| `create.bd.cost_mtd` |       ✅       |          ❌          |
+| `list.bd.cost_mtds`  |       ✅       |          ❌          |
+| `read.bd.cost_mtd`   |       ✅       |          ❌          |
+| `update.bd.cost_mtd` |       ✅       |          ❌          |
+| `delete.bd.cost_mtd` |       ✅       |          ❌          |
+
+**Scopes:**
+
+- Logged-in users have read/write access to their own financial metric: cost MTD (month to date) data.
+
 ## Playlists 📺
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |

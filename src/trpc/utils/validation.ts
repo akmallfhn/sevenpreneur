@@ -49,6 +49,13 @@ export function numberIsPosInt(): z.ZodInt {
 }
 
 /**
+ * Number should be an integer, 0 or bigger
+ */
+export function numberIsNonNegInt(): z.ZodInt {
+  return z.int().min(0);
+}
+
+/**
  * Number should be greater than 0
  */
 export function numberIsPositive(): z.ZodNumber {
@@ -74,6 +81,13 @@ export function objectHasOnlyNanoid() {
  */
 export function objectHasOnlyUUID() {
   return z.object({ id: z.uuid() });
+}
+
+/**
+ * Array has objects containing name and amount for revenue detail
+ */
+export function arrayRevenueBy() {
+  return z.array(z.object({ name: stringNotBlank(), amount: z.number() }));
 }
 
 export function arrayArticleBodyContent() {

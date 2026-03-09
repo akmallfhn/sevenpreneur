@@ -3,6 +3,7 @@ import { readAdv } from "./ads/read.ads";
 import { readAIResult } from "./ai_tool/read.ai_tool";
 import { readArticle } from "./article/read.article";
 import { readBA } from "./ba/read.ba";
+import { readBD } from "./bd/read.bd";
 import { readEvent } from "./event/read.event";
 import { readLMS } from "./lms/read.lms";
 import { readLookup } from "./lookup/read.lookup";
@@ -44,6 +45,14 @@ export const readRouter = createTRPCRouter({
     question: readBA.question,
     sheet: readBA.sheet,
     answerSheet: readBA.answerSheet,
+  },
+
+  // Business-metric-related //
+
+  // Business data (bd)
+  bd: {
+    revenue_mtd: readBD.revenue_mtd,
+    cost_mtd: readBD.cost_mtd,
   },
 
   // Playlist-related //
