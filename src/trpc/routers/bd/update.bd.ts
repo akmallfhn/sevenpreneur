@@ -8,7 +8,7 @@ import {
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { CostCategoryEnum } from "@prisma/client";
+import { CostCategoryEnum, NSStatusEnum } from "@prisma/client";
 import z from "zod";
 import { ParseRevenueCSV } from "./util.bd";
 
@@ -140,6 +140,85 @@ export const updateBD = {
         code: STATUS_OK,
         message: "Success",
         cost_mtd: updatedCostMTD[0],
+      };
+    }),
+
+  north_star_indicator: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        annual_target: z.number(),
+        unit: stringNotBlank(),
+        status: z.enum(NSStatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedNorthStarIndicator =
+        await opts.ctx.prisma.bDNorthStarIndicator.updateManyAndReturn({
+          data: {
+            user_id: opts.ctx.user.id,
+            name: opts.input.name,
+            description: opts.input.description,
+            annual_target: opts.input.annual_target,
+            unit: opts.input.unit,
+            status: opts.input.status,
+          },
+          where: {
+            id: opts.input.id,
+          },
+        });
+
+      checkUpdateResult(
+        updatedNorthStarIndicator.length,
+        "BD north star indicator",
+        "BD north star indicators"
+      );
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        north_star_indicator: updatedNorthStarIndicator[0],
+      };
+    }),
+
+  north_star_mtd: loggedInProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        indicator_id: numberIsID(),
+        year: numberIsPosInt(),
+        month: numberIsNonNegInt(),
+        actual_value: z.number(),
+        note: stringNotBlank().nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedNorthStarMTD =
+        await opts.ctx.prisma.bDNorthStarMTD.updateManyAndReturn({
+          data: {
+            indicator_id: opts.input.indicator_id,
+            year: opts.input.year,
+            month: opts.input.month,
+            actual_value: opts.input.actual_value,
+            note: opts.input.note,
+          },
+          where: {
+            id: opts.input.id,
+          },
+        });
+
+      checkUpdateResult(
+        updatedNorthStarMTD.length,
+        "BD north star MTD",
+        "BD north star MTDs"
+      );
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        north_star_mtd: updatedNorthStarMTD[0],
       };
     }),
 };

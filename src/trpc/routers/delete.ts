@@ -43,6 +43,8 @@ export const deleteRouter = createTRPCRouter({
   bd: {
     revenue_mtd: deleteBD.revenue_mtd,
     cost_mtd: deleteBD.cost_mtd,
+    north_star_indicator: deleteBD.north_star_indicator,
+    north_star_mtd: deleteBD.north_star_mtd,
   },
 
   // Playlist-related //

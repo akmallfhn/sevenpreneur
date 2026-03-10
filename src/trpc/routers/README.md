@@ -372,6 +372,34 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Logged-in users have read/write access to their own financial metric: cost MTD (month to date) data.
 
+## Business Operational Metric: North Star Indicators ✦
+
+| Procedure Name                   | Logged-In User | Public/Not Logged-In |
+| :------------------------------- | :------------: | :------------------: |
+| `create.bd.north_star_indicator` |       ✅       |          ❌          |
+| `list.bd.north_star_indicators`  |       ✅       |          ❌          |
+| `read.bd.north_star_indicator`   |       ✅       |          ❌          |
+| `update.bd.north_star_indicator` |       ✅       |          ❌          |
+| `delete.bd.north_star_indicator` |       ✅       |          ❌          |
+
+**Scopes:**
+
+- Logged-in users have read/write access to their own operational metric: north star indicators.
+
+## Business Operational Metric: North Star MTDs ★
+
+| Procedure Name             | Logged-In User | Public/Not Logged-In |
+| :------------------------- | :------------: | :------------------: |
+| `create.bd.north_star_mtd` |       ✅       |          ❌          |
+| `list.bd.north_star_mtds`  |       ✅       |          ❌          |
+| `read.bd.north_star_mtd`   |       ✅       |          ❌          |
+| `update.bd.north_star_mtd` |       ✅       |          ❌          |
+| `delete.bd.north_star_mtd` |       ✅       |          ❌          |
+
+**Scopes:**
+
+- Logged-in users have read/write access to their own operational metric: north star MTD (month to date) data.
+
 ## Playlists 📺
 
 | Procedure Name    | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
