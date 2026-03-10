@@ -1,15 +1,17 @@
 import {
+  STATUS_BAD_REQUEST,
   STATUS_CREATED,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import {
   arrayRevenueBy,
+  numberIsID,
   numberIsNonNegInt,
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { CostCategoryEnum } from "@prisma/client";
+import { CostCategoryEnum, NSStatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import { ParseRevenueCSV } from "./util.bd";
@@ -146,6 +148,103 @@ export const createBD = {
         code: STATUS_CREATED,
         message: "Success",
         cost_mtd: theCostMTD,
+      };
+    }),
+
+  north_star_indicator: loggedInProcedure
+    .input(
+      z.object({
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        annual_target: z.number(),
+        unit: stringNotBlank(),
+        status: z.enum(NSStatusEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const createdNorthStarIndicator =
+        await opts.ctx.prisma.bDNorthStarIndicator.create({
+          data: {
+            user_id: opts.ctx.user.id,
+            name: opts.input.name,
+            description: opts.input.description,
+            annual_target: opts.input.annual_target,
+            unit: opts.input.unit,
+            status: opts.input.status,
+          },
+        });
+
+      const theNorthStarIndicator =
+        await opts.ctx.prisma.bDNorthStarIndicator.findFirst({
+          where: { id: createdNorthStarIndicator.id },
+        });
+      if (!theNorthStarIndicator) {
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to create a new BD north star indicator.",
+        });
+      }
+
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        north_star_indicator: theNorthStarIndicator,
+      };
+    }),
+
+  north_star_mtd: loggedInProcedure
+    .input(
+      z.object({
+        indicator_id: numberIsID(),
+        year: numberIsPosInt(),
+        month: numberIsNonNegInt(),
+        actual_value: z.number(),
+        note: stringNotBlank().nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const theNorthStarIndicator =
+        await opts.ctx.prisma.bDNorthStarIndicator.findFirst({
+          select: { user_id: true },
+          where: {
+            id: opts.input.indicator_id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+      if (
+        !theNorthStarIndicator ||
+        theNorthStarIndicator.user_id != opts.ctx.user.id
+      ) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "The given north star indicator is not found.",
+        });
+      }
+
+      const createdNorthStarMTD = await opts.ctx.prisma.bDNorthStarMTD.create({
+        data: {
+          indicator_id: opts.input.indicator_id,
+          year: opts.input.year,
+          month: opts.input.month,
+          actual_value: opts.input.actual_value,
+          note: opts.input.note,
+        },
+      });
+
+      const theNorthStarMTD = await opts.ctx.prisma.bDNorthStarMTD.findFirst({
+        where: { id: createdNorthStarMTD.id },
+      });
+      if (!theNorthStarMTD) {
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to create a new BD north star MTD.",
+        });
+      }
+
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        north_star_mtd: theNorthStarMTD,
       };
     }),
 };

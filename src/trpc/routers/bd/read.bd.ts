@@ -48,4 +48,49 @@ export const readBD = {
       cost_mtd: theCostMTD,
     };
   }),
+
+  north_star_indicator: loggedInProcedure
+    .input(objectHasOnlyID())
+    .query(async (opts) => {
+      const theNorthStarIndicator =
+        await opts.ctx.prisma.bDNorthStarIndicator.findFirst({
+          where: {
+            id: opts.input.id,
+            user_id: opts.ctx.user.id,
+          },
+        });
+
+      if (!theNorthStarIndicator) {
+        throw readFailedNotFound("north star indicator");
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        north_star_indicator: theNorthStarIndicator,
+      };
+    }),
+
+  north_star_mtd: loggedInProcedure
+    .input(objectHasOnlyID())
+    .query(async (opts) => {
+      const theNorthStarMTD = await opts.ctx.prisma.bDNorthStarMTD.findFirst({
+        where: {
+          id: opts.input.id,
+          indicator: {
+            user_id: opts.ctx.user.id,
+          },
+        },
+      });
+
+      if (!theNorthStarMTD) {
+        throw readFailedNotFound("north star MTD");
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        north_star_mtd: theNorthStarMTD,
+      };
+    }),
 };

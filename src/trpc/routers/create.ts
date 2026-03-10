@@ -45,6 +45,8 @@ export const createRouter = createTRPCRouter({
     revenue_mtd: createBD.revenue_mtd,
     revenue_mtd_csv: createBD.revenue_mtd_csv,
     cost_mtd: createBD.cost_mtd,
+    north_star_indicator: createBD.north_star_indicator,
+    north_star_mtd: createBD.north_star_mtd,
   },
 
   // Playlist-related //
