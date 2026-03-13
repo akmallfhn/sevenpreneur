@@ -64,7 +64,7 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
 
 export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
   const [discussion, setDiscussion] = useState<DiscussionStarterList[]>(
-    props.discussionStarterList
+    props.discussionStarterList,
   );
   const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
   const [textValue, setTextValue] = useState("");
@@ -83,7 +83,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
   }, []);
 
   const activeMaterials = props.materialList.filter(
-    (material) => material.status === "ACTIVE"
+    (material) => material.status === "ACTIVE",
   );
 
   // Create discussion
@@ -126,7 +126,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
   // Remove deleted discussion on state
   const handleDiscussionDeleted = (discussionId: number) => {
     setDiscussion((prevDiscussions) =>
-      prevDiscussions.filter((discussion) => discussion.id !== discussionId)
+      prevDiscussions.filter((discussion) => discussion.id !== discussionId),
     );
   };
 
@@ -136,7 +136,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
 
     if (props.learningRecordingYoutube) {
       const extracted = extractEmbedPathFromYouTubeURL(
-        props.learningRecordingYoutube
+        props.learningRecordingYoutube,
       );
       return extracted || null;
     }
@@ -153,6 +153,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
         sessionUserId={props.sessionUserId}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
         learningSessionId={props.learningSessionId}
         learningSessionName={props.learningSessionName}
         learningSessionDescription={props.learningSessionDescription}

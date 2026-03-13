@@ -31,6 +31,7 @@ export default function HomeLMS(props: HomeLMSProps) {
       <HomeMobileLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
         courseList={props.courseList}
       />
     );

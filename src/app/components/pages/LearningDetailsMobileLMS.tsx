@@ -38,13 +38,13 @@ interface LearningDetailsMobileLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function LearningDetailsMobileLMS(
-  props: LearningDetailsMobileLMSProps
+  props: LearningDetailsMobileLMSProps,
 ) {
   const [currentTab, setCurrentTab] = useState("details");
   const [isSendingDiscussion, setIsSendingDiscussion] = useState(false);
   const [textValue, setTextValue] = useState("");
   const [discussion, setDiscussion] = useState<DiscussionStarterList[]>(
-    props.discussionStarterList
+    props.discussionStarterList,
   );
 
   // Create discussion
@@ -87,7 +87,7 @@ export default function LearningDetailsMobileLMS(
   // Remove deleted discussion on state
   const handleDiscussionDeleted = (discussionId: number) => {
     setDiscussion((prevDiscussions) =>
-      prevDiscussions.filter((discussion) => discussion.id !== discussionId)
+      prevDiscussions.filter((discussion) => discussion.id !== discussionId),
     );
   };
 
@@ -129,6 +129,7 @@ export default function LearningDetailsMobileLMS(
         sessionUserId={props.sessionUserId}
         sessionUserAvatar={props.sessionUserAvatar}
         sessionUserName={props.sessionUserName}
+        sessionUserRole={props.sessionUserRole}
         learningSessionId={props.learningSessionId}
         learningSessionDescription={props.learningSessionDescription}
         learningSessionDate={props.learningSessionDate}
