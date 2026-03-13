@@ -1,17 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeroHomeLMS from "../heroes/HeroHomeLMS";
 import HeaderListLMS from "../navigations/HeaderListLMS";
-import CourseTabsLMS, { CourseList } from "../tabs/CourseTabsLMS";
-import HomeMobileLMS from "./HomeMobileLMS";
+import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
+import DisallowedMobile from "../states/DisallowedMobile";
 
-interface HomeLMSProps extends AvatarBadgeLMSProps {
+interface LibraryLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
-  courseList: CourseList[];
+  templateList: TemplateList[];
+  hasTemplateAccess: boolean;
 }
 
-export default function HomeLMS(props: HomeLMSProps) {
+export default function LibraryLMS(props: LibraryLMSProps) {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   // Dynamic mobile rendering
@@ -27,26 +27,22 @@ export default function HomeLMS(props: HomeLMSProps) {
   }, []);
 
   if (isMobile) {
-    return (
-      <HomeMobileLMS
-        sessionUserName={props.sessionUserName}
-        sessionUserAvatar={props.sessionUserAvatar}
-        courseList={props.courseList}
-      />
-    );
+    return <DisallowedMobile />;
   }
 
   return (
     <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
       <HeaderListLMS
-        headerTitle="Courses"
+        headerTitle="Library"
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
       />
       <div className="body-home max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-        <HeroHomeLMS sessionUserName={props.sessionUserName} />
-        <CourseTabsLMS courseList={props.courseList} />
+        <LibraryTabsLMS
+          templateList={props.templateList}
+          hasTemplateAccess={props.hasTemplateAccess}
+        />
       </div>
     </div>
   );

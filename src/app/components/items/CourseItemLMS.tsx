@@ -48,7 +48,7 @@ export default function CourseItemLMS(props: CourseItemLMSProps) {
             color="#FFFFFF"
           />
         )}
-        <div className="course-category absolute flex top-3 right-3 w-fit px-2 py-1 items-center gap-1 bg-success-background text-success-foreground text-xs font-bodycopy font-semibold rounded-full z-20">
+        <div className="course-category absolute flex top-3 right-3 w-fit px-2 py-1 items-center gap-1 bg-white text-black text-xs font-bodycopy font-semibold rounded-full z-20">
           {props.courseCategory === "COHORT" ? "Bootcamp" : "Video Series"}
         </div>
       </div>

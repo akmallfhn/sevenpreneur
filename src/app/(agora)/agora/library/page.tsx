@@ -1,10 +1,9 @@
-import TemplateListLMS, {
-  TemplateList,
-} from "@/app/components/indexes/TemplateListLMS";
+import LibraryLMS from "@/app/components/pages/LibraryLMS";
+import { TemplateList } from "@/app/components/tabs/LibraryTabsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
-export default async function TemplatesPageLMS() {
+export default async function LibraryPageLMS() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -22,15 +21,15 @@ export default async function TemplatesPageLMS() {
   }
 
   return (
-    <TemplateListLMS
+    <LibraryLMS
       sessionUserName={userData.full_name}
       sessionUserAvatar={
         userData.avatar ||
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
       }
       sessionUserRole={userData.role_id}
-      hasTemplateAccess={hasTemplateAccess}
       templateList={templateLists}
+      hasTemplateAccess={hasTemplateAccess}
     />
   );
 }
