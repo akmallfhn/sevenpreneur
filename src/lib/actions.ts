@@ -46,6 +46,58 @@ export async function DeleteSession() {
 }
 
 // UPDATE USER DATA
+interface UpdateUserDataProps {
+  userId: string;
+  userName: string;
+  userPhoneNumber?: string | null;
+  userAvatar?: string | null;
+  userDateofBirth?: string | null;
+  userOccupation?: OccupationUser;
+  businessName?: string;
+  businessDescription?: string;
+  businessAgeYears?: number;
+  businessIndustry?: number;
+  businessLegalEntity?: BusinessLegalEntity;
+  businessEmployeeNum?: BusinessEmployeeNumber;
+  businessYearlyRevenue?: BusinessYearlyRevenue;
+  companyProfileUrl?: string;
+  averageSellingPrice?: number;
+}
+export async function UpdateUserData(props: UpdateUserDataProps) {
+  const cookieStore = await cookies();
+  const sessionData = cookieStore.get("session_token");
+
+  if (!sessionData) {
+    return { code: STATUS_NOT_FOUND, message: "No session token found" };
+  }
+
+  setSessionToken(sessionData.value);
+
+  const updateUserData = await trpc.update.user({
+    id: props.userId,
+    full_name: props.userName,
+    avatar: props.userAvatar,
+    phone_number: props.userPhoneNumber,
+    date_of_birth: props.userDateofBirth,
+    occupation: props.userOccupation,
+    business_name: props.businessName,
+    business_description: props.businessDescription,
+    business_age_years: props.businessAgeYears,
+    industry_id: props.businessIndustry,
+    legal_entity_type: props.businessLegalEntity,
+    total_employees: props.businessEmployeeNum,
+    yearly_revenue: props.businessYearlyRevenue,
+    company_profile_url: props.companyProfileUrl,
+    average_selling_price: props.averageSellingPrice,
+  });
+
+  return {
+    code: updateUserData.code,
+    message: updateUserData.message,
+  };
+}
+
+// UPDATE USER BUSINESS
 interface UpdateUserBusinessProps {
   userDateofBirth: string;
   userOccupation: OccupationUser;
@@ -652,7 +704,7 @@ interface GenerateAIIdeaValidationProps {
   availableResources: string;
 }
 export async function GenerateAIIdeaValidation(
-  props: GenerateAIIdeaValidationProps
+  props: GenerateAIIdeaValidationProps,
 ) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -718,7 +770,7 @@ interface GenerateAICompetitorGradingProps {
   productIndustry: string;
 }
 export async function GenerateAICompetitorGrading(
-  props: GenerateAICompetitorGradingProps
+  props: GenerateAICompetitorGradingProps,
 ) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -783,7 +835,7 @@ interface GenerateAIPriceStrategyProps extends GenerateCOGSStructureProps {
   fixedCostList: CostList[];
 }
 export async function GenerateAIPriceStrategy(
-  props: GenerateAIPriceStrategyProps
+  props: GenerateAIPriceStrategyProps,
 ) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");

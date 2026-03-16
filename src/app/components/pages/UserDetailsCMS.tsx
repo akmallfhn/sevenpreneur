@@ -57,7 +57,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
     { id: props.userId },
     {
       enabled: !!props.sessionToken,
-    }
+    },
   );
   const {
     data: rolesData,
@@ -77,7 +77,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
     isError: isErrorTransactions,
   } = trpc.list.transactions.useQuery(
     { user_id: props.userId },
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
 
   // Extract variable

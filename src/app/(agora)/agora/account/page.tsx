@@ -1,5 +1,7 @@
+import AccountDetailsLMS from "@/app/components/pages/AccountDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 
 export default async function AccountPageLMS() {
   const cookieStore = await cookies();
@@ -11,5 +13,33 @@ export default async function AccountPageLMS() {
   const userData = (await trpc.auth.checkSession()).user;
   const userId = userData.id;
 
-  return <div>{userId}</div>;
+  let userDetails;
+  try {
+    userDetails = (await trpc.read.user({ id: userId })).user;
+  } catch {
+    return notFound();
+  }
+
+  const userDetailsSanitize = {
+    ...userDetails,
+    date_of_birth: userDetails.date_of_birth
+      ? userDetails.date_of_birth.toISOString()
+      : null,
+    average_selling_price: userDetails.average_selling_price
+      ? userDetails.average_selling_price.toString()
+      : null,
+  };
+
+  return (
+    <AccountDetailsLMS
+      sessionUserId={userData.id}
+      sessionUserName={userData.full_name}
+      sessionUserAvatar={
+        userData.avatar ||
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+      }
+      sessionUserRole={userData.role_id}
+      initialData={userDetailsSanitize}
+    />
+  );
 }

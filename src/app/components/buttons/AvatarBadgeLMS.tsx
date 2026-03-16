@@ -46,16 +46,14 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
     domain = "example.com:3000";
   }
 
-  const nickName = props.sessionUserName?.split(" ")[0];
-
   return (
     <div
       className="user-menu relative flex hover:cursor-pointer"
       ref={wrapperRef}
       onClick={handleActionsDropdown}
     >
-      <div className="avatar-container flex items-center gap-3 bg-white py-2 px-3.5 rounded-full shadow-xs">
-        <div className="avatar aspect-square size-7 rounded-full overflow-hidden ">
+      <div className="avatar-container flex items-center gap-3 bg-white p-2 rounded-lg border border-outline">
+        <div className="avatar aspect-square size-6 rounded-md overflow-hidden ">
           <Image
             className="object-cover w-full h-full"
             src={props.sessionUserAvatar}
@@ -65,8 +63,8 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
           />
         </div>
         <div className="nickname items-center gap-1 lg:flex">
-          <p className="max-w-28 font-bodycopy font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
-            {nickName}
+          <p className="max-w-36 font-bodycopy font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
+            {props.sessionUserName}
           </p>
           <ChevronDown className="size-3" />
         </div>

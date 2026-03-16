@@ -1,12 +1,14 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import EmptyListLMS from "../states/EmptyListLMS";
-import AIItemCardLMS from "../items/AIItemCardLMS";
-import HeaderListLMS from "../navigations/HeaderListLMS";
+import { faBrain } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AIItemCardLMS from "../items/AIItemCardLMS";
+import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import DisallowedMobile from "../states/DisallowedMobile";
+import EmptyListLMS from "../states/EmptyListLMS";
 
 export interface AIList {
   id: number;
@@ -50,10 +52,11 @@ export default function AIListLMS({
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
-      <HeaderListLMS
+    <div className="root-page hidden flex-col pl-64 pb-8 gap-5 w-full h-full items-center justify-center lg:flex">
+      <PageHeaderLMS
         headerTitle="AI Business Tools"
-        headerDescription="Tools to helps you research, analyze, and plan your business faster and more accurately"
+        headerIcon={<FontAwesomeIcon icon={faBrain} size="lg" />}
+        headerIconColor="bg-[#FFE8E7] text-[#C76151]"
         sessionUserRole={sessionUserRole}
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
