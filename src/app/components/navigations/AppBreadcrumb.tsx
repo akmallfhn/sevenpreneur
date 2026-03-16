@@ -1,6 +1,4 @@
 "use client";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { HTMLAttributes, ReactNode } from "react";
 
@@ -14,10 +12,12 @@ export default function AppBreadcrumb({
 }: AppBreadcrumbProps) {
   return (
     <div
-      className={`breadcrumb flex text-sm font-bodycopy font-medium gap-1.5 items-center ${className}`}
+      className={`breadcrumb flex text-[13px] font-bodycopy font-medium gap-1.5 items-center ${className}`}
     >
-      <Link href={"/"} className="flex items-center gap-1.5">
-        <FontAwesomeIcon icon={faHome} className="size-3" />
+      <Link
+        href={"/"}
+        className="flex items-center gap-1.5 hover:underline underline-offset-2"
+      >
         <p>Home</p>
       </Link>
       {children}

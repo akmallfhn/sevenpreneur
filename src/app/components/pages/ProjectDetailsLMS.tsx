@@ -1,25 +1,27 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import FileItemLMS from "../items/FileItemLMS";
+import { DeleteSubmission } from "@/lib/actions";
+import { SubmissionStatus } from "@/lib/app-types";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
-import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
-import { SubmissionStatus } from "@/lib/app-types";
-import AppButton from "../buttons/AppButton";
 import { Pencil, Trash2 } from "lucide-react";
-import CreateSubmissionFormLMS from "../forms/CreateSubmissionFormLMS";
-import { DeleteSubmission } from "@/lib/actions";
-import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import { toast } from "sonner";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import CreateSubmissionFormLMS from "../forms/CreateSubmissionFormLMS";
 import EditSubmissionFormLMS, {
   InitialData,
 } from "../forms/EditSubmissionFormLMS";
-import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
-import Image from "next/image";
+import FileItemLMS from "../items/FileItemLMS";
+import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
 import DisallowedMobile from "../states/DisallowedMobile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenRuler } from "@fortawesome/free-solid-svg-icons";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -73,8 +75,8 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
   useEffect(() => {
     queueMicrotask(() =>
       setSubmissionStatus(
-        props.submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED"
-      )
+        props.submissionDocumentURL ? "SUBMITTED" : "NOT_SUBMITTED",
+      ),
     );
   }, [props.submissionDocumentURL]);
 
@@ -124,11 +126,11 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
     queueMicrotask(() => {
       if (isEarly) {
         setSubmittedTime(
-          `Assignment was submitted ${formatted || "less than an hour"} early`
+          `Assignment was submitted ${formatted || "less than an hour"} early`,
         );
       } else {
         setSubmittedTime(
-          `Assignment was submitted ${formatted || "less than an hour"} late`
+          `Assignment was submitted ${formatted || "less than an hour"} late`,
         );
       }
     });
@@ -167,14 +169,15 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
   return (
     <React.Fragment>
       <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
-        <HeaderCohortEntityLMS
+        <PageHeaderCohortLMS
           cohortId={props.cohortId}
           cohortName={props.cohortName}
           sessionUserName={props.sessionUserName}
           sessionUserAvatar={props.sessionUserAvatar}
           sessionUserRole={props.sessionUserRole}
-          headerTitle="Assignment Overview"
-          headerDescription="Test your knowledge and skills by completing the assignment below."
+          headerTitle="Assignment"
+          headerIcon={<FontAwesomeIcon icon={faPenRuler} size="lg" />}
+          headerIconColor="bg-[#FDE4D8] text-[#FB7A36]"
         />
         <div className="body-project max-w-[calc(100%-4rem)] w-full flex gap-4">
           <main className="w-full flex flex-col flex-2 gap-4">
@@ -277,7 +280,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
                   </p>
                   <p className="font-medium font-bodycopy text-sm">
                     {dayjs(props.projectDeadline).format(
-                      "DD MMM YYYY [at] HH:mm"
+                      "DD MMM YYYY [at] HH:mm",
                     )}
                   </p>
                 </div>
@@ -293,7 +296,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
                   <p className="font-medium font-bodycopy text-sm">
                     {props.submissionCreatedAt
                       ? dayjs(props.submissionCreatedAt).format(
-                          "DD MMM YYYY [at] HH:mm"
+                          "DD MMM YYYY [at] HH:mm",
                         )
                       : "-"}
                   </p>
