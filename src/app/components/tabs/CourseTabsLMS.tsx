@@ -51,7 +51,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
   );
 
   return (
-    <div className="cohort-tabs flex flex-col w-full gap-6 overflow-hidden">
+    <div className="cohort-tabs flex flex-col w-full gap-3 overflow-hidden">
       <div className="tab-options flex gap-4">
         {tabOptions.map((post) => (
           <AppButton

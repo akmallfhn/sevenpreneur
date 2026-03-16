@@ -23,7 +23,6 @@ export default function InputSVP({
   errorMessage,
   value,
   onInputChange,
-  disabled,
   required,
   ...rest
 }: InputSVPProps) {
@@ -88,7 +87,7 @@ export default function InputSVP({
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
           } ${
-            disabled
+            rest.disabled
               ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"
               : "bg-white dark:bg-[#2C2C2C]"
           } ${inputIcon ? "pl-10" : ""}  `}

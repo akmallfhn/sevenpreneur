@@ -1,12 +1,13 @@
 "use client";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeaderListLMS from "../navigations/HeaderListLMS";
-import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
+import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import DisallowedMobile from "../states/DisallowedMobile";
+import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
 
 interface LibraryLMSProps extends AvatarBadgeLMSProps {
-  sessionUserRole: number;
   templateList: TemplateList[];
   hasTemplateAccess: boolean;
 }
@@ -31,9 +32,11 @@ export default function LibraryLMS(props: LibraryLMSProps) {
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full h-full items-center justify-center lg:flex">
-      <HeaderListLMS
+    <div className="root-page hidden flex-col pl-64 pb-8 gap-5 w-full h-full items-center justify-center lg:flex">
+      <PageHeaderLMS
         headerTitle="Library"
+        headerIcon={<FontAwesomeIcon icon={faBookOpen} size="lg" />}
+        headerIconColor="bg-[#ECEBFE] text-tertiary"
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
