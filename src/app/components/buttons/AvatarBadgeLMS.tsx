@@ -77,7 +77,7 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
         <Link href={`https://agora.${domain}/account`}>
           <AppDropdownItemList
             menuIcon={<User2 className="size-4" />}
-            menuName="Profile"
+            menuName="Profile & Settings"
           />
         </Link>
         {props.sessionUserRole !== 3 && (

@@ -14,10 +14,12 @@ import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
-import HeaderCohortEntityLMS from "../navigations/HeaderCohortEntityLMS";
+import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
 import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
 import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
 import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTowerObservation } from "@fortawesome/free-solid-svg-icons";
 
 export interface MaterialList {
   name: string;
@@ -179,14 +181,15 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
 
   return (
     <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
-      <HeaderCohortEntityLMS
+      <PageHeaderCohortLMS
         cohortId={props.cohortId}
         cohortName={props.cohortName}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
         sessionUserRole={props.sessionUserRole}
         headerTitle="Learning Session"
-        headerDescription="Everything you need for your session. Learn, watch, and discuss in one place."
+        headerIcon={<FontAwesomeIcon icon={faTowerObservation} size="lg" />}
+        headerIconColor="bg-[#E3FEFC] text-[#2BC49C]"
       />
       <div className="body-learning max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         <HeroLearningDetailsLMS
