@@ -8,11 +8,12 @@ import ScorecardItemSVP from "../items/ScorecardItemSVP";
 
 interface HeroBlueprintProgramSVPProps {
   cohortId: number;
+  cohortName: string;
 }
 
-export default function HeroBlueprintProgramSVP({
-  cohortId,
-}: HeroBlueprintProgramSVPProps) {
+export default function HeroBlueprintProgramSVP(
+  props: HeroBlueprintProgramSVPProps,
+) {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
       {/* Hero Container */}
@@ -87,7 +88,13 @@ export default function HeroBlueprintProgramSVP({
                   size="defaultRounded"
                   variant="primaryGradient"
                   className="w-full lg:w-fit"
+                  // GTM
                   featureName="join_program_scroll"
+                  featureId={String(props.cohortId)}
+                  featureProductCategory="COHORT"
+                  featureProductName={props.cohortName}
+                  featurePagePoint="Product Detail Page"
+                  featurePlacement="hero-banner-mobile"
                 >
                   <p className="text-base lg:text-lg">Gabung Program</p>
                 </AppButton>
@@ -97,14 +104,20 @@ export default function HeroBlueprintProgramSVP({
                   size="largeRounded"
                   variant="primaryGradient"
                   className="w-full lg:w-fit"
+                  // GTM
                   featureName="join_program_scroll"
+                  featureId={String(props.cohortId)}
+                  featureProductCategory="COHORT"
+                  featureProductName={props.cohortName}
+                  featurePagePoint="Product Detail Page"
+                  featurePlacement="hero-banner-desktop"
                 >
                   <p className="text-base lg:text-lg">Gabung Program</p>
                 </AppButton>
               </div>
             </Link>
             <a
-              href="https://wa.me/6282312492067?text=Halo%2C%20MinSeven!%20👋%0AAku%20tertarik%20untuk%20mengikuti%20*Sevenpreneur%20Business%20Blueprint%20Program%20Batch%207*%20dan%20mau%20konsultasi%20lebih%20lanjut.%20Berikut%20dataku%3A%0A•%20Nama%3A%20(isi%20di%20sini)%0A•%20Email%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%2C%20MinSeven%20🙏"
+              href="https://wa.me/6282312492067?text=Halo%2C%20MinSeven!%20👋%0AAku%20tertarik%20untuk%20mengikuti%20*Sevenpreneur%20Business%20Blueprint%20Program%20Batch%208*%20dan%20mau%20konsultasi%20lebih%20lanjut.%20Berikut%20dataku%3A%0A•%20Nama%3A%20(isi%20di%20sini)%0A•%20Email%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%2C%20MinSeven%20🙏"
               className="w-full p-[1px]"
               target="_blank"
               rel="noopenner noreferrer"
@@ -116,17 +129,17 @@ export default function HeroBlueprintProgramSVP({
                   className="w-full lg:w-fit"
                   // GTM
                   featureName="whatsapp_consultation"
-                  featureId={String(cohortId)}
+                  featureId={String(props.cohortId)}
                   featureProductCategory="COHORT"
-                  featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
+                  featureProductName={props.cohortName}
                   featurePagePoint="Product Detail Page"
                   featurePlacement="hero-banner-mobile"
                   // Meta
                   metaEventName="Contact"
-                  metaContentIds={[String(cohortId)]}
+                  metaContentIds={[String(props.cohortId)]}
                   metaContentType="service"
                   metaContentCategory="Business Education Program"
-                  metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
+                  metaContentName={props.cohortName}
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
                   <p className="text-base lg:text-lg">Konsultasi Gratis</p>
@@ -139,17 +152,17 @@ export default function HeroBlueprintProgramSVP({
                   className="w-full lg:w-fit"
                   // GTM
                   featureName="whatsapp_consultation"
-                  featureId={String(cohortId)}
+                  featureId={String(props.cohortId)}
                   featureProductCategory="COHORT"
-                  featureProductName="Sevenpreneur Business Blueprint Program Batch 7"
+                  featureProductName={props.cohortName}
                   featurePagePoint="Product Detail Page"
                   featurePlacement="hero-banner-desktop"
                   // Meta
                   metaEventName="Contact"
-                  metaContentIds={[String(cohortId)]}
+                  metaContentIds={[String(props.cohortId)]}
                   metaContentType="service"
                   metaContentCategory="Business Education Program"
-                  metaContentName="Sevenpreneur Business Blueprint Program Batch 7"
+                  metaContentName={props.cohortName}
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
                   <p className="text-base lg:text-lg">Konsultasi Gratis</p>

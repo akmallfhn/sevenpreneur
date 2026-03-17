@@ -58,6 +58,7 @@ export default async function HomePage() {
   } catch {
     interstitialAdsRaw = null;
   }
+
   const interstitialAds = {
     ...interstitialAdsRaw,
     start_date: interstitialAdsRaw?.start_date.toISOString(),
@@ -69,10 +70,12 @@ export default async function HomePage() {
       <HomeSVP />
       {interstitialAds.status === "ACTIVE" && (
         <AppInterstitialBanner
+          interstitialTitle={interstitialAds.title ?? ""}
           interstitialImageMobile={interstitialAds.image_mobile!}
           interstitialImageDesktop={interstitialAds.image_desktop!}
           interstitialAction={interstitialAds.call_to_action ?? "More Details"}
           interstitialURL={interstitialAds.target_url!}
+          interstitialPagePoint="Home Page"
         />
       )}
     </div>

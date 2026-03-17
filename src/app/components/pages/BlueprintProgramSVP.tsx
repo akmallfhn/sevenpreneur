@@ -19,7 +19,10 @@ interface BlueprintProgramSVPProps {
 export default function BlueprintProgramSVP(props: BlueprintProgramSVPProps) {
   return (
     <div className="root relative items-center">
-      <HeroBlueprintProgramSVP cohortId={props.cohortId} />
+      <HeroBlueprintProgramSVP
+        cohortId={props.cohortId}
+        cohortName={props.cohortName}
+      />
       <AboutBlueprintProgramSVP />
       <OffersBlueprintProgramSVP />
       <ScheduleBlueprintProgramSVP />

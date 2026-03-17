@@ -142,10 +142,12 @@ export default async function ArticleDetailsPage({
       />
       {interstitialAds.status === "ACTIVE" && (
         <AppInterstitialBanner
+          interstitialTitle={interstitialAds.title ?? ""}
           interstitialImageMobile={interstitialAds.image_mobile!}
           interstitialImageDesktop={interstitialAds.image_desktop!}
           interstitialAction={interstitialAds.call_to_action ?? "More Details"}
           interstitialURL={interstitialAds.target_url!}
+          interstitialPagePoint="Article Details Page"
         />
       )}
     </div>

@@ -1,29 +1,44 @@
 "use client";
+import { toSnakeCase } from "@/lib/convert-case";
 import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
+import { useTrackView } from "@/lib/feature-tracking";
 
 interface AppInterstitialBannerProps {
+  interstitialTitle: string;
   interstitialImageMobile: string;
   interstitialImageDesktop: string;
   interstitialURL: string;
   interstitialAction: string;
+  interstitialPagePoint: string;
 }
 
 export default function AppInterstitialBanner(
-  props: AppInterstitialBannerProps
+  props: AppInterstitialBannerProps,
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const [interstitialImage, setInterstitialImage] = useState(
-    props.interstitialImageMobile
+    props.interstitialImageMobile,
   );
 
   let timeInterval = 1000 * 60 * 60; // 1 hour
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     timeInterval = 1000 * 40; // 40 seconds
   }
+
+  // Tracking View
+  const trackingViewRef = useTrackView<HTMLDivElement>(
+    {
+      featureName: "interstitial_banner_view",
+      featureId: toSnakeCase(props.interstitialTitle),
+      featurePagePoint: props.interstitialPagePoint,
+      featurePlacement: "interstitial_banner",
+    },
+    isOpen,
+  );
 
   // Determine if banner should show
   useEffect(() => {
@@ -86,51 +101,56 @@ export default function AppInterstitialBanner(
   if (!isOpen) return null;
 
   return (
-    <div>
-      <div className="interstitial-root fixed inset-0 flex w-full h-full items-end justify-center bg-black/65 z-[999]">
-        <div className="interstitial-container fixed flex bg-white outline-8 max-w-[312px] w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-[800px]">
-          <Link
-            href={props.interstitialURL}
-            className="interstitial-content relative flex flex-col aspect-interstitial-banner w-full rounded-lg overflow-hidden sm:hover:cursor-pointer sm:aspect-web-popup"
-            onClick={handleLinkClick}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="interstitial-image flex object-cover w-full h-full"
-              src={interstitialImage}
-              alt={"Buy Now"}
-              width={1200}
-              height={1200}
-            />
-            <div className="interstitial-action absolute flex bottom-10 left-1/2 -translate-x-1/2 z-[30] sm:bottom-4 lg:bottom-5 2xl:bottom-8">
-              <AppButton
-                className={
-                  interstitialImage === props.interstitialImageMobile
-                    ? "w-[180px]"
-                    : "w-[240px]"
-                }
-                size={
-                  interstitialImage === props.interstitialImageMobile
-                    ? "mediumRounded"
-                    : "defaultRounded"
-                }
-                variant="outline"
-                featureName="interstitial_banner_promotion"
-              >
-                {props.interstitialAction}
-              </AppButton>
-            </div>
-            <div
-              className={`overlay absolute inset-0 bg-linear-to-t from-0% from-black/50 to-30% to-black/0`}
-            />
-          </Link>
-          <div
-            className="interstitial-close absolute flex p-1.5 text-white bg-[#3E3E3E] -top-4 -right-4 rounded-full hover:cursor-pointer"
-            onClick={handleClose}
-          >
-            <X className="size-5" />
+    <div
+      ref={trackingViewRef}
+      className="interstitial-root fixed inset-0 flex w-full h-full items-end justify-center bg-black/65 z-[999]"
+    >
+      <div className="interstitial-container fixed flex bg-white outline-8 max-w-[312px] w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-[800px]">
+        <Link
+          href={props.interstitialURL}
+          className="interstitial-content relative flex flex-col aspect-interstitial-banner w-full rounded-lg overflow-hidden sm:hover:cursor-pointer sm:aspect-web-popup"
+          onClick={handleLinkClick}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            className="interstitial-image flex object-cover w-full h-full"
+            src={interstitialImage}
+            alt={props.interstitialTitle}
+            width={1200}
+            height={1200}
+          />
+          <div className="interstitial-action absolute flex bottom-10 left-1/2 -translate-x-1/2 z-[30] sm:bottom-4 lg:bottom-5 2xl:bottom-8">
+            <AppButton
+              className={
+                interstitialImage === props.interstitialImageMobile
+                  ? "w-[180px]"
+                  : "w-[240px]"
+              }
+              size={
+                interstitialImage === props.interstitialImageMobile
+                  ? "mediumRounded"
+                  : "defaultRounded"
+              }
+              variant="outline"
+              // GTM
+              featureName="interstitial_banner_click"
+              featureId={toSnakeCase(props.interstitialTitle)}
+              featurePagePoint={props.interstitialPagePoint}
+              featurePlacement="interstitial_banner"
+            >
+              {props.interstitialAction}
+            </AppButton>
           </div>
+          <div
+            className={`overlay absolute inset-0 bg-linear-to-t from-0% from-black/50 to-30% to-black/0`}
+          />
+        </Link>
+        <div
+          className="interstitial-close absolute flex p-1.5 text-white bg-[#3E3E3E] -top-4 -right-4 rounded-full hover:cursor-pointer"
+          onClick={handleClose}
+        >
+          <X className="size-5" />
         </div>
       </div>
     </div>
