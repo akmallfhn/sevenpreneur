@@ -1,5 +1,5 @@
 "use client";
-import { FeatureTrackingProps } from "@/lib/feature-tracking";
+import { FeatureTrackingProps, useTrackView } from "@/lib/feature-tracking";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -25,6 +25,8 @@ interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
 export default function PriceItemBlueprintProgramSVP(
   props: PriceItemBlueprintProgramSVPProps,
 ) {
+  const targetTimeCountdown = "2026-03-20T23:59:00+07:00";
+
   const purchaseAction = props.isPriority
     ? "Best Value – Choose Plan"
     : "Purchase Now";
@@ -34,8 +36,21 @@ export default function PriceItemBlueprintProgramSVP(
     callToAction = "Coming soon";
   }
 
+  // Tracking View
+  const trackingViewRef = useTrackView<HTMLDivElement>({
+    featureName: "view_cart_blueprint_program",
+    featureId: String(props.priceId),
+    featureProductCategory: "COHORT",
+    featureProductName: `${props.cohortName} - ${props.featureProductName}`,
+    featureProductAmount: props.priceAmount,
+    featurePagePoint: "Product Detail Page",
+    featurePlacement: "price-plan",
+    featurePosition: props.featurePosition,
+  });
+
   return (
     <div
+      ref={trackingViewRef}
       className={`price-outline relative z-10 ${
         props.isPriority
           ? "p-1 bg-gradient-to-tr from-21% from-[#3417E3] to-100% to-[#E74D79] rounded-[12px]"
@@ -66,7 +81,7 @@ export default function PriceItemBlueprintProgramSVP(
             <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
           </div>
         </div>
-        <AppCountdownTimer targetDateTime={"2025-12-12T23:59:00+07:00"} />
+        <AppCountdownTimer targetDateTime={targetTimeCountdown} />
         <div className="price-amount flex items-center gap-0.5 font-brand text-white">
           <p className="font-bold text-lg">Rp</p>
           <p className="font-bold text-4xl">

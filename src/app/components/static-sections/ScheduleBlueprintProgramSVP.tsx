@@ -72,7 +72,7 @@ export default function ScheduleBlueprintProgramSVP() {
           <div className="background-desktop absolute hidden inset-0 w-full h-full lg:flex">
             <Image
               className="flex object-cover w-full h-full"
-              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-desktop%20(1).webp"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-schedule-desktop-op.webp"
               alt="Schedule Calendar"
               width={1000}
               height={1000}

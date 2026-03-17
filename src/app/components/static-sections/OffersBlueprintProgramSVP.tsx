@@ -7,7 +7,7 @@ export default function OffersBlueprintProgramSVP() {
     {
       title: "Kurikulum bisnis terlengkap dengan Seven Framework+",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/Frame%201686552596.png",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/offer-curiculum.webp",
       benefits: [
         "Menentukan arah dan model bisnis yang tepat",
         "Strategi marketing & sales yang terbukti jalan",
@@ -17,7 +17,7 @@ export default function OffersBlueprintProgramSVP() {
     {
       title: "Coach dengan pengalaman bertahun-tahun di dunia bisnis.",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/Frame%201686552595.png",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/offer-coach.webp",
       benefits: [
         "Q&A bahas case bisnis kamu selama kelas",
         "Mentoring 1-on-1  sesuai kondisi bisnismu",
@@ -27,7 +27,7 @@ export default function OffersBlueprintProgramSVP() {
     {
       title: "AI business tools di setiap tahap bisnis",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/Frame%201686552595-1.png",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/offer-ai.webp",
       benefits: [
         "AI Tools untuk menentukan market, ide bisnis, pricing, dan validasi keputusan",
         "Virtual Coach AI untuk konsultasi strategi, diskusi, dan pengambilan keputusan bisnis",
@@ -37,7 +37,7 @@ export default function OffersBlueprintProgramSVP() {
     {
       title: "Dukungan pembelajaran terintegrasi melalui LMS",
       image:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/Frame%201686552595-2.png",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/offer-lms.webp",
       benefits: [
         "Materi terekam, tersimpan, dan dapat dipelajari kapan saja tanpa batas waktu",
         "Diskusi langsung atau sesi Q&A bersama coach",

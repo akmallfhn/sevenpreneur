@@ -52,8 +52,12 @@ export function useTrackView<T extends HTMLElement>(
               event: "view",
               feature_name: props.featureName,
               feature_id: props.featureId,
+              feature_product_category: props.featureProductCategory,
+              feature_product_name: props.featureProductName,
+              feature_product_amount: props.featureProductAmount,
               feature_page_point: props.featurePagePoint,
               feature_placement: props.featurePlacement,
+              feature_position: props.featurePosition,
             });
             viewedSet.add(props.featureId!);
           }
@@ -70,8 +74,12 @@ export function useTrackView<T extends HTMLElement>(
     enabled,
     props.featureId,
     props.featureName,
+    props.featureProductCategory,
+    props.featureProductName,
+    props.featureProductAmount,
     props.featurePagePoint,
     props.featurePlacement,
+    props.featurePosition,
   ]);
 
   return ref;

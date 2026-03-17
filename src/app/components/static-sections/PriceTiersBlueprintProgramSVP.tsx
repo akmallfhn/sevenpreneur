@@ -41,7 +41,7 @@ export default function PriceTiersBlueprintProgramSVP(
             {regularPrice && (
               <PriceItemBlueprintProgramSVP
                 cohortId={props.cohortId}
-                cohortName={regularPrice.name}
+                cohortName={props.cohortName}
                 cohortSlug={props.cohortSlug}
                 priceId={regularPrice.id}
                 priceName="Batch 8"
@@ -85,7 +85,7 @@ export default function PriceTiersBlueprintProgramSVP(
             {vipPrice && (
               <PriceItemBlueprintProgramSVP
                 cohortId={props.cohortId}
-                cohortName={vipPrice.name}
+                cohortName={props.cohortName}
                 cohortSlug={props.cohortSlug}
                 priceId={vipPrice.id}
                 priceName="Batch 8"
