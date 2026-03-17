@@ -57,7 +57,7 @@ export default function PriceItemBlueprintProgramSVP(
           : "p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-lg"
       }`}
     >
-      <div className="price-container flex flex-col w-[312px] h-full aspect-[360/794] p-8 items-center gap-4 bg-gradient-to-b from-0% from-[#554A94] via-40% via-[#432EBA] to-100% to-[#0D063A] rounded-lg lg:w-[360px]">
+      <div className="price-container flex flex-col w-[312px] h-full aspect-[360/820] p-8 items-center gap-4 bg-gradient-to-b from-0% from-[#554A94] via-40% via-[#432EBA] to-100% to-[#0D063A] rounded-lg lg:w-[360px]">
         <div className="price-title flex items-center justify-center gap-3 w-full">
           <h3 className="font-bold font-brand text-white text-2xl">
             {props.priceName}

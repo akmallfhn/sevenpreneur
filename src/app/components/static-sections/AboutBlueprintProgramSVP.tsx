@@ -6,9 +6,10 @@ export default function AboutBlueprintProgramSVP() {
   const audiences = [
     "<b>Business owner</b> yang stuck & ingin level up dengan sistem",
     "<b>Corporate leaders</b> yang ingin scale-up unit bisnis",
-    "<b>Professional managers</b> di family-owned businesses",
+    "<b>Family business owners</b> yang ingin membangun bisnis yang bertahan lintas generasi",
     "<b>Professional</b> yang ingin berkarier sebagai business leaders",
   ];
+
   return (
     <div>
       <div className="section-root relative flex items-center justify-center bg-black overflow-hidden">
@@ -27,13 +28,13 @@ export default function AboutBlueprintProgramSVP() {
           <div className="section-content flex flex-col text-center items-center gap-6 lg:text-left lg:items-start">
             <div className="section-title-desc flex flex-col w-full items-center gap-3 z-10">
               <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl max-w-[598px] sm:text-3xl lg:text-4xl lg:max-w-full">
-                Membantu bisnis keluar dari stagnasi & membangun sistem yang
-                scalable.
+                Bantu bisnis keluar dari stagnasi dengan sistem dan strategi
               </h2>
               <p className="section-desc text-[15px] font-bodycopy text-white max-w-[598px] sm:text-base lg:max-w-full lg:text-xl">
-                Pelajari framework praktis untuk memperjelas market, membangun
-                offer yang kuat, dan menciptakan sistem growth, tim, serta
-                keuangan agar bisnis siap scale secara terstruktur.
+                Kelas dengan strategi framework praktis untuk segala aspek
+                bisnis seperti memperluas market, membangun offer yang kuat,
+                menciptakan sistem kerja tim, dan sistem cashflow yang siap
+                scale.
               </p>
             </div>
 
@@ -61,7 +62,6 @@ export default function AboutBlueprintProgramSVP() {
             </div>
           </div>
         </div>
-        {/* <div className="color-background absolute bg-[#3417E3] blur-[120px] w-[500px] h-[1000px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 rounded-full z-[1] will-change-transform lg:blur-[200px] lg:w-[1488px] lg:h-[400px]" /> */}
       </div>
     </div>
   );
