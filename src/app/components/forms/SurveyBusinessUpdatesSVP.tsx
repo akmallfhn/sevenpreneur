@@ -47,7 +47,6 @@ export default function SurveyBusinessUpdateSVP(
     businessLegalEntity: BusinessLegalEntity | null;
     businessEmployeeNum: BusinessEmployeeNumber | null;
     businessYearlyRevenue: BusinessYearlyRevenue | null;
-
     companyProfileUrl: string;
     averageSellingPrice: number | string;
   }>({

@@ -52,16 +52,16 @@ interface UpdateUserDataProps {
   userPhoneNumber?: string | null;
   userAvatar?: string | null;
   userDateofBirth?: string | null;
-  userOccupation?: OccupationUser;
-  businessName?: string;
-  businessDescription?: string;
-  businessAgeYears?: number;
-  businessIndustry?: number;
-  businessLegalEntity?: BusinessLegalEntity;
-  businessEmployeeNum?: BusinessEmployeeNumber;
-  businessYearlyRevenue?: BusinessYearlyRevenue;
-  companyProfileUrl?: string;
-  averageSellingPrice?: number;
+  userOccupation?: OccupationUser | null;
+  businessName?: string | null;
+  businessDescription?: string | null;
+  businessAgeYears?: number | null;
+  businessIndustry?: number | null;
+  businessLegalEntity?: BusinessLegalEntity | null;
+  businessEmployeeNum?: BusinessEmployeeNumber | null;
+  businessYearlyRevenue?: BusinessYearlyRevenue | null;
+  companyProfileUrl?: string | null;
+  averageSellingPrice?: number | null;
 }
 export async function UpdateUserData(props: UpdateUserDataProps) {
   const cookieStore = await cookies();

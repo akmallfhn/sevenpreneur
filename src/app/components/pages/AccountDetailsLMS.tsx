@@ -2,12 +2,16 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import EditUserFormLMS, { InitialDataUser } from "../forms/EditUserFormLMS";
+import EditUserFormLMS, {
+  IndustryList,
+  InitialDataUser,
+} from "../forms/EditUserFormLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
 
 interface AccountDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
   initialData: InitialDataUser;
+  industriesData: IndustryList[];
 }
 
 export default function AccountDetailsLMS(props: AccountDetailsLMSProps) {
@@ -25,6 +29,7 @@ export default function AccountDetailsLMS(props: AccountDetailsLMSProps) {
         <EditUserFormLMS
           sessionUserId={props.sessionUserId}
           initialData={props.initialData}
+          industriesData={props.industriesData}
         />
       </div>
     </div>

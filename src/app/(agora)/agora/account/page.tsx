@@ -30,6 +30,8 @@ export default async function AccountPageLMS() {
       : null,
   };
 
+  const industriesData = (await trpc.list.industries()).list;
+
   return (
     <AccountDetailsLMS
       sessionUserId={userData.id}
@@ -40,6 +42,7 @@ export default async function AccountPageLMS() {
       }
       sessionUserRole={userData.role_id}
       initialData={userDetailsSanitize}
+      industriesData={industriesData}
     />
   );
 }

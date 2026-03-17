@@ -3,7 +3,7 @@ import React, { TextareaHTMLAttributes, useState } from "react";
 
 interface TextAreaLMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaId: string;
-  textAreaName: string;
+  textAreaName?: string;
   textAreaPlaceholder?: string;
   characterLength?: number;
   errorMessage?: string;
@@ -36,7 +36,7 @@ export default function TextAreaLMS({
 
   // Character Limitation on Text Area
   const handleTextAreaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     // Dynamic resize height text area
     const textarea = event.target;
@@ -65,13 +65,17 @@ export default function TextAreaLMS({
 
   return (
     <div className="text-area-box flex flex-col gap-1">
-      <label
-        htmlFor={textAreaId}
-        className="label-text-area flex pl-1 gap-0.5 text-[15px] text-[#333333] font-bodycopy font-semibold"
-      >
-        {textAreaName}
-        {required && <span className="label-required text-destructive">*</span>}
-      </label>
+      {textAreaName && (
+        <label
+          htmlFor={textAreaId}
+          className="label-text-area flex pl-1 gap-0.5 text-[15px] text-[#333333] font-bodycopy font-semibold"
+        >
+          {textAreaName}
+          {required && (
+            <span className="label-required text-destructive">*</span>
+          )}
+        </label>
+      )}
 
       <div className="text-area-container relative w-full">
         <textarea

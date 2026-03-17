@@ -3,7 +3,7 @@ import React, { TextareaHTMLAttributes, useState } from "react";
 
 interface TextAreaCMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textAreaId: string;
-  textAreaName: string;
+  textAreaName?: string;
   textAreaHeight?: string;
   textAreaPlaceholder?: string;
   characterLength?: number;
@@ -38,7 +38,7 @@ export default function TextAreaCMS({
 
   // Character Limitation on Text Area
   const handleTextAreaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const newValue = event.target.value;
     if (newValue.length > maxLength) {
@@ -61,13 +61,17 @@ export default function TextAreaCMS({
 
   return (
     <div className="text-area-box flex flex-col gap-1">
-      <label
-        htmlFor={textAreaId}
-        className="label-text-area flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
-      >
-        {textAreaName}
-        {required && <span className="label-required text-destructive">*</span>}
-      </label>
+      {textAreaName && (
+        <label
+          htmlFor={textAreaId}
+          className="label-text-area flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+        >
+          {textAreaName}
+          {required && (
+            <span className="label-required text-destructive">*</span>
+          )}
+        </label>
+      )}
 
       <div className="text-area-container relative">
         <textarea
