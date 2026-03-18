@@ -84,3 +84,27 @@ export function useTrackView<T extends HTMLElement>(
 
   return ref;
 }
+
+export function useTrackClick(props: FeatureTrackingProps) {
+  const trackClick = () => {
+    const eventData: Record<string, unknown> = {
+      event: "click",
+      feature_id: props.featureId,
+      feature_name: props.featureName,
+      feature_product_category: props.featureProductCategory,
+      feature_product_name: props.featureProductName,
+      feature_product_amount: props.featureProductAmount,
+      feature_page_point: props.featurePagePoint,
+      feature_placement: props.featurePlacement,
+      feature_position: props.featurePosition,
+    };
+    Object.keys(eventData).forEach(
+      (key) => eventData[key] === null && delete eventData[key],
+    );
+    if (typeof window !== "undefined" && window.dataLayer) {
+      window.dataLayer?.push(eventData);
+    }
+  };
+
+  return trackClick;
+}
