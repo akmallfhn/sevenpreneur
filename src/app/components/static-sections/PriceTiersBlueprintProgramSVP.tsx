@@ -45,7 +45,7 @@ export default function PriceTiersBlueprintProgramSVP(
                 cohortSlug={props.cohortSlug}
                 priceId={regularPrice.id}
                 priceName="Batch 8"
-                priceDescription="Kuasai 7 framework lengkap untuk upgrade skala bisnismu."
+                priceDescription="Kuasai 7 framework lengkap untuk upgrade bisnismu."
                 priceLabel={
                   <PackageLabelBlueprintProgramSVP variant="regular" />
                 }
