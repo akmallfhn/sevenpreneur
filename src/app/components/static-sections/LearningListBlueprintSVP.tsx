@@ -126,12 +126,13 @@ export default function LearningListBlueprintSVP() {
     },
     {
       session_number: "",
-      session_name: "",
+      session_name:
+        "Winning Beyond Price: How Service Quality Builds Unbeatable Business",
       session_description: "",
-      session_educator: "To Be Announced",
-      session_educator_title: "",
+      session_educator: "Sigit Djokosoetono",
+      session_educator_title: "Deputy CEO of Bluebird",
       session_educator_avatar:
-        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-tba.webp",
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-sigit%20(1).webp",
       session_variant: "extraordinary",
     },
   ];

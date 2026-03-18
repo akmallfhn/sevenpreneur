@@ -57,7 +57,7 @@ export default function PriceItemBlueprintProgramSVP(
           : "p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-lg"
       }`}
     >
-      <div className="price-container flex flex-col w-[312px] h-full aspect-[360/880] p-8 items-center gap-4 bg-gradient-to-b from-0% from-[#554A94] via-40% via-[#432EBA] to-100% to-[#0D063A] rounded-lg lg:w-[360px]">
+      <div className="price-container flex flex-col w-[312px] h-full aspect-[360/920] p-8 items-center gap-4 bg-gradient-to-b from-0% from-[#554A94] via-40% via-[#432EBA] to-100% to-[#0D063A] rounded-lg lg:w-[360px] lg:aspect-[360/832]">
         <div className="price-title flex items-center justify-center gap-3 w-full">
           <h3 className="font-bold font-brand text-white text-2xl">
             {props.priceName}
@@ -88,9 +88,6 @@ export default function PriceItemBlueprintProgramSVP(
             {props.priceAmount.toLocaleString("id-ID")}
           </p>
         </div>
-        <p className="price-installment font-bodycopy text-white text-[15px] text-center leading-tight">
-          Pembayaran fleksibel hingga 3x cicilan
-        </p>
         <Link
           href={`/cohorts/${props.cohortSlug}/${props.cohortId}/checkout?ticketId=${props.priceId}`}
           className={`w-full ${
@@ -147,6 +144,18 @@ export default function PriceItemBlueprintProgramSVP(
             ))}
           </div>
         </div>
+        <p className="price-installment w-full bg-black/40 p-2 border border-white/20 font-bodycopy text-white/75 text-xs text-center leading-tight rounded-md">
+          Dapatkan opsi pembayaran dengan skema cicilan. Hubungi{" "}
+          <a
+            href="https://wa.me/6282312492067?text=Hi%20Kak,%20saya%20tertarik%20dengan%20skema%20cicilan%20pembayaran%20Program%20Sevenpreneur%20Business%20Blueprint%20Program%20Batch%20%238"
+            className="text-secondary hover:cursor-pointer hover:underline hover:underline-offset-2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            admin
+          </a>{" "}
+          untuk informasi lebih lanjut
+        </p>
       </div>
 
       {/* Badge Priority */}
