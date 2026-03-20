@@ -3,12 +3,13 @@ import AvatarBadgeCMS from "@/app/components/buttons/AvatarBadgeCMS";
 import SidebarMenuItemCMS from "@/app/components/navigations/SidebarMenuItemCMS";
 import { DeleteSession } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   BanknoteArrowDown,
   CircleUserIcon,
   FlagTriangleRight,
   Globe,
-  HouseIcon,
   Loader2,
   LogOut,
   PenTool,
@@ -16,6 +17,7 @@ import {
   Tags,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SidebarMenuGroupCMS from "./SidebarMenuGroupCMS";
@@ -42,6 +44,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
   const allowedRolesMenuTransactions = [0];
   const allowedRolesMenuWebMarketing = [0, 4];
   const allowedRolesMenuArticles = [0];
+  const allowedRolesMenuWhatsapp = [0];
 
   const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
     props.sessionUserRole,
@@ -62,6 +65,9 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     props.sessionUserRole,
   );
   const isAllowedMenuArticles = allowedRolesMenuArticles.includes(
+    props.sessionUserRole,
+  );
+  const isAllowedMenuWhatsapp = allowedRolesMenuWhatsapp.includes(
     props.sessionUserRole,
   );
 
@@ -91,7 +97,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
   return (
     <div className="sidebar-cms-root hidden fixed justify-between pt-5 pb-8 max-w-64 w-full left-0 h-full bg-[#F7F7F7] z-50 lg:flex lg:flex-col">
       <div className="sidebar-cms-top flex flex-col max-w-[224px] w-full mx-auto gap-[22px]">
-        <div className="sidebar-logo flex items-center gap-4 pl-1">
+        <Link href="/" className="sidebar-logo flex items-center gap-4 pl-1">
           <div className="sidebar-logo flex size-11 rounded-sm outline-4 outline-black/20 shrink-0 overflow-hidden">
             <Image
               className="object-cover w-full h-full"
@@ -106,7 +112,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
           <p className="font-bodycopy font-medium text-sm leading-tight">
             Sevenpreneur Content Management System
           </p>
-        </div>
+        </Link>
 
         {isLoading && (
           <div className="flex w-full h-full items-center justify-center text-alternative">
@@ -130,12 +136,6 @@ export default function SidebarCMS(props: SidebarCMSProps) {
           />
         )}
         <div className="sidebar-menu flex flex-col h-full gap-1">
-          <SidebarMenuItemCMS
-            menuName="Dashboard"
-            menuURL="/"
-            menuIcon={<HouseIcon />}
-            exact
-          />
           {(isAllowedMenuCohorts ||
             isAllowedMenuDiscounts ||
             isAllowedMenuEvents) && (
@@ -181,7 +181,9 @@ export default function SidebarCMS(props: SidebarCMSProps) {
               )}
             </SidebarMenuGroupCMS>
           )}
-          {(isAllowedMenuWebMarketing || isAllowedMenuArticles) && (
+          {(isAllowedMenuWebMarketing ||
+            isAllowedMenuArticles ||
+            isAllowedMenuWhatsapp) && (
             <SidebarMenuGroupCMS groupName="Marketing">
               {isAllowedMenuWebMarketing && (
                 <SidebarMenuItemCMS
@@ -195,6 +197,13 @@ export default function SidebarCMS(props: SidebarCMSProps) {
                   menuName="SEO Articles"
                   menuURL="/articles"
                   menuIcon={<PenTool />}
+                />
+              )}
+              {isAllowedMenuWhatsapp && (
+                <SidebarMenuItemCMS
+                  menuName="Whatsapp"
+                  menuURL="/whatsapp"
+                  menuIcon={<FontAwesomeIcon icon={faWhatsapp} size="lg" />}
                 />
               )}
             </SidebarMenuGroupCMS>
