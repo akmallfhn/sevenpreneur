@@ -81,3 +81,4 @@ export type AIChatEventType =
   | "failed"
   | "error";
 export type ReactionVariant = "favorite" | "scout";
+export type LeadStatus = "COLD" | "WARM" | "HOT";
