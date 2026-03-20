@@ -2,7 +2,7 @@
 import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
 import { trpc } from "@/trpc/client";
@@ -215,9 +215,9 @@ export default function TransactionListCMS({
               </AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage={"Transaction List"}
-                descPage={"View and monitor all payment records in one place."}
+              <PageTitleSectionCMS
+                pageTitle="Transaction List"
+                pageDesc="View and monitor all payment records in one place."
               />
               <AppButton
                 variant="cmsPrimary"

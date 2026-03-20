@@ -30,12 +30,12 @@ import AppButton from "../buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import InputNumberCMS from "../fields/InputNumberCMS";
 import SelectCMS from "../fields/SelectCMS";
+import TextAreaCMS from "../fields/TextAreaCMS";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "../titles/TitleRevealCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -103,11 +103,9 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
             <AppBreadcrumbItem isCurrentPage>Profile</AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage={"Details Profile"}
-              descPage={
-                "View detailed user information, activity logs, and account status in a read-only profile view."
-              }
+            <PageTitleSectionCMS
+              pageTitle="Details Profile"
+              pageDesc="View detailed user information, activity logs, and account status in a read-only profile view."
             />
             <Link href={`/users/${props.userId}/edit`} className="w-fit h-fit">
               <AppButton variant="cmsPrimary">

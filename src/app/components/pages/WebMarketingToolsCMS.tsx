@@ -2,7 +2,7 @@
 import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -56,9 +56,9 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
               <AppBreadcrumbItem isCurrentPage>Web Marketing</AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage="Web Marketing"
-                descPage="Centralized tools to manage internal marketing channels"
+              <PageTitleSectionCMS
+                pageTitle="Web Marketing"
+                pageDesc="Centralized tools to manage internal marketing channels"
               />
             </div>
           </div>
@@ -117,11 +117,11 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                         </div>
                         <p className="font-medium">
                           {dayjs(tickerDetailsData?.start_date).format(
-                            "D MMMM YYYY [at] HH:mm"
+                            "D MMMM YYYY [at] HH:mm",
                           )}{" "}
                           -{" "}
                           {dayjs(tickerDetailsData?.end_date).format(
-                            "D MMMM YYYY [at] HH:mm"
+                            "D MMMM YYYY [at] HH:mm",
                           )}
                         </p>
                       </div>
@@ -180,11 +180,11 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                         </div>
                         <p className="font-medium">
                           {dayjs(interstitialDetailsData?.start_date).format(
-                            "D MMMM YYYY [at] HH:mm"
+                            "D MMMM YYYY [at] HH:mm",
                           )}{" "}
                           -{" "}
                           {dayjs(interstitialDetailsData?.end_date).format(
-                            "D MMMM YYYY [at] HH:mm"
+                            "D MMMM YYYY [at] HH:mm",
                           )}
                         </p>
                       </div>

@@ -2,7 +2,7 @@
 import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { RolesUser, StatusType } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
@@ -151,9 +151,9 @@ export default function UserListCMS(props: UserListCMSProps) {
             </AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage="User List"
-              descPage="View and manage all registered users in one place, with quick access to actions like edit or delete."
+            <PageTitleSectionCMS
+              pageTitle="User List"
+              pageDesc="View and manage all registered users in one place, with quick access to actions like edit or delete."
             />
             {isAllowedMutateUser && (
               <Link href={"/users/create"} className="w-fit h-fit">

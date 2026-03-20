@@ -2,7 +2,7 @@
 import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -141,9 +141,9 @@ export default function DiscountListCMS({
               </AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage="Discount List"
-                descPage="Manage discounts for all product easily"
+              <PageTitleSectionCMS
+                pageTitle="Discount List"
+                pageDesc="Manage discounts for all product easily"
               />
               <AppButton
                 variant="cmsPrimary"

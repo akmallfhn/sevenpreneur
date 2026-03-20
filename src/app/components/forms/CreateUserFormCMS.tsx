@@ -3,7 +3,7 @@ import AppButton from "@/app/components/buttons/AppButton";
 import InputCMS from "@/app/components/fields/InputCMS";
 import SelectCMS from "@/app/components/fields/SelectCMS";
 import StatusLabelCMS from "@/app/components/labels/StatusLabelCMS";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { Switch } from "@/components/ui/switch";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -211,9 +211,9 @@ export default function CreateUserForm(props: CreateUserFormProps) {
             </AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage="Add New User"
-              descPage="Fill out the form to add a new user to the system, including basic profile information."
+            <PageTitleSectionCMS
+              pageTitle="Add New User"
+              pageDesc="Fill out the form to add a new user to the system, including basic profile information."
             />
             <div className="page-actions flex items-center gap-4">
               <Link href="/users">

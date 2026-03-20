@@ -1,4 +1,6 @@
 "use client";
+import { RolesUser } from "@/lib/app-types";
+import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -12,13 +14,11 @@ import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
 import AddCohortMemberFormCMS from "../forms/AddCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
+import RolesLabelCMS from "../labels/RolesLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "../titles/TitleRevealCMS";
-import RolesLabelCMS from "../labels/RolesLabelCMS";
-import { toCamelCase } from "@/lib/convert-case";
-import { RolesUser } from "@/lib/app-types";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -83,9 +83,9 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
             <AppBreadcrumbItem isCurrentPage>Manage Members</AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage="Manage Members"
-              descPage="Invite fast. Revoke smarter. Stay in control."
+            <PageTitleSectionCMS
+              pageTitle="Manage Members"
+              pageDesc="Invite fast. Revoke smarter. Stay in control."
             />
             <AppButton
               variant="cmsPrimary"
