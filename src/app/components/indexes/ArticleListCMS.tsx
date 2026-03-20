@@ -1,7 +1,7 @@
 "use client";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -16,14 +16,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import AppNumberPagination from "../navigations/AppNumberPagination";
-import { useRouter, useSearchParams } from "next/navigation";
 import InputCMS from "../fields/InputCMS";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 interface ArticleListCMSProps {
   sessionToken: string;
@@ -82,9 +82,9 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
               <AppBreadcrumbItem isCurrentPage>SEO Articles</AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage="SEO Articles"
-                descPage=" SEO content management hub to create, optimize, and drive organic traffic."
+              <PageTitleSectionCMS
+                pageTitle="SEO Articles"
+                pageDesc="SEO content management hub to create, optimize, and drive organic traffic."
               />
               {allowedRolesMutateArticle.includes(props.sessionUserRole) && (
                 <Link href="/articles/create">

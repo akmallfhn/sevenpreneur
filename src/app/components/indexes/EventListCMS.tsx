@@ -2,7 +2,7 @@
 import AppButton from "@/app/components/buttons/AppButton";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -22,10 +22,10 @@ import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import CreateEventFormCMS from "../forms/CreateEventFormCMS";
 import EditEventFormCMS from "../forms/EditEventFormCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 
@@ -137,9 +137,9 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
               <AppBreadcrumbItem isCurrentPage>Events</AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage="Event List"
-                descPage="Manage event listings, details, and maintain content efficiently"
+              <PageTitleSectionCMS
+                pageTitle="Event List"
+                pageDesc="Manage event listings, details, and maintain content efficiently"
               />
               <AppButton
                 variant="cmsPrimary"

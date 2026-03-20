@@ -1,6 +1,6 @@
 "use client";
 import AppButton from "@/app/components/buttons/AppButton";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { ArticleStatus } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -369,9 +369,9 @@ export default function EditArticleForm(props: EditArticleFormProps) {
             <AppBreadcrumbItem isCurrentPage>Edit</AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage="Edit SEO Article"
-              descPage="Improve search performance by updating keywords, metadata, and on-page structure"
+            <PageTitleSectionCMS
+              pageTitle="Edit SEO Article"
+              pageDesc="Improve search performance by updating keywords, metadata, and on-page structure"
             />
             <div className="page-actions flex items-center gap-4">
               {initialData?.status === "DRAFT" && (

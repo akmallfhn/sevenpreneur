@@ -16,7 +16,7 @@ import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "../titles/TitleRevealCMS";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -90,9 +90,9 @@ export default function CohortMembersPerformanceCMS(
                 <AppBreadcrumbItem isCurrentPage>Performance</AppBreadcrumbItem>
               </AppBreadcrumb>
               <div className="page-title-actions flex justify-between items-center">
-                <TitleRevealCMS
-                  titlePage="Student Performance Tracker"
-                  descPage="Track student attendance, assignment progress, and overall learning performance"
+                <PageTitleSectionCMS
+                  pageTitle="Student Performance Tracker"
+                  pageDesc="Track student attendance, assignment progress, and overall learning performance"
                 />
               </div>
             </div>

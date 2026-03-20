@@ -16,7 +16,7 @@ import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "../titles/TitleRevealCMS";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -37,7 +37,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
 
   const allowedRolesDetailsSubmission = [0, 1, 2];
   const isAllowedDetailsSubmission = allowedRolesDetailsSubmission.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
 
   // Push Parameter to URL
@@ -61,7 +61,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
     isError: isErrorProjectDetails,
   } = trpc.read.project.useQuery(
     { id: props.projectId },
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
   const projectDetailsData = projectDetails?.project;
 
@@ -76,7 +76,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
   const submissionListAttributes = submissionList?.map((post) => {
     const { isEarly, shortMessage } = getSubmissionTiming(
       post.created_at,
-      projectDetailsData?.deadline_at
+      projectDetailsData?.deadline_at,
     );
 
     return { ...post, isEarly, shortMessage };
@@ -114,9 +114,9 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
               </AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title-actions flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage={"Assignment Submissions"}
-                descPage={`Browse and review all submissions for ${projectDetailsData?.name}`}
+              <PageTitleSectionCMS
+                pageTitle="Assignment Submissions"
+                pageDesc={`Browse and review all submissions for ${projectDetailsData?.name}`}
               />
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
             <ScorecardItemCMS
               scorecardName="Deadline"
               scorecardValue={dayjs(projectDetailsData?.deadline_at).format(
-                "D/MM/YYYY [-] HH:mm"
+                "D/MM/YYYY [-] HH:mm",
               )}
               scorecardBackground="bg-warning-foreground"
             />
@@ -180,7 +180,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                   ?.sort(
                     (a, b) =>
                       dayjs(a.created_at).valueOf() -
-                      dayjs(b.created_at).valueOf()
+                      dayjs(b.created_at).valueOf(),
                   )
                   .map((post, index) => (
                     <tr

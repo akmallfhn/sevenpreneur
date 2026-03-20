@@ -4,7 +4,7 @@ import CreateCohortFormCMS from "@/app/components/forms/CreateCohortFormCMS";
 import CohortItemCardCMS from "@/app/components/items/CohortItemCardCMS";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
@@ -43,11 +43,9 @@ export default function CohortListCMS({
               <AppBreadcrumbItem isCurrentPage>Cohorts</AppBreadcrumbItem>
             </AppBreadcrumb>
             <div className="page-title flex justify-between items-center">
-              <TitleRevealCMS
-                titlePage={"Cohort Programs"}
-                descPage={
-                  "View and manage all your existing cohort programs in one place"
-                }
+              <PageTitleSectionCMS
+                pageTitle="Cohort Programs"
+                pageDesc="View and manage all your existing cohort programs in one place"
               />
               {allowedRolesCreateCohort.includes(sessionUserRole) && (
                 <AppButton

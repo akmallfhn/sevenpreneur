@@ -1,6 +1,6 @@
 "use client";
 import AppButton from "@/app/components/buttons/AppButton";
-import TitleRevealCMS from "@/app/components/titles/TitleRevealCMS";
+import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { ArticleStatus } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
@@ -17,11 +17,11 @@ import { toast } from "sonner";
 import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
+import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
-import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 
 export interface BodyContentArticle {
   id?: number;
@@ -327,9 +327,9 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
             <AppBreadcrumbItem isCurrentPage>Create</AppBreadcrumbItem>
           </AppBreadcrumb>
           <div className="page-title-actions flex justify-between items-center">
-            <TitleRevealCMS
-              titlePage="Create SEO Article"
-              descPage="Write and manage a new SEO article by optimizing keywords, metadata, and structure"
+            <PageTitleSectionCMS
+              pageTitle="Create SEO Article"
+              pageDesc="Write and manage a new SEO article by optimizing keywords, metadata, and structure"
             />
             <div className="page-actions flex items-center gap-4">
               <AppButton
