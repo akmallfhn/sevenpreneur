@@ -27,7 +27,7 @@ const variantStyles: Record<
   },
   HOT: {
     icon: faFire,
-    bg_color: "text-white bg-destructive",
+    bg_color: "text-[#FED106] bg-destructive",
   },
 };
 
@@ -68,13 +68,15 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
           <p className="conv-full-name text-sm font-semibold font-bodycopy leading-snug line-clamp-1">
             {props.convUserFullName}
           </p>
-          <p className="conv-last-message text-[13px] text-alternative font-bodycopy font-[450] line-clamp-1">
+          <p className="conv-last-message text-[13px] text-[#333333]/70 font-bodycopy font-[450] line-clamp-1">
             {props.convLastMessage}
           </p>
         </div>
       </div>
       <div className="flex flex-col gap-0.5 items-center shrink-0">
-        <p className="conv-last-message-at text-[13px] text-cms-primary font-bodycopy font-medium line-clamp-1">
+        <p
+          className={`conv-last-message-at text-[13px] font-bodycopy font-medium line-clamp-1 ${props.convUnreadMessage > 0 ? "text-cms-primary" : ""}`}
+        >
           {dayjs(props.convLastMessageAt).format("HH:mm")}
         </p>
         {props.convUnreadMessage > 0 && (
