@@ -30,62 +30,36 @@ import {
 
 async function fetchItems(
   prisma: PrismaClient,
-  list: { category: CategoryEnum; item_id: number }[],
-  useCohortPrice: boolean,
-  useEventPrice: boolean
+  list: { category: CategoryEnum; item_id: number }[]
 ) {
-  const cohortIdList: Set<number> = new Set();
-  const eventIdList: Set<number> = new Set();
+  const cohortPriceIdList: Set<number> = new Set();
+  const eventPriceIdList: Set<number> = new Set();
   const playlistIdList: Set<number> = new Set();
   list.forEach((entry) => {
     if (entry.category === CategoryEnum.COHORT) {
-      cohortIdList.add(entry.item_id);
+      cohortPriceIdList.add(entry.item_id);
     } else if (entry.category === CategoryEnum.EVENT) {
-      eventIdList.add(entry.item_id);
+      eventPriceIdList.add(entry.item_id);
     } else if (entry.category === CategoryEnum.PLAYLIST) {
       playlistIdList.add(entry.item_id);
     }
   });
 
-  type Cohort = Prisma.CohortGetPayload<object>;
-  let cohortMap: Optional<Map<number, Cohort>>;
-  if (!useCohortPrice) {
-    const cohortList = await prisma.cohort.findMany({
-      where: { id: { in: Array.from(cohortIdList) } },
-    });
-    cohortMap = new Map(cohortList.map((entry) => [entry.id, entry]));
-  }
+  const cohortPriceList = await prisma.cohortPrice.findMany({
+    include: { cohort: true },
+    where: { id: { in: Array.from(cohortPriceIdList) } },
+  });
+  const cohortPriceMap = new Map(
+    cohortPriceList.map((entry) => [entry.id, entry])
+  );
 
-  type CohortPrice = Prisma.CohortPriceGetPayload<{
-    include: { cohort: true };
-  }>;
-  let cohortPriceMap: Optional<Map<number, CohortPrice>>;
-  if (useCohortPrice) {
-    const cohortPriceList = await prisma.cohortPrice.findMany({
-      include: { cohort: true },
-      where: { id: { in: Array.from(cohortIdList) } },
-    });
-    cohortPriceMap = new Map(cohortPriceList.map((entry) => [entry.id, entry]));
-  }
-
-  type Event = Prisma.EventGetPayload<object>;
-  let eventMap: Optional<Map<number, Event>>;
-  if (!useEventPrice) {
-    const eventList = await prisma.event.findMany({
-      where: { id: { in: Array.from(eventIdList) } },
-    });
-    eventMap = new Map(eventList.map((entry) => [entry.id, entry]));
-  }
-
-  type EventPrice = Prisma.EventPriceGetPayload<{ include: { event: true } }>;
-  let eventPriceMap: Optional<Map<number, EventPrice>>;
-  if (useEventPrice) {
-    const eventPriceList = await prisma.eventPrice.findMany({
-      include: { event: true },
-      where: { id: { in: Array.from(eventIdList) } },
-    });
-    eventPriceMap = new Map(eventPriceList.map((entry) => [entry.id, entry]));
-  }
+  const eventPriceList = await prisma.eventPrice.findMany({
+    include: { event: true },
+    where: { id: { in: Array.from(eventPriceIdList) } },
+  });
+  const eventPriceMap = new Map(
+    eventPriceList.map((entry) => [entry.id, entry])
+  );
 
   const playlistList = await prisma.playlist.findMany({
     where: { id: { in: Array.from(playlistIdList) } },
@@ -107,7 +81,7 @@ async function fetchItems(
     })
   );
 
-  return { cohortMap, cohortPriceMap, eventMap, eventPriceMap, playlistMap };
+  return { cohortPriceMap, eventPriceMap, playlistMap };
 }
 
 export const listTransaction = {
@@ -130,25 +104,23 @@ export const listTransaction = {
         take: paging.prisma.take,
       });
 
-      const { cohortMap, playlistMap } = await fetchItems(
+      const { cohortPriceMap, playlistMap } = await fetchItems(
         opts.ctx.prisma,
-        discountList,
-        false, // uses cohort ID
-        false
+        discountList
       );
 
       const returnedList = discountList.map((entry) => {
         let cohortBadge: Optional<CohortBadge>;
         if (entry.category === CategoryEnum.COHORT) {
-          const selectedCohortPrice = cohortMap!.get(entry.item_id);
+          const selectedCohortPrice = cohortPriceMap!.get(entry.item_id);
           if (selectedCohortPrice) {
             cohortBadge = {
               id: selectedCohortPrice.id,
               name: selectedCohortPrice.name,
-              image: selectedCohortPrice.image,
-              image_banner: selectedCohortPrice.image_banner,
-              image_square: selectedCohortPrice.image_square,
-              slugUrl: selectedCohortPrice.slug_url,
+              image: selectedCohortPrice.cohort.image,
+              image_banner: selectedCohortPrice.cohort.image_banner,
+              image_square: selectedCohortPrice.cohort.image_square,
+              slugUrl: selectedCohortPrice.cohort.slug_url,
             };
           }
         }
@@ -208,8 +180,8 @@ export const listTransaction = {
       z.object({
         user_id: stringIsUUID().optional(),
         cohort_id: numberIsID().optional(),
-        playlist_id: numberIsID().optional(),
         event_id: numberIsID().optional(),
+        playlist_id: numberIsID().optional(),
         start_date: z.iso.date().optional(),
         end_date: z.iso.date().optional(),
         page: numberIsPosInt().optional(),
@@ -298,9 +270,7 @@ export const listTransaction = {
 
       const { cohortPriceMap, playlistMap, eventPriceMap } = await fetchItems(
         opts.ctx.prisma,
-        transactionsList,
-        true, // uses cohort price ID
-        true
+        transactionsList
       );
 
       let checkoutPrefix = "https://checkout.xendit.co/web/";

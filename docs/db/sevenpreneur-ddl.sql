@@ -526,6 +526,13 @@ CREATE TABLE ai_chats (
 
 -- Transaction-related
 
+/**
+ * The item_id column refers to
+ * - cohort_prices.id if the category is cohort,
+ * - playlists.id     if the category is playlist, or
+ * - event_prices.id  if the category is event.
+ */
+
 CREATE TABLE discounts (
   id            SERIAL         PRIMARY KEY,
   name          VARCHAR        NOT NULL,

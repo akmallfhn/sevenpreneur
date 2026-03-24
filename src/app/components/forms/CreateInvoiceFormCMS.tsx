@@ -104,7 +104,7 @@ export default function CreateInvoiceFormCMS({
   const checkDiscountQuery = trpc.purchase.checkDiscount.useQuery(
     {
       code: formData.paymentDiscount.trim(),
-      cohort_id:
+      cohort_price_id:
         formData.invoiceProductCategory === "COHORT"
           ? Number(formData.invoiceProductItem)
           : undefined,
@@ -112,7 +112,7 @@ export default function CreateInvoiceFormCMS({
         formData.invoiceProductCategory === "PLAYLIST"
           ? Number(formData.invoiceProductItem)
           : undefined,
-      event_id:
+      event_price_id:
         formData.invoiceProductCategory === "EVENT"
           ? Number(formData.invoiceProductItem)
           : undefined,

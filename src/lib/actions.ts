@@ -348,11 +348,11 @@ export async function CheckDiscountPlaylist({
 // CHECK DISCOUNT COHORT
 interface CheckDiscountCohortProps {
   discountCode: string;
-  cohortId: number;
+  cohortPriceId: number;
 }
 export async function CheckDiscountCohort({
   discountCode,
-  cohortId,
+  cohortPriceId,
 }: CheckDiscountCohortProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -362,7 +362,7 @@ export async function CheckDiscountCohort({
   setSessionToken(sessionData.value);
   const checkDiscount = await trpc.purchase.checkDiscount({
     code: discountCode,
-    cohort_id: cohortId,
+    cohort_price_id: cohortPriceId,
   });
   const discountDataRaw = checkDiscount?.discount;
   const discountData = {
@@ -383,11 +383,11 @@ export async function CheckDiscountCohort({
 // CHECK DISCOUNT EVENT
 interface CheckDiscountEventProps {
   discountCode: string;
-  eventId: number;
+  eventPriceId: number;
 }
 export async function CheckDiscountEvent({
   discountCode,
-  eventId,
+  eventPriceId,
 }: CheckDiscountEventProps) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -397,7 +397,7 @@ export async function CheckDiscountEvent({
   setSessionToken(sessionData.value);
   const checkDiscount = await trpc.purchase.checkDiscount({
     code: discountCode,
-    event_id: eventId,
+    event_price_id: eventPriceId,
   });
   const discountDataRaw = checkDiscount?.discount;
   const discountData = {
