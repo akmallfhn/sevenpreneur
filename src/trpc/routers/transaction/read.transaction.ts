@@ -38,6 +38,8 @@ export const readTransaction = {
             id: theCohortPrice.id,
             name: theCohortPrice.name,
             image: theCohortPrice.image,
+            image_banner: theCohortPrice.image_banner,
+            image_square: theCohortPrice.image_square,
             slugUrl: theCohortPrice.slug_url,
           };
         }
@@ -53,6 +55,8 @@ export const readTransaction = {
             id: thePlaylist.id,
             name: thePlaylist.name,
             image: thePlaylist.image_url,
+            image_banner: thePlaylist.image_banner_url,
+            image_square: thePlaylist.image_square_url,
             slugUrl: thePlaylist.slug_url,
             totalVideo: await opts.ctx.prisma.video.count({
               where: {
@@ -79,10 +83,14 @@ export const readTransaction = {
           cohort_id: cohortBadge?.id,
           cohort_name: cohortBadge?.name,
           cohort_image: cohortBadge?.image,
+          cohort_image_banner: cohortBadge?.image_banner,
+          cohort_image_square: cohortBadge?.image_square,
           cohort_slug: cohortBadge?.slugUrl,
           playlist_id: playlistBadge?.id,
           playlist_name: playlistBadge?.name,
           playlist_image: playlistBadge?.image,
+          playlist_image_banner: playlistBadge?.image_banner,
+          playlist_image_square: playlistBadge?.image_square,
           playlist_slug_url: playlistBadge?.slugUrl,
           playlist_total_video: playlistBadge?.totalVideo,
           created_at: theDiscount.created_at,
@@ -161,6 +169,8 @@ export const readTransaction = {
             id: theCohortPrice.cohort.id,
             name: theCohortPrice.cohort.name,
             image: theCohortPrice.cohort.image,
+            image_banner: theCohortPrice.cohort.image_banner,
+            image_square: theCohortPrice.cohort.image_square,
             slugUrl: theCohortPrice.cohort.slug_url,
             priceName: theCohortPrice.name,
           };
@@ -194,6 +204,8 @@ export const readTransaction = {
             id: thePlaylist.id,
             name: thePlaylist.name,
             image: thePlaylist.image_url,
+            image_banner: thePlaylist.image_banner_url,
+            image_square: thePlaylist.image_square_url,
             slugUrl: thePlaylist.slug_url,
             totalVideo: await opts.ctx.prisma.video.count({
               where: {
@@ -226,6 +238,8 @@ export const readTransaction = {
           cohort_id: cohortBadge?.id,
           cohort_name: cohortBadge?.name,
           cohort_image: cohortBadge?.image,
+          cohort_image_banner: cohortBadge?.image_banner,
+          cohort_image_square: cohortBadge?.image_square,
           cohort_slug: cohortBadge?.slugUrl,
           cohort_price_name: cohortBadge?.priceName,
           event_id: eventBadge?.id,
@@ -236,6 +250,8 @@ export const readTransaction = {
           playlist_id: playlistBadge?.id,
           playlist_name: playlistBadge?.name,
           playlist_image: playlistBadge?.image,
+          playlist_image_banner: playlistBadge?.image_banner,
+          playlist_image_square: playlistBadge?.image_square,
           playlist_slug_url: playlistBadge?.slugUrl,
           playlist_total_video: playlistBadge?.totalVideo,
           payment_channel_name: paymentChannelName,

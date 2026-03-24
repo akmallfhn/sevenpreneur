@@ -146,6 +146,8 @@ export const listTransaction = {
               id: selectedCohortPrice.id,
               name: selectedCohortPrice.name,
               image: selectedCohortPrice.image,
+              image_banner: selectedCohortPrice.image_banner,
+              image_square: selectedCohortPrice.image_square,
               slugUrl: selectedCohortPrice.slug_url,
             };
           }
@@ -159,6 +161,8 @@ export const listTransaction = {
               id: selectedPlaylist.entry.id,
               name: selectedPlaylist.entry.name,
               image: selectedPlaylist.entry.image_url,
+              image_banner: selectedPlaylist.entry.image_banner_url,
+              image_square: selectedPlaylist.entry.image_square_url,
               slugUrl: selectedPlaylist.entry.slug_url,
               totalVideo: selectedPlaylist.videosCount,
             };
@@ -178,10 +182,14 @@ export const listTransaction = {
           cohort_id: cohortBadge?.id,
           cohort_name: cohortBadge?.name,
           cohort_image: cohortBadge?.image,
+          cohort_image_banner: cohortBadge?.image_banner,
+          cohort_image_square: cohortBadge?.image_square,
           cohort_slug: cohortBadge?.slugUrl,
           playlist_id: playlistBadge?.id,
           playlist_name: playlistBadge?.name,
           playlist_image: playlistBadge?.image,
+          playlist_image_banner: playlistBadge?.image_banner,
+          playlist_image_square: playlistBadge?.image_square,
           playlist_slug_url: playlistBadge?.slugUrl,
           playlist_total_video: playlistBadge?.totalVideo,
         };
@@ -314,6 +322,8 @@ export const listTransaction = {
               id: selectedCohortPrice.cohort.id,
               name: selectedCohortPrice.cohort.name,
               image: selectedCohortPrice.cohort.image,
+              image_banner: selectedCohortPrice.cohort.image_banner,
+              image_square: selectedCohortPrice.cohort.image_square,
               slugUrl: selectedCohortPrice.cohort.slug_url,
               priceName: selectedCohortPrice.name,
             };
@@ -342,6 +352,8 @@ export const listTransaction = {
               id: selectedPlaylist.entry.id,
               name: selectedPlaylist.entry.name,
               image: selectedPlaylist.entry.image_url,
+              image_banner: selectedPlaylist.entry.image_banner_url,
+              image_square: selectedPlaylist.entry.image_square_url,
               slugUrl: selectedPlaylist.entry.slug_url,
               totalVideo: selectedPlaylist.videosCount,
             };
@@ -365,6 +377,8 @@ export const listTransaction = {
           cohort_id: cohortBadge?.id,
           cohort_name: cohortBadge?.name,
           cohort_image: cohortBadge?.image,
+          cohort_image_banner: cohortBadge?.image_banner,
+          cohort_image_square: cohortBadge?.image_square,
           cohort_slug: cohortBadge?.slugUrl,
           cohort_price_name: cohortBadge?.priceName,
           event_id: eventBadge?.id,
@@ -375,6 +389,8 @@ export const listTransaction = {
           playlist_id: playlistBadge?.id,
           playlist_name: playlistBadge?.name,
           playlist_image: playlistBadge?.image,
+          playlist_image_banner: playlistBadge?.image_banner,
+          playlist_image_square: playlistBadge?.image_square,
           playlist_slug_url: playlistBadge?.slugUrl,
           playlist_total_video: playlistBadge?.totalVideo,
         };
@@ -438,6 +454,8 @@ export const listTransaction = {
             id: true,
             name: true,
             image: true,
+            image_banner: true,
+            image_square: true,
             start_date: true,
             end_date: true,
             status: true,
@@ -461,6 +479,8 @@ export const listTransaction = {
             id: true,
             name: true,
             image_url: true,
+            image_banner_url: true,
+            image_square_url: true,
             published_at: true,
             status: true,
             videos: { select: { duration: true } },
@@ -481,6 +501,8 @@ export const listTransaction = {
       id: number;
       name: string;
       image_url: string;
+      image_banner_url: string;
+      image_square_url: string;
       total_item: number;
       published_at: Date;
       cohort_start_date: Date | null;
@@ -495,6 +517,8 @@ export const listTransaction = {
         id: entry.cohort.id,
         name: entry.cohort.name,
         image_url: entry.cohort.image,
+        image_banner_url: entry.cohort.image_banner,
+        image_square_url: entry.cohort.image_square,
         total_item: entry.cohort.learnings.length,
         published_at: entry.cohort.published_at,
         cohort_start_date: entry.cohort.start_date,
@@ -514,6 +538,8 @@ export const listTransaction = {
         id: entry.playlist.id,
         name: entry.playlist.name,
         image_url: entry.playlist.image_url,
+        image_banner_url: entry.playlist.image_banner_url,
+        image_square_url: entry.playlist.image_square_url,
         total_item: entry.playlist.videos.length,
         published_at: entry.playlist.published_at,
         cohort_start_date: null,
