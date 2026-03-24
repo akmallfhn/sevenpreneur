@@ -12,7 +12,7 @@ export const deleteEvent = {
         .$executeRaw`UPDATE events SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id}::uuid WHERE id = ${opts.input.id};`;
       if (deletedEvent > 1) {
         console.error(
-          "delete.event: More-than-one events are deleted at once.",
+          "delete.event: More-than-one events are deleted at once."
         );
       }
       return {

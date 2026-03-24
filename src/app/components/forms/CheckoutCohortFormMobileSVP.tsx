@@ -147,7 +147,7 @@ export default function CheckoutCohortFormMobileSVP({
   // --- Get Data from Chosen Payment Channel
   const chosenPaymentChannelData = useMemo(() => {
     return paymentMethodData.find(
-      (item: PaymentMethodItem) => item.code === selectedPaymentChannel,
+      (item: PaymentMethodItem) => item.code === selectedPaymentChannel
     );
   }, [selectedPaymentChannel, paymentMethodData]);
 
@@ -198,8 +198,7 @@ export default function CheckoutCohortFormMobileSVP({
       const percentRate = chosenPaymentChannelData.calc_percent / 100;
       const flatFee = chosenPaymentChannelData.calc_flat;
       const total = Math.round(
-        (subtotal + flatFee * (1 + vatRate)) /
-          (1 - percentRate * (1 + vatRate)),
+        (subtotal + flatFee * (1 + vatRate)) / (1 - percentRate * (1 + vatRate))
       );
       const percentFee = percentRate * total;
       const allFee = Math.round(flatFee + percentFee);
@@ -394,7 +393,7 @@ export default function CheckoutCohortFormMobileSVP({
                     {paymentMethodData
                       .filter(
                         (post: PaymentMethodItem) =>
-                          post.method === "BANK_TRANSFER",
+                          post.method === "BANK_TRANSFER"
                       )
                       .map((post: PaymentMethodItem, index: number) => (
                         <RadioBoxPaymentChannelSVP
@@ -410,7 +409,7 @@ export default function CheckoutCohortFormMobileSVP({
                   <PaymentChannelGroupSVP groupPaymentName="Instant Payment">
                     {paymentMethodData
                       .filter(
-                        (post: PaymentMethodItem) => post.method === "QR_CODE",
+                        (post: PaymentMethodItem) => post.method === "QR_CODE"
                       )
                       .map((post: PaymentMethodItem, index: number) => (
                         <RadioBoxPaymentChannelSVP
@@ -426,7 +425,7 @@ export default function CheckoutCohortFormMobileSVP({
                   <PaymentChannelGroupSVP groupPaymentName="E-Wallet">
                     {paymentMethodData
                       .filter(
-                        (post: PaymentMethodItem) => post.method === "EWALLET",
+                        (post: PaymentMethodItem) => post.method === "EWALLET"
                       )
                       .map((post: PaymentMethodItem, index: number) => (
                         <RadioBoxPaymentChannelSVP
@@ -443,7 +442,7 @@ export default function CheckoutCohortFormMobileSVP({
                     {paymentMethodData
                       .filter(
                         (post: PaymentMethodItem) =>
-                          post.method === "CREDIT_CARD",
+                          post.method === "CREDIT_CARD"
                       )
                       .map((post: PaymentMethodItem, index: number) => (
                         <RadioBoxPaymentChannelSVP
@@ -459,7 +458,7 @@ export default function CheckoutCohortFormMobileSVP({
                   <PaymentChannelGroupSVP groupPaymentName="Paylater">
                     {paymentMethodData
                       .filter(
-                        (post: PaymentMethodItem) => post.method === "PAYLATER",
+                        (post: PaymentMethodItem) => post.method === "PAYLATER"
                       )
                       .map((post: PaymentMethodItem, index: number) => (
                         <RadioBoxPaymentChannelSVP
@@ -506,7 +505,7 @@ export default function CheckoutCohortFormMobileSVP({
                   <ReceiptLineItemSVP
                     receiptName={`Discount (${discount.calc_percent}%)`}
                     receiptValue={`- ${getRupiahCurrency(
-                      Math.round(programPrice - subtotal),
+                      Math.round(programPrice - subtotal)
                     )}`}
                     isDiscount
                   />
