@@ -704,7 +704,7 @@ interface GenerateAIIdeaValidationProps {
   availableResources: string;
 }
 export async function GenerateAIIdeaValidation(
-  props: GenerateAIIdeaValidationProps,
+  props: GenerateAIIdeaValidationProps
 ) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -770,7 +770,7 @@ interface GenerateAICompetitorGradingProps {
   productIndustry: string;
 }
 export async function GenerateAICompetitorGrading(
-  props: GenerateAICompetitorGradingProps,
+  props: GenerateAICompetitorGradingProps
 ) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");
@@ -835,7 +835,7 @@ interface GenerateAIPriceStrategyProps extends GenerateCOGSStructureProps {
   fixedCostList: CostList[];
 }
 export async function GenerateAIPriceStrategy(
-  props: GenerateAIPriceStrategyProps,
+  props: GenerateAIPriceStrategyProps
 ) {
   const cookieStore = await cookies();
   const sessionData = cookieStore.get("session_token");

@@ -32,7 +32,7 @@ export const listLMS = {
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
         keyword: stringNotBlank().optional(),
-      }),
+      })
     )
     .query(async (opts) => {
       const whereClause = {
@@ -57,7 +57,7 @@ export const listLMS = {
         await opts.ctx.prisma.cohort.aggregate({
           _count: true,
           where: whereClause,
-        }),
+        })
       );
 
       const cohortList = await opts.ctx.prisma.cohort.findMany({
@@ -92,7 +92,7 @@ export const listLMS = {
           .filter((entry) =>
             !opts.ctx.user || opts.ctx.user.role.name !== "Administrator"
               ? entry.status === StatusEnum.ACTIVE
-              : true,
+              : true
           )
           .map((entry) => {
             return {
@@ -130,7 +130,7 @@ export const listLMS = {
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       const cohortPricesList = await opts.ctx.prisma.cohortPrice.findMany({
@@ -156,7 +156,7 @@ export const listLMS = {
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
@@ -164,7 +164,7 @@ export const listLMS = {
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.cohort_id,
-          "You're not allowed to read members of a cohort which you aren't enrolled.",
+          "You're not allowed to read members of a cohort which you aren't enrolled."
         );
       }
       type CohortMemberItem = {
@@ -268,7 +268,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
         keyword: stringNotBlank().optional(),
-      }),
+      })
     )
     .query(async (opts) => {
       const whereClause = {
@@ -291,7 +291,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
         await opts.ctx.prisma.userCohort.aggregate({
           _count: true,
           where: whereClause,
-        }),
+        })
       );
 
       const cohortList = await opts.ctx.prisma.userCohort.findMany({
@@ -346,7 +346,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
@@ -354,7 +354,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.cohort_id,
-          "You're not allowed to read modules of a cohort which you aren't enrolled.",
+          "You're not allowed to read modules of a cohort which you aren't enrolled."
         );
       }
       const modulesList = await opts.ctx.prisma.module.findMany({
@@ -381,7 +381,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       let whereOr: Optional<{ price_id: number | null }[]> = undefined;
@@ -390,7 +390,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.cohort_id,
-          "You're not allowed to read learnings of a cohort which you aren't enrolled.",
+          "You're not allowed to read learnings of a cohort which you aren't enrolled."
         );
         whereOr = [
           { price_id: null },
@@ -449,7 +449,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       const learningsList = await opts.ctx.prisma.learning.findMany({
@@ -479,7 +479,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         learning_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
@@ -487,7 +487,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.learning_id,
-          "You're not allowed to read materials of a cohort/learning which you aren't enrolled.",
+          "You're not allowed to read materials of a cohort/learning which you aren't enrolled."
         );
       }
       const materialsList = await opts.ctx.prisma.material.findMany({
@@ -514,7 +514,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         learning_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       if (opts.ctx.user.role.name === "General User") {
@@ -522,7 +522,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.learning_id,
-          "You're not allowed to read learning discussions of a cohort/learning which you aren't enrolled.",
+          "You're not allowed to read learning discussions of a cohort/learning which you aren't enrolled."
         );
       }
       const discussionStartersList =
@@ -568,7 +568,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         starter_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       if (opts.ctx.user.role.name === "General User") {
@@ -586,7 +586,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           opts.ctx.prisma,
           opts.ctx.user.id,
           theDiscussionStarter.learning_id,
-          "You're not allowed to read learning discussions of a cohort/learning which you aren't enrolled.",
+          "You're not allowed to read learning discussions of a cohort/learning which you aren't enrolled."
         );
       }
       const discussionRepliesList =
@@ -626,7 +626,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       if (["Marketer", "General User"].includes(opts.ctx.user.role.name)) {
@@ -634,7 +634,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           opts.ctx.prisma,
           opts.ctx.user.id,
           opts.input.cohort_id,
-          "You're not allowed to read projects of a cohort which you aren't enrolled.",
+          "You're not allowed to read projects of a cohort which you aren't enrolled."
         );
         const projectsList = await opts.ctx.prisma.project.findMany({
           where: { cohort_id: opts.input.cohort_id },
@@ -694,7 +694,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
       z.object({
         project_id: numberIsID(),
         submitter_id: stringIsUUID().optional(),
-      }),
+      })
     )
     .query(async (opts) => {
       let selectedUserId = opts.input.submitter_id;
@@ -745,7 +745,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
     .input(
       z.object({
         cohort_id: numberIsID(),
-      }),
+      })
     )
     .query(async (opts) => {
       const countsList = await opts.ctx.prisma.$queryRaw<AttendanceCount[]>`

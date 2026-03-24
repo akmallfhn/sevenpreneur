@@ -6,5 +6,6 @@
   "editor.insertSpaces": true,
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  }
+  },
+  "prettier.trailingComma": "es5" // Use old format instead
 }
