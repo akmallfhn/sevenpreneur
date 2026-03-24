@@ -30,17 +30,18 @@ export const readTransaction = {
 
       let cohortBadge: Optional<CohortBadge>;
       if (theDiscount.category === CategoryEnum.COHORT) {
-        const theCohortPrice = await opts.ctx.prisma.cohort.findFirst({
+        const theCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
+          include: { cohort: true },
           where: { id: theDiscount.item_id },
         });
         if (theCohortPrice) {
           cohortBadge = {
-            id: theCohortPrice.id,
-            name: theCohortPrice.name,
-            image: theCohortPrice.image,
-            image_banner: theCohortPrice.image_banner,
-            image_square: theCohortPrice.image_square,
-            slugUrl: theCohortPrice.slug_url,
+            id: theCohortPrice.cohort.id,
+            name: theCohortPrice.cohort.name,
+            image: theCohortPrice.cohort.image,
+            image_banner: theCohortPrice.cohort.image_banner,
+            image_square: theCohortPrice.cohort.image_square,
+            slugUrl: theCohortPrice.cohort.slug_url,
           };
         }
       }

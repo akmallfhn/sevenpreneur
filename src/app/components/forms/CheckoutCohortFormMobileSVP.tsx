@@ -622,7 +622,7 @@ export default function CheckoutCohortFormMobileSVP({
 
       {/* Modal Discount */}
       <ApplyDiscountModalSVP
-        cohortId={selectedTicket?.id}
+        cohortPriceId={selectedTicket?.id}
         isOpen={openDiscount}
         onClose={() => setOpenDiscount(false)}
         onApplyDiscount={(discountData) => {

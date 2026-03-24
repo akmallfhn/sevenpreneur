@@ -282,16 +282,16 @@ export const purchaseRouter = createTRPCRouter({
     .input(
       z.object({
         code: stringNotBlank(),
-        cohort_id: numberIsID().optional(),
+        cohort_price_id: numberIsID().optional(),
         playlist_id: numberIsID().optional(),
-        event_id: numberIsID().optional(),
+        event_price_id: numberIsID().optional(),
       })
     )
     .query(async (opts) => {
       const inputs = [
-        opts.input.cohort_id,
+        opts.input.cohort_price_id,
         opts.input.playlist_id,
-        opts.input.event_id,
+        opts.input.event_price_id,
       ];
       const filledCount = inputs.filter(Boolean).length;
       if (filledCount !== 1) {
@@ -304,17 +304,17 @@ export const purchaseRouter = createTRPCRouter({
 
       let selectedCategory: CategoryEnum;
       let selectedItemId: number;
-      if (opts.input.cohort_id) {
+      if (opts.input.cohort_price_id) {
         selectedCategory = CategoryEnum.COHORT;
-        selectedItemId = opts.input.cohort_id;
+        selectedItemId = opts.input.cohort_price_id;
       }
       if (opts.input.playlist_id) {
         selectedCategory = CategoryEnum.PLAYLIST;
         selectedItemId = opts.input.playlist_id;
       }
-      if (opts.input.event_id) {
+      if (opts.input.event_price_id) {
         selectedCategory = CategoryEnum.EVENT;
-        selectedItemId = opts.input.event_id;
+        selectedItemId = opts.input.event_price_id;
       }
       const now = new Date();
       const theDiscount = await opts.ctx.prisma.discount.findFirst({
@@ -366,9 +366,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       const selectedCohortPrice = await opts.ctx.prisma.cohortPrice.findFirst({
-        include: {
-          cohort: true,
-        },
+        include: { cohort: true },
         where: { id: opts.input.cohort_price_id },
       });
       if (!selectedCohortPrice) {
@@ -489,9 +487,7 @@ export const purchaseRouter = createTRPCRouter({
       }
 
       const selectedEventPrice = await opts.ctx.prisma.eventPrice.findFirst({
-        include: {
-          event: true,
-        },
+        include: { event: true },
         where: { id: opts.input.event_price_id },
       });
       if (!selectedEventPrice) {

@@ -20,8 +20,8 @@ interface DiscountType {
 
 interface ApplyDiscountModalSVPProps {
   playlistId?: number;
-  cohortId?: number;
-  eventId?: number;
+  cohortPriceId?: number;
+  eventPriceId?: number;
   isOpen: boolean;
   onClose: () => void;
   onApplyDiscount: (discount: DiscountType) => void;
@@ -29,8 +29,8 @@ interface ApplyDiscountModalSVPProps {
 
 export default function ApplyDiscountModalSVP({
   playlistId,
-  cohortId,
-  eventId,
+  cohortPriceId,
+  eventPriceId,
   isOpen,
   onClose,
   onApplyDiscount,
@@ -81,15 +81,15 @@ export default function ApplyDiscountModalSVP({
           discountCode: discountCode.trim(),
           playlistId: playlistId,
         });
-      } else if (cohortId) {
+      } else if (cohortPriceId) {
         responseDiscount = await CheckDiscountCohort({
           discountCode: discountCode.trim(),
-          cohortId: cohortId,
+          cohortPriceId: cohortPriceId,
         });
-      } else if (eventId) {
+      } else if (eventPriceId) {
         responseDiscount = await CheckDiscountEvent({
           discountCode: discountCode.trim(),
-          eventId: eventId,
+          eventPriceId: eventPriceId,
         });
       }
       const discountData: DiscountType = {

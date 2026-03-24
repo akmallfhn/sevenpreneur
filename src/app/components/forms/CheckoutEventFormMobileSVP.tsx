@@ -623,7 +623,7 @@ export default function CheckoutEventFormMobileSVP({
 
       {/* Modal Discount */}
       <ApplyDiscountModalSVP
-        eventId={selectedTicket?.id}
+        eventPriceId={selectedTicket?.id}
         isOpen={openDiscount}
         onClose={() => setOpenDiscount(false)}
         onApplyDiscount={(discountData) => {
