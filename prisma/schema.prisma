@@ -267,6 +267,8 @@ model Cohort {
   name          String        @db.VarChar()
   description   String        @db.VarChar()
   image         String        @db.VarChar()
+  image_banner  String        @db.VarChar()
+  image_square  String        @db.VarChar()
   status        StatusEnum
   slug_url      String        @unique @db.VarChar()
   start_date    DateTime      @db.Timestamptz()
@@ -571,6 +573,8 @@ model Playlist {
   description       String             @db.Text
   video_preview_url String             @db.VarChar()
   image_url         String             @db.VarChar()
+  image_banner_url  String             @db.VarChar()
+  image_square_url  String             @db.VarChar()
   price             Decimal            @db.Decimal(12, 2)
   status            StatusEnum
   slug_url          String             @db.VarChar()
