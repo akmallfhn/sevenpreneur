@@ -2,6 +2,8 @@ export type CohortBadge = {
   id?: number;
   name?: string;
   image?: string;
+  image_banner?: string;
+  image_square?: string;
   slugUrl?: string;
 };
 
@@ -24,6 +26,8 @@ export type PlaylistBadge = {
   id?: number;
   name?: string;
   image?: string;
+  image_banner?: string;
+  image_square?: string;
   slugUrl?: string;
   totalVideo?: number;
 };
