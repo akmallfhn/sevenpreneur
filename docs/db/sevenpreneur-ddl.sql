@@ -109,6 +109,33 @@ CREATE TYPE a_status_enum AS ENUM (
   'unpublished'
 );
 
+-- Enumeration for the wa_conversations table (wa_*)
+
+CREATE TYPE wa_lead_status AS ENUM (
+  'cold',
+  'warm',
+  'hot'
+);
+
+-- Enumeration for the wa_chats table (wac_*)
+
+CREATE TYPE wac_direction AS ENUM (
+  'inbound',
+  'outbound'
+);
+
+CREATE TYPE wac_sender_type AS ENUM (
+  'user',
+  'admin'
+);
+
+CREATE TYPE wac_status AS ENUM (
+  'sent',
+  'delivered',
+  'read',
+  'failed'
+);
+
 ------------
 -- Tables --
 ------------
@@ -621,6 +648,39 @@ CREATE TABLE interstitial_ads (
   updated_at      TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
+-- WhatsApp-chat-related
+
+CREATE TABLE wa_conversations (
+  id            CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  user_id       UUID                NULL,
+  full_name     VARCHAR         NOT NULL,
+  phone_number  VARCHAR         NOT NULL,
+  handler_id    UUID                NULL,
+  lead_status   wa_lead_status  NOT NULL  DEFAULT 'cold',
+  winning_rate  SMALLINT        NOT NULL  DEFAULT 0,
+  note          VARCHAR             NULL,
+  last_read_id  CHAR(21)            NULL,
+  created_at    TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE wa_chats (
+  id            CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  conv_id       CHAR(21)         NOT NULL,
+  wam_id        VARCHAR          NOT NULL,
+  direction     wac_direction    NOT NULL,
+  sender_type   wac_sender_type  NOT NULL,
+  reply_to_id   CHAR(21)             NULL,
+  message       VARCHAR          NOT NULL,
+  status        wac_status           NULL,
+  sent_at       TIMESTAMPTZ          NULL,
+  delivered_at  TIMESTAMPTZ          NULL,
+  read_at       TIMESTAMPTZ          NULL,
+  failed_at     TIMESTAMPTZ          NULL,
+  created_at    TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (
@@ -779,6 +839,17 @@ ALTER TABLE articles
   ADD FOREIGN KEY (category_id) REFERENCES article_categories (id),
   ADD FOREIGN KEY (author_id)   REFERENCES users (id),
   ADD FOREIGN KEY (reviewer_id) REFERENCES users (id);
+
+-- WhatsApp-chat-related
+
+ALTER TABLE wa_conversations
+  ADD FOREIGN KEY (user_id)      REFERENCES users (id),
+  ADD FOREIGN KEY (handler_id)   REFERENCES users (id),
+  ADD FOREIGN KEY (last_read_id) REFERENCES wa_chats (id);
+
+ALTER TABLE wa_chats
+  ADD FOREIGN KEY (conv_id)     REFERENCES wa_conversations (id),
+  ADD FOREIGN KEY (reply_to_id) REFERENCES wa_chats (id);
 
 -- Relation Tables --
 
@@ -969,6 +1040,18 @@ CREATE TRIGGER update_articles_updated_at_trigger
 
 CREATE TRIGGER update_interstitial_ads_updated_at_trigger
   BEFORE UPDATE ON interstitial_ads
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+-- WhatsApp-chat-related
+
+CREATE TRIGGER update_wa_conversations_updated_at_trigger
+  BEFORE UPDATE ON wa_conversations
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_wa_chats_updated_at_trigger
+  BEFORE UPDATE ON wa_chats
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
