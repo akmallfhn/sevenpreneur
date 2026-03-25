@@ -167,11 +167,12 @@ const nextConfig = {
       ],
     };
   },
+  allowedDevOrigins: ["www.example.com", "*.example.com"],
   experimental: {
     serverActions: {
       allowedOrigins: [
-        "www.sevenpreneur.com",
-        "www.example.com:3000",
+        "sevenpreneur.com",
+        "*.sevenpreneur.com",
         process.env.NGROK_DOMAIN,
       ],
     },
