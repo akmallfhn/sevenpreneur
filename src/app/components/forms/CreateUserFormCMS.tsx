@@ -26,12 +26,14 @@ import InputNumberCMS from "../fields/InputNumberCMS";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 interface CreateUserFormProps {
   sessionToken: string;
 }
 
 export default function CreateUserForm(props: CreateUserFormProps) {
+  const { isCollapsed } = useSidebar();
   const createUser = trpc.create.user.useMutation();
   const router = useRouter();
   const utils = trpc.useUtils();
@@ -196,7 +198,9 @@ export default function CreateUserForm(props: CreateUserFormProps) {
   };
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+    <div
+      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+    >
       <form
         className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
         onSubmit={handleSubmit}

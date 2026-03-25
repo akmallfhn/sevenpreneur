@@ -26,6 +26,7 @@ import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
 import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -36,6 +37,7 @@ interface DiscountListCMSProps {
 export default function DiscountListCMS({
   sessionToken,
 }: DiscountListCMSProps) {
+  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("id");
@@ -131,7 +133,9 @@ export default function DiscountListCMS({
 
   return (
     <React.Fragment>
-      <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
         <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>

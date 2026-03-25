@@ -1,6 +1,7 @@
 import SidebarCMS from "@/app/components/navigations/SidebarCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import DisallowedMobile from "@/app/components/states/DisallowedMobile";
+import { SidebarProviderCMS } from "@/app/contexts/SidebarContextCMS";
 import "@/app/globals.css";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
@@ -35,7 +36,7 @@ if (process.env.DOMAIN_MODE === "local")
   baseURL = "https://api.example.com:3000/trpc";
 
 export default async function AdminLayout(
-  props: Readonly<{ children: React.ReactNode }>
+  props: Readonly<{ children: React.ReactNode }>,
 ) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
@@ -51,15 +52,17 @@ export default async function AdminLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <div>
-        <SidebarCMS
-          sessionToken={sessionToken}
-          sessionUserRole={checkUser.role_id}
-        />
-        {props.children}
-        <DisallowedMobile />
-        <Toaster richColors position="top-center" />
-      </div>
+      <SidebarProviderCMS>
+        <div>
+          <SidebarCMS
+            sessionToken={sessionToken}
+            sessionUserRole={checkUser.role_id}
+          />
+          {props.children}
+          <DisallowedMobile />
+          <Toaster richColors position="top-center" />
+        </div>
+      </SidebarProviderCMS>
     </TRPCProvider>
   );
 }

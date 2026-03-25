@@ -16,8 +16,10 @@ import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 export default function WhatsappChatsCMS() {
+  const { isCollapsed } = useSidebar();
   const conv = [
     {
       full_name: "Andi Pratama",
@@ -144,7 +146,9 @@ export default function WhatsappChatsCMS() {
   const leadStatus: LeadStatus = "HOT";
 
   return (
-    <div className="root hidden w-full h-screen justify-center bg-white py-8 lg:flex lg:pl-64">
+    <div
+      className={`root hidden w-full h-screen justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+    >
       <div className="index flex flex-col max-w-[calc(100%-4rem)] w-full h-full gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>

@@ -31,6 +31,7 @@ import RolesLabelCMS from "../labels/RolesLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppNumberPagination from "../navigations/AppNumberPagination";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 interface UserListCMSProps {
   sessionToken: string;
@@ -38,6 +39,7 @@ interface UserListCMSProps {
 }
 
 export default function UserListCMS(props: UserListCMSProps) {
+  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const utils = trpc.useUtils();
 
@@ -141,7 +143,9 @@ export default function UserListCMS(props: UserListCMSProps) {
   };
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+    <div
+      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+    >
       <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>

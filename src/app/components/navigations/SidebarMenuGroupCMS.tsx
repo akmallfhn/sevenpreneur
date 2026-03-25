@@ -20,11 +20,11 @@ export default function SidebarMenuGroupCMS(props: SidebarMenuGroupCMSProps) {
         className="sidebar-group-name p-2 flex items-center rounded-md justify-between hover:bg-black/5 hover:cursor-pointer"
         onClick={toggleDropdown}
       >
-        <p className="font-bodycopy text-xs text-black/35  font-semibold tracking-widest">
+        <p className="font-bodycopy text-xs text-black/35 font-semibold tracking-widest line-clamp-1">
           {props.groupName.toUpperCase()}
         </p>
         <ChevronDown
-          className={`size-5 transform transition-transform text-black/35 duration-300 ${
+          className={`size-5 transform transition-transform text-black/35 duration-300 shrink-0 ${
             isDropdownOpen ? "rotate-180" : "rotate-0"
           }`}
         />

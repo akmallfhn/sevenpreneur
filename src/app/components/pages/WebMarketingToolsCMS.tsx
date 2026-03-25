@@ -11,12 +11,14 @@ import React, { useEffect, useState } from "react";
 import EditInterstitialAdsFormCMS from "../forms/EditInterstitialAdsFormCMS";
 import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 interface WebMarketingToolsCMSProps {
   sessionToken: string;
 }
 
 export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
+  const { isCollapsed } = useSidebar();
   const [editTicker, setEditTicker] = useState(false);
   const [editInterstitial, setEditInterstitial] = useState(false);
 
@@ -48,7 +50,9 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
 
   return (
     <React.Fragment>
-      <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
         <div className="web-marketing-tools max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>

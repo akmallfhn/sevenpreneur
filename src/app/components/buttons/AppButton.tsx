@@ -33,11 +33,13 @@ export type SizeType =
   | "smallRounded"
   | "iconRounded"
   | "smallIconRounded"
+  | "mediumIcon"
   | "largeIconRounded";
 export type FontType = "brand" | "bodycopy" | "ui";
 
 interface AppButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    ButtonHTMLAttributes<HTMLButtonElement>,
     FeatureTrackingProps,
     MetaObjectProps {
   children: React.ReactNode;
@@ -79,7 +81,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       metaEmail,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
-    ref: ForwardedRef<HTMLButtonElement>
+    ref: ForwardedRef<HTMLButtonElement>,
   ) => {
     const baseClasses =
       "app-button relative inline-flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed";
@@ -127,6 +129,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       medium: "py-1.5 px-3 h-9 text-sm rounded-md",
       small: "py-1 px-2 h-8 text-xs rounded-md",
       icon: "size-9 rounded-md",
+      mediumIcon: "size-7 rounded-md",
       largeRounded: "py-3 px-7 h-[52px] text-lg rounded-full",
       defaultRounded: "py-2 px-4 h-10 text-sm rounded-full",
       mediumRounded: "py-1.5 px-3 h-9 text-sm rounded-full",
@@ -165,7 +168,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         feature_position: featurePosition,
       };
       Object.keys(eventData).forEach(
-        (key) => eventData[key] === null && delete eventData[key]
+        (key) => eventData[key] === null && delete eventData[key],
       );
       window.dataLayer?.push(eventData);
 
@@ -185,7 +188,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
           em: metaEmail,
         };
         Object.keys(fbqData).forEach(
-          (key) => fbqData[key] === null && delete fbqData[key]
+          (key) => fbqData[key] === null && delete fbqData[key],
         );
         window.fbq("track", metaEventName, fbqData);
       }
@@ -208,7 +211,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         {children}
       </button>
     );
-  }
+  },
 );
 AppButton.displayName = "AppButton";
 export default AppButton;

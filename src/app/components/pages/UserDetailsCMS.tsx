@@ -36,6 +36,7 @@ import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -47,6 +48,7 @@ interface UserDetailsCMSProps {
 
 export default function UserDetailsCMS(props: UserDetailsCMSProps) {
   const { copy } = useClipboard();
+  const { isCollapsed } = useSidebar();
 
   // Fetch tRPC data
   const {
@@ -93,7 +95,9 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
     isErrorTransactions;
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+    <div
+      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+    >
       <div className="page-container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
