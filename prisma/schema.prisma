@@ -47,7 +47,7 @@ enum TStatusEnum {
   @@map("t_status_enum")
 }
 
-// Enumeration for the AIChat table (C*)
+// Enumeration for the AIChat model (C*)
 
 enum CRoleEnum {
   USER      @map("user")
@@ -56,7 +56,7 @@ enum CRoleEnum {
   @@map("c_role_enum")
 }
 
-// Enumeration for the ba_answer_sheets table (ba_*)
+// Enumeration for the BAAnswerSheet model (BA*)
 
 enum BAPeriodEnum {
   ASESMEN_PERTAMA @map("asesmen_pertama")
@@ -66,7 +66,7 @@ enum BAPeriodEnum {
   @@map("ba_period_enum")
 }
 
-// Enumeration for the bd_fin_cost_mtds table (cost_*)
+// Enumeration for the BDFinCostMTD model (Cost*)
 
 enum CostCategoryEnum {
   // TODO: use actual values
@@ -75,7 +75,7 @@ enum CostCategoryEnum {
   @@map("cost_category_enum")
 }
 
-// Enumeration for the bd_north_star_indicators table (ns_*)
+// Enumeration for the BDNorthStarIndicator model (NS*)
 
 enum NSStatusEnum {
   ON_TRACK  @map("on_track")
@@ -85,7 +85,7 @@ enum NSStatusEnum {
   @@map("ns_status_enum")
 }
 
-// Enumeration for the users table
+// Enumeration for the User model
 
 enum OccupationEnum {
   EMPLOYEE     @map("employee")
@@ -134,7 +134,7 @@ enum LegalEntityEnum {
   @@map("legal_entity_enum")
 }
 
-// Enumeration for the articles table (A*)
+// Enumeration for the Article model (A*)
 
 enum AStatusEnum {
   DRAFT       @map("draft")
