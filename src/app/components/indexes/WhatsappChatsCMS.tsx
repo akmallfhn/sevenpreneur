@@ -17,7 +17,7 @@ import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 
-export default function WhatsappChatsLMS() {
+export default function WhatsappChatsCMS() {
   const conv = [
     {
       full_name: "Andi Pratama",
@@ -268,8 +268,8 @@ export default function WhatsappChatsLMS() {
                 <h5 className="font-bodycopy text-[15px] font-bold">Notes</h5>
               </div>
               <TextAreaCMS
-                textAreaId="cohort-description"
-                textAreaPlaceholder="Tell us about this program"
+                textAreaId="chat-notes"
+                textAreaPlaceholder="Take notes for important things"
                 textAreaHeight="h-32"
                 value={""}
                 // onTextAreaChange={handleInputChange("cohortDescription")}
