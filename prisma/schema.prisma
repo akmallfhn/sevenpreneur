@@ -144,6 +144,41 @@ enum AStatusEnum {
   @@map("a_status_enum")
 }
 
+// Enumeration for the WAConversation model (WA*)
+
+enum WALeadStatus {
+  COLD @map("cold")
+  WARM @map("warm")
+  HOT  @map("hot")
+
+  @@map("wa_lead_status")
+}
+
+// Enumeration for the WAChat model (WAC*)
+
+enum WACDirection {
+  INBOUND  @map("inbound")
+  OUTBOUND @map("outbound")
+
+  @@map("wac_direction")
+}
+
+enum WACSenderType {
+  USER  @map("user")
+  ADMIN @map("admin")
+
+  @@map("wac_sender_type")
+}
+
+enum WACStatus {
+  SENT      @map("sent")
+  DELIVERED @map("delivered")
+  READ      @map("read")
+  FAILED    @map("failed")
+
+  @@map("wac_status")
+}
+
 ////////////
 // Models //
 ////////////
@@ -245,6 +280,8 @@ model User {
   bd_fin_revenue_mtds      BDFinRevenueMTD[]
   bd_fin_cost_mtds         BDFinCostMTD[]
   bd_north_star_indicators BDNorthStarIndicator[]
+  wa_conversations         WAConversation[]       @relation("wa_conversation")
+  wa_handleds              WAConversation[]       @relation("wa_handle")
 
   @@map("users")
 }
@@ -827,6 +864,51 @@ model InterstitialAd {
   updated_at     DateTime   @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("interstitial_ads")
+}
+
+// WhatsApp-chat-related
+
+model WAConversation {
+  id           String       @id @default(nanoid()) @db.Char(21)
+  user         User?        @relation("wa_conversation", fields: [user_id], references: [id])
+  user_id      String?      @db.Uuid
+  full_name    String       @db.VarChar()
+  phone_number String       @db.VarChar()
+  handler      User?        @relation("wa_handle", fields: [handler_id], references: [id])
+  handler_id   String?      @db.Uuid
+  lead_status  WALeadStatus @default(COLD)
+  winning_rate Int          @default(0) @db.SmallInt
+  note         String?      @db.VarChar()
+  last_read    WAChat?      @relation("last_read", fields: [last_read_id], references: [id])
+  last_read_id String?      @db.Char(21)
+  created_at   DateTime     @default(now()) @db.Timestamptz()
+  updated_at   DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  chats        WAChat[]
+
+  @@map("wa_conversations")
+}
+
+model WAChat {
+  id           String           @id @default(nanoid()) @db.Char(21)
+  conv         WAConversation   @relation(fields: [conv_id], references: [id])
+  conv_id      String           @db.Char(21)
+  wam_id       String           @db.VarChar()
+  direction    WACDirection
+  sender_type  WACSenderType
+  reply_to     WAChat?          @relation("reply", fields: [reply_to_id], references: [id])
+  reply_to_id  String?          @db.Char(21)
+  message      String           @db.VarChar()
+  status       WACStatus?
+  sent_at      DateTime?        @db.Timestamptz()
+  delivered_at DateTime?        @db.Timestamptz()
+  read_at      DateTime?        @db.Timestamptz()
+  failed_at    DateTime?        @db.Timestamptz()
+  created_at   DateTime         @default(now()) @db.Timestamptz()
+  updated_at   DateTime         @default(now()) @updatedAt @db.Timestamptz()
+  conv_read    WAConversation[] @relation("last_read")
+  replies      WAChat[]         @relation("reply")
+
+  @@map("wa_chats")
 }
 
 // Relation Tables //
