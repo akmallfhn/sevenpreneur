@@ -82,3 +82,5 @@ export type AIChatEventType =
   | "error";
 export type ReactionVariant = "favorite" | "scout";
 export type LeadStatus = "COLD" | "WARM" | "HOT";
+export type WhatsappChatStatus = "SENT" | "DELIVERED" | "READ" | "FAILED";
+export type WhatsappChatDirection = "INBOUND" | "OUTBOUND";

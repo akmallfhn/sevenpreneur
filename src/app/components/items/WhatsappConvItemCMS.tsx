@@ -47,7 +47,7 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
     <div className="conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-[#f4f4f4]">
       <div className="conv-metadata flex items-center gap-3">
         <div className="conv-sender-avatar relative flex">
-          <div className="aspect-square size-9 shrink-0 rounded-full overflow-hidden">
+          <div className="aspect-square size-10 shrink-0 rounded-full overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src={props.convUserAvatar}
@@ -58,17 +58,17 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
           </div>
           {props.convLeadStatus !== "COLD" && (
             <div
-              className={`conv-lead-status absolute flex bottom-0 right-0 items-center justify-center ${bg_color} aspect-square size-4 rounded-full overflow-hidden`}
+              className={`conv-lead-status absolute flex bottom-0 -right-1 items-center justify-center ${bg_color} aspect-square size-5 rounded-full overflow-hidden`}
             >
               <FontAwesomeIcon icon={icon} size="2xs" />
             </div>
           )}
         </div>
         <div className="flex flex-col">
-          <p className="conv-full-name text-sm font-semibold font-bodycopy leading-snug line-clamp-1">
+          <p className="conv-full-name text-[15px] font-semibold font-bodycopy leading-snug line-clamp-1">
             {props.convUserFullName}
           </p>
-          <p className="conv-last-message text-[13px] text-[#333333]/70 font-bodycopy font-[450] line-clamp-1">
+          <p className="conv-last-message text-sm text-[#333333]/70 font-bodycopy font-[450] line-clamp-1">
             {props.convLastMessage}
           </p>
         </div>

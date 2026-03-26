@@ -1,4 +1,4 @@
-import WhatsappChatsCMS from "@/app/components/indexes/WhatsappChatsCMS";
+import WhatsappConvsCMS from "@/app/components/indexes/WhatsappConvsCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import UnderDevelopment from "@/app/components/states/UnderDevelopment";
 import { setSessionToken, trpc } from "@/trpc/server";
@@ -23,9 +23,9 @@ export default async function WhatsappPageCMS() {
     );
   }
 
-  if (process.env.DOMAIN_MODE === "local") {
-    return <WhatsappChatsCMS />;
+  if (process.env.DOMAIN_MODE !== "local") {
+    return <UnderDevelopment />;
   }
 
-  return <UnderDevelopment />;
+  return <WhatsappConvsCMS />;
 }

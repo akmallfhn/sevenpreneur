@@ -1,4 +1,5 @@
 "use client";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { Slider } from "@/components/ui/slider";
 import { LeadStatus } from "@/lib/app-types";
 import {
@@ -10,15 +11,17 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
+import TextAreaCMS from "../fields/TextAreaCMS";
 import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
+import WhatsappChatsCMS, {
+  WhatsappChatItem,
+} from "../messages/WhatsappChatsCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
-export default function WhatsappChatsCMS() {
+export default function WhatsappConvsCMS() {
   const { isCollapsed } = useSidebar();
   const conv = [
     {
@@ -145,6 +148,119 @@ export default function WhatsappChatsCMS() {
 
   const leadStatus: LeadStatus = "HOT";
 
+  const whatsappChats: WhatsappChatItem[] = [
+    {
+      id: "1",
+      message: "Halo kak, saya tertarik dengan tiketnya 🙏",
+      direction: "INBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:15:30Z",
+      sent_at: "2026-03-26T08:15:30Z",
+      delivered_at: "2026-03-26T08:15:32Z",
+      read_at: "2026-03-26T08:15:40Z",
+      failed_at: null,
+    },
+    {
+      id: "2",
+      message: "Hi kak! Untuk tiket yang mana ya?",
+      direction: "OUTBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:16:10Z",
+      sent_at: "2026-03-26T08:16:10Z",
+      delivered_at: "2026-03-26T08:16:12Z",
+      read_at: "2026-03-26T08:16:25Z",
+      failed_at: null,
+    },
+    {
+      id: "3",
+      message: "Yang VIP early bird masih ada?",
+      direction: "INBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:17:02Z",
+      sent_at: "2026-03-26T08:17:02Z",
+      delivered_at: "2026-03-26T08:17:05Z",
+      read_at: "2026-03-26T08:17:20Z",
+      failed_at: null,
+    },
+    {
+      id: "4",
+      message: "Masih ada kak, tapi tinggal sedikit 👍",
+      direction: "OUTBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:18:45Z",
+      sent_at: "2026-03-26T08:18:45Z",
+      delivered_at: "2026-03-26T08:18:48Z",
+      read_at: "2026-03-26T08:18:48Z",
+      failed_at: null,
+    },
+    {
+      id: "5",
+      message: "Kalau mau cicilan bisa gak ya?",
+      direction: "INBOUND",
+      status: "DELIVERED",
+      created_at: "2026-03-26T08:20:11Z",
+      sent_at: "2026-03-26T08:20:11Z",
+      delivered_at: "2026-03-26T08:20:13Z",
+      read_at: null,
+      failed_at: null,
+    },
+    {
+      id: "6",
+      message: "Bisa kak! Kita ada opsi cicilan tanpa kartu kredit 😊",
+      direction: "OUTBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:21:30Z",
+      sent_at: "2026-03-26T08:21:30Z",
+      delivered_at: "2026-03-26T08:21:30Z",
+      read_at: "2026-03-26T08:21:30Z",
+      failed_at: null,
+    },
+    {
+      id: "7",
+      message: "Wah menarik, ada promo juga gak?",
+      direction: "INBOUND",
+      status: "SENT",
+      created_at: "2026-03-26T08:22:05Z",
+      sent_at: "2026-03-26T08:22:05Z",
+      delivered_at: null,
+      read_at: null,
+      failed_at: null,
+    },
+    {
+      id: "8",
+      message: "Ada kak, lagi promo diskon 20% sampai akhir minggu ini 🔥",
+      direction: "OUTBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:23:50Z",
+      sent_at: "2026-03-26T08:23:50Z",
+      delivered_at: "2026-03-26T08:23:50Z",
+      read_at: "2026-03-26T08:23:50Z",
+      failed_at: null,
+    },
+    {
+      id: "9",
+      message: "Wah boleh banget, gimana cara belinya?",
+      direction: "INBOUND",
+      status: "READ",
+      created_at: "2026-03-26T08:25:10Z",
+      sent_at: "2026-03-26T08:25:10Z",
+      delivered_at: "2026-03-26T08:25:10Z",
+      read_at: "2026-03-26T08:25:10Z",
+      failed_at: null,
+    },
+    {
+      id: "10",
+      message: "Aku kirim link pembeliannya ya kak 👇",
+      direction: "OUTBOUND",
+      status: "DELIVERED",
+      created_at: "2026-03-26T08:26:00Z",
+      sent_at: "2026-03-26T08:26:00Z",
+      delivered_at: "2026-03-26T08:26:03Z",
+      read_at: null,
+      failed_at: null,
+    },
+  ];
+
   return (
     <div
       className={`root hidden w-full h-screen justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
@@ -162,7 +278,7 @@ export default function WhatsappChatsCMS() {
           </div>
         </div>
         <div className="flex w-full min-h-0">
-          <div className="chat-panels flex flex-col flex-1 min-h-0 shrink-0 border rounded-l-lg overflow-y-auto">
+          <div className="convs-panels flex flex-col flex-1 min-h-0 shrink-0 border rounded-l-lg overflow-y-auto">
             <div className="column-title sticky inset-0 top-0 p-3 bg-white font-bodycopy font-bold border-b z-30">
               Chats
             </div>
@@ -180,7 +296,9 @@ export default function WhatsappChatsCMS() {
               ))}
             </div>
           </div>
-          <div className="flex flex-[1.6] border"></div>
+          <div className="chats flex flex-[1.6] border">
+            <WhatsappChatsCMS convId="100" convChats={whatsappChats} />
+          </div>
           <div className="lead-informations flex flex-col flex-1 w-full gap-4 p-3 py-5 border rounded-r-lg overflow-y-auto">
             <div className="lead-identity flex flex-col items-center gap-2">
               <div className="lead-avatar size-24 rounded-full overflow-hidden">

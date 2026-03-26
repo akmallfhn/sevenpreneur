@@ -23,3 +23,11 @@ export function toPascalCase(input: string): string {
     .replace(/(^\w|\s\w)/g, (match) => match.toUpperCase()) // kapitalisasi setiap kata
     .replace(/\s+/g, ""); // hapus spasi → gabungkan jadi PascalCase
 }
+
+export function toCapitalizeEachWord(input: string): string {
+  return input
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
