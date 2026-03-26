@@ -2,6 +2,7 @@
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -32,6 +33,7 @@ interface ArticleListCMSProps {
 
 export default function ArticleListCMS(props: ArticleListCMSProps) {
   const { copy } = useClipboard();
+  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const pageSize = 20;
   const searchParam = useSearchParams();
@@ -74,7 +76,9 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
 
   return (
     <React.Fragment>
-      <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
         <div className="web-marketing-tools max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>

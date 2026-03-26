@@ -31,13 +31,11 @@ export default async function LearningDetailsPage({
   }
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <LearningDetailsCMS
-        sessionToken={sessionToken}
-        sessionUserRole={userSession.user.role_id}
-        cohortId={cohortId}
-        learningId={learningId}
-      />
-    </div>
+    <LearningDetailsCMS
+      sessionToken={sessionToken}
+      sessionUserRole={userSession.user.role_id}
+      cohortId={cohortId}
+      learningId={learningId}
+    />
   );
 }

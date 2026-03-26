@@ -5,6 +5,7 @@ import CohortItemCardCMS from "@/app/components/items/CohortItemCardCMS";
 import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
@@ -22,6 +23,7 @@ export default function CohortListCMS({
   sessionToken,
   sessionUserRole,
 }: CohortListCMSProps) {
+  const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
   const [createCohort, setCreateCohort] = useState(false);
 
@@ -35,7 +37,9 @@ export default function CohortListCMS({
 
   return (
     <React.Fragment>
-      <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
         <div className="page-container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>

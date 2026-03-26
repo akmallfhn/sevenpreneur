@@ -31,14 +31,12 @@ export default async function SubmissionsPageCMS({
   }
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <SubmissionListCMS
-        sessionToken={sessionToken}
-        sessionUserId={userSession.user.id}
-        sessionUserRole={userSession.user.role_id}
-        cohortId={cohortId}
-        projectId={projectId}
-      />
-    </div>
+    <SubmissionListCMS
+      sessionToken={sessionToken}
+      sessionUserId={userSession.user.id}
+      sessionUserRole={userSession.user.role_id}
+      cohortId={cohortId}
+      projectId={projectId}
+    />
   );
 }

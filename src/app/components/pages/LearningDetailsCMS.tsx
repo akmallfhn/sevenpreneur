@@ -1,4 +1,5 @@
 "use client";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { SessionMethod } from "@/lib/app-types";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -37,12 +38,13 @@ interface LearningDetailsCMSProps {
 }
 
 export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
+  const { isCollapsed } = useSidebar();
   const [editLearning, setEditLearning] = useState(false);
   const [updateRecording, setUpdateRecording] = useState(false);
 
   const allowedRolesUpdateLearning = [0, 2];
   const isAllowedUpdateLearning = allowedRolesUpdateLearning.includes(
-    props.sessionUserRole
+    props.sessionUserRole,
   );
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
     isError,
   } = trpc.read.learning.useQuery(
     { id: props.learningId },
-    { enabled: !!props.sessionToken }
+    { enabled: !!props.sessionToken },
   );
   if (isLoading) {
     return (
@@ -91,165 +93,171 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
 
   return (
     <React.Fragment>
-      <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-        <div className="header-cms flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
-              Details
-            </AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>
-              {learningDetailsData?.learning.name}
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
+        <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+          <div className="header-cms flex flex-col gap-3">
+            <AppBreadcrumb>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
+                Details
+              </AppBreadcrumbItem>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem isCurrentPage>
+                {learningDetailsData?.learning.name}
+              </AppBreadcrumbItem>
+            </AppBreadcrumb>
 
-          <div className="body-learning flex flex-col w-full gap-4">
-            <div className="hero-learning relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
-              <Image
-                className="hero-background object-cover w-full h-full inset-0 z-0"
-                src={
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//leaderboard-wallpaper.jpeg"
-                }
-                alt="Header Learnings"
-                width={800}
-                height={800}
-              />
-              <div className="learning-attributes absolute flex flex-col max-w-[528px] top-1/2 -translate-y-1/2 left-8 gap-3 z-10">
-                <div className="learning-method flex w-fit">
-                  <LearningMethodLabelCMS
-                    labelName={learningDetailsData?.learning.method || ""}
-                    variants={
-                      learningDetailsData?.learning.method as SessionMethod
-                    }
-                  />
-                </div>
-                <h1 className="learning-name font-brand font-bold text-2xl text-white">
-                  {learningDetailsData?.learning.name}
-                </h1>
-                <div className="learning-date flex w-fit gap-2 items-center bg-black/15 text-white rounded-md p-2">
-                  <CalendarFold className="size-5" />
-                  <p className="flex font-bodycopy font-medium text-sm">
-                    {dayjs(learningDetailsData?.learning.meeting_date).format(
-                      "ddd[,] DD MMM YYYY [-] HH:mm"
-                    )}
-                  </p>
-                </div>
-              </div>
-              {isAllowedUpdateLearning && (
-                <div className="edit-learning absolute flex top-4 right-4 z-10">
-                  <AppButton
-                    variant="outline"
-                    size="small"
-                    onClick={() => setEditLearning(true)}
-                  >
-                    <PenTool className="size-4" />
-                    Edit Learning Session
-                  </AppButton>
-                </div>
-              )}
-            </div>
-            <div className="body-contents flex w-full justify-between gap-4">
-              <main className="flex flex-col flex-2 min-w-0 shrink-0 gap-4">
-                <div className="learning-description flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="section-name font-brand font-bold text-black">
-                    What&apos;s on this sessions?
-                  </h2>
-                  <p className="font-bodycopy font-medium text-[15px] text-[#333333] bg-white p-3 rounded-md whitespace-pre-line">
-                    {learningDetailsData?.learning.description}
-                  </p>
-                </div>
-                <div className="video-recording flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <div className="section-name flex justify-between items-center">
-                    <h2 className="font-brand font-bold text-black">
-                      Video Recording
-                    </h2>
-                    {learningVideoKey && isAllowedUpdateLearning && (
-                      <AppButton
-                        variant="outline"
-                        size="small"
-                        onClick={() => setUpdateRecording(true)}
-                      >
-                        <TvMinimalPlay className="size-4" />
-                        Change Video
-                      </AppButton>
-                    )}
-                  </div>
-                  {learningDetailsData?.learning.external_video_id &&
-                    learningVideoKey && (
-                      <div className="learning-video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
-                        <AppVideoPlayer videoId={learningVideoKey} />
-                      </div>
-                    )}
-                  {!learningDetailsData?.learning.external_video_id &&
-                    learningVideoKey && (
-                      <div className="learning-video-recording relative w-full aspect-video overflow-hidden rounded-md">
-                        <iframe
-                          width="100%"
-                          height="100%"
-                          src={`https://www.youtube.com/embed/${learningVideoKey}&amp;controls=1`}
-                          title="YouTube video player"
-                          frameBorder="0"
-                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          referrerPolicy="strict-origin-when-cross-origin"
-                          allowFullScreen
-                        />
-                      </div>
-                    )}
-                  {!learningVideoKey && (
-                    <EmptyRecordingCMS
-                      actionClick={() => setUpdateRecording(true)}
-                      isAllowedUpdateRecording={isAllowedUpdateLearning}
-                    />
-                  )}
-                </div>
-              </main>
-              <aside className="aside-contents flex flex-col flex-1 min-w-0 gap-4">
-                <div className="learning-educator flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="section-name font-brand font-bold text-black">
-                    Lectured by
-                  </h2>
-                  <AvatarBadgeCMS
-                    userName={
-                      learningDetailsData?.learning.speaker?.full_name ||
-                      "Sevenpreneur Educator"
-                    }
-                    userRole="EDUCATOR"
-                    userAvatar={
-                      learningDetailsData?.learning.speaker?.avatar ||
-                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                    }
-                  />
-                </div>
-                <MaterialListCMS
-                  sessionToken={props.sessionToken}
-                  sessionUserRole={props.sessionUserRole}
-                  learningId={props.learningId}
+            <div className="body-learning flex flex-col w-full gap-4">
+              <div className="hero-learning relative flex w-full items-center aspect-leaderboard-banner rounded-lg overflow-hidden">
+                <Image
+                  className="hero-background object-cover w-full h-full inset-0 z-0"
+                  src={
+                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//leaderboard-wallpaper.jpeg"
+                  }
+                  alt="Header Learnings"
+                  width={800}
+                  height={800}
                 />
-                <div className="learning-location-conference flex flex-col gap-3 p-3 bg-section-background rounded-md">
-                  <h2 className="section-name font-brand font-bold text-black">
-                    Place and Access
-                  </h2>
-                  {learningDetailsData?.learning.location_name &&
-                    learningDetailsData?.learning.location_url && (
-                      <LocationItemCMS
-                        locationName={
-                          learningDetailsData?.learning.location_name
-                        }
-                        locationURL={learningDetailsData?.learning.location_url}
-                      />
-                    )}
-                  {learningDetailsData?.learning.meeting_url && (
-                    <ConferenceItemCMS
-                      conferenceURL={
-                        learningDetailsData?.learning.meeting_url || ""
+                <div className="learning-attributes absolute flex flex-col max-w-[528px] top-1/2 -translate-y-1/2 left-8 gap-3 z-10">
+                  <div className="learning-method flex w-fit">
+                    <LearningMethodLabelCMS
+                      labelName={learningDetailsData?.learning.method || ""}
+                      variants={
+                        learningDetailsData?.learning.method as SessionMethod
                       }
                     />
-                  )}
+                  </div>
+                  <h1 className="learning-name font-brand font-bold text-2xl text-white">
+                    {learningDetailsData?.learning.name}
+                  </h1>
+                  <div className="learning-date flex w-fit gap-2 items-center bg-black/15 text-white rounded-md p-2">
+                    <CalendarFold className="size-5" />
+                    <p className="flex font-bodycopy font-medium text-sm">
+                      {dayjs(learningDetailsData?.learning.meeting_date).format(
+                        "ddd[,] DD MMM YYYY [-] HH:mm",
+                      )}
+                    </p>
+                  </div>
                 </div>
-              </aside>
+                {isAllowedUpdateLearning && (
+                  <div className="edit-learning absolute flex top-4 right-4 z-10">
+                    <AppButton
+                      variant="outline"
+                      size="small"
+                      onClick={() => setEditLearning(true)}
+                    >
+                      <PenTool className="size-4" />
+                      Edit Learning Session
+                    </AppButton>
+                  </div>
+                )}
+              </div>
+              <div className="body-contents flex w-full justify-between gap-4">
+                <main className="flex flex-col flex-2 min-w-0 shrink-0 gap-4">
+                  <div className="learning-description flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                    <h2 className="section-name font-brand font-bold text-black">
+                      What&apos;s on this sessions?
+                    </h2>
+                    <p className="font-bodycopy font-medium text-[15px] text-[#333333] bg-white p-3 rounded-md whitespace-pre-line">
+                      {learningDetailsData?.learning.description}
+                    </p>
+                  </div>
+                  <div className="video-recording flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                    <div className="section-name flex justify-between items-center">
+                      <h2 className="font-brand font-bold text-black">
+                        Video Recording
+                      </h2>
+                      {learningVideoKey && isAllowedUpdateLearning && (
+                        <AppButton
+                          variant="outline"
+                          size="small"
+                          onClick={() => setUpdateRecording(true)}
+                        >
+                          <TvMinimalPlay className="size-4" />
+                          Change Video
+                        </AppButton>
+                      )}
+                    </div>
+                    {learningDetailsData?.learning.external_video_id &&
+                      learningVideoKey && (
+                        <div className="learning-video-recording relative w-full h-auto aspect-video overflow-hidden rounded-md">
+                          <AppVideoPlayer videoId={learningVideoKey} />
+                        </div>
+                      )}
+                    {!learningDetailsData?.learning.external_video_id &&
+                      learningVideoKey && (
+                        <div className="learning-video-recording relative w-full aspect-video overflow-hidden rounded-md">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            src={`https://www.youtube.com/embed/${learningVideoKey}&amp;controls=1`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allowFullScreen
+                          />
+                        </div>
+                      )}
+                    {!learningVideoKey && (
+                      <EmptyRecordingCMS
+                        actionClick={() => setUpdateRecording(true)}
+                        isAllowedUpdateRecording={isAllowedUpdateLearning}
+                      />
+                    )}
+                  </div>
+                </main>
+                <aside className="aside-contents flex flex-col flex-1 min-w-0 gap-4">
+                  <div className="learning-educator flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                    <h2 className="section-name font-brand font-bold text-black">
+                      Lectured by
+                    </h2>
+                    <AvatarBadgeCMS
+                      userName={
+                        learningDetailsData?.learning.speaker?.full_name ||
+                        "Sevenpreneur Educator"
+                      }
+                      userRole="EDUCATOR"
+                      userAvatar={
+                        learningDetailsData?.learning.speaker?.avatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                      }
+                    />
+                  </div>
+                  <MaterialListCMS
+                    sessionToken={props.sessionToken}
+                    sessionUserRole={props.sessionUserRole}
+                    learningId={props.learningId}
+                  />
+                  <div className="learning-location-conference flex flex-col gap-3 p-3 bg-section-background rounded-md">
+                    <h2 className="section-name font-brand font-bold text-black">
+                      Place and Access
+                    </h2>
+                    {learningDetailsData?.learning.location_name &&
+                      learningDetailsData?.learning.location_url && (
+                        <LocationItemCMS
+                          locationName={
+                            learningDetailsData?.learning.location_name
+                          }
+                          locationURL={
+                            learningDetailsData?.learning.location_url
+                          }
+                        />
+                      )}
+                    {learningDetailsData?.learning.meeting_url && (
+                      <ConferenceItemCMS
+                        conferenceURL={
+                          learningDetailsData?.learning.meeting_url || ""
+                        }
+                      />
+                    )}
+                  </div>
+                </aside>
+              </div>
             </div>
           </div>
         </div>

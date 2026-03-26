@@ -1,6 +1,7 @@
 "use client";
 import AppButton from "@/app/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { ArticleStatus } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -41,6 +42,7 @@ interface EditArticleFormProps {
 export default function EditArticleForm(props: EditArticleFormProps) {
   const updateArticle = trpc.update.article.useMutation();
   const router = useRouter();
+  const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
 
   // Set session token to client
@@ -359,7 +361,9 @@ export default function EditArticleForm(props: EditArticleFormProps) {
   };
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+    <div
+      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+    >
       <form className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>

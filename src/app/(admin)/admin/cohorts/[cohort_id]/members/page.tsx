@@ -29,13 +29,11 @@ export default async function MembersPage({ params }: MembersPageProps) {
   }
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <CohortMemberListCMS
-        sessionToken={sessionToken}
-        sessionUserId={userSession.user.id}
-        sessionUserRole={userSession.user.role_id}
-        cohortId={cohortId}
-      />
-    </div>
+    <CohortMemberListCMS
+      sessionToken={sessionToken}
+      sessionUserId={userSession.user.id}
+      sessionUserRole={userSession.user.role_id}
+      cohortId={cohortId}
+    />
   );
 }

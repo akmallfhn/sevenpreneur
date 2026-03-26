@@ -30,12 +30,10 @@ export default async function CohortDetailsPage({
   }
 
   return (
-    <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
-      <CohortDetailsCMS
-        sessionToken={sessionToken}
-        sessionUserRole={userSession.user.role_id}
-        cohortId={cohortId}
-      />
-    </div>
+    <CohortDetailsCMS
+      sessionToken={sessionToken}
+      sessionUserRole={userSession.user.role_id}
+      cohortId={cohortId}
+    />
   );
 }

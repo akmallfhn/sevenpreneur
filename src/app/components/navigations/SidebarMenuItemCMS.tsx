@@ -39,15 +39,13 @@ export default function SidebarMenuItemCMS(props: SidebarMenuItemCMSProps) {
       <div className="menu-icon flex size-[18px] items-center justify-center">
         {props.menuIcon}
       </div>
-      <div className="menu-name overflow-hidden">
-        {!isCollapsed && (
-          <p
-            className={` text-sm font-bodycopy transition-all duration-300 ease-in-out line-clamp-1`}
-          >
-            {props.menuName}
-          </p>
-        )}
-      </div>
+      {!isCollapsed && (
+        <p
+          className={`menu-name text-sm font-bodycopy transition-all duration-300 ease-in-out line-clamp-1`}
+        >
+          {props.menuName}
+        </p>
+      )}
       {isActive && !isCollapsed && (
         <div className="bg-cms-primary w-2 h-1/2 absolute right-0 rounded-full" />
       )}

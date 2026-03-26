@@ -1,4 +1,5 @@
 "use client";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -30,6 +31,7 @@ interface CohortMembersPerformanceCMSProps {
 export default function CohortMembersPerformanceCMS(
   props: CohortMembersPerformanceCMSProps,
 ) {
+  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
@@ -64,7 +66,9 @@ export default function CohortMembersPerformanceCMS(
 
   return (
     <React.Fragment>
-      <div className="root hidden w-full h-full justify-center bg-white py-8 lg:flex lg:pl-64">
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
         {isLoading && (
           <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
             <Loader2 className="animate-spin size-5 " />

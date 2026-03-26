@@ -25,6 +25,7 @@ import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -35,6 +36,7 @@ interface CohortDetailsCMSProps {
 }
 
 export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
+  const { isCollapsed } = useSidebar();
   const [editCohort, setEditCohort] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -88,114 +90,121 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
 
   return (
     <React.Fragment>
-      <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>
-              {cohortDetailsData?.cohort.name}
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-        </div>
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
+        <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+          <div className="page-header flex flex-col gap-3">
+            <AppBreadcrumb>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem isCurrentPage>
+                {cohortDetailsData?.cohort.name}
+              </AppBreadcrumbItem>
+            </AppBreadcrumb>
+          </div>
 
-        <div className="body-container flex gap-4">
-          <main className="main-contents flex flex-col flex-2 min-w-0 gap-4">
-            <div className="cohort-attributes flex flex-col bg-white border border-outline rounded-md overflow-hidden">
-              <div className="cohort-image relative flex aspect-thumbnail overflow-hidden">
-                <Image
-                  className="object-cover w-full h-full"
-                  src={cohortDetailsData?.cohort.image || ""}
-                  alt={cohortDetailsData?.cohort.name || "Cohort Sevenpreneur"}
-                  width={1200}
-                  height={1200}
-                />
-                <div
-                  className={`overlay absolute inset-0 z-10 bg-linear-to-b from-0% from-black to-30% to-black/20`}
-                />
-                <div
-                  className={`overlay absolute inset-0 z-10 bg-linear-to-t from-0% from-black/50 to-20% to-black/0`}
-                />
-                <div className="cohort-status absolute top-4 left-4 z-20">
-                  <StatusLabelCMS
-                    variants={cohortDetailsData?.cohort.status as StatusType}
+          <div className="body-container flex gap-4">
+            <main className="main-contents flex flex-col flex-2 min-w-0 gap-4">
+              <div className="cohort-attributes flex flex-col bg-white border border-outline rounded-md overflow-hidden">
+                <div className="cohort-image relative flex aspect-thumbnail overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={cohortDetailsData?.cohort.image || ""}
+                    alt={
+                      cohortDetailsData?.cohort.name || "Cohort Sevenpreneur"
+                    }
+                    width={1200}
+                    height={1200}
                   />
-                </div>
-                {isAllowedUpdateCohort && (
-                  <div className="edit-cohort absolute top-4 right-4 z-20">
-                    <AppButton
-                      variant="outline"
-                      size="small"
-                      onClick={() => setEditCohort(true)}
-                    >
-                      <PenTool className="size-4" />
-                      Edit Cohort
-                    </AppButton>
+                  <div
+                    className={`overlay absolute inset-0 z-10 bg-linear-to-b from-0% from-black to-30% to-black/20`}
+                  />
+                  <div
+                    className={`overlay absolute inset-0 z-10 bg-linear-to-t from-0% from-black/50 to-20% to-black/0`}
+                  />
+                  <div className="cohort-status absolute top-4 left-4 z-20">
+                    <StatusLabelCMS
+                      variants={cohortDetailsData?.cohort.status as StatusType}
+                    />
                   </div>
-                )}
-              </div>
-              <div className="cohort-attributes relative flex flex-col mt-[-20px] gap-3 p-4 bg-white text-black z-20 rounded-md">
-                <h1 className="cohort-title font-brand font-bold text-2xl line-clamp-2">
-                  {cohortDetailsData?.cohort.name}
-                </h1>
-                <div className="cohort-timeline flex w-fit gap-4 items-center bg-white rounded-md p-2 px-3.5 border border-outline">
-                  <CalendarFoldIcon className="size-6 text-alternative" />
-                  <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
-                    <p className="text-black font-semibold">
-                      Program Kickoff Date
-                    </p>
-                    <p>
-                      {dayjs(cohortDetailsData?.cohort.start_date).format("ll")}
-                    </p>
-                  </div>
-                  <div className="w-[1px] h-full bg-outline" />
-                  <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
-                    <p className="text-black font-semibold">
-                      Program Finish Date
-                    </p>
-                    <p>
-                      {dayjs(cohortDetailsData?.cohort.end_date).format("ll")}
-                    </p>
-                  </div>
-                </div>
-                <div className="cohort-description relative flex flex-col">
-                  <p
-                    className={`font-bodycopy font-medium text-sm text-black/50 transition-all ${
-                      !isExpanded && "line-clamp-3"
-                    }`}
-                    ref={paragraphRef}
-                  >
-                    {cohortDetailsData?.cohort.description}
-                  </p>
-                  {!isExpanded && isOverflowing && (
-                    <div className="overlay absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                  {isAllowedUpdateCohort && (
+                    <div className="edit-cohort absolute top-4 right-4 z-20">
+                      <AppButton
+                        variant="outline"
+                        size="small"
+                        onClick={() => setEditCohort(true)}
+                      >
+                        <PenTool className="size-4" />
+                        Edit Cohort
+                      </AppButton>
+                    </div>
                   )}
                 </div>
-                {isOverflowing && (
-                  <div className="flex justify-center transition-all transform">
-                    <AppButton
-                      variant="cmsLink"
-                      size="small"
-                      onClick={() => setIsExpanded((prev) => !prev)}
-                    >
-                      {isExpanded ? (
-                        <>
-                          <p>Show Less</p>
-                          <ChevronUp className="size-4" />
-                        </>
-                      ) : (
-                        <>
-                          <p>Show more</p>
-                          <ChevronDown className="size-4" />
-                        </>
-                      )}
-                    </AppButton>
+                <div className="cohort-attributes relative flex flex-col mt-[-20px] gap-3 p-4 bg-white text-black z-20 rounded-md">
+                  <h1 className="cohort-title font-brand font-bold text-2xl line-clamp-2">
+                    {cohortDetailsData?.cohort.name}
+                  </h1>
+                  <div className="cohort-timeline flex w-fit gap-4 items-center bg-white rounded-md p-2 px-3.5 border border-outline">
+                    <CalendarFoldIcon className="size-6 text-alternative" />
+                    <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
+                      <p className="text-black font-semibold">
+                        Program Kickoff Date
+                      </p>
+                      <p>
+                        {dayjs(cohortDetailsData?.cohort.start_date).format(
+                          "ll",
+                        )}
+                      </p>
+                    </div>
+                    <div className="w-[1px] h-full bg-outline" />
+                    <div className="flex flex-col font-bodycopy font-medium text-sm text-alternative">
+                      <p className="text-black font-semibold">
+                        Program Finish Date
+                      </p>
+                      <p>
+                        {dayjs(cohortDetailsData?.cohort.end_date).format("ll")}
+                      </p>
+                    </div>
                   </div>
-                )}
+                  <div className="cohort-description relative flex flex-col">
+                    <p
+                      className={`font-bodycopy font-medium text-sm text-black/50 transition-all ${
+                        !isExpanded && "line-clamp-3"
+                      }`}
+                      ref={paragraphRef}
+                    >
+                      {cohortDetailsData?.cohort.description}
+                    </p>
+                    {!isExpanded && isOverflowing && (
+                      <div className="overlay absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                    )}
+                  </div>
+                  {isOverflowing && (
+                    <div className="flex justify-center transition-all transform">
+                      <AppButton
+                        variant="cmsLink"
+                        size="small"
+                        onClick={() => setIsExpanded((prev) => !prev)}
+                      >
+                        {isExpanded ? (
+                          <>
+                            <p>Show Less</p>
+                            <ChevronUp className="size-4" />
+                          </>
+                        ) : (
+                          <>
+                            <p>Show more</p>
+                            <ChevronDown className="size-4" />
+                          </>
+                        )}
+                      </AppButton>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-            {/* <div className="cohort-prices flex flex-col gap-3">
+              {/* <div className="cohort-prices flex flex-col gap-3">
               <h2 className="section-name font-brand font-bold">Price Tiers</h2>
               <div className="w-full overflow-x-auto scroll-smooth">
                 <div className="cohort-price-list flex gap-4 w-fit max-w-full pb-4 snap-x snap-mandatory">
@@ -210,34 +219,35 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                 </div>
               </div>
             </div> */}
-            <AttendancesChartCMS
-              sessionToken={props.sessionToken}
-              sessionUserRole={props.sessionUserRole}
-              cohortId={props.cohortId}
-            />
-            <LearningListCMS
-              sessionToken={props.sessionToken}
-              sessionUserRole={props.sessionUserRole}
-              cohortId={props.cohortId}
-            />
-          </main>
-          <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
-            <EnrollmentScorecardListCMS
-              sessionToken={props.sessionToken}
-              sessionUserRole={props.sessionUserRole}
-              cohortId={props.cohortId}
-            />
-            <ModuleListCMS
-              sessionToken={props.sessionToken}
-              sessionUserRole={props.sessionUserRole}
-              cohortId={props.cohortId}
-            />
-            <ProjectListCMS
-              sessionToken={props.sessionToken}
-              sessionUserRole={props.sessionUserRole}
-              cohortId={props.cohortId}
-            />
-          </aside>
+              <AttendancesChartCMS
+                sessionToken={props.sessionToken}
+                sessionUserRole={props.sessionUserRole}
+                cohortId={props.cohortId}
+              />
+              <LearningListCMS
+                sessionToken={props.sessionToken}
+                sessionUserRole={props.sessionUserRole}
+                cohortId={props.cohortId}
+              />
+            </main>
+            <aside className="aside-contents flex flex-col flex-[1.2] min-w-0 gap-5">
+              <EnrollmentScorecardListCMS
+                sessionToken={props.sessionToken}
+                sessionUserRole={props.sessionUserRole}
+                cohortId={props.cohortId}
+              />
+              <ModuleListCMS
+                sessionToken={props.sessionToken}
+                sessionUserRole={props.sessionUserRole}
+                cohortId={props.cohortId}
+              />
+              <ProjectListCMS
+                sessionToken={props.sessionToken}
+                sessionUserRole={props.sessionUserRole}
+                cohortId={props.cohortId}
+              />
+            </aside>
+          </div>
         </div>
       </div>
 

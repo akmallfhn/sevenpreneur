@@ -1,4 +1,5 @@
 "use client";
+import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { RolesUser } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
@@ -30,6 +31,7 @@ interface CohortMemberListCMSProps {
 }
 
 export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
+  const { isCollapsed } = useSidebar();
   // State for Add Users
   const [isOpenInvitationForm, setIsOpenInvitationForm] = useState(false);
 
@@ -70,141 +72,150 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
 
   return (
     <React.Fragment>
-      <div className="root container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
-              Details
-            </AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>Manage Members</AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Manage Members"
-              pageDesc="Invite fast. Revoke smarter. Stay in control."
+      <div
+        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
+      >
+        <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+          <div className="page-header flex flex-col gap-3">
+            <AppBreadcrumb>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
+                Details
+              </AppBreadcrumbItem>
+              <ChevronRight className="size-3.5" />
+              <AppBreadcrumbItem isCurrentPage>
+                Manage Members
+              </AppBreadcrumbItem>
+            </AppBreadcrumb>
+            <div className="page-title-actions flex justify-between items-center">
+              <PageTitleSectionCMS
+                pageTitle="Manage Members"
+                pageDesc="Invite fast. Revoke smarter. Stay in control."
+              />
+              <AppButton
+                variant="cmsPrimary"
+                onClick={() => setIsOpenInvitationForm(true)}
+              >
+                <UserPlus className="size-5" />
+                Add Members
+              </AppButton>
+            </div>
+          </div>
+
+          <div className="members-stats grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
+            <ScorecardItemCMS
+              scorecardName="Total Members"
+              scorecardValue={cohortMemberList?.length || 0}
+              scorecardBackground="bg-primary"
             />
-            <AppButton
-              variant="cmsPrimary"
-              onClick={() => setIsOpenInvitationForm(true)}
-            >
-              <UserPlus className="size-5" />
-              Add Members
-            </AppButton>
+            <ScorecardItemCMS
+              scorecardName="Total Students"
+              scorecardValue={
+                cohortMemberList?.filter((item) => item.role_id === 3).length ||
+                0
+              }
+              scorecardBackground="bg-warning-foreground"
+            />
+            <ScorecardItemCMS
+              scorecardName="Total Educators"
+              scorecardValue={
+                cohortMemberList?.filter((item) => item.role_id === 1).length ||
+                0
+              }
+              scorecardBackground="bg-success-foreground"
+            />
+            <ScorecardItemCMS
+              scorecardName="Total Class Manager"
+              scorecardValue={
+                cohortMemberList?.filter((item) => item.role_id === 2).length ||
+                0
+              }
+              scorecardBackground="bg-secondary"
+            />
           </div>
-        </div>
 
-        <div className="members-stats grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
-          <ScorecardItemCMS
-            scorecardName="Total Members"
-            scorecardValue={cohortMemberList?.length || 0}
-            scorecardBackground="bg-primary"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Students"
-            scorecardValue={
-              cohortMemberList?.filter((item) => item.role_id === 3).length || 0
-            }
-            scorecardBackground="bg-warning-foreground"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Educators"
-            scorecardValue={
-              cohortMemberList?.filter((item) => item.role_id === 1).length || 0
-            }
-            scorecardBackground="bg-success-foreground"
-          />
-          <ScorecardItemCMS
-            scorecardName="Total Class Manager"
-            scorecardValue={
-              cohortMemberList?.filter((item) => item.role_id === 2).length || 0
-            }
-            scorecardBackground="bg-secondary"
-          />
-        </div>
+          {/* Loading & Error State */}
+          {isLoading && (
+            <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+              <Loader2 className="animate-spin size-5 " />
+            </div>
+          )}
+          {isError && (
+            <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+              No Data
+            </div>
+          )}
 
-        {/* Loading & Error State */}
-        {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
-
-        {cohortMemberList && !isLoading && !isError && (
-          <div className="submission-list flex flex-col gap-2">
-            <table className="table-submission relative w-full rounded-sm">
-              <thead className="bg-[#FAFAFA] text-[#111111]/70">
-                <tr>
-                  <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
-                </tr>
-              </thead>
-              <tbody>
-                {cohortMemberList
-                  ?.sort((a, b) => a.role_id - b.role_id)
-                  .map((post, index) => (
-                    <tr
-                      className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                      key={index}
-                    >
-                      <TableCellCMS>{index + 1}</TableCellCMS>
-                      <TableCellCMS>
-                        <div className="user-id flex items-center gap-4 w-full">
-                          <div className="flex size-6 rounded-full shrink-0 overflow-hidden">
-                            <Image
-                              className="object-cover w-full h-full"
-                              src={
-                                post.avatar ||
-                                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                              }
-                              alt={`Image ${post.full_name}`}
-                              width={300}
-                              height={300}
-                            />
+          {cohortMemberList && !isLoading && !isError && (
+            <div className="submission-list flex flex-col gap-2">
+              <table className="table-submission relative w-full rounded-sm">
+                <thead className="bg-[#FAFAFA] text-[#111111]/70">
+                  <tr>
+                    <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
+                    <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
+                    <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
+                    <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cohortMemberList
+                    ?.sort((a, b) => a.role_id - b.role_id)
+                    .map((post, index) => (
+                      <tr
+                        className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
+                        key={index}
+                      >
+                        <TableCellCMS>{index + 1}</TableCellCMS>
+                        <TableCellCMS>
+                          <div className="user-id flex items-center gap-4 w-full">
+                            <div className="flex size-6 rounded-full shrink-0 overflow-hidden">
+                              <Image
+                                className="object-cover w-full h-full"
+                                src={
+                                  post.avatar ||
+                                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                                }
+                                alt={`Image ${post.full_name}`}
+                                width={300}
+                                height={300}
+                              />
+                            </div>
+                            <p className="user-name font-semibold line-clamp-1">
+                              {post.full_name}
+                            </p>
                           </div>
-                          <p className="user-name font-semibold line-clamp-1">
-                            {post.full_name}
-                          </p>
-                        </div>
-                      </TableCellCMS>
-                      <TableCellCMS>
-                        <RolesLabelCMS
-                          labelName={post.role_name}
-                          variants={toCamelCase(post.role_name) as RolesUser}
-                        />
-                      </TableCellCMS>
-                      <TableCellCMS>
-                        <AppButton
-                          variant="destructive"
-                          size="small"
-                          onClick={() => {
-                            setDeleteTargetItem({
-                              id: post.id,
-                              name: post.full_name,
-                            });
-                            setIsOpenDeleteConfirmation(true);
-                          }}
-                        >
-                          <UserRoundMinus className="size-4" />
-                          Revoke Access
-                        </AppButton>
-                      </TableCellCMS>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                        </TableCellCMS>
+                        <TableCellCMS>
+                          <RolesLabelCMS
+                            labelName={post.role_name}
+                            variants={toCamelCase(post.role_name) as RolesUser}
+                          />
+                        </TableCellCMS>
+                        <TableCellCMS>
+                          <AppButton
+                            variant="destructive"
+                            size="small"
+                            onClick={() => {
+                              setDeleteTargetItem({
+                                id: post.id,
+                                name: post.full_name,
+                              });
+                              setIsOpenDeleteConfirmation(true);
+                            }}
+                          >
+                            <UserRoundMinus className="size-4" />
+                            Revoke Access
+                          </AppButton>
+                        </TableCellCMS>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Add User */}
