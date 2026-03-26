@@ -1,16 +1,19 @@
 "use client";
+import { StatusType } from "@/lib/app-types";
 import { FeatureTrackingProps, useTrackView } from "@/lib/feature-tracking";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import AppButton from "../buttons/AppButton";
 import AppCountdownTimer from "../elements/AppCountdownTimer";
-import { StatusType } from "@/lib/app-types";
 
 interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;
   cohortName: string;
   cohortSlug: string;
+  batch: string;
   priceId: number;
   priceName: string;
   priceLabel?: ReactNode;
@@ -23,9 +26,9 @@ interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
 }
 
 export default function PriceItemBlueprintProgramSVP(
-  props: PriceItemBlueprintProgramSVPProps,
+  props: PriceItemBlueprintProgramSVPProps
 ) {
-  const targetTimeCountdown = "2026-03-20T23:59:00+07:00";
+  const targetTimeCountdown = "2026-03-27T23:59:00+07:00";
 
   const purchaseAction = props.isPriority
     ? "Best Value – Choose Plan"
@@ -48,6 +51,9 @@ export default function PriceItemBlueprintProgramSVP(
     featurePosition: props.featurePosition,
   });
 
+  // Whatsapp Text
+  const whatsappText = `Hi kak, aku mau tanya soal pembayaran tiket ${props.priceName} - ${props.cohortName}. Kira-kira ada promo atau diskon yang bisa aku dapat?`;
+
   return (
     <div
       ref={trackingViewRef}
@@ -57,14 +63,14 @@ export default function PriceItemBlueprintProgramSVP(
           : "p-[1px] bg-gradient-to-br from-0% from-[#C4C4C4] to-65% to-[#30266D] rounded-lg"
       }`}
     >
-      <div className="price-container flex flex-col w-[312px] h-full aspect-[360/920] p-8 items-center gap-4 bg-gradient-to-b from-0% from-[#554A94] via-40% via-[#432EBA] to-100% to-[#0D063A] rounded-lg lg:w-[360px] lg:aspect-[360/832]">
+      <div className="price-container flex flex-col w-[312px] h-full aspect-[360/956] p-8 items-center gap-4 bg-gradient-to-b from-0% from-[#554A94] via-40% via-[#432EBA] to-100% to-[#0D063A] rounded-lg lg:w-[360px] lg:aspect-[360/872]">
         <div className="price-title flex items-center justify-center gap-3 w-full">
           <h3 className="font-bold font-brand text-white text-2xl">
-            {props.priceName}
+            {props.batch}
           </h3>
           {props.priceLabel}
         </div>
-        <div className="divider w-full h-0.5 bg-gradient-to-r from-0% from-white/0 via-50% via-white to-100% to-white/0" />
+        <div className="divider w-full h-0.5 shrink-0 bg-gradient-to-r from-0% from-white/0 via-50% via-white to-100% to-white/0" />
         <p className="price-description font-bodycopy text-white text-[15px] text-center leading-tight">
           {props.priceDescription}
         </p>
@@ -88,40 +94,66 @@ export default function PriceItemBlueprintProgramSVP(
             {props.priceAmount.toLocaleString("id-ID")}
           </p>
         </div>
-        <Link
-          href={`/cohorts/${props.cohortSlug}/${props.cohortId}/checkout?ticketId=${props.priceId}`}
-          className={`w-full ${
-            props.isPriority
-              ? "p-[1px] bg-gradient-to-b from-0% from-[#7B6FF0] to-69% to-[#4C3FEC] rounded-full"
-              : ""
-          }`}
-        >
-          <AppButton
-            variant={props.isPriority ? "primaryGradient" : "outline"}
-            size="defaultRounded"
-            className="cta-button flex w-full"
-            disabled={props.priceStatus === "INACTIVE"}
-            // GTM
-            featureName="add_to_cart_blueprint_program"
-            featureId={String(props.priceId)}
-            featureProductCategory="COHORT"
-            featureProductName={`${props.cohortName} - ${props.featureProductName}`}
-            featureProductAmount={props.priceAmount}
-            featurePagePoint="Product Detail Page"
-            featurePlacement="price-plan"
-            featurePosition={props.featurePosition}
-            // Meta Pixel
-            metaEventName="AddToCart"
-            metaContentIds={[String(props.priceId)]}
-            metaContentType="service"
-            metaContentName={`${props.cohortName} - ${props.featureProductName}`}
-            metaContentCategory="Business Education Program"
-            metaCurrency="IDR"
-            metaValue={props.priceAmount}
+        <div className="flex flex-col w-full gap-2">
+          <Link
+            href={`/cohorts/${props.cohortSlug}/${props.cohortId}/checkout?ticketId=${props.priceId}`}
+            className={`w-full ${
+              props.isPriority
+                ? "p-[1px] bg-gradient-to-b from-0% from-[#7B6FF0] to-69% to-[#4C3FEC] rounded-full"
+                : ""
+            }`}
           >
-            {callToAction}
-          </AppButton>
-        </Link>
+            <AppButton
+              variant={props.isPriority ? "primaryGradient" : "outline"}
+              size="defaultRounded"
+              className="cta-button flex w-full"
+              disabled={props.priceStatus === "INACTIVE"}
+              // GTM
+              featureName="add_to_cart_blueprint_program"
+              featureId={String(props.priceId)}
+              featureProductCategory="COHORT"
+              featureProductName={`${props.cohortName} - ${props.featureProductName}`}
+              featureProductAmount={props.priceAmount}
+              featurePagePoint="Product Detail Page"
+              featurePlacement="price-plan"
+              featurePosition={props.featurePosition}
+              // Meta Pixel
+              metaEventName="AddToCart"
+              metaContentIds={[String(props.priceId)]}
+              metaContentType="service"
+              metaContentName={`${props.cohortName} - ${props.featureProductName}`}
+              metaContentCategory="Business Education Program"
+              metaCurrency="IDR"
+              metaValue={props.priceAmount}
+            >
+              {callToAction}
+            </AppButton>
+          </Link>
+          <a
+            href={`https://wa.me/6282312492067?text=${encodeURIComponent(whatsappText)}`}
+            className="w-full"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AppButton
+              variant="ghost"
+              size="defaultRounded"
+              className="w-full"
+              // GTM
+              featureName="wa_click_promo"
+              featureId={String(props.priceId)}
+              featureProductCategory="COHORT"
+              featureProductName={`${props.cohortName} - ${props.featureProductName}`}
+              featureProductAmount={props.priceAmount}
+              featurePagePoint="Product Detail Page"
+              featurePlacement="price-plan"
+              featurePosition={props.featurePosition}
+            >
+              <FontAwesomeIcon icon={faWhatsapp} size="lg" />
+              <p className="text-white">Get extra discount</p>
+            </AppButton>
+          </a>
+        </div>
         <div className="benefits flex flex-col gap-1.5 w-full text-white">
           <h4 className="font-bodycopy font-extrabold text-[15px]">
             {props.isPriority

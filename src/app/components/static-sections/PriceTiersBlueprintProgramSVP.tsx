@@ -18,7 +18,7 @@ interface PriceTiersBlueprintProgramSVPProps {
 }
 
 export default function PriceTiersBlueprintProgramSVP(
-  props: PriceTiersBlueprintProgramSVPProps,
+  props: PriceTiersBlueprintProgramSVPProps
 ) {
   const regularPrice = props.cohortPrices.find((item) => item.id === 59);
   const vipPrice = props.cohortPrices.find((item) => item.id === 60);
@@ -43,8 +43,9 @@ export default function PriceTiersBlueprintProgramSVP(
                 cohortId={props.cohortId}
                 cohortName={props.cohortName}
                 cohortSlug={props.cohortSlug}
+                batch="Batch 8"
                 priceId={regularPrice.id}
-                priceName="Batch 8"
+                priceName={regularPrice.name}
                 priceDescription="Kuasai 7 framework lengkap untuk upgrade bisnismu."
                 priceLabel={
                   <PackageLabelBlueprintProgramSVP variant="regular" />
@@ -87,8 +88,9 @@ export default function PriceTiersBlueprintProgramSVP(
                 cohortId={props.cohortId}
                 cohortName={props.cohortName}
                 cohortSlug={props.cohortSlug}
+                batch="Batch 8"
                 priceId={vipPrice.id}
-                priceName="Batch 8"
+                priceName={vipPrice.name}
                 priceDescription="Pengalaman lebih eksklusif dalam satu paket lengkap."
                 priceLabel={<PackageLabelBlueprintProgramSVP variant="vip" />}
                 priceStatus={vipPrice.status}
