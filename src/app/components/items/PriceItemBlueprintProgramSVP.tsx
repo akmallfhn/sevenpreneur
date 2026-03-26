@@ -149,7 +149,11 @@ export default function PriceItemBlueprintProgramSVP(
               featurePlacement="price-plan"
               featurePosition={props.featurePosition}
             >
-              <FontAwesomeIcon icon={faWhatsapp} size="lg" />
+              <FontAwesomeIcon
+                icon={faWhatsapp}
+                size="lg"
+                className="text-white"
+              />
               <p className="text-white">Get extra discount</p>
             </AppButton>
           </a>

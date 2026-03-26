@@ -66,7 +66,8 @@ export default async function CohortDetailsPageLMS({
       sessionUserRole={userData.role_id}
       cohortId={enrolledCohortDetails.cohort.cohort_id}
       cohortName={enrolledCohortDetails.cohort.cohort.name}
-      cohorImage={enrolledCohortDetails.cohort.cohort.image}
+      cohortImage={enrolledCohortDetails.cohort.cohort.image}
+      cohortBanner={enrolledCohortDetails.cohort.cohort.image_banner}
       userCertificate={enrolledCohortDetails.cohort.certificate_url ?? ""}
       attendanceCount={learningListRest.attendance_count}
       learningList={learningList}

@@ -20,7 +20,8 @@ interface CohortDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   cohortId: number;
   cohortName: string;
-  cohorImage: string;
+  cohortImage: string;
+  cohortBanner: string;
   userCertificate: string;
   attendanceCount: number;
   learningList: LearningSessionList[];
@@ -50,7 +51,7 @@ export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
       <CohortDetailsMobileLMS
         cohortId={props.cohortId}
         cohortName={props.cohortName}
-        cohortImage={props.cohorImage}
+        cohortImage={props.cohortImage}
         learningList={props.learningList}
       />
     );
@@ -63,6 +64,7 @@ export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
         sessionUserAvatar={props.sessionUserAvatar}
         sessionUserRole={props.sessionUserRole}
         cohortName={props.cohortName}
+        cohortBanner={props.cohortBanner}
       />
       <div className="body-cohort max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
         <main className="main flex flex-col flex-[2.5] w-full">

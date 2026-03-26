@@ -6,6 +6,7 @@ import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 interface HeroCohortDetailsLMSProps extends AvatarBadgeLMSProps {
   cohortName: string;
+  cohortBanner: string;
 }
 
 export default function HeroCohortDetailsLMS(props: HeroCohortDetailsLMSProps) {
@@ -13,11 +14,10 @@ export default function HeroCohortDetailsLMS(props: HeroCohortDetailsLMSProps) {
     <div className="hero-cohort relative flex w-full aspect-[1626/494] overflow-hidden">
       <Image
         className="object-cover w-full h-full"
-        src={
-          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/banner-sbbp-batch7.webp"
-        }
+        src={props.cohortBanner}
         alt="Hero Banner Cohort"
         fill
+        loading="eager"
       />
       <div className="overlay-top absolute inset-0 bg-linear-to-b from-0% from-black to-40% to-transparent z-10" />
       <div className="overlay-bottom absolute inset-0 bg-linear-to-t from-0% from-black to-30% to-transparent z-10" />

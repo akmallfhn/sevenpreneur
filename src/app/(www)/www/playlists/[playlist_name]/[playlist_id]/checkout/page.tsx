@@ -73,7 +73,7 @@ export default async function CheckoutPlaylistPage({
   // Redirect if not login
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/playlists/${playlist_name}/${playlist_id}/checkout`,
+      `/auth/login?redirectTo=/playlists/${playlist_name}/${playlist_id}/checkout`
     );
   }
   setSessionToken(sessionToken);
@@ -115,7 +115,7 @@ export default async function CheckoutPlaylistPage({
           <CheckoutPlaylistFormMobileSVP
             playlistId={playlistData.id}
             playlistName={playlistData.name}
-            playlistImage={playlistData.image_url}
+            playlistImage={playlistData.image_square_url}
             playlistPrice={playlistData.price}
             playlistTotalVideo={playlistData.total_video}
             initialUserId={checkUser.id}

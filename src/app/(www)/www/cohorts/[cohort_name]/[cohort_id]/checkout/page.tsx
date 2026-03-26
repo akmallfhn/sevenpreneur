@@ -24,7 +24,7 @@ export async function generateMetadata({
   const cohortData = (await trpc.read.cohort({ id: cohortId })).cohort;
 
   const hasActivePrice = cohortData.cohort_prices.some(
-    (post) => post.status === "ACTIVE",
+    (post) => post.status === "ACTIVE"
   );
   const expiredCohort = dayjs().isAfter(cohortData.end_date);
 
@@ -97,7 +97,7 @@ export default async function CheckoutCohortPage({
 
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/cohorts/${cohort_name}/${cohort_id}/checkout`,
+      `/auth/login?redirectTo=/cohorts/${cohort_name}/${cohort_id}/checkout`
     );
   }
   setSessionToken(sessionToken);
@@ -133,7 +133,7 @@ export default async function CheckoutCohortPage({
   }));
 
   const hasActivePrice = cohortData.cohort_prices.some(
-    (post) => post.status === "ACTIVE",
+    (post) => post.status === "ACTIVE"
   );
   const expiredCohort = dayjs().isAfter(cohortData.end_date);
 
@@ -160,7 +160,7 @@ export default async function CheckoutCohortPage({
           <CheckoutCohortFormMobileSVP
             cohortId={cohortData.id}
             cohortName={cohortData.name}
-            cohortImage={cohortData.image}
+            cohortImage={cohortData.image_square}
             initialUserId={checkUser.id}
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
