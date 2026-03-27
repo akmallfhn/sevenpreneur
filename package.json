@@ -51,6 +51,7 @@
     "clsx": "^2.1.1",
     "csv-parse": "^6.1.0",
     "dayjs": "^1.11.18",
+    "emoji-picker-react": "^4.18.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^1.0.0-rc.1",
     "mailtrap": "^4.3.0",

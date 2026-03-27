@@ -1,10 +1,9 @@
 "use client";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import WhatsappBubbleChatCMS from "./WhatsappBubbleChatCMS";
-import { MessageCircleMore } from "lucide-react";
-import Image from "next/image";
+import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
 
 export interface WhatsappChatItem {
   id: string;
@@ -26,12 +25,11 @@ interface WhatsappChatsCMSProps {
 export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
   // const router = useRouter();
 
-  // const [textValue, setTextValue] = useState("");
+  // State for submit chat
+  const [textValue, setTextValue] = useState("");
 
   const [chats, setChats] = useState<WhatsappChatItem[]>(props.convChats);
   const conversationRef = useRef<HTMLDivElement | null>(null);
-
-  // const newConvId = useRef<string | null>(null);
 
   // Auto-scrolls to the bottom whenever new chats arrive.
   useEffect(() => {
@@ -70,78 +68,6 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
   //     return updated;
   //   });
   // }
-
-  // Handles the first response when a conversation is created
-  // const handleInitialSubmit = useCallback(
-  //   async (message: string) => {
-  //     setGeneratingAI(true);
-
-  //     const newUserChat: Chats = {
-  //       role: "USER",
-  //       message,
-  //       created_at: new Date().toISOString(),
-  //     };
-
-  //     const newAssistantChat: Chats = {
-  //       role: "ASSISTANT",
-  //       message: "",
-  //       created_at: new Date().toISOString(),
-  //     };
-
-  //     setChats([newUserChat, newAssistantChat]);
-
-  //     await sendMessage(
-  //       {
-  //         model: "gpt-4.1-mini",
-  //         token: props.authToken,
-  //         conv_id: undefined,
-  //         message,
-  //       },
-  //       {
-  //         onEvent(event) {
-  //           switch (event.event) {
-  //             case "delta":
-  //               appendToLastAssistant(event.data);
-  //               break;
-
-  //             case "conv_id":
-  //               newConvId.current = event.data;
-  //               break;
-
-  //             case "title":
-  //               setTitle(event.data);
-  //               break;
-  //           }
-  //         },
-  //         onCompleted() {
-  //           setGeneratingAI(false);
-  //           if (newConvId) {
-  //             router.replace(`/ai/chat/${newConvId.current}`);
-  //           }
-  //         },
-  //         onError(err) {
-  //           console.error(err);
-  //           toast.error("Failed to generate AI response");
-  //           setGeneratingAI(false);
-  //         },
-  //       }
-  //     );
-  //   },
-  //   [sendMessage, props.authToken, router]
-  // );
-
-  // // When there’s an initial message (from the previous page), it triggers the first AI message generation automatically.
-  // useEffect(() => {
-  //   if (hasSentInitial.current) return;
-
-  //   const message = sessionStorage.getItem("initialMessage");
-
-  //   if (!message) return;
-
-  //   hasSentInitial.current = true;
-  //   sessionStorage.removeItem("initialMessage");
-  //   queueMicrotask(() => handleInitialSubmit(message));
-  // }, [handleInitialSubmit]);
 
   // Handles user message submissions within the chat.
   // const handleSubmit = async (e: FormEvent) => {
@@ -218,7 +144,7 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
         </div>
       </div>
       <div className="chats-conversation relative flex flex-col w-full p-3">
-        <div className="chat-list w-full flex flex-col pt-5 mb-14">
+        <div className="chat-list w-full flex flex-col pt-5 mb-5">
           {chats
             .sort(
               (a, b) =>
@@ -244,17 +170,17 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
               </div>
             ))}
         </div>
-        {/* <form
-          className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-section-background items-center justify-center gap-6 rounded-t-xl z-10"
-          onSubmit={handleSubmit}
+        <form
+          className="form-generate-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
+          onSubmit={() => {}}
         >
-          <ChatSubmitterLMS
+          <WhatsappChatSubmitterCMS
             value={textValue}
             onTextAreaChange={(value) => setTextValue(value)}
-            onSubmit={handleSubmit}
-            isLoadingSubmit={generatingAI}
+            onSubmit={() => {}}
+            isLoadingSubmit={false}
           />
-        </form> */}
+        </form>
       </div>
     </div>
   );
