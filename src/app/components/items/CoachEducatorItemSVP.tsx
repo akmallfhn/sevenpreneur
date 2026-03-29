@@ -2,27 +2,42 @@
 import Image from "next/image";
 
 interface CoachEducatorItemSVPProps {
+  index: number;
   coachName: string;
   coachImage: string;
-  coachTitle: string;
+  coachRole: string;
+  coachArchetype: string;
+  coachDesc: string;
 }
 
 export default function CoachEducatorItemSVP(props: CoachEducatorItemSVPProps) {
+  const isMirrored = props.index % 2 === 0;
+
   return (
-    <div className="coach-item relative flex aspect-[1/1.27] rounded-lg overflow-hidden">
-      <Image
-        className="w-full h-full object-cover"
-        src={props.coachImage}
-        alt={props.coachImage}
-        width={400}
-        height={400}
-      />
-      <div className="absolute flex flex-col w-full items-center px-2 left-1/2 -translate-x-1/2 top-2/3 z-10 lg:px-4">
-        <p className="font-bodycopy font-bold text-white text-[15px] text-center leading-snug sm:text-lg lg:text-xl">
+    <div
+      className={`coach-item flex w-full items-center gap-4 lg:gap-5 ${isMirrored ? "flex-row-reverse sm:flex-row" : "flex-row"}`}
+    >
+      <div className="coach-image flex shrink-0 size-32 aspect-square rounded-lg overflow-hidden lg:size-48">
+        <Image
+          className="w-full h-full object-cover"
+          src={props.coachImage}
+          alt={props.coachImage}
+          width={400}
+          height={400}
+        />
+      </div>
+      <div className="flex flex-col w-full gap-2 lg:gap-2.5">
+        <p className="w-fit text-white font-brand font-bold bg-secondary px-2 py-1 text-[10px] truncate rounded-sm lg:text-[13px]">
+          {props.coachArchetype.toUpperCase()}
+        </p>
+        <p className="font-bodycopy font-bold text-white text-lg leading-snug lg:text-2xl">
           {props.coachName}
         </p>
-        <p className="font-bodycopy text-white/50 text-sm text-center font-normal leading-snug">
-          {props.coachTitle}
+        <p className="text-[#918E8E] text-[12px] font-bodycopy font-medium lg:text-[15px]">
+          {props.coachDesc}
+        </p>
+        <p className="font-bodycopy text-white text-sm font-semibold leading-snug lg:text-[15px]">
+          {props.coachRole}
         </p>
       </div>
     </div>
