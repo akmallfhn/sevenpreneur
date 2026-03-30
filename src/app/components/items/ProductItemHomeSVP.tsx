@@ -12,7 +12,7 @@ interface ProductItemHomeSVPProps {
 export default function ProductItemHomeSVP(props: ProductItemHomeSVPProps) {
   return (
     <div className="product-item flex flex-col w-full h-full items-center gap-4 p-2">
-      <div className="product-image relative aspect-[16/8] max-h-[300px] rounded-xl overflow-hidden">
+      <div className="product-image relative aspect-[16/8] max-h-[300px] rounded-sm overflow-hidden">
         <Image
           className="w-full h-full object-cover"
           src={props.productImage}
@@ -34,7 +34,7 @@ export default function ProductItemHomeSVP(props: ProductItemHomeSVPProps) {
       </div>
       <div className="metadata flex flex-col flex-1 px-2 gap-2">
         <div className="flex flex-col gap-2">
-          <h3 className="product-name font-bodycopy font-bold text-xl lg:text-2xl">
+          <h3 className="product-name font-bodycopy font-bold text-xl lg:text-2xl text-white">
             {props.productName}
           </h3>
           <p className="product-description font-bodycopy text-[15px] text-[#686868]">
