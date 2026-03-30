@@ -10,6 +10,7 @@ import { listPlaylist } from "./playlist/list.playlist";
 import { listTemplate } from "./templates/templates";
 import { listTransaction } from "./transaction/list.transaction";
 import { listUserData } from "./userdata/list.userdata";
+import { listWA } from "./wa/list.wa";
 
 export const listRouter = createTRPCRouter({
   // Lookup Tables //
@@ -90,4 +91,11 @@ export const listRouter = createTRPCRouter({
 
   articleCategories: listArticle.articleCategories,
   articles: listArticle.articles,
+
+  // WhatsApp-chat-related //
+
+  wa: {
+    conversations: listWA.conversations,
+    chats: listWA.chats,
+  },
 });

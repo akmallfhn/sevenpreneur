@@ -637,3 +637,12 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 - Administrators and Marketers can update interstitial ads.
 - Others can only read interstitial ads.
+
+## WhatsApp Chat Managements ✉️
+
+| Procedure Name          | Administrator (`0`) | Non-Administrator/Not Logged-In |
+| :---------------------- | :-----------------: | :-----------------------------: |
+| `list.wa.conversations` |         ✅          |               ❌                |
+| `list.wa.chats`         |         ✅          |               ❌                |
+
+**Scopes:** Only Administrators have access to all WhatsApp chats.
