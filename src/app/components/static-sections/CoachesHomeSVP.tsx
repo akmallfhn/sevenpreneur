@@ -1,7 +1,7 @@
 "use client";
 import CoachEducatorItemSVP from "../items/CoachEducatorItemSVP";
 
-export default function CoachEducatorListSVP() {
+export default function CoachesHomeSVP() {
   const coachList = [
     {
       name: "Raymond Chin",
