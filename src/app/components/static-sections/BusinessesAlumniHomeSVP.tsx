@@ -63,16 +63,18 @@ export default function BusinessesAlumniHomeSVP() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-culture-stock.webp",
       company_url: "https://culturestock.id/",
     },
-    // {
-    //   name: "Dimtime",
-    //   logo_image: "",
-    //   company_url: "https://www.monsphysio.com/",
-    // },
-    // {
-    //   name: "Apotek Sehat Berkat",
-    //   logo_image: "",
-    //   company_url: "https://www.instagram.com/apoteksehatberkat/",
-    // },
+    {
+      name: "Dimtime",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-dimtime.webp",
+      company_url: "https://www.instagram.com/_dimtime/",
+    },
+    {
+      name: "Apotek Sehat Berkat",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-apt-sehat-berkat.webp",
+      company_url: "https://www.instagram.com/apoteksehatberkat/",
+    },
     {
       name: "Monsphysio",
       logo_image:
@@ -85,19 +87,25 @@ export default function BusinessesAlumniHomeSVP() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-tumbuh-jaya.webp",
       company_url: "https://www.tumbuhjaya.com/",
     },
-    // {
-    //   name: "Sandhika Karyatama",
-    //   logo_image: "",
-    //   company_url: "",
-    // },
+    {
+      name: "Sandhika Karyatama",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-sandhika-karyatama.webp",
+      company_url: "https://www.instagram.com/sandhika.karyatama/",
+    },
     // {
     //   name: "Maketku",
     //   logo_image: "",
     //   company_url: "",
     // },
+    // {
+    //   name: "Ben Dino",
+    //   logo_image: "",
+    //   company_url: "",
+    // },
   ];
 
-  const alumniLogos = Array(6).fill(alumni).flat();
+  const alumniLogos = Array(5).fill(alumni).flat();
   const loopedMessages = [...alumniLogos, ...alumniLogos];
 
   return (
