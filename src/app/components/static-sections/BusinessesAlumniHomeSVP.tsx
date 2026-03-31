@@ -51,9 +51,53 @@ export default function BusinessesAlumniHomeSVP() {
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-haventwined.webp",
       company_url: "https://www.haventwined.com/",
     },
+    {
+      name: "MySkill",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-myskill.svg",
+      company_url: "https://myskill.id/",
+    },
+    {
+      name: "Culture Stock",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-culture-stock.webp",
+      company_url: "https://culturestock.id/",
+    },
+    // {
+    //   name: "Dimtime",
+    //   logo_image: "",
+    //   company_url: "https://www.monsphysio.com/",
+    // },
+    // {
+    //   name: "Apotek Sehat Berkat",
+    //   logo_image: "",
+    //   company_url: "https://www.instagram.com/apoteksehatberkat/",
+    // },
+    {
+      name: "Monsphysio",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-monsphysio.webp",
+      company_url: "https://www.monsphysio.com/",
+    },
+    {
+      name: "Tumbuh Jaya",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-tumbuh-jaya.webp",
+      company_url: "https://www.tumbuhjaya.com/",
+    },
+    // {
+    //   name: "Sandhika Karyatama",
+    //   logo_image: "",
+    //   company_url: "",
+    // },
+    // {
+    //   name: "Maketku",
+    //   logo_image: "",
+    //   company_url: "",
+    // },
   ];
 
-  const alumniLogos = Array(8).fill(alumni).flat();
+  const alumniLogos = Array(6).fill(alumni).flat();
   const loopedMessages = [...alumniLogos, ...alumniLogos];
 
   return (
