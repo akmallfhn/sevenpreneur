@@ -66,6 +66,7 @@ AND wa_conversations.lead_status = ${opts.input.lead_status.toLowerCase()}::wa_l
         lead_status: WALeadStatus;
         last_message: string;
         last_message_at: Date;
+        unread_count: number;
         user_full_name?: string;
         user_avatar?: string;
       };
@@ -75,6 +76,7 @@ FROM (
   SELECT DISTINCT ON (wa_conversations.id)
     wa_conversations.id, wa_conversations.full_name, wa_conversations.lead_status,
     wa_chats.message AS last_message, wa_chats.created_at AS last_message_at,
+    wa_get_unread_count(wa_conversations.id) AS unread_count,
     users.full_name AS user_full_name, users.avatar AS user_avatar
   FROM wa_conversations
     LEFT JOIN wa_chats ON wa_conversations.id = wa_chats.conv_id
