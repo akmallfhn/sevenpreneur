@@ -882,6 +882,20 @@ CREATE OR REPLACE FUNCTION update_updated_at()
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION wa_get_unread_count(_conv_id CHAR(21))
+  RETURNS INTEGER
+  RETURN (
+    SELECT COUNT(id)
+    FROM wa_chats
+    WHERE conv_id = _conv_id AND created_at > (
+      SELECT COALESCE(wa_chats.created_at, '2000-01-01 00:00:00Z'::TIMESTAMPTZ)
+      FROM wa_conversations
+      LEFT JOIN wa_chats ON wa_conversations.last_read_id = wa_chats.id
+      WHERE wa_conversations.id = _conv_id
+      LIMIT 1
+    )
+  );
+
 --------------
 -- Triggers --
 --------------
