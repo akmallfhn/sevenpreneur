@@ -10,6 +10,7 @@ import { updateTemplate } from "./templates/templates";
 import { updateTicker } from "./ticker/update.ticker";
 import { updateTransaction } from "./transaction/update.transaction";
 import { updateUserData } from "./userdata/update.userdata";
+import { updateWA } from "./wa/update.wa";
 
 export const updateRouter = createTRPCRouter({
   // User Data //
@@ -81,5 +82,11 @@ export const updateRouter = createTRPCRouter({
 
   ad: {
     interstitial: updateAdv.interstitial,
+  },
+
+  // WhatsApp-chat-related //
+
+  wa: {
+    conversation: updateWA.conversation,
   },
 });
