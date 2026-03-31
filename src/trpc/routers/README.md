@@ -640,9 +640,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## WhatsApp Chat Managements ✉️
 
-| Procedure Name          | Administrator (`0`) | Non-Administrator/Not Logged-In |
-| :---------------------- | :-----------------: | :-----------------------------: |
-| `list.wa.conversations` |         ✅          |               ❌                |
-| `list.wa.chats`         |         ✅          |               ❌                |
+| Procedure Name           | Administrator (`0`) | Non-Administrator/Not Logged-In |
+| :----------------------- | :-----------------: | :-----------------------------: |
+| `list.wa.conversations`  |         ✅          |               ❌                |
+| `list.wa.chats`          |         ✅          |               ❌                |
+| `update.wa.conversation` |         ✅          |               ❌                |
 
 **Scopes:** Only Administrators have access to all WhatsApp chats.
