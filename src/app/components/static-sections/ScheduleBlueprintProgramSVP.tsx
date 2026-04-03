@@ -19,7 +19,7 @@ export default function ScheduleBlueprintProgramSVP() {
                   ONLINE
                 </p>
                 <p className="session-date text-white font-bold font-brand text-[22px] lg:text-black">
-                  27 APR - 17 MAY 2025
+                  27 APR - 17 MAY 2026
                 </p>
               </div>
               <div className="hidden border-b border-dashed border-outline lg:flex" />
@@ -47,7 +47,7 @@ export default function ScheduleBlueprintProgramSVP() {
                   OFFLINE
                 </p>
                 <p className="session-date font-bold font-brand text-[22px] text-white lg:text-black">
-                  17 MAY 2025
+                  17 MAY 2026
                 </p>
               </div>
               <div className="hidden border-b border-dashed border-outline lg:flex" />

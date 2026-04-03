@@ -3,6 +3,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  /* Aspect Ratio */
   --aspect-thumbnail: 1.776/1;
   --aspect-mobile-banner: 3.4/2;
   --aspect-desktop-banner: 4/1;
@@ -13,6 +14,9 @@
   --aspect-card-restart: 7/4;
   --aspect-topic-restart: 1.51/1;
   --aspect-speaker-restart: 0.8766/1;
+
+  /* Color */
+  --svp-primary: #0165fc;
   --color-primary: #0165fc;
   --color-primary-light: #c5ddff;
   --color-primary-strong: #0041c2;
@@ -33,12 +37,16 @@
   --color-word-black: #9e9a9a;
   --color-surface-black: #171616;
   --color-coal-black: #0c0d0e;
+
+  /* Color State */
   --color-warning-background: #fef2d0;
   --color-warning-foreground: #d99e00;
   --color-success-background: #daf2f0;
   --color-success-foreground: #499e95;
   --color-danger-background: #f6d7e0;
   --color-danger-foreground: #df396a;
+
+  /* Breakpoint */
   --breakpoint-xs: 31.75rem;
   --breakpoint-3xl: 120rem;
   --breakpoint-4xl: 160rem;
@@ -46,12 +54,14 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Typography */
   --font-brand: var(--font-mona-sans);
   --font-bodycopy: var(--font-plus-jakarta-sans);
   --font-read: var(--font-inter);
   --font-ui: var(--font-open-sauce-one);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
