@@ -5,11 +5,11 @@ import Image from "next/image";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import PaymentChannelGroupSVP from "../titles/PaymentChannelGroupSVP";
-import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
+import ReceiptLineItemSVP from "../../../components/items/ReceiptLineItemSVP";
 import ApplyDiscountGatewaySVP from "../gateways/ApplyDiscountGatewaySVP";
 import ApplyDiscountModalSVP from "../modals/ApplyDiscountModalSVP";
 import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
@@ -100,7 +100,7 @@ export default function CheckoutPlaylistFormMobileSVP({
   // --- Get Data from Chosen Payment Channel
   const chosenPaymentChannelData = useMemo(() => {
     return paymentMethodData.find(
-      (item: PaymentMethodItem) => item.code === selectedPaymentChannel,
+      (item: PaymentMethodItem) => item.code === selectedPaymentChannel
     );
   }, [selectedPaymentChannel, paymentMethodData]);
 
@@ -150,8 +150,7 @@ export default function CheckoutPlaylistFormMobileSVP({
       const percentRate = chosenPaymentChannelData.calc_percent / 100;
       const flatFee = chosenPaymentChannelData.calc_flat;
       const total = Math.round(
-        (subtotal + flatFee * (1 + vatRate)) /
-          (1 - percentRate * (1 + vatRate)),
+        (subtotal + flatFee * (1 + vatRate)) / (1 - percentRate * (1 + vatRate))
       );
       const percentFee = percentRate * total;
       const allFee = Math.round(flatFee + percentFee);
@@ -292,7 +291,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                 >
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "QR_CODE",
+                      (post: PaymentMethodItem) => post.method === "QR_CODE"
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -312,7 +311,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                   {paymentMethodData
                     .filter(
                       (post: PaymentMethodItem) =>
-                        post.method === "BANK_TRANSFER",
+                        post.method === "BANK_TRANSFER"
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -328,7 +327,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                 <PaymentChannelGroupSVP groupPaymentName="E-Wallet">
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "EWALLET",
+                      (post: PaymentMethodItem) => post.method === "EWALLET"
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -344,8 +343,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                 <PaymentChannelGroupSVP groupPaymentName="Credit Card">
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) =>
-                        post.method === "CREDIT_CARD",
+                      (post: PaymentMethodItem) => post.method === "CREDIT_CARD"
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -361,7 +359,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                 <PaymentChannelGroupSVP groupPaymentName="Paylater">
                   {paymentMethodData
                     .filter(
-                      (post: PaymentMethodItem) => post.method === "PAYLATER",
+                      (post: PaymentMethodItem) => post.method === "PAYLATER"
                     )
                     .map((post: PaymentMethodItem, index: number) => (
                       <RadioBoxPaymentChannelSVP
@@ -406,7 +404,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                 <ReceiptLineItemSVP
                   receiptName={`Discount (${discount.calc_percent}%)`}
                   receiptValue={`- ${getRupiahCurrency(
-                    programPrice - subtotal,
+                    programPrice - subtotal
                   )}`}
                   isDiscount
                 />

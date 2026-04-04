@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import AppButton, { VariantType } from "../buttons/AppButton";
+import AppButton, { VariantType } from "../../../components/buttons/AppButton";
 
 interface CheckInAttendanceLMSProps {
   learningSessionId: number;

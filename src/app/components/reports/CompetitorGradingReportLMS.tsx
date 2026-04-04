@@ -5,10 +5,12 @@ import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.a
 import { BarChart } from "@mui/x-charts";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import { AvatarBadgeLMSProps } from "../../../components/buttons/AvatarBadgeLMS";
 import XYMapLMS, { CompetitorList } from "../charts/XYMapLMS";
-import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
-import AICompetitorItemLMS from "../items/AICompetitorItemLMS";
+import AICitationLMS, {
+  SourcesArticle,
+} from "../../../components/items/AICitationLMS";
+import AICompetitorItemLMS from "../../../components/items/AICompetitorItemLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import styles from "./Report.module.css";
@@ -77,7 +79,7 @@ interface CompetitorGradingReportLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function CompetitorGradingReportLMS(
-  props: CompetitorGradingReportLMSProps,
+  props: CompetitorGradingReportLMSProps
 ) {
   const router = useRouter();
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
@@ -93,7 +95,7 @@ export default function CompetitorGradingReportLMS(
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken,
-    },
+    }
   );
   const isDoneResult = data?.result.is_done;
 
@@ -106,10 +108,10 @@ export default function CompetitorGradingReportLMS(
 
   const industryCAGRReason = markdownToHtml(props.industryCAGRReason);
   const industryMarketMaturityReason = markdownToHtml(
-    props.industryMarketMaturityReason,
+    props.industryMarketMaturityReason
   );
   const industryCurrentCondition = markdownToHtml(
-    props.industryCurrentCondition,
+    props.industryCurrentCondition
   );
   const growthOpportunity = markdownToHtml(props.growthOpportunity);
   const maturity = maturityAttributes[props.industryMarketMaturity];

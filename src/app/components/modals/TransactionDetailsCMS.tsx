@@ -2,20 +2,20 @@
 import { Copy, Loader2 } from "lucide-react";
 import AppSheet from "./AppSheet";
 import { trpc } from "@/trpc/client";
-import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
+import ReceiptLineItemCMS from "../../../components/items/ReceiptLineItemCMS";
 import Image from "next/image";
-import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
+import TransactionStatusLabelCMS from "../../../components/labels/TransactionStatusLabelCMS";
 import dayjs from "dayjs";
-import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
-import UserItemCMS from "../items/UserItemCMS";
-import AppButton from "../buttons/AppButton";
+import ProductCategoryLabelCMS from "../../../components/labels/ProductCategoryLabelCMS";
+import UserItemCMS from "../../../components/items/UserItemCMS";
+import AppButton from "../../../components/buttons/AppButton";
 import { useClipboard } from "@/lib/use-clipboard";
 import { toast } from "sonner";
 import { useState } from "react";
 import { CancelPaymentXendit } from "@/lib/actions";
 import AppAlertConfirmDialog from "./AppAlertConfirmDialog";
 import { getRupiahCurrency } from "@/lib/currency";
-import SheetLineItemCMS from "../items/SheetLineItemCMS";
+import SheetLineItemCMS from "../../../components/items/SheetLineItemCMS";
 
 interface TransactionDetailsCMSProps {
   transactionId: string;

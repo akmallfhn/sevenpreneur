@@ -3,8 +3,8 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-import AppButton from "../buttons/AppButton";
-import SBBP8Logo from "../svg-logos/SBBP8Logo";
+import AppButton from "../../../components/buttons/AppButton";
+import SBBP8Logo from "../../../components/svg-logos/SBBP8Logo";
 
 interface HeroBlueprintProgramSVPProps {
   cohortId: number;
@@ -12,7 +12,7 @@ interface HeroBlueprintProgramSVPProps {
 }
 
 export default function HeroBlueprintProgramSVP(
-  props: HeroBlueprintProgramSVPProps,
+  props: HeroBlueprintProgramSVPProps
 ) {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">

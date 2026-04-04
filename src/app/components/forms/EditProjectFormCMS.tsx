@@ -6,12 +6,12 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 
 interface EditProjectFormCMSProps {

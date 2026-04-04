@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { CalendarFold } from "lucide-react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
 
 dayjs.extend(utc);
@@ -76,8 +76,8 @@ export default function NearestScheduleCardLMS({
         <a
           href={
             nearestSchedule.method !== "ONSITE"
-              ? nearestSchedule.meeting_url ?? undefined
-              : nearestSchedule.location_url ?? undefined
+              ? (nearestSchedule.meeting_url ?? undefined)
+              : (nearestSchedule.location_url ?? undefined)
           }
           className="flex w-full"
           target="_blank"

@@ -1,4 +1,4 @@
-import ProjectDetailsLMS from "@/app/components/pages/ProjectDetailsLMS";
+import ProjectDetailsLMS from "@/components/pages/ProjectDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

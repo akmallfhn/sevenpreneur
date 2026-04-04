@@ -1,10 +1,10 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import { PlusIcon, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import InputNumberCMS from "../fields/InputNumberCMS";
 
 export interface PriceTier {
@@ -39,7 +39,7 @@ export default function PriceTierStepperCMS({
   const handleChange = (
     index: number,
     field: "name" | "amount" | "status",
-    value: string | StatusType,
+    value: string | StatusType
   ) => {
     const updatedTiers = [...tiers]; // 1. Create copy for tiers
     updatedTiers[index] = { ...updatedTiers[index], [field]: value }; // 2. Update value

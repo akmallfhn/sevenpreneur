@@ -3,7 +3,7 @@ import { Star, Volume2, VolumeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 
 export type EducatorItem = {
   full_name: string;

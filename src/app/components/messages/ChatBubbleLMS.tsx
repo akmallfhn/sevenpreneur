@@ -1,7 +1,7 @@
 "use client";
 import { useClipboard } from "@/lib/use-clipboard";
 import { Check, CopyIcon } from "lucide-react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 
 interface ChatBubbleLMS {
   chatMessage: string;

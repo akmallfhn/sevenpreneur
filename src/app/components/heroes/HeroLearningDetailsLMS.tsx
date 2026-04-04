@@ -7,7 +7,7 @@ import {
 import dayjs from "dayjs";
 import { MapPinned, Video } from "lucide-react";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 
 interface HeroLearningDetailsLMSProps {
   learningSessionName: string;

@@ -1,4 +1,4 @@
-import AccountDetailsLMS from "@/app/components/pages/AccountDetailsLMS";
+import AccountDetailsLMS from "@/components/pages/AccountDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

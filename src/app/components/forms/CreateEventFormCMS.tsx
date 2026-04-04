@@ -6,12 +6,12 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
   PriceTier,
@@ -116,7 +116,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
     setIsSubmitting(true);
 
     const invalidTier = formData.eventPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim(),
+      (tier) => !tier.name.trim() || !tier.amount.trim()
     );
 
     // Required field checking
@@ -163,14 +163,14 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
       }
       if (!formData.eventLocationURL) {
         toast.error(
-          "Missing location link. A GMaps URL makes navigation easier.",
+          "Missing location link. A GMaps URL makes navigation easier."
         );
         setIsSubmitting(false);
         return;
       }
       if (!formData.eventMeetingURL) {
         toast.error(
-          "A session link is required for online or hybrid meetings.",
+          "A session link is required for online or hybrid meetings."
         );
         setIsSubmitting(false);
         return;
@@ -183,7 +183,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
       }
       if (!formData.eventLocationURL) {
         toast.error(
-          "Missing location link. A GMaps URL makes navigation easier.",
+          "Missing location link. A GMaps URL makes navigation easier."
         );
         setIsSubmitting(false);
         return;
@@ -191,7 +191,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
     } else if (formData.eventMethod === "ONLINE") {
       if (!formData.eventMeetingURL) {
         toast.error(
-          "A session link is required for online or hybrid meetings.",
+          "A session link is required for online or hybrid meetings."
         );
         setIsSubmitting(false);
         return;
@@ -243,7 +243,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
               description: err.message,
             });
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -304,7 +304,7 @@ export default function CreateEventFormCMS(props: CreateEventFormCMSProps) {
                   checked={formData.eventStatus === "ACTIVE"}
                   onCheckedChange={(checked) =>
                     handleInputChange("eventStatus")(
-                      checked ? "ACTIVE" : "INACTIVE",
+                      checked ? "ACTIVE" : "INACTIVE"
                     )
                   }
                 />

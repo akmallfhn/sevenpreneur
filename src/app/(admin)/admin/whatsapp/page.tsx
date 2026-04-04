@@ -1,4 +1,4 @@
-import WhatsappConvsCMS from "@/app/components/indexes/WhatsappConvsCMS";
+import WhatsappConvsCMS from "@/components/indexes/WhatsappConvsCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import UnderDevelopment from "@/app/components/states/UnderDevelopment";
 import { setSessionToken, trpc } from "@/trpc/server";

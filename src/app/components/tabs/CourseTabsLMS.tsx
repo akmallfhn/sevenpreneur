@@ -2,8 +2,8 @@
 import { StatusType } from "@/lib/app-types";
 import { CirclePlay, Presentation } from "lucide-react";
 import { useState } from "react";
-import AppButton from "../buttons/AppButton";
-import CourseItemLMS from "../items/CourseItemLMS";
+import AppButton from "../../../components/buttons/AppButton";
+import CourseItemLMS from "../../../components/items/CourseItemLMS";
 import EmptyListLMS from "../states/EmptyListLMS";
 
 export interface CourseList {
@@ -41,13 +41,13 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
   ];
 
   const activeCourses = props.courseList.filter(
-    (course) => course.status === "ACTIVE",
+    (course) => course.status === "ACTIVE"
   );
   const activeCohorts = props.courseList.filter(
-    (course) => course.status === "ACTIVE" && course.category === "COHORT",
+    (course) => course.status === "ACTIVE" && course.category === "COHORT"
   );
   const activePlaylists = props.courseList.filter(
-    (course) => course.status === "ACTIVE" && course.category === "PLAYLIST",
+    (course) => course.status === "ACTIVE" && course.category === "PLAYLIST"
   );
 
   return (

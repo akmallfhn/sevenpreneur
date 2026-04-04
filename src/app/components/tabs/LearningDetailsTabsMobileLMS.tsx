@@ -9,16 +9,16 @@ import dayjs from "dayjs";
 import { ChevronDown, MapPinned, Video } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import AppButton from "../buttons/AppButton";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AppButton from "../../../components/buttons/AppButton";
+import { AvatarBadgeLMSProps } from "../../../components/buttons/AvatarBadgeLMS";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 import AttendanceGatewayMobileLMS from "../gateways/AttendanceGatewayMobileLMS";
-import FileItemLMS from "../items/FileItemLMS";
+import FileItemLMS from "../../../components/items/FileItemLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import {
   DiscussionStarterList,
   MaterialList,
-} from "../pages/LearningDetailsLMS";
+} from "../../../components/pages/LearningDetailsLMS";
 import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
 import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
 

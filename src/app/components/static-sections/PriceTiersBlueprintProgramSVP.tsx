@@ -1,7 +1,7 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
-import PriceItemBlueprintProgramSVP from "../items/PriceItemBlueprintProgramSVP";
-import PackageLabelBlueprintProgramSVP from "../labels/PackageLabelBlueprintProgramSVP";
+import PriceItemBlueprintProgramSVP from "../../../components/items/PriceItemBlueprintProgramSVP";
+import PackageLabelBlueprintProgramSVP from "../../../components/labels/PackageLabelBlueprintProgramSVP";
 
 export interface PackageItem {
   id: number;

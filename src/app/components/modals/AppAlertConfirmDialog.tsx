@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 
 interface AppAlertConfirmDialogProps {
   isOpen: boolean;

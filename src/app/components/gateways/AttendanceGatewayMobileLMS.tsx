@@ -4,7 +4,7 @@ import { Check, ClockPlus, Loader2, LockKeyholeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import AppButton, { VariantType } from "../buttons/AppButton";
+import AppButton, { VariantType } from "../../../components/buttons/AppButton";
 import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
 
 interface AttendanceGatewayMobileLMSProps {

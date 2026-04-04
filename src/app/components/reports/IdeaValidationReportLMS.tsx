@@ -9,9 +9,11 @@ import { Gauge, gaugeClasses } from "@mui/x-charts";
 import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
-import AISegmentItemLMS from "../items/AISegmentItemLMS";
+import { AvatarBadgeLMSProps } from "../../../components/buttons/AvatarBadgeLMS";
+import AICitationLMS, {
+  SourcesArticle,
+} from "../../../components/items/AICitationLMS";
+import AISegmentItemLMS from "../../../components/items/AISegmentItemLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import styles from "./Report.module.css";
@@ -121,7 +123,7 @@ interface IdeaValidationReportLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function IdeaValidationReportLMS(
-  props: IdeaValidationReportLMSProps,
+  props: IdeaValidationReportLMSProps
 ) {
   const router = useRouter();
   const [intervalMs, setIntervalMs] = useState<number | false>(2000);
@@ -137,7 +139,7 @@ export default function IdeaValidationReportLMS(
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken,
-    },
+    }
   );
   const isDoneResult = data?.result.is_done;
 
@@ -183,7 +185,7 @@ export default function IdeaValidationReportLMS(
   const solutionFeasibility = markdownToHtml(props.solutionFeasibility);
   const industryDirection = markdownToHtml(props.industryDirection);
   const longevityReason = markdownToHtml(
-    `${longevity.description} ${props.longevityReason}`,
+    `${longevity.description} ${props.longevityReason}`
   );
 
   if (!props.resultStatus) {

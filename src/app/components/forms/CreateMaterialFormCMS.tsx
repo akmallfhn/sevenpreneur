@@ -3,7 +3,7 @@ import { useState, useEffect, FormEvent } from "react";
 import AppSheet from "../modals/AppSheet";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -11,7 +11,7 @@ import UploadFilesCMS from "../fields/UploadFilesCMS";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
 import { StatusType } from "@/lib/app-types";
 import { Switch } from "@/components/ui/switch";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 
 interface CreateMaterialFormCMSProps {
   learningId: number;

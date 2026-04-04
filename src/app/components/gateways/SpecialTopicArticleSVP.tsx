@@ -3,7 +3,7 @@
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
-import { ArticleList } from "../indexes/ArticleListSVP";
+import { ArticleList } from "../../../components/items/ArticleListSVP";
 
 interface SpecialTopicArticleSVPProps {
   topicName: string;
@@ -12,7 +12,7 @@ interface SpecialTopicArticleSVPProps {
 }
 
 export default function SpecialTopicArticleSVP(
-  props: SpecialTopicArticleSVPProps,
+  props: SpecialTopicArticleSVPProps
 ) {
   return (
     <div className="special-topic relative flex w-full aspect-[2/3] rounded-lg overflow-hidden dark:border dark:border-outline-dark sm:aspect-[4/1.2]">

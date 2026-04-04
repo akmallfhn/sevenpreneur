@@ -1,5 +1,5 @@
 import AppInterstitialBanner from "@/app/components/modals/AppInterstitialBanner";
-import HomeSVP from "@/app/components/pages/HomeSVP";
+import HomeSVP from "@/components/pages/HomeSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 

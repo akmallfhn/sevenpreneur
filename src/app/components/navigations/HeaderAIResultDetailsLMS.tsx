@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
-import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AvatarBadgeLMS, {
+  AvatarBadgeLMSProps,
+} from "../../../components/buttons/AvatarBadgeLMS";
 import AppBreadcrumb from "./AppBreadcrumb";
 import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
@@ -11,7 +13,7 @@ export interface HeaderAIResultDetailsLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function HeaderAIResultDetailsLMS(
-  props: HeaderAIResultDetailsLMSProps,
+  props: HeaderAIResultDetailsLMSProps
 ) {
   return (
     <React.Fragment>

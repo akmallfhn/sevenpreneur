@@ -6,11 +6,11 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
   PriceTier,
@@ -38,7 +38,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
     isError: isErrorInitial,
   } = trpc.read.cohort.useQuery(
     { id: props.cohortId },
-    { enabled: !!props.sessionToken },
+    { enabled: !!props.sessionToken }
   );
   const initialData = cohortDetailsData?.cohort;
 
@@ -74,7 +74,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
           name: post.name,
           amount: post.amount,
           status: post.status,
-        }),
+        })
       ) || [],
   });
 
@@ -103,7 +103,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
             name: post.name,
             amount: post.amount,
             status: post.status,
-          }),
+          })
         ),
       });
     }
@@ -140,7 +140,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
     setIsSubmitting(true);
 
     const invalidTier = formData.cohortPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim(),
+      (tier) => !tier.name.trim() || !tier.amount.trim()
     );
 
     // Required field checking
@@ -195,7 +195,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
 
       // Use id to mapping initial Cohort Price data
       const initialPricesMap = initialData?.cohort_prices.map(
-        (post) => post.id,
+        (post) => post.id
       );
 
       // Update & Create Cohort Prices
@@ -221,7 +221,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
               status: tier.status,
             });
           }
-        }),
+        })
       );
       // Get all id of tier that are on change in current form → This is the list that should remain in the database.
       const currentIds = formData.cohortPriceTiers
@@ -239,7 +239,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
           } catch {
             toast.error("Failed to delete price tier");
           }
-        }),
+        })
       );
 
       // Final toast & refetch
@@ -319,7 +319,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
                     checked={formData.cohortStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("cohortStatus")(
-                        checked ? "ACTIVE" : "INACTIVE",
+                        checked ? "ACTIVE" : "INACTIVE"
                       )
                     }
                   />

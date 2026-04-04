@@ -1,4 +1,4 @@
-import BlueprintProgramSVP from "@/app/components/pages/BlueprintProgramSVP";
+import BlueprintProgramSVP from "@/components/pages/BlueprintProgramSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";

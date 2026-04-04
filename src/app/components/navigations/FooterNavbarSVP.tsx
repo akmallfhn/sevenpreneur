@@ -8,13 +8,13 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import SocialButtonFooterSVP from "../buttons/SocialButtonFooterSVP";
+import SocialButtonFooterSVP from "../../../components/buttons/SocialButtonFooterSVP";
 
 export default function FooterNavbarSVP() {
   const pathname = usePathname();
 
   const isDisallowedPage = ["/auth", "/checkout"].some((path) =>
-    pathname.includes(path),
+    pathname.includes(path)
   );
 
   const socialMediaData = [

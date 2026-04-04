@@ -1,4 +1,4 @@
-import TransactionListCMS from "@/app/components/indexes/TransactionListCMS";
+import TransactionListCMS from "@/components/indexes/TransactionListCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";

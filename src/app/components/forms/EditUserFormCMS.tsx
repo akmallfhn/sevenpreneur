@@ -1,8 +1,8 @@
 "use client";
-import AppButton from "@/app/components/buttons/AppButton";
+import AppButton from "@/components/buttons/AppButton";
 import InputCMS from "@/app/components/fields/InputCMS";
 import SelectCMS from "@/app/components/fields/SelectCMS";
-import StatusLabelCMS from "@/app/components/labels/StatusLabelCMS";
+import StatusLabelCMS from "@/components/labels/StatusLabelCMS";
 import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { Switch } from "@/components/ui/switch";
 import { trpc } from "@/trpc/client";
@@ -199,7 +199,7 @@ export default function EditUserForm({
               description: err.message,
             });
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -343,7 +343,7 @@ export default function EditUserForm({
                         checked={formData.status === "ACTIVE"}
                         onCheckedChange={(checked) =>
                           handleInputChange("status")(
-                            checked ? "ACTIVE" : "INACTIVE",
+                            checked ? "ACTIVE" : "INACTIVE"
                           )
                         }
                       />

@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
-import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AvatarBadgeLMS, {
+  AvatarBadgeLMSProps,
+} from "../../../components/buttons/AvatarBadgeLMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
@@ -9,7 +11,7 @@ interface HeroPlaylistDetailsLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function HeroPlaylistDetailsLMS(
-  props: HeroPlaylistDetailsLMSProps,
+  props: HeroPlaylistDetailsLMSProps
 ) {
   return (
     <div className="hero-playlist relative flex w-full aspect-[1626/494] overflow-hidden">

@@ -1,6 +1,8 @@
 "use client";
 import React, { ReactNode } from "react";
-import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AvatarBadgeLMS, {
+  AvatarBadgeLMSProps,
+} from "../../../components/buttons/AvatarBadgeLMS";
 import AppBreadcrumb from "./AppBreadcrumb";
 import AppBreadcrumbItem from "./AppBreadcrumbItem";
 

@@ -1,10 +1,9 @@
 "use client";
 import { ArrowUp } from "lucide-react";
 import { FormEvent, KeyboardEvent, TextareaHTMLAttributes } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 
-interface ChatSubmitterLMSProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface ChatSubmitterLMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   onTextAreaChange?: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
   value: string;

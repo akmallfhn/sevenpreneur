@@ -6,12 +6,12 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
   PriceTier,
@@ -39,7 +39,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
     isError: isErrorInitial,
   } = trpc.read.event.useQuery(
     { id: props.eventId },
-    { enabled: !!props.sessionToken },
+    { enabled: !!props.sessionToken }
   );
   const initialData = eventDetailsData?.event;
 
@@ -83,7 +83,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
           name: post.name,
           amount: post.amount,
           status: post.status,
-        }),
+        })
       ) || [],
   });
 
@@ -116,7 +116,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
             name: post.name,
             amount: post.amount,
             status: post.status,
-          }),
+          })
         ),
       });
     }
@@ -178,7 +178,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
     setIsSubmitting(true);
 
     const invalidTier = formData.eventPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim(),
+      (tier) => !tier.name.trim() || !tier.amount.trim()
     );
 
     // Required field checking
@@ -225,14 +225,14 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
       }
       if (!formData.eventLocationURL) {
         toast.error(
-          "Missing location link. A GMaps URL makes navigation easier.",
+          "Missing location link. A GMaps URL makes navigation easier."
         );
         setIsSubmitting(false);
         return;
       }
       if (!formData.eventMeetingURL) {
         toast.error(
-          "A session link is required for online or hybrid meetings.",
+          "A session link is required for online or hybrid meetings."
         );
         setIsSubmitting(false);
         return;
@@ -245,7 +245,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
       }
       if (!formData.eventLocationURL) {
         toast.error(
-          "Missing location link. A GMaps URL makes navigation easier.",
+          "Missing location link. A GMaps URL makes navigation easier."
         );
         setIsSubmitting(false);
         return;
@@ -253,7 +253,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
     } else if (formData.eventMethod === "ONLINE") {
       if (!formData.eventMeetingURL) {
         toast.error(
-          "A session link is required for online or hybrid meetings.",
+          "A session link is required for online or hybrid meetings."
         );
         setIsSubmitting(false);
         return;
@@ -315,7 +315,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
               status: tier.status,
             });
           }
-        }),
+        })
       );
       // Get all id of tier that are on change in current form → This is the list that should remain in the database.
       const currentIds = formData.eventPriceTiers
@@ -333,7 +333,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
           } catch {
             toast.error("Failed to delete price tier");
           }
-        }),
+        })
       );
 
       // Final toast & refetch
@@ -413,7 +413,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                     checked={formData.eventStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("eventStatus")(
-                        checked ? "ACTIVE" : "INACTIVE",
+                        checked ? "ACTIVE" : "INACTIVE"
                       )
                     }
                   />

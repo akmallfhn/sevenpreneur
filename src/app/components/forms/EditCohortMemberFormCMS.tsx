@@ -3,14 +3,14 @@ import { trpc } from "@/trpc/client";
 import { Loader2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
-import AttendanceItemAccordionLMS from "../items/AttendanceItemAccordionLMS";
-import FileItemLMS from "../items/FileItemLMS";
-import UserItemCMS from "../items/UserItemCMS";
+import AttendanceItemAccordionLMS from "../../../components/items/AttendanceItemAccordionLMS";
+import FileItemLMS from "../../../components/items/FileItemLMS";
+import UserItemCMS from "../../../components/items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
-import SubmissionItemAccordionLMS from "../items/SubmissionItemAccordionLMS";
-import AppReactionButton from "../buttons/AppReactionButton";
+import SubmissionItemAccordionLMS from "../../../components/items/SubmissionItemAccordionLMS";
+import AppReactionButton from "../../../components/buttons/AppReactionButton";
 
 interface EditCohortMemberFormCMSProps {
   sessionToken: string;

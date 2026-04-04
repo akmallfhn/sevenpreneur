@@ -3,7 +3,7 @@ import { trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import SelectCMS from "../fields/SelectCMS";
 import AppSheet from "../modals/AppSheet";
 import InputCMS from "../fields/InputCMS";
@@ -17,12 +17,12 @@ interface AddCohortMemberFormCMSProps {
 }
 
 export default function AddCohortMemberFormCMS(
-  props: AddCohortMemberFormCMSProps,
+  props: AddCohortMemberFormCMSProps
 ) {
   const utils = trpc.useUtils();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fillUserMethod, setFillUserMethod] = useState<"SELECT" | "INPUT">(
-    "SELECT",
+    "SELECT"
   );
   const addCohortMember = trpc.create.cohortMember.useMutation();
 
@@ -33,7 +33,7 @@ export default function AddCohortMemberFormCMS(
     isError: isErrorCohortDetails,
   } = trpc.read.cohort.useQuery(
     { id: props.cohortId },
-    { enabled: !!props.sessionToken },
+    { enabled: !!props.sessionToken }
   );
   const {
     data: userListData,
@@ -119,7 +119,7 @@ export default function AddCohortMemberFormCMS(
               description: err.message,
             });
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -163,7 +163,7 @@ export default function AddCohortMemberFormCMS(
                   (post) => ({
                     value: post.id,
                     label: post.name,
-                  }),
+                  })
                 )}
               />
               {fillUserMethod === "SELECT" && (

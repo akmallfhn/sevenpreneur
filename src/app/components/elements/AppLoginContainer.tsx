@@ -2,19 +2,13 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import Link from "next/link";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { isValidRedirectUrl } from "@/lib/valid-redirect";
 
-interface AppLoginContainerProps {
-  currentDomain: string;
-}
-
-export default function AppLoginContainer({
-  currentDomain,
-}: AppLoginContainerProps) {
+export default function AppLoginContainer() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo");
@@ -22,14 +16,19 @@ export default function AppLoginContainer({
     redirectTo && isValidRedirectUrl(redirectTo) ? redirectTo : "/";
   const [isLoading, setIsLoading] = useState(false);
 
-  // --- Return token from Google
+  let domain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    domain = "example.com:3000";
+  }
+
+  // Return token from Google
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
         setIsLoading(true);
-        // --- Sent request to route handler
+        // Sent request to route handler
         const response = await fetch(
-          `https://www.${currentDomain}/api/auth/callback/google`,
+          `https://www.${domain}/api/auth/callback/google`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -41,11 +40,11 @@ export default function AppLoginContainer({
           throw new Error("Failed to trigger route");
         }
 
-        // --- Return response from route.js
+        // Return response from route.js
         const result = await response.json();
-        console.log("Response from route handler:", result);
+        // console.log("Response from route handler:", result);
 
-        // --- Redirect and status message
+        // Redirect and status message
         if (result.status === 200) {
           setIsLoading(false);
           router.push(safeRedirect);

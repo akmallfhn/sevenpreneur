@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
-import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AvatarBadgeLMS, {
+  AvatarBadgeLMSProps,
+} from "../../../components/buttons/AvatarBadgeLMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 

@@ -6,10 +6,10 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import SelectCMS from "../fields/SelectCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import InputNumberCMS from "../fields/InputNumberCMS";
 
@@ -40,7 +40,7 @@ export default function EditDiscountFormCMS({
     isError: isErrorInitialData,
   } = trpc.read.discount.useQuery(
     { id: discountId },
-    { enabled: !!sessionToken && !!discountId },
+    { enabled: !!sessionToken && !!discountId }
   );
   const initialData = data?.discount;
 
@@ -111,7 +111,7 @@ export default function EditDiscountFormCMS({
     isError: isErrorPlaylistData,
   } = trpc.list.playlists.useQuery(
     {},
-    { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken },
+    { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken }
   );
   const {
     data: cohortData,
@@ -119,7 +119,7 @@ export default function EditDiscountFormCMS({
     isError: isErrorCohortData,
   } = trpc.list.cohorts.useQuery(
     {},
-    { enabled: formData.productCategory === "COHORT" && !!sessionToken },
+    { enabled: formData.productCategory === "COHORT" && !!sessionToken }
   );
   const {
     data: eventsData,
@@ -127,7 +127,7 @@ export default function EditDiscountFormCMS({
     isError: isErrorEventsData,
   } = trpc.list.events.useQuery(
     {},
-    { enabled: formData.productCategory === "EVENT" && !!sessionToken },
+    { enabled: formData.productCategory === "EVENT" && !!sessionToken }
   );
   const isLoading =
     isLoadingCohortData || isLoadingPlaylistData || isLoadingEventsData;
@@ -140,7 +140,7 @@ export default function EditDiscountFormCMS({
         playlistData?.list.map((post) => ({
           label: post.name,
           value: post.id,
-        })) || [],
+        })) || []
       );
     } else if (formData.productCategory === "COHORT") {
       setItemOptions(
@@ -148,8 +148,8 @@ export default function EditDiscountFormCMS({
           post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
-          })),
-        ) || [],
+          }))
+        ) || []
       );
     } else if (formData.productCategory === "EVENT") {
       setItemOptions(
@@ -157,8 +157,8 @@ export default function EditDiscountFormCMS({
           post.prices.map((price) => ({
             label: `${price.name} - ${post.name}`,
             value: price.id,
-          })),
-        ) || [],
+          }))
+        ) || []
       );
     }
   }, [formData.productCategory, playlistData, cohortData, eventsData]);
@@ -214,7 +214,7 @@ export default function EditDiscountFormCMS({
     }
     if (
       dayjs(formData.discountEndDate).isBefore(
-        dayjs(formData.discountStartDate),
+        dayjs(formData.discountStartDate)
       )
     ) {
       toast.error("Oops! End date must come after the start date");
@@ -262,7 +262,7 @@ export default function EditDiscountFormCMS({
               description: error.message,
             });
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -358,7 +358,7 @@ export default function EditDiscountFormCMS({
                     checked={formData.discountStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("discountStatus")(
-                        checked ? "ACTIVE" : "INACTIVE",
+                        checked ? "ACTIVE" : "INACTIVE"
                       )
                     }
                   />

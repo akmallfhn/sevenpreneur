@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { Plus } from "lucide-react";
 
 interface EmptyRecordingCMSProps {

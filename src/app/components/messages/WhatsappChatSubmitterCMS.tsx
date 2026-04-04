@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import AppEmojiPicker from "./AppEmojiPicker";
 
 interface WhatsappChatSubmitterCMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {

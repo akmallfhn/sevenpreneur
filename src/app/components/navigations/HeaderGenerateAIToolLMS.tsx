@@ -7,7 +7,9 @@ import {
 import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import AvatarBadgeLMS, { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import AvatarBadgeLMS, {
+  AvatarBadgeLMSProps,
+} from "../../../components/buttons/AvatarBadgeLMS";
 import AppBreadcrumb from "./AppBreadcrumb";
 import AppBreadcrumbItem from "./AppBreadcrumbItem";
 
@@ -18,7 +20,7 @@ export interface HeaderGenerateAIToolLMSProps extends AvatarBadgeLMSProps {
 }
 
 export default function HeaderGenerateAIToolLMS(
-  props: HeaderGenerateAIToolLMSProps,
+  props: HeaderGenerateAIToolLMSProps
 ) {
   return (
     <React.Fragment>

@@ -1,4 +1,4 @@
-import TransactionStatusDetailsSVP from "@/app/components/pages/TransactionStatusDetailsSVP";
+import TransactionStatusDetailsSVP from "@/components/pages/TransactionStatusDetailsSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";

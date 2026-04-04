@@ -1,4 +1,4 @@
-import CohortDetailsLMS from "@/app/components/pages/CohortDetailsLMS";
+import CohortDetailsLMS from "@/components/pages/CohortDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

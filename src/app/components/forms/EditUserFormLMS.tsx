@@ -11,7 +11,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import InputSVP from "../fields/InputSVP";
 import UploadAvatarUserLMS from "../fields/UploadAvatarUserLMS";
@@ -181,7 +181,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
       } else {
         toast.error(
           updateUserData.message ||
-            "Failed to update profile. Please try again.",
+            "Failed to update profile. Please try again."
         );
       }
     } catch {

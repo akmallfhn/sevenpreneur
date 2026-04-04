@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
-import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
+import AppThemeSwitcher from "../../../components/buttons/AppThemeSwitcher";
 import Image from "next/image";
 import SideMenuItemMobileSVP from "./SideMenuItemMobileSVP";
 import { DeleteSession } from "@/lib/actions";

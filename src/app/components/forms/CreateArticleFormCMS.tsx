@@ -1,5 +1,5 @@
 "use client";
-import AppButton from "@/app/components/buttons/AppButton";
+import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
 import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 import { ArticleStatus } from "@/lib/app-types";
@@ -64,7 +64,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     isError: isErrorUsers,
   } = trpc.list.users.useQuery(
     { role_id: 0 },
-    { enabled: !!props.sessionToken },
+    { enabled: !!props.sessionToken }
   );
 
   const isLoading = isLoadingCategories || isLoadingUsers;
@@ -169,7 +169,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
       setFormData((prev) => ({
         ...prev,
         articleBodyContent: prev.articleBodyContent.map((item) =>
-          item.id === id ? { ...item, [field]: value } : item,
+          item.id === id ? { ...item, [field]: value } : item
         ),
       }));
     };
@@ -190,7 +190,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
           return !item.content?.trim();
         }
         return !item.sub_heading?.trim() || !item.content?.trim();
-      },
+      }
     );
 
     // Required field checking
@@ -283,7 +283,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               image_path: null,
               image_desc: null,
               content: item.content,
-            }),
+            })
           ),
           published_at: new Date(formData.articlePublishDate).toISOString(),
           category_id: Number(formData.articleCategoryId),
@@ -295,7 +295,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
         {
           onSuccess: () => {
             toast.success(
-              status === "PUBLISHED" ? "Article is live!" : "Draft saved!",
+              status === "PUBLISHED" ? "Article is live!" : "Draft saved!"
             );
             utils.list.users.invalidate();
             router.push("/articles");
@@ -305,7 +305,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               description: err.message,
             });
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -410,7 +410,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                         value={post.sub_heading || ""}
                         onInputChange={handleChangeBodyContent(
                           post.id!,
-                          "sub_heading",
+                          "sub_heading"
                         )}
                         required
                       />
@@ -421,7 +421,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                       value={post.content || ""}
                       onTextAreaChange={handleChangeBodyContent(
                         post.id!,
-                        "content",
+                        "content"
                       )}
                       required
                     />

@@ -1,4 +1,4 @@
-import EventDetailsSVP from "@/app/components/pages/EventDetailsSVP";
+import EventDetailsSVP from "@/components/pages/EventDetailsSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";

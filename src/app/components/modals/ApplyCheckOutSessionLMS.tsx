@@ -1,7 +1,7 @@
 "use client";
 import { FormEvent, useEffect, useState } from "react";
 import InputSVP from "../fields/InputSVP";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { Loader2, X } from "lucide-react";
 import { toast } from "sonner";
 import { CheckOutSession } from "@/lib/actions";

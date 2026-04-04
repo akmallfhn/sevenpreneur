@@ -7,7 +7,7 @@ import {
 import { ProductCategory } from "@/lib/app-types";
 import { Loader2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputSVP from "../fields/InputSVP";
 
 interface DiscountType {

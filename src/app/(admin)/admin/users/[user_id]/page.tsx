@@ -1,4 +1,4 @@
-import UserDetailsCMS from "@/app/components/pages/UserDetailsCMS";
+import UserDetailsCMS from "@/components/pages/UserDetailsCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";

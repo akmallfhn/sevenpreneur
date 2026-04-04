@@ -2,7 +2,7 @@
 import { useClipboard } from "@/lib/use-clipboard";
 import { ChevronLeft, Link2 } from "lucide-react";
 import Link from "next/link";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { useEffect } from "react";
 import { toast } from "sonner";
 

@@ -1,5 +1,5 @@
 "use client";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { PlusIcon, X } from "lucide-react";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import InputSVP from "../fields/InputSVP";

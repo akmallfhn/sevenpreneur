@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import InputSVP from "../fields/InputSVP";
 import RadioBoxSVP from "../fields/RadioBoxBooleanSVP";
@@ -30,7 +30,7 @@ interface SurveyBusinessUpdateSVPProps {
 }
 
 export default function SurveyBusinessUpdateSVP(
-  props: SurveyBusinessUpdateSVPProps,
+  props: SurveyBusinessUpdateSVPProps
 ) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -120,7 +120,7 @@ export default function SurveyBusinessUpdateSVP(
     }
     if (!formData.businessAgeYears && formData.hasBusiness) {
       toast.error(
-        "Please enter how many years your business has been running.",
+        "Please enter how many years your business has been running."
       );
       setIsSubmitting(false);
       return;
@@ -174,7 +174,7 @@ export default function SurveyBusinessUpdateSVP(
       } else {
         toast.error(
           updateUserBusiness.message ||
-            "Failed to update profile. Please try again.",
+            "Failed to update profile. Please try again."
         );
       }
     } catch {

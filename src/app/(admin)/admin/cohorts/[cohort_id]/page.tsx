@@ -1,4 +1,4 @@
-import CohortDetailsCMS from "@/app/components/pages/CohortDetailsCMS";
+import CohortDetailsCMS from "@/components/pages/CohortDetailsCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";

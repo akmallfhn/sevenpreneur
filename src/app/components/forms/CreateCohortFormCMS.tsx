@@ -6,11 +6,11 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import PriceTierStepperCMS, {
   PriceTier,
@@ -115,7 +115,7 @@ export default function CreateCohortFormCMS(props: CreateCohortFormCMSProps) {
       return;
     }
     const invalidTier = formData.cohortPriceTiers.some(
-      (tier) => !tier.name.trim() || !tier.amount.trim(),
+      (tier) => !tier.name.trim() || !tier.amount.trim()
     );
     if (formData.cohortPriceTiers.length === 0 || invalidTier) {
       toast.error("A cohort with no price? Sounds generous");
@@ -151,7 +151,7 @@ export default function CreateCohortFormCMS(props: CreateCohortFormCMSProps) {
               description: err.message,
             });
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -212,7 +212,7 @@ export default function CreateCohortFormCMS(props: CreateCohortFormCMSProps) {
                   checked={formData.cohortStatus === "ACTIVE"}
                   onCheckedChange={(checked) =>
                     handleInputChange("cohortStatus")(
-                      checked ? "ACTIVE" : "INACTIVE",
+                      checked ? "ACTIVE" : "INACTIVE"
                     )
                   }
                 />

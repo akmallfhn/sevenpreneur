@@ -1,4 +1,4 @@
-import LearningDetailsLMS from "@/app/components/pages/LearningDetailsLMS";
+import LearningDetailsLMS from "@/components/pages/LearningDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

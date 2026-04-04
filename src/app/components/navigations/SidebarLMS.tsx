@@ -12,8 +12,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import AppButton from "../buttons/AppButton";
-import AgoraSevenpreneurLogo from "../svg-logos/AgoraSevenpreneurLogo";
+import AppButton from "../../../components/buttons/AppButton";
+import AgoraSevenpreneurLogo from "../../../components/svg-logos/AgoraSevenpreneurLogo";
 import SidebarAIResultItemLMS from "./SidebarAIResultItemLMS";
 import SidebarMenuItemLMS from "./SidebarMenuItemLMS";
 

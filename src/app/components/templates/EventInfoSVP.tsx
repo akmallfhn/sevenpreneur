@@ -4,8 +4,8 @@ import { getDateTimeRange } from "@/lib/date-time-manipulation";
 import dayjs from "dayjs";
 import { CalendarFold, Clock3, LockKeyhole, MapPin } from "lucide-react";
 import Link from "next/link";
-import AppButton from "../buttons/AppButton";
-import { EventPrice } from "../pages/EventDetailsSVP";
+import AppButton from "../../../components/buttons/AppButton";
+import { EventPrice } from "../../../components/pages/EventDetailsSVP";
 
 interface EventInfoSVP {
   eventId: number;

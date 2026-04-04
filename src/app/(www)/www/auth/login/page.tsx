@@ -1,5 +1,5 @@
+import AuthLoginSVP from "@/components/pages/AuthLoginSVP";
 import { Metadata } from "next";
-import AppAuthLogin from "@/app/components/pages/AppAuthLogin";
 
 export const metadata: Metadata = {
   title: "Login | Sevenpreneur",
@@ -46,9 +46,5 @@ export const metadata: Metadata = {
 };
 
 export default function AuthPage() {
-  let domain = "sevenpreneur.com";
-  if (process.env.DOMAIN_MODE === "local") {
-    domain = "example.com:3000";
-  }
-  return <AppAuthLogin currentDomain={domain} />;
+  return <AuthLoginSVP />;
 }

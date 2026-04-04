@@ -10,7 +10,7 @@ import { ChevronDown, Loader2 } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppDiscussionReplyItem from "./AppDiscussionReplyItem";
 import AppDiscussionReplySubmitter from "./AppDiscussionReplySubmitter";

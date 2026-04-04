@@ -1,5 +1,5 @@
 "use client";
-import ProductItemHomeSVP from "../items/ProductItemHomeSVP";
+import ProductItemHomeSVP from "../../../components/items/ProductItemHomeSVP";
 
 export default function ProductsHomeSVP() {
   const productList = [

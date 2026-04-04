@@ -1,4 +1,4 @@
-import HomeLMS from "@/app/components/pages/HomeLMS";
+import HomeLMS from "@/components/pages/HomeLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 

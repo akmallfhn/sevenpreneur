@@ -1,5 +1,5 @@
 "use client";
-import AvatarBadgeCMS from "@/app/components/buttons/AvatarBadgeCMS";
+import AvatarBadgeCMS from "@/components/buttons/AvatarBadgeCMS";
 import SidebarMenuItemCMS from "@/app/components/navigations/SidebarMenuItemCMS";
 import { DeleteSession } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -22,7 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SidebarMenuGroupCMS from "./SidebarMenuGroupCMS";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { useSidebar } from "@/app/contexts/SidebarContextCMS";
 
 interface SidebarCMSProps {
@@ -51,28 +51,28 @@ export default function SidebarCMS(props: SidebarCMSProps) {
   const allowedRolesMenuWhatsapp = [0];
 
   const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuEvents = allowedRolesMenuEvents.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuDiscounts = allowedRolesMenuDiscounts.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuUsers = allowedRolesMenuUsers.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuTransactions = allowedRolesMenuTransactions.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuWebMarketing = allowedRolesMenuWebMarketing.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuArticles = allowedRolesMenuArticles.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
   const isAllowedMenuWhatsapp = allowedRolesMenuWhatsapp.includes(
-    props.sessionUserRole,
+    props.sessionUserRole
   );
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
 
   const { data, isLoading, isError } = trpc.auth.checkSession.useQuery(
     undefined,
-    { enabled: !!props.sessionToken },
+    { enabled: !!props.sessionToken }
   );
 
   // Logout function

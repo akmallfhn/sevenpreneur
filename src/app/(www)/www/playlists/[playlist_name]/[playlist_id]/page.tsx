@@ -1,4 +1,4 @@
-import PlaylistDetailsSVP from "@/app/components/pages/PlaylistDetailsSVP";
+import PlaylistDetailsSVP from "@/components/pages/PlaylistDetailsSVP";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";

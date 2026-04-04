@@ -3,15 +3,15 @@ import { useState, useEffect, FormEvent } from "react";
 import AppSheet from "../modals/AppSheet";
 import InputCMS from "../fields/InputCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import SelectCMS from "../fields/SelectCMS";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { Switch } from "@/components/ui/switch";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
-import BooleanLabelCMS from "../labels/BooleanLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
+import BooleanLabelCMS from "../../../components/labels/BooleanLabelCMS";
 
 interface CreateLearningFormCMSProps {
   sessionToken: string;

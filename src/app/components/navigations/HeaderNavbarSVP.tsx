@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
-import AppButton from "../buttons/AppButton";
+import AvatarBadgeSVP from "../../../components/buttons/AvatarBadgeSVP";
+import AppButton from "../../../components/buttons/AppButton";
 import {
   AlignLeftIcon,
   Blocks,
@@ -16,14 +16,14 @@ import AppDropdownItemList from "../elements/AppDropdownItemList";
 import { DeleteSession } from "@/lib/actions";
 import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
 import SideMenuMobileSVP from "./SideMenuMobileSVP";
-import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
+import AppThemeSwitcher from "../../../components/buttons/AppThemeSwitcher";
 import AnnouncementTickerSVP, {
   AnnouncementTickerSVPProps,
 } from "./AnnouncementTickerSVP";
 import { StatusType } from "@/lib/app-types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import SevenpreneurLogo from "../svg-logos/SevenpreneurLogo";
+import SevenpreneurLogo from "../../../components/svg-logos/SevenpreneurLogo";
 
 dayjs.extend(isBetween);
 
@@ -46,12 +46,12 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
 
   const disallowedPath = ["/auth"];
   const isDisallowedPage = disallowedPath.some((path) =>
-    pathname.includes(path),
+    pathname.includes(path)
   );
 
   const constrainedPath = ["/checkout"];
   const isConstrainedPath = constrainedPath.some((path) =>
-    pathname.includes(path),
+    pathname.includes(path)
   );
 
   const nickName = props.userName?.split(" ")[0];
@@ -65,7 +65,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
   // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (
-      event: MouseEvent | (MouseEvent & { target: Node }),
+      event: MouseEvent | (MouseEvent & { target: Node })
     ) => {
       if (
         wrapperRef.current &&
@@ -95,7 +95,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
     props.tickerStartDate,
     props.tickerEndDate,
     null,
-    "[]",
+    "[]"
   );
 
   return (

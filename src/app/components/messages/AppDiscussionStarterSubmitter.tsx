@@ -4,10 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import React, { TextareaHTMLAttributes, useState } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 
-interface AppDiscussionStarterSubmitterProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface AppDiscussionStarterSubmitterProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   sessionUserName: string;
   sessionUserAvatar: string;
   textAreaId: string;

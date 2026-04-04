@@ -7,7 +7,7 @@ import {
   LockKeyhole,
 } from "lucide-react";
 import SectionTitleSVP from "../titles/SectionTitleSVP";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { getRupiahCurrency } from "@/lib/currency";
 import Link from "next/link";
 import { getRoundedHourFromSeconds } from "@/lib/date-time-manipulation";

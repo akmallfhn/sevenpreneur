@@ -6,10 +6,10 @@ import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
-import StatusLabelCMS from "../labels/StatusLabelCMS";
+import StatusLabelCMS from "../../../components/labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 
 interface EditInterstitialAdsFormCMS {
@@ -20,7 +20,7 @@ interface EditInterstitialAdsFormCMS {
 }
 
 export default function EditInterstitialAdsFormCMS(
-  props: EditInterstitialAdsFormCMS,
+  props: EditInterstitialAdsFormCMS
 ) {
   const editInterstitial = trpc.update.ad.interstitial.useMutation();
   const utils = trpc.useUtils();
@@ -28,7 +28,7 @@ export default function EditInterstitialAdsFormCMS(
 
   const { data, isLoading, isError } = trpc.read.ad.interstitial.useQuery(
     { id: props.interstitialId },
-    { enabled: !!props.sessionToken },
+    { enabled: !!props.sessionToken }
   );
   const initialData = data?.interstitial;
 
@@ -162,7 +162,7 @@ export default function EditInterstitialAdsFormCMS(
     }
     if (
       dayjs(formData.interstitialEndDate).isBefore(
-        dayjs(formData.interstitialStartDate),
+        dayjs(formData.interstitialStartDate)
       )
     ) {
       toast.error("Oops! End date must come after the start date");
@@ -197,10 +197,10 @@ export default function EditInterstitialAdsFormCMS(
               "Something went wrong while updating interstitial ads",
               {
                 description: error.message,
-              },
+              }
             );
           },
-        },
+        }
       );
     } catch (error) {
       console.error(error);
@@ -318,7 +318,7 @@ export default function EditInterstitialAdsFormCMS(
                       checked={formData.interstitialStatus === "ACTIVE"}
                       onCheckedChange={(checked) =>
                         handleInputChange("interstitialStatus")(
-                          checked ? "ACTIVE" : "INACTIVE",
+                          checked ? "ACTIVE" : "INACTIVE"
                         )
                       }
                     />

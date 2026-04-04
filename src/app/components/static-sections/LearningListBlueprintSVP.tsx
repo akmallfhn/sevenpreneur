@@ -2,7 +2,7 @@
 import Image from "next/image";
 import LearningSessionItemBlueprintProgramSVP, {
   LearningSessionVariantBlueprintProgramSVP,
-} from "../items/LearningSessionItemBlueprintProgramSVP";
+} from "../../../components/items/LearningSessionItemBlueprintProgramSVP";
 
 export default function LearningListBlueprintSVP() {
   const data = [

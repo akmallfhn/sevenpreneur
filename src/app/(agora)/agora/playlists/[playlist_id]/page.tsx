@@ -1,4 +1,4 @@
-import PlaylistDetailsLMS from "@/app/components/pages/PlaylistDetailsLMS";
+import PlaylistDetailsLMS from "@/components/pages/PlaylistDetailsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

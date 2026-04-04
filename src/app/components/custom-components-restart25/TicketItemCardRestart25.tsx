@@ -4,7 +4,7 @@ import { Ban, Check, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import CountdownTimerRestart25 from "./CountdownTimerRestart25";
 
 interface TicketItemCardRestart25Props {

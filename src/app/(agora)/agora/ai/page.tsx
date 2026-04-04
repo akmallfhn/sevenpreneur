@@ -1,4 +1,4 @@
-import AIListLMS, { AIList } from "@/app/components/indexes/AIListLMS";
+import AIListLMS, { AIList } from "@/components/items/AIListLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 

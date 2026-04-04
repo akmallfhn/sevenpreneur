@@ -5,11 +5,11 @@ import { trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import InputCMS from "../fields/InputCMS";
 import InputNumberCMS from "../fields/InputNumberCMS";
 import SelectCMS from "../fields/SelectCMS";
-import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
+import ReceiptLineItemCMS from "../../../components/items/ReceiptLineItemCMS";
 import AppSheet from "../modals/AppSheet";
 
 interface DiscountType {

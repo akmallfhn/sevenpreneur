@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import FAQItemBlueprintProgramSVP from "../items/FAQItemBlueprintProgramSVP";
-import AppButton from "../buttons/AppButton";
+import FAQItemBlueprintProgramSVP from "../../../components/items/FAQItemBlueprintProgramSVP";
+import AppButton from "../../../components/buttons/AppButton";
 
 interface FAQBlueprintProgramSVPProps {
   cohortId: number;

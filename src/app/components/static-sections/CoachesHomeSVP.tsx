@@ -1,5 +1,5 @@
 "use client";
-import CoachEducatorItemSVP from "../items/CoachEducatorItemSVP";
+import CoachEducatorItemSVP from "../../../components/items/CoachEducatorItemSVP";
 
 export default function CoachesHomeSVP() {
   const coachList = [

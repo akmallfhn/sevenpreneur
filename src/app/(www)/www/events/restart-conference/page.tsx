@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import RestartEventSVP from "@/app/components/pages/RestartEventSVP";
+import RestartEventSVP from "@/components/pages/RestartEventSVP";
 
 export const metadata: Metadata = {
   title:

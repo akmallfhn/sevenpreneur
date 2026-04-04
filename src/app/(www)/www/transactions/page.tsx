@@ -1,4 +1,4 @@
-import TransactionCardItemSVP from "@/app/components/items/TransactionCardItemSVP";
+import TransactionCardItemSVP from "@/components/items/TransactionCardItemSVP";
 import EmptyTransactionsSVP from "@/app/components/states/EmptyTransactionsSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
@@ -81,7 +81,7 @@ export default async function TransactionsPage() {
       <div className="flex flex-col gap-4">
         {transactionData
           .sort(
-            (a, b) => dayjs(b.paid_at).valueOf() - dayjs(a.paid_at).valueOf(),
+            (a, b) => dayjs(b.paid_at).valueOf() - dayjs(a.paid_at).valueOf()
           )
           .map((post, index) => (
             <TransactionCardItemSVP

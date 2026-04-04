@@ -6,8 +6,8 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import { toast } from "sonner";
-import AppButton from "../buttons/AppButton";
-import FileResultUploadingCMS from "../items/FileResultUploadingCMS";
+import AppButton from "../../../components/buttons/AppButton";
+import FileResultUploadingCMS from "../../../components/items/FileResultUploadingCMS";
 
 interface UploadFilesCMSProps {
   onUpload: (url: string | null) => void;

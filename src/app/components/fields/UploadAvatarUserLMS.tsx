@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { supabase } from "@/lib/supabase";
 import { ImagePlusIcon, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -40,7 +40,7 @@ export default function UploadAvatarUserLMS(props: UploadAvatarUserLMSProps) {
 
   // Upload File to Supabase
   const handleUploadFiles = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
 

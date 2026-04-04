@@ -1,4 +1,4 @@
-import LibraryLMS from "@/app/components/pages/LibraryLMS";
+import LibraryLMS from "@/components/pages/LibraryLMS";
 import { TemplateList } from "@/app/components/tabs/LibraryTabsLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";

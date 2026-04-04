@@ -1,10 +1,10 @@
 "use client";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { useState } from "react";
-import FileItemLMS from "../items/FileItemLMS";
-import LearningSessionItemLMS from "../items/LearningSessionItemLMS";
-import ProjectItemLMS from "../items/ProjectItemLMS";
-import UserItemLMS from "../items/UserItemLMS";
+import FileItemLMS from "../../../components/items/FileItemLMS";
+import LearningSessionItemLMS from "../../../components/items/LearningSessionItemLMS";
+import ProjectItemLMS from "../../../components/items/ProjectItemLMS";
+import UserItemLMS from "../../../components/items/UserItemLMS";
 import EmptyItemLMS from "../states/EmptyItemLMS";
 
 export interface LearningSessionEducator {

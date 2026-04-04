@@ -5,8 +5,10 @@ import { markdownToHtml } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import AICitationLMS, { SourcesArticle } from "../indexes/AICitationLMS";
+import { AvatarBadgeLMSProps } from "../../../components/buttons/AvatarBadgeLMS";
+import AICitationLMS, {
+  SourcesArticle,
+} from "../../../components/items/AICitationLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import styles from "./Report.module.css";
@@ -42,7 +44,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
     {
       refetchInterval: intervalMs,
       enabled: !!props.sessionToken,
-    },
+    }
   );
   const isDoneResult = data?.result.is_done;
 

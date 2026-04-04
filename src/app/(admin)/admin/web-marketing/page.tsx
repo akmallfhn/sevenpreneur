@@ -1,4 +1,4 @@
-import WebMarketingToolsCMS from "@/app/components/pages/WebMarketingToolsCMS";
+import WebMarketingToolsCMS from "@/components/pages/WebMarketingToolsCMS";
 import ForbiddenComponent from "@/app/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";

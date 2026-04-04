@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import AppButton from "../buttons/AppButton";
+import AppButton from "../../../components/buttons/AppButton";
 import { useTrackView } from "@/lib/feature-tracking";
 
 interface AppInterstitialBannerProps {
@@ -17,11 +17,11 @@ interface AppInterstitialBannerProps {
 }
 
 export default function AppInterstitialBanner(
-  props: AppInterstitialBannerProps,
+  props: AppInterstitialBannerProps
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const [interstitialImage, setInterstitialImage] = useState(
-    props.interstitialImageMobile,
+    props.interstitialImageMobile
   );
 
   let timeInterval = 1000 * 60 * 60; // 1 hour
@@ -37,7 +37,7 @@ export default function AppInterstitialBanner(
       featurePagePoint: props.interstitialPagePoint,
       featurePlacement: "interstitial_banner",
     },
-    isOpen,
+    isOpen
   );
 
   // Determine if banner should show

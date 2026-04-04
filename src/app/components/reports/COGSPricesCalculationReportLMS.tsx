@@ -1,14 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import { AvatarBadgeLMSProps } from "../../../components/buttons/AvatarBadgeLMS";
 import { useEffect, useMemo, useState } from "react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import { getRupiahCurrency } from "@/lib/currency";
-import AIPriceItemLMS from "../items/AIPriceItemLMS";
+import AIPriceItemLMS from "../../../components/items/AIPriceItemLMS";
 import { AIPriceType } from "@/lib/app-types";
-import ScorecardItemCMS from "../items/ScorecardItemCMS";
+import ScorecardItemCMS from "../../../components/items/ScorecardItemCMS";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import { formatWithComma } from "@/lib/convert-number";
 

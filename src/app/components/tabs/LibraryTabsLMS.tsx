@@ -1,8 +1,8 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { useState } from "react";
-import AppButton from "../buttons/AppButton";
-import TemplateItemCardLMS from "../items/TemplateItemCardLMS";
+import AppButton from "../../../components/buttons/AppButton";
+import TemplateItemCardLMS from "../../../components/items/TemplateItemCardLMS";
 import EmptyListLMS from "../states/EmptyListLMS";
 
 export interface TemplateList {
@@ -31,7 +31,7 @@ export default function LibraryTabsLMS(props: LibraryTabsLMSProps) {
   ];
 
   const activeTemplates = props.templateList.filter(
-    (item) => item.status === "ACTIVE",
+    (item) => item.status === "ACTIVE"
   );
 
   return (
