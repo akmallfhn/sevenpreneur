@@ -17,8 +17,8 @@ export default function ReceiptLineItemCMS({
   let valueClass = "font-medium";
 
   if (isDiscount) {
-    nameClass = "font-bold text-cms-primary";
-    valueClass = "font-bold text-cms-primary";
+    nameClass = "font-bold text-tertiary";
+    valueClass = "font-bold text-tertiary";
   }
 
   if (isGrandTotal) {

@@ -54,7 +54,7 @@ export default function CohortListCMS({
               {allowedRolesCreateCohort.includes(sessionUserRole) && (
                 <AppButton
                   onClick={() => setCreateCohort(true)}
-                  variant="cmsPrimary"
+                  variant="tertiary"
                 >
                   <PlusCircle className="size-5" />
                   Create Cohort

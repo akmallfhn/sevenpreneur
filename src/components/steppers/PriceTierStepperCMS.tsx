@@ -106,7 +106,7 @@ export default function PriceTierStepperCMS({
             </label>
             <div className="switch-button flex pl-1 gap-2">
               <Switch
-                className="data-[state=checked]:bg-cms-primary"
+                className="data-[state=checked]:bg-tertiary"
                 checked={post.status === "ACTIVE"}
                 onCheckedChange={(checked) =>
                   handleChange(index, "status", checked ? "ACTIVE" : "INACTIVE")
@@ -120,7 +120,7 @@ export default function PriceTierStepperCMS({
       {tiers.length < 5 && (
         <AppButton
           size="small"
-          variant="cmsPrimaryLight"
+          variant="primarySoft"
           type="button"
           onClick={handleAddTier}
         >

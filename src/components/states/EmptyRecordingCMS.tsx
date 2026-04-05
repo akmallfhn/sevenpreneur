@@ -35,7 +35,7 @@ export default function EmptyRecordingCMS({
           </p>
         </div>
         {isAllowedUpdateRecording && (
-          <AppButton variant="cmsPrimary" size="medium" onClick={actionClick}>
+          <AppButton variant="tertiary" size="medium" onClick={actionClick}>
             <Plus className="size-4" />
             Add Video Recording
           </AppButton>

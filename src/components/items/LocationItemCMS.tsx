@@ -30,7 +30,7 @@ export default function LocationItemCMS({
         </h3>
         <Link
           href={locationURL}
-          className="font-bodycopy font-medium line-clamp-1 text-cms-primary text-sm hover:underline hover:underline-offset-4"
+          className="font-bodycopy font-medium line-clamp-1 text-tertiary text-sm hover:underline hover:underline-offset-4"
         >
           {locationURL}
         </Link>

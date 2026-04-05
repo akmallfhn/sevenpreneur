@@ -206,7 +206,7 @@ export default function EditCohortMemberFormCMS(
         <div className="update-certificate sticky bottom-0 w-full p-4 bg-white border-t border-outline z-40">
           <AppButton
             className="w-full"
-            variant="cmsPrimary"
+            variant="tertiary"
             onClick={handleUpdateCertificate}
             disabled={isSubmitting}
           >

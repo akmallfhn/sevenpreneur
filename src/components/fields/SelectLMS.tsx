@@ -120,8 +120,8 @@ export default function SelectLMS({
                     onChange?.(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-cms-primary ${
-                    value === opt.value ? "bg-[#E1EDFF] text-cms-primary" : ""
+                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-primary ${
+                    value === opt.value ? "bg-[#E1EDFF] text-primary" : ""
                   }`}
                 >
                   {opt.image && (

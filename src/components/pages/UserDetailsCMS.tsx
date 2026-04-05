@@ -112,7 +112,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
               pageDesc="View detailed user information, activity logs, and account status in a read-only profile view."
             />
             <Link href={`/users/${props.userId}/edit`} className="w-fit h-fit">
-              <AppButton variant="cmsPrimary">
+              <AppButton variant="tertiary">
                 <Settings2 className="size-5" />
                 Edit Profile
               </AppButton>

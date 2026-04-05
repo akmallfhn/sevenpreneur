@@ -42,7 +42,7 @@ export default function LibraryTabsLMS(props: LibraryTabsLMSProps) {
             key={post.id}
             className="tab-item"
             size="mediumRounded"
-            variant={activeTab === post.id ? "primary" : "primaryLight"}
+            variant={activeTab === post.id ? "primary" : "primarySoft"}
             onClick={() => setActiveTab(post.id)}
           >
             {post.icon}

@@ -224,7 +224,7 @@ export default function TransactionListCMS({
                 pageDesc="View and monitor all payment records in one place."
               />
               <AppButton
-                variant="cmsPrimary"
+                variant="tertiary"
                 onClick={() => setIsOpenCreateInvoice(true)}
               >
                 <FileSpreadsheet className="size-5" />

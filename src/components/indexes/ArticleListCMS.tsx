@@ -92,7 +92,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
               />
               {allowedRolesMutateArticle.includes(props.sessionUserRole) && (
                 <Link href="/articles/create">
-                  <AppButton variant="cmsPrimary">
+                  <AppButton variant="tertiary">
                     <PlusCircle className="size-5" />
                     Create Article
                   </AppButton>
@@ -263,7 +263,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                           props.sessionUserRole
                         ) && (
                           <Link href={`/articles/${post.id}/edit`}>
-                            <AppButton variant="cmsPrimary" size="small">
+                            <AppButton variant="tertiary" size="small">
                               <FilePenLine className="size-4" />
                               Edit
                             </AppButton>
@@ -274,7 +274,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <AppButton variant="cmsPrimaryLight" size="small">
+                          <AppButton variant="primarySoft" size="small">
                             <ExternalLink className="size-4" />
                             Preview
                           </AppButton>

@@ -314,7 +314,7 @@ export default function EditInterstitialAdsFormCMS(
                   </label>
                   <div className="switch-button flex pl-1 gap-2">
                     <Switch
-                      className="data-[state=checked]:bg-cms-primary"
+                      className="data-[state=checked]:bg-tertiary"
                       checked={formData.interstitialStatus === "ACTIVE"}
                       onCheckedChange={(checked) =>
                         handleInputChange("interstitialStatus")(
@@ -333,7 +333,7 @@ export default function EditInterstitialAdsFormCMS(
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
-              variant="cmsPrimary"
+              variant="tertiary"
               type="submit"
               disabled={isSubmitting}
             >

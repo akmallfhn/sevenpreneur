@@ -320,7 +320,7 @@ export default function WhatsappConvsCMS() {
                   budisantoso@gmail.com
                 </p>
               </div>
-              <AppButton size="smallRounded" variant="cmsPrimaryLight">
+              <AppButton size="smallRounded" variant="primarySoft">
                 <CloudSync className="size-4" />
                 Sync to Database
               </AppButton>
@@ -331,7 +331,7 @@ export default function WhatsappConvsCMS() {
                   Lead Details
                 </h5>
                 <AppButton
-                  className="text-cms-primary"
+                  className="text-tertiary"
                   size="small"
                   variant="ghost"
                 >

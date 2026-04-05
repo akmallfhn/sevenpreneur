@@ -310,7 +310,7 @@ export default function CreateDiscountFormCMS({
               </label>
               <div className="switch-button flex pl-1 gap-2">
                 <Switch
-                  className="data-[state=checked]:bg-cms-primary"
+                  className="data-[state=checked]:bg-tertiary"
                   checked={formData.discountStatus === "ACTIVE"}
                   onCheckedChange={(checked) =>
                     handleInputChange("discountStatus")(
@@ -374,7 +374,7 @@ export default function CreateDiscountFormCMS({
         <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
-            variant="cmsPrimary"
+            variant="tertiary"
             type="submit"
             disabled={isSubmitting}
           >

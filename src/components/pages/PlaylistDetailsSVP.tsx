@@ -143,9 +143,7 @@ export default function PlaylistDetailsSVP({
                 {isOverflowing && (
                   <div className="flex transition-all transform z-10">
                     <AppButton
-                      variant={
-                        theme === "dark" ? "surfaceDark" : "primaryLight"
-                      }
+                      variant={theme === "dark" ? "surfaceDark" : "primarySoft"}
                       size="small"
                       onClick={() => setIsExpanded((prev) => !prev)}
                     >

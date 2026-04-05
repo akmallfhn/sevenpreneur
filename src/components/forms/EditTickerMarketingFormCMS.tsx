@@ -244,7 +244,7 @@ export default function EditTickerMarketingFormCMS(
                   </label>
                   <div className="switch-button flex pl-1 gap-2">
                     <Switch
-                      className="data-[state=checked]:bg-cms-primary"
+                      className="data-[state=checked]:bg-tertiary"
                       checked={formData.tickerStatus === "ACTIVE"}
                       onCheckedChange={(checked) =>
                         handleInputChange("tickerStatus")(
@@ -263,7 +263,7 @@ export default function EditTickerMarketingFormCMS(
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
-              variant="cmsPrimary"
+              variant="tertiary"
               type="submit"
               disabled={isSubmitting}
             >

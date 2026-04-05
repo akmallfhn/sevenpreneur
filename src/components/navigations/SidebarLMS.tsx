@@ -91,7 +91,7 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
         <div className="sidebar-scroll-body flex flex-col w-full h-full gap-4 mt-[224px] mb-[68px] px-3 overflow-y-auto">
           <hr />
           <Link href="/ai/chat" className="w-full">
-            <AppButton className="w-full" size="medium" variant="primaryLight">
+            <AppButton className="w-full" size="medium" variant="primarySoft">
               New Chat <CircleFadingPlus className="size-4.5" />
             </AppButton>
           </Link>

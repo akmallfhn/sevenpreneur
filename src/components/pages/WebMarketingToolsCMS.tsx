@@ -132,7 +132,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                     </div>
                   </div>
                   <AppButton
-                    variant="cmsPrimary"
+                    variant="tertiary"
                     size="medium"
                     onClick={() => setEditTicker(true)}
                   >
@@ -195,7 +195,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                     </div>
                   </div>
                   <AppButton
-                    variant="cmsPrimary"
+                    variant="tertiary"
                     size="medium"
                     onClick={() => setEditInterstitial(true)}
                   >

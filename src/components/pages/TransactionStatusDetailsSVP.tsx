@@ -181,7 +181,7 @@ export default function TransactionStatusDetailsSVP(
                 <p className="text-alternative text-sm">{statusDescription}</p>
                 <AppButton
                   className="w-fit"
-                  variant={theme === "dark" ? "surfaceDark" : "primaryLight"}
+                  variant={theme === "dark" ? "surfaceDark" : "primarySoft"}
                   size="mediumRounded"
                   onClick={handleRefresh}
                 >
@@ -359,7 +359,7 @@ export default function TransactionStatusDetailsSVP(
               rel="noopenner noreferrer"
             >
               <AppButton
-                variant={theme === "dark" ? "surfaceDark" : "primaryLight"}
+                variant={theme === "dark" ? "surfaceDark" : "primarySoft"}
                 size="smallRounded"
               >
                 Contact Us

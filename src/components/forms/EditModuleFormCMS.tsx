@@ -217,7 +217,7 @@ export default function EditModuleFormCMS({
                 </label>
                 <div className="switch-button flex pl-1 gap-2">
                   <Switch
-                    className="data-[state=checked]:bg-cms-primary"
+                    className="data-[state=checked]:bg-tertiary"
                     checked={formData.moduleStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("moduleStatus")(
@@ -277,7 +277,7 @@ export default function EditModuleFormCMS({
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
-              variant="cmsPrimary"
+              variant="tertiary"
               type="submit"
               disabled={isSubmitting}
             >

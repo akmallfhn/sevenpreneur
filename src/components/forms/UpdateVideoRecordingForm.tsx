@@ -165,7 +165,7 @@ export default function UpdateVideoRecordingFormCMS({
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
-              variant="cmsPrimary"
+              variant="tertiary"
               type="submit"
               disabled={isSubmitting}
             >

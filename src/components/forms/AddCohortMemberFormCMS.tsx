@@ -205,7 +205,7 @@ export default function AddCohortMemberFormCMS(
                 </label>
                 <div className="switch-button flex items-center pl-1 gap-2">
                   <Switch
-                    className="data-[state=checked]:bg-cms-primary"
+                    className="data-[state=checked]:bg-tertiary"
                     checked={fillUserMethod === "INPUT"}
                     onCheckedChange={(checked) =>
                       setFillUserMethod(checked ? "INPUT" : "SELECT")
@@ -222,7 +222,7 @@ export default function AddCohortMemberFormCMS(
         <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
-            variant="cmsPrimary"
+            variant="tertiary"
             type="submit"
             disabled={isSubmitting}
           >

@@ -258,7 +258,7 @@ export default function EditSubmissionFormCMS(
         <div className="update-comment sticky flex flex-col bottom-0 w-full p-4 gap-3 border-t bg-white border-outline z-40">
           <AppButton
             className="w-full"
-            variant="primaryLight"
+            variant="primarySoft"
             onClick={handleAISubmission}
             disabled={generatingAI}
           >
@@ -268,7 +268,7 @@ export default function EditSubmissionFormCMS(
           </AppButton>
           <AppButton
             className="w-full"
-            variant="cmsPrimary"
+            variant="tertiary"
             onClick={handleUpdateComment}
             disabled={isSubmitting}
           >

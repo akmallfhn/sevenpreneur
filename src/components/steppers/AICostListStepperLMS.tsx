@@ -131,7 +131,7 @@ export default function AICostListStepperLMS(props: AICostListStepperLMSProps) {
       ))}
       <AppButton
         size="small"
-        variant="cmsPrimaryLight"
+        variant="primarySoft"
         type="button"
         onClick={handleAddTier}
       >

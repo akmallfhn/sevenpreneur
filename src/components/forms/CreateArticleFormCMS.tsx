@@ -349,7 +349,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               </AppButton>
               <AppButton
                 onClick={(e) => handleSubmit(e, "PUBLISHED")}
-                variant="cmsPrimary"
+                variant="tertiary"
                 type="submit"
                 disabled={isSubmittingPublished}
               >
@@ -441,7 +441,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                 ))}
                 {formData.articleBodyContent.length < 7 && (
                   <AppButton
-                    variant="cmsPrimary"
+                    variant="tertiary"
                     size="medium"
                     onClick={handleAddBodyContent}
                     type="button"

@@ -21,7 +21,7 @@ export default function RadioBoxBooleanSVP({
     <label
       className={`input-container flex p-3 gap-4 border rounded-md hover:cursor-pointer ${
         isSelected
-          ? "bg-[#F2F8FF] border-cms-primary dark:bg-[#0C2538]"
+          ? "bg-[#F2F8FF] border-primary dark:bg-[#0C2538]"
           : "bg-white border-outline dark:bg-[#2C2C2C] dark:border-outline-dark"
       } `}
     >

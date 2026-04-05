@@ -137,7 +137,7 @@ export default function UploadFilesCMS({
                   Upload File From Device{" "}
                   <span className="text-destructive">*</span>
                 </p>
-                <AppButton variant="cmsPrimaryLight" size="small" type="button">
+                <AppButton variant="primarySoft" size="small" type="button">
                   Choose File
                 </AppButton>
               </div>

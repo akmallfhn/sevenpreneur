@@ -78,7 +78,7 @@ export default function SelectCMS({
       <div
         className={`select-container relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
           isOpen
-            ? "border-cms-primary outline-4 outline-primary/15"
+            ? "border-tertiary outline-4 outline-primary/15"
             : "border-outline"
         } ${selectIcon ? "pl-10" : ""} ${
           disabled ? "cursor-not-allowed" : "cursor-pointer"
@@ -130,8 +130,8 @@ export default function SelectCMS({
                     onChange?.(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-cms-primary ${
-                    value === opt.value ? "bg-[#E1EDFF] text-cms-primary" : ""
+                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-tertiary ${
+                    value === opt.value ? "bg-[#E1EDFF] text-tertiary" : ""
                   }`}
                 >
                   {opt.image && (

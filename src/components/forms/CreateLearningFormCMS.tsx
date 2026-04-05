@@ -290,7 +290,7 @@ export default function CreateLearningFormCMS(
                 </label>
                 <div className="switch-button flex pl-1 gap-2">
                   <Switch
-                    className="data-[state=checked]:bg-cms-primary"
+                    className="data-[state=checked]:bg-tertiary"
                     checked={formData.learningStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("learningStatus")(
@@ -396,7 +396,7 @@ export default function CreateLearningFormCMS(
                   </label>
                   <div className="switch-button flex items-center pl-1 gap-2">
                     <Switch
-                      className="data-[state=checked]:bg-cms-primary"
+                      className="data-[state=checked]:bg-tertiary"
                       checked={formData.learningCheckIn}
                       onCheckedChange={(checked) =>
                         handleInputChange("learningCheckIn")(
@@ -422,7 +422,7 @@ export default function CreateLearningFormCMS(
                   </label>
                   <div className="switch-button flex items-center pl-1 gap-2">
                     <Switch
-                      className="data-[state=checked]:bg-cms-primary"
+                      className="data-[state=checked]:bg-tertiary"
                       checked={formData.learningCheckOut}
                       onCheckedChange={(checked) =>
                         handleInputChange("learningCheckOut")(
@@ -461,7 +461,7 @@ export default function CreateLearningFormCMS(
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
-              variant="cmsPrimary"
+              variant="tertiary"
               type="submit"
               disabled={isSubmitting}
             >

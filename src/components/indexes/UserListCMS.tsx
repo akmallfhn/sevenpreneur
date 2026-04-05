@@ -161,7 +161,7 @@ export default function UserListCMS(props: UserListCMSProps) {
             />
             {isAllowedMutateUser && (
               <Link href={"/users/create"} className="w-fit h-fit">
-                <AppButton variant="cmsPrimary">
+                <AppButton variant="tertiary">
                   <PlusCircle className="size-5" />
                   Add Account
                 </AppButton>

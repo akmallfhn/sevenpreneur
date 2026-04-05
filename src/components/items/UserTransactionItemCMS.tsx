@@ -14,7 +14,7 @@ const statusAttributes: Record<
   }
 > = {
   PAID: {
-    main_icon_color: "text-cms-primary bg-cms-primary-light/40",
+    main_icon_color: "text-tertiary bg-section-background",
     status_icon: <Check className="size-3" />,
     status_icon_color: "bg-green-700 text-white",
     amount_color: "text-green-600",

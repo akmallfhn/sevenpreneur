@@ -146,7 +146,7 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
                 pageDesc="Manage event listings, details, and maintain content efficiently"
               />
               <AppButton
-                variant="cmsPrimary"
+                variant="tertiary"
                 onClick={() => setIsOpenCreateForm(true)}
               >
                 <PlusCircle className="size-5" />

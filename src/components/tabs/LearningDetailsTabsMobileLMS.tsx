@@ -238,7 +238,7 @@ export default function LearningDetailsTabsMobileLMS(
             </div>
             <div className="show-more-less flex transition-all transform z-10">
               <AppButton
-                variant={"primaryLight"}
+                variant="primarySoft"
                 size="small"
                 onClick={() => setIsExpanded((prev) => !prev)}
               >

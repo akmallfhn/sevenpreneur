@@ -315,7 +315,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
                 </label>
                 <div className="switch-button flex pl-1 gap-2">
                   <Switch
-                    className="data-[state=checked]:bg-cms-primary"
+                    className="data-[state=checked]:bg-tertiary"
                     checked={formData.cohortStatus === "ACTIVE"}
                     onCheckedChange={(checked) =>
                       handleInputChange("cohortStatus")(
@@ -355,7 +355,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
           <div className="sticky bottom-0 w-full p-4 bg-white z-40">
             <AppButton
               className="w-full"
-              variant="cmsPrimary"
+              variant="tertiary"
               type="submit"
               disabled={isSubmitting}
             >

@@ -4,10 +4,11 @@ import React, { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 
 export type VariantType =
   | "primary"
-  | "primaryLight"
-  | "primaryGradient"
   | "secondary"
   | "tertiary"
+  | "primarySoft"
+  | "secondarySoft"
+  | "primaryGradient"
   | "quarternary"
   | "outline"
   | "ghost"
@@ -18,8 +19,6 @@ export type VariantType =
   | "surfaceDark"
   | "destructive"
   | "semiDestructive"
-  | "cmsPrimary"
-  | "cmsPrimaryLight"
   | "cmsLink";
 export type SizeType =
   | "default"
@@ -81,28 +80,33 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       metaEmail,
       ...rest // -- ... rest for calls the remaining props that haven't been explicitly fetched from props.
     },
-    ref: ForwardedRef<HTMLButtonElement>,
+    ref: ForwardedRef<HTMLButtonElement>
   ) => {
     const baseClasses =
       "app-button relative inline-flex gap-2 font-semibold items-center justify-center truncate transition transform hover:cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed";
 
     const variantClasses: Record<VariantType, string> = {
+      // Brand
       primary:
-        "bg-primary text-white hover:bg-[#0759D3] active:bg-[#0759D3] disabled:bg-[#A1C2F2]",
-      primaryLight:
-        "bg-primary-light text-primary hover:bg-[#A0C7FF] active:bg-[#A0C7FF] disabled:text-[#6BA6FF]",
-      primaryGradient:
-        "bg-gradient-to-br from-0% from-[#267EFF] via-19% via-[#2D4BF1] to-100% to-[#5E17E3] text-white before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:skew-x-12 before:translate-x-[-200%] hover:before:translate-x-[300%] before:transition-transform before:duration-700 disabled:from-[#93BEFF] disabled:via-[#96A4F7] disabled:to-[#AE8BF1]",
+        "bg-primary-background text-primary-foreground hover:bg-primary-hover active:bg-primary-active disabled:bg-primary-muted dark:disabled:text-primary-foreground/50",
       secondary:
-        "bg-secondary text-white hover:bg-[#CC446A] active:bg-[#CC446A] disabled:bg-[#E4AEBD]",
+        "bg-secondary-background text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-active disabled:bg-secondary-muted dark:disabled:text-secondary-foreground/50",
       tertiary:
-        "bg-tertiary text-white hover:bg-[#2D12CA] active:bg-[#2D12CA] disabled:bg-[#9183E3]",
-      quarternary:
-        "bg-success-foreground text-white hover:bg-[#418E86] active:bg-[#418E86] disabled:bg-[#9ABEBA]",
+        "bg-tertiary-background text-tertiary-foreground hover:bg-tertiary-hover active:bg-tertiary-active disabled:bg-tertiary-muted dark:disabled:text-secondary-foreground/50",
+      primarySoft:
+        "bg-primary-soft-background text-primary-soft-foreground hover:bg-primary-soft-hover active:bg-primary-soft-active disabled:bg-primary-soft-muted disabled:text-primary-soft-foreground/50",
+      secondarySoft:
+        "bg-secondary-soft-background text-secondary-soft-foreground hover:bg-secondary-soft-hover active:bg-primary-soft-active disabled:bg-secondary-soft-muted disabled:text-secondary-soft-foreground/50",
+
+      // Utilities
       outline:
         "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5] disabled:text-[#909090] disabled:dark:text-[#8F8F8F] dark:text-white dark:bg-surface-black dark:border-outline-dark dark:disabled:bg-[#2A2A2A]",
       ghost:
         "hover:bg-white/10 active:bg-white/10 dark:hover:bg-black/5 dark:active:bg-black/5",
+      primaryGradient:
+        "bg-gradient-to-br from-0% from-[#267EFF] via-19% via-[#2D4BF1] to-100% to-[#5E17E3] text-white before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:skew-x-12 before:translate-x-[-200%] hover:before:translate-x-[300%] before:transition-transform before:duration-700 disabled:from-[#93BEFF] disabled:via-[#96A4F7] disabled:to-[#AE8BF1]",
+      quarternary:
+        "bg-success-foreground text-white hover:bg-[#418E86] active:bg-[#418E86] disabled:bg-[#9ABEBA]",
       whatsapp:
         "bg-green-500 text-white hover:bg-[#05A645] disabled:bg-[#5AC785]",
       hollowWhatsapp:
@@ -115,10 +119,6 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         "bg-[#27292E] text-[#9498A1] hover:bg-[#242529] active:bg-[#242529]",
       semiDestructive:
         "bg-semi-destructive text-destructive dark:text-red-700 dark:bg-[#29110C] disabled:text-[#FF867C]",
-      cmsPrimary:
-        "bg-cms-primary text-white hover:bg-[#032E82] active:bg-[#032E82] disabled:bg-[#5D6E8F]",
-      cmsPrimaryLight:
-        "bg-cms-primary-light text-cms-primary hover:bg-[#C1DAFF] active:bg-[#0C1DAFF] disabled:text-[#6C7D9C]",
       cmsLink:
         "text-cms-primary hover:underline active:underline underline-offset-4",
     };
@@ -168,7 +168,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         feature_position: featurePosition,
       };
       Object.keys(eventData).forEach(
-        (key) => eventData[key] === null && delete eventData[key],
+        (key) => eventData[key] === null && delete eventData[key]
       );
       window.dataLayer?.push(eventData);
 
@@ -188,7 +188,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
           em: metaEmail,
         };
         Object.keys(fbqData).forEach(
-          (key) => fbqData[key] === null && delete fbqData[key],
+          (key) => fbqData[key] === null && delete fbqData[key]
         );
         window.fbq("track", metaEventName, fbqData);
       }
@@ -211,7 +211,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
         {children}
       </button>
     );
-  },
+  }
 );
 AppButton.displayName = "AppButton";
 export default AppButton;

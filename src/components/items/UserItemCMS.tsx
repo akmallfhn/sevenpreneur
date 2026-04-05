@@ -46,7 +46,7 @@ export default function UserItemCMS(props: UserItemCMSProps) {
           target="_blank"
           rel="noopenner noreferrer"
         >
-          <AppButton variant="cmsPrimary" size="iconRounded">
+          <AppButton variant="tertiary" size="iconRounded">
             <FontAwesomeIcon icon={faWhatsapp} className="size-4 text-white" />
           </AppButton>
         </a>

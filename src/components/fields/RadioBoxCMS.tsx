@@ -14,9 +14,7 @@ export default function RadioBoxCMS(props: RadioBoxCMSProps) {
   return (
     <label
       className={`flex p-3 gap-4 border rounded-md ${
-        isSelected
-          ? "bg-[#F2F8FF] border-cms-primary"
-          : "bg-white border-outline"
+        isSelected ? "bg-[#F2F8FF] border-tertiary" : "bg-white border-outline"
       } `}
     >
       <input

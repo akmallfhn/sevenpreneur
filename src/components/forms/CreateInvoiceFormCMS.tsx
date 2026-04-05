@@ -521,7 +521,7 @@ export default function CreateInvoiceFormCMS({
                   {!discount && (
                     <AppButton
                       className="flex-1"
-                      variant="cmsPrimary"
+                      variant="tertiary"
                       size="medium"
                       onClick={handleDiscountChecking}
                       disabled={isLoadingApplyDiscount}
@@ -599,7 +599,7 @@ export default function CreateInvoiceFormCMS({
         <div className="sticky bottom-0 w-full p-4 bg-white z-40">
           <AppButton
             className="w-full"
-            variant="cmsPrimary"
+            variant="tertiary"
             type="submit"
             disabled={isSubmitting}
           >

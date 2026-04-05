@@ -95,7 +95,7 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                 pageDesc="Invite fast. Revoke smarter. Stay in control."
               />
               <AppButton
-                variant="cmsPrimary"
+                variant="tertiary"
                 onClick={() => setIsOpenInvitationForm(true)}
               >
                 <UserPlus className="size-5" />

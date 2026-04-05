@@ -32,7 +32,7 @@ export default function SidebarMenuItemCMS(props: SidebarMenuItemCMSProps) {
       className={`sidebar-menu-item relative flex items-center p-2 rounded-md overflow-hidden transition transform active:scale-95
             ${
               isActive
-                ? "text-cms-primary bg-[#E1EDFF] font-semibold"
+                ? "text-tertiary bg-[#E1EDFF] font-semibold"
                 : "text-[#1A2236]/70 hover:bg-[#EAEAEA] font-medium"
             } ${isCollapsed ? "w-fit justify-center gap-0" : "w-full gap-3"}`}
     >
@@ -47,7 +47,7 @@ export default function SidebarMenuItemCMS(props: SidebarMenuItemCMSProps) {
         </p>
       )}
       {isActive && !isCollapsed && (
-        <div className="bg-cms-primary w-2 h-1/2 absolute right-0 rounded-full" />
+        <div className="bg-tertiary w-2 h-1/2 absolute right-0 rounded-full" />
       )}
     </Link>
   );

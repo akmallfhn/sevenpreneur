@@ -150,7 +150,7 @@ export default function DiscountListCMS({
                 pageDesc="Manage discounts for all product easily"
               />
               <AppButton
-                variant="cmsPrimary"
+                variant="tertiary"
                 onClick={() => setIsOpenCreateForm(true)}
               >
                 <PlusCircle className="size-5" />

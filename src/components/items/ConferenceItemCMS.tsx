@@ -30,7 +30,7 @@ export default function ConferenceItemCMS(props: ConferenceItemCMSProps) {
         </h3>
         <a
           href={props.conferenceURL}
-          className="conference-url font-bodycopy font-medium line-clamp-1 text-cms-primary text-sm hover:underline hover:underline-offset-4"
+          className="conference-url font-bodycopy font-medium line-clamp-1 text-tertiary text-sm hover:underline hover:underline-offset-4"
           target="_blank"
           rel="noopenner noreferrer"
         >

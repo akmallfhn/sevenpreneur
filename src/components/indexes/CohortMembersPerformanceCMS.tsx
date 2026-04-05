@@ -119,7 +119,7 @@ export default function CohortMembersPerformanceCMS(
                   cohortMemberList?.filter((item) => item.has_completed_survey)
                     .length || 0
                 }
-                scorecardBackground="bg-cms-primary"
+                scorecardBackground="bg-tertiary"
               />
               <ScorecardItemCMS
                 scorecardName="Certified Students"

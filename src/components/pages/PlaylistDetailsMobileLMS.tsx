@@ -118,7 +118,7 @@ export default function PlaylistDetailsMobileLMS(
         </div>
         <div className="show-more-less flex w-full px-5 justify-center transition-all transform z-10">
           <AppButton
-            variant={"primaryLight"}
+            variant={"primarySoft"}
             size="small"
             onClick={() => setIsExpanded((prev) => !prev)}
           >

@@ -230,7 +230,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
                 </AppButton>
               </Link>
               <AppButton
-                variant="cmsPrimary"
+                variant="tertiary"
                 type="submit"
                 disabled={isSubmitting}
               >
@@ -318,7 +318,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
                     </label>
                     <div className="switch-button flex pl-1 gap-2">
                       <Switch
-                        className="data-[state=checked]:bg-cms-primary"
+                        className="data-[state=checked]:bg-tertiary"
                         checked={formData.status === "ACTIVE"}
                         onCheckedChange={(checked) =>
                           handleInputChange("status")(
