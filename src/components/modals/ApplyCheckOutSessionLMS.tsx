@@ -104,7 +104,7 @@ export default function ApplyCheckOutSessionLMS(
             />
           </div>
           <div className="cta flex w-full items-center gap-4 justify-end">
-            <AppButton variant="semiDestructive" onClick={props.onClose}>
+            <AppButton variant="destructiveSoft" onClick={props.onClose}>
               Cancel
             </AppButton>
             <AppButton type="submit" disabled={checkingOut}>

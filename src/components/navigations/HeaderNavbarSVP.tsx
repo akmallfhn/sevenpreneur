@@ -131,7 +131,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                       menuUrl="/company"
                     />
                     <Link href={`https://agora.${domain}`}>
-                      <AppButton size="mediumRounded" variant="primaryGradient">
+                      <AppButton size="mediumRounded" variant="flux">
                         <p className="font-medium">My Learning</p>
                       </AppButton>
                     </Link>

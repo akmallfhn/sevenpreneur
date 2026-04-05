@@ -143,7 +143,7 @@ export default function UploadAvatarUserCMS({
           {imageUrl !== defaultAvatar && (
             <AppButton
               onClick={handleRemoveImage}
-              variant="semiDestructive"
+              variant="destructiveSoft"
               size="small"
               type="button"
             >

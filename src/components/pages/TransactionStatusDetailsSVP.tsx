@@ -387,7 +387,7 @@ export default function TransactionStatusDetailsSVP(
                   </AppButton>
                 </a>
                 <AppButton
-                  variant="semiDestructive"
+                  variant="destructiveSoft"
                   size="defaultRounded"
                   className="w-full lg:w-[240px]"
                   onClick={() => setIsOpenCancelConfirmation(true)}

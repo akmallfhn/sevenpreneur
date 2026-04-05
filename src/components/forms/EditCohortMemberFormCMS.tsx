@@ -182,7 +182,7 @@ export default function EditCohortMemberFormCMS(
                 />
                 <div className="absolute -top-2 -right-2">
                   <AppButton
-                    variant="semiDestructive"
+                    variant="destructiveSoft"
                     size="smallIconRounded"
                     onClick={() => setCertificateURL("")}
                   >

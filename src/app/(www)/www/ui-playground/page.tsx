@@ -21,7 +21,10 @@ export default function Page() {
         <AppButton variant="tertiary" disabled>
           Tertiary
         </AppButton>
-        <div className="size-10 bg-secondary-disabled"></div>
+        <AppButton variant="destructive">Destr</AppButton>
+        <AppButton variant="destructive" disabled>
+          Destr
+        </AppButton>
       </div>
       <div className="flex items-center justify-center gap-2">
         <AppButton variant="primarySoft">Primary</AppButton>
@@ -32,12 +35,12 @@ export default function Page() {
         <AppButton variant="secondarySoft" disabled>
           Secondary
         </AppButton>
-        <AppButton variant="tertiary">Tertiary</AppButton>
-        <AppButton variant="tertiary" disabled>
-          Tertiary
+        <AppButton variant="destructiveSoft">Destr</AppButton>
+        <AppButton variant="destructiveSoft" disabled>
+          Destr
         </AppButton>
-        <div className="size-10 bg-secondary-disabled"></div>
       </div>
+      <div className="flex items-center justify-center gap-2"></div>
     </div>
   );
 }

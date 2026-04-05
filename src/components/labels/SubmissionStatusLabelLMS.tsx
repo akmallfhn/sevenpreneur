@@ -9,7 +9,7 @@ const variantStyles: Record<
   }
 > = {
   SUBMITTED: {
-    labelColor: "text-[#42359B] bg-[#E0DAFF]",
+    labelColor: "bg-success-background text-success-foreground",
     labelText: "SUBMITTED",
   },
   NOT_SUBMITTED: {

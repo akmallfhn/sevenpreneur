@@ -15,17 +15,16 @@ const variantStyles: Record<
   }
 > = {
   PAID: {
-    statusColor: "text-green-700 bg-green-200 dark:bg-[#0E2F1B]",
+    statusColor: "text-success-foreground bg-success-background",
     statusWord: "Success",
   },
   PENDING: {
-    statusColor:
-      "text-[#D99E00] bg-[#FEF2D0] dark:text-[#BC8A06] dark:bg-[#363010]",
+    statusColor: "text-warning-foreground bg-warning-background",
     statusWord: "Waiting for Payment",
   },
   FAILED: {
     statusColor:
-      "text-destructive bg-semi-destructive dark:text-red-700 dark:bg-semi-destructive-dark",
+      "text-destructive-soft-foreground bg-destructive-soft-background",
     statusWord: "Canceled",
   },
 };

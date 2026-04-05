@@ -18,7 +18,7 @@ export default function AppDropdownItemList({
     <div
       className={`menu-list flex p-2 w-44 items-center gap-2 rounded-sm hover:cursor-pointer ${
         isDestructive
-          ? "text-destructive hover:bg-[#FFCDC9] dark:hover:bg-[#27292E]"
+          ? "text-destructive-soft-foreground hover:bg-destructive-soft-background dark:hover:bg-[#27292E]"
           : "text-black hover:bg-[#F1F5F9] dark:text-white dark:hover:bg-[#27292E]"
       }`}
       onClick={onClick}

@@ -18,7 +18,7 @@ export default function InstagramContentsHomeSVP() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <AppButton variant="primaryGradient" size="defaultRounded">
+              <AppButton variant="flux" size="defaultRounded">
                 <FontAwesomeIcon icon={faInstagram} />
                 Follow us on Instagram
               </AppButton>

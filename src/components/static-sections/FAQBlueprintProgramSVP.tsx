@@ -91,7 +91,7 @@ export default function FAQBlueprintProgramSVP(
               className="w-[240px]"
             >
               <AppButton
-                variant="primaryGradient"
+                variant="flux"
                 size="largeRounded"
                 className="w-full"
                 // GTM
@@ -147,7 +147,7 @@ export default function FAQBlueprintProgramSVP(
           className="w-[240px]"
         >
           <AppButton
-            variant="primaryGradient"
+            variant="flux"
             size="defaultRounded"
             className="w-full"
             // GTM

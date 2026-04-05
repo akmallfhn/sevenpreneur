@@ -142,7 +142,7 @@ export default function UploadAvatarUserLMS(props: UploadAvatarUserLMSProps) {
                 e.stopPropagation();
                 handleRemoveImage();
               }}
-              variant="semiDestructive"
+              variant="destructiveSoft"
               size="small"
               type="button"
             >

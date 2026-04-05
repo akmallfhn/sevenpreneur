@@ -54,7 +54,7 @@ export default function AppAlertConfirmDialog({
             {alertCancelLabel}
           </AppButton>
           <AppButton
-            variant="semiDestructive"
+            variant="destructiveSoft"
             size="medium"
             onClick={onConfirm}
           >

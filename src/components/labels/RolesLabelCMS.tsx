@@ -39,8 +39,8 @@ const variantStyles: Record<
     labelIcon: <FontAwesomeIcon icon={faUser} />,
   },
   marketer: {
-    backgroundColor: "bg-secondary-light",
-    labelColor: "text-secondary",
+    backgroundColor: "bg-secondary-soft-background",
+    labelColor: "text-secondary-soft-foreground",
     labelIcon: <FontAwesomeIcon icon={faBullhorn} />,
   },
 };

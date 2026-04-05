@@ -42,7 +42,7 @@ export default function HeroBlueprintProgramSVP(
               <div className="flex lg:hidden">
                 <AppButton
                   size="defaultRounded"
-                  variant="primaryGradient"
+                  variant="flux"
                   className="w-full lg:w-fit"
                   // GTM
                   featureName="join_program_scroll"
@@ -58,7 +58,7 @@ export default function HeroBlueprintProgramSVP(
               <div className="hidden lg:flex">
                 <AppButton
                   size="largeRounded"
-                  variant="primaryGradient"
+                  variant="flux"
                   className="w-full lg:w-fit"
                   // GTM
                   featureName="join_program_scroll"
@@ -104,7 +104,7 @@ export default function HeroBlueprintProgramSVP(
               <div className="hidden lg:flex">
                 <AppButton
                   size="largeRounded"
-                  variant="hollowWhatsapp"
+                  variant="wipe"
                   className="w-full lg:w-fit"
                   // GTM
                   featureName="whatsapp_consultation"

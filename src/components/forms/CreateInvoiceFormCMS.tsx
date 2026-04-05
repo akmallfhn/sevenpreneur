@@ -531,7 +531,7 @@ export default function CreateInvoiceFormCMS({
                   )}
                   {discount && (
                     <AppButton
-                      variant="semiDestructive"
+                      variant="destructiveSoft"
                       size="medium"
                       onClick={() => {
                         setDiscount(null);

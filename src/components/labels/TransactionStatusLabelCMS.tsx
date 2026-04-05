@@ -35,7 +35,6 @@ interface RolesLabelCMSProps {
 export default function TransactionStatusLabelCMS({
   variants,
 }: RolesLabelCMSProps) {
-  // --- Variant declaration
   const { statusColor, statusWord, statusIcon } = variantStyles[variants];
 
   return (

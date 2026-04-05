@@ -42,7 +42,7 @@ export default function HeroHomeSVP() {
               <div className="hidden lg:flex">
                 <AppButton
                   size="largeRounded"
-                  variant="hollowWhatsapp"
+                  variant="wipe"
                   className="w-full lg:w-fit"
                   featureName="explore_product"
                   featurePagePoint="Home Page"

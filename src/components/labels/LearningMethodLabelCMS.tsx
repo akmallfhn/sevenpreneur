@@ -8,7 +8,7 @@ const variantStyles: Record<
   }
 > = {
   ONLINE: {
-    themeColor: "bg-cms-primary-light text-cms-primary",
+    themeColor: "bg-primary-soft-background text-primary-soft-foreground",
   },
   ONSITE: {
     themeColor: "bg-[#EFEDF9] text-[#42359B]",

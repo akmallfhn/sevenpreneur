@@ -234,7 +234,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
         <div className="sidebar-cms-bottom absolute flex flex-col bottom-4 inset-x-4">
           <AppButton
             size={isCollapsed ? "icon" : "medium"}
-            variant="semiDestructive"
+            variant="destructiveSoft"
             onClick={handleLogout}
           >
             {isLoadingButton ? (
