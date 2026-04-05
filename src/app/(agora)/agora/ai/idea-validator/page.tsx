@@ -1,4 +1,4 @@
-import GenerateAIIdeaValidatorLMS from "@/app/components/forms/GenerateAIIdeaValidatorLMS";
+import GenerateAIIdeaValidatorLMS from "@/components/forms/GenerateAIIdeaValidatorLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

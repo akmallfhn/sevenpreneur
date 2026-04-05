@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { Slider } from "@/components/ui/slider";
 import { LeadStatus } from "@/lib/app-types";
 import {
@@ -10,16 +10,16 @@ import {
   TextAlignStart,
 } from "lucide-react";
 import Image from "next/image";
-import AppButton from "../buttons/AppButton";
-import TextAreaCMS from "../../app/components/fields/TextAreaCMS";
-import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
-import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
 import WhatsappChatsCMS, {
   WhatsappChatItem,
-} from "../../app/components/messages/WhatsappChatsCMS";
-import AppBreadcrumb from "../../app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../../app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "../../app/components/titles/PageTitleSectionCMS";
+} from "../messages/WhatsappChatsCMS";
+import AppButton from "../buttons/AppButton";
+import TextAreaCMS from "../fields/TextAreaCMS";
+import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
+import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 export default function WhatsappConvsCMS() {
   const { isCollapsed } = useSidebar();

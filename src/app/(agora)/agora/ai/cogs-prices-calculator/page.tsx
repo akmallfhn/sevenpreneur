@@ -1,4 +1,4 @@
-import GenerateAICOGSPricesLMS from "@/app/components/forms/GenerateAICOGSPricesLMS";
+import GenerateAICOGSPricesLMS from "@/components/forms/GenerateAICOGSPricesLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

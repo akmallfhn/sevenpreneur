@@ -1,8 +1,6 @@
 "use client";
-import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
+import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -21,10 +19,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import TableCellCMS from "../../app/components/elements/TableCellCMS";
-import TableHeadCMS from "../../app/components/elements/TableHeadCMS";
-import InputCMS from "../../app/components/fields/InputCMS";
-import AppNumberPagination from "../../app/components/navigations/AppNumberPagination";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import InputCMS from "../fields/InputCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 interface ArticleListCMSProps {
   sessionToken: string;

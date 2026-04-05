@@ -1,0 +1,388 @@
+"use client";
+import { Switch } from "@/components/ui/switch";
+import { ProductCategory, StatusType } from "@/lib/app-types";
+import { setSessionToken, trpc } from "@/trpc/client";
+import dayjs from "dayjs";
+import { Loader2 } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+import InputNumberCMS from "../fields/InputNumberCMS";
+import SelectCMS from "../fields/SelectCMS";
+import StatusLabelCMS from "../labels/StatusLabelCMS";
+import AppSheet from "../modals/AppSheet";
+
+interface CreateDiscountFormCMSProps {
+  sessionToken: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function CreateDiscountFormCMS({
+  sessionToken,
+  isOpen,
+  onClose,
+}: CreateDiscountFormCMSProps) {
+  const createDiscount = trpc.create.discount.useMutation();
+  const utils = trpc.useUtils();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [itemOptions, setItemOptions] = useState<
+    { label: string; value: number }[]
+  >([]);
+
+  // Beginning State
+  const [formData, setFormData] = useState<{
+    discountName: string;
+    discountCode: string;
+    discountRate: string;
+    discountStartDate: string;
+    discountEndDate: string;
+    discountStatus: StatusType;
+    productCategory: ProductCategory | null;
+    productItem: number;
+  }>({
+    discountName: "",
+    discountCode: "",
+    discountRate: "",
+    discountStartDate: "",
+    discountEndDate: "",
+    discountStatus: "ACTIVE",
+    productCategory: null,
+    productItem: 0,
+  });
+
+  useEffect(() => {
+    if (sessionToken) {
+      setSessionToken(sessionToken);
+    }
+  }, [sessionToken]);
+
+  // Add event listener to prevent page refresh
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  // Fetch tRPC for Product Item
+  const {
+    data: playlistsData,
+    isLoading: isLoadingPlaylistsData,
+    isError: isErrorPlaylistsData,
+  } = trpc.list.playlists.useQuery(
+    {},
+    { enabled: formData.productCategory === "PLAYLIST" && !!sessionToken }
+  );
+  const {
+    data: cohortsData,
+    isLoading: isLoadingCohortsData,
+    isError: isErrorCohortsData,
+  } = trpc.list.cohorts.useQuery(
+    {},
+    { enabled: formData.productCategory === "COHORT" && !!sessionToken }
+  );
+  const {
+    data: eventsData,
+    isLoading: isLoadingEventsData,
+    isError: isErrorEventsData,
+  } = trpc.list.events.useQuery(
+    {},
+    { enabled: formData.productCategory === "EVENT" && !!sessionToken }
+  );
+  const isLoading =
+    isLoadingCohortsData || isLoadingPlaylistsData || isLoadingEventsData;
+  const isError =
+    isErrorCohortsData || isErrorPlaylistsData || isErrorEventsData;
+
+  // Conditional Fetch Data Product Item
+  useEffect(() => {
+    if (formData.productCategory === "PLAYLIST") {
+      setItemOptions(
+        playlistsData?.list.map((post) => ({
+          label: post.name,
+          value: post.id,
+        })) || []
+      );
+    } else if (formData.productCategory === "COHORT") {
+      setItemOptions(
+        cohortsData?.list.flatMap((post) =>
+          post.prices.map((price) => ({
+            label: `${price.name} - ${post.name}`,
+            value: price.id,
+          }))
+        ) || []
+      );
+    } else if (formData.productCategory === "EVENT") {
+      setItemOptions(
+        eventsData?.list.flatMap((post) =>
+          post.prices.map((price) => ({
+            label: `${price.name} - ${post.name}`,
+            value: price.id,
+          }))
+        ) || []
+      );
+    }
+  }, [formData.productCategory, playlistsData, cohortsData, eventsData]);
+
+  // Handle data changes
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
+  // Handle form submit
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Required field checking
+    if (!formData.discountName) {
+      toast.error("Oops! Don’t forget to give your discount a name.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountCode) {
+      toast.error("Promo code cannot be empty");
+      setIsSubmitting(false);
+      return;
+    }
+    if (/\s/.test(formData.discountCode)) {
+      toast.error("Promo code cannot be contain spaces");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountRate) {
+      toast.error("Add a discount rate to make it work.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (isNaN(Number(formData.discountRate))) {
+      toast.error("Hmm… that doesn’t look like a valid number for the rate");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountStartDate) {
+      toast.error("Pick a start date to kick things off");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountStartDate) {
+      toast.error("Pick a start date to kick things off");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.discountEndDate) {
+      toast.error("Define the expiry date.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (
+      dayjs(formData.discountEndDate).isBefore(
+        dayjs(formData.discountStartDate)
+      )
+    ) {
+      toast.error("Oops! End date must come after the start date");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.productCategory) {
+      toast.error("Choose a category so we know where this discount belongs");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.productItem) {
+      toast.error("Pick a product item to apply this discount magic");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // POST to Database
+    try {
+      createDiscount.mutate(
+        {
+          // Mandatory fields:
+          name: formData.discountName.trim(),
+          status: formData.discountStatus,
+          code: formData.discountCode.trim().toUpperCase(),
+          calc_percent: Number(formData.discountRate),
+          start_date: new Date(formData.discountStartDate).toISOString(),
+          end_date: new Date(formData.discountEndDate).toISOString(),
+          category: formData.productCategory as ProductCategory,
+          item_id: formData.productItem,
+        },
+        {
+          onSuccess: () => {
+            toast.success("Discount successfully created");
+            setIsSubmitting(false);
+            utils.list.discounts.invalidate();
+            onClose();
+          },
+          onError: (err) => {
+            toast.error("Something went wrong while creating the discount", {
+              description: err.message,
+            });
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <AppSheet
+      sheetName="New Discount"
+      sheetDescription="Set up discounts to boost sales and engage customers"
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <form
+        className="relative w-full h-full flex flex-col"
+        onSubmit={handleSubmit}
+      >
+        <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
+          <div className="group-input flex flex-col gap-4">
+            <InputCMS
+              inputId="discount-name"
+              inputName="Discount Name"
+              inputType="text"
+              inputPlaceholder="e.g. Summer Sale 2025"
+              value={formData.discountName}
+              onInputChange={handleInputChange("discountName")}
+              required
+            />
+            <div className="flex gap-4 justify-between">
+              <div className="w-full flex-1">
+                <InputCMS
+                  inputId="discount-code"
+                  inputName="Promo Code"
+                  inputType="text"
+                  inputPlaceholder="e.g. SUMMER25"
+                  value={formData.discountCode}
+                  onInputChange={handleInputChange("discountCode")}
+                  required
+                />
+              </div>
+              <div className="w-full flex-1">
+                <InputNumberCMS
+                  inputId="discount-rate"
+                  inputName="Discount Percentage (%)"
+                  inputConfig="decimal"
+                  inputPlaceholder="e.g. 20"
+                  value={formData.discountRate}
+                  onInputChange={handleInputChange("discountRate")}
+                  characterLength={5}
+                  required
+                />
+              </div>
+            </div>
+            <InputCMS
+              inputId="discount-start-date"
+              inputName="Available from"
+              inputType="datetime-local"
+              value={formData.discountStartDate}
+              onInputChange={handleInputChange("discountStartDate")}
+              required
+            />
+            <InputCMS
+              inputId="discount-end-date"
+              inputName="Valid until"
+              inputType="datetime-local"
+              value={formData.discountEndDate}
+              onInputChange={handleInputChange("discountEndDate")}
+              required
+            />
+            <div className="status flex flex-col gap-1">
+              <label
+                htmlFor={"discount-status"}
+                className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+              >
+                Status <span className="text-red-700">*</span>
+              </label>
+              <div className="switch-button flex pl-1 gap-2">
+                <Switch
+                  className="data-[state=checked]:bg-cms-primary"
+                  checked={formData.discountStatus === "ACTIVE"}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("discountStatus")(
+                      checked ? "ACTIVE" : "INACTIVE"
+                    )
+                  }
+                />
+                <StatusLabelCMS variants={formData.discountStatus} />
+              </div>
+            </div>
+            <div className="flex flex-col bg-section-background/50 border border-outline gap-4 p-4 rounded-md">
+              <h5 className="font-bodycopy font-bold text-sm">
+                Applies Discount to Product
+              </h5>
+              <SelectCMS
+                selectId="product-category"
+                selectName="Product Category"
+                selectPlaceholder="Choose a product category"
+                value={formData.productCategory}
+                onChange={handleInputChange("productCategory")}
+                required
+                options={[
+                  {
+                    label: "Cohort",
+                    value: "COHORT",
+                  },
+                  {
+                    label: "Playlist",
+                    value: "PLAYLIST",
+                  },
+                  {
+                    label: "Event",
+                    value: "EVENT",
+                  },
+                ]}
+              />
+              {isLoading && (
+                <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  <Loader2 className="animate-spin size-5 " />
+                </div>
+              )}
+              {isError && (
+                <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  No Data
+                </div>
+              )}
+              {formData.productCategory && !isLoading && !isError && (
+                <SelectCMS
+                  selectId="product-item"
+                  selectName="Product Item"
+                  selectPlaceholder="Select specific products"
+                  value={formData.productItem}
+                  onChange={handleInputChange("productItem")}
+                  options={itemOptions}
+                  required
+                />
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+          <AppButton
+            className="w-full"
+            variant="cmsPrimary"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && <Loader2 className="animate-spin size-4" />}
+            Add New Discount
+          </AppButton>
+        </div>
+      </form>
+    </AppSheet>
+  );
+}

@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import LearningSessionItemMobileLMS from "../items/LearningSessionItemMobileLMS";
-import HeaderMobileLMS from "../../app/components/navigations/HeaderMobileLMS";
-import EmptyItemLMS from "../../app/components/states/EmptyItemLMS";
-import { LearningSessionList } from "../../app/components/tabs/CohortDetailsTabsLMS";
+
+import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
+import EmptyItemLMS from "../states/EmptyItemLMS";
+import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
 
 interface CohortDetailsMobileLMSProps {
   cohortId: number;

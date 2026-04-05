@@ -1,5 +1,5 @@
-import CheckoutCohortFormMobileSVP from "@/app/components/forms/CheckoutCohortFormMobileSVP";
-import UnavailableProductSVP from "@/app/components/states/UnavailableProductSVP";
+import CheckoutCohortFormMobileSVP from "@/components/forms/CheckoutCohortFormMobileSVP";
+import UnavailableProductSVP from "@/components/states/UnavailableProductSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";

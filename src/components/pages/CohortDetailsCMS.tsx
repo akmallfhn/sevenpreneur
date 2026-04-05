@@ -1,4 +1,5 @@
 "use client";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -15,17 +16,16 @@ import {
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import AttendancesChartCMS from "../charts/AttendancesChartCMS";
 import AppButton from "../buttons/AppButton";
-import AttendancesChartCMS from "../../app/components/charts/AttendancesChartCMS";
-import EditCohortFormCMS from "../../app/components/forms/EditCohortFormCMS";
+import EditCohortFormCMS from "../forms/EditCohortFormCMS";
 import EnrollmentScorecardListCMS from "../indexes/EnrollmentScorecardListCMS";
 import LearningListCMS from "../indexes/LearningListCMS";
 import ModuleListCMS from "../indexes/ModuleListCMS";
 import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppBreadcrumb from "../../app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../../app/components/navigations/AppBreadcrumbItem";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 dayjs.extend(localizedFormat);
 

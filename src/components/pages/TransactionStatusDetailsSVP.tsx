@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import ReceiptLineItemSVP from "../items/ReceiptLineItemSVP";
 import PaymentStatusAnimationSVP from "../labels/PaymentStatusAnimationSVP";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 const variantStyles: Record<
   TransactionStatus,

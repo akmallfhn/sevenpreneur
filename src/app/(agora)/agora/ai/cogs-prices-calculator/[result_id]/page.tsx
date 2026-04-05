@@ -1,4 +1,4 @@
-import COGSPricesCalculationReportLMS from "@/app/components/reports/COGSPricesCalculationReportLMS";
+import COGSPricesCalculationReportLMS from "@/components/reports/COGSPricesCalculationReportLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

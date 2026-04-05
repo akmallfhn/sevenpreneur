@@ -1,4 +1,4 @@
-import IdeaValidationReportLMS from "@/app/components/reports/IdeaValidationReportLMS";
+import IdeaValidationReportLMS from "@/components/reports/IdeaValidationReportLMS";
 import {
   AIIdeaValidation_LongevityAlignment,
   AIIdeaValidation_ProblemFreq,

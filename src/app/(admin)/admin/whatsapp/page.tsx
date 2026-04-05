@@ -1,6 +1,6 @@
 import WhatsappConvsCMS from "@/components/indexes/WhatsappConvsCMS";
-import ForbiddenComponent from "@/app/components/states/403Forbidden";
-import UnderDevelopment from "@/app/components/states/UnderDevelopment";
+import ForbiddenComponent from "@/components/states/403Forbidden";
+import UnderDevelopment from "@/components/states/UnderDevelopment";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 

@@ -1,4 +1,4 @@
-import GenerateAIMarketSizeLMS from "@/app/components/forms/GenerateAIMarketSizeLMS";
+import GenerateAIMarketSizeLMS from "@/components/forms/GenerateAIMarketSizeLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

@@ -2,24 +2,24 @@
 import { CreateDiscussionStarter } from "@/lib/actions";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
+import { faTowerObservation } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import CheckInAttendanceLMS from "../gateways/CheckInAttendanceLMS";
+import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
+import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
+import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import AppVideoPlayer from "../../app/components/elements/AppVideoPlayer";
-import CheckInAttendanceLMS from "../../app/components/gateways/CheckInAttendanceLMS";
-import CheckOutAttendanceLMS from "../../app/components/gateways/CheckOutAttendanceLMS";
-import HeroLearningDetailsLMS from "../../app/components/heroes/HeroLearningDetailsLMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
+import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import FileItemLMS from "../items/FileItemLMS";
-import AppDiscussionStarterItem from "../../app/components/messages/AppDiscussionStarterItem";
-import AppDiscussionStarterSubmitter from "../../app/components/messages/AppDiscussionStarterSubmitter";
-import PageHeaderCohortLMS from "../../app/components/navigations/PageHeaderCohortLMS";
-import EmptyDiscussionLMS from "../../app/components/states/EmptyDiscussionLMS";
-import EmptyRecordingLMS from "../../app/components/states/EmptyRecordingLMS";
+import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
+import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
+import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
 import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTowerObservation } from "@fortawesome/free-solid-svg-icons";
 
 export interface MaterialList {
   name: string;

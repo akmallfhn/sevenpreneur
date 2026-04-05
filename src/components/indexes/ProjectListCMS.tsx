@@ -4,7 +4,7 @@ import AppButton from "../buttons/AppButton";
 import ProjectItemCMS from "../items/ProjectItemCMS";
 import { trpc } from "@/trpc/client";
 import React, { useState } from "react";
-import CreateProjectFormCMS from "../../app/components/forms/CreateProjectFormCMS";
+import CreateProjectFormCMS from "../forms/CreateProjectFormCMS";
 
 interface ProjectListCMSProps {
   sessionToken: string;

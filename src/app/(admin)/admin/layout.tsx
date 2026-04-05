@@ -1,8 +1,8 @@
-import SidebarCMS from "@/app/components/navigations/SidebarCMS";
-import ForbiddenComponent from "@/app/components/states/403Forbidden";
-import DisallowedMobile from "@/app/components/states/DisallowedMobile";
-import { SidebarProviderCMS } from "@/app/contexts/SidebarContextCMS";
+import { SidebarProviderCMS } from "@/contexts/SidebarContextCMS";
 import "@/app/globals.css";
+import SidebarCMS from "@/components/navigations/SidebarCMS";
+import ForbiddenComponent from "@/components/states/403Forbidden";
+import DisallowedMobile from "@/components/states/DisallowedMobile";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -36,7 +36,7 @@ if (process.env.DOMAIN_MODE === "local")
   baseURL = "https://api.example.com:3000/trpc";
 
 export default async function AdminLayout(
-  props: Readonly<{ children: React.ReactNode }>,
+  props: Readonly<{ children: React.ReactNode }>
 ) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;

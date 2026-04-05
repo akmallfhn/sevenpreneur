@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import Image from "next/image";
 
 interface HomeCMSProps {

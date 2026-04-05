@@ -1,15 +1,15 @@
 "use client";
-import AttendeeRoleListRestart25 from "@/app/components/custom-components-restart25/AttendeeRoleListRestart25";
-import BannerEventRestart25 from "@/app/components/custom-components-restart25/BannerEventRestart25";
-import ContentEventRestart25 from "@/app/components/custom-components-restart25/ContentEventRestart25";
-import CustomFloatingRestart25 from "@/app/components/custom-components-restart25/CustomFloatingRestart25";
-import EventExperienceRestart25 from "@/app/components/custom-components-restart25/EventExperienceRestart25";
-import FAQEventRestart25 from "@/app/components/custom-components-restart25/FAQEventRestart25";
-import HeroEventRestart25 from "@/app/components/custom-components-restart25/HeroEventRestart25";
-import SpeakersLineUpRestart25 from "@/app/components/custom-components-restart25/SpeakersLineUpRestart25";
-import TicketCarouselRestart25 from "@/app/components/custom-components-restart25/TicketCarouselRestart25";
-import TopicSpeakerListRestart25 from "@/app/components/custom-components-restart25/TopicSpeakerListRestart25";
-import PartnerLogosRestart25 from "../../app/components/custom-components-restart25/PartnerLogosRestart25";
+import AttendeeRoleListRestart25 from "@/components/customs/restart-25/AttendeeRoleListRestart25";
+import BannerEventRestart25 from "@/components/customs/restart-25/BannerEventRestart25";
+import ContentEventRestart25 from "@/components/customs/restart-25/ContentEventRestart25";
+import CustomFloatingRestart25 from "@/components/customs/restart-25/CustomFloatingRestart25";
+import EventExperienceRestart25 from "@/components/customs/restart-25/EventExperienceRestart25";
+import FAQEventRestart25 from "@/components/customs/restart-25/FAQEventRestart25";
+import HeroEventRestart25 from "@/components/customs/restart-25/HeroEventRestart25";
+import SpeakersLineUpRestart25 from "@/components/customs/restart-25/SpeakersLineUpRestart25";
+import TicketCarouselRestart25 from "@/components/customs/restart-25/TicketCarouselRestart25";
+import TopicSpeakerListRestart25 from "@/components/customs/restart-25/TopicSpeakerListRestart25";
+import PartnerLogosRestart25 from "../customs/restart-25/PartnerLogosRestart25";
 // import AppInterstitialBanner from "../modals/AppInterstitialBanner";
 
 export default function RestartEventSVP() {

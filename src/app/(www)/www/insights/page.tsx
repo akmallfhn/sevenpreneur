@@ -1,5 +1,5 @@
-import ArticleListSVP from "@/components/items/ArticleListSVP";
-import AppInterstitialBanner from "@/app/components/modals/AppInterstitialBanner";
+import ArticleListSVP from "@/components/indexes/ArticleListSVP";
+import AppInterstitialBanner from "@/components/modals/AppInterstitialBanner";
 import { setSecretKey, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 

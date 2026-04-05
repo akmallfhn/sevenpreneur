@@ -1,18 +1,18 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import AppButton from "../buttons/AppButton";
-import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import "dayjs/locale/en";
-import { Gauge } from "@mui/x-charts/Gauge";
 import { trpc } from "@/trpc/client";
-import { toast } from "sonner";
+import { Gauge } from "@mui/x-charts/Gauge";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import AppDropdown from "../../app/components/elements/AppDropdown";
-import AppDropdownItemList from "../../app/components/elements/AppDropdownItemList";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
-import EditProjectFormCMS from "../../app/components/forms/EditProjectFormCMS";
+import React, { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import EditProjectFormCMS from "../forms/EditProjectFormCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 

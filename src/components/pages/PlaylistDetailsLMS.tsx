@@ -3,8 +3,8 @@ import { StatusType } from "@/lib/app-types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import AppVideoPlayer from "../../app/components/elements/AppVideoPlayer";
-import HeroPlaylistDetailsLMS from "../../app/components/heroes/HeroPlaylistDetailsLMS";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
+import HeroPlaylistDetailsLMS from "../heroes/HeroPlaylistDetailsLMS";
 import VideoListItemLMS from "../items/VideoListItemLMS";
 import PlaylistDetailsMobileLMS from "./PlaylistDetailsMobileLMS";
 

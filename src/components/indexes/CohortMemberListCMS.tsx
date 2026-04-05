@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { RolesUser } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
@@ -11,15 +11,15 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import TableCellCMS from "../../app/components/elements/TableCellCMS";
-import TableHeadCMS from "../../app/components/elements/TableHeadCMS";
-import AddCohortMemberFormCMS from "../../app/components/forms/AddCohortMemberFormCMS";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import AddCohortMemberFormCMS from "../forms/AddCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
-import AppBreadcrumb from "../../app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../../app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "../../app/components/titles/PageTitleSectionCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
 

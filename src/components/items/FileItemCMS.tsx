@@ -8,11 +8,11 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import AppDropdown from "../../app/components/elements/AppDropdown";
-import AppDropdownItemList from "../../app/components/elements/AppDropdownItemList";
-import EditMaterialFormCMS from "../../app/components/forms/EditMaterialFormCMS";
-import EditModuleFormCMS from "../../app/components/forms/EditModuleFormCMS";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import EditMaterialFormCMS from "../forms/EditMaterialFormCMS";
+import EditModuleFormCMS from "../forms/EditModuleFormCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 interface FileItemCMSProps {
   sessionToken: string;

@@ -5,10 +5,10 @@ import CohortDetailsTabsLMS, {
   ModuleList,
   ProjectList,
   UserList,
-} from "../../app/components/tabs/CohortDetailsTabsLMS";
-import HeroCohortDetailsLMS from "../../app/components/heroes/HeroCohortDetailsLMS";
-import AttendanceProgressBarLMS from "../../app/components/elements/AttendanceProgressBarLMS";
-import NearestScheduleCardLMS from "../../app/components/elements/NearestScheduleCardLMS";
+} from "../tabs/CohortDetailsTabsLMS";
+import HeroCohortDetailsLMS from "../heroes/HeroCohortDetailsLMS";
+import AttendanceProgressBarLMS from "../elements/AttendanceProgressBarLMS";
+import NearestScheduleCardLMS from "../elements/NearestScheduleCardLMS";
 import { useEffect, useState } from "react";
 import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
 import Image from "next/image";

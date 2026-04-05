@@ -1,10 +1,10 @@
 "use client";
-import HeroHomeSVP from "../../app/components/heroes/HeroHomeSVP";
-import BusinessesAlumniHomeSVP from "../../app/components/static-sections/BusinessesAlumniHomeSVP";
-import CoachesHomeSVP from "../../app/components/static-sections/CoachesHomeSVP";
-import CuriculumFrameworkHomeSVP from "../../app/components/static-sections/CuriculumFrameworkHomeSVP";
-import InstagramContentsHomeSVP from "../../app/components/static-sections/InstagramContentsHomeSVP";
-import ProductsHomeSVP from "../../app/components/static-sections/ProductsHomeSVP";
+import HeroHomeSVP from "../heroes/HeroHomeSVP";
+import BusinessesAlumniHomeSVP from "../static-sections/BusinessesAlumniHomeSVP";
+import CoachesHomeSVP from "../static-sections/CoachesHomeSVP";
+import CuriculumFrameworkHomeSVP from "../static-sections/CuriculumFrameworkHomeSVP";
+import InstagramContentsHomeSVP from "../static-sections/InstagramContentsHomeSVP";
+import ProductsHomeSVP from "../static-sections/ProductsHomeSVP";
 
 export default function HomeSVP() {
   return (

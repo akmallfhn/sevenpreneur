@@ -7,7 +7,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import AppButton from "../buttons/AppButton";
-import AppCountdownTimer from "../../app/components/elements/AppCountdownTimer";
+import AppCountdownTimer from "../elements/AppCountdownTimer";
 
 interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;

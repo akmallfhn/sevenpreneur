@@ -1,17 +1,17 @@
 "use client";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
-import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
+import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import { ChevronRight, Loader2, Pen } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import EditInterstitialAdsFormCMS from "../../app/components/forms/EditInterstitialAdsFormCMS";
-import EditTickerMarketingFormCMS from "../../app/components/forms/EditTickerMarketingFormCMS";
+import EditInterstitialAdsFormCMS from "../forms/EditInterstitialAdsFormCMS";
+import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 interface WebMarketingToolsCMSProps {
   sessionToken: string;

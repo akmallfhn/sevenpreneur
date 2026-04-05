@@ -3,9 +3,9 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import Link from "next/link";
-import SwiperArticlesSVP from "../../app/components/elements/SwiperArticlesSVP";
+import SwiperArticlesSVP from "../elements/SwiperArticlesSVP";
 import { ArticleList } from "./ArticleListSVP";
-import SpecialTopicArticleSVP from "../../app/components/gateways/SpecialTopicArticleSVP";
+import SpecialTopicArticleSVP from "../gateways/SpecialTopicArticleSVP";
 
 dayjs.extend(relativeTime);
 

@@ -1,4 +1,4 @@
-import ChatConversationLMS from "@/app/components/messages/ChatConversationLMS";
+import ChatConversationLMS from "@/components/messages/ChatConversationLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

@@ -1,6 +1,8 @@
 "use client";
 import { DeleteSubmission } from "@/lib/actions";
 import { SubmissionStatus } from "@/lib/app-types";
+import { faPenRuler } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -11,17 +13,15 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import CreateSubmissionFormLMS from "../../app/components/forms/CreateSubmissionFormLMS";
+import CreateSubmissionFormLMS from "../forms/CreateSubmissionFormLMS";
 import EditSubmissionFormLMS, {
   InitialData,
-} from "../../app/components/forms/EditSubmissionFormLMS";
+} from "../forms/EditSubmissionFormLMS";
 import FileItemLMS from "../items/FileItemLMS";
 import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
-import PageHeaderCohortLMS from "../../app/components/navigations/PageHeaderCohortLMS";
-import DisallowedMobile from "../../app/components/states/DisallowedMobile";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenRuler } from "@fortawesome/free-solid-svg-icons";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
+import DisallowedMobile from "../states/DisallowedMobile";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);

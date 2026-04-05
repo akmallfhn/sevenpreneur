@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import AppVideoPlayer from "../../app/components/elements/AppVideoPlayer";
-import HeaderMobileLMS from "../../app/components/navigations/HeaderMobileLMS";
-import AppButton from "../buttons/AppButton";
 import { ChevronDown } from "lucide-react";
-import { VideoItem } from "./PlaylistDetailsLMS";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import AppButton from "../buttons/AppButton";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
 import VideoListItemMobileLMS from "../items/VideoListItemMobileLMS";
+import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
+import { VideoItem } from "./PlaylistDetailsLMS";
 
 interface PlaylistDetailsMobileLMSProps {
   playlistId: number;

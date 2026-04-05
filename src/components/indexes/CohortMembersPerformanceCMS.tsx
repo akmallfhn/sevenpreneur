@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -10,14 +10,14 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
-import TableCellCMS from "../../app/components/elements/TableCellCMS";
-import TableHeadCMS from "../../app/components/elements/TableHeadCMS";
-import EditCohortMemberFormCMS from "../../app/components/forms/EditCohortMemberFormCMS";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
-import AppBreadcrumb from "../../app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../../app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "../../app/components/titles/PageTitleSectionCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
 

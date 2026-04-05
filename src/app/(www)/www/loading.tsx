@@ -1,4 +1,4 @@
-import LoadingStateSVP from "@/app/components/states/LoadingStateSVP";
+import LoadingStateSVP from "@/components/states/LoadingStateSVP";
 
 export default function Loading() {
   return (

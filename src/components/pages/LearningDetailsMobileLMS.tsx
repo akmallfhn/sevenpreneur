@@ -5,11 +5,11 @@ import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
+import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import AppDiscussionStarterSubmitter from "../../app/components/messages/AppDiscussionStarterSubmitter";
-import HeaderMobileLMS from "../../app/components/navigations/HeaderMobileLMS";
-import LearningDetailsTabsMobileLMS from "../../app/components/tabs/LearningDetailsTabsMobileLMS";
+import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
+import LearningDetailsTabsMobileLMS from "../tabs/LearningDetailsTabsMobileLMS";
 import { DiscussionStarterList, MaterialList } from "./LearningDetailsLMS";
 
 interface LearningDetailsMobileLMSProps extends AvatarBadgeLMSProps {

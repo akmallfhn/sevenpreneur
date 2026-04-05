@@ -1,7 +1,7 @@
+import "@/app/globals.css";
 import SidebarLMS, {
   AIResultListProps,
-} from "@/app/components/navigations/SidebarLMS";
-import "@/app/globals.css";
+} from "@/components/navigations/SidebarLMS";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";

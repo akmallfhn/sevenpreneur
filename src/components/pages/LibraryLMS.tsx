@@ -3,11 +3,9 @@ import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import PageHeaderLMS from "../../app/components/navigations/PageHeaderLMS";
-import DisallowedMobile from "../../app/components/states/DisallowedMobile";
-import LibraryTabsLMS, {
-  TemplateList,
-} from "../../app/components/tabs/LibraryTabsLMS";
+import PageHeaderLMS from "../navigations/PageHeaderLMS";
+import DisallowedMobile from "../states/DisallowedMobile";
+import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
 
 interface LibraryLMSProps extends AvatarBadgeLMSProps {
   templateList: TemplateList[];

@@ -3,7 +3,7 @@ import AppButton from "../buttons/AppButton";
 import FileItemCMS from "../items/FileItemCMS";
 import { trpc } from "@/trpc/client";
 import React, { useState } from "react";
-import CreateModuleFormCMS from "../../app/components/forms/CreateModuleFormCMS";
+import CreateModuleFormCMS from "../forms/CreateModuleFormCMS";
 
 interface ModuleListCMSProps {
   sessionToken: string;

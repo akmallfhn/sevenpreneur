@@ -1,8 +1,7 @@
 "use client";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
-import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
+import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { RolesUser, StatusType } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
@@ -22,16 +21,17 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import AppDropdown from "../../app/components/elements/AppDropdown";
-import AppDropdownItemList from "../../app/components/elements/AppDropdownItemList";
-import TableCellCMS from "../../app/components/elements/TableCellCMS";
-import TableHeadCMS from "../../app/components/elements/TableHeadCMS";
-import InputCMS from "../../app/components/fields/InputCMS";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import InputCMS from "../fields/InputCMS";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
-import AppNumberPagination from "../../app/components/navigations/AppNumberPagination";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 
 interface UserListCMSProps {
   sessionToken: string;

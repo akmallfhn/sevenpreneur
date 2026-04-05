@@ -1,8 +1,7 @@
 "use client";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
-import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
+import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -18,15 +17,16 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import AppDropdown from "../../app/components/elements/AppDropdown";
-import AppDropdownItemList from "../../app/components/elements/AppDropdownItemList";
-import TableCellCMS from "../../app/components/elements/TableCellCMS";
-import TableHeadCMS from "../../app/components/elements/TableHeadCMS";
-import CreateDiscountFormCMS from "../../app/components/forms/CreateDiscountFormCMS";
-import EditDiscountFormCMS from "../../app/components/forms/EditDiscountFormCMS";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import TableCellCMS from "../elements/TableCellCMS";
+import TableHeadCMS from "../elements/TableHeadCMS";
+import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
+import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 dayjs.extend(localizedFormat);
 

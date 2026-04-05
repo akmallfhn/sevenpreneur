@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ArticleListMobileSVP from "./ArticleListMobileSVP";
-import SpecialTopicArticleSVP from "../../app/components/gateways/SpecialTopicArticleSVP";
+import SpecialTopicArticleSVP from "../gateways/SpecialTopicArticleSVP";
 
 dayjs.extend(relativeTime);
 

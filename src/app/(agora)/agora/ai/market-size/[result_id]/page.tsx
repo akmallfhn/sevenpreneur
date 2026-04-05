@@ -1,4 +1,4 @@
-import MarketSizeReportLMS from "@/app/components/reports/MarketSizeReportLMS";
+import MarketSizeReportLMS from "@/components/reports/MarketSizeReportLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

@@ -1,4 +1,3 @@
-import { ChatProvider } from "@/app/contexts/chat-context";
 import { ReactNode } from "react";
 
 interface AgoraAILayoutProps {
@@ -6,5 +5,5 @@ interface AgoraAILayoutProps {
 }
 
 export default function AgoraAILayout({ children }: AgoraAILayoutProps) {
-  return <ChatProvider>{children}</ChatProvider>;
+  return <div>{children}</div>;
 }

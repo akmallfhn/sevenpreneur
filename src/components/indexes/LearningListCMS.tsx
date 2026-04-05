@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { Loader2, Plus } from "lucide-react";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
-import CreateLearningFormCMS from "../../app/components/forms/CreateLearningFormCMS";
+import CreateLearningFormCMS from "../forms/CreateLearningFormCMS";
 import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
 
 interface LearningListCMSProps {

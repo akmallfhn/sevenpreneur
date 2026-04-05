@@ -1,6 +1,6 @@
 "use client";
 import { Suspense } from "react";
-import AppLoginContainer from "../../app/components/elements/AppLoginContainer";
+import AppLoginContainer from "../elements/AppLoginContainer";
 import Image from "next/image";
 
 export default function AuthLoginSVP() {

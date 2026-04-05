@@ -7,13 +7,11 @@ export async function POST(request: Request) {
   const body = await request.json();
   const accessToken = body.tokenResponse.access_token;
 
-  // --- Backend Process
   setSecretKey(process.env.SECRET_KEY_PUBLIC_API!);
   const loggedIn = await trpc.auth.login({ accessToken });
   const sessionToken = loggedIn.token.token;
   const user = loggedIn.registered_user;
 
-  // --- Save session token to cookie
   if (sessionToken) {
     let domain = "sevenpreneur.com";
     if (process.env.DOMAIN_MODE === "local") {
@@ -28,7 +26,6 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 365 * 10,
     });
 
-    // --- Send Response Success
     return NextResponse.json({
       status: 200,
       message: "Success",
@@ -42,7 +39,6 @@ export async function POST(request: Request) {
     });
   }
 
-  // --- Send Response Fail
   return NextResponse.json({
     status: 500,
     message: "failed",

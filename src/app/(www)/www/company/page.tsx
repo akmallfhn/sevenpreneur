@@ -1,4 +1,4 @@
-import UnderDevelopment from "@/app/components/states/UnderDevelopment";
+import UnderDevelopment from "@/components/states/UnderDevelopment";
 
 export default function CompanyPage() {
   return <UnderDevelopment />;

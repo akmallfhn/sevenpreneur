@@ -1,15 +1,15 @@
 "use client";
 import Image from "next/image";
 import AppFloatingButton from "../buttons/AppFloatingButton";
-import HeroBlueprintProgramSVP from "../../app/components/heroes/HeroBlueprintProgramSVP";
-import AboutBlueprintProgramSVP from "../../app/components/static-sections/AboutBlueprintProgramSVP";
-import FAQBlueprintProgramSVP from "../../app/components/static-sections/FAQBlueprintProgramSVP";
-import LearningListBlueprintSVP from "../../app/components/static-sections/LearningListBlueprintSVP";
-import OffersBlueprintProgramSVP from "../../app/components/static-sections/OffersBlueprintProgramSVP";
+import HeroBlueprintProgramSVP from "../heroes/HeroBlueprintProgramSVP";
+import AboutBlueprintProgramSVP from "../static-sections/AboutBlueprintProgramSVP";
+import FAQBlueprintProgramSVP from "../static-sections/FAQBlueprintProgramSVP";
+import LearningListBlueprintSVP from "../static-sections/LearningListBlueprintSVP";
+import OffersBlueprintProgramSVP from "../static-sections/OffersBlueprintProgramSVP";
 import PriceTiersBlueprintProgramSVP, {
   PackageItem,
-} from "../../app/components/static-sections/PriceTiersBlueprintProgramSVP";
-import ScheduleBlueprintProgramSVP from "../../app/components/static-sections/ScheduleBlueprintProgramSVP";
+} from "../static-sections/PriceTiersBlueprintProgramSVP";
+import ScheduleBlueprintProgramSVP from "../static-sections/ScheduleBlueprintProgramSVP";
 
 interface BlueprintProgramSVPProps {
   cohortId: number;

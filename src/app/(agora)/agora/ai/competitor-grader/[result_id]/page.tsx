@@ -1,4 +1,4 @@
-import CompetitorGradingReportLMS from "@/app/components/reports/CompetitorGradingReportLMS";
+import CompetitorGradingReportLMS from "@/components/reports/CompetitorGradingReportLMS";
 import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";

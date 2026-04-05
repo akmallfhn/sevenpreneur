@@ -3,11 +3,9 @@ import { faCubes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
-import HeroHomeLMS from "../../app/components/heroes/HeroHomeLMS";
-import PageHeaderLMS from "../../app/components/navigations/PageHeaderLMS";
-import CourseTabsLMS, {
-  CourseList,
-} from "../../app/components/tabs/CourseTabsLMS";
+import HeroHomeLMS from "../heroes/HeroHomeLMS";
+import PageHeaderLMS from "../navigations/PageHeaderLMS";
+import CourseTabsLMS, { CourseList } from "../tabs/CourseTabsLMS";
 import HomeMobileLMS from "./HomeMobileLMS";
 
 interface HomeLMSProps extends AvatarBadgeLMSProps {

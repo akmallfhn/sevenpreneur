@@ -1,16 +1,16 @@
 "use client";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
-import CreateCohortFormCMS from "@/app/components/forms/CreateCohortFormCMS";
+import CreateCohortFormCMS from "@/components/forms/CreateCohortFormCMS";
 import CohortItemCardCMS from "@/components/items/CohortItemCardCMS";
-import AppBreadcrumb from "@/app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "@/app/components/navigations/AppBreadcrumbItem";
-import PageTitleSectionCMS from "@/app/components/titles/PageTitleSectionCMS";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { ChevronRight, Loader2, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
 dayjs.extend(isBetween);
 

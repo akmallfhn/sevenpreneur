@@ -1,4 +1,4 @@
-import GenerateAIChatLMS from "@/app/components/forms/GenerateAIChatLMS";
+import GenerateAIChatLMS from "@/components/forms/GenerateAIChatLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

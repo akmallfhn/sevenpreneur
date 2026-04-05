@@ -1,4 +1,4 @@
-import SurveyBusinessUpdateSVP from "@/app/components/forms/SurveyBusinessUpdatesSVP";
+import SurveyBusinessUpdateSVP from "@/components/forms/SurveyBusinessUpdatesSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";

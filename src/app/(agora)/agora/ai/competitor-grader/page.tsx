@@ -1,4 +1,4 @@
-import GenerateAICompetitorGraderLMS from "@/app/components/forms/GenerateAICompetitorGraderLMS";
+import GenerateAICompetitorGraderLMS from "@/components/forms/GenerateAICompetitorGraderLMS";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";

@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/app/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { SessionMethod } from "@/lib/app-types";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -17,16 +17,16 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AvatarBadgeCMS from "../buttons/AvatarBadgeCMS";
-import AppVideoPlayer from "../../app/components/elements/AppVideoPlayer";
-import EditLearningFormCMS from "../../app/components/forms/EditLearningFormCMS";
-import UpdateVideoRecordingFormCMS from "../../app/components/forms/UpdateVideoRecordingForm";
+import AppVideoPlayer from "../elements/AppVideoPlayer";
+import EditLearningFormCMS from "../forms/EditLearningFormCMS";
+import UpdateVideoRecordingFormCMS from "../forms/UpdateVideoRecordingForm";
 import MaterialListCMS from "../indexes/MaterialListCMS";
 import ConferenceItemCMS from "../items/ConferenceItemCMS";
 import LocationItemCMS from "../items/LocationItemCMS";
 import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
-import AppBreadcrumb from "../../app/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../../app/components/navigations/AppBreadcrumbItem";
-import EmptyRecordingCMS from "../../app/components/states/EmptyRecordingCMS";
+import AppBreadcrumb from "../navigations/AppBreadcrumb";
+import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import EmptyRecordingCMS from "../states/EmptyRecordingCMS";
 
 dayjs.extend(localizedFormat);
 

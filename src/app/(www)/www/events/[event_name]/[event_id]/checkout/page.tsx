@@ -1,5 +1,5 @@
-import CheckoutEventFormMobileSVP from "@/app/components/forms/CheckoutEventFormMobileSVP";
-import UnavailableProductSVP from "@/app/components/states/UnavailableProductSVP";
+import CheckoutEventFormMobileSVP from "@/components/forms/CheckoutEventFormMobileSVP";
+import UnavailableProductSVP from "@/components/states/UnavailableProductSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -23,7 +23,7 @@ export async function generateMetadata({
   const eventData = (await trpc.read.event({ id: eventId })).event;
 
   const hasActiveTicket = eventData.event_prices.some(
-    (post) => post.status === "ACTIVE",
+    (post) => post.status === "ACTIVE"
   );
   const expiredEvent = dayjs().isAfter(eventData.end_date);
 
@@ -97,7 +97,7 @@ export default async function CheckoutEventPage({
   // Redirect if not login
   if (!sessionToken) {
     redirect(
-      `/auth/login?redirectTo=/events/${event_name}/${event_id}/checkout`,
+      `/auth/login?redirectTo=/events/${event_name}/${event_id}/checkout`
     );
   }
   setSessionToken(sessionToken);
@@ -131,7 +131,7 @@ export default async function CheckoutEventPage({
   }));
 
   const hasActiveTicket = eventData.event_prices.some(
-    (post) => post.status === "ACTIVE",
+    (post) => post.status === "ACTIVE"
   );
   const expiredEvent = dayjs().isAfter(eventData.end_date);
 

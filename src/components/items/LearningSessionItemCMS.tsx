@@ -11,10 +11,10 @@ import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import AppDropdown from "../../app/components/elements/AppDropdown";
-import AppDropdownItemList from "../../app/components/elements/AppDropdownItemList";
-import EditLearningFormCMS from "../../app/components/forms/EditLearningFormCMS";
-import AppAlertConfirmDialog from "../../app/components/modals/AppAlertConfirmDialog";
+import AppDropdown from "../elements/AppDropdown";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
+import EditLearningFormCMS from "../forms/EditLearningFormCMS";
+import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 dayjs.extend(localizedFormat);
 

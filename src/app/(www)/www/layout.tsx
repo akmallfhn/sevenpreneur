@@ -1,13 +1,13 @@
 import "@/app/globals.css";
+import FooterNavbarSVP from "@/components/navigations/FooterNavbarSVP";
+import HeaderNavbarSVP from "@/components/navigations/HeaderNavbarSVP";
+import { StatusType } from "@/lib/app-types";
+import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
+import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
-import HeaderNavbarSVP from "@/app/components/navigations/HeaderNavbarSVP";
-import { cookies } from "next/headers";
-import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
-import { ThemeProvider } from "next-themes";
-import FooterNavbarSVP from "@/app/components/navigations/FooterNavbarSVP";
-import { StatusType } from "@/lib/app-types";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sevenpreneur.com"),

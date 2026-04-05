@@ -4,7 +4,7 @@ import AppButton from "../buttons/AppButton";
 import FileItemCMS from "../items/FileItemCMS";
 import { trpc } from "@/trpc/client";
 import React, { useState } from "react";
-import CreateMaterialFormCMS from "../../app/components/forms/CreateMaterialFormCMS";
+import CreateMaterialFormCMS from "../forms/CreateMaterialFormCMS";
 
 interface MaterialListCMSProps {
   sessionToken: string;

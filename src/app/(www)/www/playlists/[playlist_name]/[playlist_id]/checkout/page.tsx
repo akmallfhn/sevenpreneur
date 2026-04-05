@@ -1,4 +1,4 @@
-import CheckoutPlaylistFormMobileSVP from "@/app/components/forms/CheckoutPlaylistFormMobileSVP";
+import CheckoutPlaylistFormMobileSVP from "@/components/forms/CheckoutPlaylistFormMobileSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";

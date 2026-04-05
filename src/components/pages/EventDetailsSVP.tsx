@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
-import EventInfoSVP from "../../app/components/templates/EventInfoSVP";
+import EventInfoSVP from "../templates/EventInfoSVP";
 
 dayjs.extend(localizedFormat);
 

@@ -12,17 +12,15 @@ import {
   LockKeyhole,
   ShieldCheck,
 } from "lucide-react";
-import SectionTitleSVP from "../../app/components/titles/SectionTitleSVP";
-import OfferHighlightVideoCourseSVP from "../../app/components/templates/OfferHighlightVideoCourseSVP";
+import SectionTitleSVP from "../titles/SectionTitleSVP";
 import VideoCoursePlaylistSVP, {
   VideoItem,
 } from "../indexes/VideoCoursePlaylistSVP";
-import HeroVideoCourseSVP, {
-  EducatorItem,
-} from "../../app/components/heroes/HeroVideoCourseSVP";
+import HeroVideoCourseSVP, { EducatorItem } from "../heroes/HeroVideoCourseSVP";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { getRupiahCurrency } from "@/lib/currency";
+import OfferHighlightVideoCourseSVP from "../templates/OfferHighlightVideoCourseSVP";
 
 dayjs.extend(localizedFormat);
 

@@ -2,9 +2,9 @@
 import { Blocks, ChevronDown, Compass, User2, Wallet } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import AppDropdown from "../../app/components/elements/AppDropdown";
+import AppDropdown from "../elements/AppDropdown";
 import Link from "next/link";
-import AppDropdownItemList from "../../app/components/elements/AppDropdownItemList";
+import AppDropdownItemList from "../elements/AppDropdownItemList";
 
 export interface AvatarBadgeLMSProps {
   sessionUserAvatar: string;

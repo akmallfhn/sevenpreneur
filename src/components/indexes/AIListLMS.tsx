@@ -6,9 +6,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
-import PageHeaderLMS from "../../app/components/navigations/PageHeaderLMS";
-import DisallowedMobile from "../../app/components/states/DisallowedMobile";
-import EmptyListLMS from "../../app/components/states/EmptyListLMS";
+import PageHeaderLMS from "../navigations/PageHeaderLMS";
+import DisallowedMobile from "../states/DisallowedMobile";
+import EmptyListLMS from "../states/EmptyListLMS";
 
 export interface AIList {
   id: number;

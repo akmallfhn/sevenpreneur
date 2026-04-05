@@ -5,8 +5,8 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import EditUserFormLMS, {
   IndustryList,
   InitialDataUser,
-} from "../../app/components/forms/EditUserFormLMS";
-import PageHeaderLMS from "../../app/components/navigations/PageHeaderLMS";
+} from "../forms/EditUserFormLMS";
+import PageHeaderLMS from "../navigations/PageHeaderLMS";
 
 interface AccountDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;

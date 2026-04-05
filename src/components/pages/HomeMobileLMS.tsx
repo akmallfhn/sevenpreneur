@@ -1,8 +1,8 @@
 "use client";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import ProductItemMobileLMS from "../items/ProductItemMobileLMS";
-import EmptyListLMS from "../../app/components/states/EmptyListLMS";
-import { CourseList } from "../../app/components/tabs/CourseTabsLMS";
+import EmptyListLMS from "../states/EmptyListLMS";
+import { CourseList } from "../tabs/CourseTabsLMS";
 
 interface HomeMobileLMSProps extends AvatarBadgeLMSProps {
   courseList: CourseList[];

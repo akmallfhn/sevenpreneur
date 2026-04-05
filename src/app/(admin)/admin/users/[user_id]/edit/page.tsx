@@ -1,5 +1,5 @@
-import EditUserForm from "@/app/components/forms/EditUserFormCMS";
-import ForbiddenComponent from "@/app/components/states/403Forbidden";
+import EditUserForm from "@/components/forms/EditUserFormCMS";
+import ForbiddenComponent from "@/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
