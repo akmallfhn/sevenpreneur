@@ -121,7 +121,7 @@ export default function UploadAvatarUserCMS({
         <div className="w-fit flex items-center gap-2">
           <AppButton
             onClick={handleUploadClick}
-            variant="outline"
+            variant="light"
             size="small"
             type="button"
             disabled={isUploading}

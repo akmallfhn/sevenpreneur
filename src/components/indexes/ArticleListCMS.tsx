@@ -158,7 +158,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                           />
                         </div>
                         <AppButton
-                          variant="outline"
+                          variant="light"
                           size="small"
                           onClick={() => {
                             copy(

@@ -10,13 +10,12 @@ export type VariantType =
   | "secondarySoft"
   | "destructive"
   | "destructiveSoft"
+  | "light"
+  | "dark"
   | "quarternary"
-  | "outline"
   | "ghost"
   | "whatsapp"
   | "link"
-  | "dark"
-  | "surfaceDark"
   | "cmsLink"
   | "flux"
   | "wipe";
@@ -100,11 +99,14 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
 
       // Utilities
       destructive:
-        "bg-destructive-background text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active disabled:bg-destructive-muted dark:disabled:text-secondary-foreground/50",
+        "bg-destructive-background text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active disabled:bg-destructive-muted dark:disabled:text-destructive-foreground/50",
       destructiveSoft:
-        "bg-destructive-soft-background text-destructive-soft-foreground hover:bg-destructive-soft-hover active:bg-destructive-soft-active disabled:bg-destructive-soft-muted disabled:text-destructive-soft-foreground/50",
-      outline:
-        "bg-white text-black border border-[#E3E3E3] active:bg-[#F5F5F5] disabled:text-[#909090] disabled:dark:text-[#8F8F8F] dark:text-white dark:bg-surface-black dark:border-outline-dark dark:disabled:bg-[#2A2A2A]",
+        "bg-destructive-soft-background text-destructive-soft-foreground hover:bg-destructive-soft-hover active:bg-destructive-soft-active disabled:bg-destructive-soft-muted disabled:text-destructive-soft-foreground/50 dark:hover:bg-destructive-soft-background/80 dark:active:bg-destructive-soft-background/80 dark:disabled:bg-destructive-soft-background/50",
+      light:
+        "bg-light-background text-light-foreground border border-outline hover:bg-light-hover active:bg-light-active disabled:bg-light-muted disabled:text-light-foreground/30",
+      dark: "bg-dark-background text-dark-foreground hover:bg-dark-hover active:bg-dark-active disabled:bg-dark-muted disabled:text-dark-foreground/30",
+
+      // Todo
       ghost:
         "hover:bg-white/10 active:bg-white/10 dark:hover:bg-black/5 dark:active:bg-black/5",
       quarternary:
@@ -112,9 +114,6 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       whatsapp:
         "bg-green-500 text-white hover:bg-[#05A645] disabled:bg-[#5AC785]",
       link: "text-primary hover:underline active:underline underline-offset-4",
-      dark: "bg-[#202020] text-white hover:bg-black active:bg-black",
-      surfaceDark:
-        "bg-[#27292E] text-[#9498A1] hover:bg-[#242529] active:bg-[#242529]",
       cmsLink:
         "text-cms-primary hover:underline active:underline underline-offset-4",
 

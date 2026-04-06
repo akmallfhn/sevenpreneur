@@ -223,7 +223,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
               <Link href="/users">
                 <AppButton
                   onClick={() => router.back()}
-                  variant="outline"
+                  variant="light"
                   type="button"
                 >
                   Cancel

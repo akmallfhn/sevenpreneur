@@ -48,7 +48,7 @@ export default function MaterialListCMS({
           </h2>
           {isAllowedCreateMaterial && (
             <AppButton
-              variant="outline"
+              variant="light"
               size="small"
               onClick={() => setCreateMaterial(true)}
             >

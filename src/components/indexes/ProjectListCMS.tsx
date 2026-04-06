@@ -46,7 +46,7 @@ export default function ProjectListCMS(props: ProjectListCMSProps) {
           </h2>
           {isAllowedCreateProject && (
             <AppButton
-              variant="outline"
+              variant="light"
               size="small"
               onClick={() => setCreateProject(true)}
             >

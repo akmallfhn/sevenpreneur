@@ -239,7 +239,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
                       </AppButton>
                       <AppButton
                         size="medium"
-                        variant="outline"
+                        variant="light"
                         onClick={() => setIsOpenEditForm(true)}
                       >
                         <Pencil className="size-4" />

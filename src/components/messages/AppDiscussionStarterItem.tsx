@@ -238,7 +238,7 @@ export default function AppDiscussionStarterItem(
             <AppButton
               className="discussion-starter-view-replies w-fit"
               size="small"
-              variant="outline"
+              variant="light"
               onClick={handleViewReplies}
             >
               <ChevronDown

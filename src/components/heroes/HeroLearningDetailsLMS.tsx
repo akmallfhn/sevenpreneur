@@ -84,7 +84,7 @@ export default function HeroLearningDetailsLMS({
         >
           <AppButton
             size="medium"
-            variant="outline"
+            variant="light"
             className="w-fit"
             disabled={isExpired}
           >
@@ -102,7 +102,7 @@ export default function HeroLearningDetailsLMS({
         >
           <AppButton
             size="medium"
-            variant="outline"
+            variant="light"
             className="w-fit"
             disabled={isExpired}
           >

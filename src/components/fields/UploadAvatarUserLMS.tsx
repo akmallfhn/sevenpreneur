@@ -115,7 +115,7 @@ export default function UploadAvatarUserLMS(props: UploadAvatarUserLMSProps) {
         <div className="w-fit flex flex-col gap-2">
           <AppButton
             onClick={handleUploadClick}
-            variant="outline"
+            variant="light"
             size="small"
             type="button"
             disabled={isUploading}

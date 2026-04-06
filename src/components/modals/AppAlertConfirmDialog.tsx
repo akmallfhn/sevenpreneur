@@ -50,7 +50,7 @@ export default function AppAlertConfirmDialog({
           </p>
         </div>
         <div className="button-action flex gap-2 justify-end">
-          <AppButton variant="outline" size="medium" onClick={onClose}>
+          <AppButton variant="light" size="medium" onClick={onClose}>
             {alertCancelLabel}
           </AppButton>
           <AppButton

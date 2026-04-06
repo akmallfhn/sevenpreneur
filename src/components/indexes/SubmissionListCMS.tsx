@@ -246,7 +246,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                         {isAllowedDetailsSubmission && (
                           <TableCellCMS>
                             <AppButton
-                              variant="outline"
+                              variant="light"
                               size="small"
                               onClick={() =>
                                 viewSubmissionDetails(String(post.id))

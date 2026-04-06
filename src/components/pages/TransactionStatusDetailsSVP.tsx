@@ -173,15 +173,15 @@ export default function TransactionStatusDetailsSVP(
     <React.Fragment>
       <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] dark:bg-coal-black lg:mx-auto lg:w-full lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="flex flex-col gap-1 lg:flex-1 lg:gap-3">
-          <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
-            <div className="status-guidance flex flex-col items-center text-center font-ui">
+          <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
+            <div className="status-guidance flex flex-col items-center text-center font-bodycopy">
               <PaymentStatusAnimationSVP variant={props.transactionStatus} />
               <div className="flex flex-col items-center gap-2">
                 <h2 className="font-bold">{statusWord}</h2>
                 <p className="text-alternative text-sm">{statusDescription}</p>
                 <AppButton
                   className="w-fit"
-                  variant={theme === "dark" ? "surfaceDark" : "primarySoft"}
+                  variant={theme === "dark" ? "dark" : "primarySoft"}
                   size="mediumRounded"
                   onClick={handleRefresh}
                 >
@@ -194,7 +194,7 @@ export default function TransactionStatusDetailsSVP(
             </div>
             {props.transactionStatus !== "FAILED" && (
               <div
-                className={`flex font-ui w-full items-center ${
+                className={`flex font-bodycopy w-full items-center ${
                   isPaid ? "justify-center" : "justify-between"
                 }`}
               >
@@ -221,7 +221,7 @@ export default function TransactionStatusDetailsSVP(
               </div>
             )}
           </div>
-          <div className="payment-details flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:dark:border-outline-dark lg:rounded-lg">
+          <div className="payment-details flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
             {!isFreeCharge && (
               <div className="payment-channel flex items-center gap-3 pb-4">
                 <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
@@ -236,7 +236,7 @@ export default function TransactionStatusDetailsSVP(
                     height={100}
                   />
                 </div>
-                <p className="payment-channel-name font-ui font-[450px] text-sm">
+                <p className="payment-channel-name font-bodycopy font-[450px] text-sm">
                   {props.paymentChannelName}
                 </p>
               </div>
@@ -279,7 +279,7 @@ export default function TransactionStatusDetailsSVP(
               className="payment-details flex items-center justify-between hover:cursor-pointer"
               onClick={() => setOpenAmountDetails(!openAmountDetails)}
             >
-              <div className="amount flex flex-col font-ui text-sm">
+              <div className="amount flex flex-col font-bodycopy text-sm">
                 <p>Total Amount</p>
                 <p className="font-bold">
                   {getRupiahCurrency(Math.round(props.productTotalAmount))}
@@ -295,7 +295,7 @@ export default function TransactionStatusDetailsSVP(
         </div>
         <div className="flex flex-col gap-1 lg:flex-2 lg:gap-3">
           {/* Product Metadata */}
-          <div className="product-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
+          <div className="product-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
             <div className="product-image aspect-square size-16 rounded-md overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
@@ -305,7 +305,7 @@ export default function TransactionStatusDetailsSVP(
                 width={400}
               />
             </div>
-            <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
+            <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
               <p className="product-name font-bold line-clamp-2">
                 {productName}
               </p>
@@ -313,7 +313,7 @@ export default function TransactionStatusDetailsSVP(
             </div>
           </div>
           {/* Transaction Metadata */}
-          <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
+          <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
             <ReceiptLineItemSVP
               receiptName="Transaction ID"
               receiptValue={props.transactionId}
@@ -335,7 +335,7 @@ export default function TransactionStatusDetailsSVP(
           </div>
 
           {/* Support Helpdesk */}
-          <div className="support-helpdesk flex gap-1 bg-white py-4 p-5 items-center justify-between dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg lg:dark:border-outline-dark">
+          <div className="support-helpdesk flex gap-1 bg-white py-4 p-5 items-center justify-between dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
             <div className="flex items-center gap-2">
               <div className="helpdesk-icon flex aspect-square size-[52px] overflow-hidden">
                 <Image
@@ -348,7 +348,7 @@ export default function TransactionStatusDetailsSVP(
                   height={100}
                 />
               </div>
-              <div className="flex flex-col font-ui text-sm">
+              <div className="flex flex-col font-bodycopy text-sm">
                 <p className="font-bold">Having Trouble?</p>
                 <p className="text-alternative">We are ready to help you</p>
               </div>
@@ -359,7 +359,7 @@ export default function TransactionStatusDetailsSVP(
               rel="noopenner noreferrer"
             >
               <AppButton
-                variant={theme === "dark" ? "surfaceDark" : "primarySoft"}
+                variant={theme === "dark" ? "primary" : "primarySoft"}
                 size="smallRounded"
               >
                 Contact Us

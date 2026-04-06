@@ -104,7 +104,7 @@ export default function PriceItemBlueprintProgramSVP(
             }`}
           >
             <AppButton
-              variant={props.isPriority ? "flux" : "outline"}
+              variant={props.isPriority ? "flux" : "light"}
               size="defaultRounded"
               className="cta-button flex w-full"
               disabled={props.priceStatus === "INACTIVE"}

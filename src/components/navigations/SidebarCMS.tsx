@@ -106,7 +106,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
         <div className={`absolute -right-5 ${isCollapsed ? "top-5" : "top-6"}`}>
           <AppButton
             size="mediumIcon"
-            variant="outline"
+            variant="light"
             onClick={() => toggleSidebar()}
           >
             <PanelLeftClose

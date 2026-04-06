@@ -94,7 +94,7 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
             </div>
             <AppButton
               className="share-button shrink-0"
-              variant="outline"
+              variant="light"
               size="largeIconRounded"
               onClick={handleShare}
             >

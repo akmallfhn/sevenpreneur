@@ -233,7 +233,7 @@ export default function CohortMembersPerformanceCMS(
                         {isAllowedDetailsMembers && (
                           <TableCellCMS>
                             <AppButton
-                              variant="outline"
+                              variant="light"
                               size="small"
                               onClick={() => viewMemberDetails(post.id)}
                             >

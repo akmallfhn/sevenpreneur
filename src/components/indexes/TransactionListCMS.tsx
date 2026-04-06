@@ -267,7 +267,7 @@ export default function TransactionListCMS({
           </div>
           <div className="filter-button relative flex w-fit" ref={wrapperRef}>
             <AppButton
-              variant="outline"
+              variant="light"
               size="medium"
               onClick={handleActionsDropdown}
             >
@@ -378,7 +378,7 @@ export default function TransactionListCMS({
                       </TableCellCMS>
                       <TableCellCMS>
                         <AppButton
-                          variant="outline"
+                          variant="light"
                           size="small"
                           onClick={() => viewTransactionDetails(post.id)}
                         >

@@ -170,7 +170,7 @@ export default function EditSubmissionFormLMS({
         />
       )}
       <div className="submit flex w-full justify-end items-center gap-3">
-        <AppButton size="medium" variant="outline" onClick={onClose}>
+        <AppButton size="medium" variant="light" onClick={onClose}>
           Cancel
         </AppButton>
         <AppButton size="medium" type="submit" disabled={isSubmitting}>

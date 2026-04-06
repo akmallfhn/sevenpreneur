@@ -122,6 +122,7 @@ export default function AppInterstitialBanner(
           />
           <div className="interstitial-action absolute flex bottom-10 left-1/2 -translate-x-1/2 z-[30] sm:bottom-4 lg:bottom-5 2xl:bottom-8">
             <AppButton
+              variant="light"
               className={
                 interstitialImage === props.interstitialImageMobile
                   ? "w-[180px]"
@@ -132,7 +133,6 @@ export default function AppInterstitialBanner(
                   ? "mediumRounded"
                   : "defaultRounded"
               }
-              variant="outline"
               // GTM
               featureName="interstitial_banner_click"
               featureId={toSnakeCase(props.interstitialTitle)}

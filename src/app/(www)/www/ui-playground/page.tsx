@@ -40,7 +40,19 @@ export default function Page() {
           Destr
         </AppButton>
       </div>
-      <div className="flex items-center justify-center gap-2"></div>
+      <div className="flex items-center justify-center gap-2">
+        <AppButton variant="dark">Dark</AppButton>
+        <AppButton variant="dark" disabled>
+          Dark
+        </AppButton>
+        <AppButton variant="light">Light</AppButton>
+        <AppButton variant="light" disabled>
+          Light
+        </AppButton>
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        <p className="font-bodycopy">Lorem ipsum dolor sit amet</p>
+      </div>
     </div>
   );
 }

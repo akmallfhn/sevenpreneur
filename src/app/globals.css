@@ -5,7 +5,7 @@
 @theme {
   /* --- Sevenpreneur Brand Color ---*/
 
-  /* light */
+  /* brand */
   --color-sevenpreneur-blue-azure: #0165fc;
   --color-sevenpreneur-blue-sky: #c5ddff;
   --color-sevenpreneur-blue-whisper: #a0c7ff;
@@ -23,8 +23,14 @@
   --color-sevenpreneur-red-mist: #ffcdc9;
   --color-sevenpreneur-red-salmon: #ffb1ab;
   --color-sevenpreneur-green-aqua: #65d6ca;
+  /* neutral */
   --color-sevenpreneur-white: #ffffff;
-  /* dark */
+  --color-sevenpreneur-white-cream: #fbfbfb;
+  --color-sevenpreneur-gray-dust: #9e9a9a;
+  --color-sevenpreneur-coal-black: #0c0d0e;
+  --color-sevenpreneur-surface-black: #171616;
+  --color-sevenpreneur-charcoal-black: #1c1c1c;
+  /* midnight */
   --color-sevenpreneur-blue-midnight: #001659;
   --color-sevenpreneur-pink-midgnight: #5a2432;
   --color-sevenpreneur-purple-midnight: #2a1f5c;
@@ -85,6 +91,19 @@
   --color-destructive-soft-hover: var(--color-sevenpreneur-red-salmon);
   --color-destructive-soft-active: var(--color-sevenpreneur-red-salmon);
   --color-destructive-soft-muted: var(--color-sevenpreneur-red-mist);
+  /* neutral */
+  --color-light: var(--color-sevenpreneur-white);
+  --color-light-background: var(--color-sevenpreneur-white);
+  --color-light-foreground: var(--color-sevenpreneur-coal-black);
+  --color-light-hover: var(--color-sevenpreneur-white-cream);
+  --color-light-active: var(--color-sevenpreneur-white-cream);
+  --color-light-muted: var(--color-sevenpreneur-white);
+  --color-dark: var(--color-sevenpreneur-charcoal-black);
+  --color-dark-background: var(--color-sevenpreneur-charcoal-black);
+  --color-dark-foreground: var(--color-sevenpreneur-gray-dust);
+  --color-dark-hover: var(--color-sevenpreneur-surface-black);
+  --color-dark-active: var(--color-sevenpreneur-surface-black);
+  --color-dark-muted: var(--color-sevenpreneur-surface-black);
   /* state */
   --color-success: var(--color-sevenpreneur-accent-success);
   --color-success-background: var(--color-sevenpreneur-soft-success);
@@ -96,13 +115,9 @@
   --color-danger-background: var(--color-sevenpreneur-soft-danger);
   --color-danger-foreground: var(--color-sevenpreneur-accent-danger);
   /* utilities */
-  --color-outline: #cbd5e1;
+  --color-outline: #e3e3e3;
   --color-alternative: #949494;
-  --color-semi-destructive-dark: #3e1913;
   --color-section-background: #f5f7fb;
-  --color-word-black: #9e9a9a;
-  --color-surface-black: #171616;
-  --color-coal-black: #0c0d0e;
   /* legacy */
   --color-primary-light: #c5ddff;
   --color-primary-strong: #0041c2;
@@ -110,6 +125,10 @@
   --color-primary-deep: #001659;
   --color-secondary-light: #ffe1ea;
   --color-outline-dark: #3a3939;
+  --color-semi-destructive-dark: #3e1913;
+  --color-word-black: #9e9a9a;
+  --color-surface-black: #171616;
+  --color-coal-black: #0c0d0e;
 
   /* Breakpoint */
   --breakpoint-xs: 31.75rem;
@@ -134,8 +153,8 @@
   /* --- Default Shadcn --- */
 
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: var(--color-sevenpreneur-white);
+  --foreground: var(--color-surface-black);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -176,11 +195,13 @@
   --color-success-background: var(--color-sevenpreneur-green-midnight);
   --color-warning-background: var(--color-sevenpreneur-yellow-midnight);
   --color-danger-background: var(--color-sevenpreneur-pink-midgnight);
+  /* utilities */
+  --color-outline: #3a3939;
 
   /* --- Default Shadcn ---*/
 
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  --background: var(--color-sevenpreneur-coal-black);
+  --foreground: var(--color-sevenpreneur-gray-dust);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);

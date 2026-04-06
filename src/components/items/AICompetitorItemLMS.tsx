@@ -78,7 +78,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
         <div className="w-fit shrink-0">
           <AppButton
             onClick={() => setIsExpanded((prev) => !prev)}
-            variant="outline"
+            variant="light"
             size="small"
           >
             {isExpanded ? "Hide Details" : "More Details"}

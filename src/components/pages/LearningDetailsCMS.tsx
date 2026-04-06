@@ -146,7 +146,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                 {isAllowedUpdateLearning && (
                   <div className="edit-learning absolute flex top-4 right-4 z-10">
                     <AppButton
-                      variant="outline"
+                      variant="light"
                       size="small"
                       onClick={() => setEditLearning(true)}
                     >
@@ -173,7 +173,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                       </h2>
                       {learningVideoKey && isAllowedUpdateLearning && (
                         <AppButton
-                          variant="outline"
+                          variant="light"
                           size="small"
                           onClick={() => setUpdateRecording(true)}
                         >

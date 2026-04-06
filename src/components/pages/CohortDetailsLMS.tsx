@@ -102,7 +102,7 @@ export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <AppButton variant="outline" size="small">
+                    <AppButton variant="light" size="small">
                       <Eye className="size-4" /> View Certificate
                     </AppButton>
                   </a>

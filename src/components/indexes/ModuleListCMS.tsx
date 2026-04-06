@@ -44,7 +44,7 @@ export default function ModuleListCMS({
           <h2 className="label-name font-brand font-bold">Module File</h2>
           {isAllowedCreateModule && (
             <AppButton
-              variant="outline"
+              variant="light"
               size="small"
               onClick={() => setCreateModule(true)}
             >

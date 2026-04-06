@@ -43,7 +43,7 @@ export default function EnrollmentScorecardListCMS(
         <h2 className="label-name font-brand font-bold">Enrolled Users</h2>
         {isAllowedManageUser && (
           <Link href={`/cohorts/${props.cohortId}/members`}>
-            <AppButton variant="outline" size="small">
+            <AppButton variant="light" size="small">
               <Settings className="size-4" />
               Manage Access
             </AppButton>

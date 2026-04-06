@@ -239,7 +239,7 @@ export default function EditUserForm({
               <Link href={"/users"}>
                 <AppButton
                   onClick={() => router.back()}
-                  variant="outline"
+                  variant="light"
                   type="button"
                 >
                   Cancel

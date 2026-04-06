@@ -47,7 +47,7 @@ export default function LearningListCMS({
           <h2 className="label-name font-brand font-bold">Learning Sessions</h2>
           {isAllowedCreateLearning && (
             <AppButton
-              variant="outline"
+              variant="light"
               size="small"
               onClick={() => setCreateLearning(true)}
             >

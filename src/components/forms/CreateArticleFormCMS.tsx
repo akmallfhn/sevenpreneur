@@ -339,7 +339,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               <AppButton
                 onClick={(e) => handleSubmit(e, "DRAFT")}
                 type="submit"
-                variant="outline"
+                variant="light"
                 disabled={isSubmittingDraft}
               >
                 {isSubmittingDraft && (

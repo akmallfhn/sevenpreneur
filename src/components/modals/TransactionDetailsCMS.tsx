@@ -176,7 +176,7 @@ export default function TransactionDetailsCMS({
                   </a>
                   <AppButton
                     className="shrink-0"
-                    variant="outline"
+                    variant="light"
                     size="small"
                     onClick={handleCopyInvoiceURL}
                   >

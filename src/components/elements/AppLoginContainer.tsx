@@ -93,7 +93,7 @@ export default function AppLoginContainer() {
 
           {/* Google Login */}
           <AppButton
-            variant="outline"
+            variant="light"
             onClick={() => login()}
             disabled={isLoading}
           >

@@ -89,7 +89,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                 </div>
                 <div className="flex transition-all transform z-10">
                   <AppButton
-                    variant={isDark ? "surfaceDark" : "primarySoft"}
+                    variant={isDark ? "dark" : "primarySoft"}
                     size="small"
                     onClick={() => setIsExpanded((prev) => !prev)}
                   >
