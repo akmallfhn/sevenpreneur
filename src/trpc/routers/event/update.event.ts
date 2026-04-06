@@ -1,3 +1,4 @@
+import { LearningMethodEnum, StatusEnum } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
 import { roleBasedProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
@@ -6,7 +7,6 @@ import {
   stringIsTimestampTz,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const updateEvent = {

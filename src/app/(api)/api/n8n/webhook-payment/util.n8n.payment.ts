@@ -1,5 +1,5 @@
+import { CategoryEnum } from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
-import { CategoryEnum } from "@prisma/client";
 
 export async function getProductName(
   prisma: ReturnType<typeof GetPrismaClient>,

@@ -1,3 +1,4 @@
+import { LearningMethodEnum, StatusEnum } from "@/generated/prisma/client";
 import {
   STATUS_CREATED,
   STATUS_FORBIDDEN,
@@ -16,7 +17,6 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 

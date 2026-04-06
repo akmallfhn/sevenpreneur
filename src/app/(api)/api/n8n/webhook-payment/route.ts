@@ -1,7 +1,7 @@
+import { CategoryEnum, TStatusEnum } from "@/generated/prisma/client";
 import { getRupiahCurrency } from "@/lib/currency";
 import { Optional } from "@/lib/optional-type";
 import GetPrismaClient from "@/lib/prisma";
-import { CategoryEnum, TStatusEnum } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getProductName } from "./util.n8n.payment";
 
