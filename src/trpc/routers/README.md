@@ -642,6 +642,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 | Procedure Name           | Administrator (`0`) | Non-Administrator/Not Logged-In |
 | :----------------------- | :-----------------: | :-----------------------------: |
+| `send.wa.chat`           |         ✅          |               ❌                |
 | `list.wa.conversations`  |         ✅          |               ❌                |
 | `list.wa.chats`          |         ✅          |               ❌                |
 | `update.wa.conversation` |         ✅          |               ❌                |

@@ -7,6 +7,7 @@ import { helloRouter } from "./hello";
 import { listRouter } from "./list";
 import { purchaseRouter } from "./purchase";
 import { readRouter } from "./read";
+import { sendRouter } from "./send";
 import { updateRouter } from "./update";
 import { useRouter } from "./use";
 
@@ -21,6 +22,7 @@ export const appRouter = createTRPCRouter({
   check: checkRouter,
   use: useRouter,
   purchase: purchaseRouter,
+  send: sendRouter,
 });
 
 export type AppRouter = typeof appRouter;
