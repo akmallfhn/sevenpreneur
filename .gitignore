@@ -42,3 +42,6 @@ next-env.d.ts
 
 # self-signed certificates
 certificates
+
+# Prisma generated files
+src/generated/prisma

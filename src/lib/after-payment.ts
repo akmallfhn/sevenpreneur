@@ -6,7 +6,7 @@ import {
   PrismaClient,
   Transaction,
   User,
-} from "@prisma/client";
+} from "@/generated/prisma/client";
 import { encodeSHA256 } from "./encode";
 import { sendEmail } from "./mailtrap";
 
@@ -16,7 +16,7 @@ type TransactionWithUser = Transaction & {
 
 export async function afterPaidTrigger(
   prisma: PrismaClient,
-  transactionId: string,
+  transactionId: string
 ) {
   const theTransaction = await prisma.transaction.findFirst({
     where: { id: transactionId },
@@ -34,7 +34,7 @@ export async function afterPaidTrigger(
     });
     if (!theCohortPrice) {
       console.error(
-        "afterPaidTrigger: The selected cohort price is not found.",
+        "afterPaidTrigger: The selected cohort price is not found."
       );
       return {
         status: 404,
@@ -54,7 +54,7 @@ export async function afterPaidTrigger(
       theTransaction,
       "Purchase",
       "service",
-      "Business Education Program",
+      "Business Education Program"
     );
 
     try {
@@ -161,7 +161,7 @@ export async function afterPaidTrigger(
   else {
     console.warn(
       "afterPaidTrigger: Unsupported category",
-      theTransaction.category,
+      theTransaction.category
     );
   }
 
@@ -172,7 +172,7 @@ async function notifyMetaEvent(
   transaction: TransactionWithUser,
   eventName: string,
   contentType: string,
-  contentCategory: string,
+  contentCategory: string
 ) {
   try {
     const metaResponse = await fetch(
@@ -203,7 +203,7 @@ async function notifyMetaEvent(
             },
           ],
         }),
-      },
+      }
     );
     const metaResult = await metaResponse.json();
     console.log("Meta Result:", metaResult);

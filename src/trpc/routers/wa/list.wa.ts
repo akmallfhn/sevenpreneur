@@ -1,3 +1,4 @@
+import { Prisma, WALeadStatus } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
@@ -8,7 +9,6 @@ import {
   stringIsNanoid,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { Prisma, WALeadStatus } from "@prisma/client";
 import z from "zod";
 
 export const listWA = {

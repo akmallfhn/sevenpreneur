@@ -1,3 +1,4 @@
+import { CostCategoryEnum, NSStatusEnum } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
@@ -8,7 +9,6 @@ import {
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { CostCategoryEnum, NSStatusEnum } from "@prisma/client";
 import z from "zod";
 import { ParseRevenueCSV } from "./util.bd";
 

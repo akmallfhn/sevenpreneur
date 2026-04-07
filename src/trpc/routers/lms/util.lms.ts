@@ -1,6 +1,6 @@
+import { PrismaClient } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN } from "@/lib/status_code";
-import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export async function isEnrolledCohort(

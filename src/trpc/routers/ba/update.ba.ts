@@ -1,3 +1,4 @@
+import { BAPeriodEnum, StatusEnum } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
@@ -7,7 +8,6 @@ import {
   numberIsPositive,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { BAPeriodEnum, StatusEnum } from "@prisma/client";
 import z from "zod";
 import { calculateBAScore } from "./util.ba";
 

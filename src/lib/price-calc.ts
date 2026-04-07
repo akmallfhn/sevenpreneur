@@ -1,9 +1,8 @@
-import { Prisma } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Prisma } from "@/generated/prisma/client";
 
 interface PaymentChannelCalculationData {
-  calc_percent: Decimal;
-  calc_flat: Decimal;
+  calc_percent: Prisma.Decimal;
+  calc_flat: Prisma.Decimal;
   calc_vat: boolean;
 }
 

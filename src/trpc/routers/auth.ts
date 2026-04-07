@@ -1,3 +1,4 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -12,7 +13,6 @@ import {
 } from "@/trpc/init";
 import { GoogleTokenVerifier } from "@/trpc/utils/google_verifier";
 import { stringNotBlank } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { randomBytes } from "crypto";
 import jwt from "jsonwebtoken";

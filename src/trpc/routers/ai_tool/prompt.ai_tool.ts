@@ -1,4 +1,4 @@
-import { JsonObject } from "@prisma/client/runtime/library";
+import { Prisma } from "@/generated/prisma/client";
 import { z } from "zod";
 import {
   AICOGSStructure_ProductCategory,
@@ -19,7 +19,7 @@ import { AIFormatOutputText, AIFormatOutputZod } from "./util.ai_tool";
 
 // Idea Validation //
 
-export interface AIResultIdeaValidation extends JsonObject {
+export interface AIResultIdeaValidation extends Prisma.JsonObject {
   problem_fit: {
     validation: {
       discovery: string;
@@ -64,7 +64,7 @@ export interface AIResultIdeaValidation extends JsonObject {
 
 // Market Size //
 
-export interface AIResultMarketSize extends JsonObject {
+export interface AIResultMarketSize extends Prisma.JsonObject {
   product_name: string; // before generating
   market_need: AIMarketSize_MarketNeed;
   regulation: AIMarketSize_Regulation;
@@ -96,7 +96,7 @@ export interface AIResultMarketSize extends JsonObject {
 
 // Competitor Grader //
 
-export interface AIResultCompetitorGrading extends JsonObject {
+export interface AIResultCompetitorGrading extends Prisma.JsonObject {
   product_name: string;
   industry_analysis: {
     current_condition: string;
@@ -152,7 +152,7 @@ type CostEntry = {
   total_cost: number;
 };
 
-export interface AIResultCOGSStructure extends JsonObject {
+export interface AIResultCOGSStructure extends Prisma.JsonObject {
   variable_cost: CostEntry[];
   fixed_cost: CostEntry[];
 }
@@ -163,7 +163,7 @@ function costEntryToString({ name, quantity, unit, total_cost }: CostEntry) {
   return `${name} (${quantity} ${unit} = ${total_cost})`;
 }
 
-export interface AIResultPricingStrategy extends JsonObject {
+export interface AIResultPricingStrategy extends Prisma.JsonObject {
   production_per_month: number; // before generating
   total_cost: {
     variable_cost: number;
@@ -195,7 +195,7 @@ export interface AIResultPricingStrategy extends JsonObject {
 
 // Submission Analysis //
 
-export interface AIResultSubmissionAnalysis extends JsonObject {
+export interface AIResultSubmissionAnalysis extends Prisma.JsonObject {
   comment: string;
 }
 

@@ -1,10 +1,10 @@
+import { CRoleEnum, PrismaClient } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { SaveQStashMessageID } from "@/lib/redis";
 import {
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
-import { CRoleEnum, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { Client } from "@upstash/qstash";
 import OpenAI from "openai";
