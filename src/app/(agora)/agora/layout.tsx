@@ -42,11 +42,9 @@ interface AgoraLayoutProps {
 export default async function AgoraLayout({ children }: AgoraLayoutProps) {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
-  if (!sessionToken) return null;
 
-  if (sessionToken) {
-    setSessionToken(sessionToken);
-  }
+  if (!sessionToken) return null;
+  setSessionToken(sessionToken);
 
   let aiResultList: AIResultListProps[] = [];
   try {

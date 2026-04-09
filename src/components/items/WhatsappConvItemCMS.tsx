@@ -19,7 +19,7 @@ const variantStyles: Record<
 > = {
   COLD: {
     icon: faSnowflake,
-    bg_color: "text-primary bg-primary-light",
+    bg_color: "text-primary-soft-foreground bg-primary-soft-background",
   },
   WARM: {
     icon: faMugHot,
@@ -33,28 +33,44 @@ const variantStyles: Record<
 
 interface WhatsappConvItemCMSProps {
   convUserFullName: string;
-  convUserAvatar: string;
+  convUserAvatar: string | null;
   convLastMessage: string;
   convLastMessageAt: string;
   convLeadStatus: LeadStatus;
   convUnreadMessage: number;
+  onClick?: () => void;
 }
 
 export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
   const { bg_color, icon } = variantStyles[props.convLeadStatus];
+  const initialName = props.convUserFullName
+    .split(" ")
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
 
   return (
-    <div className="conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-[#f4f4f4]">
+    <div
+      onClick={props.onClick}
+      className="conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-[#f4f4f4]"
+    >
       <div className="conv-metadata flex items-center gap-3">
         <div className="conv-sender-avatar relative flex">
           <div className="aspect-square size-10 shrink-0 rounded-full overflow-hidden">
-            <Image
-              className="object-cover w-full h-full"
-              src={props.convUserAvatar}
-              alt="user"
-              width={500}
-              height={500}
-            />
+            {props.convUserAvatar ? (
+              <Image
+                className="object-cover w-full h-full"
+                src={props.convUserAvatar}
+                alt="user"
+                width={500}
+                height={500}
+              />
+            ) : (
+              <div className="flex w-full h-full items-center justify-center bg-secondary-soft-background text-secondary-soft-foreground">
+                <p className="font-bodycopy font-medium">{initialName}</p>
+              </div>
+            )}
           </div>
           {props.convLeadStatus !== "COLD" && (
             <div

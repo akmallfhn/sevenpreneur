@@ -12,8 +12,6 @@ const isOriginAllowed = (origin: string | null) => {
   let baseURL = "sevenpreneur.com";
   if (domainMode === "local") {
     baseURL = "example.com:3000";
-  } else if (domainMode === "staging") {
-    baseURL = "staging.sevenpreneur.com";
   }
 
   const allowedOrigins = [

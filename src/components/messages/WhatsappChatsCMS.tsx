@@ -1,6 +1,6 @@
 "use client";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
-import Image from "next/image";
+import { Loader2 } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import WhatsappBubbleChatCMS from "./WhatsappBubbleChatCMS";
 import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
@@ -9,7 +9,7 @@ export interface WhatsappChatItem {
   id: string;
   message: string;
   direction: WhatsappChatDirection;
-  status: WhatsappChatStatus;
+  status: WhatsappChatStatus | null;
   created_at: string;
   sent_at: string | null;
   delivered_at: string | null;
@@ -20,6 +20,8 @@ export interface WhatsappChatItem {
 interface WhatsappChatsCMSProps {
   convId: string;
   convChats: WhatsappChatItem[];
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
@@ -28,7 +30,6 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
   // State for submit chat
   const [textValue, setTextValue] = useState("");
 
-  const [chats, setChats] = useState<WhatsappChatItem[]>(props.convChats);
   const conversationRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-scrolls to the bottom whenever new chats arrive.
@@ -42,7 +43,7 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       }
     }, 50);
     return () => clearTimeout(timeout);
-  }, [chats]);
+  }, [props.convChats]);
 
   // Automatically scrolls to the bottom when the page first loads.
   useLayoutEffect(() => {
@@ -122,56 +123,49 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       ref={conversationRef}
       className="chats-panel relative hidden flex-col w-full h-full bg-linear-to-t from-0% from-[#DDE4F1] to-100% to-[#F2F2F2] overflow-y-auto lg:flex"
     >
-      <div className="header sticky flex w-full p-3 top-0 inset-x-0 bg-white border-b border-outline text-[#333333] z-10">
-        <div className="conv-information flex items-center gap-2">
-          <div className="aspect-square size-9 shrink-0 rounded-full overflow-hidden">
-            <Image
-              className="object-cover w-full h-full"
-              src={"https://i.pravatar.cc/150?img=2"}
-              alt="user"
-              width={500}
-              height={500}
-            />
+      <div className="chats-conversation relative flex flex-col w-full p-3 min-h-full">
+        {props.isLoading && (
+          <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+            <Loader2 className="animate-spin size-5 " />
           </div>
-          <div className="flex flex-col">
-            <h3 className="conv-user-name flex w-full items-center text-[15px] font-bodycopy font-bold leading-snug">
-              Budi Santoso
-            </h3>
-            <p className="conv-user-phone-number text-sm text-[#333333]/80 font-bodycopy font-[450]">
-              +62979723871
-            </p>
+        )}
+        {props.isError && (
+          <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+            No Data
           </div>
-        </div>
-      </div>
-      <div className="chats-conversation relative flex flex-col w-full p-3">
-        <div className="chat-list w-full flex flex-col pt-5 mb-5">
-          {chats
-            .sort(
-              (a, b) =>
-                new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime()
-            )
-            .map((post, index) => (
-              <div
-                key={index}
-                className={`chat-wrapper flex w-full gap-10 ${
-                  post.direction === "INBOUND" ? "justify-start" : "justify-end"
-                }`}
-              >
-                <WhatsappBubbleChatCMS
-                  chatMessage={post.message}
-                  chatDirection={post.direction}
-                  chatStatus={post.status}
-                  createdAt={post.created_at}
-                  sentAt={post.sent_at}
-                  deliveredAt={post.delivered_at}
-                  readAt={post.read_at}
-                />
-              </div>
-            ))}
-        </div>
+        )}
+        {!props.isLoading && !props.isError && (
+          <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
+            {props.convChats
+              .sort(
+                (a, b) =>
+                  new Date(a.created_at).getTime() -
+                  new Date(b.created_at).getTime()
+              )
+              .map((post, index) => (
+                <div
+                  key={index}
+                  className={`chat-wrapper flex w-full gap-10 ${
+                    post.direction === "INBOUND"
+                      ? "justify-start"
+                      : "justify-end"
+                  }`}
+                >
+                  <WhatsappBubbleChatCMS
+                    chatMessage={post.message}
+                    chatDirection={post.direction}
+                    chatStatus={post.status}
+                    createdAt={post.created_at}
+                    sentAt={post.sent_at}
+                    deliveredAt={post.delivered_at}
+                    readAt={post.read_at}
+                  />
+                </div>
+              ))}
+          </div>
+        )}
         <form
-          className="form-generate-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
+          className="generate-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
           onSubmit={() => {}}
         >
           <WhatsappChatSubmitterCMS

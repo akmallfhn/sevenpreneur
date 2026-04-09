@@ -29,7 +29,7 @@ const variantStyles: Record<
   },
   COLD: {
     name: "Cold Leads",
-    labelColor: "text-cms-primary bg-cms-primary-light",
+    labelColor: "text-primary-soft-foreground bg-primary-soft-background",
     labelIcon: <FontAwesomeIcon icon={faSnowflake} />,
   },
 };

@@ -6,7 +6,7 @@ import { Check, CheckCheck, TriangleAlert } from "lucide-react";
 
 interface WhatsappBubbleChatCMSProps {
   chatMessage: string;
-  chatStatus: WhatsappChatStatus;
+  chatStatus: WhatsappChatStatus | null;
   chatDirection: WhatsappChatDirection;
   createdAt: string;
   sentAt: string | null;
@@ -45,10 +45,12 @@ export default function WhatsappBubbleChatCMS(
       {props.chatDirection === "OUTBOUND" && (
         <div className="status-information flex items-center gap-1">
           {iconStatus}
-          <p className="text-sm font-bodycopy font-medium text-[#333333]/80">
-            {toCapitalizeEachWord(props.chatStatus)}{" "}
-            {dayjs(timestampStatus).format("HH:mm")}
-          </p>
+          {props.chatStatus && (
+            <p className="text-sm font-bodycopy font-medium text-[#333333]/80">
+              {toCapitalizeEachWord(props.chatStatus)}{" "}
+              {dayjs(timestampStatus).format("HH:mm")}
+            </p>
+          )}
         </div>
       )}
     </div>

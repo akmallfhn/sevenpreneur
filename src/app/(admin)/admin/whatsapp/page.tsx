@@ -27,5 +27,5 @@ export default async function WhatsappPageCMS() {
     return <UnderDevelopment />;
   }
 
-  return <WhatsappConvsCMS />;
+  return <WhatsappConvsCMS sessionToken={sessionToken} />;
 }

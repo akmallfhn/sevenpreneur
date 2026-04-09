@@ -109,7 +109,7 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
   );
   const eventList = data?.list;
 
-  // Function to delete user
+  // Function to delete
   const deleteEvent = trpc.delete.event.useMutation();
   const handleDelete = () => {
     if (!deleteTargetItem) return;
