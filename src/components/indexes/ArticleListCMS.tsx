@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -22,6 +21,7 @@ import AppButton from "../buttons/AppButton";
 import TableCellCMS from "../elements/TableCellCMS";
 import TableHeadCMS from "../elements/TableHeadCMS";
 import InputCMS from "../fields/InputCMS";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
@@ -33,7 +33,6 @@ interface ArticleListCMSProps {
 
 export default function ArticleListCMS(props: ArticleListCMSProps) {
   const { copy } = useClipboard();
-  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const pageSize = 20;
   const searchParam = useSearchParams();
@@ -76,10 +75,8 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="web-marketing-tools max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+      <PageContainerCMS>
+        <div className="web-marketing-tools w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -299,7 +296,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
             </div>
           )}
         </div>
-      </div>
+      </PageContainerCMS>
     </React.Fragment>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { ArticleStatus } from "@/lib/app-types";
@@ -22,6 +21,7 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
@@ -42,7 +42,6 @@ interface EditArticleFormProps {
 export default function EditArticleForm(props: EditArticleFormProps) {
   const updateArticle = trpc.update.article.useMutation();
   const router = useRouter();
-  const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
 
   // Set session token to client
@@ -361,10 +360,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
   };
 
   return (
-    <div
-      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-    >
-      <form className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+    <PageContainerCMS>
+      <form className="container w-full flex flex-col gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -581,6 +578,6 @@ export default function EditArticleForm(props: EditArticleFormProps) {
           </div>
         )}
       </form>
-    </div>
+    </PageContainerCMS>
   );
 }

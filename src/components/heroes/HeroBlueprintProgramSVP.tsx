@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import AppButton from "../buttons/AppButton";
-import SBBP8Logo from "../svg-logos/SBBP8Logo";
 
 interface HeroBlueprintProgramSVPProps {
   cohortId: number;
@@ -16,19 +15,25 @@ export default function HeroBlueprintProgramSVP(
 ) {
   return (
     <div className="relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
-      {/* Hero Container */}
       <div className="hero-container relative flex w-full items-center py-10 px-4 z-[70] lg:px-0 lg:pt-20 lg:pb-24 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="hero-content flex flex-col w-full items-center gap-60 lg:gap-[28px] lg:items-start">
           <div className="flex flex-col gap-4 items-center text-white lg:items-start lg:gap-5">
-            <SBBP8Logo className="max-w-[142px] h-auto lg:max-w-[224px]" />
-            <div className="hero-title flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] leading-[1.1] sm:text-3xl lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[46px] xl:max-w-[720px]">
+            {/* <SBBP8Logo className="max-w-[142px] h-auto lg:max-w-[224px]" /> */}
+            <Image
+              className="w-[264px] h-auto lg:w-[432px]"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sbbp-mifx.webp"
+              alt="logo-sbbp-8-mifx"
+              width={300}
+              height={400}
+            />
+            {/* <div className="hero-title flex flex-col items-center text-center font-brand font-bold text-2xl max-w-[380px] leading-[1.1] sm:text-3xl lg:items-start lg:text-[32px] lg:text-left lg:max-w-[472px] xl:text-[46px] xl:max-w-[720px]">
               <h2 className="w-full text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0]">
                 Bisnis Stuck & Nggak Berkembang?
               </h2>
               <h2 className="w-fit text-transparent bg-clip-text bg-gradient-to-r from-57% from-primary to-90% to-secondary">
                 Saatnya Grow dengan <br /> Strategi yang Tepat
               </h2>
-            </div>
+            </div> */}
             <p className="hero-description w-[317px] text-sm text-center font-bodycopy lg:w-[460px] lg:text-lg lg:text-left xl:w-[518px] xl:text-xl">
               Kelas Strategi & Growth Bisnis untuk Executive <br /> dan
               Entrepreneur
@@ -128,9 +133,9 @@ export default function HeroBlueprintProgramSVP(
           </div>
         </div>
 
-        {/* All Speakers Desktop XL */}
+        {/* All Speakers Desktop 2XL */}
         <Image
-          className="all-speakers absolute hidden max-w-[672px] -bottom-5 -right-10 2xl:flex"
+          className="all-speakers absolute hidden max-w-[672px] -bottom-12 -right-10 2xl:flex"
           src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-8-18-3%20(1).webp"
           alt="Sevenpreneur Coach and Mentor"
           width={2440}
@@ -139,9 +144,9 @@ export default function HeroBlueprintProgramSVP(
       </div>
 
       {/* Absolute Decoration */}
-      {/* All Speakers Mobile */}
+      {/* All Speakers Mobile - XL */}
       <Image
-        className="all-speakers absolute flex max-w-[424px] bottom-0 left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:translate-x-0 lg:max-w-[600px] lg:-bottom-5 lg:-right-8 xl:max-w-[662px] xl:right-5 2xl:hidden"
+        className="all-speakers absolute flex max-w-[424px] bottom-0 left-1/2 -translate-x-1/2 z-30 lg:left-auto lg:translate-x-0 lg:max-w-[600px] lg:-bottom-5 lg:-right-8 xl:max-w-[662px] xl:-bottom-10 xl:right-5 2xl:hidden"
         src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sbbp-speakers-8-18-3%20(1).webp"
         alt="Sevenpreneur Coach and Mentor"
         width={2440}

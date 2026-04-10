@@ -2,14 +2,14 @@
 import { LeadStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import { ChevronRight, Loader2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
 import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
+import WhatsappChatsCMS from "../messages/WhatsappChatsCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
-import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
-import WhatsappChatsCMS from "../messages/WhatsappChatsCMS";
 
 interface WhatsappConvsCMSProps {
   sessionToken: string;
@@ -37,12 +37,20 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
     },
     { enabled: !!props.sessionToken && !!selectedConvId }
   );
+  const {
+    data: leadDetails,
+    isLoading: isLoadingLeadDetails,
+    isError: isErrorLeadDetails,
+  } = trpc.read.wa.conversation.useQuery(
+    { id: selectedConvId },
+    { enabled: !!props.sessionToken && !!selectedConvId }
+  );
 
   // Derive selected conversation object from selectedConvId
-  const selectedConvData = useMemo(
-    () => convList?.list.find((conv) => conv.id === selectedConvId) ?? null,
-    [convList, selectedConvId]
-  );
+  // const selectedConvData = useMemo(
+  //   () => convList?.list.find((conv) => conv.id === selectedConvId) ?? null,
+  //   [convList, selectedConvId]
+  // );
 
   return (
     <PageContainerCMS className="h-screen">
@@ -95,26 +103,48 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
             {selectedConvId ? (
               <div className="conv-wrapper flex w-full">
                 <div className="chats flex flex-[1.25] border-r">
-                  {selectedConvId && (
-                    <WhatsappChatsCMS
-                      convId={selectedConvId}
-                      convChats={chatList?.list ?? []}
-                      isLoading={isLoadingChats}
-                      isError={isErrorChats}
-                    />
-                  )}
+                  <WhatsappChatsCMS
+                    convId={selectedConvId}
+                    convChats={chatList?.list ?? []}
+                    isLoading={isLoadingChats}
+                    isError={isErrorChats}
+                  />
                 </div>
                 <div className="lead-details flex flex-1">
-                  {selectedConvData && (
-                    <WhatsappLeadDetailsCMS
-                      leadName={
-                        selectedConvData.user_full_name ||
-                        selectedConvData?.full_name
-                      }
-                      leadAvatar={selectedConvData.user_avatar ?? null}
-                      leadStatus={selectedConvData.lead_status}
-                    />
+                  {isLoadingLeadDetails && (
+                    <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+                      <Loader2 className="animate-spin size-5 " />
+                    </div>
                   )}
+                  {isErrorLeadDetails && (
+                    <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+                      No Data
+                    </div>
+                  )}
+                  {leadDetails &&
+                    !isLoadingLeadDetails &&
+                    !isErrorLeadDetails && (
+                      <WhatsappLeadDetailsCMS
+                        conversationId={selectedConvId}
+                        leadId={null}
+                        leadName={
+                          leadDetails.conversation.user?.full_name ||
+                          leadDetails.conversation.full_name
+                        }
+                        leadAvatar={
+                          leadDetails.conversation.user?.avatar ?? null
+                        }
+                        leadPhoneNumber={
+                          leadDetails.conversation.user?.phone_number ||
+                          leadDetails.conversation.phone_number
+                        }
+                        leadEmail={leadDetails.conversation.user?.email ?? null}
+                        leadStatus={leadDetails.conversation.lead_status}
+                        leadWinningRate={
+                          leadDetails.conversation.winning_rate ?? 0
+                        }
+                      />
+                    )}
                 </div>
               </div>
             ) : (

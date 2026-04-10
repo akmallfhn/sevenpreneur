@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { SessionMethod } from "@/lib/app-types";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -24,6 +23,7 @@ import MaterialListCMS from "../indexes/MaterialListCMS";
 import ConferenceItemCMS from "../items/ConferenceItemCMS";
 import LocationItemCMS from "../items/LocationItemCMS";
 import LearningMethodLabelCMS from "../labels/LearningMethodLabelCMS";
+import PageContainerCMS from "./PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import EmptyRecordingCMS from "../states/EmptyRecordingCMS";
@@ -38,7 +38,6 @@ interface LearningDetailsCMSProps {
 }
 
 export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
-  const { isCollapsed } = useSidebar();
   const [editLearning, setEditLearning] = useState(false);
   const [updateRecording, setUpdateRecording] = useState(false);
 
@@ -93,10 +92,8 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+      <PageContainerCMS>
+        <div className="container w-full flex flex-col gap-5">
           <div className="header-cms flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -261,7 +258,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
             </div>
           </div>
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Edit Learning */}
       {editLearning && (

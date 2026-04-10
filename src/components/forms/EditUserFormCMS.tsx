@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import InputCMS from "@/components/fields/InputCMS";
 import SelectCMS from "@/components/fields/SelectCMS";
@@ -24,6 +23,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import InputNumberCMS from "../fields/InputNumberCMS";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
@@ -36,7 +36,6 @@ export default function EditUserForm({
   sessionToken,
   userId,
 }: EditUserFormProps) {
-  const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
   const editUser = trpc.update.user.useMutation();
   const router = useRouter();
@@ -209,14 +208,11 @@ export default function EditUserForm({
   };
 
   return (
-    <div
-      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-    >
+    <PageContainerCMS>
       <form
-        className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
+        className="container w-full flex flex-col gap-4"
         onSubmit={handleSubmit}
       >
-        {/* PAGE HEADER */}
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -405,6 +401,6 @@ export default function EditUserForm({
           </div>
         )}
       </form>
-    </div>
+    </PageContainerCMS>
   );
 }

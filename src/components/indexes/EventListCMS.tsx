@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -27,6 +26,7 @@ import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageContainerCMS from "../pages/PageContainerCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -35,7 +35,6 @@ interface EventListCMSProps {
 }
 
 export default function EventListCMS({ sessionToken }: EventListCMSProps) {
-  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedId = searchParams.get("id");
@@ -131,10 +130,8 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+      <PageContainerCMS>
+        <div className="index w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -238,7 +235,7 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
             </table>
           )}
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Open Create Form */}
       {isOpenCreateForm && (

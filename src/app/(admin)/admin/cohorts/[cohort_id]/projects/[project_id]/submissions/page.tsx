@@ -1,4 +1,5 @@
 import SubmissionListCMS from "@/components/indexes/SubmissionListCMS";
+import PageContainerCMS from "@/components/pages/PageContainerCMS";
 import ForbiddenComponent from "@/components/states/403Forbidden";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
@@ -24,9 +25,9 @@ export default async function SubmissionsPageCMS({
 
   if (!allowedRolesListSubmission.includes(userSession.user.role_id)) {
     return (
-      <div className="forbidden flex w-full h-full pl-64">
+      <PageContainerCMS>
         <ForbiddenComponent />
-      </div>
+      </PageContainerCMS>
     );
   }
 

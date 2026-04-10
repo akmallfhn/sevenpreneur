@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { RolesUser } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
@@ -19,6 +18,7 @@ import RolesLabelCMS from "../labels/RolesLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
@@ -31,7 +31,6 @@ interface CohortMemberListCMSProps {
 }
 
 export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
-  const { isCollapsed } = useSidebar();
   // State for Add Users
   const [isOpenInvitationForm, setIsOpenInvitationForm] = useState(false);
 
@@ -72,10 +71,8 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+      <PageContainerCMS>
+        <div className="container w-full flex flex-col gap-5">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -216,7 +213,7 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
             </div>
           )}
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Add User */}
       {isOpenInvitationForm && (

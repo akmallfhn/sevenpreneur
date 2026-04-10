@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -26,6 +25,7 @@ import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageContainerCMS from "./PageContainerCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -36,7 +36,6 @@ interface CohortDetailsCMSProps {
 }
 
 export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
-  const { isCollapsed } = useSidebar();
   const [editCohort, setEditCohort] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -90,10 +89,8 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+      <PageContainerCMS>
+        <div className="container w-full flex flex-col gap-5">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -249,7 +246,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
             </aside>
           </div>
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Edit Cohort */}
       {editCohort && (

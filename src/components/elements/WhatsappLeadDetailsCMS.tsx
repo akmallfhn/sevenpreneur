@@ -1,23 +1,48 @@
 "use client";
+import { LeadStatus } from "@/lib/app-types";
+import { trpc } from "@/trpc/client";
 import { CloudSync, Loader, PenBox, TextAlignStart } from "lucide-react";
 import Image from "next/image";
+import { useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
 import { Slider } from "../ui/slider";
-import { LeadStatus } from "@/lib/app-types";
 
 interface WhatsappLeadDetailsCMSProps {
+  conversationId: string;
+  leadId: string | null;
   leadName: string;
   leadAvatar: string | null;
-  // leadPhoneNumber: string;
-  // leadEmail: string;
+  leadPhoneNumber: string;
+  leadEmail: string | null;
   leadStatus: LeadStatus;
+  leadWinningRate: number;
 }
 
 export default function WhatsappLeadDetailsCMS(
   props: WhatsappLeadDetailsCMSProps
 ) {
+  const updateConversation = trpc.update.wa.conversation.useMutation();
+
+  // State for winning rate
+  const [winningRate, setWinningRate] = useState(props.leadWinningRate);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Fetch
+  const handleWinningRateChange = (value: number[]) => {
+    const newRate = value[0];
+    setWinningRate(newRate);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      updateConversation.mutate({
+        id: props.conversationId,
+        winning_rate: newRate,
+      });
+    }, 600);
+  };
+
   const initialName = props.leadName
     .split(" ")
     .slice(0, 2)
@@ -49,16 +74,20 @@ export default function WhatsappLeadDetailsCMS(
             {props.leadName}
           </p>
           <p className="lead-phone-number text-sm text-[#333333]/70 font-semibold font-bodycopy leading-snug line-clamp-1">
-            +6299898988787
+            {props.leadPhoneNumber}
           </p>
-          <p className="lead-email text-sm text-[#333333]/70 font-semibold font-bodycopy leading-snug line-clamp-1">
-            budisantoso@gmail.com
-          </p>
+          {props.leadEmail && (
+            <p className="lead-email text-sm text-[#333333]/70 font-semibold font-bodycopy leading-snug line-clamp-1">
+              {props.leadEmail}
+            </p>
+          )}
         </div>
-        <AppButton size="smallRounded" variant="primarySoft">
-          <CloudSync className="size-4" />
-          Sync to Database
-        </AppButton>
+        {!props.leadId && (
+          <AppButton size="smallRounded" variant="primarySoft">
+            <CloudSync className="size-4" />
+            Sync to Database
+          </AppButton>
+        )}
       </div>
       <div className="lead-details flex flex-col gap-2 p-3 bg-section-background/50  border border-outline rounded-md">
         <div className="flex w-full justify-between items-center leading-snug">
@@ -105,9 +134,14 @@ export default function WhatsappLeadDetailsCMS(
           <h5 className="font-bodycopy text-[15px] font-bold">Winning Rate</h5>
         </div>
         <div className="flex w-full items-center gap-2">
-          <Slider defaultValue={[0]} max={100} step={5} />
+          <Slider
+            value={[winningRate]}
+            max={100}
+            step={5}
+            onValueChange={handleWinningRateChange}
+          />
           <div className="input w-fit text-sm text-[#333333] font-bodycopy font-medium">
-            50%
+            {winningRate}%
           </div>
         </div>
       </div>

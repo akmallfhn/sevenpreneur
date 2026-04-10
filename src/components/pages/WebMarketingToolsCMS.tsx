@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { StatusType } from "@/lib/app-types";
@@ -10,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import EditInterstitialAdsFormCMS from "../forms/EditInterstitialAdsFormCMS";
 import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import PageContainerCMS from "./PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
@@ -18,7 +18,6 @@ interface WebMarketingToolsCMSProps {
 }
 
 export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
-  const { isCollapsed } = useSidebar();
   const [editTicker, setEditTicker] = useState(false);
   const [editInterstitial, setEditInterstitial] = useState(false);
 
@@ -50,9 +49,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
+      <PageContainerCMS>
         <div className="web-marketing-tools max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
@@ -207,7 +204,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
             </div>
           )}
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Open Edit Ticker */}
       {editTicker && (

@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import CreateCohortFormCMS from "@/components/forms/CreateCohortFormCMS";
 import CohortItemCardCMS from "@/components/items/CohortItemCardCMS";
@@ -11,6 +10,7 @@ import { ChevronRight, Loader2, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageContainerCMS from "../pages/PageContainerCMS";
 
 dayjs.extend(isBetween);
 
@@ -23,7 +23,6 @@ export default function CohortListCMS({
   sessionToken,
   sessionUserRole,
 }: CohortListCMSProps) {
-  const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
   const [createCohort, setCreateCohort] = useState(false);
 
@@ -37,10 +36,8 @@ export default function CohortListCMS({
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="page-container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+      <PageContainerCMS>
+        <div className="index w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -94,7 +91,7 @@ export default function CohortListCMS({
             </div>
           )}
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Form Create Cohort */}
       {createCohort && (

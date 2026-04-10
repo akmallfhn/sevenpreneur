@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
@@ -17,6 +16,7 @@ import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
@@ -31,7 +31,6 @@ interface CohortMembersPerformanceCMSProps {
 export default function CohortMembersPerformanceCMS(
   props: CohortMembersPerformanceCMSProps
 ) {
-  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
@@ -66,9 +65,7 @@ export default function CohortMembersPerformanceCMS(
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
+      <PageContainerCMS>
         {isLoading && (
           <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
             <Loader2 className="animate-spin size-5 " />
@@ -81,7 +78,7 @@ export default function CohortMembersPerformanceCMS(
         )}
 
         {!isLoading && !isError && (
-          <div className="root container max-w-[calc(100%-4rem)] w-full flex flex-col gap-5">
+          <div className="container w-full flex flex-col gap-5">
             <div className="page-header flex flex-col gap-3">
               <AppBreadcrumb>
                 <ChevronRight className="size-3.5" />
@@ -249,7 +246,7 @@ export default function CohortMembersPerformanceCMS(
             </div>
           </div>
         )}
-      </div>
+      </PageContainerCMS>
 
       {/* Open Submission Details */}
       {openDetailsId && (

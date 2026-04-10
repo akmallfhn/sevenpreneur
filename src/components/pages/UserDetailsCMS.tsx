@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { StatusType } from "@/lib/app-types";
 import { useClipboard } from "@/lib/use-clipboard";
 import { trpc } from "@/trpc/client";
@@ -34,6 +33,7 @@ import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
+import PageContainerCMS from "./PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
@@ -48,7 +48,6 @@ interface UserDetailsCMSProps {
 
 export default function UserDetailsCMS(props: UserDetailsCMSProps) {
   const { copy } = useClipboard();
-  const { isCollapsed } = useSidebar();
 
   // Fetch tRPC data
   const {
@@ -95,10 +94,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
     isErrorTransactions;
 
   return (
-    <div
-      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-    >
-      <div className="page-container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+    <PageContainerCMS>
+      <div className="page-container w-full flex flex-col gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -490,6 +487,6 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
           </div>
         )}
       </div>
-    </div>
+    </PageContainerCMS>
   );
 }

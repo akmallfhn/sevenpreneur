@@ -1,4 +1,5 @@
 import WhatsappConvsCMS from "@/components/indexes/WhatsappConvsCMS";
+import PageContainerCMS from "@/components/pages/PageContainerCMS";
 import ForbiddenComponent from "@/components/states/403Forbidden";
 import UnderDevelopment from "@/components/states/UnderDevelopment";
 import { setSessionToken, trpc } from "@/trpc/server";
@@ -17,14 +18,18 @@ export default async function WhatsappPageCMS() {
 
   if (!allowedRolesWhatsappChats.includes(userSession.user.role_id)) {
     return (
-      <div className="forbidden flex w-full h-full pl-64">
+      <PageContainerCMS>
         <ForbiddenComponent />
-      </div>
+      </PageContainerCMS>
     );
   }
 
-  if (process.env.DOMAIN_MODE !== "local") {
-    return <UnderDevelopment />;
+  if (process.env.DOMAIN_MODE === "local") {
+    return (
+      <PageContainerCMS>
+        <UnderDevelopment />
+      </PageContainerCMS>
+    );
   }
 
   return <WhatsappConvsCMS sessionToken={sessionToken} />;

@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { ProductCategory } from "@/lib/app-types";
@@ -27,6 +26,7 @@ import FilterLabelCMS from "../labels/FilterLabelCMS";
 import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
 import TransactionDetailsCMS from "../modals/TransactionDetailsCMS";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
@@ -40,7 +40,6 @@ interface TransactionListCMSProps {
 export default function TransactionListCMS({
   sessionToken,
 }: TransactionListCMSProps) {
-  const { isCollapsed } = useSidebar();
   const router = useRouter();
   const searchParam = useSearchParams();
   const params = new URLSearchParams(searchParam.toString());
@@ -207,10 +206,8 @@ export default function TransactionListCMS({
 
   return (
     <React.Fragment>
-      <div
-        className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-      >
-        <div className="index max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
+      <PageContainerCMS>
+        <div className="index w-full flex flex-col gap-4">
           <div className="page-header flex flex-col gap-3">
             <AppBreadcrumb>
               <ChevronRight className="size-3.5" />
@@ -415,7 +412,7 @@ export default function TransactionListCMS({
             </div>
           )}
         </div>
-      </div>
+      </PageContainerCMS>
 
       {/* Open Create Invoice */}
       {isOpenCreateInvoice && (

@@ -1,5 +1,4 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
 import AppButton from "@/components/buttons/AppButton";
 import InputCMS from "@/components/fields/InputCMS";
 import SelectCMS from "@/components/fields/SelectCMS";
@@ -25,6 +24,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import InputNumberCMS from "../fields/InputNumberCMS";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
+import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 
@@ -33,7 +33,6 @@ interface CreateUserFormProps {
 }
 
 export default function CreateUserForm(props: CreateUserFormProps) {
-  const { isCollapsed } = useSidebar();
   const createUser = trpc.create.user.useMutation();
   const router = useRouter();
   const utils = trpc.useUtils();
@@ -198,11 +197,9 @@ export default function CreateUserForm(props: CreateUserFormProps) {
   };
 
   return (
-    <div
-      className={`root hidden w-full h-full justify-center bg-white py-8 lg:flex ${isCollapsed ? "pl-16" : "pl-64"}`}
-    >
+    <PageContainerCMS>
       <form
-        className="container max-w-[calc(100%-4rem)] w-full flex flex-col gap-4"
+        className="container w-full flex flex-col gap-4"
         onSubmit={handleSubmit}
       >
         <div className="page-header flex flex-col gap-3">
@@ -380,6 +377,6 @@ export default function CreateUserForm(props: CreateUserFormProps) {
           </div>
         )}
       </form>
-    </div>
+    </PageContainerCMS>
   );
 }
