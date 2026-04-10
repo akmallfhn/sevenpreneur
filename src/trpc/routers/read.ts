@@ -12,6 +12,7 @@ import { readTemplate } from "./templates/templates";
 import { readTicker } from "./ticker/read.ticker";
 import { readTransaction } from "./transaction/read.transaction";
 import { readUserData } from "./userdata/read.userdata";
+import { readWA } from "./wa/read.wa";
 
 export const readRouter = createTRPCRouter({
   // Lookup Tables //
@@ -100,5 +101,11 @@ export const readRouter = createTRPCRouter({
 
   ad: {
     interstitial: readAdv.interstitial,
+  },
+
+  // WhatsApp-chat-related //
+
+  wa: {
+    conversation: readWA.conversation,
   },
 });
