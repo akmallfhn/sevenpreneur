@@ -114,26 +114,7 @@ ORDER BY last_message_at DESC`;
     )
     .query(async (opts) => {
       const waConversation = await opts.ctx.prisma.wAConversation.findFirst({
-        select: {
-          full_name: true,
-          phone_number: true,
-          lead_status: true,
-          winning_rate: true,
-          note: true,
-          last_read_id: true,
-          user: {
-            select: {
-              full_name: true,
-              email: true,
-              phone_country: { omit: { id: true } },
-              phone_number: true,
-              avatar: true,
-            },
-          },
-          handler: {
-            select: { full_name: true, avatar: true },
-          },
-        },
+        select: { id: true },
         where: { id: opts.input.conv_id },
       });
       if (!waConversation) {
@@ -165,19 +146,6 @@ ORDER BY last_message_at DESC`;
       return {
         code: STATUS_OK,
         message: "Success",
-        conv_full_name: waConversation.full_name,
-        conv_phone_number: waConversation.phone_number,
-        conv_lead_status: waConversation.lead_status,
-        conv_winning_rate: waConversation.winning_rate,
-        conv_note: waConversation.note,
-        conv_last_read_id: waConversation.last_read_id,
-        conv_user_full_name: waConversation.user?.full_name ?? null,
-        conv_user_email: waConversation.user?.email ?? null,
-        conv_user_phone_country: waConversation.user?.phone_country ?? null,
-        conv_user_phone_number: waConversation.user?.phone_number ?? null,
-        conv_user_avatar: waConversation.user?.avatar ?? null,
-        conv_handler_full_name: waConversation.handler?.full_name ?? null,
-        conv_handler_avatar: waConversation.handler?.avatar ?? null,
         list: waChatsList,
       };
     }),
