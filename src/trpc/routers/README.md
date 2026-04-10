@@ -645,6 +645,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `send.wa.chat`           |         ✅          |               ❌                |
 | `list.wa.conversations`  |         ✅          |               ❌                |
 | `list.wa.chats`          |         ✅          |               ❌                |
+| `read.wa.conversation`   |         ✅          |               ❌                |
 | `update.wa.conversation` |         ✅          |               ❌                |
 
 **Scopes:** Only Administrators have access to all WhatsApp chats.
