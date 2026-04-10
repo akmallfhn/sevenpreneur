@@ -1,23 +1,14 @@
 "use client";
-import { DeleteSession } from "@/lib/actions";
 import { StatusType } from "@/lib/app-types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import {
-  AlignLeftIcon,
-  Blocks,
-  LogOut,
-  UserCircle2,
-  Wallet,
-} from "lucide-react";
+import { AlignLeftIcon, UserCircle2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
-import AppDropdown from "../elements/AppDropdown";
-import AppDropdownItemList from "../elements/AppDropdownItemList";
 import SevenpreneurLogo from "../svg-logos/SevenpreneurLogo";
 import AnnouncementTickerSVP, {
   AnnouncementTickerSVPProps,
@@ -39,9 +30,7 @@ interface HeaderNavbarSVPProps extends AnnouncementTickerSVPProps {
 }
 
 export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
-  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   const disallowedPath = ["/auth"];
@@ -56,39 +45,10 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
 
   const nickName = props.userName?.split(" ")[0];
 
-  // Open and close dropdown
-  const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    setAccountMenuOpen((prev) => !prev);
-  };
-
-  // Close dropdown if clicked outside
-  useEffect(() => {
-    const handleClickOutside = (
-      event: MouseEvent | (MouseEvent & { target: Node })
-    ) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
-        setAccountMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   let domain = "sevenpreneur.com";
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
   }
-
-  // Sign out function
-  const handleSignOut = async () => {
-    await DeleteSession();
-  };
 
   // Validate Ticker Based on Start Date and End Date
   const isValidTicker = dayjs().isBetween(
@@ -144,46 +104,14 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                     <AppThemeSwitcher />
                   </div>
                   {props.isLoggedIn ? (
-                    <div
-                      className="user-menu relative flex hover:cursor-pointer"
-                      ref={wrapperRef}
-                      onClick={handleActionsDropdown}
-                    >
-                      <AvatarBadgeSVP
-                        userAvatar={
-                          props.userAvatar ||
-                          "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                        }
-                        userName={nickName || "User"}
-                      />
-                      <AppDropdown
-                        isOpen={accountMenuOpen}
-                        onClose={() => setAccountMenuOpen(false)}
-                        alignMobile="right"
-                      >
-                        {props.userRole !== 3 && (
-                          <Link href={`https://admin.${domain}`}>
-                            <AppDropdownItemList
-                              menuIcon={<Blocks className="size-4" />}
-                              menuName="Dashboard Admin"
-                            />
-                          </Link>
-                        )}
-                        <Link href={`/transactions`}>
-                          <AppDropdownItemList
-                            menuIcon={<Wallet className="size-4" />}
-                            menuName="Transaction"
-                          />
-                        </Link>
-                        <hr className="my-1" />
-                        <AppDropdownItemList
-                          menuIcon={<LogOut className="size-4" />}
-                          menuName="Sign out"
-                          isDestructive
-                          onClick={handleSignOut}
-                        />
-                      </AppDropdown>
-                    </div>
+                    <AvatarBadgeSVP
+                      userAvatar={
+                        props.userAvatar ||
+                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+                      }
+                      userName={nickName || "User"}
+                      userRole={props.userRole}
+                    />
                   ) : (
                     <Link href={`/auth/login?redirectTo=${pathname}`}>
                       <div className="login-desktop hidden lg:flex">

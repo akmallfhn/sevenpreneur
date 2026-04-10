@@ -46,12 +46,6 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
     { enabled: !!props.sessionToken && !!selectedConvId }
   );
 
-  // Derive selected conversation object from selectedConvId
-  // const selectedConvData = useMemo(
-  //   () => convList?.list.find((conv) => conv.id === selectedConvId) ?? null,
-  //   [convList, selectedConvId]
-  // );
-
   return (
     <PageContainerCMS className="h-screen">
       <div className="page-wrapper flex flex-col w-full gap-4">
