@@ -37,6 +37,14 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
+      // Only accept messages to our number
+      if (
+        change.value.metadata.phone_number_id !==
+        process.env.WHATSAPP_PHONE_NUMBER_ID
+      ) {
+        continue;
+      }
+
       // Inbound messages
       if (change.value.messages) {
         let userProfileName = "";
