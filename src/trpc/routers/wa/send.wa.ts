@@ -30,7 +30,10 @@ export const sendWA = {
           waConversation.phone_number,
           opts.input.message
         );
-        if (whatsappResponse.messages.length < 0) {
+        if (
+          !whatsappResponse.messages ||
+          whatsappResponse.messages.length < 1
+        ) {
           throw Error("No message ID");
         } else if (whatsappResponse.messages.length > 1) {
           console.error("send.whatsapp: More-than-one messages are returned.");

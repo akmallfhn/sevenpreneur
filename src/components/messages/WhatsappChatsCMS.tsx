@@ -1,9 +1,17 @@
 "use client";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
+import { trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import WhatsappBubbleChatCMS from "./WhatsappBubbleChatCMS";
 import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
+import { toast } from "sonner";
 
 export interface WhatsappChatItem {
   id: string;
@@ -18,19 +26,39 @@ export interface WhatsappChatItem {
 }
 
 interface WhatsappChatsCMSProps {
+  sessionToken: string;
   convId: string;
-  convChats: WhatsappChatItem[];
-  isLoading: boolean;
-  isError: boolean;
 }
 
 export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
-  // const router = useRouter();
+  const utils = trpc.useUtils();
+  // State for auto-scroll
+  const conversationRef = useRef<HTMLDivElement | null>(null);
 
   // State for submit chat
   const [textValue, setTextValue] = useState("");
+  const sendChat = trpc.send.wa.chat.useMutation();
 
-  const conversationRef = useRef<HTMLDivElement | null>(null);
+  // Fetch tRPC data
+  const { data, isLoading, isError } = trpc.list.wa.chats.useQuery(
+    {
+      conv_id: props.convId,
+    },
+    {
+      enabled: !!props.sessionToken && !!props.convId,
+      refetchInterval: (query) => {
+        const list = query.state.data?.list ?? [];
+        const hasPendingOutbound = list.some(
+          (chat) =>
+            chat.direction === "OUTBOUND" &&
+            chat.status !== "READ" &&
+            chat.status !== "FAILED"
+        );
+        return hasPendingOutbound ? 1000 : 5000;
+      },
+    }
+  );
+  const chatList = useMemo(() => data?.list ?? [], [data?.list]);
 
   // Auto-scrolls to the bottom whenever new chats arrive.
   useEffect(() => {
@@ -43,7 +71,7 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       }
     }, 50);
     return () => clearTimeout(timeout);
-  }, [props.convChats]);
+  }, [chatList]);
 
   // Automatically scrolls to the bottom when the page first loads.
   useLayoutEffect(() => {
@@ -55,68 +83,33 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
     }
   }, []);
 
-  // function appendToLastAssistant(text: string) {
-  //   setChats((prev) => {
-  //     const lastIndex = prev.length - 1;
-  //     if (prev[lastIndex]?.role !== "ASSISTANT") return prev;
+  // Handle send chat
+  const handleSendChat = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!textValue.trim() || sendChat.isPending) {
+      return;
+    }
 
-  //     const updated = [...prev];
-  //     updated[lastIndex] = {
-  //       ...updated[lastIndex],
-  //       message: updated[lastIndex].message + text,
-  //     };
-
-  //     return updated;
-  //   });
-  // }
-
-  // Handles user message submissions within the chat.
-  // const handleSubmit = async (e: FormEvent) => {
-  //   e.preventDefault();
-  //   if (!textValue.trim()) return;
-
-  //   setGeneratingAI(true);
-
-  //   const newUserChat: Chats = {
-  //     role: "USER",
-  //     message: textValue,
-  //     created_at: new Date().toISOString(),
-  //   };
-
-  //   const newAssistantChat: Chats = {
-  //     role: "ASSISTANT",
-  //     message: "",
-  //     created_at: new Date().toISOString(),
-  //   };
-
-  //   setChats((prev) => [...prev, newUserChat, newAssistantChat]);
-  //   setTextValue("");
-
-  //   await sendMessage(
-  //     {
-  //       model: "gpt-4.1-mini",
-  //       token: props.authToken,
-  //       conv_id: props.conversationId,
-  //       message: newUserChat.message,
-  //     },
-  //     {
-  //       onEvent(event) {
-  //         switch (event.event) {
-  //           case "delta":
-  //             appendToLastAssistant(event.data);
-  //         }
-  //       },
-  //       onCompleted() {
-  //         setGeneratingAI(false);
-  //       },
-  //       onError(err) {
-  //         console.error(err);
-  //         toast.error("Failed to generate AI response");
-  //         setGeneratingAI(false);
-  //       },
-  //     }
-  //   );
-  // };
+    try {
+      sendChat.mutate(
+        {
+          conv_id: props.convId,
+          message: textValue.trim(),
+        },
+        {
+          onSuccess: () => {
+            setTextValue("");
+            utils.list.wa.chats.invalidate({ conv_id: props.convId });
+          },
+          onError: () => {
+            toast.error("Failed to send chat");
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Failed to send chat", error);
+    }
+  };
 
   return (
     <div
@@ -124,19 +117,19 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       className="chats-panel relative hidden flex-col w-full h-full bg-linear-to-t from-0% from-[#DDE4F1] to-100% to-[#F2F2F2] overflow-y-auto lg:flex"
     >
       <div className="chats-conversation relative flex flex-col w-full p-3 min-h-full">
-        {props.isLoading && (
+        {isLoading && (
           <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
             <Loader2 className="animate-spin size-5 " />
           </div>
         )}
-        {props.isError && (
+        {isError && (
           <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
             No Data
           </div>
         )}
-        {!props.isLoading && !props.isError && (
+        {!isLoading && !isError && (
           <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
-            {props.convChats
+            {[...chatList]
               .sort(
                 (a, b) =>
                   new Date(a.created_at).getTime() -
@@ -166,13 +159,13 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
         )}
         <form
           className="generate-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
-          onSubmit={() => {}}
+          onSubmit={handleSendChat}
         >
           <WhatsappChatSubmitterCMS
             value={textValue}
             onTextAreaChange={(value) => setTextValue(value)}
-            onSubmit={() => {}}
-            isLoadingSubmit={false}
+            onSubmit={handleSendChat}
+            isLoadingSubmit={sendChat.isPending}
           />
         </form>
       </div>

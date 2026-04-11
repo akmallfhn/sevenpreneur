@@ -6,8 +6,8 @@ import { Check, CheckCheck, TriangleAlert } from "lucide-react";
 
 interface WhatsappBubbleChatCMSProps {
   chatMessage: string;
-  chatStatus: WhatsappChatStatus | null;
   chatDirection: WhatsappChatDirection;
+  chatStatus: WhatsappChatStatus | null;
   createdAt: string;
   sentAt: string | null;
   deliveredAt: string | null;
@@ -28,22 +28,24 @@ export default function WhatsappBubbleChatCMS(
   } else if (props.chatStatus === "SENT") {
     iconStatus = <Check className="size-4 text-[#333333]/80" />;
     timestampStatus = props.sentAt;
-  } else {
+  } else if (props.chatStatus === "FAILED") {
     iconStatus = <TriangleAlert className="size-4 text-destructive" />;
   }
 
   return (
-    <div className="chat-container flex flex-col w-fit max-w-[min(70%,560px)] my-3 gap-1">
+    <div className="chat-container flex flex-col w-fit max-w-[min(70%,560px)] my-3 gap-1 items-end">
       <div
-        className={`chat-message flex flex-col w-fit px-4 py-2 gap-0.5 font-bodycopy text-[15px] font-[450] break-words whitespace-pre-wrap ${props.chatDirection === "INBOUND" ? "bg-white rounded-r-md rounded-bl-md" : "bg-[#F5F2FF] rounded-l-md rounded-br-md"}`}
+        className={`chat-message flex flex-col w-fit px-4 py-2 gap-0.5 font-bodycopy text-[15px] font-[450] break-words whitespace-pre-wrap ${props.chatDirection === "INBOUND" ? "bg-white rounded-r-md rounded-bl-md" : "bg-tertiary-background text-tertiary-foreground rounded-l-md rounded-br-md"}`}
       >
         <p>{props.chatMessage}</p>
-        <span className="chat-timestamp w-full text-right text-xs text-[#333333]/80 font-[450]">
-          {dayjs(props.createdAt).format("HH:mm")}
-        </span>
+        {props.chatDirection === "INBOUND" && (
+          <span className="chat-timestamp w-full text-right text-xs text-[#333333]/80 font-[450]">
+            {dayjs(props.createdAt).format("HH:mm")}
+          </span>
+        )}
       </div>
       {props.chatDirection === "OUTBOUND" && (
-        <div className="status-information flex items-center gap-1">
+        <div className="status-information flex items-center gap-1 justify-end">
           {iconStatus}
           {props.chatStatus && (
             <p className="text-sm font-bodycopy font-medium text-[#333333]/80">

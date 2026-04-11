@@ -66,6 +66,13 @@ export default function WhatsappChatSubmitterCMS({
     setShowEmoji(false);
   };
 
+  // Reset height when value is cleared externally (e.g. after send)
+  useEffect(() => {
+    if (!value && textAreaRef.current) {
+      textAreaRef.current.style.height = "auto";
+    }
+  }, [value]);
+
   // Dynamic resize height text area
   const handleTextAreaChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>

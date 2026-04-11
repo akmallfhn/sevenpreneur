@@ -37,9 +37,9 @@ export const whatsappMessageRequest = (
       },
     };
 
-    const whatsappPhoneNumber = process.env.WHATSAPP_PHONE_NUMBER;
+    const whatsappPhoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
     const whatsappReq = https.request(
-      `https://graph.facebook.com/v23.0/${whatsappPhoneNumber}/messages`,
+      `https://graph.facebook.com/v23.0/${whatsappPhoneNumberId}/messages`,
       whatsappRequestOptions,
       (res) => {
         let data = "";

@@ -1,7 +1,6 @@
 import WhatsappConvsCMS from "@/components/indexes/WhatsappConvsCMS";
 import PageContainerCMS from "@/components/pages/PageContainerCMS";
 import ForbiddenComponent from "@/components/states/403Forbidden";
-import UnderDevelopment from "@/components/states/UnderDevelopment";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -20,14 +19,6 @@ export default async function WhatsappPageCMS() {
     return (
       <PageContainerCMS>
         <ForbiddenComponent />
-      </PageContainerCMS>
-    );
-  }
-
-  if (process.env.DOMAIN_MODE === "local") {
-    return (
-      <PageContainerCMS>
-        <UnderDevelopment />
       </PageContainerCMS>
     );
   }

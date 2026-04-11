@@ -2,6 +2,7 @@
 import { LeadStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import { ChevronRight, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
 import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
@@ -27,28 +28,10 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
     {},
     { enabled: !!props.sessionToken }
   );
-  const {
-    data: chatList,
-    isLoading: isLoadingChats,
-    isError: isErrorChats,
-  } = trpc.list.wa.chats.useQuery(
-    {
-      conv_id: selectedConvId,
-    },
-    { enabled: !!props.sessionToken && !!selectedConvId }
-  );
-  const {
-    data: leadDetails,
-    isLoading: isLoadingLeadDetails,
-    isError: isErrorLeadDetails,
-  } = trpc.read.wa.conversation.useQuery(
-    { id: selectedConvId },
-    { enabled: !!props.sessionToken && !!selectedConvId }
-  );
 
   return (
     <PageContainerCMS className="h-screen">
-      <div className="page-wrapper flex flex-col w-full gap-4">
+      <div className="page-wrapper flex flex-col w-full h-full gap-4">
         <div className="page-header flex flex-col gap-3">
           <AppBreadcrumb>
             <ChevronRight className="size-3.5" />
@@ -93,56 +76,45 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
               </div>
             )}
           </div>
-          <div className="conv-details flex flex-[2.4] border rounded-r-lg">
+          <div className="conv-details flex flex-[2.5] border rounded-r-lg">
             {selectedConvId ? (
               <div className="conv-wrapper flex w-full">
                 <div className="chats flex flex-[1.25] border-r">
                   <WhatsappChatsCMS
+                    sessionToken={props.sessionToken}
                     convId={selectedConvId}
-                    convChats={chatList?.list ?? []}
-                    isLoading={isLoadingChats}
-                    isError={isErrorChats}
                   />
                 </div>
                 <div className="lead-details flex flex-1">
-                  {isLoadingLeadDetails && (
-                    <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-                      <Loader2 className="animate-spin size-5 " />
-                    </div>
-                  )}
-                  {isErrorLeadDetails && (
-                    <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-                      No Data
-                    </div>
-                  )}
-                  {leadDetails &&
-                    !isLoadingLeadDetails &&
-                    !isErrorLeadDetails && (
-                      <WhatsappLeadDetailsCMS
-                        conversationId={selectedConvId}
-                        leadId={null}
-                        leadName={
-                          leadDetails.conversation.user?.full_name ||
-                          leadDetails.conversation.full_name
-                        }
-                        leadAvatar={
-                          leadDetails.conversation.user?.avatar ?? null
-                        }
-                        leadPhoneNumber={
-                          leadDetails.conversation.user?.phone_number ||
-                          leadDetails.conversation.phone_number
-                        }
-                        leadEmail={leadDetails.conversation.user?.email ?? null}
-                        leadStatus={leadDetails.conversation.lead_status}
-                        leadWinningRate={
-                          leadDetails.conversation.winning_rate ?? 0
-                        }
-                      />
-                    )}
+                  <WhatsappLeadDetailsCMS
+                    sessionToken={props.sessionToken}
+                    convId={selectedConvId}
+                  />
                 </div>
               </div>
             ) : (
-              <div>Lebih mantab pakai Whatsapp</div>
+              <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-8">
+                <div className="state-illustration flex max-w-72 overflow-hidden">
+                  <Image
+                    className="object-cover w-full h-full"
+                    src={
+                      "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sales-illustration.svg"
+                    }
+                    alt="chat-cms"
+                    width={500}
+                    height={400}
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5 text-center">
+                  <h3 className="font-bodycopy font-bold text-2xl">
+                    Siap Cuan Hari Ini?
+                  </h3>
+                  <p className="font-bodycopy font-medium text-alternative max-w-sm">
+                    Pilih chat di sebelah kiri dan ubah setiap percakapan jadi
+                    closing deals!
+                  </p>
+                </div>
+              </div>
             )}
           </div>
         </div>
