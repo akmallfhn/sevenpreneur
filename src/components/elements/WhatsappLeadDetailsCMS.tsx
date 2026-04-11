@@ -2,7 +2,7 @@
 import { trpc } from "@/trpc/client";
 import { Loader, Loader2, PenBox, TextAlignStart } from "lucide-react";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
@@ -32,6 +32,11 @@ export default function WhatsappLeadDetailsCMS(
     leadDetails?.winning_rate ?? 0
   );
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setWinningRate(leadDetails?.winning_rate ?? 0);
+  }, [leadDetails?.winning_rate, props.convId]);
 
   // Update winning rate change
   const handleWinningRateChange = (value: number[]) => {

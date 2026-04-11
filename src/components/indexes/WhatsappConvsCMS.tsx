@@ -89,6 +89,7 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
                 </div>
                 <div className="lead-details flex flex-1">
                   <WhatsappLeadDetailsCMS
+                    key={selectedConvId}
                     sessionToken={props.sessionToken}
                     convId={selectedConvId}
                   />
