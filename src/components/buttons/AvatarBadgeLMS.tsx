@@ -1,10 +1,19 @@
 "use client";
-import { Blocks, ChevronDown, Compass, User2, Wallet } from "lucide-react";
+import {
+  Blocks,
+  ChevronDown,
+  Compass,
+  LogOut,
+  User2,
+  Wallet,
+} from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import AppDropdown from "../elements/AppDropdown";
 import Link from "next/link";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
+import { DeleteSession } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 export interface AvatarBadgeLMSProps {
   sessionUserAvatar: string;
@@ -15,6 +24,7 @@ export interface AvatarBadgeLMSProps {
 export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,6 +55,17 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
   if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
     domain = "example.com:3000";
   }
+
+  // Sign out function
+  const handleSignOut = async () => {
+    const signOut = await DeleteSession();
+
+    if (signOut.code === "NO_CONTENT") {
+      router.push(`https://www.${domain}/auth/login`);
+    } else {
+      console.error("Logout failed");
+    }
+  };
 
   return (
     <div
@@ -100,6 +121,13 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
             menuName="Transaction"
           />
         </Link>
+        <hr className="my-1" />
+        <AppDropdownItemList
+          menuIcon={<LogOut className="size-4" />}
+          menuName="Sign out"
+          isDestructive
+          onClick={handleSignOut}
+        />
       </AppDropdown>
     </div>
   );

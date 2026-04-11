@@ -82,6 +82,12 @@ export default function BusinessesAlumniHomeSVP() {
       company_url: "https://www.monsphysio.com/",
     },
     {
+      name: "Vistara Nataruang",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-vistara-nataruang.webp",
+      company_url: "https://www.instagram.com/vistara.nataruang/",
+    },
+    {
       name: "Tumbuh Jaya",
       logo_image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-tumbuh-jaya.webp",
@@ -92,6 +98,12 @@ export default function BusinessesAlumniHomeSVP() {
       logo_image:
         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-sandhika-karyatama.webp",
       company_url: "https://www.instagram.com/sandhika.karyatama/",
+    },
+    {
+      name: "Mandala Bumantara",
+      logo_image:
+        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/alumni-mandala-bumantara.webp",
+      company_url: "https://www.mandalabumantara.com/",
     },
     // {
     //   name: "Maketku",

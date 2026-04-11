@@ -13,7 +13,7 @@ import {
   BusinessYearlyRevenue,
   OccupationUser,
 } from "./app-types";
-import { STATUS_INTERNAL_SERVER_ERROR, STATUS_NOT_FOUND } from "./status_code";
+import { STATUS_NO_CONTENT, STATUS_NOT_FOUND } from "./status_code";
 
 // DELETE SESSION FOR LOGOUT
 export async function DeleteSession() {
@@ -28,21 +28,18 @@ export async function DeleteSession() {
   setSecretKey(process.env.SECRET_KEY_PUBLIC_API!);
   const loggedOut = await trpc.auth.logout({ token: sessionData.value });
 
-  // Delete token on Cookie
-  if (loggedOut.code === "NO_CONTENT") {
-    let domain = "sevenpreneur.com";
-    if (process.env.DOMAIN_MODE === "local") {
-      domain = "example.com";
-    }
-    cookieStore.set("session_token", "", {
-      domain: domain,
-      path: "/",
-      maxAge: 0,
-    });
-    return { code: loggedOut.code, message: loggedOut.message };
+  let domain = "sevenpreneur.com";
+  if (process.env.DOMAIN_MODE === "local") {
+    domain = "example.com";
   }
 
-  return { code: STATUS_INTERNAL_SERVER_ERROR, message: "Logout failed" };
+  // Delete token on Cookie
+  cookieStore.set("session_token", "", {
+    domain: domain,
+    path: "/",
+    maxAge: 0,
+  });
+  return { code: STATUS_NO_CONTENT, message: loggedOut.message };
 }
 
 // UPDATE USER DATA
