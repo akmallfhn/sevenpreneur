@@ -1,4 +1,4 @@
-import { STATUS_INTERNAL_SERVER_ERROR } from "@/lib/status_code";
+import { STATUS_INTERNAL_SERVER_ERROR, STATUS_OK } from "@/lib/status_code";
 import { whatsappMessageRequest } from "@/lib/whatsapp";
 import { administratorProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
@@ -60,5 +60,11 @@ export const sendWA = {
           message: "Failed to create a new chat.",
         });
       }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        chat: createdChat,
+      };
     }),
 };
