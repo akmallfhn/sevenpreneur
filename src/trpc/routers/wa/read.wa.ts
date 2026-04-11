@@ -15,6 +15,7 @@ export const readWA = {
           winning_rate: true,
           note: true,
           last_read_id: true,
+          handler_id: true,
           user: {
             select: {
               full_name: true,

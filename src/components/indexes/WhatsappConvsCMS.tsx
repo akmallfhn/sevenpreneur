@@ -64,22 +64,24 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
                 {convList?.list.map((post, index) => (
                   <WhatsappConvItemCMS
                     key={index}
+                    convId={post.id}
                     convUserFullName={post.user_full_name || post.full_name}
                     convUserAvatar={post.user_avatar ?? null}
                     convLastMessage={post.last_message}
                     convLastMessageAt={post.last_message_at}
                     convLeadStatus={post.lead_status as LeadStatus}
                     convUnreadMessage={post.unread_count}
+                    selectedConvId={selectedConvId}
                     onClick={() => setSelectedConvId(post.id)}
                   />
                 ))}
               </div>
             )}
           </div>
-          <div className="conv-details flex flex-[2.5] border rounded-r-lg">
+          <div className="conv-details flex flex-[2.6] border rounded-r-lg">
             {selectedConvId ? (
               <div className="conv-wrapper flex w-full">
-                <div className="chats flex flex-[1.25] border-r">
+                <div className="chats flex flex-[1.35] border-r">
                   <WhatsappChatsCMS
                     sessionToken={props.sessionToken}
                     convId={selectedConvId}

@@ -33,13 +33,13 @@ export default function WhatsappBubbleChatCMS(
   }
 
   return (
-    <div className="chat-container flex flex-col w-fit max-w-[min(70%,560px)] my-3 gap-1 items-end">
+    <div className="chat-container flex flex-col w-fit max-w-[min(70%,560px)] my-1 gap-1 items-end">
       <div
-        className={`chat-message flex flex-col w-fit px-4 py-2 gap-0.5 font-bodycopy text-[15px] font-[450] break-words whitespace-pre-wrap ${props.chatDirection === "INBOUND" ? "bg-white rounded-r-md rounded-bl-md" : "bg-tertiary-background text-tertiary-foreground rounded-l-md rounded-br-md"}`}
+        className={`chat-message flex flex-col w-fit px-4 py-2 font-bodycopy text-[15px] font-[450] break-words whitespace-pre-wrap ${props.chatDirection === "INBOUND" ? "bg-white rounded-r-md rounded-bl-md" : "bg-tertiary-background text-tertiary-foreground rounded-l-md rounded-br-md"}`}
       >
         <p>{props.chatMessage}</p>
         {props.chatDirection === "INBOUND" && (
-          <span className="chat-timestamp w-full text-right text-xs text-[#333333]/80 font-[450]">
+          <span className="chat-timestamp w-full text-right text-xs text-[#333333]/80 font-[450] leading-snug">
             {dayjs(props.createdAt).format("HH:mm")}
           </span>
         )}

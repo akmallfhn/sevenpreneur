@@ -32,17 +32,21 @@ const variantStyles: Record<
 };
 
 interface WhatsappConvItemCMSProps {
+  convId: string;
   convUserFullName: string;
   convUserAvatar: string | null;
   convLastMessage: string;
   convLastMessageAt: string;
   convLeadStatus: LeadStatus;
   convUnreadMessage: number;
+  selectedConvId: string;
   onClick?: () => void;
 }
 
 export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
   const { bg_color, icon } = variantStyles[props.convLeadStatus];
+  const isActive = props.convId === props.selectedConvId;
+
   const initialName = props.convUserFullName
     .split(" ")
     .slice(0, 2)
@@ -53,7 +57,7 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
   return (
     <div
       onClick={props.onClick}
-      className="conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-[#f4f4f4]"
+      className={`conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-[#ebebeb] ${isActive ? "bg-[#EBEBEB]" : ""}`}
     >
       <div className="conv-metadata flex items-center gap-3">
         <div className="conv-sender-avatar relative flex">
@@ -95,11 +99,11 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
         >
           {dayjs(props.convLastMessageAt).format("HH:mm")}
         </p>
-        {props.convUnreadMessage > 0 && (
+        {/* {props.convUnreadMessage > 0 && (
           <p className="conv-unread-messages w-fit text-[10px] text-white font-bodycopy font-bold py-0.5 px-2 bg-cms-primary rounded-full">
             {props.convUnreadMessage}
           </p>
-        )}
+        )} */}
       </div>
     </div>
   );
