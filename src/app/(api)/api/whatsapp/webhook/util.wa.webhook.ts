@@ -1,5 +1,5 @@
 import GetPrismaClient from "@/lib/prisma";
-import { WACDirection, WACSenderType } from "@prisma/client";
+import { WACDirection, WACSenderType, WACStatus } from "@prisma/client";
 import { WhatsAppWebhookMessageStatusType } from "./type.wa.webhook";
 
 async function getOrCreateConversation(
@@ -122,7 +122,8 @@ export async function updateStatusByMessageID(
     }
   }
 
-  const updateChatData = {} as {
+  const updateChatData = { status: null } as {
+    status: WACStatus | null;
     sent_at?: Date;
     delivered_at?: Date;
     read_at?: Date;
@@ -130,16 +131,20 @@ export async function updateStatusByMessageID(
   };
   switch (status) {
     case "sent":
+      updateChatData["status"] = WACStatus.SENT;
       updateChatData["sent_at"] = updatedAtAsDate;
       break;
     case "delivered":
+      updateChatData["status"] = WACStatus.DELIVERED;
       updateChatData["delivered_at"] = updatedAtAsDate;
       break;
     case "read":
     case "played":
+      updateChatData["status"] = WACStatus.READ;
       updateChatData["read_at"] = updatedAtAsDate;
       break;
     case "failed":
+      updateChatData["status"] = WACStatus.FAILED;
       updateChatData["failed_at"] = updatedAtAsDate;
       break;
     default:
