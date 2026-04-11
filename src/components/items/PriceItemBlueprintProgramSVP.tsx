@@ -7,7 +7,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import AppButton from "../buttons/AppButton";
-import AppCountdownTimer from "../elements/AppCountdownTimer";
+import AppCountdownTimerDaily from "../elements/AppCountdownTimerDaily";
 
 interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
   cohortId: number;
@@ -28,7 +28,7 @@ interface PriceItemBlueprintProgramSVPProps extends FeatureTrackingProps {
 export default function PriceItemBlueprintProgramSVP(
   props: PriceItemBlueprintProgramSVPProps
 ) {
-  const targetTimeCountdown = "2026-03-27T23:59:00+07:00";
+  const targetTimeCountdown = "2026-04-27T23:59:00+07:00";
 
   const purchaseAction = props.isPriority
     ? "Best Value – Choose Plan"
@@ -87,7 +87,7 @@ export default function PriceItemBlueprintProgramSVP(
             <span className="absolute left-0 top-1/2 w-full h-[1px] bg-secondary rotate-[345deg] -translate-y-1/2" />
           </div>
         </div>
-        <AppCountdownTimer targetDateTime={targetTimeCountdown} />
+        <AppCountdownTimerDaily targetDateTime={targetTimeCountdown} />
         <div className="price-amount flex items-center gap-0.5 font-brand text-white">
           <p className="font-bold text-lg">Rp</p>
           <p className="font-bold text-4xl">
