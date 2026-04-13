@@ -1,6 +1,7 @@
 "use client";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
+import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
 import React, {
   useEffect,
@@ -135,30 +136,48 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
                   new Date(a.created_at).getTime() -
                   new Date(b.created_at).getTime()
               )
-              .map((post, index) => (
-                <div
-                  key={index}
-                  className={`chat-wrapper flex w-full gap-10 ${
-                    post.direction === "INBOUND"
-                      ? "justify-start"
-                      : "justify-end"
-                  }`}
-                >
-                  <WhatsappBubbleChatCMS
-                    chatMessage={post.message}
-                    chatDirection={post.direction}
-                    chatStatus={post.status}
-                    createdAt={post.created_at}
-                    sentAt={post.sent_at}
-                    deliveredAt={post.delivered_at}
-                    readAt={post.read_at}
-                  />
-                </div>
-              ))}
+              .map((post, index, sorted) => {
+                const currentDate = dayjs(post.created_at).format("YYYY-MM-DD");
+                const prevDate =
+                  index > 0
+                    ? dayjs(sorted[index - 1].created_at).format("YYYY-MM-DD")
+                    : null;
+                const showDateLabel = currentDate !== prevDate;
+
+                return (
+                  <React.Fragment key={index}>
+                    {showDateLabel && (
+                      <div className="flex w-full justify-center my-1">
+                        <p className="flex w-fit px-3 py-1 text-xs font-medium font-bodycopy text-[#333333]/70 bg-white/70 rounded-full">
+                          {dayjs(post.created_at).format("ddd, DD MMM YYYY")}
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      className={`chat-wrapper flex w-full gap-10 ${
+                        post.direction === "INBOUND"
+                          ? "justify-start"
+                          : "justify-end"
+                      }`}
+                    >
+                      <WhatsappBubbleChatCMS
+                        chatMessage={post.message}
+                        chatDirection={post.direction}
+                        chatStatus={post.status}
+                        createdAt={post.created_at}
+                        sentAt={post.sent_at}
+                        deliveredAt={post.delivered_at}
+                        readAt={post.read_at}
+                        failedAt={post.failed_at}
+                      />
+                    </div>
+                  </React.Fragment>
+                );
+              })}
           </div>
         )}
         <form
-          className="generate-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
+          className="send-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
           onSubmit={handleSendChat}
         >
           <WhatsappChatSubmitterCMS

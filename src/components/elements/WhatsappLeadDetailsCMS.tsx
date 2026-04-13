@@ -1,6 +1,6 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { Loader, Loader2, PenBox, TextAlignStart } from "lucide-react";
+import { Loader, Loader2, PenBox, TextAlignStart, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
@@ -17,8 +17,10 @@ interface WhatsappLeadDetailsCMSProps {
 export default function WhatsappLeadDetailsCMS(
   props: WhatsappLeadDetailsCMSProps
 ) {
+  const utils = trpc.useUtils();
   const updateConversation = trpc.update.wa.conversation.useMutation();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoadingUnassign, setIsLoadingUnassign] = useState(false);
 
   // Fetch tRPC Data
   const { data, isLoading, isError } = trpc.read.wa.conversation.useQuery(
@@ -34,9 +36,27 @@ export default function WhatsappLeadDetailsCMS(
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWinningRate(leadDetails?.winning_rate ?? 0);
   }, [leadDetails?.winning_rate, props.convId]);
+
+  // Unassign handler
+  const handleUnassigned = () => {
+    setIsLoadingUnassign(true);
+
+    try {
+      updateConversation.mutate(
+        { id: props.convId, handler_id: null },
+        {
+          onSuccess: () =>
+            utils.read.wa.conversation.invalidate({ id: props.convId }),
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoadingUnassign(false);
+    }
+  };
 
   // Update winning rate change
   const handleWinningRateChange = (value: number[]) => {
@@ -107,12 +127,6 @@ export default function WhatsappLeadDetailsCMS(
                   </p>
                 )}
               </div>
-              {/* {!props.leadId && (
-          <AppButton size="smallRounded" variant="primarySoft">
-            <CloudSync className="size-4" />
-            Sync to Database
-          </AppButton>
-        )} */}
             </div>
             <div className="lead-details flex flex-col gap-2 p-3 bg-section-background/50  border border-outline rounded-md">
               <div className="flex w-full justify-between items-center leading-snug">
@@ -151,10 +165,22 @@ export default function WhatsappLeadDetailsCMS(
                         <p className="text-sm text-[#333333] font-bodycopy font-semibold line-clamp-1">
                           {leadDetails.handler?.full_name}
                         </p>
+                        <AppButton
+                          variant="destructiveSoft"
+                          size="smallIconRounded"
+                          onClick={handleUnassigned}
+                          disabled={isLoadingUnassign}
+                        >
+                          {isLoadingUnassign ? (
+                            <Loader2 className="animate-spin size-4" />
+                          ) : (
+                            <X className="size-4" />
+                          )}
+                        </AppButton>
                       </div>
                     ) : (
-                      <p className="text-sm text-[#333333] font-bodycopy font-semibold">
-                        -
+                      <p className="py-1 px-2 text-sm bg-secondary-soft-background text-secondary-soft-foreground font-bodycopy font-semibold rounded-full">
+                        Unassigned
                       </p>
                     )}
                   </div>

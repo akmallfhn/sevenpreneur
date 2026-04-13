@@ -12,6 +12,7 @@ interface WhatsappBubbleChatCMSProps {
   sentAt: string | null;
   deliveredAt: string | null;
   readAt: string | null;
+  failedAt: string | null;
 }
 
 export default function WhatsappBubbleChatCMS(
@@ -30,6 +31,7 @@ export default function WhatsappBubbleChatCMS(
     timestampStatus = props.sentAt;
   } else if (props.chatStatus === "FAILED") {
     iconStatus = <TriangleAlert className="size-4 text-destructive" />;
+    timestampStatus = props.failedAt;
   }
 
   return (
