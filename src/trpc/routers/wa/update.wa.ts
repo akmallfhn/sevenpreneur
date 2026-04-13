@@ -47,4 +47,39 @@ export const updateWA = {
         conversation: updatedConversation[0],
       };
     }),
+
+  conversation_as_read: administratorProcedure
+    .input(
+      z.object({
+        id: stringIsNanoid(),
+      })
+    )
+    .mutation(async (opts) => {
+      const latestChat = await opts.ctx.prisma.wAChat.findFirst({
+        select: { id: true },
+        where: { conv_id: opts.input.id },
+        orderBy: [{ created_at: "desc" }],
+      });
+
+      const updatedConversation =
+        await opts.ctx.prisma.wAConversation.updateManyAndReturn({
+          data: {
+            last_read_id: latestChat?.id || null,
+          },
+          where: {
+            id: opts.input.id,
+          },
+        });
+      checkUpdateResult(
+        updatedConversation.length,
+        "conversation",
+        "conversations"
+      );
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        conversation: updatedConversation[0],
+      };
+    }),
 };
