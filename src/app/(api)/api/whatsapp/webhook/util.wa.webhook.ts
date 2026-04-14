@@ -1,5 +1,10 @@
 import GetPrismaClient from "@/lib/prisma";
-import { WACDirection, WACSenderType, WACStatus } from "@prisma/client";
+import {
+  WACDirection,
+  WACSenderType,
+  WACStatus,
+  WACType,
+} from "@prisma/client";
 import { WhatsAppWebhookMessageStatusType } from "./type.wa.webhook";
 
 async function getOrCreateConversation(
@@ -67,6 +72,7 @@ export async function appendChatFromUser(
       wam_id: wam_id,
       direction: WACDirection.INBOUND,
       sender_type: WACSenderType.USER,
+      type: WACType.TEXT,
       message: message,
       created_at: createdAtAsDate,
     },
@@ -108,6 +114,7 @@ export async function updateStatusByMessageID(
         wam_id: wam_id,
         direction: WACDirection.OUTBOUND,
         sender_type: WACSenderType.ADMIN,
+        type: WACType.TEXT,
         message: "",
         created_at: updatedAtAsDate,
       },

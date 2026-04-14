@@ -170,6 +170,27 @@ enum WACSenderType {
   @@map("wac_sender_type")
 }
 
+enum WACType {
+  AUDIO       @map("audio")
+  BUTTON      @map("button")
+  CONTACTS    @map("contacts")
+  DOCUMENT    @map("document")
+  EDIT        @map("edit")
+  IMAGE       @map("image")
+  INTERACTIVE @map("interactive")
+  LOCATION    @map("location")
+  ORDER       @map("order")
+  REACTION    @map("reaction")
+  REVOKE      @map("revoke")
+  STICKER     @map("sticker")
+  SYSTEM      @map("system")
+  TEXT        @map("text")
+  UNSUPPORTED @map("unsupported")
+  VIDEO       @map("video")
+
+  @@map("wac_type")
+}
+
 enum WACStatus {
   SENT      @map("sent")
   DELIVERED @map("delivered")
@@ -897,7 +918,9 @@ model WAChat {
   sender_type  WACSenderType
   reply_to     WAChat?          @relation("reply", fields: [reply_to_id], references: [id])
   reply_to_id  String?          @db.Char(21)
+  type         WACType
   message      String           @db.VarChar()
+  attachment   Json?            @db.Json
   status       WACStatus?
   sent_at      DateTime?        @db.Timestamptz()
   delivered_at DateTime?        @db.Timestamptz()
