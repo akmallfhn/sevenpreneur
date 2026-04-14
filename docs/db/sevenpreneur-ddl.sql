@@ -129,6 +129,25 @@ CREATE TYPE wac_sender_type AS ENUM (
   'admin'
 );
 
+CREATE TYPE wac_type AS ENUM (
+  'audio',
+  'button',
+  'contacts',
+  'document',
+  'edit',
+  'image',
+  'interactive',
+  'location',
+  'order',
+  'reaction',
+  'revoke',
+  'sticker',
+  'system',
+  'text',
+  'unsupported',
+  'video'
+);
+
 CREATE TYPE wac_status AS ENUM (
   'sent',
   'delivered',
@@ -671,7 +690,9 @@ CREATE TABLE wa_chats (
   direction     wac_direction    NOT NULL,
   sender_type   wac_sender_type  NOT NULL,
   reply_to_id   CHAR(21)             NULL,
+  type          wac_type         NOT NULL,
   message       VARCHAR          NOT NULL,
+  attachment    JSON                 NULL,
   status        wac_status           NULL,
   sent_at       TIMESTAMPTZ          NULL,
   delivered_at  TIMESTAMPTZ          NULL,

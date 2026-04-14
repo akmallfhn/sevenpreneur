@@ -3,7 +3,7 @@ import { whatsappMessageRequest } from "@/lib/whatsapp";
 import { administratorProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
-import { WACDirection, WACSenderType } from "@prisma/client";
+import { WACDirection, WACSenderType, WACType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
@@ -54,6 +54,7 @@ export const sendWA = {
           wam_id: messageId,
           direction: WACDirection.OUTBOUND,
           sender_type: WACSenderType.ADMIN,
+          type: WACType.TEXT,
           message: opts.input.message,
         },
       });
