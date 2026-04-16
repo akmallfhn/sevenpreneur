@@ -88,7 +88,7 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
           <p className="conv-full-name text-[15px] font-semibold font-bodycopy leading-snug line-clamp-1">
             {props.convUserFullName}
           </p>
-          <p className="conv-last-message text-sm text-[#333333]/70 font-bodycopy font-[450] line-clamp-1">
+          <p className="conv-last-message text-sm text-emphasis font-bodycopy font-[450] line-clamp-1">
             {props.convLastMessage}
           </p>
         </div>

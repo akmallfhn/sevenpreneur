@@ -1,30 +1,12 @@
 "use client";
-import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
+import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import WhatsappBubbleChatCMS from "./WhatsappBubbleChatCMS";
-import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-
-export interface WhatsappChatItem {
-  id: string;
-  message: string;
-  direction: WhatsappChatDirection;
-  status: WhatsappChatStatus | null;
-  created_at: string;
-  sent_at: string | null;
-  delivered_at: string | null;
-  read_at: string | null;
-  failed_at: string | null;
-}
+import WhatsappChatItemCMS from "./WhatsappChatItemCMS";
+import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
 
 interface WhatsappChatsCMSProps {
   sessionToken: string;
@@ -47,19 +29,21 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
     },
     {
       enabled: !!props.sessionToken && !!props.convId,
-      refetchInterval: (query) => {
-        const list = query.state.data?.list ?? [];
-        const hasPendingOutbound = list.some(
-          (chat) =>
-            chat.direction === "OUTBOUND" &&
-            chat.status !== "READ" &&
-            chat.status !== "FAILED"
-        );
-        return hasPendingOutbound ? 1000 : 5000;
-      },
+      // refetchInterval: (query) => {
+      //   const list = (query.state.data?.list ?? []) as WhatsappChatItem[]>;
+      //   const hasPendingOutbound = list.some(
+      //     (chat) =>
+      //       chat.direction === "OUTBOUND" &&
+      //       chat.status !== "READ" &&
+      //       chat.status !== "FAILED"
+      //   );
+      //   return hasPendingOutbound ? 1000 : 5000;
+      // },
     }
   );
-  const chatList = useMemo(() => data?.list ?? [], [data?.list]);
+  const chatList = data?.list;
+
+  console.log("chats", chatList);
 
   // Auto-scrolls to the bottom whenever new chats arrive.
   useEffect(() => {
@@ -128,9 +112,9 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
             No Data
           </div>
         )}
-        {!isLoading && !isError && (
+        {!isLoading && !isError && chatList && (
           <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
-            {[...chatList]
+            {chatList
               .sort(
                 (a, b) =>
                   new Date(a.created_at).getTime() -
@@ -160,7 +144,10 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
                           : "justify-end"
                       }`}
                     >
-                      <WhatsappBubbleChatCMS
+                      <WhatsappChatItemCMS
+                        chat={
+                          post as unknown as WhatsAppTypeAttachmentPairUnion
+                        }
                         chatMessage={post.message}
                         chatDirection={post.direction}
                         chatStatus={post.status}

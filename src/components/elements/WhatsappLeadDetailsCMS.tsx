@@ -7,7 +7,7 @@ import AppButton from "../buttons/AppButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
 import { Slider } from "../ui/slider";
-import EditLeadStatusCMS from "../modals/EditLeadStatusCMS";
+import EditLeadStatusCMS from "../forms/EditLeadStatusCMS";
 
 interface WhatsappLeadDetailsCMSProps {
   sessionToken: string;
@@ -86,12 +86,12 @@ export default function WhatsappLeadDetailsCMS(
     <React.Fragment>
       <div className="flex w-full h-full">
         {isLoading && (
-          <div className="flex w-full h-full py-12 justify-center text-alternative font-bodycopy font-medium">
+          <div className="flex w-full h-full py-12 justify-center text-emphasis font-bodycopy font-medium">
             <Loader2 className="animate-spin size-5 " />
           </div>
         )}
         {isError && (
-          <div className="flex w-full h-full py-12 justify-center text-alternative font-bodycopy font-medium">
+          <div className="flex w-full h-full py-12 justify-center text-emphasis font-bodycopy font-medium">
             No Data
           </div>
         )}
@@ -118,11 +118,11 @@ export default function WhatsappLeadDetailsCMS(
                 <p className="lead-name text-lg text-center font-bold font-bodycopy leading-snug line-clamp-2">
                   {leadName}
                 </p>
-                <p className="lead-phone-number text-sm text-[#333333]/70 font-semibold font-bodycopy leading-snug line-clamp-1">
+                <p className="lead-phone-number text-sm text-emphasis font-semibold font-bodycopy leading-snug line-clamp-1">
                   {leadDetails.user?.phone_number || leadDetails.phone_number}
                 </p>
                 {leadDetails.user?.email && (
-                  <p className="lead-email text-sm text-[#333333]/70 font-semibold font-bodycopy leading-snug line-clamp-1">
+                  <p className="lead-email text-sm text-emphasis font-semibold font-bodycopy leading-snug line-clamp-1">
                     {leadDetails.user.email}
                   </p>
                 )}
@@ -145,7 +145,7 @@ export default function WhatsappLeadDetailsCMS(
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex w-full items-center">
-                  <p className="label w-32 text-sm text-alternative font-bodycopy font-medium">
+                  <p className="label w-32 text-sm text-emphasis font-bodycopy font-medium">
                     Handled by
                   </p>
                   <div className="flex w-full">
@@ -186,7 +186,7 @@ export default function WhatsappLeadDetailsCMS(
                   </div>
                 </div>
                 <div className="flex w-full items-center">
-                  <p className="label w-32 text-sm text-alternative font-bodycopy font-medium">
+                  <p className="label w-32 text-sm text-emphasis font-bodycopy font-medium">
                     Status
                   </p>
                   <div className="input w-full">
@@ -199,7 +199,7 @@ export default function WhatsappLeadDetailsCMS(
             </div>
             <div className="lead-progress flex flex-col gap-2 p-3 bg-section-background/50  border border-outline rounded-md">
               <div className="flex items-center gap-2">
-                <Loader className="size-4 text-alternative" />
+                <Loader className="size-4 text-emphasis" />
                 <h5 className="font-bodycopy text-[15px] font-bold">
                   Winning Rate
                 </h5>
@@ -218,7 +218,7 @@ export default function WhatsappLeadDetailsCMS(
             </div>
             <div className="notes flex flex-col gap-2 p-3 bg-section-background/50 border border-outline rounded-md">
               <div className="flex items-center gap-2">
-                <TextAlignStart className="size-4 text-alternative" />
+                <TextAlignStart className="size-4 text-emphasis" />
                 <h5 className="font-bodycopy text-[15px] font-bold">Notes</h5>
               </div>
               <TextAreaCMS

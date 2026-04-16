@@ -25,14 +25,14 @@ export type WhatsappAttachmentContacts = {
       street?: string;
       type?: string;
       zip?: string;
-    }
+    },
   ];
   birthday?: string;
   emails?: [
     {
       email?: string;
       type?: string;
-    }
+    },
   ];
   name?: {
     formatted_name?: string;
@@ -52,13 +52,13 @@ export type WhatsappAttachmentContacts = {
       phone?: string;
       wa_id?: string;
       type?: string;
-    }
+    },
   ];
   urls?: [
     {
       url?: string;
       type?: string;
-    }
+    },
   ];
 }[];
 
@@ -96,3 +96,25 @@ export type WhatsappAttachmentVideo = {
 };
 
 export type WhatsappAttachmentText = undefined; // will be NULL in database
+
+export type WhatsAppTypeAttachmentPairUnion =
+  | { type: "AUDIO"; attachment: WhatsappAttachmentAudio }
+  | { type: "CONTACTS"; attachment: WhatsappAttachmentContacts }
+  | { type: "DOCUMENT"; attachment: WhatsappAttachmentDocument }
+  | { type: "IMAGE"; attachment: WhatsappAttachmentImage }
+  | { type: "STICKER"; attachment: WhatsappAttachmentSticker }
+  | { type: "TEXT"; attachment: WhatsappAttachmentText }
+  | { type: "VIDEO"; attachment: WhatsappAttachmentVideo }
+  | {
+      type:
+        | "BUTTON"
+        | "EDIT"
+        | "INTERACTIVE"
+        | "LOCATION"
+        | "ORDER"
+        | "REACTION"
+        | "REVOKE"
+        | "SYSTEM"
+        | "UNSUPPORTED";
+      attachment: unknown;
+    };
