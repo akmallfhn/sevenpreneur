@@ -8,10 +8,9 @@ import {
   WhatsappAttachmentVideo,
 } from "@/lib/whatsapp-types";
 import { WACType } from "@prisma/client";
-import { JsonValue } from "@prisma/client/runtime/library";
 
 export type WhatsAppChatWithAttachment<
-  T extends { type: WACType; attachment: JsonValue }
+  T extends { type: WACType; attachment: unknown }
 > = Omit<T, "type" | "attachment"> &
   (
     | {
@@ -53,12 +52,12 @@ export type WhatsAppChatWithAttachment<
           | typeof WACType.REVOKE
           | typeof WACType.SYSTEM
           | typeof WACType.UNSUPPORTED;
-        attachment: JsonValue | undefined;
+        attachment: unknown;
       }
   );
 
 export function convertToWhatsAppChatWithAttachment<
-  T extends { type: WACType; attachment: JsonValue }
+  T extends { type: WACType; attachment: unknown }
 >(list: T[]) {
   return list as WhatsAppChatWithAttachment<T>[];
 }
