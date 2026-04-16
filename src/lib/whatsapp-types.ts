@@ -96,3 +96,55 @@ export type WhatsappAttachmentVideo = {
 };
 
 export type WhatsappAttachmentText = undefined; // will be NULL in database
+
+export type WhatsAppTypeAttachmentPairUnion =
+  | {
+      type: "AUDIO" | "audio";
+      attachment: WhatsappAttachmentAudio;
+    }
+  | {
+      type: "CONTACTS" | "contacts";
+      attachment: WhatsappAttachmentContacts;
+    }
+  | {
+      type: "DOCUMENT" | "document";
+      attachment: WhatsappAttachmentDocument;
+    }
+  | {
+      type: "IMAGE" | "image";
+      attachment: WhatsappAttachmentImage;
+    }
+  | {
+      type: "STICKER" | "sticker";
+      attachment: WhatsappAttachmentSticker;
+    }
+  | {
+      type: "TEXT" | "text";
+      attachment: unknown;
+    }
+  | {
+      type: "VIDEO" | "video";
+      attachment: WhatsappAttachmentVideo;
+    }
+  | {
+      type:
+        | "BUTTON"
+        | "EDIT"
+        | "INTERACTIVE"
+        | "LOCATION"
+        | "ORDER"
+        | "REACTION"
+        | "REVOKE"
+        | "SYSTEM"
+        | "UNSUPPORTED"
+        | "button"
+        | "edit"
+        | "interactive"
+        | "location"
+        | "order"
+        | "reaction"
+        | "revoke"
+        | "system"
+        | "unsupported";
+      attachment: unknown;
+    };
