@@ -1,4 +1,6 @@
 import GetPrismaClient from "@/lib/prisma";
+import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
+import { WACType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
 import { appendChatFromUser, updateStatusByMessageID } from "./util.wa.webhook";
@@ -52,23 +54,47 @@ export async function POST(req: NextRequest) {
           userProfileName = change.value.contacts[0].profile.name;
         }
         for (const msg of change.value.messages) {
-          // Only accept text messages for now
-          if (msg.type !== "text") {
-            continue;
+          let messageType = WACType.UNSUPPORTED as WACType;
+          let message = "";
+          let attachment = undefined as WhatsappAttachmentAllTypes;
+
+          if (msg.type == "audio") {
+            messageType = WACType.AUDIO;
+            attachment = msg.audio;
+          } else if (msg.type == "contacts") {
+            messageType = WACType.CONTACTS;
+            attachment = msg.contacts;
+          } else if (msg.type == "document") {
+            messageType = WACType.DOCUMENT;
+            attachment = msg.document;
+          } else if (msg.type == "image") {
+            messageType = WACType.IMAGE;
+            attachment = msg.image;
+          } else if (msg.type == "sticker") {
+            messageType = WACType.STICKER;
+            attachment = msg.sticker;
+          } else if (msg.type == "text") {
+            messageType = WACType.TEXT;
+            message = msg.text.body;
+          } else if (msg.type == "video") {
+            messageType = WACType.VIDEO;
+            attachment = msg.video;
+          } else {
+            continue; // Skip other message types for now
           }
 
-          if (msg.type == "text") {
-            const isSuccess = await appendChatFromUser(
-              prisma,
-              userProfileName,
-              msg.from,
-              msg.id,
-              msg.text.body,
-              msg.timestamp
-            );
-            if (!isSuccess) {
-              return new NextResponse(undefined, { status: 500 });
-            }
+          const isSuccess = await appendChatFromUser(
+            prisma,
+            userProfileName,
+            msg.from,
+            msg.id,
+            messageType,
+            message,
+            attachment,
+            msg.timestamp
+          );
+          if (!isSuccess) {
+            return new NextResponse(undefined, { status: 500 });
           }
         }
       }
