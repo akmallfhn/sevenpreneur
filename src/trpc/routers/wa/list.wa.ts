@@ -10,6 +10,7 @@ import {
 } from "@/trpc/utils/validation";
 import { Prisma, WALeadStatus } from "@prisma/client";
 import z from "zod";
+import { convertToWhatsAppChatWithAttachment } from "./type.wa";
 
 export const listWA = {
   conversations: administratorProcedure
@@ -143,10 +144,12 @@ ORDER BY last_message_at DESC`;
         take: opts.input.size,
       });
 
+      const returnedList = convertToWhatsAppChatWithAttachment(waChatsList);
+
       return {
         code: STATUS_OK,
         message: "Success",
-        list: waChatsList,
+        list: returnedList,
       };
     }),
 };
