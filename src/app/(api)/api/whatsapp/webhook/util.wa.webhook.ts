@@ -1,4 +1,5 @@
 import GetPrismaClient from "@/lib/prisma";
+import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
 import {
   WACDirection,
   WACSenderType,
@@ -42,7 +43,9 @@ export async function appendChatFromUser(
   full_name: string,
   phone_number: string,
   wam_id: string,
+  type: WACType,
   message: string,
+  attachment: WhatsappAttachmentAllTypes,
   created_at: string
 ) {
   const waConversation = await getOrCreateConversation(
@@ -72,8 +75,9 @@ export async function appendChatFromUser(
       wam_id: wam_id,
       direction: WACDirection.INBOUND,
       sender_type: WACSenderType.USER,
-      type: WACType.TEXT,
+      type: type,
       message: message,
+      attachment: attachment,
       created_at: createdAtAsDate,
     },
   });

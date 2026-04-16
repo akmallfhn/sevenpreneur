@@ -1,3 +1,12 @@
+import {
+  WhatsappAttachmentAudio,
+  WhatsappAttachmentContacts,
+  WhatsappAttachmentDocument,
+  WhatsappAttachmentImage,
+  WhatsappAttachmentSticker,
+  WhatsappAttachmentVideo,
+} from "@/lib/whatsapp-types";
+
 // WhatsApp Webhook //
 
 type WhatsAppWebhookOtherFieldType =
@@ -40,21 +49,15 @@ export type WhatsAppWebhookBody = {
 // messages Webhook //
 
 type WhatsAppWebhookOtherMessageType =
-  | "audio"
   | "button"
-  | "contacts"
-  | "document"
   | "edit"
-  | "image"
   | "interactive"
   | "location"
   | "order"
   | "reaction"
   | "revoke"
-  | "sticker"
   | "system"
-  | "unsupported"
-  | "video";
+  | "unsupported";
 
 export type WhatsAppWebhookMessageStatusType =
   | "delivered"
@@ -80,10 +83,52 @@ export type WhatsAppWebhookMessage = {
         from: string;
         id: string;
         timestamp: string;
+        type: "audio";
+        audio: WhatsappAttachmentAudio;
+      }
+    | {
+        from: string;
+        id: string;
+        timestamp: string;
+        type: "contacts";
+        contacts: WhatsappAttachmentContacts;
+      }
+    | {
+        from: string;
+        id: string;
+        timestamp: string;
+        type: "document";
+        document: WhatsappAttachmentDocument;
+      }
+    | {
+        from: string;
+        id: string;
+        timestamp: string;
+        type: "image";
+        image: WhatsappAttachmentImage;
+      }
+    | {
+        from: string;
+        id: string;
+        timestamp: string;
+        type: "sticker";
+        sticker: WhatsappAttachmentSticker;
+      }
+    | {
+        from: string;
+        id: string;
+        timestamp: string;
         type: "text";
         text: {
           body: string;
         };
+      }
+    | {
+        from: string;
+        id: string;
+        timestamp: string;
+        type: "video";
+        video: WhatsappAttachmentVideo;
       }
     | {
         from: string;
