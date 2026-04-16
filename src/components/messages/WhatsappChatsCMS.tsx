@@ -1,5 +1,6 @@
 "use client";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
+import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
@@ -10,9 +11,9 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { toast } from "sonner";
 import WhatsappBubbleChatCMS from "./WhatsappBubbleChatCMS";
 import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
-import { toast } from "sonner";
 
 export interface WhatsappChatItem {
   id: string;
@@ -144,6 +145,11 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
                     : null;
                 const showDateLabel = currentDate !== prevDate;
 
+                const typeAttachmentPair = {
+                  type: post.type,
+                  attachment: post.attachment,
+                } as unknown as WhatsAppTypeAttachmentPairUnion;
+
                 return (
                   <React.Fragment key={index}>
                     {showDateLabel && (
@@ -161,6 +167,7 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
                       }`}
                     >
                       <WhatsappBubbleChatCMS
+                        chatTypeAttachment={typeAttachmentPair}
                         chatMessage={post.message}
                         chatDirection={post.direction}
                         chatStatus={post.status}

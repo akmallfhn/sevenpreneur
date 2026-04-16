@@ -1,10 +1,12 @@
 "use client";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
 import { toCapitalizeEachWord } from "@/lib/convert-case";
+import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import dayjs from "dayjs";
 import { Check, CheckCheck, TriangleAlert } from "lucide-react";
 
 interface WhatsappBubbleChatCMSProps {
+  chatTypeAttachment: WhatsAppTypeAttachmentPairUnion;
   chatMessage: string;
   chatDirection: WhatsappChatDirection;
   chatStatus: WhatsappChatStatus | null;
@@ -32,6 +34,10 @@ export default function WhatsappBubbleChatCMS(
   } else if (props.chatStatus === "FAILED") {
     iconStatus = <TriangleAlert className="size-4 text-destructive" />;
     timestampStatus = props.failedAt;
+  }
+
+  if (props.chatTypeAttachment.type === "IMAGE") {
+    console.log(props.chatTypeAttachment.attachment.caption);
   }
 
   return (
