@@ -47,17 +47,6 @@ VALUES (
   /* updated_at */ '2025-05-27 09:00:00+07:00'
 );
 
-------------------------
--- Entrepreneur Stage --
-------------------------
-
-INSERT INTO entrepreneur_stages (stage_name, created_at) VALUES
-  ('Ideation',             '2025-05-27 09:00:00+07:00'),
-  ('Feasibility Analysis', '2025-05-27 09:00:00+07:00'),
-  ('Business Planning',    '2025-05-27 09:00:00+07:00'),
-  ('Execution',            '2025-05-27 09:00:00+07:00'),
-  ('Growth',               '2025-05-27 09:00:00+07:00');
-
 ----------------
 -- Industries --
 ----------------
