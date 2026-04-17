@@ -46,43 +46,49 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     );
   }
 
-  // if (props.chat.type === "IMAGE") {
-  //   return (
-  //     <>
-  //       <WhatsappChatBubbleCMS
-  //         chatDirection={props.chatDirection}
-  //         chatStatus={props.chatStatus}
-  //         iconStatus={iconStatus}
-  //         timestampStatus={timestampStatus}
-  //         createdAt={props.createdAt}
-  //       >
-  //         <div className="image flex flex-col w-full gap-1 pb-1">
-  //           <Image
-  //             className="w-full h-full rounded-sm cursor-pointer"
-  //             src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohort/1765529832399.webp"
-  //             alt={props.chat.attachment.caption || "Image Whatsapp"}
-  //             width={300}
-  //             height={300}
-  //             onClick={() => setIsImagePreviewOpen(true)}
-  //           />
-  //           {!!props.chat.attachment.caption && (
-  //             <p className="p-1">{props.chat.attachment.caption}</p>
-  //           )}
-  //         </div>
-  //       </WhatsappChatBubbleCMS>
+  if (props.chat.type === "IMAGE") {
+    return (
+      <>
+        <WhatsappChatBubbleCMS
+          chatDirection={props.chatDirection}
+          chatStatus={props.chatStatus}
+          iconStatus={iconStatus}
+          timestampStatus={timestampStatus}
+          createdAt={props.createdAt}
+        >
+          <div className="image flex flex-col w-full gap-1 pb-1">
+            {props.chat.attachment.storage_url ? (
+              <Image
+                className="w-full h-full rounded-sm cursor-pointer"
+                src={props.chat.attachment.storage_url}
+                alt={props.chat.attachment.caption || "Image Whatsapp"}
+                width={300}
+                height={300}
+                onClick={() => setIsImagePreviewOpen(true)}
+              />
+            ) : (
+              <p className="px-2 italic text-muted-foreground">
+                Image not found
+              </p>
+            )}
+            {!!props.chat.attachment.caption && (
+              <p className="p-1">{props.chat.attachment.caption}</p>
+            )}
+          </div>
+        </WhatsappChatBubbleCMS>
 
-  //       {/* Preview image */}
-  //       {isImagePreviewOpen && (
-  //         <WhatsappImagePreviewCMS
-  //           imageURL="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohort/1765529832399.webp"
-  //           imageCaption={props.chat.attachment.caption}
-  //           isOpen={isImagePreviewOpen}
-  //           onClose={() => setIsImagePreviewOpen(false)}
-  //         />
-  //       )}
-  //     </>
-  //   );
-  // }
+        {/* Preview image */}
+        {isImagePreviewOpen && (
+          <WhatsappImagePreviewCMS
+            imageURL="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohort/1765529832399.webp"
+            imageCaption={props.chat.attachment.caption}
+            isOpen={isImagePreviewOpen}
+            onClose={() => setIsImagePreviewOpen(false)}
+          />
+        )}
+      </>
+    );
+  }
 
   return (
     <WhatsappChatBubbleCMS
