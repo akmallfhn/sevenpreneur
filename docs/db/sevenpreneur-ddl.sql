@@ -350,7 +350,7 @@ CREATE TABLE attendances (
   check_in_at   TIMESTAMPTZ      NULL,
   check_out_at  TIMESTAMPTZ      NULL,
   PRIMARY KEY (learning_id, user_id)
-)
+);
 
 -- Business-assessment-related
 
