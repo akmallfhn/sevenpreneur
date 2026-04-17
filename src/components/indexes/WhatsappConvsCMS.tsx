@@ -1,9 +1,11 @@
 "use client";
+import { supabase } from "@/lib/supabase";
+import { playNotificationSound } from "@/lib/sounds";
 import { LeadStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import { ChevronRight, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
 import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
 import WhatsappChatsCMS from "../messages/WhatsappChatsCMS";
@@ -18,6 +20,8 @@ interface WhatsappConvsCMSProps {
 
 export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
   const [selectedConvId, setSelectedConvId] = useState("");
+  const utils = trpc.useUtils();
+  const prevUnreadRef = useRef<Map<string, number>>(new Map());
 
   // Fetch tRPC data
   const {
@@ -28,6 +32,39 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
     {},
     { enabled: !!props.sessionToken }
   );
+
+  // Subscribe to Realtime to keep convList updated even when no conversation is selected
+  useEffect(() => {
+    const channel = supabase
+      .channel("wa_change")
+      .on("broadcast", { event: "*" }, () => {
+        utils.list.wa.conversations.invalidate();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [utils]);
+
+  // Play notification sound when unread_count increases for a non-selected conversation
+  useEffect(() => {
+    if (!convList?.list) return;
+
+    const prev = prevUnreadRef.current;
+    if (prev.size > 0) {
+      const hasNewUnread = convList.list.some((conv) => {
+        if (conv.id === selectedConvId) return false;
+        const prevCount = prev.get(conv.id) ?? 0;
+        return conv.unread_count > prevCount;
+      });
+      if (hasNewUnread) playNotificationSound();
+    }
+
+    prevUnreadRef.current = new Map(
+      convList.list.map((conv) => [conv.id, conv.unread_count])
+    );
+  }, [convList?.list, selectedConvId]);
 
   return (
     <PageContainerCMS className="h-screen">
