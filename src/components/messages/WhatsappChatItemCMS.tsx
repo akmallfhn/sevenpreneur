@@ -56,7 +56,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
           timestampStatus={timestampStatus}
           createdAt={props.createdAt}
         >
-          <div className="image flex flex-col w-full gap-1 pb-1">
+          <div className="image flex flex-col w-full">
             {props.chat.attachment.storage_url ? (
               <Image
                 className="w-full h-full rounded-sm cursor-pointer"

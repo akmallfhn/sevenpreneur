@@ -2,7 +2,6 @@ import GetPrismaClient from "@/lib/prisma";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
 import { WACType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import { processImageMessage } from "./process.wa.webhook";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
 import {
   appendChatFromUser,
@@ -111,12 +110,6 @@ export async function POST(req: NextRequest) {
             continue;
           }
 
-          // Fire background process to upload image binary to Supabase storage
-          if (msg.type === "image") {
-            processImageMessage(msg.id, msg.image.id, msg.image).catch((err) =>
-              console.error("[WA Image] Background process error:", err)
-            );
-          }
         }
       }
 

@@ -1,11 +1,10 @@
 "use client";
-import { supabase } from "@/lib/supabase";
-import { playNotificationSound } from "@/lib/sounds";
 import { LeadStatus } from "@/lib/app-types";
+import { supabase } from "@/lib/supabase";
 import { trpc } from "@/trpc/client";
 import { ChevronRight, Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
 import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
 import WhatsappChatsCMS from "../messages/WhatsappChatsCMS";
@@ -21,7 +20,6 @@ interface WhatsappConvsCMSProps {
 export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
   const [selectedConvId, setSelectedConvId] = useState("");
   const utils = trpc.useUtils();
-  const prevUnreadRef = useRef<Map<string, number>>(new Map());
 
   // Fetch tRPC data
   const {
@@ -36,35 +34,28 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
   // Subscribe to Realtime to keep convList updated even when no conversation is selected
   useEffect(() => {
     const channel = supabase
-      .channel("wa_change")
+      .channel("wa_convs_change", { config: { private: true } })
       .on("broadcast", { event: "*" }, () => {
         utils.list.wa.conversations.invalidate();
       })
-      .subscribe();
+      .subscribe((status, err) => {
+        if (err) {
+          console.error("Subscription error:", err);
+        } else if (status === "SUBSCRIBED") {
+          console.log("Channel subscribed");
+        } else if (status === "CHANNEL_ERROR") {
+          console.error("Channel encountered an error");
+        } else if (status === "TIMED_OUT") {
+          console.error("Subscription timed out");
+        } else if (status === "CLOSED") {
+          console.log("Channel closed");
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [utils]);
-
-  // Play notification sound when unread_count increases for a non-selected conversation
-  useEffect(() => {
-    if (!convList?.list) return;
-
-    const prev = prevUnreadRef.current;
-    if (prev.size > 0) {
-      const hasNewUnread = convList.list.some((conv) => {
-        if (conv.id === selectedConvId) return false;
-        const prevCount = prev.get(conv.id) ?? 0;
-        return conv.unread_count > prevCount;
-      });
-      if (hasNewUnread) playNotificationSound();
-    }
-
-    prevUnreadRef.current = new Map(
-      convList.list.map((conv) => [conv.id, conv.unread_count])
-    );
-  }, [convList?.list, selectedConvId]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <PageContainerCMS className="h-screen">
@@ -118,7 +109,7 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
           <div className="conv-details flex flex-[2.6] border rounded-r-lg">
             {selectedConvId ? (
               <div className="conv-wrapper flex w-full">
-                <div className="chats flex flex-[1.35] border-r">
+                <div className="chats flex flex-[2] border-r">
                   <WhatsappChatsCMS
                     sessionToken={props.sessionToken}
                     convId={selectedConvId}
@@ -149,7 +140,7 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
                   <h3 className="font-bodycopy font-bold text-2xl">
                     Siap Cuan Hari Ini?
                   </h3>
-                  <p className="font-bodycopy font-medium text-alternative max-w-sm">
+                  <p className="font-bodycopy font-medium text-emphasis max-w-sm">
                     Pilih chat di sebelah kiri dan ubah setiap percakapan jadi
                     closing deals!
                   </p>

@@ -919,21 +919,57 @@ CREATE OR REPLACE FUNCTION wa_get_unread_count(_conv_id CHAR(21))
 
 -- Supabase Realtime
 
-CREATE TYPE wa_broadcast_change_rows AS (id CHAR(21), conv_id CHAR(21));
+CREATE TYPE wa_broadcast_change_rows AS (id CHAR(21), conv_id CHAR(21), direction TEXT);
 
-CREATE OR REPLACE FUNCTION wa_broadcast_changes()
+-- CREATE OR REPLACE FUNCTION wa_broadcast_changes()
+--   RETURNS TRIGGER AS $$
+--   BEGIN
+--     PERFORM realtime.broadcast_changes(
+--       'wa_change',
+--       TG_OP,
+--       TG_OP,
+--       TG_TABLE_NAME,
+--       TG_TABLE_SCHEMA,
+--       CASE WHEN TG_OP = 'DELETE' THEN NULL
+--            ELSE ROW(NEW.id, NEW.conv_id, NEW.direction::TEXT)::wa_broadcast_change_rows END,
+--       CASE WHEN TG_OP = 'INSERT' THEN NULL
+--            ELSE ROW(OLD.id, OLD.conv_id, OLD.direction::TEXT)::wa_broadcast_change_rows END
+--     );
+--     RETURN NULL;
+--   END
+-- $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION wa_convs_change()
   RETURNS TRIGGER AS $$
   BEGIN
     PERFORM realtime.broadcast_changes(
-      'wa_change',
+      'wa_convs_change',
       TG_OP,
       TG_OP,
       TG_TABLE_NAME,
       TG_TABLE_SCHEMA,
       CASE WHEN TG_OP = 'DELETE' THEN NULL
-           ELSE ROW(NEW.id, NEW.conv_id)::wa_broadcast_change_rows END,
+           ELSE ROW(NEW.id, NEW.conv_id, NEW.direction::TEXT)::wa_broadcast_change_rows END,
       CASE WHEN TG_OP = 'INSERT' THEN NULL
-           ELSE ROW(OLD.id, OLD.conv_id)::wa_broadcast_change_rows END
+           ELSE ROW(OLD.id, OLD.conv_id, OLD.direction::TEXT)::wa_broadcast_change_rows END
+    );
+    RETURN NULL;
+  END
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION wa_chats_change()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    PERFORM realtime.broadcast_changes(
+      'wa_chats_change',
+      TG_OP,
+      TG_OP,
+      TG_TABLE_NAME,
+      TG_TABLE_SCHEMA,
+      CASE WHEN TG_OP = 'DELETE' THEN NULL
+           ELSE ROW(NEW.id, NEW.conv_id, NEW.direction::TEXT)::wa_broadcast_change_rows END,
+      CASE WHEN TG_OP = 'INSERT' THEN NULL
+           ELSE ROW(OLD.id, OLD.conv_id, OLD.direction::TEXT)::wa_broadcast_change_rows END
     );
     RETURN NULL;
   END
@@ -1114,10 +1150,15 @@ CREATE TRIGGER update_wa_chats_updated_at_trigger
 
 -- Supabase Realtime
 
-CREATE TRIGGER broadcast_wa_changes_trigger
+CREATE TRIGGER broadcast_wa_convs_changes_trigger
   AFTER INSERT OR UPDATE OR DELETE ON wa_chats
   FOR EACH ROW
-    EXECUTE FUNCTION wa_broadcast_changes();
+    EXECUTE FUNCTION wa_convs_change();
+
+CREATE TRIGGER broadcast_wa_chats_changes_trigger
+  AFTER INSERT OR UPDATE OR DELETE ON wa_chats
+  FOR EACH ROW
+    EXECUTE FUNCTION wa_chats_change();
 
 ------------------
 -- Unique Index --
@@ -1153,10 +1194,26 @@ ALTER SEQUENCE articles_id_seq RESTART WITH 77777;
 
 -- Supabase Realtime
 
-CREATE POLICY "Anon users can receive broadcasts for WhatsApp changes"
+-- CREATE POLICY "Anon users can receive broadcasts for WhatsApp changes"
+--   ON realtime.messages
+--   FOR SELECT
+--   TO public
+--   USING (
+--     (SELECT realtime.topic()) = 'wa_change'
+--   );
+
+CREATE POLICY "Anon users can receive broadcasts for WhatsApp conv changes"
   ON realtime.messages
   FOR SELECT
   TO public
   USING (
-    (SELECT realtime.topic()) = 'wa_change'
+    (SELECT realtime.topic()) = 'wa_convs_change'
+  );
+
+CREATE POLICY "Anon users can receive broadcasts for WhatsApp chat changes"
+  ON realtime.messages
+  FOR SELECT
+  TO public
+  USING (
+    (SELECT realtime.topic()) = 'wa_chats_change'
   );

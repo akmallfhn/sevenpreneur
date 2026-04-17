@@ -9,7 +9,7 @@ export function playNotificationSound() {
   const freq = 1200;
   const decay = 0.08;
   const gap = 0.15;
-  const count = 3;
+  const count = 4;
 
   for (let i = 0; i < count; i++) {
     const osc = ctx.createOscillator();
@@ -28,5 +28,5 @@ export function playNotificationSound() {
     osc.stop(t + decay + 0.01);
   }
 
-  setTimeout(() => ctx.close(), (count * gap + decay + 0.1) * 1000);
+  setTimeout(() => ctx.close(), (count * gap + decay + 0.1) * 1200);
 }

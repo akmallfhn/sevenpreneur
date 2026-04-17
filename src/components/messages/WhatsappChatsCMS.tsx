@@ -51,12 +51,11 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       ),
     [data?.list]
   );
-  const chatList = data?.list;
 
   // Subscribe to Supabase Realtime for live wa_chats updates.
   useEffect(() => {
     const channel = supabase
-      .channel("wa_change", { config: { private: true } })
+      .channel("wa_chats_change", { config: { private: true } })
       .on("broadcast", { event: "*" }, (payload) => {
         utils.list.wa.chats.invalidate({ conv_id: props.convId });
 
@@ -66,15 +65,15 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       })
       .subscribe((status, err) => {
         if (err) {
-          console.error("Subscription error:", err);
+          console.error("WA Chats Subscription error:", err);
         } else if (status === "SUBSCRIBED") {
-          console.log("Channel subscribed");
+          console.log("WA Chats subscribed");
         } else if (status === "CHANNEL_ERROR") {
-          console.error("Channel encountered an error");
+          console.error("WA Chats channel encountered an error");
         } else if (status === "TIMED_OUT") {
-          console.error("Subscription timed out");
+          console.error("WA Chats subs timed out");
         } else if (status === "CLOSED") {
-          console.log("Channel closed");
+          console.log("WA Chats channel closed");
         }
       });
 

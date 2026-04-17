@@ -5,9 +5,9 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
+import EditLeadStatusCMS from "../forms/EditLeadStatusCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
 import { Slider } from "../ui/slider";
-import EditLeadStatusCMS from "../forms/EditLeadStatusCMS";
 
 interface WhatsappLeadDetailsCMSProps {
   sessionToken: string;
@@ -65,10 +65,13 @@ export default function WhatsappLeadDetailsCMS(
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      updateConversation.mutate({
-        id: props.convId,
-        winning_rate: newRate,
-      });
+      updateConversation.mutate(
+        { id: props.convId, winning_rate: newRate },
+        {
+          onSuccess: () =>
+            utils.read.wa.conversation.invalidate({ id: props.convId }),
+        }
+      );
     }, 600);
   };
 
