@@ -1,4 +1,9 @@
 import GetPrismaClient from "@/lib/prisma";
+import { supabase } from "@/lib/supabase";
+import {
+  whatsappDownloadMediaRequest,
+  whatsappGetMediaURLRequest,
+} from "@/lib/whatsapp";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
 import {
   WACDirection,
@@ -172,4 +177,45 @@ export async function updateStatusByMessageID(
   }
 
   return true;
+}
+
+export async function saveWhatsappAttachment(
+  prisma: ReturnType<typeof GetPrismaClient>,
+  media_type: "audio" | "document" | "image" | "sticker" | "video",
+  attachment: object & { id: string },
+  wam_id: string
+) {
+  const getMediaURL = await whatsappGetMediaURLRequest(attachment.id);
+  const fileBuffer = await whatsappDownloadMediaRequest(getMediaURL.url);
+
+  const fileExt = getMediaURL.mime_type.split("/")[1] || "bin";
+  const fileName = `${Date.now()}_${attachment.id}.${fileExt}`;
+  const filePath = `whatsapp/${media_type}s/${fileName}`;
+  const { error } = await supabase.storage
+    .from("sevenpreneur")
+    .upload(filePath, fileBuffer, {
+      contentType: getMediaURL.mime_type,
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (error) {
+    console.error("Supabase upload error:", error.message);
+  }
+
+  const { data } = supabase.storage.from("sevenpreneur").getPublicUrl(filePath);
+
+  const updatedChat = await prisma.wAChat.updateManyAndReturn({
+    data: {
+      attachment: {
+        ...attachment,
+        storage_url: data.publicUrl,
+      },
+    },
+    where: { wam_id: wam_id },
+  });
+  if (updatedChat.length != 1) {
+    console.error("Failed to update chat.");
+    return false;
+  }
 }

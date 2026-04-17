@@ -3,7 +3,11 @@ import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
 import { WACType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
-import { appendChatFromUser, updateStatusByMessageID } from "./util.wa.webhook";
+import {
+  appendChatFromUser,
+  saveWhatsappAttachment,
+  updateStatusByMessageID,
+} from "./util.wa.webhook";
 
 export async function GET(req: NextRequest) {
   const VERIFY_TOKEN = process.env.WHATSAPP_WEBHOOK_VERIFICATION_TOKEN;
@@ -61,24 +65,29 @@ export async function POST(req: NextRequest) {
           if (msg.type == "audio") {
             messageType = WACType.AUDIO;
             attachment = msg.audio;
+            saveWhatsappAttachment(prisma, "audio", msg.audio, msg.id);
           } else if (msg.type == "contacts") {
             messageType = WACType.CONTACTS;
             attachment = msg.contacts;
           } else if (msg.type == "document") {
             messageType = WACType.DOCUMENT;
             attachment = msg.document;
+            saveWhatsappAttachment(prisma, "document", msg.document, msg.id);
           } else if (msg.type == "image") {
             messageType = WACType.IMAGE;
             attachment = msg.image;
+            saveWhatsappAttachment(prisma, "image", msg.image, msg.id);
           } else if (msg.type == "sticker") {
             messageType = WACType.STICKER;
             attachment = msg.sticker;
+            saveWhatsappAttachment(prisma, "sticker", msg.sticker, msg.id);
           } else if (msg.type == "text") {
             messageType = WACType.TEXT;
             message = msg.text.body;
           } else if (msg.type == "video") {
             messageType = WACType.VIDEO;
             attachment = msg.video;
+            saveWhatsappAttachment(prisma, "video", msg.video, msg.id);
           } else {
             continue; // Skip other message types for now
           }

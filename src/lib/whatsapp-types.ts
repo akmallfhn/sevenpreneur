@@ -13,6 +13,7 @@ export type WhatsappAttachmentAudio = {
   id: string;
   url: string;
   voice: boolean;
+  storage_url?: string;
 };
 
 export type WhatsappAttachmentContacts = {
@@ -25,14 +26,14 @@ export type WhatsappAttachmentContacts = {
       street?: string;
       type?: string;
       zip?: string;
-    },
+    }
   ];
   birthday?: string;
   emails?: [
     {
       email?: string;
       type?: string;
-    },
+    }
   ];
   name?: {
     formatted_name?: string;
@@ -52,13 +53,13 @@ export type WhatsappAttachmentContacts = {
       phone?: string;
       wa_id?: string;
       type?: string;
-    },
+    }
   ];
   urls?: [
     {
       url?: string;
       type?: string;
-    },
+    }
   ];
 }[];
 
@@ -69,6 +70,7 @@ export type WhatsappAttachmentDocument = {
   sha256: string;
   id: string;
   url: string;
+  storage_url?: string;
 };
 
 export type WhatsappAttachmentImage = {
@@ -77,6 +79,7 @@ export type WhatsappAttachmentImage = {
   sha256: string;
   id: string;
   url: string;
+  storage_url?: string;
 };
 
 export type WhatsappAttachmentSticker = {
@@ -85,6 +88,7 @@ export type WhatsappAttachmentSticker = {
   id: string;
   url: string;
   animated: boolean;
+  storage_url?: string;
 };
 
 export type WhatsappAttachmentVideo = {
@@ -93,6 +97,7 @@ export type WhatsappAttachmentVideo = {
   sha256: string;
   id: string;
   url: string;
+  storage_url?: string;
 };
 
 export type WhatsappAttachmentText = undefined; // will be NULL in database
