@@ -1,9 +1,10 @@
 "use client";
 import { trpc } from "@/trpc/client";
+import { supabase } from "@/lib/supabase";
 import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import dayjs from "dayjs";
 import { Loader2 } from "lucide-react";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import WhatsappChatItemCMS from "./WhatsappChatItemCMS";
 import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
@@ -29,21 +30,49 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
     },
     {
       enabled: !!props.sessionToken && !!props.convId,
-      // refetchInterval: (query) => {
-      //   const list = (query.state.data?.list ?? []) as WhatsappChatItem[]>;
-      //   const hasPendingOutbound = list.some(
-      //     (chat) =>
-      //       chat.direction === "OUTBOUND" &&
-      //       chat.status !== "READ" &&
-      //       chat.status !== "FAILED"
-      //   );
-      //   return hasPendingOutbound ? 1000 : 5000;
-      // },
     }
   );
-  const chatList = data?.list;
+  const sortedChatList = useMemo(
+    () =>
+      [...(data?.list ?? [])].sort(
+        (a, b) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      ),
+    [data?.list]
+  );
 
-  console.log("chats", chatList);
+  // Subscribe to Supabase Realtime for live wa_chats updates.
+  useEffect(() => {
+    const channel = supabase
+      .channel("wa_change")
+      .on("broadcast", { event: "*" }, (payload) => {
+        const row =
+          payload.payload?.record ?? payload.payload?.old_record ?? {};
+        if (!row.conv_id || row.conv_id === props.convId) {
+          utils.list.wa.chats.invalidate({ conv_id: props.convId });
+        }
+        if (payload.event === "INSERT") {
+          utils.list.wa.conversations.invalidate();
+        }
+      })
+      .subscribe((status, err) => {
+        if (err) {
+          console.error("Subscription error:", err);
+        } else if (status === "SUBSCRIBED") {
+          console.log("Channel subscribed");
+        } else if (status === "CHANNEL_ERROR") {
+          console.error("Channel encountered an error");
+        } else if (status === "TIMED_OUT") {
+          console.error("Subscription timed out");
+        } else if (status === "CLOSED") {
+          console.log("Channel closed");
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [props.convId, utils]);
 
   // Auto-scrolls to the bottom whenever new chats arrive.
   useEffect(() => {
@@ -56,7 +85,7 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       }
     }, 50);
     return () => clearTimeout(timeout);
-  }, [chatList]);
+  }, [sortedChatList]);
 
   // Automatically scrolls to the bottom when the page first loads.
   useLayoutEffect(() => {
@@ -112,15 +141,9 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
             No Data
           </div>
         )}
-        {!isLoading && !isError && chatList && (
+        {!isLoading && !isError && sortedChatList.length > 0 && (
           <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
-            {chatList
-              .sort(
-                (a, b) =>
-                  new Date(a.created_at).getTime() -
-                  new Date(b.created_at).getTime()
-              )
-              .map((post, index, sorted) => {
+            {sortedChatList.map((post, index, sorted) => {
                 const currentDate = dayjs(post.created_at).format("YYYY-MM-DD");
                 const prevDate =
                   index > 0

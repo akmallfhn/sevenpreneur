@@ -37,5 +37,8 @@ export function resolveWhatsappChatStatus(
     };
   }
 
-  return { iconStatus: null, timestampStatus: null };
+  return {
+    iconStatus: <Check className="size-4 text-[#333333]/80" />,
+    timestampStatus: timestamps.sentAt,
+  };
 }

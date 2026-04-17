@@ -930,8 +930,10 @@ CREATE OR REPLACE FUNCTION wa_broadcast_changes()
       TG_OP,
       TG_TABLE_NAME,
       TG_TABLE_SCHEMA,
-      ROW(NEW.id, NEW.conv_id)::wa_broadcast_change_rows,
-      ROW(OLD.id, OLD.conv_id)::wa_broadcast_change_rows
+      CASE WHEN TG_OP = 'DELETE' THEN NULL
+           ELSE ROW(NEW.id, NEW.conv_id)::wa_broadcast_change_rows END,
+      CASE WHEN TG_OP = 'INSERT' THEN NULL
+           ELSE ROW(OLD.id, OLD.conv_id)::wa_broadcast_change_rows END
     );
     RETURN NULL;
   END
