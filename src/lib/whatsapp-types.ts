@@ -77,6 +77,7 @@ export type WhatsappAttachmentImage = {
   sha256: string;
   id: string;
   url: string;
+  storage_url?: string;
 };
 
 export type WhatsappAttachmentSticker = {

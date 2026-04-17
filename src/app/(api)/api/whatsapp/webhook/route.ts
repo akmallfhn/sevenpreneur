@@ -2,6 +2,7 @@ import GetPrismaClient from "@/lib/prisma";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
 import { WACType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { processImageMessage } from "./process.wa.webhook";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
 import { appendChatFromUser, updateStatusByMessageID } from "./util.wa.webhook";
 
@@ -94,7 +95,18 @@ export async function POST(req: NextRequest) {
             msg.timestamp
           );
           if (!isSuccess) {
-            return new NextResponse(undefined, { status: 500 });
+            // WhatsApp akan retry webhook jika dapat response non-200.
+            // Artinya jika satu message gagal diproses, WhatsApp akan kirim ulang seluruh payload
+            // dan message yang sudah berhasil di loop sebelumnya akan diproses duplikat.
+            console.error(`[WA Webhook] Failed to process message ${msg.id}`);
+            continue;
+          }
+
+          // Fire background process to upload image binary to Supabase storage
+          if (msg.type === "image") {
+            processImageMessage(msg.id, msg.image.id, msg.image).catch((err) =>
+              console.error("[WA Image] Background process error:", err)
+            );
           }
         }
       }
