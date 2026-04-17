@@ -78,9 +78,9 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
         </WhatsappChatBubbleCMS>
 
         {/* Preview image */}
-        {isImagePreviewOpen && (
+        {isImagePreviewOpen && props.chat.attachment.storage_url && (
           <WhatsappImagePreviewCMS
-            imageURL="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohort/1765529832399.webp"
+            imageURL={props.chat.attachment.storage_url}
             imageCaption={props.chat.attachment.caption}
             isOpen={isImagePreviewOpen}
             onClose={() => setIsImagePreviewOpen(false)}
