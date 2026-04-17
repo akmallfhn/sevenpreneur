@@ -917,6 +917,26 @@ CREATE OR REPLACE FUNCTION wa_get_unread_count(_conv_id CHAR(21))
     )
   );
 
+-- Supabase Realtime
+
+CREATE TYPE wa_broadcast_change_rows AS (id CHAR(21), conv_id CHAR(21));
+
+CREATE OR REPLACE FUNCTION wa_broadcast_changes()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    PERFORM realtime.broadcast_changes(
+      'wa_change',
+      TG_OP,
+      TG_OP,
+      TG_TABLE_NAME,
+      TG_TABLE_SCHEMA,
+      ROW(NEW.id, NEW.conv_id)::wa_broadcast_change_rows,
+      ROW(OLD.id, OLD.conv_id)::wa_broadcast_change_rows
+    );
+    RETURN NULL;
+  END
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 --------------
 -- Triggers --
 --------------
@@ -1090,6 +1110,13 @@ CREATE TRIGGER update_wa_chats_updated_at_trigger
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
+-- Supabase Realtime
+
+CREATE TRIGGER broadcast_wa_changes_trigger
+  AFTER INSERT OR UPDATE OR DELETE ON wa_chats
+  FOR EACH ROW
+    EXECUTE FUNCTION wa_broadcast_changes();
+
 ------------------
 -- Unique Index --
 ------------------
@@ -1117,3 +1144,17 @@ CREATE UNIQUE INDEX interstitial_ads_one_row_only ON interstitial_ads ((TRUE));
 -- Article-related
 
 ALTER SEQUENCE articles_id_seq RESTART WITH 77777;
+
+--------------
+-- Policies --
+--------------
+
+-- Supabase Realtime
+
+CREATE POLICY "Anon users can receive broadcasts for WhatsApp changes"
+  ON realtime.messages
+  FOR SELECT
+  TO public
+  USING (
+    (SELECT realtime.topic()) = 'wa_change'
+  );
