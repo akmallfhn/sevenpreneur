@@ -8,7 +8,13 @@ import {
   stringIsNanoid,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { Prisma, WALeadStatus } from "@prisma/client";
+import {
+  Prisma,
+  WACDirection,
+  WACStatus,
+  WACType,
+  WALeadStatus,
+} from "@prisma/client";
 import z from "zod";
 import { convertToWhatsAppChatWithAttachment } from "./type.wa";
 
@@ -67,6 +73,9 @@ AND wa_conversations.lead_status = ${opts.input.lead_status.toLowerCase()}::wa_l
         lead_status: WALeadStatus;
         last_message: string;
         last_message_at: Date;
+        last_message_status: WACStatus | null;
+        last_message_type: WACType;
+        last_message_direction: WACDirection;
         unread_count: number;
         user_full_name?: string;
         user_avatar?: string;
@@ -77,6 +86,8 @@ FROM (
   SELECT DISTINCT ON (wa_conversations.id)
     wa_conversations.id, wa_conversations.full_name, wa_conversations.lead_status,
     wa_chats.message AS last_message, wa_chats.created_at AS last_message_at,
+    wa_chats.status AS last_message_status, wa_chats.type AS last_message_type,
+    wa_chats.direction AS last_message_direction,
     (
       SELECT COUNT(wc.id)
       FROM wa_chats wc
@@ -96,8 +107,17 @@ FROM (
   ORDER BY wa_conversations.id, wa_chats.created_at DESC
 ) AS t
 ORDER BY last_message_at DESC`;
+
       const returnedList = conversationList.map((entry) => {
         entry.lead_status = entry.lead_status.toUpperCase() as WALeadStatus;
+        entry.last_message_type =
+          entry.last_message_type.toUpperCase() as WACType;
+        entry.last_message_direction =
+          entry.last_message_direction.toUpperCase() as WACDirection;
+        if (entry.last_message_status) {
+          entry.last_message_status =
+            entry.last_message_status.toUpperCase() as WACStatus;
+        }
         entry.unread_count = Number(entry.unread_count);
         return entry;
       });

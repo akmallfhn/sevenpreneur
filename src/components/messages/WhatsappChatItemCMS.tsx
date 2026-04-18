@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
-import { resolveWhatsappChatStatus } from "@/lib/whatsapp-status";
+import { resolveWhatsappChatStatus } from "@/lib/whatsapp-utils";
 import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import WhatsappChatBubbleCMS from "./WhatsappChatBubbleCMS";
 import WhatsappImagePreviewCMS from "../modals/WhatsappImagePreviewCMS";

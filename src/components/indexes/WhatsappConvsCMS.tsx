@@ -73,6 +73,23 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
     readMessage.mutate({ id: selectedConvId });
   }, [selectedConvId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Mark as read when new messages arrive for the currently open conversation
+  useEffect(() => {
+    if (!selectedConvId || !convList) return;
+    const conv = convList.list.find((c) => c.id === selectedConvId);
+    if (!conv || conv.unread_count === 0) return;
+    utils.list.wa.conversations.setData({}, (old) => {
+      if (!old) return old;
+      return {
+        ...old,
+        list: old.list.map((c) =>
+          c.id === selectedConvId ? { ...c, unread_count: 0 } : c
+        ),
+      };
+    });
+    readMessage.mutate({ id: selectedConvId });
+  }, [convList]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <PageContainerCMS className="h-screen">
       <div className="page-wrapper flex flex-col w-full h-full gap-4">
@@ -112,6 +129,9 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
                     convUserFullName={post.user_full_name || post.full_name}
                     convUserAvatar={post.user_avatar ?? null}
                     convLastMessage={post.last_message}
+                    convLastMessageStatus={post.last_message_status}
+                    convLastMessageDirection={post.last_message_direction}
+                    convLastMessageType={post.last_message_type}
                     convLastMessageAt={post.last_message_at}
                     convLeadStatus={post.lead_status as LeadStatus}
                     convUnreadMessage={post.unread_count}

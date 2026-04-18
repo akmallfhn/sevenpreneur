@@ -1,5 +1,14 @@
 "use client";
-import { LeadStatus } from "@/lib/app-types";
+import {
+  LeadStatus,
+  WhatsappChatDirection,
+  WhatsappChatStatus,
+  WhatsappChatType,
+} from "@/lib/app-types";
+import {
+  getLabelWhatsappChatType,
+  resolveWhatsappChatStatus,
+} from "@/lib/whatsapp-utils";
 import {
   faFire,
   faMugHot,
@@ -36,6 +45,9 @@ interface WhatsappConvItemCMSProps {
   convUserFullName: string;
   convUserAvatar: string | null;
   convLastMessage: string;
+  convLastMessageDirection: WhatsappChatDirection;
+  convLastMessageStatus: WhatsappChatStatus | null;
+  convLastMessageType: WhatsappChatType;
   convLastMessageAt: string;
   convLeadStatus: LeadStatus;
   convUnreadMessage: number;
@@ -53,6 +65,11 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
     .map((word) => word[0])
     .join("")
     .toUpperCase();
+
+  const { iconStatus } = resolveWhatsappChatStatus(props.convLastMessageStatus);
+  const { iconType, labelType } = getLabelWhatsappChatType(
+    props.convLastMessageType
+  );
 
   return (
     <div
@@ -88,9 +105,19 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
           <p className="conv-full-name text-[15px] font-semibold font-bodycopy leading-snug line-clamp-1">
             {props.convUserFullName}
           </p>
-          <p className="conv-last-message text-sm text-emphasis font-bodycopy font-[450] line-clamp-1">
-            {props.convLastMessage}
-          </p>
+          <div className="flex items-center gap-1.5">
+            {props.convLastMessageDirection === "OUTBOUND" && (
+              <div>{iconStatus}</div>
+            )}
+            <div className="flex items-center gap-1">
+              {props.convLastMessageType !== "TEXT" && <div>{iconType}</div>}
+              <p className="conv-last-message text-sm text-emphasis font-bodycopy font-[450] line-clamp-1">
+                {props.convLastMessageType === "TEXT"
+                  ? props.convLastMessage
+                  : labelType}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-0.5 items-center shrink-0">
