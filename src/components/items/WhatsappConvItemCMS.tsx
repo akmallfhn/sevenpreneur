@@ -99,11 +99,11 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
         >
           {dayjs(props.convLastMessageAt).format("HH:mm")}
         </p>
-        {/* {props.convUnreadMessage > 0 && (
-          <p className="conv-unread-messages w-fit text-[10px] text-white font-bodycopy font-bold py-0.5 px-2 bg-cms-primary rounded-full">
+        {props.convUnreadMessage > 0 && (
+          <p className="conv-unread-messages w-fit text-[10px] text-tertiary-foreground bg-tertiary-background font-bodycopy font-bold py-0.5 px-2 rounded-full">
             {props.convUnreadMessage}
           </p>
-        )} */}
+        )}
       </div>
     </div>
   );

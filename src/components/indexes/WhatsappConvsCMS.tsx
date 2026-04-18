@@ -20,6 +20,7 @@ interface WhatsappConvsCMSProps {
 export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
   const [selectedConvId, setSelectedConvId] = useState("");
   const utils = trpc.useUtils();
+  const readMessage = trpc.update.wa.conversation_as_read.useMutation();
 
   // Fetch tRPC data
   const {
@@ -56,6 +57,21 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
       supabase.removeChannel(channel);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Read message when click conv item
+  useEffect(() => {
+    if (!selectedConvId) return;
+    utils.list.wa.conversations.setData({}, (old) => {
+      if (!old) return old;
+      return {
+        ...old,
+        list: old.list.map((conv) =>
+          conv.id === selectedConvId ? { ...conv, unread_count: 0 } : conv
+        ),
+      };
+    });
+    readMessage.mutate({ id: selectedConvId });
+  }, [selectedConvId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <PageContainerCMS className="h-screen">

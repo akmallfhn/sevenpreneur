@@ -77,7 +77,17 @@ FROM (
   SELECT DISTINCT ON (wa_conversations.id)
     wa_conversations.id, wa_conversations.full_name, wa_conversations.lead_status,
     wa_chats.message AS last_message, wa_chats.created_at AS last_message_at,
-    wa_get_unread_count(wa_conversations.id) AS unread_count,
+    (
+      SELECT COUNT(wc.id)
+      FROM wa_chats wc
+      WHERE wc.conv_id = wa_conversations.id AND wc.direction = 'inbound' AND wc.created_at > (
+        SELECT COALESCE(wc2.created_at, '2000-01-01 00:00:00Z'::TIMESTAMPTZ)
+        FROM wa_conversations wconv
+        LEFT JOIN wa_chats wc2 ON wconv.last_read_id = wc2.id
+        WHERE wconv.id = wa_conversations.id
+        LIMIT 1
+      )
+    ) AS unread_count,
     users.full_name AS user_full_name, users.avatar AS user_avatar
   FROM wa_conversations
     LEFT JOIN wa_chats ON wa_conversations.id = wa_chats.conv_id
@@ -88,6 +98,7 @@ FROM (
 ORDER BY last_message_at DESC`;
       const returnedList = conversationList.map((entry) => {
         entry.lead_status = entry.lead_status.toUpperCase() as WALeadStatus;
+        entry.unread_count = Number(entry.unread_count);
         return entry;
       });
 
