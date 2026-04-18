@@ -1,7 +1,7 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
-import { objectHasOnlyNanoid } from "@/trpc/utils/validation";
+import { objectHasOnlyID, objectHasOnlyNanoid } from "@/trpc/utils/validation";
 
 export const readWA = {
   conversation: administratorProcedure
@@ -39,6 +39,23 @@ export const readWA = {
         code: STATUS_OK,
         message: "Success",
         conversation: waConversation,
+      };
+    }),
+
+  alert: administratorProcedure
+    .input(objectHasOnlyID())
+    .query(async (opts) => {
+      const waAlert = await opts.ctx.prisma.wAAlert.findFirst({
+        where: { id: opts.input.id },
+      });
+      if (!waAlert) {
+        throw readFailedNotFound("alert");
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        alert: waAlert,
       };
     }),
 };

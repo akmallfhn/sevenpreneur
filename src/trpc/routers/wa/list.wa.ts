@@ -183,4 +183,38 @@ ORDER BY last_message_at DESC`;
         list: returnedList,
       };
     }),
+
+  alerts: administratorProcedure
+    .input(
+      z.object({
+        conv_id: stringIsNanoid(),
+      })
+    )
+    .query(async (opts) => {
+      const waAlertList = await opts.ctx.prisma.wAAlert.findMany({
+        select: {
+          id: true,
+          scheduled_at: true,
+          status: true,
+        },
+        where: {
+          conv_id: opts.input.conv_id,
+        },
+        orderBy: { scheduled_at: "asc" },
+      });
+
+      const returnedList = waAlertList.map((entry) => {
+        return {
+          id: entry.id,
+          scheduled_at: entry.scheduled_at,
+          status: entry.status,
+        };
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        alerts: returnedList,
+      };
+    }),
 };

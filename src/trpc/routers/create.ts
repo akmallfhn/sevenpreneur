@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { createArticle } from "./article/create.article";
+import { createWA } from "./wa/create.wa";
 import { createBA } from "./ba/create.ba";
 import { createBD } from "./bd/create.bd";
 import { createEvent } from "./event/create.event";
@@ -72,4 +73,10 @@ export const createRouter = createTRPCRouter({
 
   articleCategory: createArticle.articleCategory,
   article: createArticle.article,
+
+  // WhatsApp-related //
+
+  wa: {
+    alert: createWA.alert,
+  },
 });
