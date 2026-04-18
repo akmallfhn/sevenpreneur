@@ -65,29 +65,24 @@ export async function POST(req: NextRequest) {
           if (msg.type == "audio") {
             messageType = WACType.AUDIO;
             attachment = msg.audio;
-            saveWhatsappAttachment(prisma, "audio", msg.audio, msg.id);
           } else if (msg.type == "contacts") {
             messageType = WACType.CONTACTS;
             attachment = msg.contacts;
           } else if (msg.type == "document") {
             messageType = WACType.DOCUMENT;
             attachment = msg.document;
-            saveWhatsappAttachment(prisma, "document", msg.document, msg.id);
           } else if (msg.type == "image") {
             messageType = WACType.IMAGE;
             attachment = msg.image;
-            saveWhatsappAttachment(prisma, "image", msg.image, msg.id);
           } else if (msg.type == "sticker") {
             messageType = WACType.STICKER;
             attachment = msg.sticker;
-            saveWhatsappAttachment(prisma, "sticker", msg.sticker, msg.id);
           } else if (msg.type == "text") {
             messageType = WACType.TEXT;
             message = msg.text.body;
           } else if (msg.type == "video") {
             messageType = WACType.VIDEO;
             attachment = msg.video;
-            saveWhatsappAttachment(prisma, "video", msg.video, msg.id);
           } else {
             continue; // Skip other message types for now
           }
@@ -103,13 +98,21 @@ export async function POST(req: NextRequest) {
             msg.timestamp
           );
           if (!isSuccess) {
-            // WhatsApp akan retry webhook jika dapat response non-200.
-            // Artinya jika satu message gagal diproses, WhatsApp akan kirim ulang seluruh payload
-            // dan message yang sudah berhasil di loop sebelumnya akan diproses duplikat.
-            console.error(`[WA Webhook] Failed to process message ${msg.id}`);
-            continue;
+            return new NextResponse(undefined, { status: 500 });
           }
 
+          // Save the attachment after successfully appending chat
+          if (msg.type == "audio") {
+            saveWhatsappAttachment(prisma, "audio", msg.audio, msg.id);
+          } else if (msg.type == "document") {
+            saveWhatsappAttachment(prisma, "document", msg.document, msg.id);
+          } else if (msg.type == "image") {
+            saveWhatsappAttachment(prisma, "image", msg.image, msg.id);
+          } else if (msg.type == "sticker") {
+            saveWhatsappAttachment(prisma, "sticker", msg.sticker, msg.id);
+          } else if (msg.type == "video") {
+            saveWhatsappAttachment(prisma, "video", msg.video, msg.id);
+          }
         }
       }
 
