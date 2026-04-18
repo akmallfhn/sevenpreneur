@@ -35,7 +35,7 @@ async function getOrCreateConversation(
       where: { id: createdConversation.id },
     });
     if (!waConversation) {
-      console.error("Failed to create a new conversation.");
+      console.error("whatsapp.webhook: Failed to create a new conversation.");
       return undefined;
     }
   }
@@ -69,7 +69,7 @@ export async function appendChatFromUser(
       }
     );
     if (updatedConversation.length != 1) {
-      console.error("Failed to update conversation.");
+      console.error("whatsapp.webhook: Failed to update conversation.");
     }
   }
 
@@ -87,7 +87,7 @@ export async function appendChatFromUser(
     },
   });
   if (!createdChat) {
-    console.error("Failed to create a new chat.");
+    console.error("whatsapp.webhook: Failed to create a new chat.");
     return false;
   }
 
@@ -133,7 +133,7 @@ export async function updateStatusByMessageID(
       where: { id: createdChat.id },
     });
     if (!waChat) {
-      console.error("Failed to create a new chat.");
+      console.error("whatsapp.webhook: Failed to create a new chat.");
       return undefined;
     }
   }
@@ -164,7 +164,7 @@ export async function updateStatusByMessageID(
       updateChatData["failed_at"] = updatedAtAsDate;
       break;
     default:
-      console.error("Unknown message status type.");
+      console.error("whatsapp.webhook: Unknown message status type.");
       return false;
   }
   const updatedChat = await prisma.wAChat.updateManyAndReturn({
@@ -172,7 +172,7 @@ export async function updateStatusByMessageID(
     where: { id: waChat.id },
   });
   if (updatedChat.length != 1) {
-    console.error("Failed to update chat.");
+    console.error("whatsapp.webhook: Failed to update chat.");
     return false;
   }
 
@@ -200,7 +200,7 @@ export async function saveWhatsappAttachment(
     });
 
   if (error) {
-    console.error("Supabase upload error:", error.message);
+    console.error("whatsapp.webhook: Supabase upload error:", error.message);
   }
 
   const { data } = supabase.storage.from("sevenpreneur").getPublicUrl(filePath);
@@ -215,7 +215,7 @@ export async function saveWhatsappAttachment(
     where: { wam_id: wam_id },
   });
   if (updatedChat.length != 1) {
-    console.error("Failed to update chat.");
+    console.error("whatsapp.webhook: Failed to update chat.");
     return false;
   }
 }

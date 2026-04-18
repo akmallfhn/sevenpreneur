@@ -98,6 +98,7 @@ export async function POST(req: NextRequest) {
             msg.timestamp
           );
           if (!isSuccess) {
+            console.error("whatsapp.webhook: Failed to append chat from user.")
             return new NextResponse(undefined, { status: 500 });
           }
 
@@ -127,6 +128,7 @@ export async function POST(req: NextRequest) {
             status.timestamp
           );
           if (!isSuccess) {
+            console.error("whatsapp.webhook: Failed to update status by message ID.")
             return new NextResponse(undefined, { status: 500 });
           }
         }
