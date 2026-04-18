@@ -542,32 +542,32 @@ CREATE TABLE ai_tools (
 );
 
 CREATE TABLE ai_results (
-  id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  id          CHAR(21)     PRIMARY KEY  DEFAULT nanoid(),
   user_id     UUID         NOT NULL,
   ai_tool_id  SMALLINT     NOT NULL,
   name        VARCHAR      NOT NULL,
   result      JSON         NOT NULL,
-  is_done     BOOLEAN      NOT NULL  DEFAULT FALSE,
+  is_done     BOOLEAN      NOT NULL     DEFAULT FALSE,
   qstash_id   VARCHAR          NULL,
-  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  created_at  TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 -- AI-chat-related
 
 CREATE TABLE ai_conversations (
-  id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  id          CHAR(21)     PRIMARY KEY  DEFAULT nanoid(),
   user_id     UUID         NOT NULL,
   name        VARCHAR      NOT NULL,
-  is_done     BOOLEAN      NOT NULL  DEFAULT TRUE,
-  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  is_done     BOOLEAN      NOT NULL     DEFAULT TRUE,
+  created_at  TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ai_chats (
-  id          CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  id          CHAR(21)     PRIMARY KEY  DEFAULT nanoid(),
   conv_id     CHAR(21)     NOT NULL,
   role        c_role_enum  NOT NULL,
   message     TEXT         NOT NULL,
-  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  created_at  TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Transaction-related
@@ -594,13 +594,13 @@ CREATE TABLE discounts (
 );
 
 CREATE TABLE transactions (
-  id               CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  id               CHAR(21)        PRIMARY KEY  DEFAULT nanoid(),
   user_id          UUID            NOT NULL,
   category         category_enum   NOT NULL,
   item_id          INTEGER         NOT NULL,
   amount           DECIMAL(12, 2)  NOT NULL,
   discount_id      INTEGER             NULL,
-  discount_amount  DECIMAL(12, 2)  NOT NULL  DEFAULT 0,
+  discount_amount  DECIMAL(12, 2)  NOT NULL     DEFAULT 0,
   admin_fee        DECIMAL(12, 2)  NOT NULL,
   vat              DECIMAL(12, 2)  NOT NULL,
   currency         VARCHAR         NOT NULL,
@@ -609,8 +609,8 @@ CREATE TABLE transactions (
   payment_method   VARCHAR         NOT NULL,
   payment_channel  VARCHAR         NOT NULL,
   paid_at          TIMESTAMPTZ         NULL,
-  created_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at       TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  created_at       TIMESTAMPTZ     NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  updated_at       TIMESTAMPTZ     NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tickers
@@ -670,21 +670,21 @@ CREATE TABLE interstitial_ads (
 -- WhatsApp-chat-related
 
 CREATE TABLE wa_conversations (
-  id            CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  id            CHAR(21)        PRIMARY KEY  DEFAULT nanoid(),
   user_id       UUID                NULL,
   full_name     VARCHAR         NOT NULL,
   phone_number  VARCHAR         NOT NULL,
   handler_id    UUID                NULL,
-  lead_status   wa_lead_status  NOT NULL  DEFAULT 'cold',
-  winning_rate  SMALLINT        NOT NULL  DEFAULT 0,
+  lead_status   wa_lead_status  NOT NULL     DEFAULT 'cold',
+  winning_rate  SMALLINT        NOT NULL     DEFAULT 0,
   note          VARCHAR             NULL,
   last_read_id  CHAR(21)            NULL,
-  created_at    TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at    TIMESTAMPTZ     NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  created_at    TIMESTAMPTZ     NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ     NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE wa_chats (
-  id            CHAR(21) DEFAULT nanoid() PRIMARY KEY,
+  id            CHAR(21)         PRIMARY KEY  DEFAULT nanoid(),
   conv_id       CHAR(21)         NOT NULL,
   wam_id        VARCHAR          NOT NULL,
   direction     wac_direction    NOT NULL,
@@ -698,8 +698,8 @@ CREATE TABLE wa_chats (
   delivered_at  TIMESTAMPTZ          NULL,
   read_at       TIMESTAMPTZ          NULL,
   failed_at     TIMESTAMPTZ          NULL,
-  created_at    TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at    TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  created_at    TIMESTAMPTZ      NOT NULL     DEFAULT CURRENT_TIMESTAMP,
+  updated_at    TIMESTAMPTZ      NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Relation Tables --
@@ -1142,9 +1142,9 @@ CREATE TRIGGER broadcast_wa_chats_changes_trigger
   FOR EACH ROW
     EXECUTE FUNCTION wa_chats_change();
 
-------------------
--- Unique Index --
-------------------
+--------------------
+-- Unique Indices --
+--------------------
 
 -- LMS-related
 

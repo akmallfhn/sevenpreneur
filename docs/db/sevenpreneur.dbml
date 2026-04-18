@@ -3,9 +3,9 @@ Project sevenpreneur {
   note: 'Database for Sevenpreneur'
 }
 
-/////////////////
-// Enumeration //
-/////////////////
+//////////////////
+// Enumerations //
+//////////////////
 
 enum status_enum {
   active
@@ -43,9 +43,24 @@ enum c_role_enum {
 // Enumeration for the ba_answer_sheets table (ba_*)
 
 enum ba_period_enum {
-  'asesmen_pertama',
-  'asesmen_kedua',
-  'asesmen_ketiga'
+  asesmen_pertama
+  asesmen_kedua
+  asesmen_ketiga
+}
+
+// Enumeration for the bd_fin_cost_mtds table (cost_*)
+
+enum cost_category_enum {
+  // TODO: use actual values
+  todo
+}
+
+// Enumeration for the bd_north_star_indicators table (ns_*)
+
+enum ns_status_enum {
+  on_track
+  at_risk
+  off_track
 }
 
 // Enumeration for the users table
@@ -95,6 +110,52 @@ enum a_status_enum {
   draft
   published
   unpublished
+}
+
+// Enumeration for the wa_conversations table (wa_*)
+
+enum wa_lead_status {
+  cold
+  warm
+  hot
+}
+
+// Enumeration for the wa_chats table (wac_*)
+
+enum wac_direction {
+  inbound
+  outbound
+}
+
+enum wac_sender_type {
+  user
+  admin
+}
+
+enum wac_type {
+  audio
+  button
+  contacts
+  document
+  edit
+  image
+  interactive
+  location
+  order
+  reaction
+  revoke
+  sticker
+  system
+  text
+  unsupported
+  video
+}
+
+enum wac_status {
+  sent
+  delivered
+  read
+  failed
 }
 
 ////////////
@@ -175,12 +236,14 @@ Table tokens {
 // LMS-related
 
 Table cohorts {
-  id            integer      [primary key, ref: > users_cohorts.id]
+  id            integer      [primary key]
   name          varchar
   description   varchar
   image         varchar
+  image_banner  varchar
+  image_square  varchar
   status        status_enum
-  slug_url      varchar
+  slug_url      varchar      [note: 'unique']
   start_date    timestamptz
   end_date      timestamptz
   published_at  timestamptz
@@ -190,8 +253,8 @@ Table cohorts {
 }
 
 Table cohort_prices {
-  id          integer         [primary key]
-  cohort_id   integer         [ref: > cohorts.id]
+  id          integer        [primary key]
+  cohort_id   integer        [ref: > cohorts.id]
   name        varchar
   amount      decimal(12,2)
   status      status_enum
@@ -245,7 +308,7 @@ Table materials {
 
 Table discussion_starters {
   id           integer      [primary key]
-  user_id      uuid
+  user_id      uuid         [ref: > users.id]
   learning_id  integer      [ref: > learnings.id]
   message      text
   created_at   timestamptz
@@ -253,12 +316,12 @@ Table discussion_starters {
 }
 
 Table discussion_replies {
-  id           integer      [primary key]
-  user_id      uuid
-  starter_id   integer      [ref: > discussion_starters.id]
-  message      text
-  created_at   timestamptz
-  updated_at   timestamptz
+  id          integer      [primary key]
+  user_id     uuid         [ref: > users.id]
+  starter_id  integer      [ref: > discussion_starters.id]
+  message     text
+  created_at  timestamptz
+  updated_at  timestamptz
 }
 
 Table projects {
@@ -295,7 +358,7 @@ Table attendances {
 
 Table ba_categories {
   id          smallint      [primary key]
-  category    varchar
+  name        varchar
   weight      decimal(5,2)  [note: 'in percent (%)']
   num_order   smallint
   created_at  timestamptz
@@ -305,7 +368,7 @@ Table ba_categories {
 Table ba_subcategories {
   id           smallint     [primary key]
   category_id  smallint     [ref: > ba_categories.id]
-  subcategory  varchar
+  name         varchar
   num_order    smallint
   created_at   timestamptz
   updated_at   timestamptz
@@ -341,6 +404,58 @@ Table ba_answer_items {
   updated_at   timestamptz
 }
 
+// Business-metric-related
+
+Table bd_fin_revenue_mtds {
+  id          integer        [primary key]
+  user_id     uuid           [ref: > users.id]
+  year        smallint
+  month       smallint
+  amount      decimal(12,2)
+  currency    varchar
+  by_product  json
+  by_channel  json
+  note        varchar
+  created_at  timestamptz
+  updated_at  timestamptz
+}
+
+Table bd_fin_cost_mtds {
+  id          integer             [primary key]
+  user_id     uuid                [ref: > users.id]
+  year        smallint
+  month       smallint
+  amount      decimal(12,2)
+  currency    varchar
+  category    cost_category_enum
+  note        varchar
+  created_at  timestamptz
+  updated_at  timestamptz
+}
+
+Table bd_north_star_indicators {
+  id             integer         [primary key]
+  user_id        uuid            [ref: > users.id]
+  name           varchar
+  description    text
+  annual_target  decimal(12,2)
+  unit           varchar
+  status         ns_status_enum
+  created_at     timestamptz
+  updated_at     timestamptz
+}
+
+Table bd_north_star_mtds {
+  id            integer        [primary key]
+  indicator_id  integer        [ref: > bd_north_star_indicators.id]
+  year          smallint
+  month         smallint
+  actual_value  decimal(12,2)
+  note          varchar
+  created_at    timestamptz
+  updated_at    timestamptz
+}
+
 // Playlist-related
 
 Table playlists {
@@ -350,6 +465,8 @@ Table playlists {
   description        text
   video_preview_url  varchar
   image_url          varchar
+  image_banner_url   varchar
+  image_square_url   varchar
   price              decimal(12,2)
   status             status_enum
   slug_url           varchar
@@ -360,14 +477,14 @@ Table playlists {
 }
 
 Table videos {
-  id                 integer   [primary key]
-  playlist_id        integer   [ref: > playlists.id]
+  id                 integer      [primary key]
+  playlist_id        integer      [ref: > playlists.id]
   name               varchar
   description        text
   duration           integer
   image_url          varchar
   video_url          varchar
-  num_order          smallint  [note: 'default 0']
+  num_order          smallint     [note: 'default 0']
   external_video_id  varchar
   status             status_enum
 }
@@ -380,10 +497,10 @@ Table events {
   description    varchar
   image          varchar
   status         status_enum
-  slug_url       varchar
+  slug_url       varchar               [note: 'unique']
   start_date     timestamptz
   end_date       timestamptz
-  method         learning_method_enum
+  method         learning_method_enum  [note: 'default onsite']
   meeting_url    varchar
   location_name  varchar
   location_url   varchar
@@ -394,8 +511,8 @@ Table events {
 }
 
 Table event_prices {
-  id          integer         [primary key]
-  event_id    integer         [ref: > events.id]
+  id          integer        [primary key]
+  event_id    integer        [ref: > events.id]
   name        varchar
   amount      decimal(12,2)
   status      status_enum
@@ -419,7 +536,7 @@ Table templates {
 // AI-tool-related
 
 Table ai_tools {
-  id           smallint    [primary key]
+  id           smallint     [primary key]
   name         varchar
   description  varchar
   slug_url     varchar
@@ -448,14 +565,21 @@ Table ai_conversations {
 }
 
 Table ai_chats {
-  id          char(21)    [primary key, note: 'default nanoid()']
-  conv_id     char(21)    [ref: > ai_conversations.id]
+  id          char(21)     [primary key, note: 'default nanoid()']
+  conv_id     char(21)     [ref: > ai_conversations.id]
   role        c_role_enum
   message     text
   created_at  timestamptz
 }
 
 // Transaction-related
+
+/**
+ * The item_id column refers to
+ * - cohort_prices.id if the category is cohort,
+ * - playlists.id     if the category is playlist, or
+ * - event_prices.id  if the category is event.
+ */
 
 Table discounts {
   id            integer        [primary key]
@@ -478,7 +602,7 @@ Table transactions {
   item_id          integer        [note: 'items ID based on category']
   amount           decimal(12,2)
   discount_id      integer        [ref: > discounts.id]
-  discount_amount  decimal(12,2)
+  discount_amount  decimal(12,2)  [note: 'default 0']
   admin_fee        decimal(12,2)
   vat              decimal(12,2)
   currency         varchar        [note: 'IDR']
@@ -494,7 +618,7 @@ Table transactions {
 // Tickers
 
 Table ticker {
-  id          integer [primary key, note: 'default 1']
+  id          integer      [primary key, note: 'default 1']
   title       varchar
   callout     varchar
   target_url  varchar
@@ -507,7 +631,7 @@ Table ticker {
 // Article-related
 
 Table article_categories {
-  id          smallint    [primary key]
+  id          smallint     [primary key]
   name        varchar
   status      status_enum
   slug        varchar
@@ -515,16 +639,16 @@ Table article_categories {
 }
 
 Table articles {
-  id            integer       [primary key, note: 'starts at 77777']
+  id            integer        [primary key, note: 'starts at 77777']
   title         varchar
   insight       varchar
   image_url     varchar
   body_content  json
   status        a_status_enum
-  category_id   smallint      [ref: > article_categories.id]
+  category_id   smallint       [ref: > article_categories.id]
   keywords      varchar
-  author_id     uuid          [ref: > users.id]
-  reviewer_id   uuid          [ref: > users.id]
+  author_id     uuid           [ref: > users.id]
+  reviewer_id   uuid           [ref: > users.id]
   slug_url      varchar
   published_at  timestamptz
   updated_at    timestamptz
@@ -533,7 +657,7 @@ Table articles {
 // Interstitial Ads
 
 Table interstitial_ads {
-  id              integer [primary key, note: 'default 1']
+  id              integer      [primary key, note: 'default 1']
   title           varchar
   call_to_action  varchar
   target_url      varchar
@@ -543,6 +667,41 @@ Table interstitial_ads {
   start_date      timestamptz
   end_date        timestamptz
   updated_at      timestamptz
+}
+
+// WhatsApp-chat-related
+
+Table wa_conversations {
+  id            char(21)        [primary key, note: 'default nanoid()']
+  user_id       uuid            [ref: > users.id]
+  full_name     varchar
+  phone_number  varchar
+  handler_id    uuid            [ref: > users.id]
+  lead_status   wa_lead_status  [note: 'default cold']
+  winning_rate  smallint        [note: 'default 0']
+  note          varchar
+  last_read_id  char(21)        [ref: > wa_chats.id]
+  created_at    timestamptz
+  updated_at    timestamptz
+}
+
+Table wa_chats {
+  id            char(21)         [primary key, note: 'default nanoid()']
+  conv_id       char(21)         [ref: > wa_conversations.id]
+  wam_id        varchar
+  direction     wac_direction
+  sender_type   wac_sender_type
+  reply_to_id   char(21)         [ref: > wa_chats.id]
+  type          wac_type
+  message       varchar
+  attachment    json
+  status        wac_status
+  sent_at       timestamptz
+  delivered_at  timestamptz
+  read_at       timestamptz
+  failed_at     timestamptz
+  created_at    timestamptz
+  updated_at    timestamptz
 }
 
 // Relation Tables //
@@ -565,6 +724,11 @@ Table users_playlists {
 Table educators_playlists {
   user_id      uuid     [ref: > users.id]
   playlist_id  integer  [ref: > playlists.id]
+}
+
+Table users_events {
+  user_id   uuid     [ref: > users.id]
+  event_id  integer  [ref: > events.id]
 }
 
 Table users_templates {

@@ -9,9 +9,9 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-/////////////////
-// Enumeration //
-/////////////////
+//////////////////
+// Enumerations //
+//////////////////
 
 enum StatusEnum {
   ACTIVE   @map("active")
