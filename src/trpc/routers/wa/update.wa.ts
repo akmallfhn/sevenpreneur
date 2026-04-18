@@ -2,8 +2,10 @@ import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
+  numberIsID,
   numberIsNonNegInt,
   stringIsNanoid,
+  stringIsTimestampTz,
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -80,6 +82,27 @@ export const updateWA = {
         code: STATUS_OK,
         message: "Success",
         conversation: updatedConversation[0],
+      };
+    }),
+
+  alert: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        scheduled_at: stringIsTimestampTz(),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedAlerts = await opts.ctx.prisma.wAAlert.updateManyAndReturn({
+        data: { scheduled_at: opts.input.scheduled_at },
+        where: { id: opts.input.id },
+      });
+      checkUpdateResult(updatedAlerts.length, "alert", "alerts", "wa.alert");
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        alert: updatedAlerts[0],
       };
     }),
 };

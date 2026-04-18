@@ -200,6 +200,17 @@ enum WACStatus {
   @@map("wac_status")
 }
 
+// Enumeration for the WAAlert model (WAA*)
+
+enum WAAStatus {
+  SCHEDULED @map("scheduled")
+  SENT      @map("sent")
+  DELIVERED @map("delivered")
+  BOUNCED   @map("bounced")
+
+  @@map("wa_alert_status")
+}
+
 ////////////
 // Models //
 ////////////
@@ -905,6 +916,7 @@ model WAConversation {
   created_at   DateTime     @default(now()) @db.Timestamptz()
   updated_at   DateTime     @default(now()) @updatedAt @db.Timestamptz()
   chats        WAChat[]
+  alerts       WAAlert[]
 
   @@map("wa_conversations")
 }
@@ -932,6 +944,19 @@ model WAChat {
   replies      WAChat[]         @relation("reply")
 
   @@map("wa_chats")
+}
+
+model WAAlert {
+  id               Int            @id @default(autoincrement())
+  conv             WAConversation @relation(fields: [conv_id], references: [id])
+  conv_id          String         @db.Char(21)
+  email_message_id String?        @unique @db.Text
+  scheduled_at     DateTime       @db.Timestamptz()
+  status           WAAStatus      @default(SCHEDULED)
+  created_at       DateTime       @default(now()) @db.Timestamptz()
+  updated_at       DateTime       @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("wa_alerts")
 }
 
 // Relation Tables //

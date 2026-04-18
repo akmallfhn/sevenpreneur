@@ -155,6 +155,13 @@ CREATE TYPE wac_status AS ENUM (
   'failed'
 );
 
+CREATE TYPE wa_alert_status as ENUM (
+  'scheduled',
+  'sent',
+  'delivered',
+  'bounced'
+);
+
 ------------
 -- Tables --
 ------------
@@ -702,6 +709,16 @@ CREATE TABLE wa_chats (
   updated_at    TIMESTAMPTZ      NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE wa_alerts (
+  id                   SERIAL            PRIMARY KEY,
+  conv_id              CHAR(21)          NOT NULL,
+  email_message_id     TEXT              NULL            UNIQUE,
+  scheduled_at         TIMESTAMPTZ       NOT NULL,
+  status               wa_alert_status   NOT NULL        DEFAULT 'scheduled',
+  created_at           TIMESTAMPTZ       NOT NULL        DEFAULT CURRENT_TIMESTAMP,
+  updated_at           TIMESTAMPTZ       NOT NULL        DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (
@@ -871,6 +888,9 @@ ALTER TABLE wa_conversations
 ALTER TABLE wa_chats
   ADD FOREIGN KEY (conv_id)     REFERENCES wa_conversations (id),
   ADD FOREIGN KEY (reply_to_id) REFERENCES wa_chats (id);
+
+ALTER TABLE wa_alerts
+  ADD FOREIGN KEY (conv_id) REFERENCES wa_conversations (id);
 
 -- Relation Tables --
 
@@ -1127,6 +1147,11 @@ CREATE TRIGGER update_wa_conversations_updated_at_trigger
 
 CREATE TRIGGER update_wa_chats_updated_at_trigger
   BEFORE UPDATE ON wa_chats
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_wa_alerts_updated_at_trigger
+  BEFORE UPDATE ON wa_alerts
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 

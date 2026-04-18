@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { deleteAITool } from "./ai_tool/delete.ai_tool";
+import { deleteWA } from "./wa/delete.wa";
 import { deleteArticle } from "./article/delete.article";
 import { deleteBA } from "./ba/delete.ba";
 import { deleteBD } from "./bd/delete.bd";
@@ -75,4 +76,10 @@ export const deleteRouter = createTRPCRouter({
 
   articleCategory: deleteArticle.articleCategory,
   article: deleteArticle.article,
+
+  // WhatsApp-related //
+
+  wa: {
+    alert: deleteWA.alert,
+  },
 });
