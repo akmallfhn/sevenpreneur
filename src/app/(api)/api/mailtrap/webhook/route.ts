@@ -30,11 +30,15 @@ export async function POST(req: NextRequest) {
   const payload: MailtrapWebhookPayload = await req.json();
   const prisma = GetPrismaClient();
 
-  const results: { message_id: string; status: string; updated: boolean }[] =
-    [];
+  type MailtrapEventResult = {
+    message_id: string;
+    status: string;
+    updated: boolean;
+  };
+  const results: MailtrapEventResult[] = [];
 
   for (const event of payload.events) {
-    let newStatus: WAAStatus | null = null;
+    let newStatus: Optional<WAAStatus> = undefined;
 
     if (event.event === "delivery") {
       newStatus = WAAStatus.DELIVERED;
@@ -52,8 +56,8 @@ export async function POST(req: NextRequest) {
     }
 
     const updated = await prisma.wAAlert.updateMany({
-      where: { email_message_id: event.message_id },
       data: { status: newStatus },
+      where: { email_message_id: event.message_id },
     });
 
     results.push({

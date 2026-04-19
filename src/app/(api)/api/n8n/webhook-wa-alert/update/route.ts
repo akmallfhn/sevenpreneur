@@ -7,7 +7,7 @@ type MailtrapSendResult = {
   message_ids: string[];
 };
 
-type RequestBody = {
+type n8nWAAlertReminderUpdate = {
   alert_id: number;
   mailtrap_result: MailtrapSendResult;
 };
@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
   const prisma = GetPrismaClient();
 
   const updated = await prisma.wAAlert.update({
-    where: { id: alert_id },
     data: {
       email_message_id,
       status: WAAStatus.SENT,
     },
+    where: { id: alert_id },
     select: { id: true, email_message_id: true, status: true },
   });
 
