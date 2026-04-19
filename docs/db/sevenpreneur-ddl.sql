@@ -710,13 +710,13 @@ CREATE TABLE wa_chats (
 );
 
 CREATE TABLE wa_alerts (
-  id                   SERIAL            PRIMARY KEY,
-  conv_id              CHAR(21)          NOT NULL,
-  email_message_id     TEXT              NULL            UNIQUE,
-  scheduled_at         TIMESTAMPTZ       NOT NULL,
-  status               wa_alert_status   NOT NULL        DEFAULT 'scheduled',
-  created_at           TIMESTAMPTZ       NOT NULL        DEFAULT CURRENT_TIMESTAMP,
-  updated_at           TIMESTAMPTZ       NOT NULL        DEFAULT CURRENT_TIMESTAMP
+  id                SERIAL           PRIMARY KEY,
+  conv_id           CHAR(21)         NOT NULL,
+  email_message_id  TEXT                 NULL  UNIQUE,
+  scheduled_at      TIMESTAMPTZ      NOT NULL,
+  status            wa_alert_status  NOT NULL  DEFAULT 'scheduled',
+  created_at        TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at        TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Relation Tables --
