@@ -7,7 +7,7 @@ type MailtrapSendResult = {
   message_ids: string[];
 };
 
-type RequestBody = {
+type n8nWAAlertReminderUpdate = {
   alert_id: number;
   mailtrap_result: MailtrapSendResult;
 };
