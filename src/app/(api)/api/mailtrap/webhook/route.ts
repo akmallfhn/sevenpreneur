@@ -56,8 +56,8 @@ export async function POST(req: NextRequest) {
     }
 
     const updated = await prisma.wAAlert.updateMany({
-      where: { email_message_id: event.message_id },
       data: { status: newStatus },
+      where: { email_message_id: event.message_id },
     });
 
     results.push({
