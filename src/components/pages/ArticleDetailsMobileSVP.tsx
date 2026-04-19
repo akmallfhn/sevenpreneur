@@ -1,6 +1,7 @@
 "use client";
 import dayjs from "dayjs";
 import { Share2 } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import React from "react";
 import { toast } from "sonner";
@@ -24,6 +25,7 @@ interface ArticleDetailsSVP {
 
 export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
   const insight = props.articleInsight.split(". ");
+  const { theme } = useTheme();
 
   // Open navigator share
   const handleShare = async (e: React.MouseEvent) => {
@@ -62,14 +64,14 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
   };
 
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black lg:hidden">
+    <div className="page-root relative flex flex-col items-center w-full bg-background lg:hidden">
       <main className="page-container flex flex-col w-full pb-20 gap-6">
         <div className="title-section flex flex-col px-5 pt-5 gap-4">
           <div className="title-category flex flex-col gap-3">
             <p className="w-fit py-1 px-4 font-bodycopy font-medium bg-[#EFEDF9] text-[#42359B] text-base dark:bg-[#1A1534] dark:text-[#958FB7] rounded-md">
               {props.articleCategory}
             </p>
-            <h1 className="title font-bodycopy font-extrabold leading-snug text-2xl">
+            <h1 className="title font-bodycopy font-extrabold leading-snug text-2xl dark:text-sevenpreneur-white">
               {props.articleTitle}
             </h1>
           </div>
@@ -88,13 +90,13 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
                   height={300}
                 />
               </div>
-              <p className="author-name font-bodycopy font-medium text-[#333333] text-base dark:text-[#BCBCBC]">
+              <p className="author-name font-bodycopy font-medium text-base">
                 {props.articleAuthorName}
               </p>
             </div>
             <AppButton
               className="share-button shrink-0"
-              variant="light"
+              variant={theme === "light" ? "light" : "dark"}
               size="largeIconRounded"
               onClick={handleShare}
             >
@@ -112,7 +114,7 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
           />
         </div>
         <div className="body-section flex flex-col px-5 gap-4">
-          <div className="insight flex flex-col w-full p-4 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-4 rounded-lg border border-primary-light dark:border-outline-dark dark:from-[#0F0641] dark:to-surface-black">
+          <div className="insight flex flex-col w-full p-4 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-4 rounded-lg border dark:from-[#0F0641] dark:to-sevenpreneur-surface-black">
             <h3 className="w-fit font-bodycopy font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-40% from-primary to-120% to-secondary">
               Ringkasan Artikel
             </h3>
@@ -120,7 +122,7 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
               {insight.map((post) => (
                 <li
                   key={post}
-                  className="font-read text-[#333333] text-base dark:text-[#BCBCBC]"
+                  className="font-read text-emphasis text-base dark:text-foreground"
                 >
                   {post}
                 </li>
@@ -134,7 +136,7 @@ export default function ArticleDetailsMobileSVP(props: ArticleDetailsSVP) {
               key={post.index_order}
             >
               {post.sub_heading && (
-                <h2 className="font-bodycopy font-bold text-xl pt-1 pb-1">
+                <h2 className="font-bodycopy font-bold text-xl pt-1 pb-1 dark:text-sevenpreneur-white">
                   {post.sub_heading}
                 </h2>
               )}

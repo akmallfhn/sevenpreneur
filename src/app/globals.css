@@ -123,9 +123,6 @@
   --color-muted-background: var(--color-sevenpreneur-dust);
   --color-muted-foreground: var(--color-sevenpreneur-dust);
   --color-section-background: #f5f7fb;
-  /* legacy */
-  --color-word-black: var(--color-sevenpreneur-dust);
-  --color-surface-black: var(--color-sevenpreneur-surface-black);
 
   /* Breakpoint */
   --breakpoint-xs: 31.75rem;
@@ -181,6 +178,7 @@
 
   --background: var(--color-sevenpreneur-coal);
   --foreground: var(--color-sevenpreneur-dust);
+  --border: var(--color-sevenpreneur-smoke);
   /* solid */
   --color-primary-muted: var(--color-sevenpreneur-blue-midnight);
   --color-secondary-muted: var(--color-sevenpreneur-pink-midgnight);
@@ -192,8 +190,6 @@
   --color-success-background: var(--color-sevenpreneur-green-midnight);
   --color-warning-background: var(--color-sevenpreneur-yellow-midnight);
   --color-danger-background: var(--color-sevenpreneur-pink-midgnight);
-  /* utilities */
-  --color-border: var(--color-sevenpreneur-smoke);
 
   /* --- Default Shadcn ---*/
   --card: oklch(0.205 0 0);

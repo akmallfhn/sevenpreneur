@@ -27,8 +27,8 @@ export default function EventInfoSVP(props: EventInfoSVP) {
   });
 
   return (
-    <div className="container-info flex flex-col gap-4 bg-white  rounded-md dark:bg-coal-black lg:dark:bg-surface-black lg:border lg:border-outline lg:p-5 lg:sticky lg:top-24 lg:dark:border-outline-dark">
-      <h1 className="event-title font-brand font-bold text-2xl leading-tight">
+    <div className="container-info flex flex-col gap-4 bg-background rounded-md border p-5 sticky top-24 dark:bg-sevenpreneur-surface-black ">
+      <h1 className="event-title font-brand font-bold text-2xl leading-tight dark:text-sevenpreneur-white">
         {props.eventName}
       </h1>
       <div className="list-info flex flex-col gap-3">
@@ -37,7 +37,7 @@ export default function EventInfoSVP(props: EventInfoSVP) {
             <CalendarFold className="size-5 text-primary" />
           </div>
           <div className="flex flex-col">
-            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-word-black">
+            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-white">
               DATE
             </p>
             <p className="text-[15px] font-medium leading-snug">{dateString}</p>
@@ -48,7 +48,7 @@ export default function EventInfoSVP(props: EventInfoSVP) {
             <Clock3 className="size-5 text-primary" />
           </div>
           <div className="flex flex-col">
-            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-word-black">
+            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-white">
               TIME
             </p>
             <p className="text-[15px] font-medium leading-snug">{timeString}</p>
@@ -59,7 +59,7 @@ export default function EventInfoSVP(props: EventInfoSVP) {
             <MapPin className="size-5 text-primary" />
           </div>
           <div className="flex flex-col">
-            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-word-black">
+            <p className="text-[13px] text-primary font-bodycopy font-bold leading-snug tracking-widest dark:text-white">
               LOCATION
             </p>
             <a
@@ -81,10 +81,10 @@ export default function EventInfoSVP(props: EventInfoSVP) {
           </p>
         </div> */}
       </div>
-      <hr className="divider hidden border-t-1 border-outline dark:border-outline-dark lg:flex" />
+      <hr className="divider hidden border-t lg:flex" />
       <div className="add-to-cart hidden flex-col gap-3 lg:flex">
         <div className="price-info flex flex-col font-bodycopy">
-          <h3 className="font-bold text-black text-xl dark:text-white">
+          <h3 className="font-bold text-xl dark:text-white">
             {getRupiahCurrency(props.eventPrice[0].amount)}
           </h3>
         </div>

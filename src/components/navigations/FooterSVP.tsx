@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import SocialButtonFooterSVP from "../buttons/SocialButtonFooterSVP";
 
-export default function FooterNavbarSVP() {
+export default function FooterSVP() {
   const pathname = usePathname();
 
   const isDisallowedPage = ["/auth", "/checkout"].some((path) =>
@@ -43,7 +43,7 @@ export default function FooterNavbarSVP() {
   return (
     <React.Fragment>
       {!isDisallowedPage && (
-        <footer className="root-bottom-footer flex bg-[#171616] w-full items-center justify-center">
+        <footer className="root-bottom-footer flex bg-sevenpreneur-surface-black w-full items-center justify-center">
           <div className="container-bottom-footer flex flex-col w-full p-8 gap-5 lg:px-0 lg:py-10 lg:gap-8 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
             <div className="company flex flex-col gap-5 lg:flex-row lg:justify-between lg:gap-0">
               <div className="company-part flex flex-col gap-5 max-w-[442px]">
@@ -88,7 +88,7 @@ export default function FooterNavbarSVP() {
                   <h4 className="text-lg font-brand font-bold lg:text-xl">
                     PT Pengusaha Muda Indonesia
                   </h4>
-                  <p className="font-bodycopy font-medium text-sm lg:text-base">
+                  <p className="font-bodycopy font-medium text-sm text-emphasis lg:text-base">
                     Soho Capital Floor 19, Podomoro City, Jl. Letjend S.Parman
                     Kav.28, Jakarta Barat, DKI Jakarta, Indonesia
                   </p>
@@ -118,7 +118,7 @@ export default function FooterNavbarSVP() {
                   </h4>
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-col">
-                      <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
+                      <p className="text-sm font-bodycopy font-semibold text-emphasis lg:text-base">
                         Got questions about our program? We’re happy to help at
                       </p>
                       <p className="font-brand font-bold text-white lg:text-lg">
@@ -126,16 +126,16 @@ export default function FooterNavbarSVP() {
                       </p>
                     </div>
                     <div className="flex flex-col">
-                      <p className="text-sm font-bodycopy font-semibold text-[#787777] lg:text-base">
+                      <p className="text-sm font-bodycopy font-semibold text-emphasis lg:text-base">
                         For general inquiries, reach us anytime at
                       </p>
                       <p className="font-brand font-bold text-white lg:text-lg">
-                        info@sevenpreneur.com
+                        devin@sevenpreneur.com
                       </p>
                     </div>
                   </div>
                 </div>
-                <ul className="menu flex flex-col gap-1.5 text-white/90 font-bodycopy font-medium">
+                <ul className="menu flex flex-col gap-1.5 text-emphasis font-bodycopy font-medium">
                   <h4 className="text-lg font-brand font-bold text-white lg:text-xl">
                     Legal & Accessibility
                   </h4>
@@ -158,7 +158,7 @@ export default function FooterNavbarSVP() {
               </div>
             </div>
             <hr className="w-full border-t border-[#3A3A3A]" />
-            <p className="copyright text-[#949191] font-bodycopy text-xs text-center lg:text-sm">
+            <p className="copyright text-emphasis font-bodycopy text-xs text-center lg:text-sm">
               Copyright © 2025 Sevenpreneur. All rights reserved.
             </p>
           </div>

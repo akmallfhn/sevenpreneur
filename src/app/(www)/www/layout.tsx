@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import FooterNavbarSVP from "@/components/navigations/FooterNavbarSVP";
+import FooterSVP from "@/components/navigations/FooterSVP";
 import HeaderNavbarSVP from "@/components/navigations/HeaderNavbarSVP";
 import { StatusType } from "@/lib/app-types";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
@@ -73,7 +73,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
         />
         {children}
         <Toaster richColors position="top-center" />
-        <FooterNavbarSVP />
+        <FooterSVP />
       </ThemeProvider>
     </div>
   );

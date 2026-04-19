@@ -71,18 +71,18 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
   }
 
   return (
-    <div className="page-root relative hidden flex-col items-center w-full bg-white dark:bg-coal-black lg:flex">
+    <div className="page-root relative hidden flex-col items-center w-full bg-background lg:flex">
       <div className="page-container flex w-full justify-between gap-10 py-5 px-24 max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <main className="main flex flex-[2.5] flex-col pb-20 gap-6 shrink-0">
           <div className="title-category flex flex-col gap-3">
             <p className="w-fit py-1 px-4 font-bodycopy font-medium bg-[#EFEDF9] text-[#42359B] text-base dark:bg-[#1A1534] dark:text-[#958FB7] rounded-md">
               {props.articleCategory}
             </p>
-            <h1 className="title font-bodycopy font-extrabold leading-snug text-3xl">
+            <h1 className="title font-bodycopy font-extrabold leading-snug text-3xl dark:text-sevenpreneur-white">
               {props.articleTitle}
             </h1>
           </div>
-          <div className="author-date flex items-center py-3 gap-3 border-y border-outline dark:border-outline-dark">
+          <div className="author-date flex items-center py-3 gap-3 border-y">
             <div className="author flex items-center gap-3">
               <div className="author-avatar w-10 aspect-square rounded-full overflow-hidden">
                 <Image
@@ -111,7 +111,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
               height={800}
             />
           </div>
-          <div className="insight flex flex-col w-full p-6 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-4 rounded-lg border border-primary-light dark:border-outline-dark dark:from-[#0F0641] dark:to-surface-black">
+          <div className="insight flex flex-col w-full p-6 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-4 rounded-lg border dark:from-[#0F0641] dark:to-sevenpreneur-surface-black">
             <h3 className="w-fit font-bodycopy font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-40% from-primary to-120% to-secondary">
               Ringkasan Artikel
             </h3>
@@ -119,7 +119,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
               {insight.map((post) => (
                 <li
                   key={post}
-                  className="font-read text-[#333333] text-lg dark:text-[#BCBCBC]"
+                  className="font-read text-emphasis text-lg dark:text-foreground"
                 >
                   {post}
                 </li>
@@ -133,7 +133,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
               key={post.index_order}
             >
               {post.sub_heading && (
-                <h2 className="font-bodycopy font-bold text-2xl pt-1 pb-1">
+                <h2 className="font-bodycopy font-bold text-2xl pt-1 pb-1 dark:text-white">
                   {post.sub_heading}
                 </h2>
               )}
@@ -146,7 +146,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
                     width={1200}
                     height={1200}
                   />
-                  <span className="image-description flex font-ui text-sm text-neutral-black/50">
+                  <span className="image-description flex font-ui text-sm">
                     {post.image_desc}
                   </span>
                 </div>
@@ -164,24 +164,24 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
         </main>
         <aside className="desktop-aside relative flex flex-1 flex-col w-full">
           <div className="content-aside sticky top-[84px] w-full flex flex-col gap-5 pb-20">
-            <div className="table-of-contents flex flex-col w-full p-4 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-2 rounded-lg border border-primary-light dark:border-outline-dark dark:from-[#0F0641] dark:to-surface-black">
+            <div className="table-of-contents flex flex-col w-full p-4 bg-linear-to-bl from-0% from-[#D2E5FC] to-50% to-section-background gap-2 rounded-lg border dark:from-[#0F0641] dark:to-sevenpreneur-surface-black">
               <h3 className="w-fit font-bodycopy font-bold text-base text-transparent bg-clip-text bg-gradient-to-r from-40% from-primary to-120% to-secondary">
                 Table of Contents
               </h3>
-              <p className="title font-read text-[#333333] text-base dark:text-[#BCBCBC]">
+              <p className="title text-base font-bodycopy dark:text-sevenpreneur-white">
                 {props.articleTitle}
               </p>
-              <div className="chapter relative flex flex-col gap-1">
+              <div className="chapter relative flex flex-col w-full gap-1">
                 {props.articleBody
                   .filter((post) => !!post.sub_heading)
                   .map((post) => (
                     <Link
                       href={`#page-${post.index_order}`}
                       key={post.index_order}
-                      className="flex items-center gap-5 z-10"
+                      className="flex w-full items-center gap-5 z-10"
                     >
                       <div className="step-point bg-primary size-2 rounded-full shrink-0 outline-primary-light/60 outline-3 dark:bg-secondary dark:outline-white/10" />
-                      <p className="font-read text-[#333333] text-base p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 dark:text-[#BCBCBC]">
+                      <p className="font-read text-base p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5">
                         {post.sub_heading}
                       </p>
                     </Link>
@@ -196,9 +196,7 @@ export default function ArticleDetailsSVP(props: ArticleDetailsSVP) {
               </div>
             </div>
             <div className="share-social-media flex items-center gap-4">
-              <p className="font-semibold font-bodycopy text-[#333333] text-[15px] dark:text-[#BCBCBC]">
-                Share
-              </p>
+              <p className="font-semibold font-bodycopy text-[15px]">Share</p>
               <div className="flex items-center gap-2">
                 <AppSocialMediaButton
                   link={`https://wa.me/?text=${props.articleTitle}.%20Read%20more%20on%20https://www.sevenpreneur.com/insights/${props.articleSlug}/${props.articleId}`}

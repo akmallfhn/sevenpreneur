@@ -63,7 +63,7 @@ export default function CuriculumFrameworkHomeSVP() {
               className="flex items-start gap-6 z-20 lg:gap-10"
               key={post.name}
             >
-              <div className="flex items-center justify-center size-10 p-2 aspect-square shrink-0 bg-surface-black border border-outline rounded-full overflow-hidden">
+              <div className="flex items-center justify-center size-10 p-2 aspect-square shrink-0 bg-sevenpreneur-surface-black border rounded-full overflow-hidden">
                 <Image
                   className="w-full h-full object-cover"
                   src={
@@ -84,7 +84,7 @@ export default function CuriculumFrameworkHomeSVP() {
               </div>
             </div>
           ))}
-          <div className="absolute w-[2px] h-11/12 left-5 bg-outline-dark z-0" />
+          <div className="absolute w-[1px] h-11/12 left-5 bg-sevenpreneur-smoke z-0" />
         </div>
       </div>
     </div>

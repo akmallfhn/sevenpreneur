@@ -45,7 +45,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
 
   return (
     <React.Fragment>
-      <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black">
+      <div className="page-root relative flex flex-col items-center w-full bg-background">
         <div className="page-container flex flex-col px-5 py-5 w-full gap-8 z-10 lg:flex-row lg:px-0 lg:py-10 lg:pb-20 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
           <main className="main-content flex flex-col gap-8 md:flex-[2] lg:gap-10">
             <div className="event-image flex aspect-video w-full h-full rounded-lg overflow-hidden">
@@ -73,13 +73,13 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
               />
             </div>
             <div className="section-description relative flex flex-col gap-4">
-              <h2 className="section-title font-bodycopy font-bold text-xl leading-tight">
+              <h2 className="section-title font-bodycopy font-bold text-xl leading-tight dark:text-sevenpreneur-white">
                 Event Description
               </h2>
               <div className="event-description flex flex-col gap-4 items-center whitespace-pre-wrap lg:items-start">
                 <div>
                   <p
-                    className={`ratings text-[15px] font-bodycopy dark:text-white/80 ${
+                    className={`ratings text-[15px] font-bodycopy ${
                       !isExpanded && "line-clamp-5"
                     }`}
                     ref={paragraphRef}
@@ -107,7 +107,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                   </AppButton>
                 </div>
                 {!isExpanded && (
-                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-white to-transparent pointer-events-none dark:from-coal-black" />
+                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-background to-transparent pointer-events-none" />
                 )}
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
             />
           </aside>
         </div>
-        <div className="background absolute flex w-full h-40 bg-primary-dark overflow-hidden lg:h-72">
+        <div className="background absolute flex w-full h-40 overflow-hidden lg:h-72">
           <Image
             className="object-cover w-full h-full blur-lg scale-105"
             src={props.eventImage}
@@ -138,12 +138,12 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
 
       {/* Floating CTA */}
       <div
-        className={`floating-cta fixed flex flex-col bg-white bottom-0 left-0 w-full gap-2 p-5 border-t border-outline transition-all duration-300 z-40 dark:bg-surface-black dark:border-outline-dark lg:hidden`}
+        className={`floating-cta fixed flex flex-col bg-background bottom-0 left-0 w-full gap-2 p-5 border-t transition-all duration-300 z-40 dark:bg-sevenpreneur-surface-black lg:hidden`}
       >
         <div className="flex  items-center justify-between">
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
-            <p className="font-bold">
+            <p className="font-bold dark:text-sevenpreneur-white">
               {getRupiahCurrency(props.eventPrice[0].amount)}
             </p>
           </div>
@@ -179,7 +179,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
             </AppButton>
           </Link>
         </div>
-        <div className="flex w-full text-center justify-center items-center gap-1 text-alternative">
+        <div className="flex w-full text-center justify-center items-center text-emphasis gap-1 text-alternative">
           <LockKeyhole className="size-3" />
           <p className="text-xs text-center">
             Secure payment processed by Xendit

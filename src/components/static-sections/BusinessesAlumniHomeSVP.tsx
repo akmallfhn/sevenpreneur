@@ -131,7 +131,7 @@ export default function BusinessesAlumniHomeSVP() {
             {loopedMessages.map((post, index) => (
               <a
                 href={post.company_url}
-                className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-surface-black to-100% to-[#1C1C1C] border border-sevenpreneur-smoke rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
+                className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-sevenpreneur-surface-black to-100% to-[#1C1C1C] border border-sevenpreneur-smoke rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
                 key={`${post.name}${index}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -151,7 +151,7 @@ export default function BusinessesAlumniHomeSVP() {
           {loopedMessages.map((post, index) => (
             <a
               href={post.company_url}
-              className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-surface-black to-100% to-[#1C1C1C] border border-sevenpreneur-smoke rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
+              className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-sevenpreneur-surface-black to-100% to-[#1C1C1C] border border-sevenpreneur-smoke rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
               key={`${post.name}${index}`}
               target="_blank"
               rel="noopener noreferrer"
