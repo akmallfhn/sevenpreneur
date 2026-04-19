@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     [];
 
   for (const event of payload.events) {
-    let newStatus: WAAStatus | null = null;
+    let newStatus: Optional<WAAStatus> = undefined;
 
     if (event.event === "delivery") {
       newStatus = WAAStatus.DELIVERED;
