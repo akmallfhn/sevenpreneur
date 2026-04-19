@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ArticleListMobileSVP from "./ArticleListMobileSVP";
 import SpecialTopicArticleSVP from "../gateways/SpecialTopicArticleSVP";
+import PageContainerSVP from "../pages/PageContainerSVP";
 
 dayjs.extend(relativeTime);
 
@@ -66,9 +67,9 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
   }
 
   return (
-    <div className="page-root relative hidden flex-col items-center w-full bg-white dark:bg-coal-black lg:flex">
-      <div className="page-container flex flex-col w-full gap-14 z-10 px-0 py-10 pb-20 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-        <div className="headline-articles grid grid-cols-[1.6fr_1fr] gap-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-30% to-section-background rounded-lg overflow-hidden border border-primary-light dark:border-0 dark:from-[#0F0641] dark:to-surface-black">
+    <PageContainerSVP className="hidden lg:flex">
+      <div className="flex flex-col w-full gap-14 py-5 pb-20 lg:py-10">
+        <div className="headline-articles grid grid-cols-[1.6fr_1fr] gap-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-30% to-section-background rounded-lg overflow-hidden border dark:border-0 dark:from-[#0F0641] dark:to-sevenpreneur-surface-black">
           <Link
             className="main-article flex h-full shrink-0"
             href={`/insights/${activeArticles[0].slug_url}/${activeArticles[0].id}`}
@@ -92,7 +93,7 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
                 <Link
                   href={`/insights/${post.slug_url}/${post.id}`}
                   key={index}
-                  className={`article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-coal-black`}
+                  className="article-item flex gap-5 items-center transition transform duration-150 active:scale-95"
                 >
                   <div className="image-container flex max-w-[180px] aspect-video shrink-0 overflow-hidden rounded-lg">
                     <Image
@@ -107,10 +108,10 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
                     <p className="category text-sm font-semibold text-primary">
                       {post.category.name}
                     </p>
-                    <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3">
+                    <p className="title font-bold text-base line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3 dark:text-white">
                       {post.title}
                     </p>
-                    <p className="timestamp font-bodycopy text-[#333333] text-sm dark:text-word-black">
+                    <p className="timestamp font-bodycopy text-emphasis text-sm dark:text-foreground">
                       {dayjs(post.published_at).fromNow()}
                     </p>
                   </div>
@@ -137,12 +138,12 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <p className="article-title font-bodycopy font-bold text-base line-clamp-2 leading-snug transition transform hover:underline hover:underline-offset-3">
+                  <p className="article-title font-bodycopy font-bold text-base line-clamp-2 leading-snug transition transform hover:underline hover:underline-offset-3 dark:text-sevenpreneur-white">
                     {post.title}
                   </p>
                   <p className="article-category font-bodycopy text-sm text-primary">
                     {post.category.name}{" "}
-                    <span className="text-[#333333] dark:text-word-black">
+                    <span className="text-emphasis dark:text-foreground">
                       · {dayjs(post.published_at).fromNow()}
                     </span>
                   </p>
@@ -174,12 +175,12 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <p className="article-title font-bodycopy font-bold text-base line-clamp-2 leading-snug transition transform hover:underline hover:underline-offset-3">
+                  <p className="article-title font-bodycopy font-bold text-base line-clamp-2 leading-snug transition transform hover:underline hover:underline-offset-3 dark:text-sevenpreneur-white">
                     {post.title}
                   </p>
                   <p className="article-category font-bodycopy text-sm text-primary">
                     {post.category.name}{" "}
-                    <span className="text-[#333333] dark:text-word-black">
+                    <span className="text-emphasis dark:text-foreground">
                       · {dayjs(post.published_at).fromNow()}
                     </span>
                   </p>
@@ -194,6 +195,6 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
           articleList={economyCategory}
         />
       </div>
-    </div>
+    </PageContainerSVP>
   );
 }

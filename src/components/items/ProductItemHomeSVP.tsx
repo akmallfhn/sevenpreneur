@@ -37,7 +37,7 @@ export default function ProductItemHomeSVP(props: ProductItemHomeSVPProps) {
           <h3 className="product-name font-bodycopy font-bold text-xl lg:text-2xl text-white">
             {props.productName}
           </h3>
-          <p className="product-description font-bodycopy text-[15px] text-[#686868]">
+          <p className="product-description font-bodycopy text-[15px] text-sevenpreneur-dust">
             {props.productDesc}
           </p>
         </div>

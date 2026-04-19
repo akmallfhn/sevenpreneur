@@ -46,7 +46,7 @@ export default function CuriculumFrameworkHomeSVP() {
   ];
 
   return (
-    <div className="section-root relative flex items-center justify-center bg-coal-black">
+    <div className="section-root relative flex items-center justify-center bg-sevenpreneur-coal">
       <div className="section-container flex flex-col w-full items-center p-5 py-10 gap-8 z-10 lg:flex-row lg:items-start lg:px-0 lg:gap-[64px] lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="section-title-desc flex flex-col w-full text-center items-center gap-3 lg:sticky lg:top-[138px] lg:text-left lg:items-start">
           <h2 className="section-title w-fit text-transparent leading-snug bg-clip-text bg-gradient-to-r from-40% from-white to-100% to-primary font-brand font-bold text-center text-xl max-w-[420px] sm:text-2xl lg:text-4xl lg:max-w-[680px]">
@@ -63,7 +63,7 @@ export default function CuriculumFrameworkHomeSVP() {
               className="flex items-start gap-6 z-20 lg:gap-10"
               key={post.name}
             >
-              <div className="flex items-center justify-center size-10 p-2 aspect-square shrink-0 bg-surface-black border border-outline rounded-full overflow-hidden">
+              <div className="flex items-center justify-center size-10 p-2 aspect-square shrink-0 bg-sevenpreneur-surface-black border rounded-full overflow-hidden">
                 <Image
                   className="w-full h-full object-cover"
                   src={
@@ -78,13 +78,13 @@ export default function CuriculumFrameworkHomeSVP() {
                 <p className="text-white font-bodycopy font-bold text-lg lg:text-xl">
                   {post.name}
                 </p>
-                <p className="text-[#918E8E] text-sm font-bodycopy font-[450] lg:text-base">
+                <p className="text-sevenpreneur-dust text-sm font-bodycopy font-[450] lg:text-base">
                   {post.description}
                 </p>
               </div>
             </div>
           ))}
-          <div className="absolute w-[2px] h-11/12 left-5 bg-outline-dark z-0" />
+          <div className="absolute w-[1px] h-11/12 left-5 bg-sevenpreneur-smoke z-0" />
         </div>
       </div>
     </div>

@@ -1,28 +1,35 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import AppButton from "../buttons/AppButton";
+import { getRupiahCurrency } from "@/lib/currency";
 import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import "dayjs/locale/en";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
-  ArrowBigUpDash,
   ChevronDown,
   ChevronUp,
   Languages,
   LockKeyhole,
   ShieldCheck,
 } from "lucide-react";
-import SectionTitleSVP from "../titles/SectionTitleSVP";
-import VideoCoursePlaylistSVP, {
-  VideoItem,
-} from "../indexes/VideoCoursePlaylistSVP";
-import HeroVideoCourseSVP, { EducatorItem } from "../heroes/HeroVideoCourseSVP";
-import Link from "next/link";
 import { useTheme } from "next-themes";
-import { getRupiahCurrency } from "@/lib/currency";
-import OfferHighlightVideoCourseSVP from "../templates/OfferHighlightVideoCourseSVP";
+import Link from "next/link";
+import React, { useRef, useState } from "react";
+import AppButton from "../buttons/AppButton";
+import OfferVideoSeriesSVP from "../cards/OfferVideoSeriesSVP";
+import SectionContainerSVP from "../cards/SectionContainerSVP";
+import HeroVideoCourseSVP, { EducatorItem } from "../heroes/HeroVideoCourseSVP";
+import VideoSeriesItemSVP from "../items/VideoSeriesItemSVP";
+import PageContainerSVP from "./PageContainerSVP";
 
 dayjs.extend(localizedFormat);
+
+export interface VideoItem {
+  id: number;
+  name: string;
+  image_url: string;
+  duration: number;
+  video_url?: string;
+  external_video_id?: string;
+}
 
 interface PlaylistDetailsSVPProps {
   playlistId: number;
@@ -40,107 +47,46 @@ interface PlaylistDetailsSVPProps {
   playlistVideos: VideoItem[];
 }
 
-export default function PlaylistDetailsSVP({
-  playlistId,
-  playlistName,
-  playlistTagline,
-  playlistVideoPreview,
-  playlistDescription,
-  playlistSlug,
-  playlistPrice,
-  playlistPublishedAt,
-  playlistTotalEpisodes,
-  playlistTotalDuration,
-  playlistTotalUserEnrolled,
-  playlistEducators,
-  playlistVideos,
-}: PlaylistDetailsSVPProps) {
-  const [showCTA, setShowCTA] = useState(false);
+export default function PlaylistDetailsSVP(props: PlaylistDetailsSVPProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
   const { theme } = useTheme();
-  const paragraphRef = useRef<HTMLParagraphElement | null>(null);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-  // Checking height content description
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (paragraphRef.current) {
-        const el = paragraphRef.current;
-        const isOverflow = el.scrollHeight > el.clientHeight;
-        setIsOverflowing(isOverflow);
-      }
-    };
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
-  }, []);
-
-  // Show floating button when sentinel was gone
-  useEffect(() => {
-    if (!sentinelRef.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowCTA(!entry.isIntersecting);
-      },
-      {
-        root: null,
-        threshold: 0,
-        rootMargin: "0px 0px 0px 0px",
-      }
-    );
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const paragraphRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <React.Fragment>
-      <div className="flex flex-col w-full bg-white dark:bg-coal-black">
-        {/* --- Hero */}
+      <div className="flex flex-col w-full bg-background">
         <HeroVideoCourseSVP
-          playlistId={playlistId}
-          playlistName={playlistName}
-          playlistTagline={playlistTagline}
-          playlistVideoPreview={playlistVideoPreview}
-          playlistSlug={playlistSlug}
-          playlistPrice={playlistPrice}
-          playlistTotalUserEnrolled={playlistTotalUserEnrolled}
-          playlistEducators={playlistEducators}
+          playlistId={props.playlistId}
+          playlistName={props.playlistName}
+          playlistTagline={props.playlistTagline}
+          playlistVideoPreview={props.playlistVideoPreview}
+          playlistSlug={props.playlistSlug}
+          playlistPrice={props.playlistPrice}
+          playlistTotalUserEnrolled={props.playlistTotalUserEnrolled}
+          playlistEducators={props.playlistEducators}
         />
-        <div ref={sentinelRef} className="h-0" />
-
-        {/* --- Content */}
-        <div className="content flex flex-col px-5 py-5 w-full gap-8 md:flex-row lg:gap-14 lg:px-0 lg:py-10 lg:pb-20 lg:mx-auto lg:max-w-[960px] xl:max-w-[1208px]">
-          {/* -- Main */}
-          <main className="flex flex-col gap-8 md:flex-[1.7] lg:gap-10">
-            {/* Description */}
-            <div className="video-description relative flex flex-col gap-4">
-              <SectionTitleSVP sectionTitle={`About ${playlistName}`} />
-              <div className="flex flex-col gap-2 items-center md:items-start">
-                <div>
-                  <p
-                    className={`ratings text-sm text-black font-ui dark:text-white/80 ${
-                      !isExpanded && "line-clamp-5"
-                    }`}
-                    ref={paragraphRef}
-                  >
-                    {playlistDescription}
-                    <br />
-                    <br />
-                    <span className="inline-flex items-center gap-1 text-alternative">
+        <PageContainerSVP className="relativ flex">
+          <div className="flex flex-col w-full gap-5 z-10 py-5 pb-20 md:flex-row lg:gap-7 lg:py-10">
+            <main className="flex flex-col gap-5 md:flex-2 lg:gap-7">
+              <SectionContainerSVP
+                sectionName={`Video Series ${props.playlistName}`}
+              >
+                <div className="description flex flex-col gap-4 items-center whitespace-pre-wrap md:items-start">
+                  <div className="flex flex-col gap-2" ref={paragraphRef}>
+                    <p
+                      className={`description text-[15px] font-bodycopy ${
+                        !isExpanded && "line-clamp-5"
+                      }`}
+                    >
+                      {props.playlistDescription}
+                    </p>
+                    <div
+                      className={`flex items-center gap-1 font-bodycopy ${!isExpanded && "hidden"}`}
+                    >
                       <Languages className="size-4" />
-                      <b>Language:</b> Bahasa Indonesia
-                    </span>
-                    <br />
-                    <span className="inline-flex items-center gap-1 text-alternative">
-                      <ArrowBigUpDash className="size-4" />
-                      <b>Published at:</b>{" "}
-                      {dayjs(playlistPublishedAt).format("LLL")}
-                    </span>
-                    <br />
-                  </p>
-                </div>
-                {isOverflowing && (
+                      <p className="text-[15px]">Language: Bahasa Indonesia</p>
+                    </div>
+                  </div>
                   <div className="flex transition-all transform z-10">
                     <AppButton
                       variant={theme === "dark" ? "dark" : "primarySoft"}
@@ -160,53 +106,55 @@ export default function PlaylistDetailsSVP({
                       )}
                     </AppButton>
                   </div>
-                )}
-                {!isExpanded && isOverflowing && (
-                  <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-white to-transparent pointer-events-none dark:from-coal-black" />
-                )}
-              </div>
-            </div>
-            {/* Playlist */}
-            <div className="video-course flex flex-col gap-4">
-              <SectionTitleSVP
-                sectionTitle="Course Playlist"
-                sectionDescription={`${playlistTotalEpisodes} episodes of course video`}
+                  {!isExpanded && (
+                    <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-background to-transparent pointer-events-none" />
+                  )}
+                </div>
+              </SectionContainerSVP>
+              <SectionContainerSVP sectionName="Playlist Content">
+                <div className="flex flex-col gap-4">
+                  {props.playlistVideos.map((post, index) => (
+                    <VideoSeriesItemSVP
+                      key={index}
+                      index={index + 1}
+                      videoName={post.name}
+                      videoImage={post.image_url}
+                      videoDuration={post.duration}
+                    />
+                  ))}
+                </div>
+              </SectionContainerSVP>
+            </main>
+            <aside className="aside flex flex-col gap-5 md:flex-1 lg:gap-7">
+              <OfferVideoSeriesSVP
+                playlistId={props.playlistId}
+                playlistName={props.playlistName}
+                playlistSlug={props.playlistSlug}
+                playlistPrice={props.playlistPrice}
+                playlistTotalDuration={props.playlistTotalDuration}
               />
-              <VideoCoursePlaylistSVP playlistVideos={playlistVideos} />
-            </div>
-          </main>
-          {/* -- Aside */}
-          <aside className="aside flex flex-col gap-8 md:flex-1 lg:gap-10">
-            <OfferHighlightVideoCourseSVP
-              playlistId={playlistId}
-              playlistName={playlistName}
-              playlistSlug={playlistSlug}
-              playlistPrice={playlistPrice}
-              playlistTotalDuration={playlistTotalDuration}
-            />
-          </aside>
-        </div>
-      </div>
-
-      {/* --- Floating CTA */}
-      <div
-        className={`floating-cta fixed flex flex-col bg-white bottom-0 left-0 w-full gap-2 p-5 border-t border-outline transition-all duration-300 z-40 dark:bg-surface-black dark:border-outline-dark md:hidden ${
-          showCTA ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
-        }`}
-      >
-        <div className="flex  items-center justify-between">
-          <div className="flex flex-col font-ui">
-            <p className="text-sm">Total Amount</p>
-            <p className="font-bold">{getRupiahCurrency(playlistPrice)}</p>
+            </aside>
           </div>
-          <Link href={`/playlists/${playlistSlug}/${playlistId}/checkout`}>
+        </PageContainerSVP>
+      </div>
+      <div className="floating-cta fixed flex flex-col bg-background bottom-0 left-0 w-full gap-2 p-5 border-t transition-all duration-300 z-40 dark:bg-sevenpreneur-surface-black md:hidden">
+        <div className="flex  items-center justify-between">
+          <div className="flex flex-col font-bodycopy dark:text-sevenpreneur-white">
+            <p className="text-sm">Total Amount</p>
+            <p className="font-bold">
+              {getRupiahCurrency(props.playlistPrice)}
+            </p>
+          </div>
+          <Link
+            href={`/playlists/${props.playlistSlug}/${props.playlistId}/checkout`}
+          >
             <AppButton
               size="defaultRounded"
               featureName="add_to_cart_playlist"
-              featureId={String(playlistId)}
+              featureId={String(props.playlistId)}
               featureProductCategory="PLAYLIST"
-              featureProductName={playlistName}
-              featureProductAmount={playlistPrice}
+              featureProductName={props.playlistName}
+              featureProductAmount={props.playlistPrice}
               featurePagePoint="Product Detail Page"
               featurePlacement="floating-panel-mobile"
             >
@@ -215,7 +163,7 @@ export default function PlaylistDetailsSVP({
             </AppButton>
           </Link>
         </div>
-        <div className="flex w-full text-center justify-center items-center gap-1 text-alternative">
+        <div className="flex w-full text-center font-bodycopy justify-center items-center gap-1 text-emphasis">
           <LockKeyhole className="size-3" />
           <p className="text-xs text-center">
             Secure payment processed by Xendit

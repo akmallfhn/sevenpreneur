@@ -1,11 +1,19 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { Loader, Loader2, PenBox, TextAlignStart, X } from "lucide-react";
+import {
+  BellPlus,
+  Loader,
+  Loader2,
+  PenBox,
+  TextAlignStart,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TextAreaCMS from "../fields/TextAreaCMS";
-import EditLeadStatusCMS from "../forms/EditLeadStatusCMS";
+import CreateWhatsappAlertFormCMS from "../forms/CreateWhatsappAlertFormCMS";
+import EditLeadStatusFormCMS from "../forms/EditLeadStatusFormCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
 import { Slider } from "../ui/slider";
 
@@ -21,6 +29,7 @@ export default function WhatsappLeadDetailsCMS(
   const updateConversation = trpc.update.wa.conversation.useMutation();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoadingUnassign, setIsLoadingUnassign] = useState(false);
+  const [createAlert, setCreateAlert] = useState(false);
 
   // Fetch tRPC Data
   const { data, isLoading, isError } = trpc.read.wa.conversation.useQuery(
@@ -100,6 +109,18 @@ export default function WhatsappLeadDetailsCMS(
         )}
         {leadDetails && !isLoading && !isError && (
           <div className="lead-informations flex flex-col w-full gap-4 p-3 py-5 overflow-y-auto">
+            <div className="tool flex w-full items-center justify-end gap-2">
+              {/* <AppButton variant="light" size="icon">
+                <UserRoundPlus className="size-4.5" />
+              </AppButton> */}
+              <AppButton
+                variant="light"
+                size="icon"
+                onClick={() => setCreateAlert(true)}
+              >
+                <BellPlus className="size-4.5" />
+              </AppButton>
+            </div>
             <div className="lead-identity flex flex-col items-center gap-2">
               <div className="lead-avatar size-24 rounded-full overflow-hidden">
                 {leadDetails.user?.avatar ? (
@@ -237,8 +258,18 @@ export default function WhatsappLeadDetailsCMS(
         )}
       </div>
 
-      {/* Open Edit Status Lead */}
-      <EditLeadStatusCMS
+      {/* Create alert */}
+      {createAlert && (
+        <CreateWhatsappAlertFormCMS
+          sessionToken={props.sessionToken}
+          convId={props.convId}
+          isOpen={createAlert}
+          onClose={() => setCreateAlert(false)}
+        />
+      )}
+
+      {/* Edit status lead */}
+      <EditLeadStatusFormCMS
         sessionToken={props.sessionToken}
         convId={props.convId}
         isOpen={isEditModalOpen}

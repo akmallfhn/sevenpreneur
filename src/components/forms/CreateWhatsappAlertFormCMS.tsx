@@ -1,0 +1,122 @@
+"use client";
+import { trpc } from "@/trpc/client";
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import AppButton from "../buttons/AppButton";
+import InputCMS from "../fields/InputCMS";
+
+interface CreateWhatsappAlertFormCMSProps {
+  sessionToken: string;
+  convId: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function CreateWhatsappAlertFormCMS(
+  props: CreateWhatsappAlertFormCMSProps
+) {
+  const utils = trpc.useUtils();
+  // const updateConversation = trpc.update.wa.conversation.useMutation();
+
+  // Form data
+  const [formData, setFormData] = useState<{
+    scheduledAt: string;
+  }>({
+    scheduledAt: "",
+  });
+
+  // Handle data changes
+  const handleInputChange = (fieldName: string) => (value: unknown) => {
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
+  // Block scroll on background
+  useEffect(() => {
+    if (props.isOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [props.isOpen]);
+
+  const handleSubmit = async () => {
+    if (!formData.scheduledAt) {
+      toast.error("Please pick a scheduled time first");
+      return;
+    }
+
+    // updateConversation.mutate(
+    //   {
+    //     id: props.convId,
+    //     handler_id: formData.handler_id,
+    //     lead_status: formData.lead_status,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       toast.success("Lead updated successfully");
+    //       utils.read.wa.conversation.invalidate({ id: props.convId });
+    //       utils.list.wa.conversations.invalidate();
+    //       props.onSuccess?.();
+    //       props.onClose();
+    //     },
+    //     onError: () => {
+    //       toast.error("Failed to update lead");
+    //     },
+    //   }
+    // );
+  };
+
+  if (!props.isOpen) return null;
+
+  return (
+    <div
+      className="modal-root fixed inset-0 flex w-full h-full items-end justify-center bg-black/65 z-[999]"
+      onClick={props.onClose}
+    >
+      <div
+        className="modal-container fixed flex bg-white max-w-[calc(100%-2rem)] p-6 w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md dark:bg-surface-black sm:max-w-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex flex-col w-full gap-5">
+          <h2 className="font-bodycopy font-bold text-lg">
+            Set alert reminder
+          </h2>
+          <div className="flex flex-col gap-4">
+            <InputCMS
+              inputId="scheduled_at"
+              inputType="datetime-local"
+              value={formData.scheduledAt}
+              onInputChange={handleInputChange("scheduledAt")}
+              required
+            />
+          </div>
+          <div className="flex gap-2 justify-end">
+            <AppButton variant="light" onClick={props.onClose}>
+              Cancel
+            </AppButton>
+            <AppButton
+              onClick={handleSubmit}
+              // disabled={updateConversation.isPending || isLoading}
+            >
+              {/* {updateConversation.isPending && (
+                <Loader2 className="animate-spin size-4" />
+              )} */}
+              Set Alert
+            </AppButton>
+          </div>
+        </div>
+        <div
+          className="absolute flex top-4 right-4 hover:cursor-pointer"
+          onClick={props.onClose}
+        >
+          <X className="size-6" />
+        </div>
+      </div>
+    </div>
+  );
+}

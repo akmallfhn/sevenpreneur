@@ -1,6 +1,6 @@
 import "@/app/globals.css";
-import FooterNavbarSVP from "@/components/navigations/FooterNavbarSVP";
-import HeaderNavbarSVP from "@/components/navigations/HeaderNavbarSVP";
+import FooterSVP from "@/components/navigations/FooterSVP";
+import HeaderSVP from "@/components/navigations/HeaderSVP";
 import { StatusType } from "@/lib/app-types";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -58,7 +58,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   return (
     <div>
       <ThemeProvider attribute="class" defaultTheme="light">
-        <HeaderNavbarSVP
+        <HeaderSVP
           userName={userData?.full_name ?? null}
           userAvatar={userData?.avatar ?? null}
           userRole={userData?.role_id ?? null}
@@ -73,7 +73,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
         />
         {children}
         <Toaster richColors position="top-center" />
-        <FooterNavbarSVP />
+        <FooterSVP />
       </ThemeProvider>
     </div>
   );

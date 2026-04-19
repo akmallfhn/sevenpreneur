@@ -6,6 +6,7 @@ import Link from "next/link";
 import SwiperArticlesSVP from "../elements/SwiperArticlesSVP";
 import { ArticleList } from "./ArticleListSVP";
 import SpecialTopicArticleSVP from "../gateways/SpecialTopicArticleSVP";
+import PageContainerSVP from "../pages/PageContainerSVP";
 
 dayjs.extend(relativeTime);
 
@@ -17,10 +18,10 @@ interface ArticleListMobileSVPProps {
 
 export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-white dark:bg-coal-black lg:hidden">
-      <div className="page-container flex flex-col w-full gap-5 z-10">
-        <SwiperArticlesSVP articleList={props.articleList.slice(0, 4)} />
-        <div className="flex flex-col gap-6 px-5 pb-20">
+    <div className="page-root relative flex flex-col items-center w-full bg-background z-10 lg:hidden">
+      <SwiperArticlesSVP articleList={props.articleList.slice(0, 4)} />
+      <PageContainerSVP className="flex lg:hidden">
+        <div className="flex flex-col w-full gap-6 py-5 pb-20">
           <div className="headline-news flex flex-col gap-4">
             <h2 className="w-fit font-bodycopy font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-40% from-primary to-120% to-secondary">
               Headline News
@@ -30,7 +31,7 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
                 <Link
                   href={`/insights/${post.slug_url}/${post.id}`}
                   key={post.id}
-                  className="article-item flex gap-5 items-center transition transform duration-150 active:scale-95 active:bg-[#F2f2f2] dark:active:bg-surface-black"
+                  className="article-item flex gap-5 items-center transition transform duration-150 active:scale-95"
                 >
                   <div className="image-container flex w-[80px] aspect-square shrink-0 overflow-hidden rounded-lg">
                     <Image
@@ -45,10 +46,10 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
                     <p className="category text-sm font-semibold text-primary">
                       {post.category.name}
                     </p>
-                    <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3">
+                    <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3 dark:text-sevenpreneur-white">
                       {post.title}
                     </p>
-                    <p className="timestamp font-bodycopy text-[#333333] text-sm dark:text-word-black">
+                    <p className="timestamp font-bodycopy text-sm text-emphasis dark:text-foreground">
                       {dayjs(post.published_at).fromNow()}
                     </p>
                   </div>
@@ -81,10 +82,10 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
                   <p className="category text-sm font-semibold text-primary">
                     {post.category.name}
                   </p>
-                  <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3">
+                  <p className="title font-bold text-base font-content line-clamp-2 leading-snug lg:hover:underline lg:hover:underline-offset-3 dark:text-sevenpreneur-white">
                     {post.title}
                   </p>
-                  <p className="timestamp font-bodycopy text-[#333333] text-sm dark:text-word-black">
+                  <p className="timestamp font-bodycopy text-sm text-emphasis dark:text-foreground">
                     {dayjs(post.published_at).fromNow()}
                   </p>
                 </div>
@@ -97,7 +98,7 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
             articleList={props.economyCategory}
           />
         </div>
-      </div>
+      </PageContainerSVP>
     </div>
   );
 }

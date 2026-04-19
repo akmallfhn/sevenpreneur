@@ -30,7 +30,7 @@
   --color-sevenpreneur-surface-black: #171616;
   --color-sevenpreneur-white-cream: #fbfbfb;
   --color-sevenpreneur-charcoal: #1c1c1c;
-  --color-sevenpreneur-ash: #e3e3e3; /* for border */
+  --color-sevenpreneur-ash: #d0cece; /* for border */
   --color-sevenpreneur-smoke: #3a3939;
   --color-sevenpreneur-subtle: #707070;
   /* midnight */
@@ -118,15 +118,11 @@
   --color-danger-background: var(--color-sevenpreneur-soft-danger);
   --color-danger-foreground: var(--color-sevenpreneur-accent-danger);
   /* utilities */
-  --color-border: var(--color-sevenpreneur-ash);
   --color-emphasis: var(--color-sevenpreneur-subtle);
   --color-muted: var(--color-sevenpreneur-dust);
   --color-muted-background: var(--color-sevenpreneur-dust);
   --color-muted-foreground: var(--color-sevenpreneur-dust);
   --color-section-background: #f5f7fb;
-  /* legacy */
-  --color-word-black: var(--color-sevenpreneur-dust);
-  --color-surface-black: var(--color-sevenpreneur-surface-black);
 
   /* Breakpoint */
   --breakpoint-xs: 31.75rem;
@@ -150,9 +146,9 @@
 :root {
   --background: var(--color-sevenpreneur-white);
   --foreground: var(--color-surface-black);
+  --border: var(--color-sevenpreneur-ash);
 
   /* --- Default Shadcn --- */
-
   --radius: 0.625rem;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -160,7 +156,6 @@
   --popover-foreground: oklch(0.145 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -181,6 +176,9 @@
 .dark {
   /* --- UI Design System --- */
 
+  --background: var(--color-sevenpreneur-coal);
+  --foreground: var(--color-sevenpreneur-dust);
+  --border: var(--color-sevenpreneur-smoke);
   /* solid */
   --color-primary-muted: var(--color-sevenpreneur-blue-midnight);
   --color-secondary-muted: var(--color-sevenpreneur-pink-midgnight);
@@ -192,13 +190,8 @@
   --color-success-background: var(--color-sevenpreneur-green-midnight);
   --color-warning-background: var(--color-sevenpreneur-yellow-midnight);
   --color-danger-background: var(--color-sevenpreneur-pink-midgnight);
-  /* utilities */
-  --color-border: var(--color-sevenpreneur-smoke);
 
   /* --- Default Shadcn ---*/
-
-  --background: var(--color-sevenpreneur-coal);
-  --foreground: var(--color-sevenpreneur-dust);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);

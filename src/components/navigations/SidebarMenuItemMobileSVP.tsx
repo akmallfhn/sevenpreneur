@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
-interface SideMenuItemMobileSVPProps {
+interface SidebarMenuItemMobileSVPProps {
   menuName: string;
   menuIcon: ReactNode;
   menuURL?: string;
@@ -10,8 +10,8 @@ interface SideMenuItemMobileSVPProps {
   onClick: () => void;
 }
 
-export default function SideMenuItemMobileSVP(
-  props: SideMenuItemMobileSVPProps
+export default function SidebarMenuItemMobileSVP(
+  props: SidebarMenuItemMobileSVPProps
 ) {
   if (props.menuURL) {
     return (
