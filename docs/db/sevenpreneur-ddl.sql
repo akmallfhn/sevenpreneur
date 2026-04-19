@@ -155,7 +155,7 @@ CREATE TYPE wac_status AS ENUM (
   'failed'
 );
 
-CREATE TYPE wa_alert_status as ENUM (
+CREATE TYPE wa_alert_status AS ENUM (
   'scheduled',
   'sent',
   'delivered',
