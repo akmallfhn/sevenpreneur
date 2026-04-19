@@ -10,8 +10,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
-import EventInfoSVP from "../templates/EventInfoSVP";
+import EventInfoSVP from "../cards/EventInfoSVP";
 import PageContainerSVP from "./PageContainerSVP";
+import SectionContainerSVP from "../cards/SectionContainerSVP";
 
 dayjs.extend(localizedFormat);
 
@@ -47,9 +48,9 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
   return (
     <React.Fragment>
       <PageContainerSVP className="relative flex">
-        <div className="flex flex-col w-full gap-5 z-10 py-5 pb-20 lg:py-10 md:flex-row">
-          <main className="main-content flex flex-col min-w-0 gap-8 md:flex-2 lg:gap-10">
-            <div className="event-image flex aspect-video w-full h-full rounded-lg overflow-hidden">
+        <div className="flex flex-col w-full gap-5 z-10 py-5 pb-20 lg:py-10 md:flex-row lg:gap-7">
+          <main className="main-content flex flex-col min-w-0 gap-5 md:flex-2 lg:gap-7">
+            <div className="event-image flex aspect-video w-full h-auto rounded-lg overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
                 src={
@@ -61,7 +62,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                 height={1200}
               />
             </div>
-            <div className="event-info flex md:hidden">
+            <div className="event-info flex gap-5 md:hidden lg:gap-7">
               <EventInfoSVP
                 eventId={props.eventId}
                 eventName={props.eventName}
@@ -73,22 +74,17 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                 eventLocationURL={props.eventLocationURL}
               />
             </div>
-            <div className="section-description relative flex flex-col gap-4">
-              <h2 className="section-title font-bodycopy font-bold text-xl leading-tight dark:text-sevenpreneur-white">
-                Event Description
-              </h2>
+            <SectionContainerSVP sectionName={`About ${props.eventName}`}>
               <div className="event-description flex flex-col gap-4 items-center whitespace-pre-wrap lg:items-start">
-                <div>
-                  <p
-                    className={`ratings text-[15px] font-bodycopy ${
-                      !isExpanded && "line-clamp-5"
-                    }`}
-                    ref={paragraphRef}
-                  >
-                    {props.eventDescription}
-                  </p>
-                </div>
-                <div className="flex transition-all transform z-10">
+                <p
+                  className={`description text-[15px] font-bodycopy ${
+                    !isExpanded && "line-clamp-5"
+                  }`}
+                  ref={paragraphRef}
+                >
+                  {props.eventDescription}
+                </p>
+                <div className="relative flex transition-all z-10">
                   <AppButton
                     variant={isDark ? "dark" : "primarySoft"}
                     size="small"
@@ -111,9 +107,9 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                   <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-background to-transparent pointer-events-none" />
                 )}
               </div>
-            </div>
+            </SectionContainerSVP>
           </main>
-          <aside className="event-info aside hidden flex-col md:flex flex-1 gap-10 shrink-0">
+          <aside className="event-info aside hidden flex-col flex-1 gap-10 shrink-0 z-10 md:flex">
             <EventInfoSVP
               eventId={props.eventId}
               eventName={props.eventName}
@@ -135,9 +131,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
             height={800}
           />
         </div>
-        <div
-          className={`floating-cta fixed flex flex-col bg-background bottom-0 left-0 w-full gap-2 p-5 border-t transition-all duration-300 z-40 dark:bg-sevenpreneur-surface-black lg:hidden`}
-        >
+        <div className="floating-cta fixed flex flex-col bg-background bottom-0 left-0 w-full gap-2 p-5 border-t transition-all duration-300 z-40 dark:bg-sevenpreneur-surface-black lg:hidden">
           <div className="flex  items-center justify-between">
             <div className="flex flex-col font-bodycopy">
               <p className="text-sm">Total Amount</p>
@@ -177,7 +171,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
               </AppButton>
             </Link>
           </div>
-          <div className="flex w-full text-center justify-center items-center text-emphasis gap-1 text-alternative">
+          <div className="flex w-full text-center justify-center items-center font-bodycopy text-emphasis gap-1">
             <LockKeyhole className="size-3" />
             <p className="text-xs text-center">
               Secure payment processed by Xendit
