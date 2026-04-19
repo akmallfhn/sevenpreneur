@@ -1,0 +1,62 @@
+import GetPrismaClient from "@/lib/prisma";
+import { WAAStatus } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+
+type MailtrapSendResult = {
+  success: boolean;
+  message_ids: string[];
+};
+
+type RequestBody = {
+  alert_id: number;
+  mailtrap_result: MailtrapSendResult;
+};
+
+export async function POST(req: NextRequest) {
+  const n8nWebhookToken = req.headers.get("x-webhook-token");
+  if (n8nWebhookToken !== process.env.N8N_WEBHOOK_VERIFICATION_TOKEN) {
+    return new NextResponse(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: [["Content-Type", "application/json"]],
+    });
+  }
+
+  const body: RequestBody = await req.json();
+  const { alert_id, mailtrap_result } = body;
+
+  if (
+    !alert_id ||
+    !mailtrap_result?.success ||
+    !mailtrap_result.message_ids?.length
+  ) {
+    return new NextResponse(JSON.stringify({ error: "Invalid payload" }), {
+      status: 400,
+      headers: [["Content-Type", "application/json"]],
+    });
+  }
+
+  const email_message_id = mailtrap_result.message_ids[0];
+
+  const prisma = GetPrismaClient();
+
+  const updated = await prisma.wAAlert.update({
+    where: { id: alert_id },
+    data: {
+      email_message_id,
+      status: WAAStatus.SENT,
+    },
+    select: { id: true, email_message_id: true, status: true },
+  });
+
+  return new NextResponse(
+    JSON.stringify({
+      code: 200,
+      status: "success",
+      data: updated,
+    }),
+    {
+      status: 200,
+      headers: [["Content-Type", "application/json"]],
+    }
+  );
+}
