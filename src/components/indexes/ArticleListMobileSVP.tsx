@@ -6,6 +6,7 @@ import Link from "next/link";
 import SwiperArticlesSVP from "../elements/SwiperArticlesSVP";
 import { ArticleList } from "./ArticleListSVP";
 import SpecialTopicArticleSVP from "../gateways/SpecialTopicArticleSVP";
+import PageContainerSVP from "../pages/PageContainerSVP";
 
 dayjs.extend(relativeTime);
 
@@ -17,10 +18,10 @@ interface ArticleListMobileSVPProps {
 
 export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
   return (
-    <div className="page-root relative flex flex-col items-center w-full bg-background lg:hidden">
-      <div className="page-container flex flex-col w-full gap-5 z-10">
-        <SwiperArticlesSVP articleList={props.articleList.slice(0, 4)} />
-        <div className="flex flex-col gap-6 px-5 pb-20">
+    <div className="page-root relative flex flex-col items-center w-full bg-background z-10 lg:hidden">
+      <SwiperArticlesSVP articleList={props.articleList.slice(0, 4)} />
+      <PageContainerSVP className="flex lg:hidden">
+        <div className="flex flex-col w-full gap-6 py-5 pb-20">
           <div className="headline-news flex flex-col gap-4">
             <h2 className="w-fit font-bodycopy font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-40% from-primary to-120% to-secondary">
               Headline News
@@ -97,7 +98,7 @@ export default function ArticleListMobileSVP(props: ArticleListMobileSVPProps) {
             articleList={props.economyCategory}
           />
         </div>
-      </div>
+      </PageContainerSVP>
     </div>
   );
 }

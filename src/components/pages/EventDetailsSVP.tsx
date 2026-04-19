@@ -11,6 +11,7 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import EventInfoSVP from "../templates/EventInfoSVP";
+import PageContainerSVP from "./PageContainerSVP";
 
 dayjs.extend(localizedFormat);
 
@@ -45,9 +46,9 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
 
   return (
     <React.Fragment>
-      <div className="page-root relative flex flex-col items-center w-full bg-background">
-        <div className="page-container flex flex-col px-5 py-5 w-full gap-8 z-10 lg:flex-row lg:px-0 lg:py-10 lg:pb-20 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
-          <main className="main-content flex flex-col gap-8 md:flex-[2] lg:gap-10">
+      <PageContainerSVP className="relative flex">
+        <div className="flex flex-col w-full gap-5 z-10 py-5 pb-20 lg:py-10 md:flex-row">
+          <main className="main-content flex flex-col min-w-0 gap-8 md:flex-2 lg:gap-10">
             <div className="event-image flex aspect-video w-full h-full rounded-lg overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
@@ -60,7 +61,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
                 height={1200}
               />
             </div>
-            <div className="event-info flex lg:hidden">
+            <div className="event-info flex md:hidden">
               <EventInfoSVP
                 eventId={props.eventId}
                 eventName={props.eventName}
@@ -112,7 +113,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
               </div>
             </div>
           </main>
-          <aside className="event-info aside hidden flex-col gap-8 lg:flex lg:flex-1 lg:gap-10">
+          <aside className="event-info aside hidden flex-col md:flex flex-1 gap-10 shrink-0">
             <EventInfoSVP
               eventId={props.eventId}
               eventName={props.eventName}
@@ -125,7 +126,7 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
             />
           </aside>
         </div>
-        <div className="background absolute flex w-full h-40 overflow-hidden lg:h-72">
+        <div className="background absolute top-0 left-0 flex w-full h-40 overflow-hidden lg:h-72">
           <Image
             className="object-cover w-full h-full blur-lg scale-105"
             src={props.eventImage}
@@ -134,58 +135,56 @@ export default function EventDetailsSVP(props: EventDetailsSVPProps) {
             height={800}
           />
         </div>
-      </div>
-
-      {/* Floating CTA */}
-      <div
-        className={`floating-cta fixed flex flex-col bg-background bottom-0 left-0 w-full gap-2 p-5 border-t transition-all duration-300 z-40 dark:bg-sevenpreneur-surface-black lg:hidden`}
-      >
-        <div className="flex  items-center justify-between">
-          <div className="flex flex-col font-bodycopy">
-            <p className="text-sm">Total Amount</p>
-            <p className="font-bold dark:text-sevenpreneur-white">
-              {getRupiahCurrency(props.eventPrice[0].amount)}
+        <div
+          className={`floating-cta fixed flex flex-col bg-background bottom-0 left-0 w-full gap-2 p-5 border-t transition-all duration-300 z-40 dark:bg-sevenpreneur-surface-black lg:hidden`}
+        >
+          <div className="flex  items-center justify-between">
+            <div className="flex flex-col font-bodycopy">
+              <p className="text-sm">Total Amount</p>
+              <p className="font-bold dark:text-sevenpreneur-white">
+                {getRupiahCurrency(props.eventPrice[0].amount)}
+              </p>
+            </div>
+            <Link
+              href={`/events/${props.eventSlug}/${props.eventId}/checkout?ticketId=${props.eventPrice[0].id}`}
+            >
+              <AppButton
+                size="defaultRounded"
+                disabled={
+                  props.eventPrice[0].status === "INACTIVE" || !!expiredEvent
+                }
+                // GTM
+                featureName="add_to_cart_event"
+                featureId={String(props.eventId)}
+                featureProductCategory="EVENT"
+                featureProductName={props.eventName}
+                featureProductAmount={props.eventPrice[0].amount}
+                featurePagePoint="Product Detail Page"
+                featurePlacement="floating-panel-mobile"
+                // Meta Pixel
+                metaEventName="AddToCart"
+                metaContentIds={[String(props.eventId)]}
+                metaContentType="event"
+                metaContentName={`${props.eventName} - ${props.eventPrice[0].name}`}
+                metaContentCategory="Business Event"
+                metaCurrency="IDR"
+                metaValue={props.eventPrice[0].amount}
+              >
+                <ShieldCheck className="size-5" />
+                {props.eventPrice[0].status === "INACTIVE" || !!expiredEvent
+                  ? "Sold Out"
+                  : "Pay & Get Access"}
+              </AppButton>
+            </Link>
+          </div>
+          <div className="flex w-full text-center justify-center items-center text-emphasis gap-1 text-alternative">
+            <LockKeyhole className="size-3" />
+            <p className="text-xs text-center">
+              Secure payment processed by Xendit
             </p>
           </div>
-          <Link
-            href={`/events/${props.eventSlug}/${props.eventId}/checkout?ticketId=${props.eventPrice[0].id}`}
-          >
-            <AppButton
-              size="defaultRounded"
-              disabled={
-                props.eventPrice[0].status === "INACTIVE" || !!expiredEvent
-              }
-              // GTM
-              featureName="add_to_cart_event"
-              featureId={String(props.eventId)}
-              featureProductCategory="EVENT"
-              featureProductName={props.eventName}
-              featureProductAmount={props.eventPrice[0].amount}
-              featurePagePoint="Product Detail Page"
-              featurePlacement="floating-panel-mobile"
-              // Meta Pixel
-              metaEventName="AddToCart"
-              metaContentIds={[String(props.eventId)]}
-              metaContentType="event"
-              metaContentName={`${props.eventName} - ${props.eventPrice[0].name}`}
-              metaContentCategory="Business Event"
-              metaCurrency="IDR"
-              metaValue={props.eventPrice[0].amount}
-            >
-              <ShieldCheck className="size-5" />
-              {props.eventPrice[0].status === "INACTIVE" || !!expiredEvent
-                ? "Sold Out"
-                : "Pay & Get Access"}
-            </AppButton>
-          </Link>
         </div>
-        <div className="flex w-full text-center justify-center items-center text-emphasis gap-1 text-alternative">
-          <LockKeyhole className="size-3" />
-          <p className="text-xs text-center">
-            Secure payment processed by Xendit
-          </p>
-        </div>
-      </div>
+      </PageContainerSVP>
     </React.Fragment>
   );
 }

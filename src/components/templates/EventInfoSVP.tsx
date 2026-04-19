@@ -27,7 +27,7 @@ export default function EventInfoSVP(props: EventInfoSVP) {
   });
 
   return (
-    <div className="container-info flex flex-col gap-4 bg-background rounded-md border p-5 sticky top-24 dark:bg-sevenpreneur-surface-black ">
+    <div className="container-info flex flex-col gap-4 bg-background rounded-md border p-5 sticky top-20 lg:top-24 dark:bg-sevenpreneur-surface-black ">
       <h1 className="event-title font-brand font-bold text-2xl leading-tight dark:text-sevenpreneur-white">
         {props.eventName}
       </h1>

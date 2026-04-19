@@ -1,4 +1,5 @@
 "use client";
+import { DeleteSession } from "@/lib/actions";
 import {
   Flag,
   HouseIcon,
@@ -9,15 +10,14 @@ import {
   Presentation,
   Wallet,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
-import Image from "next/image";
-import SideMenuItemMobileSVP from "./SideMenuItemMobileSVP";
-import { DeleteSession } from "@/lib/actions";
-import { usePathname } from "next/navigation";
+import SidebarMenuItemMobileSVP from "./SidebarMenuItemMobileSVP";
 
-interface SideMenuMobileSVPProps {
+interface SidebarMobileSVPProps {
   isLoggedIn: boolean;
   userName: string;
   userAvatar: string;
@@ -26,7 +26,7 @@ interface SideMenuMobileSVPProps {
   onClose: () => void;
 }
 
-export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
+export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
   const pathname = usePathname();
 
   // Blocked scroll behind
@@ -74,10 +74,10 @@ export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
                 />
               </div>
               <div className="flex flex-col">
-                <p className="user-name font-bodycopy font-semibold text-[15px] line-clamp-1 leading-snug">
+                <p className="user-name font-bodycopy text-sevenpreneur-surface-black font-semibold text-[15px] line-clamp-1 leading-snug">
                   {props.userName}
                 </p>
-                <p className="user-email font-bodycopy font-medium text-sm text-[#111111]/70 line-clamp-1 leading-snug dark:text-white/60">
+                <p className="user-email font-bodycopy font-medium text-sm text-emphasis line-clamp-1 leading-snug">
                   {props.userEmail}
                 </p>
               </div>
@@ -101,62 +101,62 @@ export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
                     height={320}
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-sevenpreneur-surface-black">
                   <p className="login-title font-bodycopy font-semibold text-[15px] line-clamp-1 leading-snug">
                     Login to your account
                   </p>
-                  <p className="login-subtitle font-bodycopy font-medium text-sm text-[#111111]/70 line-clamp-1 leading-snug dark:text-white/60">
+                  <p className="login-subtitle font-bodycopy font-medium text-sm line-clamp-1 leading-snug">
                     Explore more features
                   </p>
                 </div>
               </div>
             </Link>
           )}
-          <ul className="side-menu-list flex flex-col gap-3 p-4 border border-outline bg-white/30 rounded-lg dark:bg-surface-black dark:border-outline-dark">
-            <SideMenuItemMobileSVP
+          <ul className="side-menu-list flex flex-col gap-3 p-4 border bg-sevenpreneur-white/30 rounded-lg dark:bg-sevenpreneur-surface-black">
+            <SidebarMenuItemMobileSVP
               menuName="Home"
               menuIcon={<HouseIcon className="size-5" />}
               menuURL="/"
               onClick={props.onClose}
             />
-            <hr className="border-t border-outline dark:border-outline-dark" />
-            <SideMenuItemMobileSVP
+            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
               menuName="Program"
               menuIcon={<Presentation className="size-5" />}
               menuURL="/cohorts/sevenpreneur-business-blueprint-program"
               onClick={props.onClose}
             />
-            <hr className="border-t border-outline dark:border-outline-dark" />
-            <SideMenuItemMobileSVP
-              menuName="Learning Series"
+            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
+              menuName="Video Series"
               menuIcon={<PlayCircle className="size-5" />}
               menuURL="/playlists/restart-conference-2025/1"
               onClick={props.onClose}
             />
-            <hr className="border-t border-outline dark:border-outline-dark" />
-            <SideMenuItemMobileSVP
+            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
               menuName="Event"
               menuIcon={<Flag className="size-5" />}
               menuURL="/events/spill-your-bizz-iftar-meet-2026/5"
               onClick={props.onClose}
             />
-            <hr className="border-t border-outline dark:border-outline-dark" />
-            <SideMenuItemMobileSVP
+            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
               menuName="Insights"
               menuIcon={<LayoutList className="size-5" />}
               menuURL="/insights"
               onClick={props.onClose}
             />
           </ul>
-          <ul className="side-menu-list flex flex-col mb-24 gap-3 p-4 border border-outline bg-white/30 rounded-lg dark:bg-surface-black dark:border-outline-dark">
-            <SideMenuItemMobileSVP
+          <ul className="side-menu-list flex flex-col mb-24 gap-3 p-4 border border-outline bg-white/30 rounded-lg dark:bg-sevenpreneur-surface-black">
+            <SidebarMenuItemMobileSVP
               menuName="My Learning"
               menuIcon={<LayoutDashboard className="size-5" />}
               menuURL={`https://agora.${domain}`}
               onClick={props.onClose}
             />
-            <hr className="border-t border-outline dark:border-outline-dark" />
-            <SideMenuItemMobileSVP
+            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
               menuName="Transactions"
               menuIcon={<Wallet className="size-5" />}
               menuURL="/transactions"
@@ -164,8 +164,8 @@ export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
             />
             {props.isLoggedIn && (
               <>
-                <hr className="border-t border-outline dark:border-outline-dark" />
-                <SideMenuItemMobileSVP
+                <hr className="border-t" />
+                <SidebarMenuItemMobileSVP
                   menuName="Sign Out"
                   menuIcon={<LogOut className="size-5" />}
                   destructiveColor
@@ -173,7 +173,7 @@ export default function SideMenuMobileSVP(props: SideMenuMobileSVPProps) {
                 />
               </>
             )}
-            <hr className="border-t border-outline dark:border-outline-dark" />
+            <hr className="border-t" />
             <AppThemeSwitcher style="switch" />
           </ul>
         </div>

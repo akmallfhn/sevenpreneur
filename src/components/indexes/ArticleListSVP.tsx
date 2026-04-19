@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ArticleListMobileSVP from "./ArticleListMobileSVP";
 import SpecialTopicArticleSVP from "../gateways/SpecialTopicArticleSVP";
+import PageContainerSVP from "../pages/PageContainerSVP";
 
 dayjs.extend(relativeTime);
 
@@ -66,8 +67,8 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
   }
 
   return (
-    <div className="page-root relative hidden flex-col items-center w-full bg-background lg:flex">
-      <div className="page-container flex flex-col w-full gap-14 z-10 px-0 py-10 pb-20 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+    <PageContainerSVP className="hidden lg:flex">
+      <div className="flex flex-col w-full gap-14 py-5 pb-20 lg:py-10">
         <div className="headline-articles grid grid-cols-[1.6fr_1fr] gap-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-30% to-section-background rounded-lg overflow-hidden border dark:border-0 dark:from-[#0F0641] dark:to-sevenpreneur-surface-black">
           <Link
             className="main-article flex h-full shrink-0"
@@ -194,6 +195,6 @@ export default function ArticleListSVP(props: ArticleListSVPProps) {
           articleList={economyCategory}
         />
       </div>
-    </div>
+    </PageContainerSVP>
   );
 }

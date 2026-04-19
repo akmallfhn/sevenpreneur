@@ -9,16 +9,17 @@ import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AppThemeSwitcher from "../buttons/AppThemeSwitcher";
 import AvatarBadgeSVP from "../buttons/AvatarBadgeSVP";
+import PageContainerSVP from "../pages/PageContainerSVP";
 import SevenpreneurLogo from "../svg-logos/SevenpreneurLogo";
 import AnnouncementTickerSVP, {
   AnnouncementTickerSVPProps,
 } from "./AnnouncementTickerSVP";
 import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
-import SideMenuMobileSVP from "./SideMenuMobileSVP";
+import SidebarMobileSVP from "./SidebarMobileSVP";
 
 dayjs.extend(isBetween);
 
-interface HeaderNavbarSVPProps extends AnnouncementTickerSVPProps {
+interface HeaderSVPProps extends AnnouncementTickerSVPProps {
   isLoggedIn: boolean;
   userAvatar: string | null;
   userName: string | null;
@@ -29,7 +30,7 @@ interface HeaderNavbarSVPProps extends AnnouncementTickerSVPProps {
   tickerEndDate: string;
 }
 
-export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
+export default function HeaderSVP(props: HeaderSVPProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -62,8 +63,8 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
     <React.Fragment>
       {!isDisallowedPage && (
         <div className="navbar-group sticky flex flex-col top-0 left-0 z-[90] lg:flex-col-reverse">
-          <div className="navbar-root flex w-full bg-white items-center justify-center shadow-md dark:bg-black/40 dark:backdrop-blur-sm">
-            <div className="navbar-container flex items-center w-full justify-between py-3 px-5 lg:px-0 lg:py-3.5 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+          <PageContainerSVP className="flex shadow-md dark:bg-background/40 dark:backdrop-blur-sm">
+            <div className="navbar-container flex items-center w-full justify-between py-3 lg:py-3.5">
               <Link href={"/"} className="brand-logo-site">
                 <SevenpreneurLogo className="max-w-[142px] h-auto lg:max-w-[168px]" />
               </Link>
@@ -75,7 +76,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                       menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
                     />
                     <HeaderNavbarItemSVP
-                      menuTitle="Learning Series"
+                      menuTitle="Video Series"
                       menuUrl="/playlists/restart-conference-2025/1"
                     />
                     <HeaderNavbarItemSVP
@@ -134,7 +135,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
                 </div>
               )}
             </div>
-          </div>
+          </PageContainerSVP>
           {props.tickerStatus === "ACTIVE" &&
             isValidTicker &&
             !isConstrainedPath && (
@@ -149,7 +150,7 @@ export default function HeaderNavbarSVP(props: HeaderNavbarSVPProps) {
 
       {/* Open Mobile Navbar */}
       {mobileMenuOpen && (
-        <SideMenuMobileSVP
+        <SidebarMobileSVP
           isLoggedIn={props.isLoggedIn}
           userName={props.userName || "User"}
           userAvatar={
