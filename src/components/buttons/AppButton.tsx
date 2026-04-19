@@ -103,7 +103,7 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       destructiveSoft:
         "bg-destructive-soft-background text-destructive-soft-foreground hover:bg-destructive-soft-hover active:bg-destructive-soft-active disabled:bg-destructive-soft-muted disabled:text-destructive-soft-foreground/50 dark:hover:bg-destructive-soft-background/80 dark:active:bg-destructive-soft-background/80 dark:disabled:bg-destructive-soft-background/50",
       light:
-        "bg-light-background text-light-foreground border border-outline hover:bg-light-hover active:bg-light-active disabled:bg-light-muted disabled:text-light-foreground/30",
+        "bg-light-background text-light-foreground border hover:bg-light-hover active:bg-light-active disabled:bg-light-muted disabled:text-light-foreground/30",
       dark: "bg-dark-background text-dark-foreground hover:bg-dark-hover active:bg-dark-active disabled:bg-dark-muted disabled:text-dark-foreground/30",
 
       // Todo

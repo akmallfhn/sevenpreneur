@@ -6,7 +6,7 @@ import AppButton from "../buttons/AppButton";
 
 export default function InstagramContentsHomeSVP() {
   return (
-    <div className="section-root relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-0% to-70% from-coal-black to-[#1A0951]">
+    <div className="section-root relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-0% to-70% from-sevenpreneur-coal to-[#1A0951]">
       <div className="section-container flex flex-col w-full items-center gap-20 p-5 py-10 z-20 lg:px-0 lg:py-[60px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="section-item flex flex-col w-full items-center gap-8 lg:gap-[48px]">
           <div className="flex flex-col items-center gap-4">

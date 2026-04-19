@@ -121,7 +121,7 @@ export default function BusinessesAlumniHomeSVP() {
   const loopedMessages = [...alumniLogos, ...alumniLogos];
 
   return (
-    <div className="section-root relative flex items-center justify-center overflow-hidden bg-coal-black">
+    <div className="section-root relative flex items-center justify-center overflow-hidden bg-sevenpreneur-coal">
       <div className="section-container flex flex-col w-full items-center gap-6 p-5 py-10 pb-0 z-20 lg:px-0 lg:py-[60px] lg:gap-[48px] ">
         <h2 className="section-title w-fit text-transparent leading-snug bg-clip-text bg-gradient-to-r from-40% from-white to-100% to-primary font-brand font-bold text-center text-xl sm:text-2xl lg:text-4xl lg:max-w-[680px]">
           Empowering 900+ Real Businesses, <br /> Scaled Through Our Program
@@ -131,7 +131,7 @@ export default function BusinessesAlumniHomeSVP() {
             {loopedMessages.map((post, index) => (
               <a
                 href={post.company_url}
-                className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-surface-black to-100% to-[#1C1C1C] border border-outline-dark rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
+                className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-surface-black to-100% to-[#1C1C1C] border border-sevenpreneur-smoke rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
                 key={`${post.name}${index}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -151,7 +151,7 @@ export default function BusinessesAlumniHomeSVP() {
           {loopedMessages.map((post, index) => (
             <a
               href={post.company_url}
-              className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-surface-black to-100% to-[#1C1C1C] border border-outline-dark rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
+              className="logo-item flex max-w-[120px] h-auto shrink-0 p-2 items-center justify-center aspect-[222/88] bg-linear-to-b from-0% from-surface-black to-100% to-[#1C1C1C] border border-sevenpreneur-smoke rounded-full overflow-hidden lg:max-w-[158px] lg:p-3"
               key={`${post.name}${index}`}
               target="_blank"
               rel="noopener noreferrer"

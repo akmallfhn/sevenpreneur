@@ -33,7 +33,7 @@ export default function CoachEducatorItemSVP(props: CoachEducatorItemSVPProps) {
         <p className="font-bodycopy font-bold text-white text-lg leading-snug lg:text-2xl">
           {props.coachName}
         </p>
-        <p className="text-[#918E8E] text-[12px] font-bodycopy font-medium lg:text-[15px]">
+        <p className="text-sevenpreneur-dust text-[12px] font-bodycopy font-medium lg:text-[15px]">
           {props.coachDesc}
         </p>
         <p className="font-bodycopy text-white text-sm font-semibold leading-snug lg:text-[15px]">
