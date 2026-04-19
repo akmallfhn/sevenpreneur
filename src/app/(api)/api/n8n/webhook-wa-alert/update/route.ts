@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
   const prisma = GetPrismaClient();
 
   const updated = await prisma.wAAlert.update({
-    where: { id: alert_id },
     data: {
       email_message_id,
       status: WAAStatus.SENT,
     },
+    where: { id: alert_id },
     select: { id: true, email_message_id: true, status: true },
   });
 
