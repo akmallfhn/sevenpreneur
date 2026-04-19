@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const body: RequestBody = await req.json();
+  const body: n8nWAAlertReminderUpdate = await req.json();
   const { alert_id, mailtrap_result } = body;
 
   if (
