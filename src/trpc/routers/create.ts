@@ -74,7 +74,7 @@ export const createRouter = createTRPCRouter({
   articleCategory: createArticle.articleCategory,
   article: createArticle.article,
 
-  // WhatsApp-related //
+  // WhatsApp-chat-related //
 
   wa: {
     alert: createWA.alert,
