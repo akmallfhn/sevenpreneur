@@ -77,7 +77,7 @@ export const deleteRouter = createTRPCRouter({
   articleCategory: deleteArticle.articleCategory,
   article: deleteArticle.article,
 
-  // WhatsApp-related //
+  // WhatsApp-chat-related //
 
   wa: {
     alert: deleteWA.alert,
