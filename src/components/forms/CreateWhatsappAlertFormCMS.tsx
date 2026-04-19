@@ -1,6 +1,7 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { X } from "lucide-react";
+import dayjs from "dayjs";
+import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -17,7 +18,7 @@ export default function CreateWhatsappAlertFormCMS(
   props: CreateWhatsappAlertFormCMSProps
 ) {
   const utils = trpc.useUtils();
-  // const updateConversation = trpc.update.wa.conversation.useMutation();
+  const createWAAlert = trpc.create.wa.alert.useMutation();
 
   // Form data
   const [formData, setFormData] = useState<{
@@ -50,25 +51,22 @@ export default function CreateWhatsappAlertFormCMS(
       return;
     }
 
-    // updateConversation.mutate(
-    //   {
-    //     id: props.convId,
-    //     handler_id: formData.handler_id,
-    //     lead_status: formData.lead_status,
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success("Lead updated successfully");
-    //       utils.read.wa.conversation.invalidate({ id: props.convId });
-    //       utils.list.wa.conversations.invalidate();
-    //       props.onSuccess?.();
-    //       props.onClose();
-    //     },
-    //     onError: () => {
-    //       toast.error("Failed to update lead");
-    //     },
-    //   }
-    // );
+    createWAAlert.mutate(
+      {
+        conv_id: props.convId,
+        scheduled_at: dayjs(formData.scheduledAt).format(),
+      },
+      {
+        onSuccess: () => {
+          toast.success("Alert reminder scheduled");
+          utils.read.wa.conversation.invalidate({ id: props.convId });
+          props.onClose();
+        },
+        onError: () => {
+          toast.error("Failed to set alert reminder");
+        },
+      }
+    );
   };
 
   if (!props.isOpen) return null;
@@ -88,7 +86,7 @@ export default function CreateWhatsappAlertFormCMS(
           </h2>
           <div className="flex flex-col gap-4">
             <InputCMS
-              inputId="scheduled_at"
+              inputId="scheduled-at"
               inputType="datetime-local"
               value={formData.scheduledAt}
               onInputChange={handleInputChange("scheduledAt")}
@@ -101,11 +99,11 @@ export default function CreateWhatsappAlertFormCMS(
             </AppButton>
             <AppButton
               onClick={handleSubmit}
-              // disabled={updateConversation.isPending || isLoading}
+              disabled={createWAAlert.isPending}
             >
-              {/* {updateConversation.isPending && (
+              {createWAAlert.isPending && (
                 <Loader2 className="animate-spin size-4" />
-              )} */}
+              )}
               Set Alert
             </AppButton>
           </div>
