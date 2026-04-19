@@ -7,12 +7,11 @@ import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import SelectCMS, { OptionType } from "../fields/SelectCMS";
 
-interface EditLeadStatusCMSProps {
+interface EditLeadStatusFormCMSProps {
   sessionToken: string;
   convId: string;
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: () => void;
 }
 
 const leadStatusOptions: OptionType[] = [
@@ -21,7 +20,9 @@ const leadStatusOptions: OptionType[] = [
   { label: "Hot", value: "HOT" },
 ];
 
-export default function EditLeadStatusCMS(props: EditLeadStatusCMSProps) {
+export default function EditLeadStatusFormCMS(
+  props: EditLeadStatusFormCMSProps
+) {
   const utils = trpc.useUtils();
   const updateConversation = trpc.update.wa.conversation.useMutation();
 
@@ -103,7 +104,6 @@ export default function EditLeadStatusCMS(props: EditLeadStatusCMSProps) {
           toast.success("Lead updated successfully");
           utils.read.wa.conversation.invalidate({ id: props.convId });
           utils.list.wa.conversations.invalidate();
-          props.onSuccess?.();
           props.onClose();
         },
         onError: () => {

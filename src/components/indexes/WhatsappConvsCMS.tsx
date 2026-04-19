@@ -142,16 +142,16 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
               </div>
             )}
           </div>
-          <div className="conv-details flex flex-[2.6] border rounded-r-lg">
+          <div className="conv-details flex flex-[2.6]">
             {selectedConvId ? (
               <div className="conv-wrapper flex w-full">
-                <div className="chats flex flex-[2] border-r">
+                <div className="chats flex flex-[2] border-y">
                   <WhatsappChatsCMS
                     sessionToken={props.sessionToken}
                     convId={selectedConvId}
                   />
                 </div>
-                <div className="lead-details flex flex-1">
+                <div className="lead-details flex flex-1 border-y border-r rounded-r-lg">
                   <WhatsappLeadDetailsCMS
                     key={selectedConvId}
                     sessionToken={props.sessionToken}
@@ -160,7 +160,7 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-8">
+              <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-8 border-y border-r rounded-r-lg">
                 <div className="state-illustration flex max-w-72 overflow-hidden">
                   <Image
                     className="object-cover w-full h-full"
