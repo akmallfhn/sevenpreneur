@@ -39,7 +39,7 @@ export default function CourseItemLMS(props: CourseItemLMSProps) {
           width={600}
           height={600}
         />
-        <div className="overlay absolute inset-0 bg-gradient-to-t from-10% from-surface-black to-80% to-surface-black/0 z-10" />
+        <div className="overlay absolute inset-0 bg-gradient-to-t from-10% from-sevenpreneur-surface-black to-80% to-sevenpreneur-surface-black/0 z-10" />
         {props.courseCategory === "PLAYLIST" && (
           <FontAwesomeIcon
             className="play-button absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 aspect-square p-4 bg-white/10 backdrop-blur-xs border border-white/[0.08] rounded-full z-20"
@@ -52,25 +52,25 @@ export default function CourseItemLMS(props: CourseItemLMSProps) {
           {props.courseCategory === "COHORT" ? "Bootcamp" : "Video Series"}
         </div>
       </div>
-      <div className="metadata relative flex flex-col gap-2 h-[112px] bg-surface-black px-4">
+      <div className="metadata relative flex flex-col gap-2 h-[112px] bg-sevenpreneur-coal px-4">
         <div className="flex flex-col gap-2">
           <h3 className="course-name text-white font-bodycopy font-bold leading-snug line-clamp-2 lg:text-base xl:text-lg">
             {props.courseName}
           </h3>
           <div className="course-attributes flex gap-2">
-            <p className="course-category flex w-fit px-2.5 py-1 bg-white/15 text-word-black text-xs font-bodycopy font-semibold rounded-full">
+            <p className="course-category flex w-fit px-2.5 py-1 bg-white/15 text-sevenpreneur-dust text-xs font-bodycopy font-semibold rounded-full">
               {props.courseItems}{" "}
               {props.courseCategory === "COHORT" ? "Sessions" : "Episodes"}
             </p>
             {props.courseCategory === "COHORT" && (
-              <div className="cohort-date flex w-fit items-center gap-1 px-2.5 py-1 bg-white/15 text-word-black text-xs font-bodycopy font-semibold rounded-full">
+              <div className="cohort-date flex w-fit items-center gap-1 px-2.5 py-1 bg-white/15 text-sevenpreneur-dust text-xs font-bodycopy font-semibold rounded-full">
                 <FontAwesomeIcon icon={faCalendar} size="sm" />
                 <p>{dateString}</p>
               </div>
             )}
             {props.courseCategory === "PLAYLIST" &&
               !!props.playlistDuration && (
-                <div className="playlist-duration flex w-fit items-center gap-1 px-2.5 py-1 bg-white/15 text-word-black text-xs font-bodycopy font-semibold rounded-full">
+                <div className="playlist-duration flex w-fit items-center gap-1 px-2.5 py-1 bg-white/15 text-sevenpreneur-dust text-xs font-bodycopy font-semibold rounded-full">
                   <FontAwesomeIcon icon={faPlay} size="sm" />
                   <p>{formatDurationFromSeconds(props.playlistDuration)}</p>
                 </div>
