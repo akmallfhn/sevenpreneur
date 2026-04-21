@@ -80,6 +80,7 @@ export const deleteRouter = createTRPCRouter({
   // WhatsApp-chat-related //
 
   wa: {
+    asset: deleteWA.asset,
     alert: deleteWA.alert,
   },
 });

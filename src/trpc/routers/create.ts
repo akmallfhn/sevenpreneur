@@ -77,6 +77,7 @@ export const createRouter = createTRPCRouter({
   // WhatsApp-chat-related //
 
   wa: {
+    asset: createWA.asset,
     alert: createWA.alert,
   },
 });

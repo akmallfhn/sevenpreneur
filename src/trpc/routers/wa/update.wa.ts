@@ -9,7 +9,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { WALeadStatus } from "@prisma/client";
+import { WAAssetType, WALeadStatus } from "@prisma/client";
 import z from "zod";
 
 export const updateWA = {
@@ -82,6 +82,31 @@ export const updateWA = {
         code: STATUS_OK,
         message: "Success",
         conversation: updatedConversation[0],
+      };
+    }),
+
+  asset: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        url: stringNotBlank(),
+        type: z.enum(WAAssetType),
+      })
+    )
+    .mutation(async (opts) => {
+      const updatedAssets = await opts.ctx.prisma.wAAsset.updateManyAndReturn({
+        data: {
+          url: opts.input.url,
+          type: opts.input.type,
+        },
+        where: { id: opts.input.id },
+      });
+      checkUpdateResult(updatedAssets.length, "asset", "assets", "wa.asset");
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        asset: updatedAssets[0],
       };
     }),
 
