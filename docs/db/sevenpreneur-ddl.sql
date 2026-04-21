@@ -155,6 +155,18 @@ CREATE TYPE wac_status AS ENUM (
   'failed'
 );
 
+-- Enumeration for the wa_assets table (wa_asset_*)
+
+CREATE TYPE wa_asset_type AS ENUM (
+  'audio',
+  'audio_voice',
+  'document',
+  'image',
+  'sticker',
+  'sticker_anim',
+  'video'
+);
+
 -- Enumeration for the wa_alerts table (wa_alert_*)
 
 CREATE TYPE wa_alert_status AS ENUM (
@@ -711,6 +723,14 @@ CREATE TABLE wa_chats (
   updated_at    TIMESTAMPTZ      NOT NULL     DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE wa_assets (
+  id          SERIAL         PRIMARY KEY,
+  url         VARCHAR        NOT NULL,
+  type        wa_asset_type  NOT NULL,
+  created_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE wa_alerts (
   id                SERIAL           PRIMARY KEY,
   conv_id           CHAR(21)         NOT NULL,
@@ -1149,6 +1169,11 @@ CREATE TRIGGER update_wa_conversations_updated_at_trigger
 
 CREATE TRIGGER update_wa_chats_updated_at_trigger
   BEFORE UPDATE ON wa_chats
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_wa_assets_updated_at_trigger
+  BEFORE UPDATE ON wa_assets
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
