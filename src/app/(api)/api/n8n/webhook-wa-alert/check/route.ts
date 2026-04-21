@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     where: {
       status: WAAStatus.SCHEDULED,
       scheduled_at: {
-        gte: new Date(now.getTime() - 2 * 60 * 1000),
+        gte: new Date(now.getTime() - 2 * 60 * 1000), // Last 2 minutes
         lte: now,
       },
     },
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   return new NextResponse(
     JSON.stringify({
       code: 200,
-      status: "success",
+      status: "Success",
       alert_count: theAlerts.length,
       data: theAlerts,
     }),

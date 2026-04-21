@@ -1,41 +1,85 @@
 import { Optional } from "@/lib/optional-type";
 import GetPrismaClient from "@/lib/prisma";
 import { WAAStatus } from "@prisma/client";
+import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
+type MailtrapEventType =
+  | "delivery"
+  | "open"
+  | "click"
+  | "unsubscribe"
+  | "spam"
+  | "soft bounce"
+  | "bounce"
+  | "suspension"
+  | "reject";
+
 type MailtrapEvent = {
-  event: string;
+  event: MailtrapEventType;
   message_id: string;
+  sending_stream: "transactional" | "bulk";
   email: string;
-  event_id: string;
-  timestamp: number;
+  sending_domain_name: string;
   category?: string;
-  custom_variables?: Record<string, unknown>;
-  sending_domain_name?: string | null;
-  sending_stream?: string | null;
+  custom_variables?: Record<string, string | number | boolean>;
+  timestamp: number;
+  event_id: string;
 };
 
 type MailtrapWebhookPayload = {
   events: MailtrapEvent[];
 };
 
+type MailtrapEventResult = {
+  message_id: string;
+  status: string;
+  updated: boolean;
+};
+
+async function MailtrapCheckSignature(req: NextRequest) {
+  const raw = await req.text();
+
+  const signingSecret = process.env.MAILTRAP_WEBHOOK_SECRET!;
+  const hmac = crypto.createHmac("sha256", signingSecret);
+  hmac.update(raw, "utf-8");
+  const computed = hmac.digest("hex");
+
+  const signHeader = req.headers.get("Mailtrap-Signature");
+  if (!signHeader) {
+    return false;
+  }
+
+  const receivedBuf = Buffer.from(signHeader, "hex");
+  const computedBuf = Buffer.from(computed, "hex");
+  let valid = false;
+  try {
+    if (receivedBuf.length === computedBuf.length) {
+      valid = crypto.timingSafeEqual(receivedBuf, computedBuf);
+    }
+  } catch {
+    valid = false;
+  }
+
+  if (valid) {
+    return JSON.parse(raw) as MailtrapWebhookPayload;
+  }
+
+  return false;
+}
+
 export async function POST(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get("secret");
-  if (secret !== process.env.MAILTRAP_WEBHOOK_SECRET) {
+  const checkResult = await MailtrapCheckSignature(req);
+  if (checkResult === false) {
     return new NextResponse(JSON.stringify({ error: "Forbidden" }), {
       status: 403,
       headers: [["Content-Type", "application/json"]],
     });
   }
 
-  const payload: MailtrapWebhookPayload = await req.json();
+  const payload: MailtrapWebhookPayload = checkResult;
   const prisma = GetPrismaClient();
 
-  type MailtrapEventResult = {
-    message_id: string;
-    status: string;
-    updated: boolean;
-  };
   const results: MailtrapEventResult[] = [];
 
   for (const event of payload.events) {
@@ -43,7 +87,7 @@ export async function POST(req: NextRequest) {
 
     if (event.event === "delivery") {
       newStatus = WAAStatus.DELIVERED;
-    } else if (event.event === "bounce" || event.event === "soft_bounce") {
+    } else if (event.event === "bounce" || event.event === "soft bounce") {
       newStatus = WAAStatus.BOUNCED;
     }
 
@@ -71,7 +115,7 @@ export async function POST(req: NextRequest) {
   return new NextResponse(
     JSON.stringify({
       code: 200,
-      status: "success",
+      status: "Success",
       results,
     }),
     {
