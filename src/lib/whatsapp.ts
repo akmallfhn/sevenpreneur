@@ -11,21 +11,18 @@ export type WhatsappMessageResponse = {
   }[];
 };
 
-// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/text-messages/?locale=en_US
-export const whatsappMessageRequest = (
+const whatsappMessageRequest = (
   userPhoneNumber: string,
-  message: string
+  type: "text" | "audio" | "document" | "image" | "sticker" | "video",
+  payload: object
 ): Promise<WhatsappMessageResponse> => {
   return new Promise((resolve, reject) => {
     const whatsappRequestBody = JSON.stringify({
       messaging_product: "whatsapp",
       recipient_type: "individual",
       to: userPhoneNumber,
-      type: "text",
-      text: {
-        preview_url: true,
-        body: message,
-      },
+      type: type,
+      ...payload,
     });
 
     const whatsappRequestOptions: https.RequestOptions = {
@@ -65,6 +62,89 @@ export const whatsappMessageRequest = (
 
     whatsappReq.write(whatsappRequestBody);
     whatsappReq.end();
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/text-messages/?locale=en_US
+export const whatsappTextMessageRequest = (
+  userPhoneNumber: string,
+  message: string
+) => {
+  return whatsappMessageRequest(userPhoneNumber, "text", {
+    text: {
+      preview_url: true,
+      body: message,
+    },
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/audio-messages/?locale=en_US
+export const whatsappAudioMessageRequest = (
+  userPhoneNumber: string,
+  audioUrl: string,
+  isVoice: boolean
+) => {
+  return whatsappMessageRequest(userPhoneNumber, "audio", {
+    audio: {
+      link: audioUrl,
+      voice: isVoice,
+    },
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/document-messages/?locale=en_US
+export const whatsappDocumentMessageRequest = (
+  userPhoneNumber: string,
+  documentUrl: string,
+  caption: string,
+  fileName: string
+) => {
+  return whatsappMessageRequest(userPhoneNumber, "document", {
+    document: {
+      link: documentUrl,
+      caption: caption,
+      filename: fileName,
+    },
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/image-messages/?locale=en_US
+export const whatsappImageMessageRequest = (
+  userPhoneNumber: string,
+  imageUrl: string,
+  caption: string
+) => {
+  return whatsappMessageRequest(userPhoneNumber, "image", {
+    image: {
+      link: imageUrl,
+      caption: caption,
+    },
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/sticker-messages/?locale=en_US
+export const whatsappStickerMessageRequest = (
+  userPhoneNumber: string,
+  stickerUrl: string
+) => {
+  return whatsappMessageRequest(userPhoneNumber, "sticker", {
+    sticker: {
+      link: stickerUrl,
+    },
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/video-messages/?locale=en_US
+export const whatsappVideoMessageRequest = (
+  userPhoneNumber: string,
+  videoUrl: string,
+  caption: string
+) => {
+  return whatsappMessageRequest(userPhoneNumber, "video", {
+    video: {
+      link: videoUrl,
+      caption: caption,
+    },
   });
 };
 

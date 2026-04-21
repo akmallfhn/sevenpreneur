@@ -643,6 +643,11 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | Procedure Name                   | Administrator (`0`) | Non-Administrator/Not Logged-In |
 | :------------------------------- | :-----------------: | :-----------------------------: |
 | `send.wa.chat`                   |         ✅          |               ❌                |
+| `send.wa.audio`                  |         ✅          |               ❌                |
+| `send.wa.document`               |         ✅          |               ❌                |
+| `send.wa.image`                  |         ✅          |               ❌                |
+| `send.wa.sticker`                |         ✅          |               ❌                |
+| `send.wa.video`                  |         ✅          |               ❌                |
 | `list.wa.conversations`          |         ✅          |               ❌                |
 | `list.wa.chats`                  |         ✅          |               ❌                |
 | `read.wa.conversation`           |         ✅          |               ❌                |
