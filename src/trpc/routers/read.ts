@@ -107,6 +107,7 @@ export const readRouter = createTRPCRouter({
 
   wa: {
     conversation: readWA.conversation,
+    asset: readWA.asset,
     alert: readWA.alert,
   },
 });

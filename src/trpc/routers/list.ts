@@ -97,6 +97,7 @@ export const listRouter = createTRPCRouter({
   wa: {
     conversations: listWA.conversations,
     chats: listWA.chats,
+    assets: listWA.assets,
     alerts: listWA.alerts,
   },
 });

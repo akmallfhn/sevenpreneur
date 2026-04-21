@@ -648,10 +648,15 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `send.wa.image`                  |         ✅          |               ❌                |
 | `send.wa.sticker`                |         ✅          |               ❌                |
 | `send.wa.video`                  |         ✅          |               ❌                |
+| `create.wa.asset`                |         ✅          |               ❌                |
 | `list.wa.conversations`          |         ✅          |               ❌                |
 | `list.wa.chats`                  |         ✅          |               ❌                |
+| `list.wa.assets`                 |         ✅          |               ❌                |
+| `read.wa.asset`                  |         ✅          |               ❌                |
 | `read.wa.conversation`           |         ✅          |               ❌                |
 | `update.wa.conversation`         |         ✅          |               ❌                |
 | `update.wa.conversation_as_read` |         ✅          |               ❌                |
+| `update.wa.asset`                |         ✅          |               ❌                |
+| `delete.wa.asset`                |         ✅          |               ❌                |
 
 **Scopes:** Only Administrators have access to all WhatsApp chats.

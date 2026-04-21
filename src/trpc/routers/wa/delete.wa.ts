@@ -4,6 +4,20 @@ import { checkDeleteResult } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
 
 export const deleteWA = {
+  asset: administratorProcedure
+    .input(objectHasOnlyID())
+    .mutation(async (opts) => {
+      const deletedAsset = await opts.ctx.prisma.wAAsset.deleteMany({
+        where: { id: opts.input.id },
+      });
+      checkDeleteResult(deletedAsset.count, "assets", "wa.asset");
+
+      return {
+        code: STATUS_NO_CONTENT,
+        message: "Success",
+      };
+    }),
+
   alert: administratorProcedure
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
