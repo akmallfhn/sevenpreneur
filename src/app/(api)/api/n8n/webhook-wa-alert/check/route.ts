@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     where: {
       status: WAAStatus.SCHEDULED,
       scheduled_at: {
-        gte: new Date(now.getTime() - 2 * 60 * 1000), // Last 2 minutes
+        gte: new Date(now.getTime() - 62 * 60 * 1000), // Last 1 hour
         lte: now,
       },
     },
