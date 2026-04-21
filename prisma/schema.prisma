@@ -200,6 +200,20 @@ enum WACStatus {
   @@map("wac_status")
 }
 
+// Enumeration for the WAAsset model (WAAsset*)
+
+enum WAAssetType {
+  AUDIO        @map("audio")
+  AUDIO_VOICE  @map("audio_voice")
+  DOCUMENT     @map("document")
+  IMAGE        @map("image")
+  STICKER      @map("sticker")
+  STICKER_ANIM @map("sticker_anim")
+  VIDEO        @map("video")
+
+  @@map("wa_asset_type")
+}
+
 // Enumeration for the WAAlert model (WAA*)
 
 enum WAAStatus {
@@ -944,6 +958,16 @@ model WAChat {
   replies      WAChat[]         @relation("reply")
 
   @@map("wa_chats")
+}
+
+model WAAsset {
+  id         Int         @id @default(autoincrement())
+  url        String      @db.VarChar()
+  type       WAAssetType
+  created_at DateTime    @default(now()) @db.Timestamptz()
+  updated_at DateTime    @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("wa_assets")
 }
 
 model WAAlert {
