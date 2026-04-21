@@ -17,8 +17,8 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import AppDropdown from "../elements/AppDropdown";
-import TableCellCMS from "../elements/TableCellCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
+import TableCellCMS from "../tables/TableCellCMS";
+import TableHeadCMS from "../tables/TableHeadCMS";
 import SelectCMS from "../fields/SelectCMS";
 import CreateInvoiceFormCMS from "../forms/CreateInvoiceFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
@@ -30,6 +30,9 @@ import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
+import TableHeaderCMS from "../tables/TableHeaderCMS";
+import TableRowCMS from "../tables/TableRowCMS";
+import TableBodyCMS from "../tables/TableBodyCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -307,7 +310,7 @@ export default function TransactionListCMS({
           <div className="table-transactions flex flex-col">
             {filterData.productId && (
               <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
-                <p className="text-sm text-alternative font-medium font-bodycopy">
+                <p className="text-sm text-emphasis font-medium font-bodycopy">
                   Active filter:
                 </p>
                 <FilterLabelCMS
@@ -326,8 +329,8 @@ export default function TransactionListCMS({
               </div>
             )}
             <table className="table-component relative w-full overflow-hidden">
-              <thead className="bg-[#FAFAFA] text-alternative/70">
-                <tr>
+              <TableHeaderCMS>
+                <TableRowCMS>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Transaction Id`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Product Name`.toUpperCase()}</TableHeadCMS>
@@ -337,16 +340,13 @@ export default function TransactionListCMS({
                   <TableHeadCMS>{`Created At`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Paid At`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
-                </tr>
-              </thead>
+                </TableRowCMS>
+              </TableHeaderCMS>
               {/* Table Body */}
               {!isLoadingTransactionsData && !isErrorTransactionsData && (
-                <tbody>
+                <TableBodyCMS>
                   {transactionList?.map((post, index) => (
-                    <tr
-                      className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                      key={index}
-                    >
+                    <TableRowCMS key={index}>
                       <TableCellCMS>
                         {(currentPage - 1) * pageSize + (index + 1)}
                       </TableCellCMS>
@@ -383,21 +383,21 @@ export default function TransactionListCMS({
                           View
                         </AppButton>
                       </TableCellCMS>
-                    </tr>
+                    </TableRowCMS>
                   ))}
-                </tbody>
+                </TableBodyCMS>
               )}
             </table>
           </div>
 
           {/* Conditional Rendering */}
           {isLoadingTransactionsData && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
               <Loader2 className="animate-spin size-5 " />
             </div>
           )}
           {isErrorTransactionsData && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
               No Data
             </div>
           )}
@@ -408,7 +408,7 @@ export default function TransactionListCMS({
                 currentPage={currentPage}
                 totalPages={transactionsData?.metapaging.total_page ?? 1}
               />
-              <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${transactionsData?.metapaging.total_data} transactions`}</p>
+              <p className="text-sm text-emphasis text-center font-bodycopy font-medium">{`Showing all ${transactionsData?.metapaging.total_data} transactions`}</p>
             </div>
           )}
         </div>

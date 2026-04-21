@@ -83,9 +83,9 @@ export default function CohortItemCardCMS({
   }, []);
 
   // Function to delete cohort
-  const deleteUser = trpc.delete.cohort.useMutation();
+  const deleteCohort = trpc.delete.cohort.useMutation();
   const handleDelete = () => {
-    deleteUser.mutate(
+    deleteCohort.mutate(
       { id: cohortId },
       {
         onSuccess: () => {
@@ -121,7 +121,7 @@ export default function CohortItemCardCMS({
             <h3 className="cohort-title text-base font-bodycopy font-bold line-clamp-2 xl:text-[17px] 2xl:text-lg">
               {cohortName}
             </h3>
-            <div className="cohort-timeline flex gap-1.5 items-center text-alternative">
+            <div className="cohort-timeline flex gap-1.5 items-center text-emphasis">
               <FontAwesomeIcon icon={faCalendar} className="xs" />
               <div className="flex font-bodycopy font-medium text-sm items-center gap-1">
                 {dateString}

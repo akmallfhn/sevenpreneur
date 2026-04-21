@@ -20,10 +20,10 @@ export default function AvatarBadgeCMS(props: AvatarBadgeCMSProps) {
         />
       </div>
       <div className="user-attributes flex flex-col gap-0 font-bodycopy">
-        <p className="user-name text-sm font-semibold text-black line-clamp-1">
+        <p className="user-name text-sm font-semibold line-clamp-1">
           {props.userName}
         </p>
-        <p className="user-roles text-xs font-semibold text-alternative">
+        <p className="user-roles text-xs font-semibold text-emphasis">
           {props.userRole.toUpperCase()}
         </p>
       </div>

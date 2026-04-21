@@ -144,14 +144,14 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
           </div>
           <div className="conv-details flex flex-[2.6]">
             {selectedConvId ? (
-              <div className="conv-wrapper flex w-full">
-                <div className="chats flex flex-[2] border-y">
+              <div className="conv-wrapper flex w-full min-w-0">
+                <div className="chats flex flex-[2] border-y shrink-0 min-w-0">
                   <WhatsappChatsCMS
                     sessionToken={props.sessionToken}
                     convId={selectedConvId}
                   />
                 </div>
-                <div className="lead-details flex flex-1 border-y border-r rounded-r-lg">
+                <div className="lead-details flex flex-1 border-y border-r rounded-r-lg min-w-0">
                   <WhatsappLeadDetailsCMS
                     key={selectedConvId}
                     sessionToken={props.sessionToken}

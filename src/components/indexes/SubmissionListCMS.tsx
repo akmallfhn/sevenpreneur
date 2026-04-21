@@ -9,14 +9,17 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
-import TableCellCMS from "../elements/TableCellCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
 import EditSubmissionFormCMS from "../forms/EditSubmissionFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import TableBodyCMS from "../tables/TableBodyCMS";
+import TableCellCMS from "../tables/TableCellCMS";
+import TableHeadCMS from "../tables/TableHeadCMS";
+import TableHeaderCMS from "../tables/TableHeaderCMS";
+import TableRowCMS from "../tables/TableRowCMS";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
@@ -164,8 +167,8 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
             <div className="submission-list flex flex-col gap-2">
               <h3 className="font-bold font-bodycopy">Users Submission</h3>
               <table className="table-submission relative w-full rounded-sm">
-                <thead className="bg-[#FAFAFA] text-[#111111]/70">
-                  <tr>
+                <TableHeaderCMS>
+                  <TableRowCMS>
                     <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                     <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
                     <TableHeadCMS>{`Submitted at`.toUpperCase()}</TableHeadCMS>
@@ -175,9 +178,9 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                     {isAllowedDetailsSubmission && (
                       <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
                     )}
-                  </tr>
-                </thead>
-                <tbody>
+                  </TableRowCMS>
+                </TableHeaderCMS>
+                <TableBodyCMS>
                   {submissionListAttributes
                     ?.sort(
                       (a, b) =>
@@ -185,10 +188,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                         dayjs(b.created_at).valueOf()
                     )
                     .map((post, index) => (
-                      <tr
-                        className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                        key={index}
-                      >
+                      <TableRowCMS key={index}>
                         <TableCellCMS>{index + 1}</TableCellCMS>
                         <TableCellCMS>
                           <div className="user-id flex items-center gap-4 w-full shrink-0 max-w-[30vw] lg:max-w-[33vw] 2xl:max-w-[49vw]">
@@ -254,9 +254,9 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
                             </AppButton>
                           </TableCellCMS>
                         )}
-                      </tr>
+                      </TableRowCMS>
                     ))}
-                </tbody>
+                </TableBodyCMS>
               </table>
             </div>
           </div>

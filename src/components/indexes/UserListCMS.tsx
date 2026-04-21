@@ -22,16 +22,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import TableCellCMS from "../elements/TableCellCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
 import InputCMS from "../fields/InputCMS";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
+import PageContainerCMS from "../pages/PageContainerCMS";
+import TableBodyCMS from "../tables/TableBodyCMS";
+import TableCellCMS from "../tables/TableCellCMS";
+import TableHeadCMS from "../tables/TableHeadCMS";
+import TableHeaderCMS from "../tables/TableHeaderCMS";
+import TableRowCMS from "../tables/TableRowCMS";
 
 interface UserListCMSProps {
   sessionToken: string;
@@ -186,20 +189,20 @@ export default function UserListCMS(props: UserListCMSProps) {
 
         {/* Loading & Error State */}
         {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
             <Loader2 className="animate-spin size-5 " />
           </div>
         )}
         {isError && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
             No Data
           </div>
         )}
 
         {userList && !isLoading && !isError && (
           <table className="table-users relative w-full rounded-sm">
-            <thead className="bg-[#FAFAFA] text-[#111111]/60">
-              <tr>
+            <TableHeaderCMS>
+              <TableRowCMS>
                 <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`User`.toUpperCase()}</TableHeadCMS>
                 <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
@@ -208,14 +211,11 @@ export default function UserListCMS(props: UserListCMSProps) {
                 {isAllowedMutateUser && (
                   <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
                 )}
-              </tr>
-            </thead>
-            <tbody>
+              </TableRowCMS>
+            </TableHeaderCMS>
+            <TableBodyCMS>
               {userList?.map((post, index) => (
-                <tr
-                  className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                  key={index}
-                >
+                <TableRowCMS key={index}>
                   <TableCellCMS>
                     {(currentPage - 1) * pageSize + (index + 1)}
                   </TableCellCMS>
@@ -239,7 +239,7 @@ export default function UserListCMS(props: UserListCMSProps) {
                             {post.full_name}
                           </h2>
                         </Link>
-                        <p className="user-email flex items-center gap-2 text-alternative font-bodycopy text-sm">
+                        <p className="user-email flex items-center gap-2 text-emphasis font-bodycopy text-sm">
                           {post.email}
                         </p>
                       </div>
@@ -309,13 +309,13 @@ export default function UserListCMS(props: UserListCMSProps) {
                       </div>
                     </TableCellCMS>
                   )}
-                </tr>
+                </TableRowCMS>
               ))}
-            </tbody>
+            </TableBodyCMS>
           </table>
         )}
         {userList?.length === 0 && (
-          <p className="empty-state mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+          <p className="empty-state mt-2 font-bodycopy text-center text-emphasis">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
         )}
         {!isLoading && !isError && (
           <div className="pagination flex flex-col w-full items-center gap-3">
@@ -323,7 +323,7 @@ export default function UserListCMS(props: UserListCMSProps) {
               currentPage={currentPage}
               totalPages={data?.metapaging.total_page ?? 1}
             />
-            <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
+            <p className="text-sm text-emphasis text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} users`}</p>
           </div>
         )}
       </div>

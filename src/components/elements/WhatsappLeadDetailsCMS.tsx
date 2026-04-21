@@ -110,9 +110,6 @@ export default function WhatsappLeadDetailsCMS(
         {leadDetails && !isLoading && !isError && (
           <div className="lead-informations flex flex-col w-full gap-4 p-3 py-5 overflow-y-auto">
             <div className="tool flex w-full items-center justify-end gap-2">
-              {/* <AppButton variant="light" size="icon">
-                <UserRoundPlus className="size-4.5" />
-              </AppButton> */}
               <AppButton
                 variant="light"
                 size="icon"
@@ -175,8 +172,9 @@ export default function WhatsappLeadDetailsCMS(
                   <div className="flex w-full">
                     {leadDetails.handler_id ? (
                       <div className="input flex w-fit items-center gap-2 bg-white py-1 px-2 rounded-full border border-outline">
-                        <div className="size-5 rounded-full overflow-hidden">
+                        <div className="size-5 rounded-full shrink-0 overflow-hidden">
                           <Image
+                            className="object-cover w-full h-full"
                             src={
                               leadDetails.handler?.avatar ||
                               "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
@@ -190,6 +188,7 @@ export default function WhatsappLeadDetailsCMS(
                           {leadDetails.handler?.full_name}
                         </p>
                         <AppButton
+                          className="shrink-0"
                           variant="destructiveSoft"
                           size="smallIconRounded"
                           onClick={handleUnassigned}

@@ -12,12 +12,12 @@ export default function ScorecardItemCMS({
   scorecardBackground,
 }: ScorecardItemCMSProps) {
   return (
-    <div className="scorecard-container flex flex-col bg-white border border-outline p-3 rounded-md">
+    <div className="scorecard-container flex flex-col bg-white border p-3 rounded-md">
       <div className="flex items-center gap-1.5">
         <div
           className={`scorecard-icon flex size-2.5 justify-center items-center rounded-full ${scorecardBackground}`}
         />
-        <h3 className="scorecard-name font-bodycopy font-medium text-sm text-[#333333]">
+        <h3 className="scorecard-name font-bodycopy font-medium text-sm text-emphasis">
           {scorecardName}
         </h3>
       </div>

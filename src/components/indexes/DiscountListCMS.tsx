@@ -18,8 +18,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import TableCellCMS from "../elements/TableCellCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
 import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
 import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
@@ -27,6 +25,11 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import TableBodyCMS from "../tables/TableBodyCMS";
+import TableCellCMS from "../tables/TableCellCMS";
+import TableHeadCMS from "../tables/TableHeadCMS";
+import TableHeaderCMS from "../tables/TableHeaderCMS";
+import TableRowCMS from "../tables/TableRowCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -158,21 +161,21 @@ export default function DiscountListCMS({
 
           {/* Conditional Rendering */}
           {isLoading && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
               <Loader2 className="animate-spin size-5 " />
             </div>
           )}
           {isError && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
               No Data
             </div>
           )}
 
           {/* TABLE */}
           {!isLoading && !isError && (
-            <table className="relative w-full rounded-sm">
-              <thead className="bg-[#FAFAFA] text-alternative/70">
-                <tr>
+            <table className="relative w-full">
+              <TableHeaderCMS>
+                <TableRowCMS>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Discount Code`.toUpperCase()}</TableHeadCMS>
@@ -181,14 +184,11 @@ export default function DiscountListCMS({
                   <TableHeadCMS>{`Start date`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Expired date`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Actions`.toUpperCase()}</TableHeadCMS>
-                </tr>
-              </thead>
-              <tbody>
+                </TableRowCMS>
+              </TableHeaderCMS>
+              <TableBodyCMS>
                 {discountList?.map((post, index) => (
-                  <tr
-                    className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                    key={index}
-                  >
+                  <TableRowCMS key={index}>
                     <TableCellCMS>{index + 1}</TableCellCMS>
                     <TableCellCMS>{post.name}</TableCellCMS>
                     <TableCellCMS>{post.code}</TableCellCMS>
@@ -239,9 +239,9 @@ export default function DiscountListCMS({
                         </AppDropdown>
                       </div>
                     </TableCellCMS>
-                  </tr>
+                  </TableRowCMS>
                 ))}
-              </tbody>
+              </TableBodyCMS>
             </table>
           )}
         </div>

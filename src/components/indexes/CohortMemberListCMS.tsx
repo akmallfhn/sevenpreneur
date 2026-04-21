@@ -10,8 +10,6 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import TableCellCMS from "../elements/TableCellCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
 import AddCohortMemberFormCMS from "../forms/AddCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
@@ -19,6 +17,11 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import TableBodyCMS from "../tables/TableBodyCMS";
+import TableCellCMS from "../tables/TableCellCMS";
+import TableHeadCMS from "../tables/TableHeadCMS";
+import TableHeaderCMS from "../tables/TableHeaderCMS";
+import TableRowCMS from "../tables/TableRowCMS";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 dayjs.extend(localizedFormat);
@@ -135,12 +138,12 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
 
           {/* Loading & Error State */}
           {isLoading && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
               <Loader2 className="animate-spin size-5 " />
             </div>
           )}
           {isError && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
               No Data
             </div>
           )}
@@ -148,22 +151,19 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
           {cohortMemberList && !isLoading && !isError && (
             <div className="submission-list flex flex-col gap-2">
               <table className="table-submission relative w-full rounded-sm">
-                <thead className="bg-[#FAFAFA] text-[#111111]/70">
-                  <tr>
+                <TableHeaderCMS>
+                  <TableRowCMS>
                     <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                     <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
                     <TableHeadCMS>{`Roles`.toUpperCase()}</TableHeadCMS>
                     <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
-                  </tr>
-                </thead>
-                <tbody>
+                  </TableRowCMS>
+                </TableHeaderCMS>
+                <TableBodyCMS>
                   {cohortMemberList
                     ?.sort((a, b) => a.role_id - b.role_id)
                     .map((post, index) => (
-                      <tr
-                        className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                        key={index}
-                      >
+                      <TableRowCMS key={index}>
                         <TableCellCMS>{index + 1}</TableCellCMS>
                         <TableCellCMS>
                           <div className="user-id flex items-center gap-4 w-full">
@@ -206,9 +206,9 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
                             Revoke Access
                           </AppButton>
                         </TableCellCMS>
-                      </tr>
+                      </TableRowCMS>
                     ))}
-                </tbody>
+                </TableBodyCMS>
               </table>
             </div>
           )}

@@ -18,13 +18,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import TableCellCMS from "../elements/TableCellCMS";
-import TableHeadCMS from "../elements/TableHeadCMS";
 import InputCMS from "../fields/InputCMS";
-import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
+import PageContainerCMS from "../pages/PageContainerCMS";
+import TableBodyCMS from "../tables/TableBodyCMS";
+import TableCellCMS from "../tables/TableCellCMS";
+import TableHeadCMS from "../tables/TableHeadCMS";
+import TableHeaderCMS from "../tables/TableHeaderCMS";
+import TableRowCMS from "../tables/TableRowCMS";
 
 interface ArticleListCMSProps {
   sessionToken: string;
@@ -117,32 +120,29 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
 
           {/* Loading & Error State */}
           {isLoading && (
-            <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+            <div className="flex w-full h-full py-10 justify-center text-emphasis font-bodycopy font-medium">
               <Loader2 className="animate-spin size-5 " />
             </div>
           )}
           {isError && (
-            <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
+            <div className="flex w-full h-full py-10 justify-center text-emphasis font-bodycopy font-medium">
               No Data
             </div>
           )}
 
           {!isLoading && !isError && (
             <table className="relative w-full rounded-sm">
-              <thead className="bg-[#FAFAFA] text-alternative/70">
-                <tr>
+              <TableHeaderCMS>
+                <TableRowCMS>
                   <TableHeadCMS>{`Image`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Metadata`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Person`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
-                </tr>
-              </thead>
-              <tbody>
+                </TableRowCMS>
+              </TableHeaderCMS>
+              <TableBodyCMS>
                 {articleList?.map((post) => (
-                  <tr
-                    className="border-b border-[#F3F3F3] hover:bg-muted/50 transition-colors"
-                    key={post.id}
-                  >
+                  <TableRowCMS key={post.id}>
                     <TableCellCMS>
                       <div className="flex flex-col items-center max-w-44 gap-2">
                         <div className="image flex aspect-video rounded-sm overflow-hidden">
@@ -185,7 +185,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                             {post.category.name}
                           </div>
                           <div
-                            className={`article-id flex rounded-full items-center text-xs py-[2px] px-[10px] text-[#333333] border border-[#D8D8D8] font-bodycopy font-medium`}
+                            className={`article-id flex rounded-full items-center text-xs py-[2px] px-[10px] text-emphasis border border-[#D8D8D8] font-bodycopy font-medium`}
                             style={{
                               backgroundImage: "#FAFAFA",
                             }}
@@ -194,10 +194,10 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                           </div>
                         </div>
                         <div className="flex flex-col">
-                          <p className="article-keywords font-bodycopy font-[440] text-[#686868] text-sm line-clamp-1">
+                          <p className="article-keywords font-bodycopy font-[440] text-emphasis text-sm line-clamp-1">
                             Keywords: {post.keywords}
                           </p>
-                          <p className="article-keywords font-bodycopy font-[440] text-[#686868] text-sm line-clamp-1">
+                          <p className="article-keywords font-bodycopy font-[440] text-emphasis text-sm line-clamp-1">
                             Published at{" "}
                             {dayjs(post.published_at).format(
                               "dddd, D MMM YYYY - HH:mm"
@@ -278,13 +278,13 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                         </Link>
                       </div>
                     </TableCellCMS>
-                  </tr>
+                  </TableRowCMS>
                 ))}
-              </tbody>
+              </TableBodyCMS>
             </table>
           )}
           {articleList?.length === 0 && (
-            <p className="empty-state mt-2 font-bodycopy text-center text-alternative">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+            <p className="empty-state mt-2 font-bodycopy text-center text-emphasis">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
           )}
           {!isLoading && !isError && (
             <div className="pagination flex flex-col w-full items-center gap-3">
@@ -292,7 +292,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                 currentPage={currentPage}
                 totalPages={data?.metapaging.total_page ?? 1}
               />
-              <p className="text-sm text-alternative text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} articles`}</p>
+              <p className="text-sm text-emphasis text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} articles`}</p>
             </div>
           )}
         </div>
