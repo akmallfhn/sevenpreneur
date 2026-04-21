@@ -42,20 +42,33 @@ export const readWA = {
       };
     }),
 
-  alert: administratorProcedure
-    .input(objectHasOnlyID())
-    .query(async (opts) => {
-      const waAlert = await opts.ctx.prisma.wAAlert.findFirst({
-        where: { id: opts.input.id },
-      });
-      if (!waAlert) {
-        throw readFailedNotFound("alert");
-      }
+  asset: administratorProcedure.input(objectHasOnlyID()).query(async (opts) => {
+    const waAsset = await opts.ctx.prisma.wAAsset.findFirst({
+      where: { id: opts.input.id },
+    });
+    if (!waAsset) {
+      throw readFailedNotFound("asset");
+    }
 
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        alert: waAlert,
-      };
-    }),
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      asset: waAsset,
+    };
+  }),
+
+  alert: administratorProcedure.input(objectHasOnlyID()).query(async (opts) => {
+    const waAlert = await opts.ctx.prisma.wAAlert.findFirst({
+      where: { id: opts.input.id },
+    });
+    if (!waAlert) {
+      throw readFailedNotFound("alert");
+    }
+
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      alert: waAlert,
+    };
+  }),
 };

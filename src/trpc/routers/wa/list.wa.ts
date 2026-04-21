@@ -10,6 +10,7 @@ import {
 } from "@/trpc/utils/validation";
 import {
   Prisma,
+  WAAssetType,
   WACDirection,
   WACStatus,
   WACType,
@@ -176,6 +177,37 @@ ORDER BY last_message_at DESC`;
       });
 
       const returnedList = convertToWhatsAppChatWithAttachment(waChatsList);
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: returnedList,
+      };
+    }),
+
+  assets: administratorProcedure
+    .input(
+      z.object({
+        type: z.enum(WAAssetType).optional(),
+      })
+    )
+    .query(async (opts) => {
+      const waAssetsList = await opts.ctx.prisma.wAAsset.findMany({
+        where: {
+          type: opts.input.type,
+        },
+        orderBy: [{ url: "asc" }],
+      });
+
+      const returnedList = waAssetsList.map((entry) => {
+        const fileUrl = new URL(entry.url);
+        const segments = fileUrl.pathname.split("/").filter(Boolean);
+        const fileName = segments.length ? segments[segments.length - 1] : "";
+        return {
+          ...entry,
+          file_name: fileName,
+        };
+      });
 
       return {
         code: STATUS_OK,

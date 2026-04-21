@@ -643,10 +643,25 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | Procedure Name                   | Administrator (`0`) | Non-Administrator/Not Logged-In |
 | :------------------------------- | :-----------------: | :-----------------------------: |
 | `send.wa.chat`                   |         ✅          |               ❌                |
+| `send.wa.audio`                  |         ✅          |               ❌                |
+| `send.wa.document`               |         ✅          |               ❌                |
+| `send.wa.image`                  |         ✅          |               ❌                |
+| `send.wa.sticker`                |         ✅          |               ❌                |
+| `send.wa.video`                  |         ✅          |               ❌                |
+| `create.wa.asset`                |         ✅          |               ❌                |
+| `create.wa.alert`                |         ✅          |               ❌                |
 | `list.wa.conversations`          |         ✅          |               ❌                |
 | `list.wa.chats`                  |         ✅          |               ❌                |
+| `list.wa.assets`                 |         ✅          |               ❌                |
+| `list.wa.alerts`                 |         ✅          |               ❌                |
 | `read.wa.conversation`           |         ✅          |               ❌                |
+| `read.wa.asset`                  |         ✅          |               ❌                |
+| `read.wa.alert`                  |         ✅          |               ❌                |
 | `update.wa.conversation`         |         ✅          |               ❌                |
 | `update.wa.conversation_as_read` |         ✅          |               ❌                |
+| `update.wa.asset`                |         ✅          |               ❌                |
+| `update.wa.alert`                |         ✅          |               ❌                |
+| `delete.wa.asset`                |         ✅          |               ❌                |
+| `delete.wa.alert`                |         ✅          |               ❌                |
 
 **Scopes:** Only Administrators have access to all WhatsApp chats.
