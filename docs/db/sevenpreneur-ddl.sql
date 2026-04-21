@@ -155,6 +155,8 @@ CREATE TYPE wac_status AS ENUM (
   'failed'
 );
 
+-- Enumeration for the wa_alerts table (wa_alert_*)
+
 CREATE TYPE wa_alert_status AS ENUM (
   'scheduled',
   'sent',
