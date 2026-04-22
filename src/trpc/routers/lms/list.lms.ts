@@ -442,6 +442,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
         _count: { _all: true },
         where: {
           user_id: opts.ctx.user.id,
+          learning: { cohort_id: opts.input.cohort_id },
           OR: [{ check_in_at: { not: null } }, { check_out_at: { not: null } }],
         },
       });

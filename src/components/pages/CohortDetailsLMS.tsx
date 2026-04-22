@@ -7,8 +7,8 @@ import CohortDetailsTabsLMS, {
   UserList,
 } from "../tabs/CohortDetailsTabsLMS";
 import HeroCohortDetailsLMS from "../heroes/HeroCohortDetailsLMS";
-import AttendanceProgressBarLMS from "../elements/AttendanceProgressBarLMS";
-import NearestScheduleCardLMS from "../elements/NearestScheduleCardLMS";
+import AttendanceProgressBarLMS from "../cards/AttendanceProgressBarLMS";
+import NearestScheduleCardLMS from "../cards/NearestScheduleCardLMS";
 import { useEffect, useState } from "react";
 import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
 import Image from "next/image";

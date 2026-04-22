@@ -32,7 +32,7 @@ export default function FileItemLMS({ fileName, fileURL }: FileItemLMSProps) {
         <h3 className="file-name font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
           {fileName}
         </h3>
-        <p className="file-type font-bodycopy font-medium text-alternative text-sm">
+        <p className="file-type font-bodycopy font-medium text-emphasis text-sm">
           {fileType}
         </p>
       </div>

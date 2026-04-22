@@ -204,7 +204,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
             <div className="flex flex-col w-full bg-white p-4 gap-3 border rounded-xl">
               <div className="flex flex-col">
                 <h2 className="font-bold font-bodycopy">Submission</h2>
-                <p className="text-alternative text-sm font-medium font-bodycopy">
+                <p className="text-emphasis text-sm font-medium font-bodycopy">
                   Upload your finalized task file to complete your submission.
                   Once submitted, your document will be reviewed as part of the
                   assessment process.
@@ -330,12 +330,12 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
                       Sevenpreneur Team
                     </p>
                   </div>
-                  <p className="comment text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
+                  <p className="comment font-medium font-bodycopy text-sm whitespace-pre-line">
                     {props.submissionComment}
                   </p>
                 </div>
               ) : (
-                <p className="text-[#333333]/90 font-medium font-bodycopy text-sm whitespace-pre-line">
+                <p className="text-emphasis font-medium font-bodycopy text-sm whitespace-pre-line">
                   Feedback will show up here once it’s ready!
                 </p>
               )}

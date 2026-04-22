@@ -40,7 +40,7 @@ export default function UserItemLMS({
             </span>
           )}
         </div>
-        <p className="user-email text-sm text-alternative font-medium">
+        <p className="user-email text-sm text-emphasis font-medium">
           {userEmail}
         </p>
       </div>

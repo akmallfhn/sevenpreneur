@@ -5,7 +5,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import LearningSessionItemLMS from "../items/LearningSessionItemLMS";
 import ProjectItemLMS from "../items/ProjectItemLMS";
 import UserItemLMS from "../items/UserItemLMS";
-import EmptyItemLMS from "../states/EmptyItemLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
 export interface LearningSessionEducator {
   full_name: string;
@@ -83,7 +83,7 @@ export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
             <div
               className={`tab-item w-full p-3 text-center text-sm font-bodycopy transform transition hover:cursor-pointer ${
                 activeTab === post.id
-                  ? "bg-gradient-to-t from-0% from-primary-light/50 to-60% to-primary-light/0 text-primary font-bold"
+                  ? "bg-gradient-to-t from-0% from-primary-soft/50 to-60% to-primary-soft/0 text-primary font-bold"
                   : "bg-white font-medium"
               }`}
               onClick={() => setActiveTab(post.id)}
@@ -130,10 +130,7 @@ export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
             </>
           ) : (
             <div className="flex w-full h-full items-center p-4">
-              <EmptyItemLMS
-                stateTitle="No Sessions Available"
-                stateDescription="There are no learning sessions scheduled right now. Please check back later or contact your program coordinator for updates."
-              />
+              <EmptyComponentsLMS variant="LEARNINGS" />
             </div>
           )}
         </div>
@@ -153,10 +150,7 @@ export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full h-full items-center justify-center p-4">
-              <EmptyItemLMS
-                stateTitle="Modules Coming Soon"
-                stateDescription="We’re working on something great! New modules will be ready soon"
-              />
+              <EmptyComponentsLMS variant="MODULES" />
             </div>
           )}
         </div>
@@ -178,10 +172,7 @@ export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full h-full items-center p-4">
-              <EmptyItemLMS
-                stateTitle="No Assignments Yet"
-                stateDescription="You don’t have any tasks or assignments right now. New tasks will appear here once they’re ready!"
-              />
+              <EmptyComponentsLMS variant="PROJECTS" />
             </div>
           )}
         </div>
@@ -207,10 +198,7 @@ export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full h-full items-center">
-              <EmptyItemLMS
-                stateTitle="No Members Have Joined So Far."
-                stateDescription="Looks like no one’s joined this cohort just yet. Once members enroll, you’ll see them listed right here!"
-              />
+              <EmptyComponentsLMS variant="MEMBERS" />
             </div>
           )}
         </div>

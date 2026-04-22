@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import LearningSessionItemMobileLMS from "../items/LearningSessionItemMobileLMS";
-
 import HeaderMobileLMS from "../navigations/HeaderMobileLMS";
-import EmptyItemLMS from "../states/EmptyItemLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 import { LearningSessionList } from "../tabs/CohortDetailsTabsLMS";
 
 interface CohortDetailsMobileLMSProps {
@@ -63,10 +62,7 @@ export default function CohortDetailsMobileLMS(
             </>
           ) : (
             <div className="flex w-full h-full items-center">
-              <EmptyItemLMS
-                stateTitle="No Sessions Available"
-                stateDescription="There are no learning sessions scheduled right now. Please check back later or contact your program coordinator for updates."
-              />
+              <EmptyComponentsLMS variant="LEARNINGS" />
             </div>
           )}
         </div>

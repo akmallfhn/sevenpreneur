@@ -8,17 +8,16 @@ import { ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import CheckInAttendanceLMS from "../gateways/CheckInAttendanceLMS";
-import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
-import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
-import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
+import CheckInAttendanceLMS from "../gateways/CheckInAttendanceLMS";
+import CheckOutAttendanceLMS from "../gateways/CheckOutAttendanceLMS";
 import HeroLearningDetailsLMS from "../heroes/HeroLearningDetailsLMS";
 import FileItemLMS from "../items/FileItemLMS";
+import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
+import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
-import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
-import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
 
 export interface MaterialList {
@@ -233,7 +232,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   />
                 </div>
               )}
-              {!learningVideoKey && <EmptyRecordingLMS />}
+              {!learningVideoKey && <EmptyComponentsLMS variant="RECORDING" />}
             </div>
             <div className="learning-discussions flex flex-col gap-3 bg-white p-4 border rounded-lg">
               <h3 className="section-title font-bold font-bodycopy">
@@ -277,7 +276,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                     ))}
                   </div>
                 ) : (
-                  <EmptyDiscussionLMS />
+                  <EmptyComponentsLMS variant="DISCUSSIONS" />
                 )}
               </div>
             </div>
@@ -301,7 +300,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   <p className="text-[15px] text-black font-semibold line-clamp-1">
                     {props.learningEducatorName}
                   </p>
-                  <p className="educator-role text-[13px] text-[#111111]/70 font-medium">
+                  <p className="educator-role text-[13px] text-emphasis font-medium">
                     BUSINESS COACH
                   </p>
                 </div>
@@ -322,10 +321,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   ))}
                 </div>
               ) : (
-                <p className="text-alternative text-[15px] font-bodycopy font-medium">
-                  The session materials are being prepared and will be available
-                  soon.
-                </p>
+                <EmptyComponentsLMS variant="MATERIALS" />
               )}
             </div>
             <CheckInAttendanceLMS
@@ -378,7 +374,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                       />
                     </div>
                   </div>
-                  <ChevronRight className="size-6 text-alternative" />
+                  <ChevronRight className="size-6 text-emphasis" />
                 </a>
               )}
           </aside>

@@ -3,7 +3,7 @@ import { StatusType } from "@/lib/app-types";
 import { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import TemplateItemCardLMS from "../items/TemplateItemCardLMS";
-import EmptyListLMS from "../states/EmptyListLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
 export interface TemplateList {
   id: number;
@@ -69,11 +69,7 @@ export default function LibraryTabsLMS(props: LibraryTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full min-h-96 items-center p-4">
-              <EmptyListLMS
-                stateTitle="Business Templates Locked"
-                stateDescription="Looks like you’re not part of any Bootcamp Programs. Join one to unlock all business templates!"
-                stateAction="Explore our Program"
-              />
+              <EmptyComponentsLMS variant="TEMPLATES" />
             </div>
           )}
         </div>

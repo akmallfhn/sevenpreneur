@@ -8,7 +8,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import DisallowedMobile from "../states/DisallowedMobile";
-import EmptyListLMS from "../states/EmptyListLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
 export interface AIList {
   id: number;
@@ -76,11 +76,7 @@ export default function AIListLMS({
               ))}
           </div>
         ) : (
-          <EmptyListLMS
-            stateTitle="AI Tools Locked"
-            stateDescription="Looks like you’re not part of any Bootcamp Programs. Join one to unlock all AI Tools!"
-            stateAction="Explore our Program"
-          />
+          <EmptyComponentsLMS variant="AI_TOOLS" />
         )}
       </div>
       <div className="remarks-open-ai flex items-center pt-5 gap-2 opacity-60">

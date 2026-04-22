@@ -35,7 +35,7 @@ export default function ProjectItemLMS(props: ProjectItemLMSProps) {
             {/* <span className="w-fit text-xs text-[#42359B] bg-[#E0DAFF] font-bodycopy font-semibold px-2 py-0.5 rounded-full">
               SUBMITTED
             </span> */}
-            <p className="project-deadline text-sm text-alternative font-medium">
+            <p className="project-deadline text-sm text-emphasis font-medium">
               Must be submitted before{" "}
               <span className="font-semibold text-danger-foreground">
                 {dayjs(props.projectDeadline).format("DD MMM YYYY [at] HH:mm")}{" "}
@@ -45,7 +45,7 @@ export default function ProjectItemLMS(props: ProjectItemLMSProps) {
           </div>
         </div>
       </div>
-      <ChevronRight className="size-7 text-alternative" />
+      <ChevronRight className="size-7 text-emphasis" />
     </Link>
   );
 }

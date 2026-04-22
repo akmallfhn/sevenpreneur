@@ -42,21 +42,21 @@ export default function LearningSessionItemLMS(
             {dayjs(props.learningSessionDate).format("D")}
           </p>
         </div>
-        <div className="divider w-[1px] self-stretch bg-outline" />
-        <div className="session-schedule flex flex-col w-30 text-sm gap-1 font-medium text-[#333333] shrink-0">
+        <div className="divider w-[1px] self-stretch bg-border" />
+        <div className="session-schedule flex flex-col w-30 text-sm gap-1 font-medium text-emphasis shrink-0">
           <div className="session-time flex items-center gap-2">
-            <FontAwesomeIcon icon={faClock} className="text-alternative" />
+            <FontAwesomeIcon icon={faClock} className="text-emphasis" />
             <p>{dayjs(props.learningSessionDate).format("HH:mm")}</p>
           </div>
           <div className="session-place flex items-center gap-2">
             <FontAwesomeIcon
               icon={faLocationDot}
-              className="text-alternative shrink-0"
+              className="text-emphasis shrink-0"
             />
             <p className="line-clamp-1">{learningLocation}</p>
           </div>
         </div>
-        <div className="divider w-[1px] self-stretch bg-outline" />
+        <div className="divider w-[1px] self-stretch bg-border" />
         <div className="session-metadata flex items-center gap-3">
           <div className="session-educator-avatar aspect-square size-9 shrink-0 rounded-full overflow-hidden">
             <Image
@@ -71,13 +71,13 @@ export default function LearningSessionItemLMS(
             <h2 className="session-title text-[15px] font-bold line-clamp-1">
               {props.learningSessionName}
             </h2>
-            <p className="session-educator font-medium text-sm text-[#333333]">
+            <p className="session-educator font-medium text-sm text-emphasis">
               {props.learningSessionEducatorName}
             </p>
           </div>
         </div>
       </div>
-      <ChevronRight className="size-7 text-alternative" />
+      <ChevronRight className="size-7 text-emphasis" />
     </Link>
   );
 }

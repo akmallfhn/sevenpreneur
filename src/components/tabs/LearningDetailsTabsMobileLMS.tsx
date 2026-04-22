@@ -19,8 +19,7 @@ import {
   DiscussionStarterList,
   MaterialList,
 } from "../pages/LearningDetailsLMS";
-import EmptyDiscussionLMS from "../states/EmptyDiscussionLMS";
-import EmptyRecordingLMS from "../states/EmptyRecordingLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
 export interface LearningDetailsTabsMobileLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
@@ -290,7 +289,7 @@ export default function LearningDetailsTabsMobileLMS(
                   ))}
                 </div>
               ) : (
-                <EmptyDiscussionLMS />
+                <EmptyComponentsLMS variant="DISCUSSIONS" />
               )}
             </div>
           </div>
@@ -322,7 +321,7 @@ export default function LearningDetailsTabsMobileLMS(
                 />
               </div>
             )}
-            {!learningVideoKey && <EmptyRecordingLMS />}
+            {!learningVideoKey && <EmptyComponentsLMS variant="RECORDING" />}
           </div>
           <div className="learning-materials relative flex flex-col gap-3 bg-white p-5">
             <h2 className="section-title font-bodycopy font-bold">Materials</h2>

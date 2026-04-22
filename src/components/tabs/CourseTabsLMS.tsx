@@ -4,7 +4,7 @@ import { CirclePlay, Presentation } from "lucide-react";
 import { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import CourseItemLMS from "../items/CourseItemLMS";
-import EmptyListLMS from "../states/EmptyListLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
 export interface CourseList {
   id: number;
@@ -88,12 +88,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full min-h-96 items-center p-4">
-              <EmptyListLMS
-                stateTitle="No Courses Purchased"
-                stateDescription="Looks like you haven’t bought any courses. Explore our collections
-                               and start learning something new today!"
-                stateAction="Discover"
-              />
+              <EmptyComponentsLMS variant="COURSES" />
             </div>
           )}
         </div>
@@ -120,12 +115,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full min-h-96 items-center justify-center p-5">
-              <EmptyListLMS
-                stateTitle="No Program Purchased"
-                stateDescription="Looks like you haven’t bought any programs. Explore our collections
-                               and start learning something new today!"
-                stateAction="Explore our Program"
-              />
+              <EmptyComponentsLMS variant="COHORTS" />
             </div>
           )}
         </div>
@@ -152,12 +142,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
             </div>
           ) : (
             <div className="flex w-full min-h-96 items-center p-5">
-              <EmptyListLMS
-                stateTitle="No Video Series Purchased"
-                stateDescription="Looks like you haven’t bought any learning series. Explore our collections
-                      and start learning something new today!"
-                stateAction="Explore Series"
-              />
+              <EmptyComponentsLMS variant="PLAYLISTS" />
             </div>
           )}
         </div>

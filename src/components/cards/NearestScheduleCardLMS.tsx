@@ -38,16 +38,16 @@ export default function NearestScheduleCardLMS({
   const nearestSchedule = upcomingSchedule[0] || null;
 
   return (
-    <div className="nearest-schedule-box relative flex flex-col w-full bg-coal-black p-4 gap-6 border rounded-lg">
+    <div className="nearest-schedule-box relative flex flex-col w-full bg-sevenpreneur-coal p-4 gap-6 border rounded-lg">
       {nearestSchedule ? (
         <div className="nearest-schedule-container flex flex-col gap-2">
-          <p className="section-title font-bodycopy text-white/50 text-[15px]">
+          <p className="section-title font-bodycopy text-emphasis text-[15px]">
             Next learning topic
           </p>
-          <h2 className="learning-name font-bodycopy text-xl font-bold text-white">
+          <h2 className="learning-name font-bodycopy text-xl font-bold text-sevenpreneur-white">
             {nearestSchedule.name}
           </h2>
-          <div className="learning-date flex gap-2 items-center text-white/70">
+          <div className="learning-date flex gap-2 items-center text-emphasis">
             <div className="border border-white/70 p-1 rounded-sm">
               <CalendarFold className="size-4" />
             </div>
@@ -60,13 +60,13 @@ export default function NearestScheduleCardLMS({
         </div>
       ) : (
         <div className="nearest-schedule-container flex flex-col gap-1">
-          <p className="section-title font-bodycopy text-alternative text-[15px]">
+          <p className="section-title font-bodycopy text-emphasis text-[15px]">
             Congratulations🎉
           </p>
           <h2 className="learning-name font-bodycopy text-lg font-bold text-white">
             Program Fully Completed
           </h2>
-          <p className="flex font-bodycopy font-medium text-[15px] text-alternative">
+          <p className="flex font-bodycopy font-medium text-[15px] text-emphasis">
             Your Commitment Made It Happen.
           </p>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import ProductItemMobileLMS from "../items/ProductItemMobileLMS";
-import EmptyListLMS from "../states/EmptyListLMS";
+import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 import { CourseList } from "../tabs/CourseTabsLMS";
 
 interface HomeMobileLMSProps extends AvatarBadgeLMSProps {
@@ -40,12 +40,7 @@ export default function HomeMobileLMS(props: HomeMobileLMSProps) {
             ))}
           </div>
           {activeCourse.length === 0 && (
-            <EmptyListLMS
-              stateTitle="No Program Purchased Yet"
-              stateDescription="Looks like you haven’t bought any products. Explore our collections
-                            and start learning something new today!"
-              stateAction="Explore our Program"
-            />
+            <EmptyComponentsLMS variant="COURSES" />
           )}
         </div>
       </div>
