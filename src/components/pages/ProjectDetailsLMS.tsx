@@ -21,7 +21,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
-import DisallowedMobile from "../states/DisallowedMobile";
+import AppPageState from "../states/AppPageState";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -163,7 +163,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
 
   // Render Mobile
   if (isMobile) {
-    return <DisallowedMobile />;
+    return <AppPageState variant="ONLY_MOBILE" />;
   }
 
   return (

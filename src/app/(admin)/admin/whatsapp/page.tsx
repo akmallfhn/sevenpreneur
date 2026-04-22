@@ -1,6 +1,6 @@
 import WhatsappConvsCMS from "@/components/indexes/WhatsappConvsCMS";
 import PageContainerCMS from "@/components/pages/PageContainerCMS";
-import ForbiddenComponent from "@/components/states/403Forbidden";
+import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
 
@@ -18,7 +18,7 @@ export default async function WhatsappPageCMS() {
   if (!allowedRolesWhatsappChats.includes(userSession.user.role_id)) {
     return (
       <PageContainerCMS>
-        <ForbiddenComponent />
+        <AppPageState variant="FORBIDDEN" />
       </PageContainerCMS>
     );
   }

@@ -1,8 +1,7 @@
-import { SidebarProviderCMS } from "@/contexts/SidebarContextCMS";
 import "@/app/globals.css";
 import SidebarCMS from "@/components/navigations/SidebarCMS";
-import ForbiddenComponent from "@/components/states/403Forbidden";
-import DisallowedMobile from "@/components/states/DisallowedMobile";
+import AppPageState from "@/components/states/AppPageState";
+import { SidebarProviderCMS } from "@/contexts/SidebarContextCMS";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -47,7 +46,7 @@ export default async function AdminLayout(
   const checkUser = (await trpc.auth.checkSession()).user;
 
   if (!checkUser || checkUser.role_id === 3) {
-    return <ForbiddenComponent />;
+    return <AppPageState variant="FORBIDDEN" />;
   }
 
   return (
@@ -59,7 +58,7 @@ export default async function AdminLayout(
             sessionUserRole={checkUser.role_id}
           />
           {props.children}
-          <DisallowedMobile />
+          <AppPageState variant="ONLY_MOBILE" />
           <Toaster richColors position="top-center" />
         </div>
       </SidebarProviderCMS>

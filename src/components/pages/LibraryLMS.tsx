@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
-import DisallowedMobile from "../states/DisallowedMobile";
+import AppPageState from "../states/AppPageState";
 import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
 
 interface LibraryLMSProps extends AvatarBadgeLMSProps {
@@ -28,7 +28,7 @@ export default function LibraryLMS(props: LibraryLMSProps) {
   }, []);
 
   if (isMobile) {
-    return <DisallowedMobile />;
+    return <AppPageState variant="ONLY_MOBILE" />;
   }
 
   return (

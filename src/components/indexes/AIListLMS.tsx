@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
-import DisallowedMobile from "../states/DisallowedMobile";
+import AppPageState from "../states/AppPageState";
 import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
 export interface AIList {
@@ -48,7 +48,7 @@ export default function AIListLMS({
 
   // Render Mobile
   if (isMobile) {
-    return <DisallowedMobile />;
+    return <AppPageState variant="ONLY_MOBILE" />;
   }
 
   return (

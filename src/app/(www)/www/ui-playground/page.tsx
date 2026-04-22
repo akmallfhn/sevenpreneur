@@ -1,9 +1,9 @@
 import AppButton from "@/components/buttons/AppButton";
-import NotFoundComponent from "@/components/states/404NotFound";
+import AppPageState from "@/components/states/AppPageState";
 
 export default function Page() {
   if (process.env.DOMAIN_MODE === "production") {
-    return <NotFoundComponent />;
+    return <AppPageState variant="NOT_FOUND" />;
   }
 
   return (

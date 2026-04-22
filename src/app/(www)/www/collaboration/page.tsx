@@ -1,5 +1,5 @@
-import UnderDevelopment from "@/components/states/UnderDevelopment";
+import AppPageState from "@/components/states/AppPageState";
 
 export default function CollaborationPage() {
-  return <UnderDevelopment />;
+  return <AppPageState variant="DEVELOPMENT" />;
 }
