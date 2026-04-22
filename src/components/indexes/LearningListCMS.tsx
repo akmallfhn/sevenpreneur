@@ -1,11 +1,13 @@
 "use client";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { Loader2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import CreateLearningFormCMS from "../forms/CreateLearningFormCMS";
 import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface LearningListCMSProps {
   sessionToken: string;
@@ -56,20 +58,12 @@ export default function LearningListCMS({
             </AppButton>
           )}
         </div>
-        {isLoading && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
 
-        {!isLoading && !isError && (
+        {!isLoading && !isError && learningListData && (
           <>
-            {(learningListData?.list ?? []).length > 0 ? (
+            {(learningListData.list ?? []).length > 0 ? (
               <div className="learning-list flex flex-col gap-3">
                 {learningListData?.list
                   .sort((a, b) =>

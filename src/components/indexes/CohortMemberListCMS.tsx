@@ -5,7 +5,7 @@ import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { ChevronRight, Loader2, UserPlus, UserRoundMinus } from "lucide-react";
+import { ChevronRight, UserPlus, UserRoundMinus } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -17,6 +17,8 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import TableBodyCMS from "../tables/TableBodyCMS";
 import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
@@ -137,16 +139,8 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
           </div>
 
           {/* Loading & Error State */}
-          {isLoading && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
-              <Loader2 className="animate-spin size-5 " />
-            </div>
-          )}
-          {isError && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
-              No Data
-            </div>
-          )}
+          {isLoading && <AppLoadingComponents />}
+          {isError && <AppErrorComponents />}
 
           {cohortMemberList && !isLoading && !isError && (
             <div className="submission-list flex flex-col gap-2">

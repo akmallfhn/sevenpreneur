@@ -8,7 +8,6 @@ import {
   Copy,
   ExternalLink,
   FilePenLine,
-  Loader2,
   PlusCircle,
   Search,
 } from "lucide-react";
@@ -23,6 +22,8 @@ import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import TableBodyCMS from "../tables/TableBodyCMS";
 import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
@@ -119,16 +120,8 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
           </div>
 
           {/* Loading & Error State */}
-          {isLoading && (
-            <div className="flex w-full h-full py-10 justify-center text-emphasis font-bodycopy font-medium">
-              <Loader2 className="animate-spin size-5 " />
-            </div>
-          )}
-          {isError && (
-            <div className="flex w-full h-full py-10 justify-center text-emphasis font-bodycopy font-medium">
-              No Data
-            </div>
-          )}
+          {isLoading && <AppLoadingComponents />}
+          {isError && <AppErrorComponents />}
 
           {!isLoading && !isError && (
             <table className="relative w-full rounded-sm">

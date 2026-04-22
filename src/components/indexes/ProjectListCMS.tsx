@@ -1,10 +1,12 @@
 "use client";
-import { Loader2, Plus } from "lucide-react";
-import AppButton from "../buttons/AppButton";
-import ProjectItemCMS from "../items/ProjectItemCMS";
 import { trpc } from "@/trpc/client";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import AppButton from "../buttons/AppButton";
 import CreateProjectFormCMS from "../forms/CreateProjectFormCMS";
+import ProjectItemCMS from "../items/ProjectItemCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface ProjectListCMSProps {
   sessionToken: string;
@@ -56,22 +58,14 @@ export default function ProjectListCMS(props: ProjectListCMSProps) {
           )}
         </div>
 
-        {isLoading && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
 
-        {!isLoading && !isError && (
+        {!isLoading && !isError && projectListData && (
           <>
-            {(projectListData?.list ?? []).length > 0 ? (
+            {(projectListData.list ?? []).length > 0 ? (
               <div className="project-list flex flex-col gap-2">
-                {projectListData?.list.map((post) => (
+                {projectListData.list.map((post) => (
                   <ProjectItemCMS
                     key={post.id}
                     sessionUserRole={props.sessionUserRole}

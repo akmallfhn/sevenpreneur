@@ -1,9 +1,11 @@
-import { Loader2, Plus } from "lucide-react";
-import AppButton from "../buttons/AppButton";
-import FileItemCMS from "../items/FileItemCMS";
 import { trpc } from "@/trpc/client";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import AppButton from "../buttons/AppButton";
 import CreateModuleFormCMS from "../forms/CreateModuleFormCMS";
+import FileItemCMS from "../items/FileItemCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface ModuleListCMSProps {
   sessionToken: string;
@@ -54,16 +56,8 @@ export default function ModuleListCMS({
           )}
         </div>
 
-        {isLoading && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <p className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </p>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
 
         {!isLoading && !isError && (
           <>
@@ -83,7 +77,7 @@ export default function ModuleListCMS({
                 ))}
               </div>
             ) : (
-              <p className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
+              <p className="flex w-full h-full items-center justify-center p-5 text-emphasis font-bodycopy font-medium">
                 No Data
               </p>
             )}

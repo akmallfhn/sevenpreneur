@@ -2,7 +2,7 @@
 import { LeadStatus } from "@/lib/app-types";
 import { supabase } from "@/lib/supabase";
 import { trpc } from "@/trpc/client";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
@@ -11,6 +11,8 @@ import WhatsappChatsCMS from "../messages/WhatsappChatsCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
 
 interface WhatsappConvsCMSProps {
@@ -109,17 +111,11 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
             <div className="column-title sticky inset-0 top-0 p-3 bg-white font-bodycopy font-bold border-b z-30">
               Chats
             </div>
+
             {/* Loading & Error State */}
-            {isLoadingConvs && (
-              <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-                <Loader2 className="animate-spin size-5 " />
-              </div>
-            )}
-            {isErrorConvs && (
-              <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-                No Data
-              </div>
-            )}
+            {isLoadingConvs && <AppLoadingComponents />}
+            {isErrorConvs && <AppErrorComponents />}
+
             {!isLoadingConvs && !isErrorConvs && (
               <div className="conv-list p-2 flex flex-col">
                 {convList?.list.map((post, index) => (

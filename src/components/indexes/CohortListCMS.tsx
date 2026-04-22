@@ -6,11 +6,13 @@ import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { ChevronRight, Loader2, PlusCircle } from "lucide-react";
+import { ChevronRight, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 dayjs.extend(isBetween);
 
@@ -60,16 +62,8 @@ export default function CohortListCMS({
             </div>
           </div>
 
-          {isLoading && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
-              <Loader2 className="animate-spin size-5 " />
-            </div>
-          )}
-          {isError && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
-              No Data
-            </div>
-          )}
+          {isLoading && <AppLoadingComponents />}
+          {isError && <AppErrorComponents />}
 
           {cohortListData && !isLoading && !isError && (
             <div className="index w-full flex flex-col gap-4 bg-section-background px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">

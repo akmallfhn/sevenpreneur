@@ -1,10 +1,12 @@
 "use client";
-import { Loader2, Plus } from "lucide-react";
-import AppButton from "../buttons/AppButton";
-import FileItemCMS from "../items/FileItemCMS";
 import { trpc } from "@/trpc/client";
+import { Plus } from "lucide-react";
 import React, { useState } from "react";
+import AppButton from "../buttons/AppButton";
 import CreateMaterialFormCMS from "../forms/CreateMaterialFormCMS";
+import FileItemCMS from "../items/FileItemCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface MaterialListCMSProps {
   sessionToken: string;
@@ -58,22 +60,14 @@ export default function MaterialListCMS({
           )}
         </div>
 
-        {isLoading && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
 
-        {!isLoading && !isError && (
+        {!isLoading && !isError && materialListData && (
           <>
-            {(materialListData?.list ?? []).length > 0 ? (
+            {(materialListData.list ?? []).length > 0 ? (
               <div className="material-list flex flex-col gap-2">
-                {materialListData?.list.map((post, index) => (
+                {materialListData.list.map((post, index) => (
                   <FileItemCMS
                     key={index}
                     sessionToken={sessionToken}

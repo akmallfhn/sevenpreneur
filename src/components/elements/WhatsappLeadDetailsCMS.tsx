@@ -16,6 +16,8 @@ import CreateWhatsappAlertFormCMS from "../forms/CreateWhatsappAlertFormCMS";
 import EditLeadStatusFormCMS from "../forms/EditLeadStatusFormCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
 import { Slider } from "../ui/slider";
+import AppLoadingComponents from "../states/AppLoadingComponents";
+import AppErrorComponents from "../states/AppErrorComponents";
 
 interface WhatsappLeadDetailsCMSProps {
   sessionToken: string;
@@ -97,16 +99,9 @@ export default function WhatsappLeadDetailsCMS(
   return (
     <React.Fragment>
       <div className="flex w-full h-full">
-        {isLoading && (
-          <div className="flex w-full h-full py-12 justify-center text-emphasis font-bodycopy font-medium">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full py-12 justify-center text-emphasis font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
+
         {leadDetails && !isLoading && !isError && (
           <div className="lead-informations flex flex-col w-full gap-4 p-3 py-5 overflow-y-auto">
             <div className="tool flex w-full items-center justify-end gap-2">

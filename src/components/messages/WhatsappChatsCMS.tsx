@@ -4,7 +4,6 @@ import { supabase } from "@/lib/supabase";
 import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { Loader2 } from "lucide-react";
 import React, {
   useEffect,
   useLayoutEffect,
@@ -13,6 +12,8 @@ import React, {
   useState,
 } from "react";
 import { toast } from "sonner";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import WhatsappChatItemCMS from "./WhatsappChatItemCMS";
 import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
 
@@ -154,16 +155,9 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       className="chats-panel relative hidden flex-col w-full h-full bg-linear-to-t from-0% from-[#DDE4F1] to-100% to-[#F2F2F2] overflow-y-auto lg:flex"
     >
       <div className="chats-conversation relative flex flex-col w-full p-3 min-h-full">
-        {isLoading && (
-          <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
+
         {!isLoading && !isError && sortedChatList.length > 0 && (
           <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
             {sortedChatList.map((post, index, sorted) => {

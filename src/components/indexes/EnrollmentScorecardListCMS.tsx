@@ -1,9 +1,11 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { Loader2, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
+import Link from "next/link";
 import AppButton from "../buttons/AppButton";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
-import Link from "next/link";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EnrollmentScorecardListCMSProps {
   sessionToken: string;
@@ -50,33 +52,29 @@ export default function EnrollmentScorecardListCMS(
           </Link>
         )}
       </div>
-      {isLoading && (
-        <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-          <Loader2 className="animate-spin size-5 " />
+
+      {isLoading && <AppLoadingComponents />}
+      {isError && <AppErrorComponents />}
+
+      {!isLoading && !isError && (
+        <div className="user-list flex flex-col w-full gap-2">
+          <ScorecardItemCMS
+            scorecardName="Enrolled Students"
+            scorecardBackground="bg-[#FF7830]"
+            scorecardValue={enrolledStudents?.length || "-"}
+          />
+          <ScorecardItemCMS
+            scorecardName="Enrolled Educators"
+            scorecardBackground="bg-success-foreground"
+            scorecardValue={enrolledEducators?.length || "-"}
+          />
+          <ScorecardItemCMS
+            scorecardName="Enrolled Class Manager"
+            scorecardBackground="bg-secondary"
+            scorecardValue={enrolledClassManager?.length || "-"}
+          />
         </div>
       )}
-      {isError && (
-        <div className="flex w-full h-full items-center py-5 justify-center text-alternative font-bodycopy font-medium">
-          No Data
-        </div>
-      )}
-      <div className="user-list flex flex-col w-full gap-2">
-        <ScorecardItemCMS
-          scorecardName="Enrolled Students"
-          scorecardBackground="bg-[#FF7830]"
-          scorecardValue={enrolledStudents?.length || "-"}
-        />
-        <ScorecardItemCMS
-          scorecardName="Enrolled Educators"
-          scorecardBackground="bg-success-foreground"
-          scorecardValue={enrolledEducators?.length || "-"}
-        />
-        <ScorecardItemCMS
-          scorecardName="Enrolled Class Manager"
-          scorecardBackground="bg-secondary"
-          scorecardValue={enrolledClassManager?.length || "-"}
-        />
-      </div>
     </div>
   );
 }

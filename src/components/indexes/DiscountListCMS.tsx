@@ -8,7 +8,6 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   ChevronRight,
   EllipsisVertical,
-  Loader2,
   PlusCircle,
   Settings2,
   Trash2,
@@ -25,6 +24,8 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import TableBodyCMS from "../tables/TableBodyCMS";
 import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
@@ -160,16 +161,8 @@ export default function DiscountListCMS({
           </div>
 
           {/* Conditional Rendering */}
-          {isLoading && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
-              <Loader2 className="animate-spin size-5 " />
-            </div>
-          )}
-          {isError && (
-            <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
-              No Data
-            </div>
-          )}
+          {isLoading && <AppLoadingComponents />}
+          {isError && <AppErrorComponents />}
 
           {/* TABLE */}
           {!isLoading && !isError && (
