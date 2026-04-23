@@ -2,6 +2,7 @@ import {
   STATUS_CREATED,
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
+  STATUS_NOT_FOUND,
 } from "@/lib/status_code";
 import {
   administratorProcedure,
@@ -13,7 +14,6 @@ import { createSlugFromTitle } from "@/trpc/utils/slug";
 import {
   numberIsID,
   stringIsTimestampTz,
-  stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
@@ -129,32 +129,40 @@ export const createLMS = {
   cohortMember: administratorProcedure
     .input(
       z.object({
-        user_id: stringIsUUID(),
+        email: stringNotBlank(),
         cohort_id: numberIsID(),
         cohort_price_id: numberIsID(),
       })
     )
     .mutation(async (opts) => {
-      const createdCohortMember = await opts.ctx.prisma.userCohort.create({
-        data: {
-          user_id: opts.input.user_id,
+      const theUser = await opts.ctx.prisma.user.findUnique({
+        select: { id: true },
+        where: { email: opts.input.email },
+      });
+      if (!theUser) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: `The user with the given email is not found.`,
+        });
+      }
+
+      const theCohortMember = await opts.ctx.prisma.userCohort.upsert({
+        create: {
+          user_id: theUser.id,
           cohort_id: opts.input.cohort_id,
           cohort_price_id: opts.input.cohort_price_id,
         },
-      });
-      const theCohortMember = await opts.ctx.prisma.userCohort.findFirst({
+        update: {
+          cohort_price_id: opts.input.cohort_price_id,
+        },
         where: {
-          user_id: createdCohortMember.user_id,
-          cohort_id: createdCohortMember.cohort_id,
-          cohort_price_id: createdCohortMember.cohort_price_id,
+          user_id_cohort_id: {
+            user_id: theUser.id,
+            cohort_id: opts.input.cohort_id,
+          },
         },
       });
-      if (!theCohortMember) {
-        throw new TRPCError({
-          code: STATUS_INTERNAL_SERVER_ERROR,
-          message: "Failed to create a new cohort member.",
-        });
-      }
+
       return {
         code: STATUS_CREATED,
         message: "Success",
