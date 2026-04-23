@@ -11,9 +11,18 @@ export type WhatsappMessageResponse = {
   }[];
 };
 
+type WhatsappMessageRequestType =
+  | "text"
+  | "audio"
+  | "document"
+  | "image"
+  | "sticker"
+  | "video"
+  | "template";
+
 const whatsappMessageRequest = (
   userPhoneNumber: string,
-  type: "text" | "audio" | "document" | "image" | "sticker" | "video",
+  type: WhatsappMessageRequestType,
   payload: object
 ): Promise<WhatsappMessageResponse> => {
   return new Promise((resolve, reject) => {
@@ -130,6 +139,29 @@ export const whatsappStickerMessageRequest = (
   return whatsappMessageRequest(userPhoneNumber, "sticker", {
     sticker: {
       link: stickerUrl,
+    },
+  });
+};
+
+// https://developers.facebook.com/documentation/business-messaging/whatsapp/templates/marketing-templates/custom-marketing-templates/?locale=en_US
+export const whatsappTemplateMessageRequest = (
+  userPhoneNumber: string,
+  templateName: string,
+  langCode: string,
+  parameters: { name: string; text: string }[]
+) => {
+  const bodyParamList = parameters.map((entry) => {
+    return {
+      type: "text",
+      parameter_name: entry.name,
+      text: entry.text,
+    };
+  });
+  return whatsappMessageRequest(userPhoneNumber, "template", {
+    template: {
+      name: templateName,
+      language: { code: langCode },
+      components: [{ type: "body", parameters: bodyParamList }],
     },
   });
 };

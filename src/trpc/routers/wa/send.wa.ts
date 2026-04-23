@@ -6,6 +6,7 @@ import {
   whatsappImageMessageRequest,
   WhatsappMessageResponse,
   whatsappStickerMessageRequest,
+  whatsappTemplateMessageRequest,
   whatsappTextMessageRequest,
   whatsappVideoMessageRequest,
 } from "@/lib/whatsapp";
@@ -14,6 +15,7 @@ import {
   WhatsappAttachmentDocument,
   WhatsappAttachmentImage,
   WhatsappAttachmentSticker,
+  WhatsappAttachmentTemplate,
   WhatsappAttachmentVideo,
 } from "@/lib/whatsapp-types";
 import { administratorProcedure } from "@/trpc/init";
@@ -271,6 +273,44 @@ export const sendWA = {
           url: "",
           storage_url: opts.input.video_url,
         } as WhatsappAttachmentVideo // Most values are set to blank
+      );
+    }),
+
+  template: administratorProcedure
+    .input(
+      z.object({
+        conv_id: stringIsNanoid(),
+        template_name: stringNotBlank(),
+        lang_code: stringNotBlank().default("id_ID"),
+        parameters: z.record(stringNotBlank(), stringNotBlank()).default({}),
+      })
+    )
+    .mutation(async (opts) => {
+      const paramEntries = Object.entries(opts.input.parameters);
+      const bodyParamList = paramEntries.map((entry) => {
+        return { name: entry[0], text: entry[1] };
+      });
+
+      const caller = (() => async (phone_number: string) => {
+        return await whatsappTemplateMessageRequest(
+          phone_number,
+          opts.input.template_name,
+          opts.input.lang_code,
+          bodyParamList
+        );
+      })();
+
+      return sendWhatsappMessage(
+        opts.ctx.prisma,
+        opts.input.conv_id,
+        caller,
+        WACType.TEMPLATE,
+        "", // Blank for now
+        {
+          name: opts.input.template_name,
+          lang_code: opts.input.lang_code,
+          parameters: opts.input.parameters,
+        } as WhatsappAttachmentTemplate
       );
     }),
 };

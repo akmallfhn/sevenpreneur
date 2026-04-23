@@ -11,5 +11,6 @@ export const sendRouter = createTRPCRouter({
     image: sendWA.image,
     sticker: sendWA.sticker,
     video: sendWA.video,
+    template: sendWA.template,
   },
 });

@@ -187,6 +187,7 @@ enum WACType {
   TEXT        @map("text")
   UNSUPPORTED @map("unsupported")
   VIDEO       @map("video")
+  TEMPLATE    @map("template")
 
   @@map("wac_type")
 }

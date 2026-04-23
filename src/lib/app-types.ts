@@ -108,7 +108,8 @@ export type WhatsappChatType =
   | "SYSTEM"
   | "TEXT"
   | "UNSUPPORTED"
-  | "VIDEO";
+  | "VIDEO"
+  | "TEMPLATE";
 
 // Article related
 export type ArticleStatus = "DRAFT" | "PUBLISHED" | "UNPUBLISHED";
