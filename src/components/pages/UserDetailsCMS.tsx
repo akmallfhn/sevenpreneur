@@ -15,7 +15,6 @@ import {
   Copy,
   Flag,
   KeyRound,
-  Loader2,
   Scale,
   Settings2,
   User2,
@@ -33,10 +32,12 @@ import SelectCMS from "../fields/SelectCMS";
 import TextAreaCMS from "../fields/TextAreaCMS";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import PageContainerCMS from "./PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
+import PageContainerCMS from "./PageContainerCMS";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -117,16 +118,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
           </div>
         </div>
 
-        {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
-        {isError && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
-            No Data
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
+        {isError && <AppErrorComponents />}
 
         {!isLoading && !isError && userDetailData && (
           <div className="flex w-full gap-4">

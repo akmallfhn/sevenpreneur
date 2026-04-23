@@ -8,9 +8,8 @@ export default function LearningListBlueprintSVP() {
   const data = [
     {
       session_number: "01.",
-      session_name: "Growth Foundations",
-      session_description:
-        "Build the mindset and fundamentals behind every scalable business.",
+      session_name: "AI-Assisted Founder for Leadership & Decision Making",
+      session_description: "",
       session_educator: "Raymond Chin",
       session_educator_title: "Founder Sevenpreneur",
       session_educator_avatar:

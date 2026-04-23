@@ -1,9 +1,5 @@
-import LoadingStateSVP from "@/components/states/LoadingStateSVP";
+import AppPageLoading from "@/components/states/AppPageLoading";
 
 export default function Loading() {
-  return (
-    <div className="flex w-full justify-center py-48 px-6 overflow-hidden lg:items-center lg:py-52">
-      <LoadingStateSVP />
-    </div>
-  );
+  return <AppPageLoading type="SVP" />;
 }

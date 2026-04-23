@@ -4,14 +4,16 @@ import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { ChevronRight, Loader2, Pen } from "lucide-react";
+import { ChevronRight, Pen } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import EditInterstitialAdsFormCMS from "../forms/EditInterstitialAdsFormCMS";
 import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import PageContainerCMS from "./PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import AppErrorComponents from "../states/AppErrorComponents";
+import AppLoadingComponents from "../states/AppLoadingComponents";
+import PageContainerCMS from "./PageContainerCMS";
 
 interface WebMarketingToolsCMSProps {
   sessionToken: string;
@@ -65,16 +67,8 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
           </div>
 
           {/* Loading & Error State */}
-          {isLoading && (
-            <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-              <Loader2 className="animate-spin size-5 " />
-            </div>
-          )}
-          {isError && (
-            <div className="flex w-full h-full py-10 justify-center text-alternative font-bodycopy font-medium">
-              No Data
-            </div>
-          )}
+          {isLoading && <AppLoadingComponents />}
+          {isError && <AppErrorComponents />}
 
           {!isLoadingTickerData && !isErrorTickerData && (
             <div className="flex flex-col w-full gap-4">
@@ -87,7 +81,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           Ticker Running Text
                         </h2>
                         <StatusLabelCMS
-                          variants={tickerDetailsData?.status as StatusType}
+                          variants={tickerDetailsData.status as StatusType}
                         />
                       </div>
                       <h3 className="text-black/40 font-bodycopy font-medium">
@@ -101,7 +95,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           <p className="font-medium">Headline:</p>
                         </div>
                         <p className="font-medium ">
-                          {tickerDetailsData?.title}
+                          {tickerDetailsData.title}
                         </p>
                       </div>
                       <div className="call-to-action flex items-center">
@@ -109,7 +103,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           <p className="font-medium">Call To Action:</p>
                         </div>
                         <p className="font-medium ">
-                          {tickerDetailsData?.callout}
+                          {tickerDetailsData.callout}
                         </p>
                       </div>
                       <div className="date-periods flex items-center">
@@ -117,11 +111,11 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           <p className="font-medium">Periods:</p>
                         </div>
                         <p className="font-medium">
-                          {dayjs(tickerDetailsData?.start_date).format(
+                          {dayjs(tickerDetailsData.start_date).format(
                             "D MMMM YYYY [at] HH:mm"
                           )}{" "}
                           -{" "}
-                          {dayjs(tickerDetailsData?.end_date).format(
+                          {dayjs(tickerDetailsData.end_date).format(
                             "D MMMM YYYY [at] HH:mm"
                           )}
                         </p>
@@ -139,7 +133,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                 </div>
               )}
 
-              {interstitialData && (
+              {interstitialDetailsData && (
                 <div className="tool-item flex items-center justify-between p-5 bg-section-background/50 border border-outline rounded-md">
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col">
@@ -149,7 +143,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                         </h2>
                         <StatusLabelCMS
                           variants={
-                            interstitialDetailsData?.status as StatusType
+                            interstitialDetailsData.status as StatusType
                           }
                         />
                       </div>
@@ -164,7 +158,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           <p className="font-medium">Title:</p>
                         </div>
                         <p className="font-medium">
-                          {interstitialDetailsData?.title}
+                          {interstitialDetailsData.title}
                         </p>
                       </div>
                       <div className="call-to-action flex items-center">
@@ -172,7 +166,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           <p className="font-medium">Call To Action:</p>
                         </div>
                         <p className="font-medium ">
-                          {interstitialDetailsData?.call_to_action}
+                          {interstitialDetailsData.call_to_action}
                         </p>
                       </div>
                       <div className="date-periods flex items-center">
@@ -180,11 +174,11 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           <p className="font-medium">Periods:</p>
                         </div>
                         <p className="font-medium">
-                          {dayjs(interstitialDetailsData?.start_date).format(
+                          {dayjs(interstitialDetailsData.start_date).format(
                             "D MMMM YYYY [at] HH:mm"
                           )}{" "}
                           -{" "}
-                          {dayjs(interstitialDetailsData?.end_date).format(
+                          {dayjs(interstitialDetailsData.end_date).format(
                             "D MMMM YYYY [at] HH:mm"
                           )}
                         </p>

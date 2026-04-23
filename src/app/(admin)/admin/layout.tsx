@@ -58,7 +58,9 @@ export default async function AdminLayout(
             sessionUserRole={checkUser.role_id}
           />
           {props.children}
-          <AppPageState variant="ONLY_MOBILE" />
+          <div className="lg:hidden">
+            <AppPageState variant="ONLY_MOBILE" />
+          </div>
           <Toaster richColors position="top-center" />
         </div>
       </SidebarProviderCMS>
