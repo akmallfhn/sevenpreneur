@@ -1,5 +1,6 @@
 import TransactionCardItemSVP from "@/components/items/TransactionCardItemSVP";
-import EmptyTransactionsSVP from "@/components/states/EmptyTransactionsSVP";
+import PageContainerSVP from "@/components/pages/PageContainerSVP";
+import EmptyStateSVP from "@/components/states/EmptyStateSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -75,41 +76,49 @@ export default async function TransactionsPage() {
   }));
 
   return (
-    <div className="flex flex-col w-full bg-white px-5 py-5 pb-20 gap-5 dark:bg-coal-black lg:px-0 lg:mx-auto lg:w-full lg:max-w-[960px] xl:max-w-[1208px]">
-      <h1 className="font-bold font-ui text-xl">Transaction History</h1>
-      {transactionData.length === 0 && <EmptyTransactionsSVP />}
-      <div className="flex flex-col gap-4">
-        {transactionData
-          .sort(
-            (a, b) => dayjs(b.paid_at).valueOf() - dayjs(a.paid_at).valueOf()
-          )
-          .map((post, index) => (
-            <TransactionCardItemSVP
-              key={index}
-              transactionId={post.id}
-              transactionDate={post.created_at}
-              transactionStatus={post.status}
-              productCategory={post.category}
-              playlistId={post.playlist_id}
-              playlistImage={post.playlist_image}
-              playlistName={post.playlist_name}
-              playlistSlug={post.playlist_slug_url}
-              playlistTotalVideo={post.playlist_total_video}
-              cohortId={post.cohort_id}
-              cohortImage={post.cohort_image}
-              cohortName={post.cohort_name}
-              cohortSlug={post.cohort_slug}
-              cohortPriceName={post.cohort_price_name}
-              eventId={post.event_id}
-              eventName={post.event_name}
-              eventImage={post.event_image}
-              eventSlug={post.event_slug}
-              eventPriceName={post.event_price_name}
-              totalTransactionAmount={post.amount}
-              invoiceURL={post.invoice_url}
-            />
-          ))}
+    <PageContainerSVP className="flex">
+      <div className="flex flex-col w-full py-5 pb-20 gap-5">
+        <h1 className="font-bold font-bodycopy text-xl dark:text-sevenpreneur-white">
+          Transaction History
+        </h1>
+        {transactionData.length > 0 ? (
+          <div className="flex flex-col gap-4">
+            {transactionData
+              .sort(
+                (a, b) =>
+                  dayjs(b.paid_at).valueOf() - dayjs(a.paid_at).valueOf()
+              )
+              .map((post, index) => (
+                <TransactionCardItemSVP
+                  key={index}
+                  transactionId={post.id}
+                  transactionDate={post.created_at}
+                  transactionStatus={post.status}
+                  productCategory={post.category}
+                  playlistId={post.playlist_id}
+                  playlistImage={post.playlist_image}
+                  playlistName={post.playlist_name}
+                  playlistSlug={post.playlist_slug_url}
+                  playlistTotalVideo={post.playlist_total_video}
+                  cohortId={post.cohort_id}
+                  cohortImage={post.cohort_image}
+                  cohortName={post.cohort_name}
+                  cohortSlug={post.cohort_slug}
+                  cohortPriceName={post.cohort_price_name}
+                  eventId={post.event_id}
+                  eventName={post.event_name}
+                  eventImage={post.event_image}
+                  eventSlug={post.event_slug}
+                  eventPriceName={post.event_price_name}
+                  totalTransactionAmount={post.amount}
+                  invoiceURL={post.invoice_url}
+                />
+              ))}
+          </div>
+        ) : (
+          <EmptyStateSVP variant="TRANSACTIONS" className="lg:min-h-0" />
+        )}
       </div>
-    </div>
+    </PageContainerSVP>
   );
 }

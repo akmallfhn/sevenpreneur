@@ -1,5 +1,5 @@
 import CheckoutEventFormMobileSVP from "@/components/forms/CheckoutEventFormMobileSVP";
-import UnavailableProductSVP from "@/components/states/UnavailableProductSVP";
+import EmptyStateSVP from "@/components/states/EmptyStateSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -137,12 +137,7 @@ export default async function CheckoutEventPage({
 
   // Unavailable Product
   if (!hasActiveTicket || expiredEvent) {
-    return (
-      <UnavailableProductSVP
-        stateTitle="Tickets Are Sold Out"
-        stateDesc="All tickets for this event have been sold. Please check back for future events."
-      />
-    );
+    return <EmptyStateSVP variant="EVENT" />;
   }
 
   // Auto Correction Slug

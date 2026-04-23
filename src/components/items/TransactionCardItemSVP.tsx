@@ -122,10 +122,9 @@ export default function TransactionCardItemSVP({
   }
 
   return (
-    <div className="transaction-item flex flex-col p-4 gap-3 bg-white rounded-md shadow-md dark:bg-surface-black">
-      {/* Status & Date */}
-      <div className="flex items-center justify-between font-ui">
-        <p className="transaction-date text-sm dark:text-alternative">
+    <div className="transaction-item flex flex-col p-4 gap-3 bg-background rounded-md border dark:bg-sevenpreneur-surface-black dark:border-0">
+      <div className="flex items-center justify-between font-bodycopy">
+        <p className="transaction-date text-sm">
           {dayjs(transactionDate).format("DD MMMM YYYY [at] HH:mm")}
         </p>
         <p
@@ -134,8 +133,7 @@ export default function TransactionCardItemSVP({
           {statusWord}
         </p>
       </div>
-      <hr className="border-t border-outline dark:border-outline-dark" />
-      {/* Metadata */}
+      <hr className="border-t" />
       <Link
         href={`/transactions/${transactionId}`}
         className="product-metadata flex gap-3 items-center"
@@ -149,18 +147,19 @@ export default function TransactionCardItemSVP({
             width={400}
           />
         </div>
-        <div className="flex flex-col font-ui max-w-[calc(100%-4rem-0.75rem)]">
-          <p className="product-name font-bold line-clamp-2">{productName}</p>
-          <p className="product-tier text-sm line-clamp-1 dark:text-alternative">
+        <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
+          <p className="product-name font-bold line-clamp-2 dark:text-sevenpreneur-white">
+            {productName}
+          </p>
+          <p className="product-tier text-sm line-clamp-1 text-emphasis">
             {productTier}
           </p>
         </div>
       </Link>
-      {/* Price & CTA */}
       <div className="transaction-metadata flex items-center justify-between">
-        <div className="flex flex-col font-ui text-sm">
+        <div className="flex flex-col font-bodycopy text-sm">
           <p>Total Amount</p>
-          <p className="font-bold">
+          <p className="font-bold dark:text-sevenpreneur-white">
             {getRupiahCurrency(Math.round(totalTransactionAmount))}
           </p>
         </div>

@@ -1,5 +1,5 @@
 import CheckoutCohortFormMobileSVP from "@/components/forms/CheckoutCohortFormMobileSVP";
-import UnavailableProductSVP from "@/components/states/UnavailableProductSVP";
+import EmptyStateSVP from "@/components/states/EmptyStateSVP";
 import { setSessionToken, trpc } from "@/trpc/server";
 import dayjs from "dayjs";
 import { Metadata } from "next";
@@ -138,13 +138,7 @@ export default async function CheckoutCohortPage({
   const expiredCohort = dayjs().isAfter(cohortData.end_date);
 
   if (!hasActivePrice || expiredCohort) {
-    return (
-      <UnavailableProductSVP
-        stateTitle="This Class Is Sold Out"
-        stateDesc="All available slots for this class have been filled. New sessions
-            will be available soon."
-      />
-    );
+    return <EmptyStateSVP variant="COHORT" />;
   }
 
   // Auto Correction Slug
