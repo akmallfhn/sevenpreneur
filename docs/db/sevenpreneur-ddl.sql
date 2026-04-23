@@ -145,7 +145,8 @@ CREATE TYPE wac_type AS ENUM (
   'system',
   'text',
   'unsupported',
-  'video'
+  'video',
+  'template'
 );
 
 CREATE TYPE wac_status AS ENUM (

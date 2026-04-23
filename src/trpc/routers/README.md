@@ -648,6 +648,7 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 | `send.wa.image`                  |         ✅          |               ❌                |
 | `send.wa.sticker`                |         ✅          |               ❌                |
 | `send.wa.video`                  |         ✅          |               ❌                |
+| `send.wa.template`               |         ✅          |               ❌                |
 | `create.wa.asset`                |         ✅          |               ❌                |
 | `create.wa.alert`                |         ✅          |               ❌                |
 | `list.wa.conversations`          |         ✅          |               ❌                |
