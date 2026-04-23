@@ -1,12 +1,12 @@
 "use client";
+import { Switch } from "@/components/ui/switch";
 import { trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import SelectCMS from "../fields/SelectCMS";
-import { Switch } from "@/components/ui/switch";
 import InputCMS from "../fields/InputCMS";
+import SelectCMS from "../fields/SelectCMS";
 import AppSheet from "../modals/AppSheet";
 
 interface AddCohortMemberFormCMSProps {
@@ -47,18 +47,18 @@ export default function AddCohortMemberFormCMS(
 
   // Beginning State
   const [formData, setFormData] = useState<{
-    userId: string;
+    email: string;
     cohortPriceId: number | string;
   }>({
-    userId: "",
+    email: "",
     cohortPriceId: "",
   });
 
-  // Reset user Id every time fill method is changed
+  // Reset email every time fill method is changed
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      userId: "",
+      email: "",
     }));
   }, [fillUserMethod]);
 
@@ -87,7 +87,7 @@ export default function AddCohortMemberFormCMS(
     setIsSubmitting(true);
 
     // Required field checking
-    if (!formData.userId) {
+    if (!formData.email) {
       toast.error("Don’t forget to select a user");
       setIsSubmitting(false);
       return;
@@ -103,7 +103,7 @@ export default function AddCohortMemberFormCMS(
       addCohortMember.mutate(
         {
           // Mandatory fields:
-          user_id: formData.userId,
+          email: formData.email,
           cohort_id: props.cohortId,
           cohort_price_id: Number(formData.cohortPriceId),
         },
@@ -168,16 +168,16 @@ export default function AddCohortMemberFormCMS(
               />
               {fillUserMethod === "SELECT" && (
                 <SelectCMS
-                  selectId="user-id"
+                  selectId="user-email"
                   selectName="Select User"
                   selectPlaceholder="Select a user to invite"
-                  value={formData.userId}
-                  onChange={handleInputChange("userId")}
+                  value={formData.email}
+                  onChange={handleInputChange("email")}
                   required
                   options={userList
                     ?.filter((user) => user.role_id !== 3)
                     .map((post) => ({
-                      value: post.id,
+                      value: post.email,
                       label: post.full_name,
                       image:
                         post.avatar ||
@@ -187,12 +187,12 @@ export default function AddCohortMemberFormCMS(
               )}
               {fillUserMethod === "INPUT" && (
                 <InputCMS
-                  inputId="user-id"
-                  inputName="User Id"
+                  inputId="user-email"
+                  inputName="User Email"
                   inputType="text"
-                  inputPlaceholder="Input ID User"
-                  value={formData.userId}
-                  onInputChange={handleInputChange("userId")}
+                  inputPlaceholder="Input Email User"
+                  value={formData.email}
+                  onInputChange={handleInputChange("email")}
                   required
                 />
               )}
@@ -212,7 +212,7 @@ export default function AddCohortMemberFormCMS(
                     }
                   />
                   <p className="font-bodycopy font-medium text-sm">
-                    Manually enter User ID
+                    Manually enter User Email
                   </p>
                 </div>
               </div>
