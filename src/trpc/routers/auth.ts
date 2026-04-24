@@ -61,7 +61,23 @@ export const authRouter = createTRPCRouter({
           message: `Your account has been deleted (${findUser.deleted_at}).`,
         });
       } else {
-        if (!findUser.avatar && userInfo.picture) {
+        if (findUser.full_name === findUser.email) {
+          const updatedProfile = await opts.ctx.prisma.user.updateManyAndReturn({
+            data: {
+              full_name: userInfo.name,
+              avatar: userInfo.picture,
+            },
+            where: {
+              email: userInfo.email,
+            },
+          });
+          if (updatedProfile.length > 1) {
+            console.error(
+              "auth.login: More-than-one users have its profile updated at once."
+            );
+          }
+          registeredUser = updatedProfile[0];
+        } else if (!findUser.avatar && userInfo.picture) {
           const updatedAvatar = await opts.ctx.prisma.user.updateManyAndReturn({
             data: {
               avatar: userInfo.picture,
@@ -75,6 +91,7 @@ export const authRouter = createTRPCRouter({
               "auth.login: More-than-one users have its avatar updated at once."
             );
           }
+          registeredUser = updatedAvatar[0];
         }
 
         // $executeRaw is used for using the correct CURRENT_TIMESTAMP.

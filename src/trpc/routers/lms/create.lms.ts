@@ -2,7 +2,6 @@ import {
   STATUS_CREATED,
   STATUS_FORBIDDEN,
   STATUS_INTERNAL_SERVER_ERROR,
-  STATUS_NOT_FOUND,
 } from "@/lib/status_code";
 import {
   administratorProcedure,
@@ -135,16 +134,15 @@ export const createLMS = {
       })
     )
     .mutation(async (opts) => {
-      const theUser = await opts.ctx.prisma.user.findUnique({
+      const theUser = await opts.ctx.prisma.user.upsert({
         select: { id: true },
         where: { email: opts.input.email },
+        create: {
+          full_name: opts.input.email,
+          email: opts.input.email,
+        },
+        update: {},
       });
-      if (!theUser) {
-        throw new TRPCError({
-          code: STATUS_NOT_FOUND,
-          message: `The user with the given email is not found.`,
-        });
-      }
 
       const theCohortMember = await opts.ctx.prisma.userCohort.upsert({
         create: {
