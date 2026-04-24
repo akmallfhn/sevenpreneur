@@ -1,5 +1,5 @@
 "use client";
-import { ArrowUp, Loader2, SmilePlus } from "lucide-react";
+import { ArrowUp, ImagePlus, Loader2, SmilePlus } from "lucide-react";
 import React, {
   FormEvent,
   KeyboardEvent,
@@ -14,6 +14,7 @@ import AppEmojiPicker from "./AppEmojiPicker";
 interface WhatsappChatSubmitterCMSProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   onTextAreaChange?: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
+  onOpenImagePicker: () => void;
   value: string;
   isLoadingSubmit: boolean;
 }
@@ -22,10 +23,10 @@ export default function WhatsappChatSubmitterCMS({
   value,
   onTextAreaChange,
   onSubmit,
+  onOpenImagePicker,
   isLoadingSubmit,
   ...rest
 }: WhatsappChatSubmitterCMSProps) {
-  // State for open/close and add emoji
   const [showEmoji, setShowEmoji] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -108,6 +109,16 @@ export default function WhatsappChatSubmitterCMS({
               onClick={() => setShowEmoji((prev) => !prev)}
             >
               <SmilePlus className="size-5" />
+            </AppButton>
+          </div>
+          <div className="image-picker flex items-center justify-center">
+            <AppButton
+              size="iconRounded"
+              variant="ghost"
+              type="button"
+              onClick={onOpenImagePicker}
+            >
+              <ImagePlus className="size-5" />
             </AppButton>
           </div>
           <div className="text-area-container relative w-full">

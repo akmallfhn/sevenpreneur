@@ -12,6 +12,7 @@ import React, {
   useState,
 } from "react";
 import { toast } from "sonner";
+import WAImagePickerModal from "../modals/WAImagePickerModal";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import WhatsappChatItemCMS from "./WhatsappChatItemCMS";
@@ -29,9 +30,10 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
   const prevConvIdRef = useRef<string>(props.convId);
   const prevChatIdsRef = useRef<Set<string>>(new Set());
 
-  // State for submit chat
   const [textValue, setTextValue] = useState("");
+  const [showImagePicker, setShowImagePicker] = useState(false);
   const sendChat = trpc.send.wa.chat.useMutation();
+  const sendImage = trpc.send.wa.image.useMutation();
 
   const utils = trpc.useUtils();
 
@@ -121,7 +123,16 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
     }
   }, []);
 
-  // Handle send chat
+  const handleSendImage = (image_url: string, caption: string) => {
+    sendImage.mutate(
+      { conv_id: props.convId, image_url, caption },
+      {
+        onSuccess: () => utils.list.wa.chats.invalidate({ conv_id: props.convId }),
+        onError: () => toast.error("Failed to send image"),
+      }
+    );
+  };
+
   const handleSendChat = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!textValue.trim() || sendChat.isPending) {
@@ -209,10 +220,21 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
             value={textValue}
             onTextAreaChange={(value) => setTextValue(value)}
             onSubmit={handleSendChat}
+            onOpenImagePicker={() => setShowImagePicker(true)}
             isLoadingSubmit={sendChat.isPending}
           />
         </form>
       </div>
+
+      <WAImagePickerModal
+        isOpen={showImagePicker}
+        onClose={() => setShowImagePicker(false)}
+        isLoading={sendImage.isPending}
+        onSubmit={(image_url, caption) => {
+          handleSendImage(image_url, caption);
+          setShowImagePicker(false);
+        }}
+      />
     </div>
   );
 }
