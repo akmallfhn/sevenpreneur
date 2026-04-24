@@ -155,6 +155,11 @@ CREATE TYPE wac_status AS ENUM (
   'failed'
 );
 
+CREATE TYPE wa_mode AS ENUM (
+  'ai',
+  'human'
+);
+
 -- Enumeration for the wa_assets table (wa_asset_*)
 
 CREATE TYPE wa_asset_type AS ENUM (
@@ -698,6 +703,7 @@ CREATE TABLE wa_conversations (
   handler_id    UUID                NULL,
   lead_status   wa_lead_status  NOT NULL     DEFAULT 'cold',
   winning_rate  SMALLINT        NOT NULL     DEFAULT 0,
+  mode          wa_mode         NOT NULL     DEFAULT 'ai',
   note          VARCHAR             NULL,
   last_read_id  CHAR(21)            NULL,
   created_at    TIMESTAMPTZ     NOT NULL     DEFAULT CURRENT_TIMESTAMP,

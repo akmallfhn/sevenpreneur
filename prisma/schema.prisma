@@ -154,6 +154,13 @@ enum WALeadStatus {
   @@map("wa_lead_status")
 }
 
+enum WAMode {
+  AI    @map("ai")
+  HUMAN @map("human")
+
+  @@map("wa_mode")
+}
+
 // Enumeration for the WAChat model (WAC*)
 
 enum WACDirection {
@@ -924,6 +931,7 @@ model WAConversation {
   handler_id   String?      @db.Uuid
   lead_status  WALeadStatus @default(COLD)
   winning_rate Int          @default(0) @db.SmallInt
+  mode         WAMode       @default(AI)
   note         String?      @db.VarChar()
   last_read    WAChat?      @relation("last_read", fields: [last_read_id], references: [id])
   last_read_id String?      @db.Char(21)
