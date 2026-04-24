@@ -365,6 +365,8 @@ model Cohort {
   end_date      DateTime      @db.Timestamptz()
   published_at  DateTime      @default(now()) @db.Timestamptz()
   updated_at    DateTime      @default(now()) @updatedAt @db.Timestamptz()
+  context       String?       @db.Text
+  tags          String?       @db.VarChar()
   deleted_at    DateTime?     @db.Timestamptz()
   deleted_by    User?         @relation(fields: [deleted_by_id], references: [id])
   deleted_by_id String?       @map("deleted_by") @db.Uuid
@@ -670,6 +672,8 @@ model Playlist {
   slug_url          String             @db.VarChar()
   published_at      DateTime           @default(now()) @db.Timestamptz()
   updated_at        DateTime           @default(now()) @updatedAt @db.Timestamptz()
+  context           String?            @db.Text
+  tags              String?            @db.VarChar()
   deleted_at        DateTime?          @db.Timestamptz()
   deleted_by        User?              @relation(fields: [deleted_by_id], references: [id])
   deleted_by_id     String?            @map("deleted_by") @db.Uuid
@@ -713,6 +717,8 @@ model Event {
   location_url  String?            @db.VarChar()
   published_at  DateTime           @default(now()) @db.Timestamptz()
   updated_at    DateTime           @default(now()) @updatedAt @db.Timestamptz()
+  context       String?            @db.Text
+  tags          String?            @db.VarChar()
   deleted_at    DateTime?          @db.Timestamptz()
   deleted_by    User?              @relation(fields: [deleted_by_id], references: [id])
   deleted_by_id String?            @map("deleted_by") @db.Uuid

@@ -248,6 +248,8 @@ Table cohorts {
   end_date      timestamptz
   published_at  timestamptz
   updated_at    timestamptz
+  context       text
+  tags          varchar
   deleted_at    timestamptz
   deleted_by    uuid         [ref: > users.id]
 }
@@ -472,6 +474,8 @@ Table playlists {
   slug_url           varchar
   published_at       timestamptz
   updated_at         timestamptz
+  context            text
+  tags               varchar
   deleted_at         timestamptz
   deleted_by         uuid           [ref: > users.id]
 }
@@ -506,6 +510,8 @@ Table events {
   location_url   varchar
   published_at   timestamptz
   updated_at     timestamptz
+  context        text
+  tags           varchar
   deleted_at     timestamptz
   deleted_by     uuid                  [ref: > users.id]
 }
