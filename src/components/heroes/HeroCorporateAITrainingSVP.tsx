@@ -474,7 +474,7 @@ export default function HeroCorporateAITrainingSVP() {
                 className="w-1.5 h-1.5 rounded-full bg-[#0fd4a3]"
                 style={{ animation: "cat-dot-pulse 2s infinite" }}
               />
-              CORPORATE AI TRAINING PROGRAM · BATCH 2026
+              CORPORATE AI TRAINING PROGRAM
             </span>
           </div>
 
@@ -525,6 +525,18 @@ export default function HeroCorporateAITrainingSVP() {
               href="https://wa.me/6285353533844"
               target="_blank"
               rel="noopener noreferrer"
+              className="flex lg:hidden"
+            >
+              <AppButton variant="flux">
+                Konsultasi Gratis untuk Tim Anda
+                <ArrowIcon />
+              </AppButton>
+            </a>
+            <a
+              href="https://wa.me/6285353533844"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden lg:flex"
             >
               <AppButton variant="flux" size="largeRounded">
                 Konsultasi Gratis untuk Tim Anda

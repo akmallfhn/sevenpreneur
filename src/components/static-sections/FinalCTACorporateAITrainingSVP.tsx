@@ -63,7 +63,7 @@ export default function FinalCTACorporateAITrainingSVP() {
             <h2
               className="font-brand font-semibold leading-[0.98]"
               style={{
-                fontSize: "clamp(40px, 6vw, 88px)",
+                fontSize: "clamp(40px, 6vw, 68px)",
                 letterSpacing: "-0.035em",
               }}
             >
@@ -81,7 +81,7 @@ export default function FinalCTACorporateAITrainingSVP() {
                 maxWidth: 680,
               }}
             >
-              Jangan biarkan tim Anda tertinggal sementara kompetitor sudah
+              Jangan biarkan tim Anda tertinggal, sementara kompetitor sudah
               memanfaatkan AI untuk efisiensi 60% lebih tinggi. Mulai dari
               konsultasi gratis.
             </p>
@@ -90,6 +90,18 @@ export default function FinalCTACorporateAITrainingSVP() {
                 href="https://wa.me/6285353533844?text=Halo%2C%20MinSeven!%20%F0%9F%91%8B%0ASaya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20*Corporate%20AI%20Training*%20dari%20Sevenpreneur.%20Boleh%20konsultasi%20dulu%3F%0A%0A%E2%80%A2%20Nama%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Perusahaan%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Jumlah%20Tim%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%20%F0%9F%99%8F"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex lg:hidden"
+              >
+                <AppButton variant="flux">
+                  Jadwalkan konsultasi gratis
+                  <ArrowRight />
+                </AppButton>
+              </a>
+              <a
+                href="https://wa.me/6285353533844?text=Halo%2C%20MinSeven!%20%F0%9F%91%8B%0ASaya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20*Corporate%20AI%20Training*%20dari%20Sevenpreneur.%20Boleh%20konsultasi%20dulu%3F%0A%0A%E2%80%A2%20Nama%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Perusahaan%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Jumlah%20Tim%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%20%F0%9F%99%8F"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden lg:flex"
               >
                 <AppButton variant="flux" size="large">
                   Jadwalkan konsultasi gratis
@@ -114,7 +126,7 @@ export default function FinalCTACorporateAITrainingSVP() {
                     />
                   </svg>
                 ),
-                text: "WhatsApp · +62 853-5353-3844",
+                text: "WhatsApp +62 853-5353-3844",
               },
               {
                 icon: (

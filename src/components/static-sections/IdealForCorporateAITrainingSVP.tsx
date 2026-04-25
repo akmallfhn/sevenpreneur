@@ -49,29 +49,32 @@ export default function IdealForCorporateAITrainingSVP() {
   }, []);
 
   return (
-    <section ref={ref} className="py-24 md:py-32">
+    <section ref={ref} className="py-24 pb-0">
       <div className="max-w-[1240px] mx-auto px-5 md:px-8">
         {/* Header */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-end mb-14 cat-reveal opacity-0 translate-y-6 transition-all duration-700">
           <div>
             <span
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-6 text-[11px] uppercase tracking-[0.12em] text-[#777]"
-              style={{ background: "#f5f5f5", borderColor: "#e8e8e8", fontFamily: "JetBrains Mono, monospace" }}
+              style={{
+                background: "#f5f5f5",
+                borderColor: "#e8e8e8",
+                fontFamily: "JetBrains Mono, monospace",
+              }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#0165fc]" />
               Ideal Untuk
             </span>
             <h2
               className="font-brand font-semibold leading-[0.98] text-[#0a0a0a]"
-              style={{ fontSize: "clamp(36px, 5vw, 64px)", letterSpacing: "-0.035em" }}
+              style={{
+                fontSize: "clamp(36px, 5vw, 64px)",
+                letterSpacing: "-0.035em",
+              }}
             >
               Program ini cocok untuk perusahaan yang...
             </h2>
           </div>
-          <p className="font-bodycopy" style={{ fontSize: "clamp(18px, 1.4vw, 22px)", color: "#3a3a3a", lineHeight: 1.5, maxWidth: 680 }}>
-            Kami memilih partner dengan hati-hati. Program bekerja paling baik ketika ada
-            kesiapan organisasi untuk benar-benar menggunakan AI.
-          </p>
         </div>
 
         {/* Grid */}
@@ -90,7 +93,10 @@ export default function IdealForCorporateAITrainingSVP() {
               >
                 <span
                   className="flex-shrink-0 text-[12px] text-[#777] mt-1.5"
-                  style={{ fontFamily: "JetBrains Mono, monospace", letterSpacing: "0.06em" }}
+                  style={{
+                    fontFamily: "JetBrains Mono, monospace",
+                    letterSpacing: "0.06em",
+                  }}
                 >
                   0{i + 1}
                 </span>
@@ -105,7 +111,7 @@ export default function IdealForCorporateAITrainingSVP() {
               className="text-[14px] uppercase tracking-[0.08em] text-[#777] font-medium mb-4"
               style={{ fontFamily: "JetBrains Mono, monospace" }}
             >
-              // Industri yang sudah kami latih
+              Industri yang sudah kami latih
             </h4>
             <div className="flex flex-wrap gap-2 mb-6">
               {industries.map((ind, i) => (
@@ -122,10 +128,16 @@ export default function IdealForCorporateAITrainingSVP() {
                 <div
                   key={i}
                   className="flex justify-between"
-                  style={{ fontFamily: "JetBrains Mono, monospace", fontSize: 12, letterSpacing: "0.06em" }}
+                  style={{
+                    fontFamily: "JetBrains Mono, monospace",
+                    fontSize: 12,
+                    letterSpacing: "0.06em",
+                  }}
                 >
                   <span className="text-[#777]">{stat.label}</span>
-                  <span style={{ color: stat.accent ? "#0165fc" : "#777" }}>{stat.value}</span>
+                  <span style={{ color: stat.accent ? "#0165fc" : "#777" }}>
+                    {stat.value}
+                  </span>
                 </div>
               ))}
             </div>

@@ -57,29 +57,32 @@ export default function CurriculumCorporateAITrainingSVP() {
   }, []);
 
   return (
-    <section ref={ref} id="curriculum" className="py-24 md:py-32">
+    <section ref={ref} id="curriculum" className="py-24 pb-0">
       <div className="max-w-[1240px] mx-auto px-5 md:px-8">
         {/* Header */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-end mb-14 cat-reveal opacity-0 translate-y-6 transition-all duration-700">
           <div>
             <span
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-6 text-[11px] uppercase tracking-[0.12em] text-[#777]"
-              style={{ background: "#f5f5f5", borderColor: "#e8e8e8", fontFamily: "JetBrains Mono, monospace" }}
+              style={{
+                background: "#f5f5f5",
+                borderColor: "#e8e8e8",
+                fontFamily: "JetBrains Mono, monospace",
+              }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#0165fc]" />
               Curriculum
             </span>
             <h2
               className="font-brand font-semibold leading-[0.98] text-[#0a0a0a]"
-              style={{ fontSize: "clamp(36px, 5vw, 64px)", letterSpacing: "-0.035em" }}
+              style={{
+                fontSize: "clamp(36px, 5vw, 64px)",
+                letterSpacing: "-0.035em",
+              }}
             >
               Apa yang akan dipelajari tim Anda.
             </h2>
           </div>
-          <p className="font-bodycopy" style={{ fontSize: "clamp(18px, 1.4vw, 22px)", color: "#3a3a3a", lineHeight: 1.5, maxWidth: 680 }}>
-            Enam modul yang membentuk fondasi penggunaan AI yang sustainable. Curriculum dapat
-            dikustomisasi sesuai kebutuhan dan industri perusahaan Anda.
-          </p>
         </div>
 
         {/* Module grid */}
@@ -107,7 +110,9 @@ export default function CurriculumCorporateAITrainingSVP() {
               >
                 {m.t}
               </h4>
-              <p className="font-bodycopy text-[15px] text-[#3a3a3a] leading-[1.5]">{m.d}</p>
+              <p className="font-bodycopy text-[15px] text-[#3a3a3a] leading-[1.5]">
+                {m.d}
+              </p>
             </div>
           ))}
         </div>
