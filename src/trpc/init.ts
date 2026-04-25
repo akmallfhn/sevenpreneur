@@ -105,6 +105,22 @@ export const administratorProcedure = t.procedure.use(async (opts) => {
   });
 });
 
+export const aileneProcedure = t.procedure.use(async (opts) => {
+  const { ctx } = opts;
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  if (ctx.user.role.name === "General User") {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return opts.next({
+    ctx: {
+      prisma: ctx.prisma,
+      user: ctx.user, // not-null
+    },
+  });
+});
+
 export const roleBasedProcedure = (roleList: string[]) => {
   return t.procedure.use(async (opts) => {
     const { ctx } = opts;

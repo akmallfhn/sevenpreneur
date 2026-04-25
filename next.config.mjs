@@ -53,7 +53,7 @@ const nextConfig = {
           {
             type: "header",
             key: "host",
-            value: "(agora|admin).sevenpreneur.com.*",
+            value: "(agora|admin|ailene).sevenpreneur.com.*",
           },
         ],
         missing: [
@@ -72,7 +72,7 @@ const nextConfig = {
           {
             type: "header",
             key: "host",
-            value: "(agora|admin).example.com:3000.*",
+            value: "(agora|admin|ailene).example.com:3000.*",
           },
         ],
         missing: [
@@ -115,7 +115,7 @@ const nextConfig = {
     return {
       beforeFiles: [
         {
-          source: "/(admin|agora|api|www)",
+          source: "/(admin|agora|ailene|api|www)",
           destination: "/_not-found/page",
         },
       ],
@@ -173,6 +173,8 @@ const nextConfig = {
       allowedOrigins: [
         "sevenpreneur.com",
         "*.sevenpreneur.com",
+        "example.com",
+        "*.example.com",
         process.env.NGROK_DOMAIN,
       ],
     },

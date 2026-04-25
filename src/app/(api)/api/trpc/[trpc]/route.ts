@@ -17,6 +17,7 @@ const isOriginAllowed = (origin: string | null) => {
   const allowedOrigins = [
     `https://admin.${baseURL}`,
     `https://agora.${baseURL}`,
+    `https://ailene.${baseURL}`,
     `https://api.${baseURL}`,
     `https://www.${baseURL}`,
     `https://${baseURL}`,
