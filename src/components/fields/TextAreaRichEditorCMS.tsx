@@ -39,7 +39,7 @@ interface TextAreaRichEditorCMSProps extends HTMLAttributes<HTMLTextAreaElement>
 }
 
 export default function TextAreaRichEditorCMS(
-  props: TextAreaRichEditorCMSProps,
+  props: TextAreaRichEditorCMSProps
 ) {
   const [, setRefresh] = useState<number>(0);
 
@@ -217,7 +217,7 @@ export default function TextAreaRichEditorCMS(
           )}
         </label>
       )}
-      <div className="text-area-container relative w-full bg-white border border-outline rounded-md overflow-hidden">
+      <div className="text-area-container relative w-full bg-white border rounded-md overflow-hidden">
         <div className="text-area-toolbar absolute flex top-0 inset-x-0 p-1 gap-1 w-full h-fit border-b z-10">
           <ToggleGroup type="multiple" size="sm">
             {editor &&

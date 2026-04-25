@@ -395,7 +395,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               <div className="body-content flex flex-col gap-4 bg-white rounded-md">
                 {formData.articleBodyContent.map((post, index) => (
                   <div
-                    className="flex flex-col p-4 gap-4 bg-section-background/50 rounded-md border border-outline"
+                    className="flex flex-col p-4 gap-4 bg-section-background/50 rounded-md border"
                     key={post.id}
                   >
                     {index !== 0 && (
@@ -450,7 +450,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               </div>
             </main>
             <aside className="aside-content flex flex-1 flex-col gap-5">
-              <div className="flex flex-col w-full gap-4 border border-outline rounded-lg">
+              <div className="flex flex-col w-full gap-4 border rounded-lg">
                 <div className="section-title flex gap-3 px-6 py-3 items-center bg-black text-white rounded-t-lg">
                   <ListMinus />
                   <h2 className="font-bodycopy font-semibold text-sm">

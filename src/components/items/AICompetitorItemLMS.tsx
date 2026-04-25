@@ -37,7 +37,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
 
   return (
     <div
-      className={`competitor-box flex flex-col p-3 rounded-lg border border-outline overflow-hidden transition-all duration-300 ${containerBg} ${
+      className={`competitor-box flex flex-col p-3 rounded-lg border overflow-hidden transition-all duration-300 ${containerBg} ${
         isExpanded ? "gap-3" : "gap-0"
       }`}
     >
@@ -94,7 +94,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
       >
         <div className="market-score flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
           <b>Market Score:</b>
-          <div className="competitor-score flex w-fit items-center gap-2 bg-white py-1 px-2 border border-outline rounded-md shrink-0">
+          <div className="competitor-score flex w-fit items-center gap-2 bg-white py-1 px-2 border rounded-md shrink-0">
             <div className="flex size-1.5 bg-alternative rounded-full" />
             <p className="text-sm font-bodycopy font-medium">
               {props.competitorScore}/100

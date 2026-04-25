@@ -77,9 +77,7 @@ export default function SelectCMS({
 
       <div
         className={`select-container relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all ${
-          isOpen
-            ? "border-tertiary outline-4 outline-primary/15"
-            : "border-outline"
+          isOpen ? "border-tertiary outline-4 outline-primary/15" : ""
         } ${selectIcon ? "pl-10" : ""} ${
           disabled ? "cursor-not-allowed" : "cursor-pointer"
         }`}
@@ -120,7 +118,7 @@ export default function SelectCMS({
         )}
 
         {isOpen && !disabled && (
-          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden">
+          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border rounded-md shadow-md overflow-hidden">
             <ul className="dropdown-options flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt, index) => (
                 <div

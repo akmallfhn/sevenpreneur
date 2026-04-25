@@ -76,8 +76,8 @@ export default function SelectLMS({
 
       <div
         className={`select-container relative flex w-full p-2 pt-1 bg-white font-bodycopy font-medium text-[15px] border-b-2 transform transition-all ${
-          isOpen ? "border-primary-deep" : "border-outline"
-        }  ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+          isOpen ? "border-primary-deep" : ""
+        } ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         onClick={() => {
           if (!disabled) setIsOpen((prev) => !prev);
         }}
@@ -110,7 +110,7 @@ export default function SelectLMS({
         )}
 
         {isOpen && !disabled && (
-          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden">
+          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border rounded-md shadow-md overflow-hidden">
             <ul className="dropdown-options flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt, index) => (
                 <div

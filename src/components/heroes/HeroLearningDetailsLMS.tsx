@@ -42,7 +42,7 @@ export default function HeroLearningDetailsLMS({
   }
 
   return (
-    <div className="hero-learning relative w-full aspect-[5208/702] border border-outline rounded-lg overflow-hidden">
+    <div className="hero-learning relative w-full aspect-[5208/702] border rounded-lg overflow-hidden">
       <Image
         className="object-cover w-full h-full inset-0"
         src={
@@ -54,7 +54,7 @@ export default function HeroLearningDetailsLMS({
       />
       <div className="learning-attribute absolute flex w-full items-center top-1/2 -translate-y-1/2 left-5 gap-4 z-10">
         {learningSessionMethod !== "ONSITE" && (
-          <div className="conference-icon size-[50px] aspect-square bg-white p-1 border border-outline shrink-0 rounded-lg overflow-hidden">
+          <div className="conference-icon size-[50px] aspect-square bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src={conferenceIcon}

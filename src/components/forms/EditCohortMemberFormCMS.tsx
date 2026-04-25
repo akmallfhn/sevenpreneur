@@ -124,7 +124,7 @@ export default function EditCohortMemberFormCMS(
       )}
       {!isLoading && !isError && memberDetails && (
         <div className="container flex flex-col h-full px-6 pb-20 gap-5 overflow-y-auto">
-          <div className="user-details flex flex-col gap-2 p-3 border border-outline rounded-md">
+          <div className="user-details flex flex-col gap-2 p-3 border rounded-md">
             <h5 className="font-bodycopy font-bold text-[15px]">
               User Details
             </h5>
@@ -173,7 +173,7 @@ export default function EditCohortMemberFormCMS(
             ))}
           </div>
           {certificateURL ? (
-            <div className="certificate flex flex-col gap-2 p-3 border border-outline rounded-md">
+            <div className="certificate flex flex-col gap-2 p-3 border rounded-md">
               <h3 className="font-bold font-bodycopy">Certificate</h3>
               <div className="certificate-file relative w-full text-[15px]">
                 <FileItemLMS
@@ -203,7 +203,7 @@ export default function EditCohortMemberFormCMS(
         </div>
       )}
       {isAllowedUpdateCertificate && (
-        <div className="update-certificate sticky bottom-0 w-full p-4 bg-white border-t border-outline z-40">
+        <div className="update-certificate sticky bottom-0 w-full p-4 bg-white border-t z-40">
           <AppButton
             className="w-full"
             variant="tertiary"

@@ -452,7 +452,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                   }
                 />
               )}
-              <div className="attendance-settings flex flex-col gap-4 p-4 bg-section-background/50 border border-outline rounded-md">
+              <div className="attendance-settings flex flex-col gap-4 p-4 bg-section-background/50 border rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">
                   Attendance Settings
                 </h5>

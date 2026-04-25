@@ -62,7 +62,7 @@ export default function CheckOutAttendanceLMS(
     <React.Fragment>
       <div className="check-out-attendance relative flex items-center justify-between gap-3 bg-white p-4 border rounded-lg overflow-hidden">
         <div className="flex items-center gap-2">
-          <div className="clock-icon size-11 aspect-square bg-white p-1 border border-outline shrink-0 rounded-lg overflow-hidden">
+          <div className="clock-icon size-11 aspect-square bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/clock-icon.svg"

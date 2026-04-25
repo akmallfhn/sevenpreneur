@@ -79,7 +79,7 @@ export default function SelectSVP({
         className={`select-container relative flex w-full p-2 bg-white font-bodycopy font-medium text-sm rounded-md border transform transition-all dark:bg-[#2C2C2C] ${
           isOpen
             ? "outline-4 border-primary outline-primary/15 dark:border-surface-black dark:outline-outline-dark"
-            : "border-outline dark:border-outline-dark"
+            : ""
         } ${selectIcon ? "pl-10" : ""} ${
           disabled ? "cursor-not-allowed" : "cursor-pointer"
         }`}
@@ -120,7 +120,7 @@ export default function SelectSVP({
         )}
 
         {isOpen && !disabled && (
-          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border border-outline rounded-md shadow-md overflow-hidden dark:bg-[#2C2C2C] dark:border-outline-dark">
+          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border rounded-md shadow-md overflow-hidden dark:bg-[#2C2C2C]">
             <ul className="dropdown-options flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt, index) => (
                 <div

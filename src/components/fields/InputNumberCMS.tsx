@@ -121,7 +121,7 @@ export default function InputNumberCMS({
           className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
-              : "border-outline focus:outline-tertiary/15 focus:border-tertiary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
+              : "focus:outline-tertiary/15 focus:border-tertiary dark:focus:border-outline-dark dark:focus:outline-white/10"
           } ${inputIcon ? "pl-14" : ""} `}
           value={textValue}
           onChange={handleInputChange}

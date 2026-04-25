@@ -34,7 +34,7 @@ export default function UploadImageCMS(props: UploadImageCMSProps) {
 
   // Upload File to Supabase
   const handleUploadFiles = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
 
@@ -95,7 +95,7 @@ export default function UploadImageCMS(props: UploadImageCMSProps) {
   return (
     <div className="upload-file-container flex flex-col gap-1">
       <div
-        className={`upload-photo-container flex relative bg-white w-full h-full border border-dashed border-outline cursor-pointer rounded-md overflow-hidden`}
+        className={`upload-photo-container flex relative bg-white w-full h-full border border-dashed cursor-pointer rounded-md overflow-hidden`}
         style={{ aspectRatio: props.imageRatio }}
         onClick={handleUploadClick}
       >

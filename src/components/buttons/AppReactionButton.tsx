@@ -46,9 +46,7 @@ export default function AppReactionButton(props: AppReactionButtonProps) {
   return (
     <button
       className={`like-button flex w-fit items-center justify-center gap-1.5 py-1.5 px-2.5 transition-transform ease-in-out rounded-full active:scale-90 hover:cursor-pointer ${
-        props.isSelected
-          ? `border-0 ${activeColor}`
-          : "border border-outline text-[#444444]"
+        props.isSelected ? `border-0 ${activeColor}` : "border text-[#444444]"
       }`}
       onClick={props.onClick}
     >

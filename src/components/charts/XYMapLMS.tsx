@@ -89,7 +89,7 @@ export default function XYMapLMS(props: XYMapLMSProps) {
             </TooltipContent>
           </Tooltip>
           <div className="y-axis absolute flex w-[1px] h-full left-1/2 -translate-x-1/2 self-stretch bg-outline" />
-          <hr className="x-axis absolute flex w-full top-1/2 -translate-y-1/2 border-b border-outline" />
+          <hr className="x-axis absolute flex w-full top-1/2 -translate-y-1/2 border-b" />
         </div>
       </div>
     </div>

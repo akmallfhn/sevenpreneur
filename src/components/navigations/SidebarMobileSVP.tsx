@@ -63,7 +63,7 @@ export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
       >
         <div className="side-menu-box relative flex flex-col w-full h-full p-5 gap-5 justify-center">
           {props.isLoggedIn ? (
-            <div className="user-informations flex w-full min-h-[64px] items-center gap-2 p-3 border border-outline bg-white rounded-lg overflow-hidden dark:bg-surface-black dark:border-outline-dark">
+            <div className="user-informations flex w-full min-h-[64px] items-center gap-2 p-3 border bg-white rounded-lg overflow-hidden dark:bg-surface-black">
               <div className="user-avatar aspect-square size-9 shrink-0 rounded-full overflow-hidden">
                 <Image
                   className="user-avatar object-cover w-full h-full"
@@ -87,7 +87,7 @@ export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
               href={`/auth/login?redirectTo=${pathname}`}
               onClick={props.onClose}
             >
-              <div className="user-informations flex w-full min-h-[64px] items-center gap-2 p-3 border border-outline bg-white rounded-lg overflow-hidden dark:bg-surface-black dark:border-outline-dark">
+              <div className="user-informations flex w-full min-h-[64px] items-center gap-2 p-3 border bg-white rounded-lg overflow-hidden dark:bg-surface-black">
                 <div className="user-avatar aspect-square size-9 shrink-0 rounded-full overflow-hidden">
                   <Image
                     className="user-avatar object-cover w-full h-full"
@@ -148,7 +148,7 @@ export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
               onClick={props.onClose}
             />
           </ul>
-          <ul className="side-menu-list flex flex-col mb-24 gap-3 p-4 border border-outline bg-white/30 rounded-lg dark:bg-sevenpreneur-surface-black">
+          <ul className="side-menu-list flex flex-col mb-24 gap-3 p-4 border bg-white/30 rounded-lg dark:bg-sevenpreneur-surface-black">
             <SidebarMenuItemMobileSVP
               menuName="My Learning"
               menuIcon={<LayoutDashboard className="size-5" />}

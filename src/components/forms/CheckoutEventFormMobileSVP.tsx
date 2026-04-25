@@ -329,7 +329,7 @@ export default function CheckoutEventFormMobileSVP({
           // Payment Details
           <div className="payment-details relative flex flex-col gap-1 z-10">
             {/* Payment Summary */}
-            <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm dark:bg-surface-black dark:border-outline-dark">
+            <div className="payment-summary flex gap-3 p-4 m-5 mb-0 bg-white items-center rounded-md shadow-sm dark:bg-surface-black">
               <div className="aspect-square size-16 rounded-md overflow-hidden">
                 <Image
                   className="object-cover w-full h-full"
@@ -511,7 +511,7 @@ export default function CheckoutEventFormMobileSVP({
                     isDiscount
                   />
                 )}
-                <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
+                <hr className="border-t-1 border-dashed" />
                 <ReceiptLineItemSVP
                   receiptName="Subtotal"
                   receiptValue={getRupiahCurrency(subtotal)}
@@ -532,7 +532,7 @@ export default function CheckoutEventFormMobileSVP({
                       : getRupiahCurrency(paymentCalculation.valueAddedTax)
                   }
                 />
-                <hr className="border-t-1 border-outline border-dashed dark:border-outline-dark" />
+                <hr className="border-t-1 border-dashed" />
                 <ReceiptLineItemSVP
                   receiptName="Total Amount"
                   receiptValue={
@@ -552,7 +552,7 @@ export default function CheckoutEventFormMobileSVP({
 
         {/* Footer */}
         <div className="footer-box flex p-5">
-          <div className="footer-container flex w-full items-center p-3 gap-1.5 bg-white border border-outline rounded-md dark:bg-surface-black dark:border-outline-dark">
+          <div className="footer-container flex w-full items-center p-3 gap-1.5 bg-white border rounded-md dark:bg-surface-black">
             <div className="flex aspect-square size-10">
               <Image
                 className="object-cover w-full h-full"
@@ -578,7 +578,7 @@ export default function CheckoutEventFormMobileSVP({
 
       {/* Floating CTA */}
       {isValidTicketId && (
-        <div className="floating-cta fixed flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t border-outline/50 z-40 dark:bg-surface-black dark:border-outline-dark">
+        <div className="floating-cta fixed flex bg-white bottom-0 left-0 w-full justify-between p-5 border-t/50 z-40 dark:bg-surface-black">
           <div className="flex flex-col font-bodycopy">
             <p className="text-sm">Total Amount</p>
             <p className="font-bold">

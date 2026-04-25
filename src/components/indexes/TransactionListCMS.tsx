@@ -309,7 +309,7 @@ export default function TransactionListCMS({
           </div>
           <div className="table-transactions flex flex-col">
             {filterData.productId && (
-              <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b border-outline/25">
+              <div className="applied-filter flex w-full bg-[#FAFAFA] items-center gap-2 p-2 border-b/25">
                 <p className="text-sm text-emphasis font-medium font-bodycopy">
                   Active filter:
                 </p>

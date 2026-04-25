@@ -321,7 +321,7 @@ export default function CreateDiscountFormCMS({
                 <StatusLabelCMS variants={formData.discountStatus} />
               </div>
             </div>
-            <div className="flex flex-col bg-section-background/50 border border-outline gap-4 p-4 rounded-md">
+            <div className="flex flex-col bg-section-background/50 border gap-4 p-4 rounded-md">
               <h5 className="font-bodycopy font-bold text-sm">
                 Applies Discount to Product
               </h5>

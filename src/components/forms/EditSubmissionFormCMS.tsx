@@ -203,7 +203,7 @@ export default function EditSubmissionFormCMS(
       )}
       {!isLoading && !isError && submissionDetails && (
         <div className="container flex flex-col h-full px-6 pb-20 gap-5 overflow-y-auto">
-          <div className="submitter-details flex flex-col gap-2 p-3 border border-outline rounded-md">
+          <div className="submitter-details flex flex-col gap-2 p-3 border rounded-md">
             <h5 className="font-bodycopy font-bold text-[15px]">
               Submitter Details
             </h5>
@@ -255,7 +255,7 @@ export default function EditSubmissionFormCMS(
         </div>
       )}
       {isAllowedUpdateSubmission && (
-        <div className="update-comment sticky flex flex-col bottom-0 w-full p-4 gap-3 border-t bg-white border-outline z-40">
+        <div className="update-comment sticky flex flex-col bottom-0 w-full p-4 gap-3 border-t bg-white z-40">
           <AppButton
             className="w-full"
             variant="primarySoft"

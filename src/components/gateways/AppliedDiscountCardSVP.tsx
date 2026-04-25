@@ -16,7 +16,7 @@ export default function AppliedDiscountCardSVP({
 }: AppliedDiscountCardSVPProps) {
   return (
     <div
-      className="applied-discount-box relative flex w-full p-3 bg-[#f7f7f7] border border-outline rounded-md overflow-hidden dark:bg-surface-black dark:border-0 sm:hover:cursor-pointer"
+      className="applied-discount-box relative flex w-full p-3 bg-[#f7f7f7] border rounded-md overflow-hidden dark:bg-surface-black dark:border-0 sm:hover:cursor-pointer"
       {...rest}
     >
       <div className="discount-container flex w-full items-center justify-between z-10">

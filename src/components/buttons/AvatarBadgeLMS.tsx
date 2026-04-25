@@ -73,7 +73,7 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
       ref={wrapperRef}
       onClick={handleActionsDropdown}
     >
-      <div className="avatar-container flex items-center gap-3 bg-white p-2 rounded-lg border border-outline">
+      <div className="avatar-container flex items-center gap-3 bg-white p-2 rounded-lg border">
         <div className="avatar aspect-square size-6 rounded-md overflow-hidden ">
           <Image
             className="object-cover w-full h-full"

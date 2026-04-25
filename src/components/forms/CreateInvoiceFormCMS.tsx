@@ -439,7 +439,7 @@ export default function CreateInvoiceFormCMS({
                 onInputChange={handleInputChange("invoiceUserPhone")}
                 required
               />
-              <div className="bg-section-background/50 border border-outline flex flex-col gap-2 p-4 rounded-md">
+              <div className="bg-section-background/50 border flex flex-col gap-2 p-4 rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">Order Item</h5>
                 <SelectCMS
                   selectId="invoice-product-category"
@@ -554,7 +554,7 @@ export default function CreateInvoiceFormCMS({
 
               {/* Payment Details */}
               {formData.paymentChannelId && formData.invoiceProductItem && (
-                <div className="flex flex-col bg-section-background/50 gap-2 p-3 border border-outline rounded-md">
+                <div className="flex flex-col bg-section-background/50 gap-2 p-3 border rounded-md">
                   <h5 className="font-bodycopy font-bold text-sm">
                     Payment Details
                   </h5>
@@ -583,7 +583,7 @@ export default function CreateInvoiceFormCMS({
                       Math.round(paymentCalculation.valueAddedTax)
                     )}
                   />
-                  <hr className="border-t border-outline" />
+                  <hr className="border-t" />
                   <ReceiptLineItemCMS
                     receiptName="Total Amount"
                     receiptValue={getRupiahCurrency(

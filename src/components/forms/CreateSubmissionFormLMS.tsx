@@ -126,11 +126,11 @@ export default function CreateSubmissionFormLMS({
       )}
       {submitMode === null && (
         <div className="divider flex items-center gap-6">
-          <hr className="w-full border-b border-outline" />
+          <hr className="w-full border-b" />
           <p className="text-[#333333]/70 text-sm font-bodycopy font-medium">
             OR
           </p>
-          <hr className="w-full border-b border-outline " />
+          <hr className="w-full border-b " />
         </div>
       )}
       {submitMode !== "attach" && (

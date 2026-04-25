@@ -21,7 +21,7 @@ export default function HeaderMobileLMS(props: HeaderMobileLMSProps) {
   }, [copied]);
 
   return (
-    <div className="mobile-header sticky flex w-full top-0 left-0 items-center justify-between py-2 px-5 gap-4 bg-white border-b border-outline z-[90]">
+    <div className="mobile-header sticky flex w-full top-0 left-0 items-center justify-between py-2 px-5 gap-4 bg-white border-b z-[90]">
       <Link href={props.headerBackURL} className="shrink-0">
         <AppButton variant="ghost" size="icon">
           <ChevronLeft className="size-5" />

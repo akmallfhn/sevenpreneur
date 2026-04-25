@@ -24,7 +24,7 @@ export default function FileResultUploadingCMS({
 
   return (
     <React.Fragment>
-      <div className="file-container flex items-center justify-between bg-white border border-outline gap-2 p-1 rounded-md">
+      <div className="file-container flex items-center justify-between bg-white border gap-2 p-1 rounded-md">
         <a
           href={fileURL}
           className="flex items-center w-[calc(87%)]"

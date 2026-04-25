@@ -73,7 +73,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
           {!isLoadingTickerData && !isErrorTickerData && (
             <div className="flex flex-col w-full gap-4">
               {tickerDetailsData && (
-                <div className="tools flex items-center justify-between p-5 bg-section-background/50 border border-outline rounded-md">
+                <div className="tools flex items-center justify-between p-5 bg-section-background/50 border rounded-md">
                   <div className="flex flex-col gap-2">
                     <div className="tools-name flex flex-col">
                       <div className="tool-name flex items-center gap-3">
@@ -134,7 +134,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
               )}
 
               {interstitialDetailsData && (
-                <div className="tool-item flex items-center justify-between p-5 bg-section-background/50 border border-outline rounded-md">
+                <div className="tool-item flex items-center justify-between p-5 bg-section-background/50 border rounded-md">
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col">
                       <div className="tool-name flex items-center gap-3">

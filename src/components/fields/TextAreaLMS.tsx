@@ -36,7 +36,7 @@ export default function TextAreaLMS({
 
   // Character Limitation on Text Area
   const handleTextAreaChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     // Dynamic resize height text area
     const textarea = event.target;
@@ -84,7 +84,7 @@ export default function TextAreaLMS({
           rows={1}
           {...rest}
           className={`text-area-placeholder flex w-full min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-[15px] border-b-2 resize-none transform transition-all overflow-hidden placeholder:text-emphasis placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
-            computedError ? "border-destructive" : "border-outline"
+            computedError ? "border-destructive" : ""
           } `}
           value={textValue}
           onChange={handleTextAreaChange}

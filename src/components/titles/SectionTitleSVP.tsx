@@ -21,7 +21,7 @@ export default function SectionTitleSVP({
           </p>
         )}
       </div>
-      <hr className="border-t-1 border-outline dark:border-outline-dark" />
+      <hr className="border-t" />
     </div>
   );
 }

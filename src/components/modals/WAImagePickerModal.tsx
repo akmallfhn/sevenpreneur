@@ -135,7 +135,7 @@ export default function WAImagePickerModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-outline">
+        <div className="flex items-center justify-between px-5 py-4 border-b">
           <h2 className="font-bodycopy font-bold text-sm">
             {selectedUrl ? "Add Caption" : "Choose Image"}
           </h2>

@@ -173,7 +173,7 @@ export default function TransactionStatusDetailsSVP(
     <React.Fragment>
       <div className="transaction-page relative flex flex-col pb-36 gap-1 bg-[#F9F9F9] dark:bg-coal-black lg:mx-auto lg:w-full lg:gap-3 lg:flex-row lg:bg-white lg:pt-12 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
         <div className="flex flex-col gap-1 lg:flex-1 lg:gap-3">
-          <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
+          <div className="transaction-status flex flex-col p-5 items-center gap-5 bg-white dark:bg-surface-black lg:border lg:lg:rounded-lg">
             <div className="status-guidance flex flex-col items-center text-center font-bodycopy">
               <PaymentStatusAnimationSVP variant={props.transactionStatus} />
               <div className="flex flex-col items-center gap-2">
@@ -221,7 +221,7 @@ export default function TransactionStatusDetailsSVP(
               </div>
             )}
           </div>
-          <div className="payment-details flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
+          <div className="payment-details flex flex-col w-full bg-white p-5 dark:bg-surface-black lg:border lg:lg:rounded-lg">
             {!isFreeCharge && (
               <div className="payment-channel flex items-center gap-3 pb-4">
                 <div className="payment-image flex aspect-square w-8 h-8 rounded-full overflow-hidden">
@@ -272,7 +272,7 @@ export default function TransactionStatusDetailsSVP(
                   receiptName="VAT"
                   receiptValue={getRupiahCurrency(Math.round(props.productVAT))}
                 />
-                <hr className="border-t border-outline border-dashed dark:border-outline-dark" />
+                <hr className="border-t border-dashed" />
               </div>
             </div>
             <div
@@ -295,7 +295,7 @@ export default function TransactionStatusDetailsSVP(
         </div>
         <div className="flex flex-col gap-1 lg:flex-2 lg:gap-3">
           {/* Product Metadata */}
-          <div className="product-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
+          <div className="product-metadata flex w-full items-center gap-4 bg-white p-5 dark:bg-surface-black lg:border lg:lg:rounded-lg">
             <div className="product-image aspect-square size-16 rounded-md overflow-hidden">
               <Image
                 className="object-cover w-full h-full"
@@ -313,7 +313,7 @@ export default function TransactionStatusDetailsSVP(
             </div>
           </div>
           {/* Transaction Metadata */}
-          <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
+          <div className="transaction-metadata flex flex-col gap-1 bg-white p-5 dark:bg-surface-black lg:border lg:lg:rounded-lg">
             <ReceiptLineItemSVP
               receiptName="Transaction ID"
               receiptValue={props.transactionId}
@@ -335,7 +335,7 @@ export default function TransactionStatusDetailsSVP(
           </div>
 
           {/* Support Helpdesk */}
-          <div className="support-helpdesk flex gap-1 bg-white py-4 p-5 items-center justify-between dark:bg-surface-black lg:border lg:border-outline lg:rounded-lg">
+          <div className="support-helpdesk flex gap-1 bg-white py-4 p-5 items-center justify-between dark:bg-surface-black lg:border lg:lg:rounded-lg">
             <div className="flex items-center gap-2">
               <div className="helpdesk-icon flex aspect-square size-[52px] overflow-hidden">
                 <Image

@@ -102,7 +102,7 @@ export default function UploadAvatarUserCMS({
 
   return (
     <div className="flex items-center gap-5">
-      <div className="size-32 border border-outline aspect-square rounded-full overflow-hidden">
+      <div className="size-32 border aspect-square rounded-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"
           src={imageUrl}

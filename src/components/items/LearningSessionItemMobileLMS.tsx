@@ -21,7 +21,7 @@ export default function LearningSessionItemMobileLMS(
   return (
     <Link
       href={`/cohorts/${props.cohortId}/learnings/${props.learningSessionId}`}
-      className="session-box flex w-full bg-white p-3 items-center gap-3 justify-between font-bodycopy rounded-md border border-outline transform transition hover:cursor-pointer active:scale-95 hover:bg-[#EDF0F6]"
+      className="session-box flex w-full bg-white p-3 items-center gap-3 justify-between font-bodycopy rounded-md border transform transition hover:cursor-pointer active:scale-95 hover:bg-[#EDF0F6]"
     >
       <div className="session-container flex items-center gap-4">
         <div className="session-metadata flex items-center gap-3">

@@ -153,7 +153,7 @@ export default function LearningDetailsMobileLMS(
       {currentTab === "details" &&
         props.learningSessionFeedbackURL &&
         props.learningSessionCheckOut && (
-          <div className="ratings-feedback fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t border-outline transition-all z-[90]">
+          <div className="ratings-feedback fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t transition-all z-[90]">
             <p className="section-title font-bold font-bodycopy text-[15px]">
               How satisfied are you with this session?
             </p>
@@ -171,7 +171,7 @@ export default function LearningDetailsMobileLMS(
 
       {/* Create Discussion */}
       {currentTab === "discussions" && (
-        <div className="discussions fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t border-outline transition-all z-[90]">
+        <div className="discussions fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t transition-all z-[90]">
           <AppDiscussionStarterSubmitter
             sessionUserName={props.sessionUserName}
             sessionUserAvatar={props.sessionUserAvatar}

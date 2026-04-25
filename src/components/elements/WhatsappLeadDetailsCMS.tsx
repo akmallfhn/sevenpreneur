@@ -144,7 +144,7 @@ export default function WhatsappLeadDetailsCMS(
                 )}
               </div>
             </div>
-            <div className="lead-details flex flex-col gap-2 p-3 bg-section-background/50  border border-outline rounded-md">
+            <div className="lead-details flex flex-col gap-2 p-3 bg-section-background/50 border rounded-md">
               <div className="flex w-full justify-between items-center leading-snug">
                 <h5 className="font-bodycopy text-[15px] font-bold">
                   Lead Details
@@ -166,7 +166,7 @@ export default function WhatsappLeadDetailsCMS(
                   </p>
                   <div className="flex w-full">
                     {leadDetails.handler_id ? (
-                      <div className="input flex w-fit items-center gap-2 bg-white py-1 px-2 rounded-full border border-outline">
+                      <div className="input flex w-fit items-center gap-2 bg-white py-1 px-2 rounded-full border">
                         <div className="size-5 rounded-full shrink-0 overflow-hidden">
                           <Image
                             className="object-cover w-full h-full"
@@ -215,7 +215,7 @@ export default function WhatsappLeadDetailsCMS(
                 </div>
               </div>
             </div>
-            <div className="lead-progress flex flex-col gap-2 p-3 bg-section-background/50  border border-outline rounded-md">
+            <div className="lead-progress flex flex-col gap-2 p-3 bg-section-background/50 border rounded-md">
               <div className="flex items-center gap-2">
                 <Loader className="size-4 text-emphasis" />
                 <h5 className="font-bodycopy text-[15px] font-bold">
@@ -234,7 +234,7 @@ export default function WhatsappLeadDetailsCMS(
                 </div>
               </div>
             </div>
-            <div className="notes flex flex-col gap-2 p-3 bg-section-background/50 border border-outline rounded-md">
+            <div className="notes flex flex-col gap-2 p-3 bg-section-background/50 border rounded-md">
               <div className="flex items-center gap-2">
                 <TextAlignStart className="size-4 text-emphasis" />
                 <h5 className="font-bodycopy text-[15px] font-bold">Notes</h5>

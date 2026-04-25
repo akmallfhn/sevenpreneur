@@ -41,7 +41,7 @@ export default function ChatSubmitterLMS({
   };
 
   return (
-    <div className="chat-submitter flex flex-col w-full p-3 bg-white gap-3 border border-outline rounded-xl">
+    <div className="chat-submitter flex flex-col w-full p-3 bg-white gap-3 border rounded-xl">
       <div className="text-area-container relative w-full">
         <textarea
           id="chat-ai"
@@ -58,13 +58,13 @@ export default function ChatSubmitterLMS({
       </div>
       <div className="chat-attachments flex items-center justify-end">
         {/* <AppButton size="largeIconRounded" variant="outline" type="button">
-          <Paperclip className="size-5" />
-        </AppButton> */}
+ <Paperclip className="size-5" />
+ </AppButton> */}
         {/* {isLoadingSubmit ? (
-          <AppButton className="chat-end-submitting" size="largeIconRounded">
-            <Square fill="#FFFFFF" className="size-4" />
-          </AppButton>
-        ) : ( */}
+ <AppButton className="chat-end-submitting" size="largeIconRounded">
+ <Square fill="#FFFFFF" className="size-4" />
+ </AppButton>
+ ) : ( */}
         <AppButton
           className="chat-submitter"
           type="submit"

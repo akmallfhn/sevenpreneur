@@ -22,7 +22,7 @@ export default function ScheduleBlueprintProgramSVP() {
                   27 APR - 17 MAY 2026
                 </p>
               </div>
-              <div className="hidden border-b border-dashed border-outline lg:flex" />
+              <div className="hidden border-b border-dashed lg:flex" />
               <div className="schedule flex font-bodycopy gap-8 text-white lg:text-black">
                 <div className="day-schedule flex flex-col gap-1 w-fit text-[15px] lg:text-base">
                   <p className="font-bold">Day</p>
@@ -50,7 +50,7 @@ export default function ScheduleBlueprintProgramSVP() {
                   17 MAY 2026
                 </p>
               </div>
-              <div className="hidden border-b border-dashed border-outline lg:flex" />
+              <div className="hidden border-b border-dashed lg:flex" />
               <div className="schedule flex font-bodycopy gap-8 text-white lg:text-black">
                 <div className="day-schedule flex flex-col gap-1 w-fit text-[15px] lg:text-base">
                   <p className="font-bold">Days</p>

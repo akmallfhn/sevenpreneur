@@ -85,12 +85,12 @@ export default function InputSVP({
           className={`input-placeholder flex w-full p-2 font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
-              : "border-outline focus:outline-primary/15 focus:border-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"
+              : "focus:outline-primary/15 focus:border-primary dark:focus:border-outline-dark dark:focus:outline-white/10"
           } ${
             rest.disabled
               ? "bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-[#1F1F1F] dark:text-[#555555]"
               : "bg-white dark:bg-[#2C2C2C]"
-          } ${inputIcon ? "pl-10" : ""}  `}
+          } ${inputIcon ? "pl-10" : ""} `}
           value={textValue}
           onChange={handleInputChange}
           {...rest}

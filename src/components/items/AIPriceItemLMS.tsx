@@ -49,9 +49,7 @@ export default function AIPriceItemLMS(props: AIPriceItemLMSProps) {
   return (
     <div
       className={`value-based-price flex flex-col w-full font-bodycopy p-4 gap-2 rounded-lg hover:cursor-pointer ${
-        props.isSelected
-          ? `border ${priceVar.background}`
-          : "bg-white border border-outline"
+        props.isSelected ? `border ${priceVar.background}` : "bg-white border"
       }`}
       onClick={props.onSelect}
     >
@@ -72,7 +70,7 @@ export default function AIPriceItemLMS(props: AIPriceItemLMSProps) {
           {getRupiahCurrency(Math.round(props.estimatedPrice))}
         </h2>
       </div>
-      <hr className="border-b border-outline" />
+      <hr className="border-b" />
       <div className="flex flex-col">
         <div className="flex w-full items-center justify-between text-[15px] text-[#111111]">
           <p className="font-medium">Persentase Margin per Unit</p>

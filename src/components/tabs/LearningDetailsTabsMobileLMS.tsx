@@ -150,7 +150,7 @@ export default function LearningDetailsTabsMobileLMS(
             </h2>
             <div className="learning-place-date-box flex flex-col gap-3">
               <div className="learning-place-date-container flex w-full items-center gap-3">
-                <div className="learning-place-icon size-11 aspect-square bg-white p-1 border border-outline shrink-0 rounded-lg overflow-hidden">
+                <div className="learning-place-icon size-11 aspect-square bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
                   <Image
                     className="object-cover w-full h-full"
                     src={learningPlaceIcon}

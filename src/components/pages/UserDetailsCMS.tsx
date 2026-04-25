@@ -265,7 +265,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                   Transaction History
                 </h2>
                 {(transactionsData?.list ?? []).length > 0 ? (
-                  <div className="transaction-list flex flex-col w-full max-h-[230px] p-1 gap-1 bg-white rounded-lg border border-outline overflow-y-auto">
+                  <div className="transaction-list flex flex-col w-full max-h-[230px] p-1 gap-1 bg-white rounded-lg border overflow-y-auto">
                     {transactionsData?.list.map((post) => (
                       <UserTransactionItemCMS
                         key={post.id}

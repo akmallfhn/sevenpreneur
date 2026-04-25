@@ -100,7 +100,7 @@ export default function WhatsappChatSubmitterCMS({
   return (
     <React.Fragment>
       <div className="relative w-full" ref={wrapperRef}>
-        <div className="chat-submitter flex items-center w-full p-3 px-4 bg-white gap-2 border border-outline rounded-xl">
+        <div className="chat-submitter flex items-center w-full p-3 px-4 bg-white gap-2 border rounded-xl">
           <div className="emoji flex items-center justify-center">
             <AppButton
               size="iconRounded"

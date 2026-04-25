@@ -81,7 +81,7 @@ export default function TextAreaCMS({
           className={`text-area-placeholder flex w-full p-2 ${textAreaHeight} bg-white font-medium font-bodycopy text-sm rounded-md border resize-none transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
-              : "border-outline focus:outline-primary/15 focus:border-tertiary"
+              : "focus:outline-primary/15 focus:border-tertiary"
           } `}
           value={textValue}
           onChange={handleTextAreaChange}

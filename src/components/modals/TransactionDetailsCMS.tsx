@@ -114,7 +114,7 @@ export default function TransactionDetailsCMS({
               />
             )}
           </SheetLineItemCMS>
-          <div className="customer-details flex flex-col gap-2 p-3 border border-outline rounded-md">
+          <div className="customer-details flex flex-col gap-2 p-3 border rounded-md">
             <h5 className="font-bodycopy font-bold text-sm">
               Customer Details
             </h5>
@@ -129,7 +129,7 @@ export default function TransactionDetailsCMS({
               userPhoneNumber={transactionDetails?.user_phone_number || ""}
             />
           </div>
-          <div className="payment-status flex flex-col gap-4 p-3 border border-outline rounded-md">
+          <div className="payment-status flex flex-col gap-4 p-3 border rounded-md">
             <SheetLineItemCMS itemName="Payment Method">
               <div className="flex items-center gap-2">
                 {transactionDetails?.payment_channel_image && (
@@ -187,7 +187,7 @@ export default function TransactionDetailsCMS({
               </SheetLineItemCMS>
             )}
           </div>
-          <div className="payment-details flex flex-col gap-2 p-3 border border-outline rounded-md">
+          <div className="payment-details flex flex-col gap-2 p-3 border rounded-md">
             <h5 className="font-bodycopy font-bold text-sm">Payment Details</h5>
             <ReceiptLineItemCMS
               receiptName="Price"
@@ -216,7 +216,7 @@ export default function TransactionDetailsCMS({
                 Math.round(Number(transactionDetails?.product_vat))
               )}
             />
-            <hr className="border-t border-outline" />
+            <hr className="border-t" />
             <ReceiptLineItemCMS
               receiptName="Total Amount"
               receiptValue={getRupiahCurrency(

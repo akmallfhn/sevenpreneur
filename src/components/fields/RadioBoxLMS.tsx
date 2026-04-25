@@ -14,7 +14,7 @@ export default function RadioBoxLMS(props: RadioBoxLMSProps) {
   return (
     <label
       className={`input-container flex p-3 gap-4 border rounded-md ${
-        isSelected ? "bg-[#F2F8FF] border-primary" : "bg-white border-outline"
+        isSelected ? "bg-[#F2F8FF] border-primary" : "bg-white"
       } `}
     >
       <input

@@ -11,7 +11,7 @@ export interface PageHeaderLMSProps extends AvatarBadgeLMSProps {
 export default function PageHeaderLMS(props: PageHeaderLMSProps) {
   return (
     <React.Fragment>
-      <div className="header-root flex sticky w-full top-0 left-0 px-0 py-3 items-center justify-center bg-white border-b border-outline z-40">
+      <div className="header-root flex sticky w-full top-0 left-0 px-0 py-3 items-center justify-center bg-white border-b z-40">
         <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between">
           <div className="header-page-data flex items-center gap-3">
             <div

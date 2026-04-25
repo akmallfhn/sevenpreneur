@@ -18,7 +18,7 @@ export default function SubmissionItemAccordionLMS(
 
   return (
     <div
-      className="submission-item flex flex-col w-full py-2.5 px-3 bg-white border border-outline rounded-md transform transition duration-500 hover:cursor-pointer"
+      className="submission-item flex flex-col w-full py-2.5 px-3 bg-white border rounded-md transform transition duration-500 hover:cursor-pointer"
       onClick={handleOpen}
     >
       <div className="submission-attributes flex justify-between items-center gap-2">

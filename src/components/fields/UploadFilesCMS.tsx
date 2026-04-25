@@ -117,7 +117,7 @@ export default function UploadFilesCMS({
       {!value && (
         <div className="upload-file-container flex flex-col gap-1">
           <div
-            className="upload-helper flex relative aspect-thumbnail w-full h-full border-[1.9px] border-dashed border-outline cursor-pointer rounded-md overflow-hidden"
+            className="upload-helper flex relative aspect-thumbnail w-full h-full border-[1.9px] border-dashed cursor-pointer rounded-md overflow-hidden"
             onClick={handleUploadClick}
           >
             <div className=" flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">

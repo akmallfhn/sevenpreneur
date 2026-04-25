@@ -119,10 +119,10 @@ export default function AttendanceGatewayMobileLMS(
 
   return (
     <React.Fragment>
-      <div className="attendance-gateway relative flex flex-col w-full p-3.5 gap-3 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg overflow-hidden">
+      <div className="attendance-gateway relative flex flex-col w-full p-3.5 gap-3 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white border rounded-lg overflow-hidden">
         <div className="section-title flex flex-col gap-1 z-20">
           <h3 className="font-bodycopy font-bold ">Sudah Hadir Sesi Ini?</h3>
-          <p className="font-bodycopy  text-sm">
+          <p className="font-bodycopy text-sm">
             Yuk, lakukan check-in sekarang dan check-out setelah sesi selesai.
           </p>
         </div>

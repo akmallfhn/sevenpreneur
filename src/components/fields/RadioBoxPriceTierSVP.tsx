@@ -23,7 +23,7 @@ export default function RadioBoxPriceTierSVP({
   return (
     <label
       className={`flex p-3 px-5 gap-4 border rounded-md justify-between ${
-        isSelected ? "bg-[#F2F8FF] border-primary" : "bg-white border-outline"
+        isSelected ? "bg-[#F2F8FF] border-primary" : "bg-white"
       } `}
     >
       <div className="flex flex-col font-ui text-sm">

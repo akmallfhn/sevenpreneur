@@ -7,7 +7,7 @@ interface HeroGreetingsLMSProps {
 
 export default function HeroGreetingsLMS(props: HeroGreetingsLMSProps) {
   return (
-    <div className="hero-greetings relative w-full aspect-[5208/702] border border-outline rounded-lg overflow-hidden">
+    <div className="hero-greetings relative w-full aspect-[5208/702] border rounded-lg overflow-hidden">
       <Image
         className="hero-image object-cover w-full h-full inset-0"
         src={

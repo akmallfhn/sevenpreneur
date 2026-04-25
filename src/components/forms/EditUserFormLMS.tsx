@@ -217,7 +217,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
           height={800}
         />
       </div>
-      <div className="personal-form-input flex flex-col w-full bg-white p-6 gap-6 border border-outline rounded-lg">
+      <div className="personal-form-input flex flex-col w-full bg-white p-6 gap-6 border rounded-lg">
         <div className="form-name flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Full Name</p>
@@ -342,7 +342,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
           </div>
         </div>
       </div>
-      <div className="business-form-input flex flex-col w-full bg-white p-6 gap-6 border border-outline rounded-lg">
+      <div className="business-form-input flex flex-col w-full bg-white p-6 gap-6 border rounded-lg">
         <div className="form-business-name flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Business Name</p>

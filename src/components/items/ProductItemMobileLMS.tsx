@@ -31,7 +31,7 @@ export default function ProductItemMobileLMS(props: ProductItemMobileLMSProps) {
   return (
     <Link
       href={`/${slugCategory}/${props.productId}`}
-      className="product-container flex w-full p-3 items-center gap-3 bg-white border border-outline rounded-lg overflow-hidden transition transform active:scale-95"
+      className="product-container flex w-full p-3 items-center gap-3 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
     >
       <div className="product-image relative flex w-20 aspect-square rounded-md shrink-0 overflow-hidden">
         <Image

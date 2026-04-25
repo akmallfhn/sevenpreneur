@@ -184,7 +184,7 @@ export default function COGSPricesCalculationReportLMS(
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="flex w-full gap-4">
           <main className="flex flex-col flex-2 gap-4 w-full">
-            <div className="target-profit flex flex-col w-full gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg">
+            <div className="target-profit flex flex-col w-full gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Simulasi Target
               </h3>
@@ -204,7 +204,7 @@ export default function COGSPricesCalculationReportLMS(
                 onInputChange={handleVolumeProductionChange}
               />
             </div>
-            <div className="price-strategy flex flex-col gap-3 p-5 bg-white border border-outline rounded-lg">
+            <div className="price-strategy flex flex-col gap-3 p-5 bg-white border rounded-lg">
               <div className="flex flex-col">
                 <h3 className="section-title font-bodycopy font-bold text-lg">
                   Harga yang Disarankan
@@ -238,7 +238,7 @@ export default function COGSPricesCalculationReportLMS(
                 variant="competition"
               />
             </div>
-            <div className="price-strategy flex flex-col gap-3 p-5 bg-white border border-outline rounded-lg">
+            <div className="price-strategy flex flex-col gap-3 p-5 bg-white border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Kalkulasi & Proyeksi Penjualan
               </h3>
@@ -269,7 +269,7 @@ export default function COGSPricesCalculationReportLMS(
             </div>
           </main>
           <aside className="aside-industry-analisis flex flex-col flex-[1.2] gap-4 w-full">
-            <div className="cost-analysis flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg">
+            <div className="cost-analysis flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Rincian Biaya
               </h3>
@@ -316,7 +316,7 @@ export default function COGSPricesCalculationReportLMS(
                 </p>
               </div>
             </div>
-            <div className="value-communication flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border border-outline rounded-lg">
+            <div className="value-communication flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Value Communication
               </h3>
@@ -324,7 +324,7 @@ export default function COGSPricesCalculationReportLMS(
                 {props.valueCommunication}
               </p>
             </div>
-            <div className="value-communication flex flex-col gap-2 p-5 bg-white border border-outline rounded-lg">
+            <div className="value-communication flex flex-col gap-2 p-5 bg-white border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Benchmark Kompetitor
               </h3>

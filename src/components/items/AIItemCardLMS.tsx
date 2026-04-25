@@ -38,7 +38,7 @@ export default function AIItemCardLMS({
   return (
     <Link
       href={`/ai/${aiSlug}`}
-      className="ai-item-container flex flex-col w-full gap-2 p-3 bg-white border border-outline rounded-lg overflow-hidden transition transform active:scale-95"
+      className="ai-item-container flex flex-col w-full gap-2 p-3 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
     >
       <div className="ai-icon flex items-center justify-center size-11 border rounded-lg">
         {aiIcon}
