@@ -736,11 +736,12 @@ CREATE TABLE wa_chats (
 );
 
 CREATE TABLE wa_assets (
-  id          SERIAL         PRIMARY KEY,
-  url         VARCHAR        NOT NULL,
-  type        wa_asset_type  NOT NULL,
-  created_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at  TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  id           SERIAL         PRIMARY KEY,
+  url          VARCHAR        NOT NULL,
+  type         wa_asset_type  NOT NULL,
+  description  VARCHAR            NULL,
+  created_at   TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMPTZ    NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE wa_alerts (

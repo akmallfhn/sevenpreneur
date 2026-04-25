@@ -19,6 +19,7 @@ export const createWA = {
       z.object({
         url: stringNotBlank(),
         type: z.enum(WAAssetType),
+        description: stringNotBlank().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -26,6 +27,7 @@ export const createWA = {
         data: {
           url: opts.input.url,
           type: opts.input.type,
+          description: opts.input.description,
         },
       });
       const theAsset = await opts.ctx.prisma.wAAsset.findFirst({

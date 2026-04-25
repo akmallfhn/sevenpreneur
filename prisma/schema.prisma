@@ -975,11 +975,12 @@ model WAChat {
 }
 
 model WAAsset {
-  id         Int         @id @default(autoincrement())
-  url        String      @db.VarChar()
-  type       WAAssetType
-  created_at DateTime    @default(now()) @db.Timestamptz()
-  updated_at DateTime    @default(now()) @updatedAt @db.Timestamptz()
+  id          Int         @id @default(autoincrement())
+  url         String      @db.VarChar()
+  type        WAAssetType
+  description String?     @db.VarChar()
+  created_at  DateTime    @default(now()) @db.Timestamptz()
+  updated_at  DateTime    @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("wa_assets")
 }

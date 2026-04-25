@@ -91,6 +91,7 @@ export const updateWA = {
         id: numberIsID(),
         url: stringNotBlank(),
         type: z.enum(WAAssetType),
+        description: stringNotBlank().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -98,6 +99,7 @@ export const updateWA = {
         data: {
           url: opts.input.url,
           type: opts.input.type,
+          description: opts.input.description,
         },
         where: { id: opts.input.id },
       });

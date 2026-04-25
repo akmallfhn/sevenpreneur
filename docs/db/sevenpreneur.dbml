@@ -112,6 +112,18 @@ enum a_status_enum {
   unpublished
 }
 
+// Enumeration for the wa_assets table (wa_asset_*)
+
+enum wa_asset_type {
+  audio
+  audio_voice
+  document
+  image
+  sticker
+  sticker_anim
+  video
+}
+
 // Enumeration for the wa_conversations table (wa_*)
 
 enum wa_lead_status {
@@ -708,6 +720,15 @@ Table wa_chats {
   failed_at     timestamptz
   created_at    timestamptz
   updated_at    timestamptz
+}
+
+Table wa_assets {
+  id           serial          [primary key]
+  url          varchar         [not null]
+  type         wa_asset_type   [not null]
+  description  varchar
+  created_at   timestamptz
+  updated_at   timestamptz
 }
 
 // Relation Tables //

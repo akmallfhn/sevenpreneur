@@ -10,6 +10,7 @@ import {
   WACSenderType,
   WACStatus,
   WACType,
+  WAMode,
 } from "@prisma/client";
 import { WhatsAppWebhookMessageStatusType } from "./type.wa.webhook";
 
@@ -19,7 +20,7 @@ async function getOrCreateConversation(
   phone_number: string
 ) {
   let waConversation = await prisma.wAConversation.findFirst({
-    select: { id: true, full_name: true },
+    select: { id: true, full_name: true, mode: true },
     where: { phone_number: phone_number },
   });
 
@@ -31,7 +32,7 @@ async function getOrCreateConversation(
       },
     });
     waConversation = await prisma.wAConversation.findFirst({
-      select: { id: true, full_name: true },
+      select: { id: true, full_name: true, mode: true },
       where: { id: createdConversation.id },
     });
     if (!waConversation) {
@@ -52,7 +53,7 @@ export async function appendChatFromUser(
   message: string,
   attachment: WhatsappAttachmentAllTypes,
   created_at: string
-) {
+): Promise<{ conv_id: string; mode: WAMode } | false> {
   const waConversation = await getOrCreateConversation(
     prisma,
     full_name,
@@ -91,7 +92,39 @@ export async function appendChatFromUser(
     return false;
   }
 
-  return true;
+  return { conv_id: waConversation.id, mode: waConversation.mode };
+}
+
+export async function triggerLangGraphAgent(payload: {
+  conv_id: string;
+  wam_id: string;
+  direction: string;
+  sender_type: string;
+  type: string;
+  message: string;
+  attachment: object | null;
+  sent_at: string | null;
+}) {
+  const agentUrl = process.env.AGENT_URL;
+  const agentSecretKey = process.env.AGENT_SECRET_KEY;
+  if (!agentUrl || !agentSecretKey) {
+    console.error(
+      "whatsapp.webhook: AGENT_URL or AGENT_SECRET_KEY not configured."
+    );
+    return;
+  }
+  try {
+    await fetch(`${agentUrl}/api/v1/messages/incoming`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${agentSecretKey}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.error("whatsapp.webhook: Failed to trigger LangGraph agent.", e);
+  }
 }
 
 export async function updateStatusByMessageID(

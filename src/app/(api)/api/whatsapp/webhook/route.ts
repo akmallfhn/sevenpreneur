@@ -1,11 +1,12 @@
 import GetPrismaClient from "@/lib/prisma";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
-import { WACType } from "@prisma/client";
+import { WACType, WAMode } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
 import {
   appendChatFromUser,
   saveWhatsappAttachment,
+  triggerLangGraphAgent,
   updateStatusByMessageID,
 } from "./util.wa.webhook";
 
@@ -87,7 +88,7 @@ export async function POST(req: NextRequest) {
             continue; // Skip other message types for now
           }
 
-          const isSuccess = await appendChatFromUser(
+          const appendResult = await appendChatFromUser(
             prisma,
             userProfileName,
             msg.from,
@@ -97,9 +98,22 @@ export async function POST(req: NextRequest) {
             attachment,
             msg.timestamp
           );
-          if (!isSuccess) {
+          if (!appendResult) {
             console.error("whatsapp.webhook: Failed to append chat from user.")
             return new NextResponse(undefined, { status: 500 });
+          }
+
+          if (appendResult.mode === WAMode.AI) {
+            triggerLangGraphAgent({
+              conv_id: appendResult.conv_id,
+              wam_id: msg.id,
+              direction: "inbound",
+              sender_type: "user",
+              type: msg.type,
+              message: message,
+              attachment: attachment ?? null,
+              sent_at: new Date(Number(msg.timestamp) * 1e3).toISOString(),
+            });
           }
 
           // Save the attachment after successfully appending chat
