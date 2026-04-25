@@ -193,12 +193,12 @@ export default function EditProjectFormCMS({
       onClose={onClose}
     >
       {isLoading && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+        <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
           <Loader2 className="animate-spin size-5 " />
         </div>
       )}
       {isError && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+        <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
           No Data
         </div>
       )}
@@ -264,7 +264,7 @@ export default function EditProjectFormCMS({
                   <h3 className="font-bold font-brand">
                     Upload Supporting Document
                   </h3>
-                  <p className="font-bodycopy font-medium text-sm text-alternative">
+                  <p className="font-bodycopy font-medium text-sm text-emphasis">
                     Optional — attach any file that can guide participants, such
                     as a case study, brief, or template.
                   </p>

@@ -49,7 +49,7 @@ export default function FileResultUploadingCMS({
                 <Progress value={uploadProgress} />
               </div>
             ) : (
-              <p className="file-upload-status font-bodycopy font-medium text-alternative text-sm">
+              <p className="file-upload-status font-bodycopy font-medium text-emphasis text-sm">
                 Completed
               </p>
             )}

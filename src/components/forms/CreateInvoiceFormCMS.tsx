@@ -408,12 +408,12 @@ export default function CreateInvoiceFormCMS({
         onSubmit={handleCreateInvoice}
       >
         {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
             <Loader2 className="animate-spin size-5 " />
           </div>
         )}
         {isError && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
             No Data
           </div>
         )}
@@ -464,12 +464,12 @@ export default function CreateInvoiceFormCMS({
                   ]}
                 />
                 {isLoadingProduct && (
-                  <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
                     <Loader2 className="animate-spin size-5 " />
                   </div>
                 )}
                 {isErrorProduct && (
-                  <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
                     No Data
                   </div>
                 )}

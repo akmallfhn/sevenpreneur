@@ -153,12 +153,12 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     <h2 className="user-name font-brand text-lg font-bold">
                       {userDetailData.user.full_name}
                     </h2>
-                    <p className="last-login font-bodycopy font-medium text-alternative text-sm">
+                    <p className="last-login font-bodycopy font-medium text-emphasis text-sm">
                       Last login{" "}
                       {dayjs(userDetailData.user.last_login).fromNow()}
                     </p>
                     <div className="user-id flex font-bodycopy items-center gap-1 rounded-full text-sm">
-                      <p className="font-medium text-alternative">
+                      <p className="font-medium text-emphasis">
                         User ID: {userDetailData.user.id}
                       </p>
                       <AppButton
@@ -282,7 +282,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     ))}
                   </div>
                 ) : (
-                  <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+                  <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
                     No Transactions
                   </div>
                 )}

@@ -193,7 +193,7 @@ export default function AppDiscussionStarterItem(
               <p className="discussion-starter-author-name font-bold">
                 {props.discussionStarterAuthorName}
               </p>
-              <p className="discussion-starter-created-at text-alternative">
+              <p className="discussion-starter-created-at text-emphasis">
                 {dayjs(props.discussionStarterCreatedAt).fromNow()}
               </p>
             </div>
@@ -253,7 +253,7 @@ export default function AppDiscussionStarterItem(
           {isOpenReplies && (
             <div className="discussion-replies-container w-full py-2">
               {isLoadingReplies ? (
-                <Loader2 className="discussion-loading-replies size-4 animate-spin text-alternative" />
+                <Loader2 className="discussion-loading-replies size-4 animate-spin text-emphasis" />
               ) : (
                 <div className="discsussion-replies flex flex-col gap-4">
                   {replies

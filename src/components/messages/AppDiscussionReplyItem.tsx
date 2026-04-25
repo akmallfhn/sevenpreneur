@@ -124,7 +124,7 @@ export default function AppDiscussionReplyItem(
               <p className="discussion-reply-author-name font-bold">
                 {props.discussionReplyAuthorName}
               </p>
-              <p className="discussion-reply-created-at text-alternative">
+              <p className="discussion-reply-created-at text-emphasis">
                 {dayjs(props.discussionReplyCreatedAt).fromNow()}
               </p>
             </div>

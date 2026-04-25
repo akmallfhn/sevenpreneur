@@ -88,7 +88,7 @@ export default function SelectCMS({
         }}
       >
         {selectIcon && (
-          <div className="select-icon absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-alternative">
+          <div className="select-icon absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-emphasis">
             {selectIcon}
           </div>
         )}
@@ -106,7 +106,7 @@ export default function SelectCMS({
           )}
           <span
             className={`selected-option-placeholder block truncate text-sm font-medium ${
-              selectedOption ? "" : "text-alternative"
+              selectedOption ? "" : "text-emphasis"
             }`}
           >
             {selectedOption?.label || selectPlaceholder}

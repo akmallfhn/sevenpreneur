@@ -35,7 +35,7 @@ export default function UserItemCMS(props: UserItemCMSProps) {
           <p className="user-name text-black font-semibold line-clamp-1 break-all">
             {props.userName}
           </p>
-          <p className="user-email text-alternative font-medium line-clamp-1 break-all">
+          <p className="user-email text-emphasis font-medium line-clamp-1 break-all">
             {props.userEmail}
           </p>
         </div>

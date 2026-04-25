@@ -16,7 +16,7 @@ export default function SectionTitleSVP({
           {sectionTitle}
         </h2>
         {sectionDescription && (
-          <p className="section-description text-sm text-alternative lg:text-base">
+          <p className="section-description text-sm text-emphasis lg:text-base">
             {sectionDescription}
           </p>
         )}

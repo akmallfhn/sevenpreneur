@@ -13,7 +13,7 @@ export default function ReceiptLineItemCMS({
   isDiscount = false,
   isGrandTotal = false,
 }: ReceiptLineItemCMSProps) {
-  let nameClass = "text-alternative";
+  let nameClass = "text-emphasis";
   let valueClass = "font-medium";
 
   if (isDiscount) {
@@ -30,7 +30,7 @@ export default function ReceiptLineItemCMS({
     <div className="line-item flex items-center justify-between">
       <p className={`font-bodycopy text-sm ${nameClass}`}>{receiptName}</p>
       <p
-        className={`font-bodycopy text-sm text-right dark:text-alternative ${valueClass}`}
+        className={`font-bodycopy text-sm text-right dark:text-emphasis ${valueClass}`}
       >
         {receiptValue}
       </p>

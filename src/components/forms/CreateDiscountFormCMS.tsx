@@ -348,12 +348,12 @@ export default function CreateDiscountFormCMS({
                 ]}
               />
               {isLoading && (
-                <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
                   <Loader2 className="animate-spin size-5 " />
                 </div>
               )}
               {isError && (
-                <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
                   No Data
                 </div>
               )}

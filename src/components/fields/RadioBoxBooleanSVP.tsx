@@ -35,7 +35,7 @@ export default function RadioBoxBooleanSVP({
       />
       <div className="input-attributes flex flex-col font-bodycopy text-sm ">
         <p className="input-label font-bold">{radioName}</p>
-        <p className="input-description text-alternative font-medium">
+        <p className="input-description text-emphasis font-medium">
           {radioDescription}
         </p>
       </div>

@@ -109,7 +109,7 @@ export default function ProjectItemCMS(props: ProjectItemCMSProps) {
               <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
                 {props.projectName}
               </h3>
-              <p className="font-bodycopy font-medium text-alternative text-[13px]">
+              <p className="font-bodycopy font-medium text-emphasis text-[13px]">
                 Last submission:{" "}
                 {dayjs(props.lastSubmission).format("D MMM YYYY HH.mm")}
               </p>

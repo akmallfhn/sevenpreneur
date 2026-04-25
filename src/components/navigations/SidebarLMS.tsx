@@ -73,7 +73,7 @@ export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
           {aiResultList.length > 0 && (
             <div className="sidebar-lms-ai-result flex flex-col w-full gap-4">
               <div className="flex flex-col gap-1">
-                <h2 className="m-2 mt-0 text-sm text-alternative font-bodycopy font-medium">
+                <h2 className="m-2 mt-0 text-sm text-emphasis font-bodycopy font-medium">
                   Generated Result
                 </h2>
                 <div className="sidebar-ai-result flex flex-col h-full gap-2">

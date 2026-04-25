@@ -20,13 +20,13 @@ const statusAttributes: Record<
     amount_color: "text-green-600",
   },
   PENDING: {
-    main_icon_color: "text-alternative bg-section-background",
+    main_icon_color: "text-emphasis bg-section-background",
     status_icon: <Clock7 className="size-3" />,
     status_icon_color: "bg-[#F8AC4B] text-white",
     amount_color: "text-[#333333]",
   },
   FAILED: {
-    main_icon_color: "text-alternative bg-section-background",
+    main_icon_color: "text-emphasis bg-section-background",
     status_icon: <X className="size-3" />,
     status_icon_color: "bg-destructive text-white",
     amount_color: "text-[#333333]",
@@ -98,7 +98,7 @@ export default function UserTransactionItemCMS({
           <p className="font-bodycopy font-medium text-[15px] text-[#333333] line-clamp-1">
             {productName}
           </p>
-          <p className="font-bodycopy font-medium text-sm text-alternative line-clamp-1">
+          <p className="font-bodycopy font-medium text-sm text-emphasis line-clamp-1">
             {productPriceName}
           </p>
         </div>

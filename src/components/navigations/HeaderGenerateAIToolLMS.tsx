@@ -44,7 +44,7 @@ export default function HeaderGenerateAIToolLMS(
                   <TooltipTrigger asChild>
                     <FontAwesomeIcon
                       icon={faCircleQuestion}
-                      className="text-alternative hover:cursor-pointer"
+                      className="text-emphasis hover:cursor-pointer"
                       size="sm"
                     />
                   </TooltipTrigger>

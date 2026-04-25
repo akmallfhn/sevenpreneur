@@ -180,7 +180,7 @@ export default function CreateModuleFormCMS({
             <div className="flex flex-col gap-5 pt-4">
               <div className="flex flex-col">
                 <h3 className="font-bold font-brand">Upload Document</h3>
-                <p className="font-bodycopy font-medium text-sm text-alternative">
+                <p className="font-bodycopy font-medium text-sm text-emphasis">
                   Choose how you’d like to add the document
                 </p>
               </div>

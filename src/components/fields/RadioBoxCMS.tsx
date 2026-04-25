@@ -26,7 +26,7 @@ export default function RadioBoxCMS(props: RadioBoxCMSProps) {
       />
       <div className="flex flex-col font-bodycopy text-sm">
         <p className="text-black font-bold">{props.radioName}</p>
-        <p className="text-alternative font-medium">{props.radioDescription}</p>
+        <p className="text-emphasis font-medium">{props.radioDescription}</p>
       </div>
     </label>
   );

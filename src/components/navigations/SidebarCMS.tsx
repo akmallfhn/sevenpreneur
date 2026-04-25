@@ -110,7 +110,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
             onClick={() => toggleSidebar()}
           >
             <PanelLeftClose
-              className={`size-4 text-alternative transition-all duration-300 ease-in-out ${isCollapsed ? "rotate-180" : ""}`}
+              className={`size-4 text-emphasis transition-all duration-300 ease-in-out ${isCollapsed ? "rotate-180" : ""}`}
             />
           </AppButton>
         </div>
@@ -136,12 +136,12 @@ export default function SidebarCMS(props: SidebarCMSProps) {
             </p>
           </Link>
           {isLoading && (
-            <div className="flex w-full h-full items-center justify-center text-alternative">
+            <div className="flex w-full h-full items-center justify-center text-emphasis">
               <Loader2 className="animate-spin size-5 " />
             </div>
           )}
           {isError && (
-            <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+            <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy">
               No Data
             </div>
           )}

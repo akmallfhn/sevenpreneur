@@ -108,7 +108,7 @@ export default function InputNumberSVP({
 
       <div className="input-container relative ">
         {inputIcon && (
-          <div className="input-icon absolute left-0 flex items-center p-[9px] pl-3 gap-1 pointer-events-none text-alternative">
+          <div className="input-icon absolute left-0 flex items-center p-[9px] pl-3 gap-1 pointer-events-none text-emphasis">
             <p className="input-emoji text-sm">{inputIcon}</p>
           </div>
         )}
@@ -118,7 +118,7 @@ export default function InputNumberSVP({
           inputMode={mode}
           pattern={pattern}
           placeholder={inputPlaceholder}
-          className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
+          className={`input-placeholder flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
               : "border-outline focus:outline-primary/15 focus:border-primary dark:border-outline-dark dark:focus:border-outline-dark dark:focus:outline-white/10"

@@ -200,7 +200,7 @@ export default function CreateProjectFormCMS({
                 <h3 className="font-bold font-brand">
                   Upload Supporting Document
                 </h3>
-                <p className="font-bodycopy font-medium text-sm text-alternative">
+                <p className="font-bodycopy font-medium text-sm text-emphasis">
                   Optional — attach any file that can guide participants, such
                   as a case study, brief, or template.
                 </p>

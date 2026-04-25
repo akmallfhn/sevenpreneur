@@ -162,7 +162,7 @@ export default function UploadImageCMS(props: UploadImageCMSProps) {
           onChange={handleUploadFiles}
         />
       </div>
-      <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-alternative">
+      <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-emphasis">
         <p>Supported Formats: JPG, JPEG, PNG, WEBP, AVIF</p>
       </div>
     </div>

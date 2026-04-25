@@ -150,7 +150,7 @@ export default function UploadSubmissionLMS({
             onChange={handleUploadFiles}
           />
         </div>
-        <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-alternative">
+        <div className="flex items-center justify-between font-bodycopy font-medium text-sm text-emphasis">
           <p>Supported Formats: PDF</p>
           <p>Maximum Size: 50MB</p>
         </div>

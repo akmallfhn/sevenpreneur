@@ -178,7 +178,7 @@ export default function TransactionStatusDetailsSVP(
               <PaymentStatusAnimationSVP variant={props.transactionStatus} />
               <div className="flex flex-col items-center gap-2">
                 <h2 className="font-bold">{statusWord}</h2>
-                <p className="text-alternative text-sm">{statusDescription}</p>
+                <p className="text-emphasis text-sm">{statusDescription}</p>
                 <AppButton
                   className="w-fit"
                   variant={theme === "dark" ? "dark" : "primarySoft"}
@@ -203,7 +203,7 @@ export default function TransactionStatusDetailsSVP(
                     {isPaid && "Payment received on"}
                     {isPending && "Make the payment before"}
                   </p>
-                  <p className="payment-deadline text-alternative">
+                  <p className="payment-deadline text-emphasis">
                     {isPaid &&
                       dayjs(props.paidTransactionAt).format(
                         "DD MMM YYYY [at] HH:mm"
@@ -286,7 +286,7 @@ export default function TransactionStatusDetailsSVP(
                 </p>
               </div>
               <ChevronDown
-                className={`text-alternative size-6 transition-transform duration-300 ${
+                className={`text-emphasis size-6 transition-transform duration-300 ${
                   openAmountDetails ? "rotate-180" : "rotate-0"
                 }`}
               />
@@ -350,7 +350,7 @@ export default function TransactionStatusDetailsSVP(
               </div>
               <div className="flex flex-col font-bodycopy text-sm">
                 <p className="font-bold">Having Trouble?</p>
-                <p className="text-alternative">We are ready to help you</p>
+                <p className="text-emphasis">We are ready to help you</p>
               </div>
             </div>
             <Link

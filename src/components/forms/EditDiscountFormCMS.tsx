@@ -284,12 +284,12 @@ export default function EditDiscountFormCMS({
       >
         <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
           {isLoadingInitialData && (
-            <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+            <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
               <Loader2 className="animate-spin size-5 " />
             </div>
           )}
           {isErrorInitialData && (
-            <div className="flex w-full h-full py-4 items-center justify-center text-alternative font-bodycopy font-medium">
+            <div className="flex w-full h-full py-4 items-center justify-center text-emphasis font-bodycopy font-medium">
               No Data
             </div>
           )}
@@ -394,12 +394,12 @@ export default function EditDiscountFormCMS({
                   ]}
                 />
                 {isLoading && (
-                  <div className="flex w-full h-full py-4 items-center justify-center text-alternative">
+                  <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
                     <Loader2 className="animate-spin size-5 " />
                   </div>
                 )}
                 {isError && (
-                  <div className="flex w-full h-full py-4 items-center justify-center text-alternative font-bodycopy font-medium">
+                  <div className="flex w-full h-full py-4 items-center justify-center text-emphasis font-bodycopy font-medium">
                     No Data
                   </div>
                 )}

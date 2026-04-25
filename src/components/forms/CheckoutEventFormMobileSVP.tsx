@@ -282,7 +282,7 @@ export default function CheckoutEventFormMobileSVP({
             <div className="programs-tier flex flex-col gap-4 bg-white p-4 rounded-md shadow-sm z-10">
               <div className="flex flex-col font-bodycopy">
                 <h1 className="font-bold text-black">Event Pass</h1>
-                <p className="font-medium text-alternative text-sm">
+                <p className="font-medium text-emphasis text-sm">
                   Make the most of the event. Choose the pass that works best
                   for you.
                 </p>
@@ -343,7 +343,7 @@ export default function CheckoutEventFormMobileSVP({
                 <p className="font-bold line-clamp-1">
                   {selectedTicket?.name || "-"}
                 </p>
-                <p className="text-alternative text-sm font-medium line-clamp-2">
+                <p className="text-emphasis text-sm font-medium line-clamp-2">
                   {eventName}
                 </p>
               </div>
@@ -564,7 +564,7 @@ export default function CheckoutEventFormMobileSVP({
                 height={100}
               />
             </div>
-            <p className="font-bodycopy text-xs text-alternative">
+            <p className="font-bodycopy text-xs text-emphasis">
               Payment is securely processed with advanced encryption. Powered by{" "}
               {""}
               <a href="https://www.xendit.co/id/" className="font-bold">

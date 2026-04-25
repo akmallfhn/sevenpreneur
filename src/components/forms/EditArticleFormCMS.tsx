@@ -406,12 +406,12 @@ export default function EditArticleForm(props: EditArticleFormProps) {
         </div>
 
         {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative">
+          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
             <Loader2 className="animate-spin size-5 " />
           </div>
         )}
         {isError && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-alternative font-bodycopy font-medium">
+          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
             No Data
           </div>
         )}

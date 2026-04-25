@@ -35,7 +35,7 @@ export default function RadioBoxPriceTierSVP({
           >
             {priceTierName}
           </p>
-          <p className="text-alternative font-medium">{productName}</p>
+          <p className="text-emphasis font-medium">{productName}</p>
         </div>
         <p className="text-secondary font-bold">
           {getRupiahCurrency(priceTierAmount)}

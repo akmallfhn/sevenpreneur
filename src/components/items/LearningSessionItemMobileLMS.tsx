@@ -44,7 +44,7 @@ export default function LearningSessionItemMobileLMS(
           </div>
         </div>
       </div>
-      <ChevronRight className="size-6 text-alternative shrink-0" />
+      <ChevronRight className="size-6 text-emphasis shrink-0" />
     </Link>
   );
 }

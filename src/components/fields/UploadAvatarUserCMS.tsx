@@ -151,7 +151,7 @@ export default function UploadAvatarUserCMS({
             </AppButton>
           )}
         </div>
-        <p className="text-alternative text-[13px] font-medium font-bodycopy">
+        <p className="text-emphasis text-[13px] font-medium font-bodycopy">
           Avatar must be square (1:1) and no larger than 1MB.
         </p>
         <input

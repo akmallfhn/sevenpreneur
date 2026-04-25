@@ -96,7 +96,7 @@ export default function SelectLMS({
           )}
           <span
             className={`selected-option-placeholder block truncate text-sm font-medium ${
-              selectedOption ? "" : "text-alternative"
+              selectedOption ? "" : "text-emphasis"
             }`}
           >
             {selectedOption?.label || selectPlaceholder}

@@ -82,12 +82,12 @@ export default function AppLoginContainer() {
           <h1 className="login-title text-xl font-bold lg:text-2xl">
             Welcome Back, Founder!
           </h1>
-          <p className="login-tagline lg:text-lg lg:text-alternative">
+          <p className="login-tagline lg:text-lg lg:text-emphasis">
             Log in. Level up. Scale.
           </p>
         </div>
         <div className="login-action flex flex-col font-ui gap-2 w-full">
-          <p className="text-[13px] lg:text-base lg:text-alternative">
+          <p className="text-[13px] lg:text-base lg:text-emphasis">
             Login faster with
           </p>
 
@@ -98,7 +98,7 @@ export default function AppLoginContainer() {
             disabled={isLoading}
           >
             {isLoading ? (
-              <Loader2 className="size-5 animate-spin text-alternative" />
+              <Loader2 className="size-5 animate-spin text-emphasis" />
             ) : (
               <Image
                 className="flex size-6"

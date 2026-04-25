@@ -175,12 +175,12 @@ export default function EditModuleFormCMS({
       onClose={onClose}
     >
       {isLoading && (
-        <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
+        <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy font-medium">
           <Loader2 className="animate-spin size-5 " />
         </div>
       )}
       {isError && (
-        <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy font-medium">
+        <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy font-medium">
           <Loader2 className="animate-spin size-5 " />
         </div>
       )}
@@ -233,7 +233,7 @@ export default function EditModuleFormCMS({
               <div className="flex flex-col gap-5 pt-4">
                 <div className="flex flex-col">
                   <h3 className="font-bold font-brand">Upload Document</h3>
-                  <p className="font-bodycopy font-medium text-sm text-alternative">
+                  <p className="font-bodycopy font-medium text-sm text-emphasis">
                     Choose how you’d like to add the document
                   </p>
                 </div>

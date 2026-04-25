@@ -21,7 +21,7 @@ export default function ChatBubbleLMS({ chatMessage }: ChatBubbleLMS) {
         {copied ? (
           <Check className="text-green-400 size-5" />
         ) : (
-          <CopyIcon className="text-alternative size-5" />
+          <CopyIcon className="text-emphasis size-5" />
         )}
       </AppButton>
     </div>

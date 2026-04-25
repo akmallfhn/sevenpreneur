@@ -93,12 +93,12 @@ export default function TransactionDetailsCMS({
       onClose={onClose}
     >
       {isLoading && (
-        <div className="flex w-full h-full items-center justify-center text-alternative">
+        <div className="flex w-full h-full items-center justify-center text-emphasis">
           <Loader2 className="animate-spin size-5 " />
         </div>
       )}
       {isError && (
-        <div className="flex w-full h-full items-center justify-center text-alternative font-bodycopy">
+        <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy">
           No Data
         </div>
       )}

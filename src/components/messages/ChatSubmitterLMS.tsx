@@ -48,7 +48,7 @@ export default function ChatSubmitterLMS({
           placeholder="Ask anything about business!"
           rows={1}
           {...rest}
-          className={`text-area-placeholder flex w-full max-h-52 min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-base resize-none transform transition-all overflow-auto placeholder:text-alternative placeholder:font-medium placeholder:text-base focus:outline-none focus:ring-0`}
+          className={`text-area-placeholder flex w-full max-h-52 min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-base resize-none transform transition-all overflow-auto placeholder:text-emphasis placeholder:font-medium placeholder:text-base focus:outline-none focus:ring-0`}
           value={value}
           onKeyDown={handleKeyDown}
           onChange={handleTextAreaChange}

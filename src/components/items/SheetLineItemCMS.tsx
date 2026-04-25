@@ -12,7 +12,7 @@ export default function SheetLineItemCMS({
 }: SheetLineItemCMSProps) {
   return (
     <div className="flex flex-col gap-1.5 font-bodycopy text-sm font-medium">
-      <p className="text-alternative">{itemName}</p>
+      <p className="text-emphasis">{itemName}</p>
       {children}
     </div>
   );

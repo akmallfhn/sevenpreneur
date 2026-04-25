@@ -80,7 +80,7 @@ export default function TextAreaTitleCMS({
           ref={textAreaRef}
           placeholder={textAreaPlaceholder}
           {...rest}
-          className={`text-area-placeholder flex w-full p-3 ${textAreaHeight} bg-transparent font-bold font-bodycopy text-2xl rounded-md resize-none overflow-hidden transform transition-all placeholder:text-alternative placeholder:font-medium placeholder:text-2xl invalid:border-destructive required:border-destructive hover:bg-[#F1F2F4] ${
+          className={`text-area-placeholder flex w-full p-3 ${textAreaHeight} bg-transparent font-bold font-bodycopy text-2xl rounded-md resize-none overflow-hidden transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-2xl invalid:border-destructive required:border-destructive hover:bg-[#F1F2F4] ${
             computedError
               ? "border border-destructive focus:outline-semi-destructive"
               : "border-none outline-0"

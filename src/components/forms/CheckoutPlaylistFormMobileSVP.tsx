@@ -244,7 +244,7 @@ export default function CheckoutPlaylistFormMobileSVP({
             </div>
             <div className="flex flex-col font-bodycopy max-w-[calc(100%-4rem-0.75rem)]">
               <p className="font-bold line-clamp-1">{playlistName || "-"}</p>
-              <p className="text-alternative text-sm font-medium line-clamp-2">
+              <p className="text-emphasis text-sm font-medium line-clamp-2">
                 {`Learning Series - ${playlistTotalVideo} episodes`}
               </p>
             </div>
@@ -462,7 +462,7 @@ export default function CheckoutPlaylistFormMobileSVP({
                 height={100}
               />
             </div>
-            <p className="font-bodycopy text-xs text-alternative">
+            <p className="font-bodycopy text-xs text-emphasis">
               Payment is securely processed with advanced encryption. Powered by{" "}
               {""}
               <a href="https://www.xendit.co/id/" className="font-bold">

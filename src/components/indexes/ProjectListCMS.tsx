@@ -79,7 +79,7 @@ export default function ProjectListCMS(props: ProjectListCMSProps) {
                 ))}
               </div>
             ) : (
-              <p className="flex w-full h-full items-center justify-center p-5 text-alternative font-bodycopy font-medium">
+              <p className="flex w-full h-full items-center justify-center p-5 text-emphasis font-bodycopy font-medium">
                 No Data
               </p>
             )}

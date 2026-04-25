@@ -45,7 +45,7 @@ export default function AppAlertConfirmDialog({
           <h2 className="text-lg font-brand font-semibold">
             {alertDialogHeader}
           </h2>
-          <p className="text-alternative text-sm font-bodycopy font-medium">
+          <p className="text-emphasis text-sm font-bodycopy font-medium">
             {alertDialogMessage}
           </p>
         </div>

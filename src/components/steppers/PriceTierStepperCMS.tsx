@@ -50,7 +50,7 @@ export default function PriceTierStepperCMS({
     <div className="group-input flex flex-col gap-4">
       <div className="flex flex-col">
         <h3 className="section-title font-bold font-brand">Prices</h3>
-        <p className="section-desc font-bodycopy font-medium text-sm text-alternative">
+        <p className="section-desc font-bodycopy font-medium text-sm text-emphasis">
           Max. 5 price tiers allowed
         </p>
       </div>

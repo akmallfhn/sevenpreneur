@@ -47,7 +47,7 @@ export default function LoadingAIGeneratingResult() {
       />
       <div className="state-text absolute flex flex-col bottom-24 left-1/2 -translate-x-1/2 gap-2 items-center">
         <p
-          className={`state-description font-bodycopy text-center font-medium text-alternative transition-all duration-500 ${
+          className={`state-description font-bodycopy text-center font-medium text-emphasis transition-all duration-500 ${
             isLast
               ? "opacity-100 translate-y-0"
               : visible

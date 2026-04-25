@@ -46,7 +46,7 @@ export default function AICitationLMS(props: AICitationLMSProps) {
             >
               {post.source_name}
             </a>
-            <p className="source-publisher text-sm text-alternative">
+            <p className="source-publisher text-sm text-emphasis">
               {`${post.source_publisher} ${post.source_year}`}
             </p>
           </div>

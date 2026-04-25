@@ -128,7 +128,7 @@ export default function EditLeadStatusFormCMS(
           <h2 className="font-bodycopy font-bold text-lg">Edit Status Lead</h2>
           {isLoading ? (
             <div className="flex w-full justify-center py-6">
-              <Loader2 className="animate-spin size-5 text-alternative" />
+              <Loader2 className="animate-spin size-5 text-emphasis" />
             </div>
           ) : (
             <div className="flex flex-col gap-4">

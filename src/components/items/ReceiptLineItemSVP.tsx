@@ -13,7 +13,7 @@ export default function ReceiptLineItemSVP({
   isDiscount = false,
   isGrandTotal = false,
 }: ReceiptLineItemSVPProps) {
-  let nameClass = "font-medium text-alternative";
+  let nameClass = "font-medium text-emphasis";
   let valueClass = "font-medium";
 
   if (isDiscount) {
@@ -30,7 +30,7 @@ export default function ReceiptLineItemSVP({
     <div className="line-item flex items-center justify-between">
       <p className={`font-bodycopy text-sm ${nameClass}`}>{receiptName}</p>
       <p
-        className={`font-bodycopy text-sm text-right dark:text-alternative ${valueClass}`}
+        className={`font-bodycopy text-sm text-right dark:text-emphasis ${valueClass}`}
       >
         {receiptValue}
       </p>

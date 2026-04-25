@@ -42,11 +42,11 @@ export default function AppSheet({
           <h2 className="text-black text-lg font-brand font-bold">
             {sheetName}
           </h2>
-          <p className="sheet-description text-alternative text-sm font-bodycopy font-medium">
+          <p className="sheet-description text-emphasis text-sm font-bodycopy font-medium">
             {sheetDescription}
           </p>
           <X
-            className="sheet-close absolute text-alternative size-5 top-2 right-2 cursor-pointer"
+            className="sheet-close absolute text-emphasis size-5 top-2 right-2 cursor-pointer"
             onClick={onClose}
           />
         </div>

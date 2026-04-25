@@ -336,7 +336,7 @@ export default function LearningDetailsTabsMobileLMS(
                 ))}
               </div>
             ) : (
-              <p className="text-alternative text-sm font-bodycopy font-medium">
+              <p className="text-emphasis text-sm font-bodycopy font-medium">
                 The session materials are being prepared and will be available
                 soon.
               </p>

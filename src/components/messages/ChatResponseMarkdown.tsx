@@ -35,7 +35,7 @@ export default function ChatResponseMarkdown(props: ChatResponseMarkdownProps) {
           }}
         />
         {props.isGeneratingMessage ? (
-          <Loader2 className="animate-spin text-alternative size-6" />
+          <Loader2 className="animate-spin text-emphasis size-6" />
         ) : (
           <AppButton
             variant="ghost"
@@ -45,7 +45,7 @@ export default function ChatResponseMarkdown(props: ChatResponseMarkdownProps) {
             {copied ? (
               <Check className="text-green-400 size-5" />
             ) : (
-              <CopyIcon className="text-alternative size-5" />
+              <CopyIcon className="text-emphasis size-5" />
             )}
           </AppButton>
         )}
