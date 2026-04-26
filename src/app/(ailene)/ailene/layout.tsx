@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import SidebarAilene from "@/components/navigations/SidebarAilene";
 import AppPageState from "@/components/states/AppPageState";
 import { SidebarProviderCMS } from "@/contexts/SidebarContextCMS";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -48,19 +49,21 @@ export default async function AileneLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <SidebarProviderCMS>
-        <div>
-          <SidebarAilene
-            sessionToken={sessionToken}
-            sessionUserRole={checkUser.role_id}
-          />
-          {props.children}
-          <div className="lg:hidden">
-            <AppPageState variant="ONLY_MOBILE" />
+      <ThemeProvider>
+        <SidebarProviderCMS>
+          <div className="min-h-screen bg-dashboard-bg">
+            <SidebarAilene
+              sessionToken={sessionToken}
+              sessionUserRole={checkUser.role_id}
+            />
+            {props.children}
+            <div className="lg:hidden">
+              <AppPageState variant="ONLY_MOBILE" />
+            </div>
+            <Toaster richColors position="top-center" />
           </div>
-          <Toaster richColors position="top-center" />
-        </div>
-      </SidebarProviderCMS>
+        </SidebarProviderCMS>
+      </ThemeProvider>
     </TRPCProvider>
   );
 }

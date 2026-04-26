@@ -56,7 +56,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
 
   return (
     <div
-      className={`page-root hidden w-full min-h-screen bg-white overflow-y-auto lg:flex lg:justify-center ${isCollapsed ? "pl-16" : "pl-64"}`}
+      className={`page-root hidden w-full min-h-screen overflow-y-auto lg:flex lg:justify-center ${isCollapsed ? "pl-16" : "pl-64"}`}
     >
       <div className="w-full max-w-[calc(100%-4rem)] py-10 flex flex-col items-center">
         <div className="w-full flex flex-col gap-10">

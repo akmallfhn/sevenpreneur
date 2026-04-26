@@ -42,7 +42,7 @@ export default function AdminLessonsAilene() {
 
   return (
     <div
-      className={`root hidden w-full min-h-screen bg-white py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}
+      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}
     >
       <div className="container max-w-[calc(100%-4rem)] mx-auto w-full flex flex-col gap-6">
         {/* Header */}

@@ -147,8 +147,20 @@
   --background: var(--color-sevenpreneur-white);
   --foreground: var(--color-surface-black);
   --border: var(--color-sevenpreneur-ash);
+  --dashboard-bg: #fefefe;
+  --sb-bg: #fbfaff;
+  --sb-text: #595b68;
+  --sb-text-strong: #1a2236;
+  --sb-border: #ecebf0;
+  --sb-item-hover: #eff1fe;
+  --sb-item-active-bg: #eff1fe;
+  --sb-item-active-text: var(--color-sevenpreneur-purple-indigo);
+  --sb-indicator: var(--color-sevenpreneur-purple-indigo);
+  --sb-group-text: #aaacaf;
+  --sb-avatar-bg: #faf9ff;
 
   /* --- Default Shadcn --- */
+
   --radius: 0.625rem;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -179,6 +191,18 @@
   --background: var(--color-sevenpreneur-coal);
   --foreground: var(--color-sevenpreneur-dust);
   --border: var(--color-sevenpreneur-smoke);
+  --dashboard-bg: #0b0e13;
+  /* sidebar */
+  --sb-bg: #0b0e15;
+  --sb-text: #abb1bf;
+  --sb-text-strong: rgba(255, 255, 255, 0.95);
+  --sb-border: #202229;
+  --sb-item-hover: #12172a;
+  --sb-item-active-bg: #12172a;
+  --sb-item-active-text: #6b63d0;
+  --sb-indicator: #6b63d0;
+  --sb-group-text: rgba(255, 255, 255, 0.3);
+  --sb-avatar-bg: #0b0e15;
   /* solid */
   --color-primary-muted: var(--color-sevenpreneur-blue-midnight);
   --color-secondary-muted: var(--color-sevenpreneur-pink-midgnight);
@@ -254,6 +278,21 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* --- dashboard --- */
+  --color-dashboard-bg: var(--dashboard-bg);
+
+  /* --- sidebar --- */
+  --color-sb-bg: var(--sb-bg);
+  --color-sb-text: var(--sb-text);
+  --color-sb-text-strong: var(--sb-text-strong);
+  --color-sb-border: var(--sb-border);
+  --color-sb-item-hover: var(--sb-item-hover);
+  --color-sb-item-active-bg: var(--sb-item-active-bg);
+  --color-sb-item-active-text: var(--sb-item-active-text);
+  --color-sb-indicator: var(--sb-indicator);
+  --color-sb-group-text: var(--sb-group-text);
+  --color-sb-avatar-bg: var(--sb-avatar-bg);
 }
 
 @layer base {
@@ -270,31 +309,94 @@
 
 /* Corporate AI Training Page Animations */
 @keyframes cat-marquee {
-  to { transform: translateX(-50%); }
+  to {
+    transform: translateX(-50%);
+  }
 }
 @keyframes cat-chip-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 @keyframes cat-orb-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(40px, -30px) scale(1.08); }
-  66% { transform: translate(-30px, 20px) scale(0.95); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+  66% {
+    transform: translate(-30px, 20px) scale(0.95);
+  }
 }
 @keyframes cat-dot-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(15, 212, 163, 0.7); }
-  70% { box-shadow: 0 0 0 8px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+  0% {
+    box-shadow: 0 0 0 0 rgba(15, 212, 163, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 @keyframes cat-blink {
-  0%, 80%, 100% { opacity: 0.3; }
-  40% { opacity: 1; }
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 1;
+  }
 }
 @keyframes cat-pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(1, 101, 252, 0.6); }
-  70% { box-shadow: 0 0 0 12px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+  0% {
+    box-shadow: 0 0 0 0 rgba(1, 101, 252, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 12px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
 }
 @keyframes cat-bar-fill {
-  from { width: 0%; }
+  from {
+    width: 0%;
+  }
+}
+
+/* --- Sidebar Utilities --- */
+@layer base {
+  .sb-root {
+    background-color: var(--sb-bg);
+    color: var(--sb-text);
+  }
+  .sb-item {
+    color: var(--sb-text);
+    font-weight: 500;
+  }
+  .sb-item:hover {
+    background-color: var(--sb-item-hover);
+  }
+  .sb-item-active {
+    background-color: var(--sb-item-active-bg);
+    color: var(--sb-item-active-text);
+    font-weight: 600;
+  }
+  .sb-indicator {
+    background-color: var(--sb-indicator);
+  }
+  .sb-group-text {
+    color: var(--sb-group-text);
+  }
+  .sb-group-hover:hover {
+    background-color: var(--sb-item-hover);
+  }
 }
