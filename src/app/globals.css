@@ -147,7 +147,9 @@
   --background: var(--color-sevenpreneur-white);
   --foreground: var(--color-surface-black);
   --border: var(--color-sevenpreneur-ash);
+  /* dashboard */
   --dashboard-bg: #fefefe;
+  --card-bg: #fefefe;
   --sb-bg: #fbfaff;
   --sb-text: #595b68;
   --sb-text-strong: #1a2236;
@@ -191,8 +193,9 @@
   --background: var(--color-sevenpreneur-coal);
   --foreground: var(--color-sevenpreneur-dust);
   --border: var(--color-sevenpreneur-smoke);
+  /* dashboard */
   --dashboard-bg: #0b0e13;
-  /* sidebar */
+  --card-bg: #11141b;
   --sb-bg: #0b0e15;
   --sb-text: #abb1bf;
   --sb-text-strong: rgba(255, 255, 255, 0.95);
@@ -281,6 +284,7 @@
 
   /* --- dashboard --- */
   --color-dashboard-bg: var(--dashboard-bg);
+  --color-card-bg: var(--card-bg);
 
   /* --- sidebar --- */
   --color-sb-bg: var(--sb-bg);

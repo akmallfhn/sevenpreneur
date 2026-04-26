@@ -14,8 +14,11 @@ import {
   TrendingUp,
   Trophy,
 } from "lucide-react";
+import AppScorecardDashboard from "../cards/AppScorecardDashboard";
+import { Progress } from "../ui/progress";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import AppButton from "../buttons/AppButton";
 
 const LEVEL_LABELS: Record<number, string> = {
   1: "Foundations",
@@ -50,7 +53,9 @@ export default function HomeAilene(props: HomeAileneProps) {
   const completedCount = progressData?.completed_count ?? 0;
   const totalPublished = lessonsData?.list.length ?? 0;
   const progressPct =
-    totalPublished > 0 ? Math.round((completedCount / totalPublished) * 100) : 0;
+    totalPublished > 0
+      ? Math.round((completedCount / totalPublished) * 100)
+      : 0;
   const currentStreak = 0;
 
   const continueLesson = useMemo(() => {
@@ -96,8 +101,8 @@ export default function HomeAilene(props: HomeAileneProps) {
       <div className="container max-w-[calc(100%-4rem)] mx-auto w-full flex flex-col gap-6">
         {/* Greeting */}
         <div className="flex flex-col gap-1">
-          <h1 className="font-brand font-bold text-2xl text-sevenpreneur-coal dark:text-white">
-            Welcome back, {props.sessionUserName}! 👋
+          <h1 className="font-bodycopy font-bold text-2xl text-sevenpreneur-coal dark:text-white">
+            Welcome back, {props.sessionUserName.split(" ")[0]}! 👋
           </h1>
           <p className="font-bodycopy text-sm text-emphasis">
             Continue your AI learning journey and level up your skills.
@@ -106,90 +111,67 @@ export default function HomeAilene(props: HomeAileneProps) {
 
         {/* Scorecards */}
         <div className="grid grid-cols-4 gap-4">
-          <div className="flex items-center gap-4 p-5 rounded-xl border border-sevenpreneur-ash dark:border-sevenpreneur-smoke bg-white dark:bg-sevenpreneur-charcoal">
-            <div className="flex items-center justify-center size-11 rounded-xl bg-tertiary shrink-0">
-              <Trophy className="size-5 text-white" />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <p className="font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest">
-                Total XP
-              </p>
-              <p className="font-brand font-bold text-2xl text-sevenpreneur-coal dark:text-white">
+          <AppScorecardDashboard
+            title="Total XP"
+            icon={<Trophy className="size-4 text-white" />}
+            iconClassName="bg-gradient-to-br from-tertiary/70 to-tertiary"
+            value={
+              <>
                 {totalXp.toLocaleString()}{" "}
-                <span className="text-base font-normal text-emphasis">XP</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 p-5 rounded-xl border border-sevenpreneur-ash dark:border-sevenpreneur-smoke bg-white dark:bg-sevenpreneur-charcoal">
-            <div className="flex items-center justify-center size-11 rounded-xl bg-primary shrink-0">
-              <BookCheck className="size-5 text-white" />
-            </div>
-            <div className="flex flex-col gap-1.5 flex-1">
-              <p className="font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest">
-                Lessons Completed
-              </p>
-              <p className="font-brand font-bold text-2xl text-sevenpreneur-coal dark:text-white">
+                <span className="font-normal text-emphasis">XP</span>
+              </>
+            }
+          />
+          <AppScorecardDashboard
+            title="Lessons Completed"
+            icon={<BookCheck className="size-4 text-white" />}
+            iconClassName="bg-gradient-to-br from-primary/70 to-primary"
+            value={
+              <>
                 {completedCount}{" "}
-                <span className="text-base font-normal text-emphasis">
+                <span className="font-normal text-emphasis">
                   / {totalPublished}
                 </span>
-              </p>
-              <div className="w-full h-1.5 rounded-full bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-primary transition-all"
-                  style={{ width: `${progressPct}%` }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 p-5 rounded-xl border border-sevenpreneur-ash dark:border-sevenpreneur-smoke bg-white dark:bg-sevenpreneur-charcoal">
-            <div className="flex items-center justify-center size-11 rounded-xl bg-success shrink-0">
-              <TrendingUp className="size-5 text-white" />
-            </div>
-            <div className="flex flex-col gap-1.5 flex-1">
-              <p className="font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest">
-                Overall Progress
-              </p>
-              <p className="font-brand font-bold text-2xl text-sevenpreneur-coal dark:text-white">
+              </>
+            }
+          >
+            <Progress value={progressPct} className="h-1.5" />
+          </AppScorecardDashboard>
+          <AppScorecardDashboard
+            title="Overall Progress"
+            icon={<TrendingUp className="size-4 text-white" />}
+            iconClassName="bg-gradient-to-br from-success/70 to-success"
+            value={
+              <>
                 {progressPct}
-                <span className="text-base font-normal text-emphasis">%</span>
-              </p>
-              <div className="w-full h-1.5 rounded-full bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-success transition-all"
-                  style={{ width: `${progressPct}%` }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 p-5 rounded-xl border border-sevenpreneur-ash dark:border-sevenpreneur-smoke bg-white dark:bg-sevenpreneur-charcoal">
-            <div className="flex items-center justify-center size-11 rounded-xl bg-warning shrink-0">
-              <Flame className="size-5 text-white" />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <p className="font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest">
-                Current Streak
-              </p>
-              <p className="font-brand font-bold text-2xl text-sevenpreneur-coal dark:text-white">
+                <span className="font-normal text-emphasis">%</span>
+              </>
+            }
+          >
+            <Progress
+              value={progressPct}
+              className="[&>[data-slot=progress-indicator]]:bg-success"
+            />
+          </AppScorecardDashboard>
+          <AppScorecardDashboard
+            title="Current Streak"
+            icon={<Flame className="size-4 text-white" />}
+            iconClassName="bg-gradient-to-br from-warning/70 to-warning"
+            value={
+              <>
                 {currentStreak}{" "}
-                <span className="text-base font-normal text-emphasis">days</span>
-              </p>
-              <p className="font-bodycopy text-xs text-warning font-medium">
-                Keep it up! 🔥
-              </p>
-            </div>
-          </div>
+                <span className="font-normal text-emphasis">days</span>
+              </>
+            }
+          />
         </div>
 
         {/* Continue Learning */}
         {continueLesson && (
           <Link href={`/lessons/${continueLesson.id}`}>
-            <div className="flex items-center gap-4 px-5 py-4 rounded-xl border border-sevenpreneur-ash dark:border-sevenpreneur-smoke bg-white dark:bg-sevenpreneur-charcoal hover:border-primary/40 transition-colors">
-              <div className="flex items-center justify-center size-10 rounded-xl bg-primary-muted dark:bg-sevenpreneur-blue-midnight shrink-0">
-                <BookOpen className="size-5 text-primary" />
+            <div className="flex items-center gap-4 px-4 py-3 rounded-lg border border-sb-border bg-sb-item-hover hover:border-primary/40 transition-colors">
+              <div className="flex items-center justify-center size-10 rounded-lg bg-gradient-to-br from-primary/70 to-primary shrink-0">
+                <BookOpen className="size-5 text-white" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bodycopy font-bold text-sm text-sevenpreneur-coal dark:text-white">
@@ -199,10 +181,10 @@ export default function HomeAilene(props: HomeAileneProps) {
                   You left off at &ldquo;{continueLesson.title}&rdquo;
                 </p>
               </div>
-              <div className="flex items-center gap-2 shrink-0 bg-primary text-white font-bodycopy font-semibold text-sm px-4 py-2 rounded-lg">
+              <AppButton variant="tertiary" size="small">
                 <Play className="size-3.5 fill-white" />
                 Continue Lesson
-              </div>
+              </AppButton>
             </div>
           </Link>
         )}
@@ -252,13 +234,13 @@ export default function HomeAilene(props: HomeAileneProps) {
 
                   {/* expandable card */}
                   <div
-                    className={`flex-1 rounded-xl border overflow-hidden ${
+                    className={`flex-1 rounded-lg border shadow-[0_0_12px_rgba(0,0,0,0.04)] overflow-hidden ${
                       isCompleted
                         ? "border-success/40"
                         : isUnlocked
-                          ? "border-sevenpreneur-ash dark:border-sevenpreneur-smoke"
-                          : "border-sevenpreneur-ash dark:border-sevenpreneur-smoke opacity-60"
-                    } bg-white dark:bg-sevenpreneur-charcoal`}
+                          ? "border-sb-border"
+                          : "border-sb-border opacity-60"
+                    } bg-card-bg`}
                   >
                     {/* header */}
                     <button
@@ -300,7 +282,7 @@ export default function HomeAilene(props: HomeAileneProps) {
 
                     {/* expanded lesson list */}
                     {isExpanded && (
-                      <div className="border-t border-sevenpreneur-ash dark:border-sevenpreneur-smoke">
+                      <div className="border-t border-sb-border">
                         {lessons.map((lesson, idx) => {
                           const progress = lesson.user_progress[0];
                           const isLessonDone = !!progress?.completed_at;
@@ -313,7 +295,7 @@ export default function HomeAilene(props: HomeAileneProps) {
                           return (
                             <div
                               key={lesson.id}
-                              className="flex items-center gap-4 px-6 py-4 border-b border-sevenpreneur-ash dark:border-sevenpreneur-smoke last:border-b-0"
+                              className="flex items-center gap-4 px-6 py-4 bg-card-bg border-b border-sb-border last:border-b-0"
                             >
                               {/* completion icon */}
                               <div className="shrink-0">
@@ -353,14 +335,14 @@ export default function HomeAilene(props: HomeAileneProps) {
                               <div className="flex items-center gap-2 shrink-0">
                                 <Link
                                   href={`/lessons/${lesson.id}`}
-                                  className="font-bodycopy text-sm font-medium px-3 py-1.5 rounded-lg border border-sevenpreneur-ash dark:border-sevenpreneur-smoke text-sevenpreneur-coal dark:text-white hover:bg-sevenpreneur-ash/30 dark:hover:bg-sevenpreneur-smoke/30 transition-colors"
+                                  className="font-bodycopy text-sm font-medium px-3 py-1.5 rounded-md border border-sevenpreneur-ash dark:border-sevenpreneur-smoke text-sevenpreneur-coal dark:text-white hover:bg-sevenpreneur-ash/30 dark:hover:bg-sevenpreneur-smoke/30 transition-colors"
                                 >
                                   Re-read
                                 </Link>
                                 {lesson._count.quiz_questions > 0 && (
                                   <Link
                                     href={`/lessons/${lesson.id}/quiz`}
-                                    className={`font-bodycopy text-sm font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                                    className={`font-bodycopy text-sm font-medium px-3 py-1.5 rounded-md transition-colors ${
                                       isWeak
                                         ? "bg-secondary text-white hover:bg-secondary-hover"
                                         : isLessonDone
@@ -368,7 +350,9 @@ export default function HomeAilene(props: HomeAileneProps) {
                                           : "bg-primary text-white hover:bg-primary-hover"
                                     }`}
                                   >
-                                    {isLessonDone ? "Retake quiz" : "Start quiz"}
+                                    {isLessonDone
+                                      ? "Retake quiz"
+                                      : "Start quiz"}
                                   </Link>
                                 )}
                               </div>

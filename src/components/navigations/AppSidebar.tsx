@@ -42,7 +42,7 @@ export default function AppSidebar({
         <div
           className={`absolute -right-5 ${isCollapsed ? "top-5" : "top-6"} z-10`}
         >
-          <AppButton size="mediumIcon" variant="light" onClick={toggleSidebar}>
+          <AppButton size="mediumIcon" variant={isDark ? "dark" : "light"} onClick={toggleSidebar}>
             <PanelLeftClose
               className={`size-4 text-emphasis transition-all duration-300 ease-in-out ${
                 isCollapsed ? "rotate-180" : ""
