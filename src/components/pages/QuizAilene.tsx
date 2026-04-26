@@ -12,6 +12,16 @@ interface QuizOption {
   text: string;
 }
 
+interface QuizQuestion {
+  id: number;
+  question: string;
+  options: unknown;
+  correct_option: string;
+  explanation: string | null;
+  lesson_id: number;
+  order_index: number;
+}
+
 interface QuizAileneProps {
   lessonId: number;
 }
@@ -21,17 +31,26 @@ type QuizState = "answering" | "result";
 export default function QuizAilene(props: QuizAileneProps) {
   const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [quizState, setQuizState] = useState<QuizState>("answering");
   const [result, setResult] = useState<{
     score: number;
     passed: boolean;
     xp_awarded: number;
-    perQuestion: { correct: boolean; correct_option: string; explanation?: string | null }[];
+    perQuestion: {
+      correct: boolean;
+      correct_option: string;
+      explanation?: string | null;
+    }[];
   } | null>(null);
 
-  const { data: questionsData, isLoading } =
-    trpc.ailene.listQuizQuestionsForUser.useQuery({ lesson_id: props.lessonId });
+  const {
+    data: questionsData,
+    isLoading,
+    isError,
+  } = trpc.ailene.listQuizQuestionsForUser.useQuery({
+    lesson_id: props.lessonId,
+  });
 
   const submitMutation = trpc.ailene.submitQuiz.useMutation({
     onSuccess: (data) => {
@@ -46,8 +65,10 @@ export default function QuizAilene(props: QuizAileneProps) {
     onError: () => toast.error("Terjadi kesalahan. Coba lagi."),
   });
 
-  const questions = questionsData?.list ?? [];
-  const allAnswered = questions.length > 0 && questions.every((q) => answers[q.id] !== undefined);
+  const questions = (questionsData?.list ?? []) as QuizQuestion[];
+  const allAnswered =
+    questions.length > 0 &&
+    questions.every((q) => answers[String(q.id)] !== undefined);
 
   const handleSubmit = () => {
     if (!allAnswered) {
@@ -55,11 +76,13 @@ export default function QuizAilene(props: QuizAileneProps) {
       return;
     }
 
-    const correct = questions.filter((q) => answers[q.id] === q.correct_option).length;
+    const correct = questions.filter(
+      (q) => answers[String(q.id)] === q.correct_option
+    ).length;
     const score = Math.round((correct / questions.length) * 100);
 
     const perQuestion = questions.map((q) => ({
-      correct: answers[q.id] === q.correct_option,
+      correct: answers[String(q.id)] === q.correct_option,
       correct_option: q.correct_option,
       explanation: q.explanation,
     }));
@@ -68,7 +91,12 @@ export default function QuizAilene(props: QuizAileneProps) {
       { lesson_id: props.lessonId, score },
       {
         onSuccess: (data) => {
-          setResult({ score: data.score, passed: data.passed, xp_awarded: data.xp_awarded, perQuestion });
+          setResult({
+            score: data.score,
+            passed: data.passed,
+            xp_awarded: data.xp_awarded,
+            perQuestion,
+          });
           setQuizState("result");
         },
       }
@@ -99,7 +127,18 @@ export default function QuizAilene(props: QuizAileneProps) {
           </div>
         )}
 
-        {!isLoading && quizState === "answering" && (
+        {isError && (
+          <div className="flex flex-col gap-2 py-20 items-center text-center">
+            <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal dark:text-white">
+              Gagal memuat soal quiz.
+            </p>
+            <p className="font-bodycopy text-xs text-emphasis">
+              Coba reload halaman ini.
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !isError && quizState === "answering" && (
           <>
             <div className="flex flex-col gap-1">
               <h1 className="font-brand font-bold text-2xl text-sevenpreneur-coal">
@@ -114,18 +153,26 @@ export default function QuizAilene(props: QuizAileneProps) {
               {questions.map((q, idx) => {
                 const options = q.options as unknown as QuizOption[];
                 return (
-                  <div key={q.id} className="flex flex-col gap-3 p-5 rounded-xl border border-sevenpreneur-ash">
+                  <div
+                    key={q.id}
+                    className="flex flex-col gap-3 p-5 rounded-xl border border-sevenpreneur-ash"
+                  >
                     <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal">
                       <span className="text-primary mr-1">{idx + 1}.</span>
                       {q.question}
                     </p>
                     <div className="flex flex-col gap-2">
                       {options.map((opt) => {
-                        const isSelected = answers[q.id] === opt.id;
+                        const isSelected = answers[String(q.id)] === opt.id;
                         return (
                           <button
                             key={opt.id}
-                            onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: opt.id }))}
+                            onClick={() =>
+                              setAnswers((prev) => ({
+                                ...prev,
+                                [String(q.id)]: opt.id,
+                              }))
+                            }
                             className={`flex items-center gap-3 p-3 rounded-lg border text-left transition font-bodycopy text-sm ${
                               isSelected
                                 ? "border-primary bg-primary-muted text-primary font-semibold"
@@ -134,14 +181,18 @@ export default function QuizAilene(props: QuizAileneProps) {
                           >
                             <div
                               className={`flex shrink-0 size-5 rounded-full border-2 items-center justify-center ${
-                                isSelected ? "border-primary" : "border-sevenpreneur-ash"
+                                isSelected
+                                  ? "border-primary"
+                                  : "border-sevenpreneur-ash"
                               }`}
                             >
                               {isSelected && (
                                 <div className="size-2.5 rounded-full bg-primary" />
                               )}
                             </div>
-                            <span>{opt.id.toUpperCase()}. {opt.text}</span>
+                            <span>
+                              {opt.id.toUpperCase()}. {opt.text}
+                            </span>
                           </button>
                         );
                       })}
@@ -181,12 +232,20 @@ export default function QuizAilene(props: QuizAileneProps) {
                 <XCircle className="size-8 text-danger" />
               )}
               <h2 className="font-brand font-bold text-2xl text-sevenpreneur-coal">
-                {result.passed ? "Selamat, kamu lulus! 🎉" : "Belum lulus, coba lagi!"}
+                {result.passed
+                  ? "Selamat, kamu lulus! 🎉"
+                  : "Belum lulus, coba lagi!"}
               </h2>
               <p className="font-bodycopy text-sm text-emphasis">
                 Skor kamu: <strong>{result.score}%</strong>
                 {result.passed && result.xp_awarded > 0 && (
-                  <> · <span className="text-primary font-semibold">+{result.xp_awarded} XP diperoleh</span></>
+                  <>
+                    {" "}
+                    ·{" "}
+                    <span className="text-primary font-semibold">
+                      +{result.xp_awarded} XP diperoleh
+                    </span>
+                  </>
                 )}
               </p>
             </div>
@@ -203,17 +262,26 @@ export default function QuizAilene(props: QuizAileneProps) {
                   <div
                     key={q.id}
                     className={`flex flex-col gap-3 p-4 rounded-xl border ${
-                      review.correct ? "border-success/40 bg-success-background/20" : "border-danger/40 bg-danger-background/20"
+                      review.correct
+                        ? "border-success/40 bg-success-background/20"
+                        : "border-danger/40 bg-danger-background/20"
                     }`}
                   >
                     <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal">
-                      <span className={`mr-1 ${review.correct ? "text-success" : "text-danger"}`}>{idx + 1}.</span>
+                      <span
+                        className={`mr-1 ${review.correct ? "text-success" : "text-danger"}`}
+                      >
+                        {idx + 1}.
+                      </span>
                       {q.question}
                     </p>
                     <p className="font-bodycopy text-xs text-emphasis">
                       Jawaban benar:{" "}
                       <strong className="text-success">
-                        {options.find((o) => o.id === review.correct_option)?.text}
+                        {
+                          options.find((o) => o.id === review.correct_option)
+                            ?.text
+                        }
                       </strong>
                     </p>
                     {review.explanation && (
@@ -227,7 +295,11 @@ export default function QuizAilene(props: QuizAileneProps) {
             </div>
 
             <div className="flex gap-3">
-              <AppButton variant="primarySoft" size="medium" onClick={handleRetry}>
+              <AppButton
+                variant="primarySoft"
+                size="medium"
+                onClick={handleRetry}
+              >
                 Coba Lagi
               </AppButton>
               <Link href="/">
