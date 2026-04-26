@@ -10,10 +10,13 @@ import {
   CircleCheck,
   Flame,
   Lock,
+  Medal,
   Play,
   TrendingUp,
   Trophy,
+  Users,
 } from "lucide-react";
+import Image from "next/image";
 import AppScorecardDashboard from "../cards/AppScorecardDashboard";
 import { Progress } from "../ui/progress";
 import Link from "next/link";
@@ -46,6 +49,7 @@ export default function HomeAilene(props: HomeAileneProps) {
   const { isCollapsed } = useSidebar();
   const { data: progressData } = trpc.ailene.myProgress.useQuery();
   const { data: lessonsData } = trpc.ailene.listLessonsWithProgress.useQuery();
+  const { data: leaderboardData } = trpc.ailene.leaderboard.useQuery();
 
   const [expandedLevel, setExpandedLevel] = useState<number | null>(null);
 
@@ -169,7 +173,7 @@ export default function HomeAilene(props: HomeAileneProps) {
         {/* Continue Learning */}
         {continueLesson && (
           <Link href={`/lessons/${continueLesson.id}`}>
-            <div className="flex items-center gap-4 px-4 py-3 rounded-lg border border-sb-border bg-sb-item-hover hover:border-primary/40 transition-colors">
+            <div className="flex items-center gap-4 px-4 py-3 rounded-lg border border-card-border bg-sb-item-hover hover:border-primary/40 transition-colors">
               <div className="flex items-center justify-center size-10 rounded-lg bg-gradient-to-br from-primary/70 to-primary shrink-0">
                 <BookOpen className="size-5 text-white" />
               </div>
@@ -238,8 +242,8 @@ export default function HomeAilene(props: HomeAileneProps) {
                       isCompleted
                         ? "border-success/40"
                         : isUnlocked
-                          ? "border-sb-border"
-                          : "border-sb-border opacity-60"
+                          ? "border-card-border"
+                          : "border-card-border opacity-60"
                     } bg-card-bg`}
                   >
                     {/* header */}
@@ -282,7 +286,7 @@ export default function HomeAilene(props: HomeAileneProps) {
 
                     {/* expanded lesson list */}
                     {isExpanded && (
-                      <div className="border-t border-sb-border">
+                      <div className="border-t border-card-border">
                         {lessons.map((lesson, idx) => {
                           const progress = lesson.user_progress[0];
                           const isLessonDone = !!progress?.completed_at;
@@ -295,7 +299,7 @@ export default function HomeAilene(props: HomeAileneProps) {
                           return (
                             <div
                               key={lesson.id}
-                              className="flex items-center gap-4 px-6 py-4 bg-card-bg border-b border-sb-border last:border-b-0"
+                              className="flex items-center gap-4 px-6 py-4 bg-card-bg border-b border-card-border last:border-b-0"
                             >
                               {/* completion icon */}
                               <div className="shrink-0">
@@ -367,6 +371,113 @@ export default function HomeAilene(props: HomeAileneProps) {
             })}
           </div>
         </div>
+
+        {/* Leaderboard */}
+        {leaderboardData && leaderboardData.list.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <h2 className="font-brand font-bold text-lg text-sevenpreneur-coal dark:text-white">
+              Leaderboard
+            </h2>
+
+            {/* Team Insights Card */}
+            <div className="grid grid-cols-4 gap-4 mb-1">
+              <AppScorecardDashboard
+                title="Total Members"
+                icon={<Users className="size-4 text-white" />}
+                iconClassName="bg-gradient-to-br from-primary/70 to-primary"
+                value={<>{leaderboardData.teamInsights.memberCount}</>}
+              />
+              <AppScorecardDashboard
+                title="Team Total XP"
+                icon={<Trophy className="size-4 text-white" />}
+                iconClassName="bg-gradient-to-br from-tertiary/70 to-tertiary"
+                value={
+                  <>
+                    {leaderboardData.teamInsights.totalXp.toLocaleString()}{" "}
+                    <span className="font-normal text-emphasis">XP</span>
+                  </>
+                }
+              />
+              <AppScorecardDashboard
+                title="Lessons Completed"
+                icon={<BookCheck className="size-4 text-white" />}
+                iconClassName="bg-gradient-to-br from-success/70 to-success"
+                value={<>{leaderboardData.teamInsights.totalCompleted}</>}
+              />
+              <AppScorecardDashboard
+                title="Team Avg Score"
+                icon={<TrendingUp className="size-4 text-white" />}
+                iconClassName="bg-gradient-to-br from-warning/70 to-warning"
+                value={
+                  leaderboardData.teamInsights.avgScore != null ? (
+                    <>
+                      {leaderboardData.teamInsights.avgScore}
+                      <span className="font-normal text-emphasis">%</span>
+                    </>
+                  ) : (
+                    <span className="font-normal text-emphasis">—</span>
+                  )
+                }
+              />
+            </div>
+
+            {/* Ranked list */}
+            <div className="flex flex-col rounded-lg border border-card-border bg-card-bg overflow-hidden">
+              {leaderboardData.list.map((member, idx) => {
+                const rankColors = ["text-warning", "text-sevenpreneur-ash", "text-tertiary"];
+                const rankColor = idx < 3 ? rankColors[idx] : "text-emphasis";
+                return (
+                  <div
+                    key={member.id}
+                    className="flex items-center gap-4 px-5 py-3.5 border-b border-card-border last:border-b-0"
+                  >
+                    <div className={`w-6 text-center font-bodycopy font-bold text-sm ${rankColor}`}>
+                      {idx === 0 ? (
+                        <Medal className="size-4 mx-auto text-warning" />
+                      ) : idx === 1 ? (
+                        <Medal className="size-4 mx-auto text-sevenpreneur-ash" />
+                      ) : idx === 2 ? (
+                        <Medal className="size-4 mx-auto text-tertiary" />
+                      ) : (
+                        idx + 1
+                      )}
+                    </div>
+                    <div className="flex size-8 rounded-full overflow-hidden shrink-0">
+                      {member.avatar ? (
+                        <Image
+                          src={member.avatar}
+                          alt={member.full_name}
+                          width={32}
+                          height={32}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full bg-primary-muted text-primary font-bold text-xs">
+                          {member.full_name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal dark:text-white truncate">
+                        {member.full_name}
+                      </p>
+                      <p className="font-bodycopy text-xs text-emphasis">
+                        {member.completedCount} lessons completed
+                        {member.avgScore != null && ` · ${member.avgScore}% avg`}
+                      </p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <p className="font-bodycopy font-bold text-sm text-sevenpreneur-coal dark:text-white">
+                        {member.totalXp.toLocaleString()}
+                      </p>
+                      <p className="font-bodycopy text-xs text-emphasis">XP</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

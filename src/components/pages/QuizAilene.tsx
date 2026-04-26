@@ -20,6 +20,7 @@ type QuizState = "answering" | "result";
 
 export default function QuizAilene(props: QuizAileneProps) {
   const { isCollapsed } = useSidebar();
+  const utils = trpc.useUtils();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [quizState, setQuizState] = useState<QuizState>("answering");
   const [result, setResult] = useState<{
@@ -34,6 +35,8 @@ export default function QuizAilene(props: QuizAileneProps) {
 
   const submitMutation = trpc.ailene.submitQuiz.useMutation({
     onSuccess: (data) => {
+      utils.ailene.myProgress.invalidate();
+      utils.ailene.listLessonsWithProgress.invalidate();
       if (data.passed) {
         toast.success(`Lulus! Kamu mendapat +${data.xp_awarded} XP 🎉`);
       } else {
@@ -227,9 +230,9 @@ export default function QuizAilene(props: QuizAileneProps) {
               <AppButton variant="primarySoft" size="medium" onClick={handleRetry}>
                 Coba Lagi
               </AppButton>
-              <Link href="/lessons">
+              <Link href="/">
                 <AppButton variant="primary" size="medium">
-                  Materi Lainnya
+                  Kembali ke Dashboard
                 </AppButton>
               </Link>
             </div>

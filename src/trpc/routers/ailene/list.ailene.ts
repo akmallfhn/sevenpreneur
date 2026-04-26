@@ -93,4 +93,55 @@ export const listAilene = {
       completed_count: completed,
     };
   }),
+
+  leaderboard: aileneProcedure.query(async (opts) => {
+    const users = await opts.ctx.prisma.user.findMany({
+      where: { role_id: { not: 3 } },
+      select: {
+        id: true,
+        full_name: true,
+        avatar: true,
+        ai_learn_progress: {
+          select: { xp_earned: true, completed_at: true, score: true },
+        },
+      },
+    });
+
+    const ranked = users
+      .map((u) => {
+        const totalXp = u.ai_learn_progress.reduce((sum, p) => sum + p.xp_earned, 0);
+        const completedCount = u.ai_learn_progress.filter((p) => !!p.completed_at).length;
+        const scores = u.ai_learn_progress
+          .map((p) => p.score)
+          .filter((s): s is number => s != null);
+        const avgScore =
+          scores.length > 0
+            ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+            : null;
+        return { id: u.id, full_name: u.full_name, avatar: u.avatar, totalXp, completedCount, avgScore };
+      })
+      .sort((a, b) => b.totalXp - a.totalXp);
+
+    const teamTotalXp = ranked.reduce((sum, u) => sum + u.totalXp, 0);
+    const teamTotalCompleted = ranked.reduce((sum, u) => sum + u.completedCount, 0);
+    const teamScores = ranked.flatMap((u) =>
+      u.avgScore != null ? [u.avgScore] : []
+    );
+    const teamAvgScore =
+      teamScores.length > 0
+        ? Math.round(teamScores.reduce((a, b) => a + b, 0) / teamScores.length)
+        : null;
+
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      list: ranked,
+      teamInsights: {
+        memberCount: ranked.length,
+        totalXp: teamTotalXp,
+        totalCompleted: teamTotalCompleted,
+        avgScore: teamAvgScore,
+      },
+    };
+  }),
 };

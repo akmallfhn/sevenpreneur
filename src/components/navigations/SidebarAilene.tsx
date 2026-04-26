@@ -1,6 +1,6 @@
 "use client";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { BookOpen, LayoutDashboard, Settings } from "lucide-react";
+import { LayoutDashboard, Settings } from "lucide-react";
 import { useEffect } from "react";
 import AppSidebar from "./AppSidebar";
 import AppSidebarGroupMenu from "./AppSidebarGroupMenu";
@@ -40,11 +40,7 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           menuIcon={<LayoutDashboard className="size-[18px]" />}
           exact
         />
-        <AppSidebarMenuItem
-          menuName="Materi"
-          menuURL="/lessons"
-          menuIcon={<BookOpen className="size-[18px]" />}
-        />
+
       </AppSidebarGroupMenu>
 
       {isAdmin && (

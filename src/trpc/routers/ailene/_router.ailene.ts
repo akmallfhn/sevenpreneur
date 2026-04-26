@@ -25,4 +25,5 @@ export const aileneRouter = createTRPCRouter({
   // User progress
   submitQuiz: createAilene.submitQuiz,
   myProgress: listAilene.myProgress,
+  leaderboard: listAilene.leaderboard,
 });
