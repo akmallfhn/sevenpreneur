@@ -150,6 +150,7 @@
   /* dashboard */
   --dashboard-bg: #fefefe;
   --card-bg: #fefefe;
+  --card-border: #ecebf0;
   --sb-bg: #fbfaff;
   --sb-text: #595b68;
   --sb-text-strong: #1a2236;
@@ -196,6 +197,7 @@
   /* dashboard */
   --dashboard-bg: #0b0e13;
   --card-bg: #11141b;
+  --card-border: #202229;
   --sb-bg: #0b0e15;
   --sb-text: #abb1bf;
   --sb-text-strong: rgba(255, 255, 255, 0.95);
@@ -285,6 +287,7 @@
   /* --- dashboard --- */
   --color-dashboard-bg: var(--dashboard-bg);
   --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
 
   /* --- sidebar --- */
   --color-sb-bg: var(--sb-bg);
