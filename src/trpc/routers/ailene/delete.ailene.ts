@@ -4,6 +4,13 @@ import { numberIsID } from "@/trpc/utils/validation";
 import z from "zod";
 
 export const deleteAilene = {
+  session: administratorProcedure
+    .input(z.object({ id: numberIsID() }))
+    .mutation(async (opts) => {
+      await opts.ctx.prisma.aiLearnSession.delete({ where: { id: opts.input.id } });
+      return { code: STATUS_OK, message: "Success" };
+    }),
+
   member: administratorProcedure
     .input(z.object({ id: numberIsID() }))
     .mutation(async (opts) => {

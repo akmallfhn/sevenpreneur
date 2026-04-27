@@ -1,6 +1,6 @@
 "use client";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { LayoutDashboard, Settings, Trophy, Users } from "lucide-react";
+import { CalendarDays, LayoutDashboard, Settings, Trophy, Users } from "lucide-react";
 import { useEffect } from "react";
 import AppSidebar from "./AppSidebar";
 import AppSidebarGroupMenu from "./AppSidebarGroupMenu";
@@ -58,6 +58,11 @@ export default function SidebarAilene(props: SidebarAileneProps) {
             menuName="Kelola Members"
             menuURL="/admin/members"
             menuIcon={<Users className="size-[18px]" />}
+          />
+          <AppSidebarMenuItem
+            menuName="Kelola Sessions"
+            menuURL="/admin/sessions"
+            menuIcon={<CalendarDays className="size-[18px]" />}
           />
         </AppSidebarGroupMenu>
       )}

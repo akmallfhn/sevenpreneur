@@ -7,11 +7,39 @@ import {
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus, AiLearnRoleEnum } from "@prisma/client";
+import { AiLearnLessonStatus, AiLearnRoleEnum, LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const createAilene = {
+  session: administratorProcedure
+    .input(
+      z.object({
+        name: stringNotBlank(),
+        description: stringNotBlank(),
+        method: z.enum(LearningMethodEnum),
+        meeting_date: z.iso.datetime({ offset: true, local: false }),
+        meeting_url: z.string().optional(),
+        location_name: z.string().optional(),
+        location_url: z.string().optional(),
+        speaker_id: z.string().optional(),
+        recording_url: z.string().optional(),
+        external_video_id: z.string().optional(),
+        status: z.enum(StatusEnum).optional(),
+        feedback_form: z.string().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const session = await opts.ctx.prisma.aiLearnSession.create({
+        data: {
+          ...opts.input,
+          status: opts.input.status ?? StatusEnum.ACTIVE,
+          meeting_date: new Date(opts.input.meeting_date),
+        },
+      });
+      return { code: STATUS_CREATED, message: "Success", session };
+    }),
+
   addMemberByEmail: administratorProcedure
     .input(
       z.object({

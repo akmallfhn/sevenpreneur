@@ -5,6 +5,17 @@ import { AiLearnLessonStatus } from "@prisma/client";
 import z from "zod";
 
 export const listAilene = {
+  sessions: aileneProcedure.query(async (opts) => {
+    const sessions = await opts.ctx.prisma.aiLearnSession.findMany({
+      include: {
+        speaker: { select: { id: true, full_name: true, avatar: true } },
+        _count: { select: { attendances: true } },
+      },
+      orderBy: { meeting_date: "asc" },
+    });
+    return { code: STATUS_OK, message: "Success", list: sessions };
+  }),
+
   members: administratorProcedure.query(async (opts) => {
     const members = await opts.ctx.prisma.aiLearnMember.findMany({
       include: {

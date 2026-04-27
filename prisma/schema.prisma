@@ -336,6 +336,7 @@ model User {
   deleted_playlists        Playlist[]
   speaker_at               Learning[]
   speaker_in               EducatorPlaylist[]     @relation("host_playlist")
+  ai_learn_sessions_speaker AiLearnSession[]      @relation("ai_learn_session_speaker")
   transactions             Transaction[]
   cohorts                  UserCohort[]
   discussion_starters      DiscussionStarter[]
@@ -1022,12 +1023,13 @@ model WAAlert {
 // Ailene AI Learn //
 
 model AiLearnMember {
-  id         Int                   @id @default(autoincrement()) @db.Integer
-  user       User                  @relation(fields: [user_id], references: [id])
-  user_id    String                @unique @db.Uuid
-  role_name  AiLearnRoleEnum
-  created_at DateTime              @default(now()) @db.Timestamptz()
-  progress   AiLearnUserProgress[]
+  id                  Int                        @id @default(autoincrement()) @db.Integer
+  user                User                       @relation(fields: [user_id], references: [id])
+  user_id             String                     @unique @db.Uuid
+  role_name           AiLearnRoleEnum
+  created_at          DateTime                   @default(now()) @db.Timestamptz()
+  progress            AiLearnUserProgress[]
+  session_attendances AiLearnSessionAttendance[]
 
   @@map("ai_learn_members")
 }
@@ -1091,6 +1093,43 @@ model AiLearnUserProgress {
 
   @@unique([member_id, lesson_id])
   @@map("ai_learn_user_progress")
+}
+
+model AiLearnSession {
+  id                Int                        @id @default(autoincrement()) @db.Integer
+  name              String                     @db.VarChar()
+  description       String                     @db.VarChar()
+  method            LearningMethodEnum
+  meeting_date      DateTime                   @default(now()) @db.Timestamptz()
+  meeting_url       String?                    @db.VarChar()
+  location_name     String?                    @db.VarChar()
+  location_url      String?                    @db.VarChar()
+  speaker           User?                      @relation("ai_learn_session_speaker", fields: [speaker_id], references: [id])
+  speaker_id        String?                    @db.Uuid
+  recording_url     String?                    @db.VarChar()
+  external_video_id String?                    @db.VarChar()
+  status            StatusEnum                 @default(ACTIVE)
+  check_in          Boolean                    @default(false) @db.Boolean
+  check_out         Boolean                    @default(false) @db.Boolean
+  check_out_code    String?                    @db.VarChar()
+  feedback_form     String?                    @db.VarChar()
+  created_at        DateTime                   @default(now()) @db.Timestamptz()
+  updated_at        DateTime                   @default(now()) @updatedAt @db.Timestamptz()
+  attendances       AiLearnSessionAttendance[]
+
+  @@map("ai_learn_sessions")
+}
+
+model AiLearnSessionAttendance {
+  session      AiLearnSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  session_id   Int            @db.Integer
+  member       AiLearnMember  @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  member_id    Int            @db.Integer
+  check_in_at  DateTime?      @db.Timestamptz()
+  check_out_at DateTime?      @db.Timestamptz()
+
+  @@id([session_id, member_id])
+  @@map("ai_learn_session_attendances")
 }
 
 // Relation Tables //

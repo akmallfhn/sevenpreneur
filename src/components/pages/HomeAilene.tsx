@@ -4,15 +4,19 @@ import { trpc } from "@/trpc/client";
 import {
   BookCheck,
   BookOpen,
+  CalendarDays,
   ChevronDown,
   Circle,
   CircleAlert,
   CircleCheck,
+  ExternalLink,
   Flame,
   Lock,
+  MapPin,
   Play,
   TrendingUp,
   Trophy,
+  Video,
 } from "lucide-react";
 import AppScorecardDashboard from "../cards/AppScorecardDashboard";
 import { Progress } from "../ui/progress";
@@ -46,6 +50,7 @@ export default function HomeAilene(props: HomeAileneProps) {
   const { isCollapsed } = useSidebar();
   const { data: progressData } = trpc.ailene.myProgress.useQuery();
   const { data: lessonsData } = trpc.ailene.listLessonsWithProgress.useQuery();
+  const { data: sessionsData } = trpc.ailene.listSessions.useQuery();
 
   const [expandedLevel, setExpandedLevel] = useState<number | null>(null);
 
@@ -188,6 +193,81 @@ export default function HomeAilene(props: HomeAileneProps) {
             </div>
           </Link>
         )}
+
+        {/* Sessions */}
+        {sessionsData && sessionsData.list.length > 0 && (() => {
+          const now = new Date();
+          const upcoming = sessionsData.list.filter(
+            (s) => new Date(s.meeting_date) >= now && s.status === "ACTIVE"
+          );
+          const past = sessionsData.list.filter(
+            (s) => new Date(s.meeting_date) < now && s.status === "ACTIVE"
+          );
+          const shown = upcoming.length > 0 ? upcoming.slice(0, 3) : past.slice(-3).reverse();
+          const label = upcoming.length > 0 ? "Upcoming Sessions" : "Past Sessions";
+          return (
+            <div className="flex flex-col gap-3">
+              <h2 className="font-brand font-bold text-lg text-sevenpreneur-coal dark:text-white">
+                {label}
+              </h2>
+              <div className="flex flex-col gap-2">
+                {shown.map((session) => {
+                  const isUpcoming = new Date(session.meeting_date) >= now;
+                  return (
+                    <div
+                      key={session.id}
+                      className="flex items-start gap-4 px-5 py-4 rounded-lg border border-dashboard-border bg-card-bg"
+                    >
+                      <div className={`flex items-center justify-center size-10 rounded-lg shrink-0 mt-0.5 ${isUpcoming ? "bg-gradient-to-br from-tertiary/70 to-tertiary" : "bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke"}`}>
+                        <CalendarDays className={`size-5 ${isUpcoming ? "text-white" : "text-emphasis"}`} />
+                      </div>
+                      <div className="flex-1 min-w-0 flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bodycopy font-bold text-sm text-sevenpreneur-coal dark:text-white truncate">
+                            {session.name}
+                          </span>
+                          <span className={`shrink-0 text-[10px] font-semibold font-bodycopy px-2 py-0.5 rounded-full capitalize ${session.method === "ONLINE" ? "bg-primary/10 text-primary" : session.method === "ONSITE" ? "bg-success-background text-success-foreground" : "bg-warning-background text-warning-foreground"}`}>
+                            {session.method.toLowerCase()}
+                          </span>
+                        </div>
+                        <p className="font-bodycopy text-xs text-emphasis">
+                          {new Intl.DateTimeFormat("id-ID", { dateStyle: "full", timeStyle: "short" }).format(new Date(session.meeting_date))}
+                        </p>
+                        {session.speaker && (
+                          <p className="font-bodycopy text-xs text-emphasis">🎤 {session.speaker.full_name}</p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {session.meeting_url && isUpcoming && (
+                          <a href={session.meeting_url} target="_blank" rel="noopener noreferrer">
+                            <AppButton variant="tertiary" size="small">
+                              <Video className="size-3.5" />
+                              Join
+                            </AppButton>
+                          </a>
+                        )}
+                        {session.location_name && !session.meeting_url && (
+                          <div className="flex items-center gap-1 text-xs text-emphasis font-bodycopy">
+                            <MapPin className="size-3.5" />
+                            {session.location_name}
+                          </div>
+                        )}
+                        {session.recording_url && !isUpcoming && (
+                          <a href={session.recording_url} target="_blank" rel="noopener noreferrer">
+                            <AppButton variant="light" size="small">
+                              <ExternalLink className="size-3.5" />
+                              Recording
+                            </AppButton>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Your Journey */}
         <div className="flex flex-col gap-3">

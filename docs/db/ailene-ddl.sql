@@ -1,6 +1,7 @@
 -- PostgreSQL DDL for Ailene — AI Learning Platform
 -- Part of the Sevenpreneur ecosystem
--- Tables: ai_learn_members, ai_learn_lessons, ai_learn_quiz_questions, ai_learn_quiz_options, ai_learn_user_progress
+-- Tables: ai_learn_members, ai_learn_lessons, ai_learn_quiz_questions, ai_learn_quiz_options, ai_learn_user_progress,
+--         ai_learn_sessions, ai_learn_session_attendances
 
 ------------------
 -- Enumerations --
@@ -113,3 +114,50 @@ ALTER TABLE ai_learn_user_progress
 ALTER TABLE ai_learn_user_progress
     ADD CONSTRAINT ai_learn_user_progress_lesson_id_fkey
     FOREIGN KEY (lesson_id) REFERENCES ai_learn_lessons(id) ON DELETE CASCADE;
+
+-- Stores live learning sessions (workshops, webinars, etc.) for Ailene members
+-- Same architecture as the Learning model in the main platform
+
+CREATE TABLE ai_learn_sessions (
+    id                SERIAL               PRIMARY KEY,
+    name              VARCHAR              NOT NULL,
+    description       VARCHAR              NOT NULL,
+    method            learning_method_enum NOT NULL,
+    meeting_date      TIMESTAMPTZ          NOT NULL DEFAULT NOW(),
+    meeting_url       VARCHAR,
+    location_name     VARCHAR,
+    location_url      VARCHAR,
+    speaker_id        UUID,
+    recording_url     VARCHAR,
+    external_video_id VARCHAR,
+    status            status_enum          NOT NULL DEFAULT 'active',
+    check_in          BOOLEAN              NOT NULL DEFAULT false,
+    check_out         BOOLEAN              NOT NULL DEFAULT false,
+    check_out_code    VARCHAR,
+    feedback_form     VARCHAR,
+    created_at        TIMESTAMPTZ          NOT NULL DEFAULT NOW(),
+    updated_at        TIMESTAMPTZ          NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE ai_learn_sessions
+    ADD CONSTRAINT ai_learn_sessions_speaker_id_fkey
+    FOREIGN KEY (speaker_id) REFERENCES users(id) ON DELETE SET NULL;
+
+-- Tracks attendance per member per session
+-- Composite PK: (session_id, member_id)
+
+CREATE TABLE ai_learn_session_attendances (
+    session_id   INTEGER     NOT NULL,
+    member_id    INTEGER     NOT NULL,
+    check_in_at  TIMESTAMPTZ,
+    check_out_at TIMESTAMPTZ,
+    PRIMARY KEY (session_id, member_id)
+);
+
+ALTER TABLE ai_learn_session_attendances
+    ADD CONSTRAINT ai_learn_session_attendances_session_id_fkey
+    FOREIGN KEY (session_id) REFERENCES ai_learn_sessions(id) ON DELETE CASCADE;
+
+ALTER TABLE ai_learn_session_attendances
+    ADD CONSTRAINT ai_learn_session_attendances_member_id_fkey
+    FOREIGN KEY (member_id) REFERENCES ai_learn_members(id) ON DELETE CASCADE;
