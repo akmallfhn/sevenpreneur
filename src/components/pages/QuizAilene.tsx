@@ -151,7 +151,7 @@ export default function QuizAilene(props: QuizAileneProps) {
 
             <div className="flex flex-col gap-6">
               {questions.map((q, idx) => {
-                const options = q.options as unknown as QuizOption[];
+                const options: QuizOption[] = Array.isArray(q.options) ? (q.options as QuizOption[]) : [];
                 return (
                   <div
                     key={q.id}
@@ -257,7 +257,7 @@ export default function QuizAilene(props: QuizAileneProps) {
               </h3>
               {questions.map((q, idx) => {
                 const review = result.perQuestion[idx];
-                const options = q.options as unknown as QuizOption[];
+                const options: QuizOption[] = Array.isArray(q.options) ? (q.options as QuizOption[]) : [];
                 return (
                   <div
                     key={q.id}
