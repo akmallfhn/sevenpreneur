@@ -1,4 +1,5 @@
 import { Optional } from "@/lib/optional-type";
+import GetQStashClient from "@/lib/qstash";
 import { STATUS_FORBIDDEN, STATUS_NO_CONTENT } from "@/lib/status_code";
 import {
   administratorProcedure,
@@ -6,6 +7,7 @@ import {
   roleBasedProcedure,
 } from "@/trpc/init";
 import { checkDeleteResult, readFailedNotFound } from "@/trpc/utils/errors";
+import { UpdateLearningReminderSchedule } from "@/trpc/utils/schedule_reminder";
 import {
   numberIsID,
   objectHasOnlyID,
@@ -96,6 +98,15 @@ export const deleteLMS = {
         },
       });
       checkDeleteResult(deletedLearning.count, "learnings", "learning");
+
+      const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
+        opts.ctx.prisma,
+        GetQStashClient()
+      );
+      if (!isUpdateScheduleSuccess) {
+        console.error("Failed to update learning reminder schedule.");
+      }
+
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

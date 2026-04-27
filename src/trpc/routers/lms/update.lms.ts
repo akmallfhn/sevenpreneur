@@ -1,4 +1,5 @@
 import { Optional } from "@/lib/optional-type";
+import GetQStashClient from "@/lib/qstash";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -6,6 +7,7 @@ import {
 } from "@/lib/status_code";
 import { loggedInProcedure, roleBasedProcedure } from "@/trpc/init";
 import { checkUpdateResult, readFailedNotFound } from "@/trpc/utils/errors";
+import { UpdateLearningReminderSchedule } from "@/trpc/utils/schedule_reminder";
 import {
   numberIsID,
   stringIsTimestampTz,
@@ -211,6 +213,15 @@ export const updateLMS = {
           },
         });
       checkUpdateResult(updatedLearning.length, "learning", "learnings");
+
+      const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
+        opts.ctx.prisma,
+        GetQStashClient()
+      );
+      if (!isUpdateScheduleSuccess) {
+        console.error("Failed to update learning reminder schedule.");
+      }
+
       return {
         code: STATUS_OK,
         message: "Success",

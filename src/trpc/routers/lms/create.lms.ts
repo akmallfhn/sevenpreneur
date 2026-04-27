@@ -1,3 +1,4 @@
+import GetQStashClient from "@/lib/qstash";
 import {
   STATUS_CREATED,
   STATUS_FORBIDDEN,
@@ -9,6 +10,7 @@ import {
   roleBasedProcedure,
 } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
+import { UpdateLearningReminderSchedule } from "@/trpc/utils/schedule_reminder";
 import { createSlugFromTitle } from "@/trpc/utils/slug";
 import {
   numberIsID,
@@ -259,6 +261,15 @@ export const createLMS = {
           message: "Failed to create a new learning.",
         });
       }
+
+      const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
+        opts.ctx.prisma,
+        GetQStashClient()
+      );
+      if (!isUpdateScheduleSuccess) {
+        console.error("Failed to update learning reminder schedule.");
+      }
+
       return {
         code: STATUS_CREATED,
         message: "Success",
