@@ -4,10 +4,11 @@ import { BookCheck, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import { marked } from "marked";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import PageContainerCMS from "./PageContainerCMS";
 import styles from "./ailene-prose.module.css";
+import StartQuizModal from "../modals/StartQuizModal";
 
 marked.setOptions({ gfm: true, breaks: false });
 
@@ -75,6 +76,8 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
   const { data: allLessonsData } =
     trpc.ailene.listLessonsWithProgress.useQuery();
 
+  const [quizModalOpen, setQuizModalOpen] = useState(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lesson = data?.lesson as any;
   const progress = lesson?.progress[0] as
@@ -83,12 +86,14 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
   const isCompleted = !!progress?.completed_at;
   const hasQuiz = (lesson?._count.quiz_questions ?? 0) > 0;
 
-  const { prevLesson, nextLesson } = useMemo(() => {
+  const { prevLesson, prevNumber, nextLesson, nextNumber } = useMemo(() => {
     const list = allLessonsData?.list ?? [];
     const idx = list.findIndex((l) => l.id === props.lessonId);
     return {
       prevLesson: idx > 0 ? list[idx - 1] : null,
+      prevNumber: idx > 0 ? idx : 0,
       nextLesson: idx !== -1 && idx < list.length - 1 ? list[idx + 1] : null,
+      nextNumber: idx !== -1 && idx < list.length - 1 ? idx + 2 : 0,
     };
   }, [allLessonsData, props.lessonId]);
 
@@ -105,6 +110,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
   const completionScore = progress?.score ?? 0;
 
   return (
+    <>
     <PageContainerCMS className="overflow-y-auto">
       <div className="w-full max-w-[880px] mx-auto py-4 flex flex-col">
         {isLoading && <AppLoadingComponents />}
@@ -284,7 +290,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
 
             {/* Quiz CTA */}
             {hasQuiz ? (
-              <div className="flex flex-col gap-4 p-6 rounded-xl border border-[var(--dashboard-border)] bg-gradient-to-br from-[var(--card-bg)] to-[var(--sb-item-hover)] mb-8">
+              <div className="flex flex-col gap-4 p-6 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] mb-8">
                 <div className="flex flex-col gap-1.5">
                   <p className="font-bodycopy font-semibold text-base text-sevenpreneur-coal dark:text-white">
                     {isCompleted
@@ -292,18 +298,26 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
                       : "Siap uji pemahaman kamu?"}
                   </p>
                   <p className="font-bodycopy text-sm text-emphasis">
-                    Kerjakan {lesson._count.quiz_questions} soal quiz · Nilai
-                    minimum 70% untuk lulus · Dapatkan +{lesson.xp_reward} XP
+                    {lesson._count.quiz_questions} soal · Nilai minimum 70% ·{" "}
+                    +{lesson.xp_reward} XP
                   </p>
                 </div>
-                <Link href={`/lessons/${lesson.id}/quiz`}>
+                {isCompleted ? (
+                  <Link href={`/lessons/${lesson.id}/quiz`}>
+                    <AppButton variant="primarySoft" size="medium">
+                      Lihat Hasil
+                    </AppButton>
+                  </Link>
+                ) : (
                   <AppButton
-                    variant={isCompleted ? "primarySoft" : "primary"}
+                    variant="primary"
                     size="medium"
+                    className="self-start"
+                    onClick={() => setQuizModalOpen(true)}
                   >
-                    {isCompleted ? "Coba Lagi" : "Mulai Quiz"}
+                    Mulai Quiz
                   </AppButton>
-                </Link>
+                )}
               </div>
             ) : (
               <div className="flex flex-col gap-2 p-6 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] mb-8">
@@ -318,18 +332,23 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
               <div className="flex items-stretch gap-4 pb-6">
                 {prevLesson ? (
                   <Link href={`/lessons/${prevLesson.id}`} className="flex-1">
-                    <div className="flex flex-col gap-1.5 p-5 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] hover:border-primary/40 hover:bg-primary-muted/20 dark:hover:bg-primary-muted/10 transition-colors h-full">
-                      <span className="font-bodycopy text-xs text-emphasis flex items-center gap-1">
-                        <ChevronLeft className="size-3.5" />
-                        Sebelumnya
+                    <div className="flex flex-col gap-3 p-5 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] hover:border-primary/40 transition-colors h-full">
+                      <span className="font-bodycopy text-[10px] font-semibold text-emphasis flex items-center gap-0.5 uppercase tracking-widest">
+                        <ChevronLeft className="size-3" />
+                        Sebelumnya · Lesson{" "}
+                        {String(prevNumber).padStart(2, "0")}
                       </span>
-                      <p className="font-brand font-semibold text-sm text-sevenpreneur-coal dark:text-white leading-snug">
+                      <p className="font-bodycopy font-semibold text-[17px] text-sevenpreneur-coal dark:text-white leading-snug flex-1">
                         {prevLesson.title}
                       </p>
-                      <span className="font-bodycopy text-xs text-emphasis">
-                        Level {prevLesson.level} —{" "}
-                        {LEVEL_LABELS[prevLesson.level]}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center justify-center size-5 rounded-sm bg-primary text-white font-bodycopy font-bold text-[10px]">
+                          L{prevLesson.level}
+                        </span>
+                        <span className="font-bodycopy text-[11px] text-emphasis uppercase tracking-widest">
+                          {LEVEL_LABELS[prevLesson.level]}
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 ) : (
@@ -337,18 +356,23 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
                 )}
                 {nextLesson ? (
                   <Link href={`/lessons/${nextLesson.id}`} className="flex-1">
-                    <div className="flex flex-col gap-1.5 p-5 rounded-xl border border-primary bg-gradient-to-br from-primary-muted/30 to-[var(--sb-item-hover)] dark:from-primary-muted/10 dark:to-[var(--card-bg)] hover:from-primary-muted/50 dark:hover:from-primary-muted/20 transition-colors h-full items-end text-right">
-                      <span className="font-bodycopy text-xs text-primary flex items-center gap-1">
-                        Selanjutnya
-                        <ChevronRight className="size-3.5" />
+                    <div className="flex flex-col gap-3 p-5 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] hover:border-primary/40 transition-colors h-full items-end text-right">
+                      <span className="font-bodycopy text-[10px] font-semibold text-emphasis flex items-center gap-0.5 uppercase tracking-widest">
+                        Selanjutnya · Lesson{" "}
+                        {String(nextNumber).padStart(2, "0")}
+                        <ChevronRight className="size-3" />
                       </span>
-                      <p className="font-brand font-semibold text-sm text-sevenpreneur-coal dark:text-white leading-snug">
+                      <p className="font-bodycopy font-semibold text-[17px] text-sevenpreneur-coal dark:text-white leading-snug flex-1">
                         {nextLesson.title}
                       </p>
-                      <span className="font-bodycopy text-xs text-emphasis">
-                        Level {nextLesson.level} —{" "}
-                        {LEVEL_LABELS[nextLesson.level]}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center justify-center size-5 rounded-sm bg-primary text-white font-bodycopy font-bold text-[10px]">
+                          L{nextLesson.level}
+                        </span>
+                        <span className="font-bodycopy text-[11px] text-emphasis uppercase tracking-widest">
+                          {LEVEL_LABELS[nextLesson.level]}
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 ) : (
@@ -360,5 +384,16 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
         )}
       </div>
     </PageContainerCMS>
+
+    {lesson && (
+      <StartQuizModal
+        isOpen={quizModalOpen}
+        onClose={() => setQuizModalOpen(false)}
+        lessonId={lesson.id}
+        quizCount={lesson._count.quiz_questions}
+        xpReward={lesson.xp_reward}
+      />
+    )}
+    </>
   );
 }

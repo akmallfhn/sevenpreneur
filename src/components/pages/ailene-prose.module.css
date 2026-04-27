@@ -164,36 +164,53 @@
   margin: 2.25rem 0;
 }
 
-/* Table */
+/* Table — clean, Claude-style */
 .prose table {
   width: 100%;
   border-collapse: collapse;
   font-family: var(--font-inter);
-  font-size: 0.88em;
+  font-size: 0.875em;
   margin: 1.75em 0;
   border: 1px solid var(--dashboard-border);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   overflow: hidden;
 }
 
 .prose th {
-  background: linear-gradient(135deg, var(--card-bg), var(--sb-item-hover));
+  background: var(--card-bg);
+  font-family: var(--font-inter);
   font-weight: 600;
   text-align: left;
-  padding: 0.7rem 1rem;
-  border-bottom: 2px solid var(--dashboard-border);
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--dashboard-border);
   color: var(--color-sevenpreneur-coal);
-  font-size: 0.85em;
-  letter-spacing: 0.02em;
+  font-size: 0.78em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .prose td {
-  padding: 0.6rem 1rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid var(--dashboard-border);
+  vertical-align: top;
+  line-height: 1.6;
 }
 
 .prose tr:last-child td {
   border-bottom: none;
+}
+
+.prose tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.018);
+}
+
+:global(.dark) .prose tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+:global(.dark) .prose th {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .prose img {

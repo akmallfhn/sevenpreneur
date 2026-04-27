@@ -121,25 +121,18 @@ export const listAilene = {
   }),
 
   leaderboard: aileneProcedure.query(async (opts) => {
-    const users = await opts.ctx.prisma.user.findMany({
-      where: { role_id: { not: 3 } },
+    const members = await opts.ctx.prisma.aiLearnMember.findMany({
       select: {
-        id: true,
-        full_name: true,
-        avatar: true,
-        ai_learn_member: {
-          select: {
-            progress: {
-              select: { xp_earned: true, completed_at: true, score: true },
-            },
-          },
+        user: { select: { id: true, full_name: true, avatar: true } },
+        progress: {
+          select: { xp_earned: true, completed_at: true, score: true },
         },
       },
     });
 
-    const ranked = users
-      .map((u) => {
-        const prog = u.ai_learn_member?.progress ?? [];
+    const ranked = members
+      .map((m) => {
+        const prog = m.progress;
         const totalXp = prog.reduce((sum, p) => sum + p.xp_earned, 0);
         const completedCount = prog.filter((p) => !!p.completed_at).length;
         const scores = prog
@@ -149,7 +142,7 @@ export const listAilene = {
           scores.length > 0
             ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
             : null;
-        return { id: u.id, full_name: u.full_name, avatar: u.avatar, totalXp, completedCount, avgScore };
+        return { id: m.user.id, full_name: m.user.full_name, avatar: m.user.avatar, totalXp, completedCount, avgScore };
       })
       .sort((a, b) => b.totalXp - a.totalXp);
 
