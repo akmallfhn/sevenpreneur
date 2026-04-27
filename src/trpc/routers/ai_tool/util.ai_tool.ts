@@ -1,4 +1,5 @@
 import { Optional } from "@/lib/optional-type";
+import GetQStashClient from "@/lib/qstash";
 import { SaveQStashMessageID } from "@/lib/redis";
 import {
   STATUS_FORBIDDEN,
@@ -6,7 +7,6 @@ import {
 } from "@/lib/status_code";
 import { CRoleEnum, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import { Client } from "@upstash/qstash";
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { AutoParseableTextFormat } from "openai/lib/parser";
@@ -98,8 +98,6 @@ export function AIFormatOutputZod<T extends z.ZodObject>(
   );
 }
 
-const QStashClient = new Client();
-
 let baseURL = "https://api.sevenpreneur.com/";
 if (process.env.DOMAIN_MODE === "local") {
   baseURL = "https://api.example.com:3000/";
@@ -142,7 +140,9 @@ export async function AIGenerate<T extends AutoParseableTextFormat<U>, U>(
     ];
   }
 
-  const res = await QStashClient.publishJSON({
+  const qstash = GetQStashClient();
+
+  const res = await qstash.publishJSON({
     url: "https://api.openai.com/v1/responses",
     headers: {
       Authorization: `Bearer ${process.env.OPENAI_API_KEY!}`,
