@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const upcomingLearning = await GetUpcomingLearning(
     prisma,
-    LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE + 10
+    LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 10
   );
   if (!upcomingLearning) {
     return new NextResponse("OK", {

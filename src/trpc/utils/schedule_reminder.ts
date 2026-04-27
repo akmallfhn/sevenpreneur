@@ -7,10 +7,10 @@ export const LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE = 30;
 
 export async function GetUpcomingLearning(
   prisma: ReturnType<typeof GetPrismaClient>,
-  minusMinutes: number
+  minusMinutes: number // minutes before meeting date
 ) {
   const minusXMinutes = new Date();
-  minusXMinutes.setMinutes(minusXMinutes.getMinutes() - minusMinutes);
+  minusXMinutes.setMinutes(minusXMinutes.getMinutes() + minusMinutes);
 
   const upcomingLearning = await prisma.learning.findFirst({
     select: {
