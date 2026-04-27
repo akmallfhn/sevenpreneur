@@ -12,7 +12,10 @@ export const readAilene = {
       const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({
         where: { id: opts.input.id },
         include: {
-          quiz_questions: { orderBy: [{ order_index: "asc" }] },
+          quiz_questions: {
+            orderBy: [{ order_index: "asc" }],
+            include: { options: { orderBy: { order_index: "asc" } } },
+          },
           _count: { select: { quiz_questions: true } },
         },
       });

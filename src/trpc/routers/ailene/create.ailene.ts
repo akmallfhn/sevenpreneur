@@ -61,11 +61,18 @@ export const createAilene = {
         data: {
           lesson_id: opts.input.lesson_id,
           question: opts.input.question,
-          options: opts.input.options,
-          correct_option: opts.input.correct_option,
           explanation: opts.input.explanation,
           order_index: opts.input.order_index ?? 0,
+          options: {
+            create: opts.input.options.map((opt, idx) => ({
+              option_id: opt.id,
+              text: opt.text,
+              is_correct: opt.id === opts.input.correct_option,
+              order_index: idx,
+            })),
+          },
         },
+        include: { options: { orderBy: { order_index: "asc" } } },
       });
       return { code: STATUS_CREATED, message: "Success", question };
     }),

@@ -131,13 +131,22 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
     setShowQuizForm(true);
   };
 
-  const handleEditQuiz = (q: { id: number; question: string; options: unknown; correct_option: string; explanation: string | null }) => {
+  const handleEditQuiz = (q: {
+    id: number;
+    question: string;
+    options: { option_id: string; text: string; is_correct: boolean; order_index: number }[];
+    explanation: string | null;
+  }) => {
     setEditingQuizId(q.id);
+    const formOptions = OPTION_IDS.map((optId) => {
+      const match = q.options.find((o) => o.option_id === optId);
+      return { id: optId, text: match?.text ?? "" };
+    });
     setQuizForm({
       id: q.id,
       question: q.question,
-      options: q.options as QuizOption[],
-      correct_option: q.correct_option,
+      options: formOptions,
+      correct_option: q.options.find((o) => o.is_correct)?.option_id ?? "a",
       explanation: q.explanation ?? "",
     });
     setShowQuizForm(true);
@@ -374,7 +383,13 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
               )}
 
               {/* Quiz list */}
-              {(lesson.quiz_questions as Array<{ id: number; question: string; options: unknown; correct_option: string; explanation: string | null; order_index: number }>).map((q, idx) => (
+              {(lesson.quiz_questions as Array<{
+                id: number;
+                question: string;
+                options: { id: number; option_id: string; text: string; is_correct: boolean; order_index: number }[];
+                explanation: string | null;
+                order_index: number;
+              }>).map((q, idx) => (
                 <div key={q.id} className="flex flex-col gap-2 p-4 rounded-xl border border-sevenpreneur-ash">
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal">
@@ -400,16 +415,16 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
-                    {(q.options as unknown as QuizOption[]).map((opt) => (
+                    {q.options.map((opt) => (
                       <span
                         key={opt.id}
                         className={`font-bodycopy text-xs px-2 py-0.5 rounded-full ${
-                          opt.id === q.correct_option
+                          opt.is_correct
                             ? "bg-success-background text-success-foreground font-semibold"
                             : "bg-section-background text-emphasis"
                         }`}
                       >
-                        {opt.id.toUpperCase()}. {opt.text}
+                        {opt.option_id.toUpperCase()}. {opt.text}
                       </span>
                     ))}
                   </div>

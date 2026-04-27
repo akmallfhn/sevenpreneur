@@ -209,14 +209,6 @@ enum WACStatus {
 
 // Enumeration for the WAAsset model (WAAsset*)
 
-enum AiLearnLessonStatus {
-  DRAFT     @map("draft")
-  PUBLISHED @map("published")
-  ARCHIVED  @map("archived")
-
-  @@map("ai_learn_lesson_status")
-}
-
 enum WAAssetType {
   AUDIO        @map("audio")
   AUDIO_VOICE  @map("audio_voice")
@@ -238,6 +230,26 @@ enum WAAStatus {
   BOUNCED   @map("bounced")
 
   @@map("wa_alert_status")
+}
+
+// Enumeration for the Ailene
+
+enum AiLearnLessonStatus {
+  DRAFT     @map("draft")
+  PUBLISHED @map("published")
+  ARCHIVED  @map("archived")
+
+  @@map("ai_learn_lesson_status")
+}
+
+enum AiLearnRoleEnum {
+  MARKETING   @map("marketing")
+  OPERATIONAL @map("operational")
+  CEO         @map("ceo")
+  FINANCE     @map("finance")
+  HR          @map("hr")
+
+  @@map("ai_learn_role_enum")
 }
 
 ////////////
@@ -343,7 +355,7 @@ model User {
   bd_north_star_indicators BDNorthStarIndicator[]
   wa_conversations         WAConversation[]       @relation("wa_conversation")
   wa_handleds              WAConversation[]       @relation("wa_handle")
-  ai_learn_progress        AiLearnUserProgress[]
+  ai_learn_member          AiLearnMember?
 
   @@map("users")
 }
@@ -1009,52 +1021,75 @@ model WAAlert {
 
 // Ailene AI Learn //
 
+model AiLearnMember {
+  id         Int                   @id @default(autoincrement()) @db.Integer
+  user       User                  @relation(fields: [user_id], references: [id])
+  user_id    String                @unique @db.Uuid
+  role_name  AiLearnRoleEnum
+  created_at DateTime              @default(now()) @db.Timestamptz()
+  progress   AiLearnUserProgress[]
+
+  @@map("ai_learn_members")
+}
+
 model AiLearnLesson {
-  id             Int                  @id @default(autoincrement()) @db.Integer
-  title          String               @db.VarChar()
-  slug           String               @unique @db.VarChar()
-  description    String?              @db.Text
-  content        String               @default("") @db.Text
-  youtube_url    String               @default("") @db.Text
-  level          Int                  @default(1) @db.SmallInt
-  xp_reward      Int                  @default(10) @db.SmallInt
-  status         AiLearnLessonStatus  @default(DRAFT)
-  order_index    Int                  @default(0) @db.SmallInt
-  created_at     DateTime             @default(now()) @db.Timestamptz()
-  updated_at     DateTime             @default(now()) @updatedAt @db.Timestamptz()
+  id             Int                   @id @default(autoincrement()) @db.Integer
+  title          String                @db.VarChar()
+  slug           String                @unique @db.VarChar()
+  description    String?               @db.Text
+  content        String                @default("") @db.Text
+  youtube_url    String                @default("") @db.Text
+  level          Int                   @default(1) @db.SmallInt
+  xp_reward      Int                   @default(10) @db.SmallInt
+  status         AiLearnLessonStatus   @default(DRAFT)
+  order_index    Int                   @default(0) @db.SmallInt
+  created_at     DateTime              @default(now()) @db.Timestamptz()
+  updated_at     DateTime              @default(now()) @updatedAt @db.Timestamptz()
   quiz_questions AiLearnQuizQuestion[]
-  user_progress  AiLearnUserProgress[]
+  progress       AiLearnUserProgress[]
 
   @@map("ai_learn_lessons")
 }
 
 model AiLearnQuizQuestion {
-  id             Int           @id @default(autoincrement()) @db.Integer
-  lesson         AiLearnLesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
-  lesson_id      Int           @db.Integer
-  question       String        @db.Text
-  options        Json          @db.Json
-  correct_option String        @db.VarChar()
-  explanation    String?       @db.Text
-  order_index    Int           @default(0) @db.SmallInt
-  created_at     DateTime      @default(now()) @db.Timestamptz()
-  updated_at     DateTime      @default(now()) @updatedAt @db.Timestamptz()
+  id          Int                 @id @default(autoincrement()) @db.Integer
+  lesson      AiLearnLesson       @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  lesson_id   Int                 @db.Integer
+  question    String              @db.Text
+  explanation String?             @db.Text
+  order_index Int                 @default(0) @db.SmallInt
+  created_at  DateTime            @default(now()) @db.Timestamptz()
+  updated_at  DateTime            @default(now()) @updatedAt @db.Timestamptz()
+  options     AiLearnQuizOption[]
 
   @@map("ai_learn_quiz_questions")
 }
 
-model AiLearnUserProgress {
-  user            User          @relation(fields: [user_id], references: [id])
-  user_id         String        @db.Uuid
-  lesson          AiLearnLesson @relation(fields: [lesson_id], references: [id])
-  lesson_id       Int           @db.Integer
-  completed_at    DateTime?     @db.Timestamptz()
-  score           Int?          @db.SmallInt
-  xp_earned       Int           @default(0) @db.SmallInt
-  attempts        Int           @default(0) @db.SmallInt
-  last_attempt_at DateTime?     @db.Timestamptz()
+model AiLearnQuizOption {
+  id          Int                 @id @default(autoincrement()) @db.Integer
+  question    AiLearnQuizQuestion @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  question_id Int                 @db.Integer
+  option_id   String              @db.VarChar()
+  text        String              @db.VarChar()
+  is_correct  Boolean             @default(false) @db.Boolean
+  order_index Int                 @default(0) @db.SmallInt
 
-  @@id([user_id, lesson_id])
+  @@map("ai_learn_quiz_options")
+}
+
+model AiLearnUserProgress {
+  id           Int           @id @default(autoincrement()) @db.Integer
+  member       AiLearnMember @relation(fields: [member_id], references: [id], onDelete: Cascade)
+  member_id    Int           @db.Integer
+  lesson       AiLearnLesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
+  lesson_id    Int           @db.Integer
+  score        Int?          @db.SmallInt
+  xp_earned    Int           @default(0) @db.SmallInt
+  completed_at DateTime?     @db.Timestamptz()
+  answers      Json?         @db.Json
+  submitted_at DateTime      @default(now()) @db.Timestamptz()
+
+  @@unique([member_id, lesson_id])
   @@map("ai_learn_user_progress")
 }
 

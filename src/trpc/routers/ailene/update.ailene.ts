@@ -44,10 +44,26 @@ export const updateAilene = {
       })
     )
     .mutation(async (opts) => {
-      const { id, ...data } = opts.input;
+      const { id, options, correct_option, ...rest } = opts.input;
       const question = await opts.ctx.prisma.aiLearnQuizQuestion.update({
         where: { id },
-        data,
+        data: {
+          ...rest,
+          ...(options != null
+            ? {
+                options: {
+                  deleteMany: {},
+                  create: options.map((opt, idx) => ({
+                    option_id: opt.id,
+                    text: opt.text,
+                    is_correct: opt.id === correct_option,
+                    order_index: idx,
+                  })),
+                },
+              }
+            : {}),
+        },
+        include: { options: { orderBy: { order_index: "asc" } } },
       });
       if (!question) throw new TRPCError({ code: "NOT_FOUND" });
       return { code: STATUS_OK, message: "Success", question };

@@ -55,6 +55,7 @@ export const listAilene = {
     .query(async (opts) => {
       const questions = await opts.ctx.prisma.aiLearnQuizQuestion.findMany({
         where: { lesson_id: opts.input.lesson_id },
+        include: { options: { orderBy: { order_index: "asc" } } },
         orderBy: [{ order_index: "asc" }],
       });
       return { code: STATUS_OK, message: "Success", list: questions };
@@ -70,6 +71,7 @@ export const listAilene = {
 
       const questions = await opts.ctx.prisma.aiLearnQuizQuestion.findMany({
         where: { lesson_id: opts.input.lesson_id },
+        include: { options: { orderBy: { order_index: "asc" } } },
         orderBy: [{ order_index: "asc" }],
       });
       return { code: STATUS_OK, message: "Success", list: questions };
