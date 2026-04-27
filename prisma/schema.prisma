@@ -1015,6 +1015,7 @@ model AiLearnLesson {
   slug           String               @unique @db.VarChar()
   description    String?              @db.Text
   content        String               @default("") @db.Text
+  youtube_url    String               @default("") @db.Text
   level          Int                  @default(1) @db.SmallInt
   xp_reward      Int                  @default(10) @db.SmallInt
   status         AiLearnLessonStatus  @default(DRAFT)

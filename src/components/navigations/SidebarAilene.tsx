@@ -1,6 +1,6 @@
 "use client";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { LayoutDashboard, Settings } from "lucide-react";
+import { LayoutDashboard, Settings, Trophy } from "lucide-react";
 import { useEffect } from "react";
 import AppSidebar from "./AppSidebar";
 import AppSidebarGroupMenu from "./AppSidebarGroupMenu";
@@ -40,7 +40,11 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           menuIcon={<LayoutDashboard className="size-[18px]" />}
           exact
         />
-
+        <AppSidebarMenuItem
+          menuName="Leaderboard"
+          menuURL="/leaderboard"
+          menuIcon={<Trophy className="size-[18px]" />}
+        />
       </AppSidebarGroupMenu>
 
       {isAdmin && (

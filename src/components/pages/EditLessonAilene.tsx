@@ -51,6 +51,7 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
     title: string;
     description: string;
     content: string;
+    youtube_url: string;
     level: number;
     xp_reward: number;
     status: AiLearnLessonStatus;
@@ -58,6 +59,7 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
     title: "",
     description: "",
     content: "",
+    youtube_url: "",
     level: 1,
     xp_reward: 10,
     status: AiLearnLessonStatus.DRAFT,
@@ -73,6 +75,7 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
         title: lesson.title,
         description: lesson.description ?? "",
         content: lesson.content,
+        youtube_url: lesson.youtube_url ?? "",
         level: lesson.level,
         xp_reward: lesson.xp_reward,
         status: lesson.status,
@@ -205,6 +208,18 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                   className={inputCls}
                   value={form.description}
                   onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className={labelCls}>
+                  YouTube URL{" "}
+                  <span className="normal-case text-emphasis font-normal">(link video YouTube)</span>
+                </label>
+                <input
+                  className={inputCls}
+                  placeholder="https://youtube.com/watch?v=..."
+                  value={form.youtube_url}
+                  onChange={(e) => setForm((p) => ({ ...p, youtube_url: e.target.value }))}
                 />
               </div>
               <div className="grid grid-cols-3 gap-4">

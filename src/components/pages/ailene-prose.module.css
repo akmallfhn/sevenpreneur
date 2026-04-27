@@ -1,0 +1,236 @@
+.prose {
+  font-family: var(--font-fraunces);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.82;
+  color: var(--color-sevenpreneur-coal);
+}
+
+.prose > * + * {
+  margin-top: 1em;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-fraunces);
+  font-weight: 500;
+  color: var(--color-sevenpreneur-coal);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.prose h1 {
+  font-size: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.prose h3 {
+  font-size: 1.2rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose h4 {
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.prose p {
+  font-family: var(--font-inter);
+  color: #333333;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+:global(.dark) .prose p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.prose ul,
+.prose ol {
+  font-family: var(--font-inter);
+  font-size: 15px;
+  padding-left: 1.5rem;
+  margin-bottom: 1em;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.4em;
+  padding-left: 0.25rem;
+  line-height: 1.7;
+}
+
+.prose li > p {
+  margin-bottom: 0.4em;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--color-sevenpreneur-coal);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+/* Blockquote — gradient card style */
+.prose blockquote {
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--color-primary);
+  background: linear-gradient(
+    135deg,
+    var(--card-bg) 0%,
+    var(--sb-item-hover) 100%
+  );
+  border-radius: 0 0.75rem 0.75rem 0;
+  margin: 1.75em 0;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.05);
+}
+
+.prose blockquote p {
+  margin-bottom: 0;
+  font-style: normal;
+  color: var(--color-sevenpreneur-coal);
+}
+
+/* Inline code chip */
+.prose :not(pre) > code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.8em;
+  background: var(--card-bg);
+  color: var(--color-primary);
+  padding: 0.18em 0.55em;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* Code block */
+.prose pre {
+  background: linear-gradient(160deg, #16192a 0%, #0d1017 100%);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 1.75em 0;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.prose pre code {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: #e2e8f0;
+  font-size: 0.85em;
+  line-height: 1.72;
+  font-weight: 400;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: 2.25rem 0;
+}
+
+/* Table */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-inter);
+  font-size: 0.88em;
+  margin: 1.75em 0;
+  border: 1px solid var(--card-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.prose th {
+  background: linear-gradient(135deg, var(--card-bg), var(--sb-item-hover));
+  font-weight: 600;
+  text-align: left;
+  padding: 0.7rem 1rem;
+  border-bottom: 2px solid var(--card-border);
+  color: var(--color-sevenpreneur-coal);
+  font-size: 0.85em;
+  letter-spacing: 0.02em;
+}
+
+.prose td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+.prose img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin: 1.25em 0;
+  border: 1px solid var(--card-border);
+}
+
+/* Dark mode */
+:global(.dark) .prose {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:global(.dark) .prose h1,
+:global(.dark) .prose h2,
+:global(.dark) .prose h3,
+:global(.dark) .prose h4 {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+:global(.dark) .prose strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+:global(.dark) .prose blockquote p {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+:global(.dark) .prose :not(pre) > code {
+  color: #93c5fd;
+}
+
+:global(.dark) .prose th {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+:global(.dark) .prose td {
+  color: rgba(255, 255, 255, 0.78);
+}

@@ -17,6 +17,7 @@ export const updateAilene = {
         xp_reward: numberIsPosInt().optional(),
         status: z.enum(AiLearnLessonStatus).optional(),
         order_index: numberIsNonNegInt().optional(),
+        youtube_url: z.string().optional(),
       })
     )
     .mutation(async (opts) => {

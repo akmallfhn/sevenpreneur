@@ -148,10 +148,10 @@
   --foreground: var(--color-surface-black);
   --border: var(--color-sevenpreneur-ash);
   /* dashboard */
-  --dashboard-bg: #fefefe;
+  --dashboard-bg: #fafbfe;
   --card-bg: #fefefe;
   --card-border: #ecebf0;
-  --sb-bg: #fbfaff;
+  --sb-bg: #f7f5fc;
   --sb-text: #595b68;
   --sb-text-strong: #1a2236;
   --sb-border: #ecebf0;
@@ -252,6 +252,7 @@
   --font-bodycopy: var(--font-plus-jakarta-sans);
   --font-read: var(--font-inter);
   --font-ui: var(--font-open-sauce-one);
+  --font-fraunces: var(--font-fraunces);
 
   /* --- Default Shadcn --- */
 

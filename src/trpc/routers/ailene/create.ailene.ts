@@ -22,6 +22,7 @@ export const createAilene = {
         status: z.enum(AiLearnLessonStatus),
         order_index: numberIsNonNegInt().optional(),
         slug: stringNotBlank().optional(),
+        youtube_url: z.string().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -32,6 +33,7 @@ export const createAilene = {
           slug,
           description: opts.input.description,
           content: opts.input.content,
+          youtube_url: opts.input.youtube_url ?? "",
           level: opts.input.level,
           xp_reward: opts.input.xp_reward,
           status: opts.input.status,

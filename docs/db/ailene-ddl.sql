@@ -25,6 +25,7 @@ CREATE TABLE ai_learn_lessons (
     slug        VARCHAR         UNIQUE NOT NULL,
     description TEXT,
     content     TEXT            NOT NULL DEFAULT '',
+    youtube_url TEXT            NOT NULL DEFAULT '',
     level       SMALLINT        NOT NULL DEFAULT 1,
     xp_reward   SMALLINT        NOT NULL DEFAULT 10,
     status      ai_learn_lesson_status NOT NULL DEFAULT 'draft',
