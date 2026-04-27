@@ -75,14 +75,14 @@ export default function LeaderboardAilene() {
 
             {/* Ranked list */}
             {data.list.length > 0 ? (
-              <div className="flex flex-col rounded-xl border border-card-border bg-card-bg overflow-hidden">
+              <div className="flex flex-col rounded-xl border border-dashboard-border bg-card-bg overflow-hidden">
                 {data.list.map((member, idx) => {
                   const isTop3 = idx < 3;
                   const medalColor = ["text-warning", "text-sevenpreneur-ash", "text-tertiary"];
                   return (
                     <div
                       key={member.id}
-                      className={`flex items-center gap-4 px-5 py-4 border-b border-card-border last:border-b-0 ${idx === 0 ? "bg-gradient-to-r from-warning/5 to-transparent" : ""}`}
+                      className={`flex items-center gap-4 px-5 py-4 border-b border-dashboard-border last:border-b-0 ${idx === 0 ? "bg-gradient-to-r from-warning/5 to-transparent" : ""}`}
                     >
                       {/* Rank */}
                       <div className="w-7 shrink-0 flex items-center justify-center">
@@ -96,7 +96,7 @@ export default function LeaderboardAilene() {
                       </div>
 
                       {/* Avatar */}
-                      <div className="flex size-9 rounded-full overflow-hidden shrink-0 border border-card-border">
+                      <div className="flex size-9 rounded-full overflow-hidden shrink-0 border border-dashboard-border">
                         {member.avatar ? (
                           <Image
                             src={member.avatar}
@@ -135,7 +135,7 @@ export default function LeaderboardAilene() {
                 })}
               </div>
             ) : (
-              <p className="font-bodycopy text-sm text-emphasis text-center py-16 border border-dashed border-card-border rounded-xl">
+              <p className="font-bodycopy text-sm text-emphasis text-center py-16 border border-dashed border-dashboard-border rounded-xl">
                 Belum ada data leaderboard.
               </p>
             )}

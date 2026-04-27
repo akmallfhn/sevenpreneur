@@ -169,7 +169,7 @@ export default function HomeAilene(props: HomeAileneProps) {
         {/* Continue Learning */}
         {continueLesson && (
           <Link href={`/lessons/${continueLesson.id}`}>
-            <div className="flex items-center gap-4 px-4 py-3 rounded-lg border border-card-border bg-sb-item-hover hover:border-primary/40 transition-colors">
+            <div className="flex items-center gap-4 px-4 py-3 rounded-lg border border-dashboard-border bg-sb-item-hover hover:border-primary/40 transition-colors">
               <div className="flex items-center justify-center size-10 rounded-lg bg-gradient-to-br from-primary/70 to-primary shrink-0">
                 <BookOpen className="size-5 text-white" />
               </div>
@@ -238,8 +238,8 @@ export default function HomeAilene(props: HomeAileneProps) {
                       isCompleted
                         ? "border-success/40"
                         : isUnlocked
-                          ? "border-card-border"
-                          : "border-card-border opacity-60"
+                          ? "border-dashboard-border"
+                          : "border-dashboard-border opacity-60"
                     } bg-card-bg`}
                   >
                     {/* header */}
@@ -282,7 +282,7 @@ export default function HomeAilene(props: HomeAileneProps) {
 
                     {/* expanded lesson list */}
                     {isExpanded && (
-                      <div className="border-t border-card-border">
+                      <div className="border-t border-dashboard-border">
                         {lessons.map((lesson, idx) => {
                           const progress = lesson.progress[0];
                           const isLessonDone = !!progress?.completed_at;
@@ -295,7 +295,7 @@ export default function HomeAilene(props: HomeAileneProps) {
                           return (
                             <div
                               key={lesson.id}
-                              className="flex items-center gap-4 px-6 py-4 bg-card-bg border-b border-card-border last:border-b-0"
+                              className="flex items-center gap-4 px-6 py-4 bg-card-bg border-b border-dashboard-border last:border-b-0"
                             >
                               {/* completion icon */}
                               <div className="shrink-0">

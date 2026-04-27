@@ -16,7 +16,7 @@ export default function AppScorecardDashboard({
   children,
 }: AppScorecardDashboardProps) {
   return (
-    <div className="flex flex-col gap-2 p-3 rounded-lg border border-card-border bg-gradient-to-br from-card-bg to-sb-item-hover dark:to-card-bg">
+    <div className="flex flex-col gap-2 p-3 rounded-lg border border-dashboard-border bg-gradient-to-br from-card-bg to-sb-item-hover dark:to-card-bg">
       <div className="flex items-start gap-3">
         <div
           className={`flex items-center justify-center size-9 rounded-md shrink-0 ${iconClassName ?? "bg-primary"}`}

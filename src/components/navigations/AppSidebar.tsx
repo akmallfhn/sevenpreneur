@@ -36,7 +36,7 @@ export default function AppSidebar({
         className={`sb-root relative flex flex-col w-full h-full gap-0 ${
           isCollapsed ? "px-2 py-4" : "p-4"
         }`}
-        style={{ borderRight: "1px solid var(--sb-border)" }}
+        style={{ borderRight: "1px solid var(--dashboard-border)" }}
       >
         {/* Collapse toggle */}
         <div
@@ -136,7 +136,7 @@ export default function AppSidebar({
               isCollapsed ? "justify-center py-2" : "gap-3 p-2"
             }`}
             style={
-              isCollapsed ? undefined : { border: "1px solid var(--sb-border)" }
+              isCollapsed ? undefined : { border: "1px solid var(--dashboard-border)" }
             }
           >
             <div className="flex size-8 rounded-full overflow-hidden shrink-0">

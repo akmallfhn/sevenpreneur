@@ -150,11 +150,10 @@
   /* dashboard */
   --dashboard-bg: #fafbfe;
   --card-bg: #fefefe;
-  --card-border: #ecebf0;
+  --dashboard-border: #E3E0ED;
   --sb-bg: #f7f5fc;
   --sb-text: #595b68;
   --sb-text-strong: #1a2236;
-  --sb-border: #ecebf0;
   --sb-item-hover: #eff1fe;
   --sb-item-active-bg: #eff1fe;
   --sb-item-active-text: var(--color-sevenpreneur-purple-indigo);
@@ -197,11 +196,10 @@
   /* dashboard */
   --dashboard-bg: #0b0e13;
   --card-bg: #11141b;
-  --card-border: #202229;
+  --dashboard-border: #202229;
   --sb-bg: #0b0e15;
   --sb-text: #abb1bf;
   --sb-text-strong: rgba(255, 255, 255, 0.95);
-  --sb-border: #202229;
   --sb-item-hover: #12172a;
   --sb-item-active-bg: #12172a;
   --sb-item-active-text: #6b63d0;
@@ -288,13 +286,12 @@
   /* --- dashboard --- */
   --color-dashboard-bg: var(--dashboard-bg);
   --color-card-bg: var(--card-bg);
-  --color-card-border: var(--card-border);
+  --color-dashboard-border: var(--dashboard-border);
 
   /* --- sidebar --- */
   --color-sb-bg: var(--sb-bg);
   --color-sb-text: var(--sb-text);
   --color-sb-text-strong: var(--sb-text-strong);
-  --color-sb-border: var(--sb-border);
   --color-sb-item-hover: var(--sb-item-hover);
   --color-sb-item-active-bg: var(--sb-item-active-bg);
   --color-sb-item-active-text: var(--sb-item-active-text);

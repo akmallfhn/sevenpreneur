@@ -77,7 +77,9 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lesson = data?.lesson as any;
-  const progress = lesson?.progress[0] as { completed_at: string | null; score: number | null; xp_earned: number } | undefined;
+  const progress = lesson?.progress[0] as
+    | { completed_at: string | null; score: number | null; xp_earned: number }
+    | undefined;
   const isCompleted = !!progress?.completed_at;
   const hasQuiz = (lesson?._count.quiz_questions ?? 0) > 0;
 
@@ -112,7 +114,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
             {/* Meta pills */}
             <div className="flex items-center gap-2 flex-wrap mb-5">
               {/* Level chip */}
-              <div className="inline-flex items-center gap-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-md px-2 py-1">
+              <div className="inline-flex items-center gap-2 bg-[var(--card-bg)] border border-[#E3E0ED] rounded-md px-2 py-1">
                 <span className="flex items-center justify-center size-5 rounded-sm bg-primary text-white font-bodycopy font-bold text-[10px]">
                   L{lesson.level}
                 </span>
@@ -125,7 +127,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
               </div>
 
               {/* XP chip */}
-              <div className="inline-flex items-center gap-2 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-md px-2 py-1">
+              <div className="inline-flex items-center gap-2 bg-[var(--card-bg)] border border-[#E6E7EB] rounded-md px-2 py-1">
                 <span className="flex items-center justify-center size-5 rounded-sm bg-primary text-white">
                   <Sparkles className="size-3" />
                 </span>
@@ -169,7 +171,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
             )}
 
             {/* Stats strip */}
-            <div className="grid grid-cols-3 border-t border-b border-[var(--card-border)] py-5 mb-8 gap-2">
+            <div className="grid grid-cols-3 border-t border-b border-[#E6E7EB] py-5 mb-8 gap-2">
               {/* XP */}
               <div className="flex flex-col gap-2 pr-4">
                 <span className="inline-flex items-center gap-1 self-start font-bodycopy text-[10px] font-semibold uppercase tracking-widest text-primary bg-primary-muted px-2 py-0.5 rounded-full">
@@ -189,8 +191,8 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
               </div>
 
               {/* Passing */}
-              <div className="flex flex-col gap-2 border-l border-[var(--card-border)] px-4">
-                <span className="inline-flex items-center gap-1 self-start font-bodycopy text-[10px] font-semibold uppercase tracking-widest text-emphasis bg-[var(--card-bg)] border border-[var(--card-border)] px-2 py-0.5 rounded-full">
+              <div className="flex flex-col gap-2 border-l border-[var(--dashboard-border)] px-4">
+                <span className="inline-flex items-center gap-1 self-start font-bodycopy text-[10px] font-semibold uppercase tracking-widest text-emphasis bg-[var(--card-bg)] border border-[var(--dashboard-border)] px-2 py-0.5 rounded-full">
                   Nilai Lulus
                 </span>
                 <span
@@ -206,9 +208,9 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
               </div>
 
               {/* Progress */}
-              <div className="flex flex-col gap-2 border-l border-[var(--card-border)] pl-4">
+              <div className="flex flex-col gap-2 border-l border-[var(--dashboard-border)] pl-4">
                 <span
-                  className={`inline-flex items-center gap-1 self-start font-bodycopy text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full border ${isCompleted ? "text-success bg-success-background border-success/20" : "text-emphasis bg-[var(--card-bg)] border-[var(--card-border)]"}`}
+                  className={`inline-flex items-center gap-1 self-start font-bodycopy text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full border ${isCompleted ? "text-success bg-success-background border-success/20" : "text-emphasis bg-[var(--card-bg)] border-[var(--dashboard-border)]"}`}
                 >
                   {isCompleted ? (
                     <>
@@ -234,7 +236,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
                 </span>
                 {isCompleted ? (
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1.5 bg-[var(--card-border)] rounded-full overflow-hidden">
+                    <div className="flex-1 h-1.5 bg-[var(--dashboard-border)] rounded-full overflow-hidden">
                       <div
                         className="h-full bg-success rounded-full transition-all"
                         style={{ width: `${completionScore}%` }}
@@ -282,7 +284,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
 
             {/* Quiz CTA */}
             {hasQuiz ? (
-              <div className="flex flex-col gap-4 p-6 rounded-xl border border-[var(--card-border)] bg-gradient-to-br from-[var(--card-bg)] to-[var(--sb-item-hover)] mb-8">
+              <div className="flex flex-col gap-4 p-6 rounded-xl border border-[var(--dashboard-border)] bg-gradient-to-br from-[var(--card-bg)] to-[var(--sb-item-hover)] mb-8">
                 <div className="flex flex-col gap-1.5">
                   <p className="font-bodycopy font-semibold text-base text-sevenpreneur-coal dark:text-white">
                     {isCompleted
@@ -304,7 +306,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col gap-2 p-6 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] mb-8">
+              <div className="flex flex-col gap-2 p-6 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] mb-8">
                 <p className="font-bodycopy text-sm text-emphasis">
                   Materi ini belum memiliki quiz.
                 </p>
@@ -316,7 +318,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
               <div className="flex items-stretch gap-4 pb-6">
                 {prevLesson ? (
                   <Link href={`/lessons/${prevLesson.id}`} className="flex-1">
-                    <div className="flex flex-col gap-1.5 p-5 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] hover:border-primary/40 hover:bg-primary-muted/20 dark:hover:bg-primary-muted/10 transition-colors h-full">
+                    <div className="flex flex-col gap-1.5 p-5 rounded-xl border border-[var(--dashboard-border)] bg-[var(--card-bg)] hover:border-primary/40 hover:bg-primary-muted/20 dark:hover:bg-primary-muted/10 transition-colors h-full">
                       <span className="font-bodycopy text-xs text-emphasis flex items-center gap-1">
                         <ChevronLeft className="size-3.5" />
                         Sebelumnya
