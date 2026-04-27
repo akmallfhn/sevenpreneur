@@ -64,17 +64,37 @@ export const listAilene = {
   quizQuestionsForUser: aileneProcedure
     .input(z.object({ lesson_id: numberIsID() }))
     .query(async (opts) => {
+      const user_id = opts.ctx.user.id;
+
       const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({
         where: { id: opts.input.lesson_id, status: AiLearnLessonStatus.PUBLISHED },
       });
       if (!lesson) throw new Error("Lesson not found");
+
+      const member = await opts.ctx.prisma.aiLearnMember.findUnique({
+        where: { user_id },
+      });
 
       const questions = await opts.ctx.prisma.aiLearnQuizQuestion.findMany({
         where: { lesson_id: opts.input.lesson_id },
         include: { options: { orderBy: { order_index: "asc" } } },
         orderBy: [{ order_index: "asc" }],
       });
-      return { code: STATUS_OK, message: "Success", list: questions };
+
+      const progress = member
+        ? await opts.ctx.prisma.aiLearnUserProgress.findUnique({
+            where: { member_id_lesson_id: { member_id: member.id, lesson_id: opts.input.lesson_id } },
+            select: { completed_at: true, score: true, xp_earned: true, answers: true },
+          })
+        : null;
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: questions,
+        progress,
+        is_member: !!member,
+      };
     }),
 
   myProgress: aileneProcedure.query(async (opts) => {

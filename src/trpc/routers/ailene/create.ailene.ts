@@ -82,52 +82,34 @@ export const createAilene = {
       z.object({
         lesson_id: numberIsID(),
         score: z.int().min(0).max(100),
+        answers: z.record(z.string(), z.string().nullable()),
       })
     )
     .mutation(async (opts) => {
-      const { lesson_id, score } = opts.input;
+      const { lesson_id, score, answers } = opts.input;
       const user_id = opts.ctx.user.id;
       const PASS_THRESHOLD = 70;
 
-      const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({
-        where: { id: lesson_id },
-      });
+      const member = await opts.ctx.prisma.aiLearnMember.findUnique({ where: { user_id } });
+      if (!member) throw new Error("Not an Ailene member");
+
+      const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({ where: { id: lesson_id } });
       if (!lesson) throw new Error("Lesson not found");
 
       const existing = await opts.ctx.prisma.aiLearnUserProgress.findUnique({
-        where: { user_id_lesson_id: { user_id, lesson_id } },
+        where: { member_id_lesson_id: { member_id: member.id, lesson_id } },
       });
+      if (existing?.completed_at) throw new Error("Quiz already completed");
 
       const passed = score >= PASS_THRESHOLD;
-      const alreadyCompleted = !!existing?.completed_at;
-      const xpToAward = passed && !alreadyCompleted ? lesson.xp_reward : 0;
+      const xpToAward = passed ? lesson.xp_reward : 0;
 
       await opts.ctx.prisma.aiLearnUserProgress.upsert({
-        where: { user_id_lesson_id: { user_id, lesson_id } },
-        create: {
-          user_id,
-          lesson_id,
-          score,
-          xp_earned: xpToAward,
-          attempts: 1,
-          last_attempt_at: new Date(),
-          completed_at: passed ? new Date() : null,
-        },
-        update: {
-          score: existing?.score ? Math.max(existing.score, score) : score,
-          xp_earned: { increment: xpToAward },
-          attempts: { increment: 1 },
-          last_attempt_at: new Date(),
-          completed_at: passed && !alreadyCompleted ? new Date() : existing?.completed_at,
-        },
+        where: { member_id_lesson_id: { member_id: member.id, lesson_id } },
+        create: { member_id: member.id, lesson_id, score, xp_earned: xpToAward, completed_at: new Date(), answers },
+        update: { score, xp_earned: xpToAward, completed_at: new Date(), answers, submitted_at: new Date() },
       });
 
-      return {
-        code: STATUS_CREATED,
-        message: "Success",
-        passed,
-        xp_awarded: xpToAward,
-        score,
-      };
+      return { code: STATUS_CREATED, message: "Success", passed, xp_awarded: xpToAward, score };
     }),
 };
