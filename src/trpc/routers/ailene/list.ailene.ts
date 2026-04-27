@@ -5,6 +5,17 @@ import { AiLearnLessonStatus } from "@prisma/client";
 import z from "zod";
 
 export const listAilene = {
+  members: administratorProcedure.query(async (opts) => {
+    const members = await opts.ctx.prisma.aiLearnMember.findMany({
+      include: {
+        user: { select: { id: true, full_name: true, email: true, avatar: true } },
+        _count: { select: { progress: true } },
+      },
+      orderBy: { created_at: "desc" },
+    });
+    return { code: STATUS_OK, message: "Success", list: members };
+  }),
+
   lessons: aileneProcedure
     .input(
       z.object({

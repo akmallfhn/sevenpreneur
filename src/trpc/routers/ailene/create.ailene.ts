@@ -7,10 +7,46 @@ import {
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus } from "@prisma/client";
+import { AiLearnLessonStatus, AiLearnRoleEnum } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const createAilene = {
+  addMemberByEmail: administratorProcedure
+    .input(
+      z.object({
+        email: z.email(),
+        role_name: z.enum(AiLearnRoleEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const user = await opts.ctx.prisma.user.findUnique({
+        where: { email: opts.input.email },
+      });
+      if (!user)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User dengan email ini tidak ditemukan",
+        });
+
+      const existing = await opts.ctx.prisma.aiLearnMember.findUnique({
+        where: { user_id: user.id },
+      });
+      if (existing)
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User sudah terdaftar sebagai member Ailene",
+        });
+
+      const member = await opts.ctx.prisma.aiLearnMember.create({
+        data: { user_id: user.id, role_name: opts.input.role_name },
+        include: {
+          user: { select: { id: true, full_name: true, email: true } },
+        },
+      });
+      return { code: STATUS_CREATED, message: "Success", member };
+    }),
+
   lesson: administratorProcedure
     .input(
       z.object({

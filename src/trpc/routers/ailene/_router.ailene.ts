@@ -6,6 +6,12 @@ import { readAilene } from "./read.ailene";
 import { updateAilene } from "./update.ailene";
 
 export const aileneRouter = createTRPCRouter({
+  // Members
+  listMembers: listAilene.members,
+  addMemberByEmail: createAilene.addMemberByEmail,
+  updateMemberRole: updateAilene.memberRole,
+  deleteMember: deleteAilene.member,
+
   // Lessons
   createLesson: createAilene.lesson,
   listLessons: listAilene.lessons,

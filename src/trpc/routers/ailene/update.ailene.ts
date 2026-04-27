@@ -1,11 +1,31 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
 import { numberIsID, numberIsNonNegInt, numberIsPosInt, stringNotBlank } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus } from "@prisma/client";
+import { AiLearnLessonStatus, AiLearnRoleEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const updateAilene = {
+  memberRole: administratorProcedure
+    .input(
+      z.object({
+        id: numberIsID(),
+        role_name: z.enum(AiLearnRoleEnum),
+      })
+    )
+    .mutation(async (opts) => {
+      const member = await opts.ctx.prisma.aiLearnMember.update({
+        where: { id: opts.input.id },
+        data: { role_name: opts.input.role_name },
+        include: {
+          user: { select: { id: true, full_name: true, email: true } },
+        },
+      });
+      if (!member) throw new TRPCError({ code: "NOT_FOUND" });
+      return { code: STATUS_OK, message: "Success", member };
+    }),
+
+
   lesson: administratorProcedure
     .input(
       z.object({
