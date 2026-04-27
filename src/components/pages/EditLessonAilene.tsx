@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 const LEVELS = [
   { value: 1, label: "L1 — Foundations" },
@@ -178,11 +179,7 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
           </AppButton>
         </Link>
 
-        {isLoading && (
-          <div className="flex items-center justify-center py-20 text-emphasis">
-            <Loader2 className="animate-spin size-6" />
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
 
         {!isLoading && lesson && (
           <>

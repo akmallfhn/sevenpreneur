@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface QuizOption {
   id: string;
@@ -121,11 +122,7 @@ export default function QuizAilene(props: QuizAileneProps) {
           </AppButton>
         </Link>
 
-        {isLoading && (
-          <div className="flex items-center justify-center py-20 text-emphasis">
-            <Loader2 className="animate-spin size-6" />
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
 
         {isError && (
           <div className="flex flex-col gap-2 py-20 items-center text-center">

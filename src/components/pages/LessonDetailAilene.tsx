@@ -6,9 +6,9 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   Sparkles,
 } from "lucide-react";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import { marked } from "marked";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -60,19 +60,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
     >
       <div className="w-full max-w-[calc(100%-4rem)] py-10 flex flex-col items-center">
         <div className="w-full flex flex-col gap-10">
-          {/* Back */}
-          <Link href="/lessons">
-            <AppButton variant="light" size="small">
-              <ChevronLeft className="size-3.5" />
-              Semua Materi
-            </AppButton>
-          </Link>
-
-          {isLoading && (
-            <div className="flex items-center justify-center py-20 text-emphasis">
-              <Loader2 className="animate-spin size-6" />
-            </div>
-          )}
+          {isLoading && <AppLoadingComponents />}
 
           {!isLoading && lesson && (
             <>

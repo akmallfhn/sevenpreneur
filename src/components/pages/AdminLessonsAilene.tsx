@@ -2,7 +2,8 @@
 import { useSidebar } from "@/contexts/SidebarContextCMS";
 import { trpc } from "@/trpc/client";
 import { AiLearnLessonStatus } from "@prisma/client";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -77,11 +78,7 @@ export default function AdminLessonsAilene() {
           ))}
         </div>
 
-        {isLoading && (
-          <div className="flex items-center justify-center py-20 text-emphasis">
-            <Loader2 className="animate-spin size-6" />
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
 
         {!isLoading && (
           <div className="rounded-xl border border-sevenpreneur-ash overflow-hidden">
