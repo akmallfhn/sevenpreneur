@@ -18,6 +18,7 @@ export async function GetUpcomingLearning(
       meeting_date: true,
     },
     where: {
+      cohort_id: { lte: 10 },
       meeting_date: { gte: minusXMinutes },
     },
     orderBy: [{ meeting_date: "asc" }],
