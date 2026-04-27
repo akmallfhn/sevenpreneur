@@ -6,6 +6,20 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const readAilene = {
+  session: aileneProcedure
+    .input(z.object({ id: numberIsID() }))
+    .query(async (opts) => {
+      const session = await opts.ctx.prisma.aiLearnSession.findUnique({
+        where: { id: opts.input.id },
+        include: {
+          speaker: { select: { id: true, full_name: true, avatar: true } },
+          _count: { select: { attendances: true } },
+        },
+      });
+      if (!session) throw new TRPCError({ code: "NOT_FOUND" });
+      return { code: STATUS_OK, message: "Success", session };
+    }),
+
   lesson: administratorProcedure
     .input(z.object({ id: numberIsID() }))
     .query(async (opts) => {

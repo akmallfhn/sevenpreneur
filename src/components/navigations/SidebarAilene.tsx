@@ -41,6 +41,11 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           exact
         />
         <AppSidebarMenuItem
+          menuName="Sessions"
+          menuURL="/sessions"
+          menuIcon={<CalendarDays className="size-[18px]" />}
+        />
+        <AppSidebarMenuItem
           menuName="Leaderboard"
           menuURL="/leaderboard"
           menuIcon={<Trophy className="size-[18px]" />}

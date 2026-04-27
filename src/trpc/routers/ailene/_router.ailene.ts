@@ -8,6 +8,7 @@ import { updateAilene } from "./update.ailene";
 export const aileneRouter = createTRPCRouter({
   // Sessions
   listSessions: listAilene.sessions,
+  readSession: readAilene.session,
   createSession: createAilene.session,
   updateSession: updateAilene.session,
   deleteSession: deleteAilene.session,
