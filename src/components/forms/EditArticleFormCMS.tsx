@@ -24,6 +24,7 @@ import UploadImageCMS from "../fields/UploadImageCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 export interface BodyContentArticle {
   id?: number;
@@ -405,11 +406,7 @@ export default function EditArticleForm(props: EditArticleFormProps) {
           </div>
         </div>
 
-        {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
         {isError && (
           <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
             No Data

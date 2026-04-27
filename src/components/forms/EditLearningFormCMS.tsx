@@ -13,6 +13,7 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EditLearningFormCMSProps {
   sessionToken: string;
@@ -301,11 +302,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
-      {isLoading && (
-        <div className="flex w-full h-full items-center py-5 justify-center text-emphasis font-bodycopy font-medium">
-          <Loader2 className="animate-spin size-5 " />
-        </div>
-      )}
+      {isLoading && <AppLoadingComponents />}
       {isError && (
         <div className="flex w-full h-full items-center py-5 justify-center text-emphasis font-bodycopy font-medium">
           No Data
@@ -424,11 +421,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                   />
                 </>
               )}
-              {isLoading && (
-                <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy font-medium">
-                  <Loader2 className="animate-spin size-5 " />
-                </div>
-              )}
+              {isLoading && <AppLoadingComponents />}
               {isError && (
                 <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy font-medium">
                   <Loader2 className="animate-spin size-5 " />

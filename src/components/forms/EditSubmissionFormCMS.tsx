@@ -14,6 +14,7 @@ import FileItemLMS from "../items/FileItemLMS";
 import SheetLineItemCMS from "../items/SheetLineItemCMS";
 import UserItemCMS from "../items/UserItemCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EditSubmissionFormCMSProps {
   sessionToken: string;
@@ -191,11 +192,7 @@ export default function EditSubmissionFormCMS(
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
-      {isLoading && (
-        <div className="flex w-full h-full items-center justify-center text-emphasis">
-          <Loader2 className="animate-spin size-5" />
-        </div>
-      )}
+      {isLoading && <AppLoadingComponents />}
       {isError && (
         <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy">
           No Data

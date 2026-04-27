@@ -13,6 +13,7 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EditProjectFormCMSProps {
   projectId: number;
@@ -192,11 +193,7 @@ export default function EditProjectFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      {isLoading && (
-        <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
-          <Loader2 className="animate-spin size-5 " />
-        </div>
-      )}
+      {isLoading && <AppLoadingComponents />}
       {isError && (
         <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
           No Data

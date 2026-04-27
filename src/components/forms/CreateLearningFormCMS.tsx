@@ -12,6 +12,7 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface CreateLearningFormCMSProps {
   sessionToken: string;
@@ -244,11 +245,7 @@ export default function CreateLearningFormCMS(
       isOpen={props.isOpen}
       onClose={props.onClose}
     >
-      {isLoading && (
-        <div className="flex w-full h-full py-10 justify-center text-emphasis font-bodycopy font-medium">
-          <Loader2 className="animate-spin size-5 " />
-        </div>
-      )}
+      {isLoading && <AppLoadingComponents />}
       {isError && (
         <div className="flex w-full h-full py-10 justify-center text-emphasis font-bodycopy font-medium">
           No Data

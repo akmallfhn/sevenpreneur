@@ -12,6 +12,7 @@ import InputNumberCMS from "../fields/InputNumberCMS";
 import SelectCMS from "../fields/SelectCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface CreateDiscountFormCMSProps {
   sessionToken: string;
@@ -347,11 +348,7 @@ export default function CreateDiscountFormCMS({
                   },
                 ]}
               />
-              {isLoading && (
-                <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
-                  <Loader2 className="animate-spin size-5 " />
-                </div>
-              )}
+              {isLoading && <AppLoadingComponents />}
               {isError && (
                 <div className="flex w-full h-full py-4 items-center justify-center text-emphasis">
                   No Data

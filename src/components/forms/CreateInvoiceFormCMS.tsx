@@ -11,6 +11,7 @@ import InputNumberCMS from "../fields/InputNumberCMS";
 import SelectCMS from "../fields/SelectCMS";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface DiscountType {
   name: string | undefined;
@@ -407,11 +408,7 @@ export default function CreateInvoiceFormCMS({
         className="relative w-full h-full flex flex-col"
         onSubmit={handleCreateInvoice}
       >
-        {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
         {isError && (
           <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
             No Data

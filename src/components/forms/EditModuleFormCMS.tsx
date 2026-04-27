@@ -12,6 +12,7 @@ import TextAreaCMS from "../fields/TextAreaCMS";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EditModuleFormCMSProps {
   sessionToken: string;
@@ -174,11 +175,7 @@ export default function EditModuleFormCMS({
       isOpen={isOpen}
       onClose={onClose}
     >
-      {isLoading && (
-        <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy font-medium">
-          <Loader2 className="animate-spin size-5 " />
-        </div>
-      )}
+      {isLoading && <AppLoadingComponents />}
       {isError && (
         <div className="flex w-full h-full items-center justify-center text-emphasis font-bodycopy font-medium">
           <Loader2 className="animate-spin size-5 " />

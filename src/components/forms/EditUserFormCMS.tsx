@@ -26,6 +26,7 @@ import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EditUserFormProps {
   sessionToken: string;
@@ -257,11 +258,7 @@ export default function EditUserForm({
           </div>
         </div>
 
-        {isLoading && (
-          <div className="flex w-full h-full py-10 items-center justify-center text-emphasis">
-            <Loader2 className="animate-spin size-5 " />
-          </div>
-        )}
+        {isLoading && <AppLoadingComponents />}
         {isError && (
           <div className="flex w-full h-full py-10 items-center justify-center text-emphasis font-bodycopy font-medium">
             No Data
