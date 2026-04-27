@@ -63,19 +63,19 @@ export default function HomeAilene(props: HomeAileneProps) {
     const ordered = [1, 2, 3, 4].flatMap((level) =>
       lessonsData.list.filter((l) => l.level === level)
     );
-    return ordered.find((l) => !l.user_progress[0]?.completed_at) ?? null;
+    return ordered.find((l) => !l.progress[0]?.completed_at) ?? null;
   }, [lessonsData]);
 
   const getLevelData = (level: number) => {
     const lessons = lessonsData?.list.filter((l) => l.level === level) ?? [];
     const completedLessons = lessons.filter(
-      (l) => !!l.user_progress[0]?.completed_at
+      (l) => !!l.progress[0]?.completed_at
     );
     const completed = completedLessons.length;
     const isCompleted = lessons.length > 0 && completed === lessons.length;
 
     const scores = completedLessons
-      .map((l) => l.user_progress[0]?.score)
+      .map((l) => l.progress[0]?.score)
       .filter((s): s is number => s != null);
     const avgScore =
       scores.length > 0
@@ -89,7 +89,7 @@ export default function HomeAilene(props: HomeAileneProps) {
     const isUnlocked =
       level === 1 ||
       (prevLessons.length > 0 &&
-        prevLessons.every((l) => !!l.user_progress[0]?.completed_at));
+        prevLessons.every((l) => !!l.progress[0]?.completed_at));
 
     return { lessons, completed, isCompleted, isUnlocked, avgScore };
   };
@@ -284,7 +284,7 @@ export default function HomeAilene(props: HomeAileneProps) {
                     {isExpanded && (
                       <div className="border-t border-card-border">
                         {lessons.map((lesson, idx) => {
-                          const progress = lesson.user_progress[0];
+                          const progress = lesson.progress[0];
                           const isLessonDone = !!progress?.completed_at;
                           const score = progress?.score ?? null;
                           const isWeak =

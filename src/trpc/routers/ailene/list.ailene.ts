@@ -39,8 +39,8 @@ export const listAilene = {
       where: { status: AiLearnLessonStatus.PUBLISHED },
       include: {
         _count: { select: { quiz_questions: true } },
-        user_progress: {
-          where: { user_id },
+        progress: {
+          where: { member: { user_id } },
           select: { completed_at: true, score: true, xp_earned: true },
         },
       },
@@ -99,8 +99,12 @@ export const listAilene = {
 
   myProgress: aileneProcedure.query(async (opts) => {
     const user_id = opts.ctx.user.id;
+    const member = await opts.ctx.prisma.aiLearnMember.findUnique({ where: { user_id } });
+    if (!member) {
+      return { code: STATUS_OK, message: "Success", list: [], total_xp: 0, completed_count: 0 };
+    }
     const progress = await opts.ctx.prisma.aiLearnUserProgress.findMany({
-      where: { user_id },
+      where: { member_id: member.id },
       include: {
         lesson: { select: { id: true, title: true, level: true, xp_reward: true } },
       },
@@ -123,17 +127,22 @@ export const listAilene = {
         id: true,
         full_name: true,
         avatar: true,
-        ai_learn_progress: {
-          select: { xp_earned: true, completed_at: true, score: true },
+        ai_learn_member: {
+          select: {
+            progress: {
+              select: { xp_earned: true, completed_at: true, score: true },
+            },
+          },
         },
       },
     });
 
     const ranked = users
       .map((u) => {
-        const totalXp = u.ai_learn_progress.reduce((sum, p) => sum + p.xp_earned, 0);
-        const completedCount = u.ai_learn_progress.filter((p) => !!p.completed_at).length;
-        const scores = u.ai_learn_progress
+        const prog = u.ai_learn_member?.progress ?? [];
+        const totalXp = prog.reduce((sum, p) => sum + p.xp_earned, 0);
+        const completedCount = prog.filter((p) => !!p.completed_at).length;
+        const scores = prog
           .map((p) => p.score)
           .filter((s): s is number => s != null);
         const avgScore =

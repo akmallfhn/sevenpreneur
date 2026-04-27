@@ -76,7 +76,7 @@ export default function LessonDetailAilene(props: LessonDetailAileneProps) {
     trpc.ailene.listLessonsWithProgress.useQuery();
 
   const lesson = data?.lesson;
-  const progress = lesson?.user_progress[0];
+  const progress = lesson?.progress[0];
   const isCompleted = !!progress?.completed_at;
   const hasQuiz = (lesson?._count.quiz_questions ?? 0) > 0;
 

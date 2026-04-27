@@ -31,9 +31,9 @@ export const readAilene = {
         where: { id: opts.input.id, status: AiLearnLessonStatus.PUBLISHED },
         include: {
           _count: { select: { quiz_questions: true } },
-          user_progress: {
-            where: { user_id },
-            select: { completed_at: true, score: true, xp_earned: true, attempts: true },
+          progress: {
+            where: { member: { user_id } },
+            select: { completed_at: true, score: true, xp_earned: true },
           },
         },
       });

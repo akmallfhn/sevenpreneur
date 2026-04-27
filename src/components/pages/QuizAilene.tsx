@@ -29,6 +29,13 @@ interface QuizQuestion {
   order_index: number;
 }
 
+interface QuizProgress {
+  completed_at: string | null;
+  score: number | null;
+  xp_earned: number;
+  answers: Record<string, string | null> | null;
+}
+
 interface QuizAileneProps {
   lessonId: number;
 }
@@ -81,9 +88,11 @@ export default function QuizAilene({ lessonId }: QuizAileneProps) {
     lesson_id: lessonId,
   });
 
-  const questions = (data?.list ?? []) as QuizQuestion[];
-  const existingProgress = data?.progress ?? null;
-  const isMember = data?.is_member ?? false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawData = data as any;
+  const questions = (rawData?.list ?? []) as QuizQuestion[];
+  const existingProgress = (rawData?.progress ?? null) as QuizProgress | null;
+  const isMember = Boolean(rawData?.is_member);
 
   const [phase, setPhase] = useState<Phase>("idle");
   const [currentIdx, setCurrentIdx] = useState(0);
