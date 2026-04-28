@@ -183,8 +183,6 @@ export const updateLMS = {
         status: z.enum(StatusEnum).optional(),
         check_in: z.boolean().optional(),
         check_out: z.boolean().optional(),
-        check_out_code: stringNotBlank().nullable().optional(),
-        feedback_form: stringNotBlank().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -206,8 +204,6 @@ export const updateLMS = {
             status: opts.input.status,
             check_in: opts.input.check_in,
             check_out: opts.input.check_out,
-            check_out_code: opts.input.check_out_code,
-            feedback_form: opts.input.feedback_form,
           },
           where: {
             id: opts.input.id,

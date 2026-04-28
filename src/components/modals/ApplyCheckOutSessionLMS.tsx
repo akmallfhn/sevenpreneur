@@ -55,7 +55,6 @@ export default function ApplyCheckOutSessionLMS(
     try {
       const checkOutSession = await CheckOutSession({
         learningId: props.learningId,
-        checkOutCode: checkOutCode.trim(),
       });
       if (checkOutSession.code === "CREATED") {
         toast.success("You’ve successfully checked out!");

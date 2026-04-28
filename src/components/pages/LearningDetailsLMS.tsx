@@ -4,7 +4,6 @@ import { SessionMethod, StatusType } from "@/lib/app-types";
 import { extractEmbedPathFromYouTubeURL } from "@/lib/extract-youtube-id";
 import { faTowerObservation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -50,7 +49,6 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   learningSessionURL: string;
   learningSessionCheckIn: boolean;
   learningSessionCheckOut: boolean;
-  learningSessionFeedbackURL: string;
   learningLocationURL: string;
   learningLocationName: string;
   learningEducatorName: string;
@@ -61,6 +59,7 @@ interface LearningDetailsLMSProps extends AvatarBadgeLMSProps {
   discussionStarterList: DiscussionStarterList[];
   hasCheckIn: boolean;
   hasCheckOut: boolean;
+  sessionToken: string;
 }
 
 export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
@@ -163,7 +162,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
         learningSessionURL={props.learningSessionURL}
         learningSessionCheckIn={props.learningSessionCheckIn}
         learningSessionCheckOut={props.learningSessionCheckOut}
-        learningSessionFeedbackURL={props.learningSessionFeedbackURL}
+        sessionToken={props.sessionToken}
         learningLocationURL={props.learningLocationURL}
         learningLocationName={props.learningLocationName}
         learningEducatorName={props.learningEducatorName}
@@ -333,50 +332,8 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
               learningSessionId={props.learningSessionId}
               hasCheckOut={props.hasCheckOut}
               learningSessionCheckOut={props.learningSessionCheckOut}
+              sessionToken={props.sessionToken}
             />
-            {props.learningSessionFeedbackURL &&
-              props.learningSessionCheckOut && (
-                <a
-                  href={props.learningSessionFeedbackURL}
-                  className="check-out-attendance flex items-center justify-between bg-white p-4 border rounded-lg transition-all active:scale-95"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div className="flex flex-col gap-1">
-                    <h3 className="section-title font-bold font-bodycopy">
-                      Ratings & Feedback
-                    </h3>
-                    <div className="flex items-center">
-                      <Star
-                        className="size-6"
-                        fill="#FFB21D"
-                        stroke="#FFF3DB"
-                      />
-                      <Star
-                        className="size-6"
-                        fill="#FFB21D"
-                        stroke="#FFF3DB"
-                      />
-                      <Star
-                        className="size-6"
-                        fill="#FFB21D"
-                        stroke="#FFF3DB"
-                      />
-                      <Star
-                        className="size-6"
-                        fill="#FFB21D"
-                        stroke="#FFF3DB"
-                      />
-                      <Star
-                        className="size-6"
-                        fill="#FFB21D"
-                        stroke="#FFF3DB"
-                      />
-                    </div>
-                  </div>
-                  <ChevronRight className="size-6 text-emphasis" />
-                </a>
-              )}
           </aside>
         </div>
       </div>

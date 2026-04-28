@@ -225,8 +225,6 @@ export const createLMS = {
         status: z.enum(StatusEnum),
         check_in: z.boolean().optional(),
         check_out: z.boolean().optional(),
-        check_out_code: stringNotBlank().nullable().optional(),
-        feedback_form: stringNotBlank().nullable().optional(),
       })
     )
     .mutation(async (opts) => {
@@ -247,8 +245,6 @@ export const createLMS = {
           status: opts.input.status,
           check_in: opts.input.check_in,
           check_out: opts.input.check_out,
-          check_out_code: opts.input.check_out_code,
-          feedback_form: opts.input.feedback_form,
         },
       });
       const theLearning = await opts.ctx.prisma.learning.findFirst({
@@ -520,12 +516,11 @@ export const createLMS = {
     .input(
       z.object({
         learning_id: numberIsID(),
-        check_out_code: stringNotBlank(),
       })
     )
     .mutation(async (opts) => {
       const learning = await opts.ctx.prisma.learning.findFirst({
-        select: { check_out: true, check_out_code: true },
+        select: { check_out: true },
         where: {
           id: opts.input.learning_id,
         },
@@ -539,13 +534,6 @@ export const createLMS = {
         throw new TRPCError({
           code: STATUS_FORBIDDEN,
           message: "This learning does not accept check-outs.",
-        });
-      }
-
-      if (learning.check_out_code !== opts.input.check_out_code) {
-        throw new TRPCError({
-          code: STATUS_FORBIDDEN,
-          message: "The check-out code is wrong.",
         });
       }
 
@@ -584,5 +572,62 @@ export const createLMS = {
         message: "Success",
         attendance: theCheckOut,
       };
+    }),
+
+  submitRating: loggedInProcedure
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+        coach_clarity: z.int().min(1).max(5),
+        coach_mastery: z.int().min(1).max(5),
+        coach_responsiveness: z.int().min(1).max(5),
+        coach_engagement: z.int().min(1).max(5),
+        material_relevance: z.int().min(1).max(5),
+        material_flow: z.int().min(1).max(5),
+        material_depth: z.int().min(1).max(5),
+        learning_value: z.int().min(1).max(5),
+        missing_topics: z.string().optional(),
+        favorite_material: z.string().optional(),
+        disliked_material: z.string().optional(),
+        improvement_suggestion: z.string().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { learning_id, ...ratings } = opts.input;
+      const user_id = opts.ctx.user.id;
+
+      const learning = await opts.ctx.prisma.learning.findFirst({
+        select: { check_out: true },
+        where: { id: learning_id },
+      });
+      if (!learning) throw readFailedNotFound("learning");
+      if (!learning.check_out) {
+        throw new TRPCError({
+          code: STATUS_FORBIDDEN,
+          message: "Check-out is not open for this session.",
+        });
+      }
+
+      const existing = await opts.ctx.prisma.learningRating.findUnique({
+        where: { learning_id_user_id: { learning_id, user_id } },
+      });
+      if (existing) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You have already submitted a rating for this session.",
+        });
+      }
+
+      await opts.ctx.prisma.learningRating.create({
+        data: { learning_id, user_id, ...ratings },
+      });
+
+      const attendance = await opts.ctx.prisma.attendance.upsert({
+        create: { learning_id, user_id, check_out_at: new Date() },
+        update: { check_out_at: new Date() },
+        where: { learning_id_user_id: { learning_id, user_id } },
+      });
+
+      return { code: STATUS_CREATED, message: "Success", attendance };
     }),
 };

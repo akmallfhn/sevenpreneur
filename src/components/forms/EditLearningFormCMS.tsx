@@ -62,8 +62,6 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
     learningStatus: StatusType;
     learningCheckIn: boolean;
     learningCheckOut: boolean;
-    learningCheckOutCode: string;
-    learningFeedbackURL: string;
   }>({
     learningName: initialData?.name || "",
     learningDescription: initialData?.description || "",
@@ -84,12 +82,6 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
     learningStatus: initialData?.status as StatusType,
     learningCheckIn: initialData?.check_in ?? false,
     learningCheckOut: initialData?.check_out ?? false,
-    learningCheckOutCode: initialData?.check_out_code
-      ? initialData.check_out_code
-      : "",
-    learningFeedbackURL: initialData?.feedback_form
-      ? initialData.feedback_form
-      : "",
   });
 
   useEffect(() => {
@@ -114,12 +106,6 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
         learningStatus: initialData.status as StatusType,
         learningCheckIn: initialData.check_in,
         learningCheckOut: initialData.check_out,
-        learningCheckOutCode: initialData.check_out_code
-          ? initialData.check_out_code
-          : "",
-        learningFeedbackURL: initialData.feedback_form
-          ? initialData.feedback_form
-          : "",
       });
     }
   }, [initialData]);
@@ -266,12 +252,6 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
             : null,
           check_in: formData.learningCheckIn,
           check_out: formData.learningCheckOut,
-          check_out_code: formData.learningCheckOutCode.trim()
-            ? formData.learningCheckOutCode.trim()
-            : null,
-          feedback_form: formData.learningFeedbackURL.trim()
-            ? formData.learningFeedbackURL.trim()
-            : null,
         },
         {
           onSuccess: () => {
@@ -501,22 +481,6 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                     </div>
                   </div>
                 </div>
-                <InputCMS
-                  inputId="learning-check-out-code"
-                  inputName="Check Out Code"
-                  inputType="text"
-                  inputPlaceholder="e.g. WEAREFOUNDER"
-                  value={formData.learningCheckOutCode}
-                  onInputChange={handleInputChange("learningCheckOutCode")}
-                />
-                <InputCMS
-                  inputId="learning-feedback-url"
-                  inputName="Feedback Form"
-                  inputType="url"
-                  inputPlaceholder="e.g. https://forms.gle/XtGCMjh3GbwQ65Ss6"
-                  value={formData.learningFeedbackURL}
-                  onInputChange={handleInputChange("learningFeedbackURL")}
-                />
               </div>
             </div>
           </div>

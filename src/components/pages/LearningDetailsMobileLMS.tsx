@@ -1,7 +1,6 @@
 "use client";
 import { CreateDiscussionStarter } from "@/lib/actions";
 import { SessionMethod } from "@/lib/app-types";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,7 +18,6 @@ interface LearningDetailsMobileLMSProps extends AvatarBadgeLMSProps {
   learningSessionName: string;
   learningEducatorName: string;
   learningEducatorAvatar: string;
-  learningSessionFeedbackURL: string;
   learningSessionId: number;
   learningSessionDescription: string;
   learningSessionDate: string;
@@ -29,6 +27,7 @@ interface LearningDetailsMobileLMSProps extends AvatarBadgeLMSProps {
   learningLocationName: string;
   learningSessionCheckIn: boolean;
   learningSessionCheckOut: boolean;
+  sessionToken: string;
   learningRecordingYoutube: string;
   learningRecordingCloudflare: string;
   hasCheckIn: boolean;
@@ -143,31 +142,13 @@ export default function LearningDetailsMobileLMS(
         learningRecordingYoutube={props.learningRecordingYoutube}
         hasCheckIn={props.hasCheckIn}
         hasCheckOut={props.hasCheckOut}
+        sessionToken={props.sessionToken}
         materialList={props.materialList}
         discussion={discussion}
         onTabChange={setCurrentTab}
         onDiscussionDeleted={handleDiscussionDeleted}
       />
 
-      {/* Ratings & Feedback */}
-      {currentTab === "details" &&
-        props.learningSessionFeedbackURL &&
-        props.learningSessionCheckOut && (
-          <div className="ratings-feedback fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t transition-all z-[90]">
-            <p className="section-title font-bold font-bodycopy text-[15px]">
-              How satisfied are you with this session?
-            </p>
-            <a
-              href={props.learningSessionFeedbackURL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <AppButton className="shrink-0" variant="primary">
-                Rate us <Star className="size-6" fill="#FFB21D" stroke="0" />
-              </AppButton>
-            </a>
-          </div>
-        )}
 
       {/* Create Discussion */}
       {currentTab === "discussions" && (

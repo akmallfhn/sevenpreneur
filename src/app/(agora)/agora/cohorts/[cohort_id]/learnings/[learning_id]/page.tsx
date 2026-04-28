@@ -75,7 +75,6 @@ export default async function LearningsDetailsPageLMS({
       learningSessionURL={learningDetails.meeting_url || ""}
       learningSessionCheckIn={learningDetails.check_in}
       learningSessionCheckOut={learningDetails.check_out}
-      learningSessionFeedbackURL={learningDetails.feedback_form || ""}
       learningLocationURL={learningDetails.location_url || ""}
       learningLocationName={learningDetails.location_name || ""}
       learningEducatorName={
@@ -91,6 +90,7 @@ export default async function LearningsDetailsPageLMS({
       discussionStarterList={discussionStarterList}
       hasCheckIn={hasAttendance.check_in}
       hasCheckOut={hasAttendance.check_out}
+      sessionToken={sessionToken}
     />
   );
 }

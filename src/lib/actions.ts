@@ -178,7 +178,6 @@ export async function CheckInSession(props: CheckInSessionProps) {
 // CHECK OUT SESSION
 interface CheckOutSessionProps {
   learningId: number;
-  checkOutCode: string;
 }
 export async function CheckOutSession(props: CheckOutSessionProps) {
   const cookieStore = await cookies();
@@ -192,7 +191,6 @@ export async function CheckOutSession(props: CheckOutSessionProps) {
 
   const checkOutSession = await trpc.create.checkOut({
     learning_id: props.learningId,
-    check_out_code: props.checkOutCode,
   });
 
   return {

@@ -1,16 +1,18 @@
 "use client";
+import { setSessionToken } from "@/trpc/client";
 import { Check, ClockFading, ClockPlus, LockKeyholeIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton, { VariantType } from "../buttons/AppButton";
-import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
+import RatingCheckoutModalLMS from "../modals/RatingCheckoutModalLMS";
 
 interface CheckOutAttendanceLMSProps {
   learningSessionId: number;
   hasCheckOut: boolean;
   learningSessionCheckOut: boolean;
+  sessionToken: string;
 }
 
 export default function CheckOutAttendanceLMS(
@@ -18,6 +20,10 @@ export default function CheckOutAttendanceLMS(
 ) {
   const router = useRouter();
   const [openCheckOut, setOpenCheckOut] = useState(false);
+
+  useEffect(() => {
+    setSessionToken(props.sessionToken);
+  }, [props.sessionToken]);
 
   const getCheckOutState = (hasCheckOut: boolean, canCheckOut: boolean) => {
     if (hasCheckOut)
@@ -97,11 +103,11 @@ export default function CheckOutAttendanceLMS(
       </div>
 
       {/* Modal Checkout */}
-      <ApplyCheckOutSessionLMS
+      <RatingCheckoutModalLMS
         learningId={props.learningSessionId}
         isOpen={openCheckOut}
         onClose={() => setOpenCheckOut(false)}
-        onSuccessCheckOut={() => {
+        onSuccess={() => {
           router.refresh();
         }}
       />

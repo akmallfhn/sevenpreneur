@@ -36,6 +36,7 @@ export interface LearningDetailsTabsMobileLMSProps extends AvatarBadgeLMSProps {
   learningRecordingCloudflare: string;
   hasCheckIn: boolean;
   hasCheckOut: boolean;
+  sessionToken: string;
   materialList: MaterialList[];
   discussion: DiscussionStarterList[];
   onTabChange: (tab: string) => void;
@@ -219,6 +220,7 @@ export default function LearningDetailsTabsMobileLMS(
               hasCheckOut={props.hasCheckOut}
               learningSessionCheckIn={props.learningSessionCheckIn}
               learningSessionCheckOut={props.learningSessionCheckOut}
+              sessionToken={props.sessionToken}
             />
           </div>
           <div className="learning-description relative flex flex-col gap-3 bg-white p-5">

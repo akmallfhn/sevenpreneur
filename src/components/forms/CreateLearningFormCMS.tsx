@@ -50,8 +50,6 @@ export default function CreateLearningFormCMS(
     learningStatus: StatusType;
     learningCheckIn: boolean;
     learningCheckOut: boolean;
-    learningCheckOutCode: string;
-    learningFeedbackURL: string;
   }>({
     learningName: "",
     learningDescription: "",
@@ -64,8 +62,6 @@ export default function CreateLearningFormCMS(
     learningStatus: "ACTIVE",
     learningCheckIn: false,
     learningCheckOut: false,
-    learningCheckOutCode: "",
-    learningFeedbackURL: "",
   });
 
   // Add event listener to prevent page refresh
@@ -208,12 +204,6 @@ export default function CreateLearningFormCMS(
             : null,
           check_in: formData.learningCheckIn,
           check_out: formData.learningCheckOut,
-          check_out_code: formData.learningCheckOutCode.trim()
-            ? formData.learningCheckOutCode.trim()
-            : null,
-          feedback_form: formData.learningFeedbackURL.trim()
-            ? formData.learningFeedbackURL.trim()
-            : null,
         },
         {
           onSuccess: () => {
@@ -436,22 +426,6 @@ export default function CreateLearningFormCMS(
                     </div>
                   </div>
                 </div>
-                <InputCMS
-                  inputId="learning-check-out-code"
-                  inputName="Check Out Code"
-                  inputType="text"
-                  inputPlaceholder="e.g. WEAREFOUNDER"
-                  value={formData.learningCheckOutCode}
-                  onInputChange={handleInputChange("learningCheckOutCode")}
-                />
-                <InputCMS
-                  inputId="learning-feedback-url"
-                  inputName="Feedback Form"
-                  inputType="url"
-                  inputPlaceholder="e.g. https://forms.gle/XtGCMjh3GbwQ65Ss6"
-                  value={formData.learningFeedbackURL}
-                  onInputChange={handleInputChange("learningFeedbackURL")}
-                />
               </div>
             </div>
           </div>

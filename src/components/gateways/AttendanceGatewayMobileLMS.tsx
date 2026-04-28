@@ -1,11 +1,12 @@
 "use client";
 import { CheckInSession } from "@/lib/actions";
+import { setSessionToken } from "@/trpc/client";
 import { Check, ClockPlus, Loader2, LockKeyholeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton, { VariantType } from "../buttons/AppButton";
-import ApplyCheckOutSessionLMS from "../modals/ApplyCheckOutSessionLMS";
+import RatingCheckoutModalLMS from "../modals/RatingCheckoutModalLMS";
 
 interface AttendanceGatewayMobileLMSProps {
   learningSessionId: number;
@@ -13,6 +14,7 @@ interface AttendanceGatewayMobileLMSProps {
   hasCheckOut: boolean;
   learningSessionCheckIn: boolean;
   learningSessionCheckOut: boolean;
+  sessionToken: string;
 }
 
 export default function AttendanceGatewayMobileLMS(
@@ -21,6 +23,10 @@ export default function AttendanceGatewayMobileLMS(
   const router = useRouter();
   const [checkingIn, setCheckingIn] = useState(false);
   const [openCheckOut, setOpenCheckOut] = useState(false);
+
+  useEffect(() => {
+    setSessionToken(props.sessionToken);
+  }, [props.sessionToken]);
 
   const getCheckInState = (hasCheckIn: boolean, canCheckIn: boolean) => {
     if (hasCheckIn)
@@ -155,11 +161,11 @@ export default function AttendanceGatewayMobileLMS(
       </div>
 
       {/* Modal Checkout */}
-      <ApplyCheckOutSessionLMS
+      <RatingCheckoutModalLMS
         learningId={props.learningSessionId}
         isOpen={openCheckOut}
         onClose={() => setOpenCheckOut(false)}
-        onSuccessCheckOut={() => {
+        onSuccess={() => {
           router.refresh();
         }}
       />

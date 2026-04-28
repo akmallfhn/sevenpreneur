@@ -314,8 +314,6 @@ CREATE TABLE learnings (
   status             status_enum           NOT NULL,
   check_in           BOOLEAN               NOT NULL  DEFAULT FALSE,
   check_out          BOOLEAN               NOT NULL  DEFAULT FALSE,
-  check_out_code     VARCHAR                   NULL,
-  feedback_form      VARCHAR                   NULL,
   created_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at         TIMESTAMPTZ           NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
@@ -378,6 +376,31 @@ CREATE TABLE attendances (
   check_in_at   TIMESTAMPTZ      NULL,
   check_out_at  TIMESTAMPTZ      NULL,
   PRIMARY KEY (learning_id, user_id)
+);
+
+-- Stores structured feedback from members after each learning session
+-- Likert fields: 1 (Sangat Buruk) — 5 (Sangat Baik)
+-- Submitting a rating automatically sets attendances.check_out_at
+-- Unique per (learning_id, user_id) — one submission per member per session
+
+CREATE TABLE learning_ratings (
+  id                     SERIAL       PRIMARY KEY,
+  learning_id            INTEGER      NOT NULL,
+  user_id                UUID         NOT NULL,
+  coach_clarity          SMALLINT     NOT NULL,
+  coach_mastery          SMALLINT     NOT NULL,
+  coach_responsiveness   SMALLINT     NOT NULL,
+  coach_engagement       SMALLINT     NOT NULL,
+  material_relevance     SMALLINT     NOT NULL,
+  material_flow          SMALLINT     NOT NULL,
+  material_depth         SMALLINT     NOT NULL,
+  learning_value         SMALLINT     NOT NULL,
+  missing_topics         TEXT             NULL,
+  favorite_material      TEXT             NULL,
+  disliked_material      TEXT             NULL,
+  improvement_suggestion TEXT             NULL,
+  created_at             TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (learning_id, user_id)
 );
 
 -- Business-assessment-related
@@ -840,6 +863,10 @@ ALTER TABLE submissions
   ADD FOREIGN KEY (submitter_id) REFERENCES users (id);
 
 ALTER TABLE attendances
+  ADD FOREIGN KEY (learning_id) REFERENCES learnings (id),
+  ADD FOREIGN KEY (user_id)     REFERENCES users (id);
+
+ALTER TABLE learning_ratings
   ADD FOREIGN KEY (learning_id) REFERENCES learnings (id),
   ADD FOREIGN KEY (user_id)     REFERENCES users (id);
 
