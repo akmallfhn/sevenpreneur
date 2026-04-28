@@ -50,6 +50,13 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
+type LessonProgressItem = {
+  lesson: { id: number; title: string; level: number; xp_reward: number };
+  xp_earned: number;
+  score: number | null;
+  completed_at: Date | string | null;
+};
+
 export default function ProfileAilene() {
   const { data, isLoading } = trpc.ailene.myProfile.useQuery();
 
@@ -331,7 +338,7 @@ export default function ProfileAilene() {
                   </tr>
                 </thead>
                 <tbody>
-                  {lesson_progress.map((prog, i) => {
+                  {(lesson_progress as LessonProgressItem[]).map((prog, i) => {
                     const levelBadge = LEVEL_BADGE[prog.lesson.level] ?? LEVEL_BADGE[1];
                     return (
                       <tr

@@ -16,6 +16,13 @@ export const listAilene = {
     return { code: STATUS_OK, message: "Success", list: sessions };
   }),
 
+  journeys: administratorProcedure.query(async (opts) => {
+    const journeys = await opts.ctx.prisma.aiLearnJourney.findMany({
+      orderBy: { order_index: "asc" },
+    });
+    return { code: STATUS_OK, message: "Success", list: journeys };
+  }),
+
   members: administratorProcedure.query(async (opts) => {
     const members = await opts.ctx.prisma.aiLearnMember.findMany({
       include: {

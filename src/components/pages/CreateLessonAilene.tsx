@@ -20,6 +20,9 @@ export default function CreateLessonAilene() {
   const { isCollapsed } = useSidebar();
   const router = useRouter();
 
+  const { data: journeyData } = trpc.ailene.listJourneys.useQuery();
+  const journeys = journeyData?.list ?? [];
+
   const [form, setForm] = useState<{
     title: string;
     description: string;
@@ -27,6 +30,7 @@ export default function CreateLessonAilene() {
     level: number;
     xp_reward: number;
     status: AiLearnLessonStatus;
+    journey_id: number | null;
   }>({
     title: "",
     description: "",
@@ -34,6 +38,7 @@ export default function CreateLessonAilene() {
     level: 1,
     xp_reward: 10,
     status: AiLearnLessonStatus.DRAFT,
+    journey_id: null,
   });
 
   const createMutation = trpc.ailene.createLesson.useMutation({
@@ -47,7 +52,8 @@ export default function CreateLessonAilene() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim()) return toast.warning("Judul tidak boleh kosong.");
-    createMutation.mutate(form);
+    if (!form.journey_id) return toast.warning("Pilih journey terlebih dahulu.");
+    createMutation.mutate({ ...form, journey_id: form.journey_id });
   };
 
   const inputCls = "w-full px-3 py-2 rounded-lg border border-sevenpreneur-ash text-sm font-bodycopy focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition";
@@ -93,6 +99,20 @@ export default function CreateLessonAilene() {
               value={form.description}
               onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
             />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className={labelCls}>Journey *</label>
+            <select
+              className={inputCls}
+              value={form.journey_id ?? ""}
+              onChange={(e) => setForm((p) => ({ ...p, journey_id: e.target.value ? Number(e.target.value) : null }))}
+            >
+              <option value="">— Pilih journey —</option>
+              {journeys.map((j) => (
+                <option key={j.id} value={j.id}>{j.name}{j.role ? ` (${j.role})` : ""}</option>
+              ))}
+            </select>
           </div>
 
           <div className="grid grid-cols-3 gap-4">

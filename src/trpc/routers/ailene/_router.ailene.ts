@@ -6,6 +6,9 @@ import { readAilene } from "./read.ailene";
 import { updateAilene } from "./update.ailene";
 
 export const aileneRouter = createTRPCRouter({
+  // Journeys
+  listJourneys: listAilene.journeys,
+
   // Sessions
   listSessions: listAilene.sessions,
   readSession: readAilene.session,

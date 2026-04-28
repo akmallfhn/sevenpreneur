@@ -87,6 +87,7 @@ export const createAilene = {
         order_index: numberIsNonNegInt().optional(),
         slug: stringNotBlank().optional(),
         youtube_url: z.string().optional(),
+        journey_id: numberIsID(),
       })
     )
     .mutation(async (opts) => {
@@ -102,6 +103,7 @@ export const createAilene = {
           xp_reward: opts.input.xp_reward,
           status: opts.input.status,
           order_index: opts.input.order_index ?? 0,
+          journey_id: opts.input.journey_id,
         },
       });
       return { code: STATUS_CREATED, message: "Success", lesson };

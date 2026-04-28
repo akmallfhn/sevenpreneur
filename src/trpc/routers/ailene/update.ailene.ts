@@ -72,6 +72,7 @@ export const updateAilene = {
         status: z.enum(AiLearnLessonStatus).optional(),
         order_index: numberIsNonNegInt().optional(),
         youtube_url: z.string().optional(),
+        journey_id: numberIsID().optional(),
       })
     )
     .mutation(async (opts) => {
