@@ -1,7 +1,7 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { aileneProcedure, administratorProcedure } from "@/trpc/init";
 import { numberIsID } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus } from "@prisma/client";
+import { AiLearnLessonStatus, StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const listAilene = {
@@ -20,6 +20,42 @@ export const listAilene = {
     const journeys = await opts.ctx.prisma.aiLearnJourney.findMany({
       orderBy: { order_index: "asc" },
     });
+    return { code: STATUS_OK, message: "Success", list: journeys };
+  }),
+
+  journeysForUser: aileneProcedure.query(async (opts) => {
+    const user_id = opts.ctx.user.id;
+
+    const member = await opts.ctx.prisma.aiLearnMember.findUnique({
+      where: { user_id },
+      select: { role_name: true },
+    });
+
+    const roleFilter = member?.role_name;
+
+    const journeys = await opts.ctx.prisma.aiLearnJourney.findMany({
+      where: {
+        status: StatusEnum.ACTIVE,
+        ...(roleFilter
+          ? { OR: [{ role: roleFilter }, { role: null }] }
+          : { role: null }),
+      },
+      include: {
+        lessons: {
+          where: { status: AiLearnLessonStatus.PUBLISHED },
+          include: {
+            _count: { select: { quiz_questions: true } },
+            progress: {
+              where: { member: { user_id } },
+              select: { completed_at: true, score: true, xp_earned: true },
+            },
+          },
+          orderBy: [{ level: "asc" }, { order_index: "asc" }],
+        },
+      },
+      orderBy: { order_index: "asc" },
+    });
+
     return { code: STATUS_OK, message: "Success", list: journeys };
   }),
 
