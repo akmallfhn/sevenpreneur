@@ -1,6 +1,13 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { Loader2, Star, X } from "lucide-react";
+import {
+  BookOpen,
+  GraduationCap,
+  Loader2,
+  MessageSquare,
+  Star,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
@@ -43,93 +50,100 @@ const EMPTY_FORM: RatingForm = {
   improvement_suggestion: "",
 };
 
-const LIKERT_FIELDS: {
-  key: keyof Pick<
-    RatingForm,
-    | "coach_clarity"
-    | "coach_mastery"
-    | "coach_responsiveness"
-    | "coach_engagement"
-    | "material_relevance"
-    | "material_flow"
-    | "material_depth"
-    | "learning_value"
-  >;
-  label: string;
-  section: "coach" | "material" | "overall";
-}[] = [
-  {
-    key: "coach_clarity",
-    label: "Seberapa jelas penjelasan coach?",
-    section: "coach",
-  },
-  {
-    key: "coach_mastery",
-    label: "Seberapa dalam penguasaan materi coach?",
-    section: "coach",
-  },
-  {
-    key: "coach_responsiveness",
-    label: "Seberapa responsif coach dalam menjawab pertanyaan?",
-    section: "coach",
-  },
-  {
-    key: "coach_engagement",
-    label: "Seberapa engaging dan interaktif sesi bersama coach?",
-    section: "coach",
-  },
-  {
-    key: "material_relevance",
-    label: "Seberapa relevan materi dengan kebutuhan bisnismu?",
-    section: "material",
-  },
-  {
-    key: "material_flow",
-    label: "Seberapa baik alur penyampaian materi?",
-    section: "material",
-  },
-  {
-    key: "material_depth",
-    label: "Seberapa mendalam materi yang disampaikan?",
-    section: "material",
-  },
-  {
-    key: "learning_value",
-    label: "Secara keseluruhan, seberapa berharga sesi ini untukmu?",
-    section: "overall",
-  },
-];
+type LikertKey = keyof Pick<
+  RatingForm,
+  | "coach_clarity"
+  | "coach_mastery"
+  | "coach_responsiveness"
+  | "coach_engagement"
+  | "material_relevance"
+  | "material_flow"
+  | "material_depth"
+  | "learning_value"
+>;
 
-const TEXT_FIELDS: {
-  key: keyof Pick<
-    RatingForm,
-    | "missing_topics"
-    | "favorite_material"
-    | "disliked_material"
-    | "improvement_suggestion"
-  >;
-  label: string;
-  placeholder: string;
+type TextKey = keyof Pick<
+  RatingForm,
+  | "missing_topics"
+  | "favorite_material"
+  | "disliked_material"
+  | "improvement_suggestion"
+>;
+
+const SECTIONS: {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  likertFields?: { key: LikertKey; label: string }[];
+  textFields?: { key: TextKey; label: string; placeholder: string }[];
 }[] = [
   {
-    key: "favorite_material",
-    label: "Apa bagian yang paling kamu sukai dari sesi ini?",
-    placeholder: "Ceritakan bagian yang paling berkesan atau bermanfaat...",
+    title: "Tentang Coach",
+    description: "Nilai performa coach sesi ini",
+    icon: GraduationCap,
+    likertFields: [
+      { key: "coach_clarity", label: "Seberapa jelas penjelasan coach?" },
+      {
+        key: "coach_mastery",
+        label: "Seberapa dalam penguasaan materi coach?",
+      },
+      {
+        key: "coach_responsiveness",
+        label: "Seberapa responsif coach dalam menjawab pertanyaan?",
+      },
+      {
+        key: "coach_engagement",
+        label: "Seberapa engaging dan interaktif sesi bersama coach?",
+      },
+    ],
   },
   {
-    key: "missing_topics",
-    label: "Topik apa yang menurutmu perlu ditambahkan?",
-    placeholder: "Misalnya: studi kasus lebih banyak, latihan praktik, dsb...",
+    title: "Tentang Materi",
+    description: "Nilai kualitas materi yang disampaikan",
+    icon: BookOpen,
+    likertFields: [
+      {
+        key: "material_relevance",
+        label: "Seberapa relevan materi dengan kebutuhan bisnismu?",
+      },
+      { key: "material_flow", label: "Seberapa baik alur penyampaian materi?" },
+      {
+        key: "material_depth",
+        label: "Seberapa mendalam materi yang disampaikan?",
+      },
+      {
+        key: "learning_value",
+        label: "Secara keseluruhan, seberapa berharga sesi ini untukmu?",
+      },
+    ],
   },
   {
-    key: "disliked_material",
-    label: "Bagian mana yang menurutmu perlu diperbaiki?",
-    placeholder: "Feedback kamu sangat membantu kami berkembang...",
-  },
-  {
-    key: "improvement_suggestion",
-    label: "Ada saran lain untuk meningkatkan kualitas sesi ini?",
-    placeholder: "Bebas tulis apapun yang terlintas di pikiranmu...",
+    title: "Feedback Tambahan",
+    description: "Ceritakan pengalamanmu lebih lanjut",
+    icon: MessageSquare,
+    textFields: [
+      {
+        key: "favorite_material",
+        label: "Apa bagian yang paling kamu sukai?",
+        placeholder: "Ceritakan bagian yang paling berkesan atau bermanfaat...",
+      },
+      {
+        key: "missing_topics",
+        label: "Topik apa yang perlu ditambahkan?",
+        placeholder:
+          "Misalnya: studi kasus lebih banyak, latihan praktik, dsb...",
+      },
+      {
+        key: "disliked_material",
+        label: "Bagian mana yang perlu diperbaiki?",
+        placeholder: "Feedback kamu sangat membantu kami berkembang...",
+      },
+      {
+        key: "improvement_suggestion",
+        label: "Ada saran lain untuk meningkatkan kualitas sesi?",
+        placeholder: "Bebas tulis apapun yang terlintas di pikiranmu...",
+      },
+    ],
   },
 ];
 
@@ -141,33 +155,31 @@ function StarRating({
   onChange: (v: number) => void;
 }) {
   const [hovered, setHovered] = useState(0);
+  const active = hovered || value;
   return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          className="transition-transform hover:scale-110 active:scale-95"
-          onMouseEnter={() => setHovered(star)}
-          onMouseLeave={() => setHovered(0)}
-          onClick={() => onChange(star)}
-        >
-          <Star
-            className="size-7"
-            fill={(hovered || value) >= star ? "#FFB21D" : "none"}
-            stroke={(hovered || value) >= star ? "#FFB21D" : "#D1D5DB"}
-          />
-        </button>
-      ))}
-      {value > 0 && (
-        <span className="ml-2 text-xs font-bodycopy text-emphasis">
-          {
-            ["", "Sangat Buruk", "Kurang", "Cukup", "Baik", "Sangat Baik"][
-              value
-            ]
-          }
-        </span>
-      )}
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-1.5">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            type="button"
+            className="transition-transform hover:scale-110 active:scale-95"
+            onMouseEnter={() => setHovered(star)}
+            onMouseLeave={() => setHovered(0)}
+            onClick={() => onChange(star)}
+          >
+            <Star
+              className="size-7"
+              fill={active >= star ? "#FFB21D" : "none"}
+              stroke={active >= star ? "#FFB21D" : "#D1D5DB"}
+            />
+          </button>
+        ))}
+      </div>
+      <div className="flex justify-between text-[11px] font-bodycopy text-emphasis px-0.5">
+        <span>Sangat Buruk</span>
+        <span>Sangat Baik</span>
+      </div>
     </div>
   );
 }
@@ -186,16 +198,37 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
     },
   });
 
-  const setLikert = (key: keyof RatingForm, value: number) =>
+  const setLikert = (key: LikertKey, value: number) =>
     setForm((p) => ({ ...p, [key]: value }));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const likertFields = LIKERT_FIELDS.map((f) => f.key);
-    const missing = likertFields.find((k) => (form[k] as number) === 0);
-    if (missing) {
+    const allLikertKeys: LikertKey[] = [
+      "coach_clarity",
+      "coach_mastery",
+      "coach_responsiveness",
+      "coach_engagement",
+      "material_relevance",
+      "material_flow",
+      "material_depth",
+      "learning_value",
+    ];
+    const missingLikert = allLikertKeys.find((k) => form[k] === 0);
+    if (missingLikert) {
       toast.warning("Mohon isi semua penilaian bintang terlebih dahulu.");
+      return;
+    }
+
+    const allTextKeys: TextKey[] = [
+      "favorite_material",
+      "missing_topics",
+      "disliked_material",
+      "improvement_suggestion",
+    ];
+    const missingText = allTextKeys.find((k) => !form[k].trim());
+    if (missingText) {
+      toast.warning("Mohon isi semua pertanyaan feedback terlebih dahulu.");
       return;
     }
 
@@ -209,16 +242,12 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
       material_flow: form.material_flow,
       material_depth: form.material_depth,
       learning_value: form.learning_value,
-      missing_topics: form.missing_topics || undefined,
-      favorite_material: form.favorite_material || undefined,
-      disliked_material: form.disliked_material || undefined,
-      improvement_suggestion: form.improvement_suggestion || undefined,
+      missing_topics: form.missing_topics,
+      favorite_material: form.favorite_material,
+      disliked_material: form.disliked_material,
+      improvement_suggestion: form.improvement_suggestion,
     });
   };
-
-  const coachFields = LIKERT_FIELDS.filter((f) => f.section === "coach");
-  const materialFields = LIKERT_FIELDS.filter((f) => f.section === "material");
-  const overallFields = LIKERT_FIELDS.filter((f) => f.section === "overall");
 
   return (
     <div
@@ -226,113 +255,163 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
       onClick={props.onClose}
     >
       <div
-        className="relative bg-white dark:bg-surface-black w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl shadow-xl"
+        className="relative bg-white w-full max-w-[820px] max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col sm:flex-row"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="sticky top-0 bg-white dark:bg-surface-black border-b px-6 py-4 flex items-start justify-between z-10">
+        {/* ── Sidebar ────────────────────────────────────── */}
+        <div className="bg-[#F5F3FF] sm:w-[220px] sm:shrink-0 flex flex-col p-5 gap-5 sm:overflow-y-auto">
+          {/* Header */}
           <div>
-            <h2 className="font-bodycopy font-bold text-lg">
+            <p className="text-[10px] font-bold font-bodycopy uppercase tracking-widest text-[#7C3AED]/60 mb-1">
               Checkout & Feedback
-            </h2>
-            <p className="font-bodycopy text-sm text-emphasis mt-0.5">
-              Bantu kami meningkatkan kualitas program dengan mengisi feedback
-              berikut.
+            </p>
+            <p className="text-sm font-bold font-bodycopy text-[#111]">
+              Isi semua pertanyaan di bawah ini
             </p>
           </div>
-          <button
-            type="button"
-            onClick={props.onClose}
-            className="ml-4 shrink-0 text-emphasis hover:text-black dark:hover:text-white transition-colors"
-          >
-            <X className="size-5" />
-          </button>
+
+          {/* Section list — desktop only */}
+          <div className="hidden sm:flex flex-col gap-3">
+            {SECTIONS.map((section) => {
+              const Icon = section.icon;
+              return (
+                <div key={section.title} className="flex items-start gap-3">
+                  <div className="size-8 rounded-full bg-[#7C3AED]/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <Icon className="size-4 text-[#7C3AED]" />
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold font-bodycopy text-[#111] leading-tight">
+                      {section.title}
+                    </p>
+                    <p className="text-[11px] font-bodycopy text-emphasis mt-0.5 leading-tight">
+                      {section.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Motivational card — desktop only */}
+          <div className="hidden sm:block mt-auto">
+            <div className="bg-white rounded-xl p-3.5 border border-[#EDE9FE]">
+              <p className="text-xl mb-1">⭐</p>
+              <p className="text-xs font-bold font-bodycopy text-[#111]">
+                Feedback-mu berarti!
+              </p>
+              <p className="text-[11px] text-emphasis font-bodycopy mt-1 leading-relaxed">
+                Bantu kami jadi lebih baik untuk semua peserta Sevenpreneur.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-0">
-          {/* Section: Coach */}
-          <div className="px-6 py-5 flex flex-col gap-4 border-b">
-            <h3 className="font-bodycopy font-bold text-sm uppercase tracking-widest text-emphasis">
-              Tentang Coach
-            </h3>
-            {coachFields.map((field) => (
-              <div key={field.key} className="flex flex-col gap-2">
-                <label className="font-bodycopy text-sm font-medium text-[#111111] dark:text-white">
-                  {field.label}
-                </label>
-                <StarRating
-                  value={form[field.key] as number}
-                  onChange={(v) => setLikert(field.key, v)}
-                />
+        {/* ── Right Panel ────────────────────────────────── */}
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col flex-1 overflow-hidden"
+        >
+          {/* Header */}
+          <div className="border-b px-5 py-4 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="size-9 rounded-lg bg-[#FEF9C3] flex items-center justify-center shrink-0">
+                <Star className="size-5 fill-[#FFB21D] stroke-[#FFB21D]" />
               </div>
-            ))}
+              <div>
+                <h2 className="font-bodycopy font-bold text-[15px] text-[#111]">
+                  Checkout &amp; Feedback
+                </h2>
+                <p className="font-bodycopy text-[12px] text-emphasis">
+                  Bantu kami meningkatkan kualitas program
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={props.onClose}
+              className="text-emphasis hover:text-black transition-colors ml-4 shrink-0"
+            >
+              <X className="size-5" />
+            </button>
           </div>
 
-          {/* Section: Materi */}
-          <div className="px-6 py-5 flex flex-col gap-4 border-b">
-            <h3 className="font-bodycopy font-bold text-sm uppercase tracking-widest text-emphasis">
-              Tentang Materi
-            </h3>
-            {materialFields.map((field) => (
-              <div key={field.key} className="flex flex-col gap-2">
-                <label className="font-bodycopy text-sm font-medium text-[#111111] dark:text-white">
-                  {field.label}
-                </label>
-                <StarRating
-                  value={form[field.key] as number}
-                  onChange={(v) => setLikert(field.key, v)}
-                />
-              </div>
-            ))}
-          </div>
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-6">
+            {SECTIONS.map((section) => {
+              const Icon = section.icon;
+              return (
+                <div key={section.title} className="flex flex-col gap-3">
+                  {/* Section header */}
+                  <div className="flex items-center gap-3 bg-[#F5F3FF] rounded-xl p-4">
+                    <div className="size-10 rounded-full bg-[#7C3AED]/10 flex items-center justify-center shrink-0">
+                      <Icon className="size-5 text-[#7C3AED]" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold font-bodycopy text-[#111] text-sm">
+                        {section.title}
+                      </h3>
+                      <p className="text-[12px] text-emphasis font-bodycopy">
+                        {section.description}
+                      </p>
+                    </div>
+                  </div>
 
-          {/* Section: Overall */}
-          <div className="px-6 py-5 flex flex-col gap-4 border-b">
-            <h3 className="font-bodycopy font-bold text-sm uppercase tracking-widest text-emphasis">
-              Penilaian Keseluruhan
-            </h3>
-            {overallFields.map((field) => (
-              <div key={field.key} className="flex flex-col gap-2">
-                <label className="font-bodycopy text-sm font-medium text-[#111111] dark:text-white">
-                  {field.label}
-                </label>
-                <StarRating
-                  value={form[field.key] as number}
-                  onChange={(v) => setLikert(field.key, v)}
-                />
-              </div>
-            ))}
-          </div>
+                  {/* Likert cards */}
+                  {section.likertFields && section.likertFields.length > 0 && (
+                    <div className="flex flex-col gap-3">
+                      {section.likertFields.map((field, index) => (
+                        <div
+                          key={field.key}
+                          className="bg-white border rounded-xl p-4 flex flex-col gap-3"
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="size-6 rounded-full bg-[#7C3AED] text-white text-[10px] font-bold font-bodycopy flex items-center justify-center shrink-0 mt-0.5">
+                              {String(index + 1).padStart(2, "0")}
+                            </span>
+                            <p className="text-sm font-medium font-bodycopy text-[#111]">
+                              {field.label}
+                            </p>
+                          </div>
+                          <StarRating
+                            value={form[field.key] as number}
+                            onChange={(v) => setLikert(field.key, v)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
-          {/* Section: Pertanyaan Terbuka */}
-          <div className="px-6 py-5 flex flex-col gap-4 border-b">
-            <h3 className="font-bodycopy font-bold text-sm uppercase tracking-widest text-emphasis">
-              Pertanyaan Terbuka
-              <span className="normal-case font-normal ml-1">(opsional)</span>
-            </h3>
-            {TEXT_FIELDS.map((field) => (
-              <TextAreaSVP
-                key={field.key}
-                textAreaId={field.key}
-                textAreaName={field.label}
-                textAreaPlaceholder={field.placeholder}
-                textAreaHeight="min-h-[80px]"
-                value={form[field.key] as string}
-                onTextAreaChange={(v) =>
-                  setForm((p) => ({ ...p, [field.key]: v }))
-                }
-              />
-            ))}
+                  {/* Text fields */}
+                  {section.textFields && section.textFields.length > 0 && (
+                    <div className="flex flex-col gap-4">
+                      {section.textFields.map((field) => (
+                        <TextAreaSVP
+                          key={field.key}
+                          textAreaId={field.key}
+                          textAreaName={field.label}
+                          textAreaPlaceholder={field.placeholder}
+                          textAreaHeight="min-h-[80px]"
+                          value={form[field.key] as string}
+                          onTextAreaChange={(v) =>
+                            setForm((p) => ({ ...p, [field.key]: v }))
+                          }
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 flex items-center justify-end gap-3">
+          <div className="border-t px-5 py-3.5 flex items-center justify-between shrink-0 bg-white">
             <AppButton
               type="button"
               variant="destructiveSoft"
               onClick={props.onClose}
             >
-              Cancel
+              Batal
             </AppButton>
             <AppButton
               type="submit"
@@ -342,7 +421,7 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
               {submitMutation.isPending && (
                 <Loader2 className="animate-spin size-4" />
               )}
-              Submit & Check Out
+              Submit &amp; Check Out
             </AppButton>
           </div>
         </form>
