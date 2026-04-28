@@ -1,7 +1,7 @@
 -- PostgreSQL DDL for Ailene — AI Learning Platform
 -- Part of the Sevenpreneur ecosystem
--- Tables: ai_learn_members, ai_learn_lessons, ai_learn_quiz_questions, ai_learn_quiz_options, ai_learn_user_progress,
---         ai_learn_sessions, ai_learn_session_attendances
+-- Tables: ai_learn_members, ai_learn_journeys, ai_learn_lessons, ai_learn_quiz_questions, ai_learn_quiz_options,
+--         ai_learn_user_progress, ai_learn_sessions, ai_learn_session_attendances
 
 ------------------
 -- Enumerations --
@@ -38,8 +38,25 @@ ALTER TABLE ai_learn_members
     ADD CONSTRAINT ai_learn_members_user_id_fkey
     FOREIGN KEY (user_id) REFERENCES users(id);
 
+-- Groups lessons into role-targeted learning journeys
+-- role: which member role this journey is designed for
+
+CREATE TABLE ai_learn_journeys (
+    id          SERIAL             PRIMARY KEY,
+    name        VARCHAR            NOT NULL,
+    slug        VARCHAR            NOT NULL UNIQUE,
+    description TEXT,
+    cover_image VARCHAR,
+    role        ai_learn_role_enum NOT NULL,
+    order_index SMALLINT           NOT NULL DEFAULT 0,
+    status      status_enum        NOT NULL DEFAULT 'active',
+    created_at  TIMESTAMPTZ        NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ        NOT NULL DEFAULT NOW()
+);
+
 -- Stores AI learning lessons/articles
 -- level: 1 = Foundations, 2 = Techniques, 3 = Advanced, 4 = Strategic
+-- journey_id: optional grouping under a specific journey
 
 CREATE TABLE ai_learn_lessons (
     id          SERIAL                 PRIMARY KEY,
@@ -52,9 +69,14 @@ CREATE TABLE ai_learn_lessons (
     xp_reward   SMALLINT               NOT NULL DEFAULT 10,
     status      ai_learn_lesson_status NOT NULL DEFAULT 'draft',
     order_index SMALLINT               NOT NULL DEFAULT 0,
+    journey_id  INTEGER,
     created_at  TIMESTAMPTZ            NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMPTZ            NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE ai_learn_lessons
+    ADD CONSTRAINT ai_learn_lessons_journey_id_fkey
+    FOREIGN KEY (journey_id) REFERENCES ai_learn_journeys(id);
 
 -- Stores multiple-choice quiz questions per lesson
 
