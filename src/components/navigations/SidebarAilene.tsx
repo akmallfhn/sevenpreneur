@@ -1,6 +1,6 @@
 "use client";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { CalendarDays, LayoutDashboard, Settings, Trophy, Users } from "lucide-react";
+import { CalendarDays, LayoutDashboard, Settings, Trophy, UserCircle, Users } from "lucide-react";
 import { useEffect } from "react";
 import AppSidebar from "./AppSidebar";
 import AppSidebarGroupMenu from "./AppSidebarGroupMenu";
@@ -49,6 +49,11 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           menuName="Leaderboard"
           menuURL="/leaderboard"
           menuIcon={<Trophy className="size-[18px]" />}
+        />
+        <AppSidebarMenuItem
+          menuName="Profile"
+          menuURL="/profile"
+          menuIcon={<UserCircle className="size-[18px]" />}
         />
       </AppSidebarGroupMenu>
 
