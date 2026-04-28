@@ -463,4 +463,103 @@ export const readLMS = {
         check_out: !!attendance?.check_out_at,
       };
     }),
+
+  learningStats: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(z.object({ learning_id: numberIsID() }))
+    .query(async (opts) => {
+      const { learning_id } = opts.input;
+
+      const [checkInCount, checkOutCount, ratingAgg, attendances, ratings] =
+        await Promise.all([
+          opts.ctx.prisma.attendance.count({
+            where: { learning_id, check_in_at: { not: null } },
+          }),
+          opts.ctx.prisma.attendance.count({
+            where: { learning_id, check_out_at: { not: null } },
+          }),
+          opts.ctx.prisma.learningRating.aggregate({
+            where: { learning_id },
+            _count: { _all: true },
+            _avg: {
+              coach_clarity: true,
+              coach_mastery: true,
+              coach_responsiveness: true,
+              coach_engagement: true,
+              material_relevance: true,
+              material_flow: true,
+              material_depth: true,
+              learning_value: true,
+            },
+          }),
+          opts.ctx.prisma.attendance.findMany({
+            where: { learning_id },
+            include: {
+              user: { select: { id: true, full_name: true, avatar: true } },
+            },
+            orderBy: { check_in_at: { sort: "asc", nulls: "last" } },
+          }),
+          opts.ctx.prisma.learningRating.findMany({
+            where: { learning_id },
+            select: {
+              user_id: true,
+              coach_clarity: true,
+              coach_mastery: true,
+              coach_responsiveness: true,
+              coach_engagement: true,
+              material_relevance: true,
+              material_flow: true,
+              material_depth: true,
+              learning_value: true,
+            },
+          }),
+        ]);
+
+      const ratingMap = new Map(ratings.map((r) => [r.user_id, r]));
+
+      const avgScores = ratingAgg._avg;
+      const ratingCount = ratingAgg._count._all;
+      const overallAvg =
+        ratingCount > 0
+          ? ([
+              avgScores.coach_clarity,
+              avgScores.coach_mastery,
+              avgScores.coach_responsiveness,
+              avgScores.coach_engagement,
+              avgScores.material_relevance,
+              avgScores.material_flow,
+              avgScores.material_depth,
+              avgScores.learning_value,
+            ] as (number | null)[]).reduce(
+              (sum: number, v) => sum + (v ?? 0),
+              0
+            ) / 8
+          : null;
+
+      const attendeeList = attendances.map((a) => {
+        const rating = ratingMap.get(a.user_id) ?? null;
+        return {
+          user_id: a.user_id,
+          full_name: a.user.full_name,
+          avatar: a.user.avatar,
+          check_in_at: a.check_in_at?.toISOString() ?? null,
+          check_out_at: a.check_out_at?.toISOString() ?? null,
+          rating,
+        };
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        check_in_count: checkInCount,
+        check_out_count: checkOutCount,
+        rating_count: ratingCount,
+        overall_avg: overallAvg,
+        avg_scores: avgScores,
+        attendees: attendeeList,
+      };
+    }),
 };
