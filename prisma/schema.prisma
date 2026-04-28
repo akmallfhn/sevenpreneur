@@ -1035,16 +1035,16 @@ model AiLearnMember {
 }
 
 model AiLearnJourney {
-  id          Int             @id @default(autoincrement()) @db.Integer
-  name        String          @db.VarChar()
-  slug        String          @unique @db.VarChar()
-  description String?         @db.Text
-  cover_image String?         @db.VarChar()
-  role        AiLearnRoleEnum
-  order_index Int             @default(0) @db.SmallInt
-  status      StatusEnum      @default(ACTIVE)
-  created_at  DateTime        @default(now()) @db.Timestamptz()
-  updated_at  DateTime        @default(now()) @updatedAt @db.Timestamptz()
+  id          Int              @id @default(autoincrement()) @db.Integer
+  name        String           @db.VarChar()
+  slug        String           @unique @db.VarChar()
+  description String?          @db.Text
+  cover_image String?          @db.VarChar()
+  role        AiLearnRoleEnum?
+  order_index Int              @default(0) @db.SmallInt
+  status      StatusEnum       @default(ACTIVE)
+  created_at  DateTime         @default(now()) @db.Timestamptz()
+  updated_at  DateTime         @default(now()) @updatedAt @db.Timestamptz()
   lessons     AiLearnLesson[]
 
   @@map("ai_learn_journeys")
@@ -1061,8 +1061,8 @@ model AiLearnLesson {
   xp_reward      Int                   @default(10) @db.SmallInt
   status         AiLearnLessonStatus   @default(DRAFT)
   order_index    Int                   @default(0) @db.SmallInt
-  journey        AiLearnJourney?       @relation(fields: [journey_id], references: [id])
-  journey_id     Int?                  @db.Integer
+  journey        AiLearnJourney        @relation(fields: [journey_id], references: [id])
+  journey_id     Int                   @db.Integer
   created_at     DateTime              @default(now()) @db.Timestamptz()
   updated_at     DateTime              @default(now()) @updatedAt @db.Timestamptz()
   quiz_questions AiLearnQuizQuestion[]

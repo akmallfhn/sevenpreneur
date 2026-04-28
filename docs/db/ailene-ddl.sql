@@ -38,8 +38,8 @@ ALTER TABLE ai_learn_members
     ADD CONSTRAINT ai_learn_members_user_id_fkey
     FOREIGN KEY (user_id) REFERENCES users(id);
 
--- Groups lessons into role-targeted learning journeys
--- role: which member role this journey is designed for
+-- Groups lessons into learning journeys
+-- role: optional — if set, journey is targeted to a specific member role; null = all roles
 
 CREATE TABLE ai_learn_journeys (
     id          SERIAL             PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE ai_learn_journeys (
     slug        VARCHAR            NOT NULL UNIQUE,
     description TEXT,
     cover_image VARCHAR,
-    role        ai_learn_role_enum NOT NULL,
+    role        ai_learn_role_enum,
     order_index SMALLINT           NOT NULL DEFAULT 0,
     status      status_enum        NOT NULL DEFAULT 'active',
     created_at  TIMESTAMPTZ        NOT NULL DEFAULT NOW(),
@@ -56,7 +56,7 @@ CREATE TABLE ai_learn_journeys (
 
 -- Stores AI learning lessons/articles
 -- level: 1 = Foundations, 2 = Techniques, 3 = Advanced, 4 = Strategic
--- journey_id: optional grouping under a specific journey
+-- journey_id: required — every lesson must belong to a journey
 
 CREATE TABLE ai_learn_lessons (
     id          SERIAL                 PRIMARY KEY,
@@ -69,7 +69,7 @@ CREATE TABLE ai_learn_lessons (
     xp_reward   SMALLINT               NOT NULL DEFAULT 10,
     status      ai_learn_lesson_status NOT NULL DEFAULT 'draft',
     order_index SMALLINT               NOT NULL DEFAULT 0,
-    journey_id  INTEGER,
+    journey_id  INTEGER                NOT NULL,
     created_at  TIMESTAMPTZ            NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMPTZ            NOT NULL DEFAULT NOW()
 );
