@@ -3,12 +3,15 @@ import { markdownToHtml } from "@/lib/markdown-to-html";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { AICompetitorGrader_MarketMaturity } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { BarChart } from "@mui/x-charts";
+import { ChevronLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import XYMapLMS, { CompetitorList } from "../charts/XYMapLMS";
 import AICitationLMS, { SourcesArticle } from "../items/AICitationLMS";
 import AICompetitorItemLMS from "../items/AICompetitorItemLMS";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import PageContainerDashboard from "../pages/PageContainerDashboard";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
@@ -115,24 +118,46 @@ export default function CompetitorGradingReportLMS(
   const growthOpportunity = markdownToHtml(props.growthOpportunity);
   const maturity = maturityAttributes[props.industryMarketMaturity];
 
+  const mobileHeader = (
+    <div className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 bg-dashboard-bg border-b border-dashboard-border">
+      <Link href="/ai" className="flex items-center justify-center size-8 rounded-full hover:bg-card-inside-bg transition-colors">
+        <ChevronLeft className="size-5" />
+      </Link>
+      <h1 className="font-brand font-bold text-lg truncate">Competitor Grading</h1>
+    </div>
+  );
+
   if (!props.resultStatus) {
     return (
-      <PageContainerDashboard className="pb-8 items-center justify-center">
-        <HeaderAIResultDetailsLMS
-          sessionUserName={props.sessionUserName}
-          sessionUserAvatar={props.sessionUserAvatar}
-          sessionUserRole={props.sessionUserRole}
-          headerTitle="Competitor Grading Result"
-          headerResultName={props.resultName}
-        />
-        <div className="flex flex-col w-full items-center">
-          <LoadingAIGeneratingResult />
+      <>
+        <PageContainerDashboard className="pb-8 items-center justify-center">
+          <HeaderAIResultDetailsLMS
+            sessionUserName={props.sessionUserName}
+            sessionUserAvatar={props.sessionUserAvatar}
+            sessionUserRole={props.sessionUserRole}
+            headerTitle="Competitor Grading Result"
+            headerResultName={props.resultName}
+          />
+          <div className="flex flex-col w-full items-center">
+            <LoadingAIGeneratingResult />
+          </div>
+        </PageContainerDashboard>
+        <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+          {mobileHeader}
+          <div className="flex flex-col items-center justify-center flex-1 gap-3 p-8 text-center">
+            <Loader2 className="size-8 animate-spin text-tertiary" />
+            <p className="font-bodycopy font-medium text-emphasis text-sm">
+              Generating your report...
+            </p>
+          </div>
+          <BottomNavLMS />
         </div>
-      </PageContainerDashboard>
+      </>
     );
   }
 
   return (
+    <>
     <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderAIResultDetailsLMS
         sessionUserName={props.sessionUserName}
@@ -247,5 +272,69 @@ export default function CompetitorGradingReportLMS(
         </div>
       </div>
     </PageContainerDashboard>
+
+    {/* Mobile */}
+    <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+      {mobileHeader}
+      <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-2 p-4 bg-card-bg border border-dashboard-border rounded-lg">
+          <div className="flex flex-col">
+            <h3 className="font-bodycopy font-bold text-base">Proyeksi Pertumbuhan Tahunan Industri (CAGR)</h3>
+            <p className="text-sm text-emphasis font-bodycopy font-medium">dalam persen (%)</p>
+          </div>
+          <div className="w-full overflow-x-auto">
+            <BarChart
+              xAxis={[{ data: ["2024", "2025", "2026", "2027", "2028"] }]}
+              series={[{ data: props.industryCAGRValue }]}
+              height={240}
+            />
+          </div>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: industryCAGRReason }} />
+        </div>
+        <div className={`flex flex-col gap-3 p-4 bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg font-bodycopy dark:from-sevenpreneur-blue-midnight/50`}>
+          <h3 className="text-base font-bold">Fase Perkembangan Industri</h3>
+          <h4 className={`font-brand font-bold text-2xl ${maturity.color}`}>{maturity.label} {maturity.icon}</h4>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: industryMarketMaturityReason }} />
+        </div>
+        <div className="flex flex-col gap-3 p-4 bg-card-bg border border-dashboard-border rounded-lg">
+          <h3 className="text-base font-bold font-bodycopy">Kompetitor Utama</h3>
+          <div className="flex flex-col gap-2">
+            {props.competitorList
+              .sort((a, b) => b.market_score - a.market_score)
+              .map((item, index) => (
+                <AICompetitorItemLMS
+                  key={item.name}
+                  leaderboardIndex={index + 1}
+                  competitorName={item.name}
+                  competitorURL={item.company_url}
+                  competitorScore={item.market_score}
+                  competitorKeyStrength={item.key_strength}
+                />
+              ))}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 p-4 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Lanskap Persaingan Industri</h3>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: industryCurrentCondition }} />
+        </div>
+        <div className="flex flex-col gap-2 p-4 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Celah Kompetitif</h3>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: growthOpportunity }} />
+        </div>
+        <AICitationLMS sources={props.sources} confidenceLevel={props.confidenceLevel} />
+        <XYMapLMS
+          competitorList={props.competitorList}
+          productName={props.productName}
+          productXPosition={props.productXPosition}
+          productYPosition={props.productYPosition}
+          xLeftAttribute={props.xLeftAttribute}
+          xRightAttribute={props.xRightAttribute}
+          yTopAttribute={props.yTopAttribute}
+          yBottomAttribute={props.yBottomAttribute}
+        />
+      </div>
+      <BottomNavLMS />
+    </div>
+    </>
   );
 }

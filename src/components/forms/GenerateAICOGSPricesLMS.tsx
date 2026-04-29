@@ -7,8 +7,9 @@ import {
 import { findIncompleteCosts } from "@/lib/array";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { AICOGSStructure_ProductCategory } from "@/trpc/routers/ai_tool/enum.ai_tool";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -19,8 +20,9 @@ import InputLMS from "../fields/InputLMS";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import RadioBoxLMS from "../fields/RadioBoxLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
-import PageContainerDashboard from "../pages/PageContainerDashboard";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import AICostListStepperLMS, {
   CostListForm,
 } from "../steppers/AICostListStepperLMS";
@@ -290,8 +292,53 @@ export default function GenerateAICOGSPricesLMS(
     }
   };
 
+  const analyzeButton = (
+    <AppButton
+      variant="primary"
+      type="button"
+      size="small"
+      onClick={handleAICOGSStructure}
+      disabled={isGeneratingCosts}
+    >
+      {isGeneratingCosts ? (
+        <>
+          <Loader2 className="size-5 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        <>Analisis COGS dengan AI</>
+      )}
+    </AppButton>
+  );
+
+  const submitButton = (
+    <AppButton className="w-fit" type="submit" disabled={isGeneratingContents}>
+      {isGeneratingContents ? (
+        <>
+          <Loader2 className="size-5 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        <>
+          Generate Insight
+          <div className="flex w-7">
+            <Image
+              className="object-cover w-full h-full"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
+              alt="AI Icon"
+              height={100}
+              width={100}
+            />
+          </div>
+        </>
+      )}
+    </AppButton>
+  );
+
   return (
-    <PageContainerDashboard className="pb-8 items-center justify-center">
+    <>
+      {/* Desktop */}
+      <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderGenerateAIToolLMS
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
@@ -446,33 +493,7 @@ export default function GenerateAICOGSPricesLMS(
                 onInputChange={handleInputChange("productionPerMonth")}
               />
             </section>
-            <AppButton
-              className="w-fit"
-              type="submit"
-              disabled={isGeneratingContents}
-            >
-              {isGeneratingContents ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Please wait...
-                </>
-              ) : (
-                <>
-                  Generate Insight
-                  <div className="flex w-7">
-                    <Image
-                      className="object-cover w-full h-full"
-                      src={
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
-                      }
-                      alt="AI Icon"
-                      height={100}
-                      width={100}
-                    />
-                  </div>
-                </>
-              )}
-            </AppButton>
+            {submitButton}
           </form>
         </main>
         <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
@@ -485,5 +506,134 @@ export default function GenerateAICOGSPricesLMS(
         </aside>
       </div>
     </PageContainerDashboard>
+
+      {/* Mobile */}
+      <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+        <div className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 bg-dashboard-bg border-b border-dashboard-border">
+          <Link href="/ai" className="flex items-center justify-center size-8 rounded-full hover:bg-card-inside-bg transition-colors">
+            <ChevronLeft className="size-5" />
+          </Link>
+          <h1 className="font-brand font-bold text-lg">COGS &amp; Prices Calculator</h1>
+        </div>
+        <form
+          className="flex flex-col gap-4 p-4 items-end"
+          onSubmit={handleAIGenerate}
+        >
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <h2 className="section-title font-bold font-bodycopy">
+              Product Information
+            </h2>
+            <InputLMS
+              inputId="product-name-m"
+              inputName="Apa nama produk Anda?"
+              inputType="text"
+              inputPlaceholder="e.g. NutriBlend Smoothie"
+              value={formData.productName}
+              onInputChange={handleInputChange("productName")}
+              required
+            />
+            <TextAreaLMS
+              textAreaId="product-description-m"
+              textAreaName="Deskripsikan produk Anda (fitur/ukuran/kapasitas)"
+              textAreaPlaceholder="e.g. Smoothie ukuran 500ml rasa mangga."
+              characterLength={4000}
+              value={formData.productDescription}
+              onTextAreaChange={handleInputChange("productDescription")}
+              required
+            />
+            <div className="product-category flex flex-col gap-2">
+              <h3 className="text-[15px] text-sb-text-strong font-bodycopy font-semibold">
+                Pilih Kategori Produk
+                <span className="label-required text-destructive">*</span>
+              </h3>
+              <div className="grid grid-cols-2 gap-2">
+                <RadioBoxLMS
+                  radioName="Manufaktur"
+                  radioDescription="Produk yang dihasilkan melalui tahapan produksi"
+                  value={AICOGSStructure_ProductCategory.MANUFAKTUR}
+                  selectedValue={formData.productCategory ?? ""}
+                  onChange={handleInputChange("productCategory")}
+                />
+                <RadioBoxLMS
+                  radioName="Retail"
+                  radioDescription="Produk yang dijual sebagai barang siap konsumsi atau penggunaan."
+                  value={AICOGSStructure_ProductCategory.RETAIL}
+                  selectedValue={formData.productCategory ?? ""}
+                  onChange={handleInputChange("productCategory")}
+                />
+                <RadioBoxLMS
+                  radioName="F&B"
+                  radioDescription="Produk makanan atau minuman yang diolah dan disajikan untuk konsumsi"
+                  value={AICOGSStructure_ProductCategory.FNB}
+                  selectedValue={formData.productCategory ?? ""}
+                  onChange={handleInputChange("productCategory")}
+                />
+                <RadioBoxLMS
+                  radioName="Jasa Konsultan"
+                  radioDescription="Layanan yang memberikan analisis atau rekomendasi berbasis keahlian khusus"
+                  value={AICOGSStructure_ProductCategory.JASA_KONSULTAN}
+                  selectedValue={formData.productCategory ?? ""}
+                  onChange={handleInputChange("productCategory")}
+                />
+                <RadioBoxLMS
+                  radioName="Jasa Layanan"
+                  radioDescription="Layanan untuk memenuhi kebutuhan personal, rumah tangga, atau bisnis."
+                  value={AICOGSStructure_ProductCategory.JASA_LAYANAN}
+                  selectedValue={formData.productCategory ?? ""}
+                  onChange={handleInputChange("productCategory")}
+                />
+                <RadioBoxLMS
+                  radioName="Software / SaaS"
+                  radioDescription="Aplikasi, platform, atau sistem berbasis teknologi."
+                  value={AICOGSStructure_ProductCategory.SOFTWARE}
+                  selectedValue={formData.productCategory ?? ""}
+                  onChange={handleInputChange("productCategory")}
+                />
+              </div>
+            </div>
+            {analyzeButton}
+          </section>
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <div className="section-attributes flex flex-col">
+              <h2 className="section-title font-bold font-bodycopy">
+                Variable Cost
+              </h2>
+              <p className="section-description text-[15px] text-emphasis font-medium font-bodycopy">
+                Variable cost adalah biaya yang melekat pada setiap unit produk
+                seperti bahan baku atau komponen produk.
+              </p>
+            </div>
+            <AICostListStepperLMS costs={variableCost} setCosts={setVariableCost} />
+          </section>
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <div className="section-attributes flex flex-col">
+              <h2 className="section-title font-bold font-bodycopy">
+                Fixed Cost
+              </h2>
+              <p className="section-description text-[15px] text-emphasis font-medium font-bodycopy">
+                Fixed cost adalah biaya tetap yang tidak terikat pada jumlah
+                produk.
+              </p>
+            </div>
+            <AICostListStepperLMS costs={fixedCost} setCosts={setFixedCost} />
+          </section>
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <h2 className="section-title font-bold font-bodycopy">
+              Volume Production per Month
+            </h2>
+            <InputNumberSVP
+              inputId="production-per-month-m"
+              inputName={productionQuestion}
+              inputPlaceholder="e.g. 1000"
+              inputConfig="numeric"
+              value={String(formData.productionPerMonth)}
+              onInputChange={handleInputChange("productionPerMonth")}
+            />
+          </section>
+          {submitButton}
+        </form>
+        <BottomNavLMS />
+      </div>
+    </>
   );
 }

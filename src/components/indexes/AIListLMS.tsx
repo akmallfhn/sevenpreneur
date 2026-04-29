@@ -10,6 +10,7 @@ import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import PageContainerDashboard from "../pages/PageContainerDashboard";
 import AppPageState from "../states/AppPageState";
 import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
+import AIListMobileLMS from "./AIListMobileLMS";
 
 export interface AIList {
   id: number;
@@ -49,7 +50,15 @@ export default function AIListLMS({
 
   // Render Mobile
   if (isMobile) {
-    return <AppPageState variant="ONLY_MOBILE" />;
+    return (
+      <AIListMobileLMS
+        sessionUserName={sessionUserName}
+        sessionUserAvatar={sessionUserAvatar}
+        sessionUserRole={sessionUserRole}
+        hasAIAccess={hasAIAccess}
+        aiList={aiList}
+      />
+    );
   }
 
   return (

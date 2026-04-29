@@ -1,7 +1,8 @@
 "use client";
 import { GenerateAICompetitorGrading } from "@/lib/actions";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
@@ -11,8 +12,9 @@ import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
 import SelectLMS from "../fields/SelectLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
-import PageContainerDashboard from "../pages/PageContainerDashboard";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 
 interface IndustryList {
   name: string;
@@ -99,106 +101,129 @@ export default function GenerateAICompetitorGraderLMS(
     }
   };
 
-  return (
-    <PageContainerDashboard className="pb-8 items-center justify-center">
-      <HeaderGenerateAIToolLMS
-        sessionUserRole={props.sessionUserRole}
-        sessionUserName={props.sessionUserName}
-        sessionUserAvatar={props.sessionUserAvatar}
-        pageName="Competitor Grader"
-        headerTitle="Competitor Grader"
+  const formSections = (
+    <section
+      id="business-profile"
+      className="business-profile bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg"
+    >
+      <h2 className="section-title font-bold font-bodycopy">
+        Business Profile
+      </h2>
+      <InputLMS
+        inputId="product-name"
+        inputName="Apa nama produk atau layanan Anda?"
+        inputType="text"
+        inputPlaceholder="e.g. NutriBlend Smoothie"
+        value={formData.productName}
+        onInputChange={handleInputChange("productName")}
+        required
       />
-      <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
-        <main className="main-contents flex-2 w-full">
-          <form
-            className="form-generate-ai w-full flex flex-col gap-4 items-end"
-            onSubmit={handleAIGenerate}
-          >
-            <section
-              id="business-profile"
-              className="business-profile bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
-            >
-              <h2 className="section-title font-bold font-bodycopy">
-                Business Profile
-              </h2>
-              <InputLMS
-                inputId="product-name"
-                inputName="Apa nama produk atau layanan Anda?"
-                inputType="text"
-                inputPlaceholder="e.g. NutriBlend Smoothie"
-                value={formData.productName}
-                onInputChange={handleInputChange("productName")}
-                required
-              />
-              <TextAreaLMS
-                textAreaId="product-description"
-                textAreaName="Deskripsikan produk/layanan Anda dan jelaskan model bisnisnya"
-                textAreaPlaceholder="e.g. Smoothie untuk membantu diet dengan sistem subscription."
-                characterLength={4000}
-                value={formData.productDescription}
-                onTextAreaChange={handleInputChange("productDescription")}
-                required
-              />
-              <SelectLMS
-                selectId="product-industry"
-                selectName="Apa kategori industri yang paling sesuai dengan bisnis Anda?"
-                selectPlaceholder="Pilih kategori industri"
-                value={formData.productIndustry}
-                onChange={handleInputChange("productIndustry")}
-                required
-                options={props.indutryList.map((item) => ({
-                  label: item.name,
-                  value: item.name,
-                }))}
-              />
-              <InputLMS
-                inputId="product-country"
-                inputName="Di pasar/wilayah mana kompetisi bisnis berlangsung?"
-                inputType="text"
-                inputPlaceholder="e.g. Greater Sumatera, Indonesia"
-                value={formData.productCountry}
-                onInputChange={handleInputChange("productCountry")}
-                required
-              />
-            </section>
-            <AppButton
-              className="w-fit"
-              type="submit"
-              disabled={isGeneratingContents}
-            >
-              {isGeneratingContents ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Please wait...
-                </>
-              ) : (
-                <>
-                  Generate Insight
-                  <div className="flex w-7">
-                    <Image
-                      className="object-cover w-full h-full"
-                      src={
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
-                      }
-                      alt="AI Icon"
-                      height={100}
-                      width={100}
-                    />
-                  </div>
-                </>
-              )}
-            </AppButton>
-          </form>
-        </main>
-        <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
-          <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
-            <AppCalloutBox
-              calloutTitle="Tips"
-              calloutContent="Competitor Grader membantu memahami siapa kompetitor terdekat, bagaimana posisi bisnis di pasar, dan strategi yang dapat memperkuat daya saing bisnis Anda."
+      <TextAreaLMS
+        textAreaId="product-description"
+        textAreaName="Deskripsikan produk/layanan Anda dan jelaskan model bisnisnya"
+        textAreaPlaceholder="e.g. Smoothie untuk membantu diet dengan sistem subscription."
+        characterLength={4000}
+        value={formData.productDescription}
+        onTextAreaChange={handleInputChange("productDescription")}
+        required
+      />
+      <SelectLMS
+        selectId="product-industry"
+        selectName="Apa kategori industri yang paling sesuai dengan bisnis Anda?"
+        selectPlaceholder="Pilih kategori industri"
+        value={formData.productIndustry}
+        onChange={handleInputChange("productIndustry")}
+        required
+        options={props.indutryList.map((item) => ({
+          label: item.name,
+          value: item.name,
+        }))}
+      />
+      <InputLMS
+        inputId="product-country"
+        inputName="Di pasar/wilayah mana kompetisi bisnis berlangsung?"
+        inputType="text"
+        inputPlaceholder="e.g. Greater Sumatera, Indonesia"
+        value={formData.productCountry}
+        onInputChange={handleInputChange("productCountry")}
+        required
+      />
+    </section>
+  );
+
+  const submitButton = (
+    <AppButton className="w-fit" type="submit" disabled={isGeneratingContents}>
+      {isGeneratingContents ? (
+        <>
+          <Loader2 className="size-5 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        <>
+          Generate Insight
+          <div className="flex w-7">
+            <Image
+              className="object-cover w-full h-full"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
+              alt="AI Icon"
+              height={100}
+              width={100}
             />
           </div>
-        </aside>
+        </>
+      )}
+    </AppButton>
+  );
+
+  return (
+    <>
+      {/* Desktop */}
+      <PageContainerDashboard className="pb-8 items-center justify-center">
+        <HeaderGenerateAIToolLMS
+          sessionUserRole={props.sessionUserRole}
+          sessionUserName={props.sessionUserName}
+          sessionUserAvatar={props.sessionUserAvatar}
+          pageName="Competitor Grader"
+          headerTitle="Competitor Grader"
+        />
+        <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
+          <main className="main-contents flex-2 w-full">
+            <form
+              className="form-generate-ai w-full flex flex-col gap-4 items-end"
+              onSubmit={handleAIGenerate}
+            >
+              {formSections}
+              {submitButton}
+            </form>
+          </main>
+          <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
+            <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
+              <AppCalloutBox
+                calloutTitle="Tips"
+                calloutContent="Competitor Grader membantu memahami siapa kompetitor terdekat, bagaimana posisi bisnis di pasar, dan strategi yang dapat memperkuat daya saing bisnis Anda."
+              />
+            </div>
+          </aside>
+        </div>
+      </PageContainerDashboard>
+
+      {/* Mobile */}
+      <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+        <div className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 bg-dashboard-bg border-b border-dashboard-border">
+          <Link href="/ai" className="flex items-center justify-center size-8 rounded-full hover:bg-card-inside-bg transition-colors">
+            <ChevronLeft className="size-5" />
+          </Link>
+          <h1 className="font-brand font-bold text-lg">Competitor Grader</h1>
+        </div>
+        <form
+          className="flex flex-col gap-4 p-4 items-end"
+          onSubmit={handleAIGenerate}
+        >
+          {formSections}
+          {submitButton}
+        </form>
+        <BottomNavLMS />
       </div>
-    </PageContainerDashboard>
+    </>
   );
 }

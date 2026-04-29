@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import ChatBubbleLMS from "./ChatBubbleLMS";
 import ChatResponseMarkdown from "./ChatResponseMarkdown";
 import ChatSubmitterLMS from "./ChatSubmitterLMS";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import PageContainerDashboard from "../pages/PageContainerDashboard";
 
 interface Chats {
@@ -39,31 +40,28 @@ export default function ChatConversationLMS(props: ChatConversationLMSProps) {
   const [generatingAI, setGeneratingAI] = useState(false);
   const [chats, setChats] = useState<Chats[]>(props.conversationChats);
   const conversationRef = useRef<HTMLDivElement | null>(null);
+  const mobileConversationRef = useRef<HTMLDivElement | null>(null);
   const [title, setTitle] = useState("");
   const newConvId = useRef<string | null>(null);
 
+  const scrollAllToBottom = (behavior: ScrollBehavior) => {
+    [conversationRef, mobileConversationRef].forEach((ref) => {
+      if (ref.current) {
+        ref.current.scrollTo({ top: ref.current.scrollHeight, behavior });
+      }
+    });
+  };
+
   // Auto-scrolls to the bottom whenever new chats arrive.
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (conversationRef.current) {
-        conversationRef.current.scrollTo({
-          top: conversationRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      }
-    }, 50);
+    const timeout = setTimeout(() => scrollAllToBottom("smooth"), 50);
     return () => clearTimeout(timeout);
-  }, [chats]);
+  }, [chats]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Automatically scrolls to the bottom when the page first loads.
   useLayoutEffect(() => {
-    if (conversationRef.current) {
-      conversationRef.current.scrollTo({
-        top: conversationRef.current.scrollHeight,
-        behavior: "instant",
-      });
-    }
-  }, []);
+    scrollAllToBottom("instant");
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function appendToLastAssistant(text: string) {
     setChats((prev) => {
@@ -200,45 +198,76 @@ export default function ChatConversationLMS(props: ChatConversationLMSProps) {
     );
   };
 
-  return (
-    <PageContainerDashboard
-      ref={conversationRef}
-      className="relative h-screen overflow-y-auto"
-    >
-      <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-dashboard-bg border-b border-dashboard-border text-foreground z-10">
-        <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold">
-          <MessageCircleMore className="size-5" />
-          {props.conversationName ? props.conversationName : title}
-        </div>
+  const conversationName = props.conversationName || title;
+
+  const chatMessages = chats
+    .sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
+    .map((post, index) => (
+      <div
+        key={index}
+        className={`chat-wrapper flex w-full ${
+          post.role === "USER" ? "justify-end" : "justify-start"
+        }`}
+      >
+        {post.role === "USER" ? (
+          <ChatBubbleLMS chatMessage={post.message} />
+        ) : (
+          <ChatResponseMarkdown
+            chatMessage={post.message}
+            isGeneratingMessage={generatingAI}
+          />
+        )}
       </div>
-      <div className="conversation-page relative flex flex-col w-full max-w-[768px] mx-auto">
-        <div className="conversation w-full flex flex-col pt-5 mb-52">
-          {chats
-            .sort(
-              (a, b) =>
-                new Date(a.created_at).getTime() -
-                new Date(b.created_at).getTime()
-            )
-            .map((post, index) => (
-              <div
-                key={index}
-                className={`chat-wrapper flex w-full ${
-                  post.role === "USER" ? "justify-end" : "justify-start"
-                }`}
-              >
-                {post.role === "USER" ? (
-                  <ChatBubbleLMS chatMessage={post.message} />
-                ) : (
-                  <ChatResponseMarkdown
-                    chatMessage={post.message}
-                    isGeneratingMessage={generatingAI}
-                  />
-                )}
-              </div>
-            ))}
+    ));
+
+  return (
+    <>
+      {/* Desktop */}
+      <PageContainerDashboard
+        ref={conversationRef}
+        className="relative h-screen overflow-y-auto"
+      >
+        <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-dashboard-bg border-b border-dashboard-border text-foreground z-10">
+          <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold">
+            <MessageCircleMore className="size-5" />
+            {conversationName}
+          </div>
+        </div>
+        <div className="conversation-page relative flex flex-col w-full max-w-[768px] mx-auto">
+          <div className="conversation w-full flex flex-col pt-5 mb-52">
+            {chatMessages}
+          </div>
+          <form
+            className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-dashboard-bg items-center justify-center gap-6 rounded-t-xl z-10"
+            onSubmit={handleSubmit}
+          >
+            <ChatSubmitterLMS
+              value={textValue}
+              onTextAreaChange={(value) => setTextValue(value)}
+              onSubmit={handleSubmit}
+              isLoadingSubmit={generatingAI}
+            />
+          </form>
+        </div>
+      </PageContainerDashboard>
+
+      {/* Mobile */}
+      <div
+        ref={mobileConversationRef}
+        className="root-page relative flex flex-col w-full h-screen overflow-y-auto lg:hidden"
+      >
+        <div className="header-conversation sticky flex w-full items-center gap-2 top-0 px-4 py-3 bg-dashboard-bg border-b border-dashboard-border text-foreground z-10 font-bodycopy font-semibold">
+          <MessageCircleMore className="size-5 shrink-0" />
+          <span className="truncate">{conversationName}</span>
+        </div>
+        <div className="conversation w-full flex flex-col pt-4 px-4 mb-[9rem]">
+          {chatMessages}
         </div>
         <form
-          className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-dashboard-bg items-center justify-center gap-6 rounded-t-xl z-10"
+          className="form-generate-chat fixed flex flex-col w-full bottom-20 px-4 pb-3 pt-2 bg-dashboard-bg border-t border-dashboard-border z-10"
           onSubmit={handleSubmit}
         >
           <ChatSubmitterLMS
@@ -248,7 +277,8 @@ export default function ChatConversationLMS(props: ChatConversationLMSProps) {
             isLoadingSubmit={generatingAI}
           />
         </form>
+        <BottomNavLMS />
       </div>
-    </PageContainerDashboard>
+    </>
   );
 }

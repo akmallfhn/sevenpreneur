@@ -255,17 +255,17 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
       onClick={props.onClose}
     >
       <div
-        className="relative bg-white w-full max-w-[820px] max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col sm:flex-row"
+        className="relative bg-white dark:bg-card-bg w-full max-w-[820px] max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col sm:flex-row"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ── Sidebar ────────────────────────────────────── */}
-        <div className="bg-[#F5F3FF] sm:w-[220px] sm:shrink-0 flex flex-col p-5 gap-5 sm:overflow-y-auto">
+        <div className="bg-sb-bg sm:w-[220px] sm:shrink-0 flex flex-col p-5 gap-5 sm:overflow-y-auto">
           {/* Header */}
           <div>
             <p className="text-[10px] font-bold font-bodycopy uppercase tracking-widest text-[#7C3AED]/60 mb-1">
               Checkout & Feedback
             </p>
-            <p className="text-sm font-bold font-bodycopy text-[#111]">
+            <p className="text-sm font-bold font-bodycopy text-[#111] dark:text-foreground">
               Isi semua pertanyaan di bawah ini
             </p>
           </div>
@@ -280,7 +280,7 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
                     <Icon className="size-4 text-[#7C3AED]" />
                   </div>
                   <div>
-                    <p className="text-[13px] font-semibold font-bodycopy text-[#111] leading-tight">
+                    <p className="text-[13px] font-semibold font-bodycopy text-[#111] dark:text-foreground leading-tight">
                       {section.title}
                     </p>
                     <p className="text-[11px] font-bodycopy text-emphasis mt-0.5 leading-tight">
@@ -294,9 +294,9 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
 
           {/* Motivational card — desktop only */}
           <div className="hidden sm:block mt-auto">
-            <div className="bg-white rounded-xl p-3.5 border border-[#EDE9FE]">
+            <div className="bg-white dark:bg-card-inside-bg rounded-xl p-3.5 border border-[#EDE9FE] dark:border-dashboard-border">
               <p className="text-xl mb-1">⭐</p>
-              <p className="text-xs font-bold font-bodycopy text-[#111]">
+              <p className="text-xs font-bold font-bodycopy text-[#111] dark:text-foreground">
                 Feedback-mu berarti!
               </p>
               <p className="text-[11px] text-emphasis font-bodycopy mt-1 leading-relaxed">
@@ -312,13 +312,13 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
           className="flex flex-col flex-1 overflow-hidden"
         >
           {/* Header */}
-          <div className="border-b px-5 py-4 flex items-center justify-between shrink-0">
+          <div className="border-b border-dashboard-border px-5 py-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className="size-9 rounded-lg bg-[#FEF9C3] flex items-center justify-center shrink-0">
+              <div className="size-9 rounded-lg bg-[#FEF9C3] dark:bg-yellow-950 flex items-center justify-center shrink-0">
                 <Star className="size-5 fill-[#FFB21D] stroke-[#FFB21D]" />
               </div>
               <div>
-                <h2 className="font-bodycopy font-bold text-[15px] text-[#111]">
+                <h2 className="font-bodycopy font-bold text-[15px] text-[#111] dark:text-foreground">
                   Checkout &amp; Feedback
                 </h2>
                 <p className="font-bodycopy text-[12px] text-emphasis">
@@ -329,7 +329,7 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
             <button
               type="button"
               onClick={props.onClose}
-              className="text-emphasis hover:text-black transition-colors ml-4 shrink-0"
+              className="text-emphasis hover:text-foreground transition-colors ml-4 shrink-0"
             >
               <X className="size-5" />
             </button>
@@ -342,12 +342,12 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
               return (
                 <div key={section.title} className="flex flex-col gap-3">
                   {/* Section header */}
-                  <div className="flex items-center gap-3 bg-[#F5F3FF] rounded-xl p-4">
+                  <div className="flex items-center gap-3 bg-[#F5F3FF] dark:bg-[#1a1640] rounded-xl p-4">
                     <div className="size-10 rounded-full bg-[#7C3AED]/10 flex items-center justify-center shrink-0">
                       <Icon className="size-5 text-[#7C3AED]" />
                     </div>
                     <div>
-                      <h3 className="font-bold font-bodycopy text-[#111] text-sm">
+                      <h3 className="font-bold font-bodycopy text-[#111] dark:text-foreground text-sm">
                         {section.title}
                       </h3>
                       <p className="text-[12px] text-emphasis font-bodycopy">
@@ -362,13 +362,13 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
                       {section.likertFields.map((field, index) => (
                         <div
                           key={field.key}
-                          className="bg-white border rounded-xl p-4 flex flex-col gap-3"
+                          className="bg-white dark:bg-card-inside-bg border border-gray-200 dark:border-dashboard-border rounded-xl p-4 flex flex-col gap-3"
                         >
                           <div className="flex items-start gap-3">
                             <span className="size-6 rounded-full bg-[#7C3AED] text-white text-[10px] font-bold font-bodycopy flex items-center justify-center shrink-0 mt-0.5">
                               {String(index + 1).padStart(2, "0")}
                             </span>
-                            <p className="text-sm font-medium font-bodycopy text-[#111]">
+                            <p className="text-sm font-medium font-bodycopy text-[#111] dark:text-foreground">
                               {field.label}
                             </p>
                           </div>
@@ -406,7 +406,7 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
           </div>
 
           {/* Footer */}
-          <div className="border-t px-5 py-3.5 flex items-center justify-between shrink-0 bg-white">
+          <div className="border-t border-dashboard-border px-5 py-3.5 flex items-center justify-between shrink-0 bg-white dark:bg-card-bg">
             <AppButton
               type="button"
               variant="destructiveSoft"

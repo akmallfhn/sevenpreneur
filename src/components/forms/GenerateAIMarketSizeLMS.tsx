@@ -5,8 +5,9 @@ import {
   AIMarketSize_CustomerType,
   AIMarketSize_ProductType,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
@@ -17,8 +18,9 @@ import InputLMS from "../fields/InputLMS";
 import SelectLMS from "../fields/SelectLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import AppTableofContents from "../navigations/AppTableofContents";
-import PageContainerDashboard from "../pages/PageContainerDashboard";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 
 interface GenerateAIMarketSizeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -150,8 +152,34 @@ export default function GenerateAIMarketSizeLMS(
     }
   };
 
+  const submitButton = (
+    <AppButton className="w-fit" type="submit" disabled={isGeneratingContents}>
+      {isGeneratingContents ? (
+        <>
+          <Loader2 className="size-5 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        <>
+          Generate Insight
+          <div className="flex w-7">
+            <Image
+              className="object-cover w-full h-full"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
+              alt="AI Icon"
+              height={100}
+              width={100}
+            />
+          </div>
+        </>
+      )}
+    </AppButton>
+  );
+
   return (
-    <PageContainerDashboard className="pb-8 items-center justify-center">
+    <>
+      {/* Desktop */}
+      <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderGenerateAIToolLMS
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
@@ -279,33 +307,7 @@ export default function GenerateAIMarketSizeLMS(
                 ))}
               </div>
             </section>
-            <AppButton
-              className="w-fit"
-              type="submit"
-              disabled={isGeneratingContents}
-            >
-              {isGeneratingContents ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Please wait...
-                </>
-              ) : (
-                <>
-                  Generate Insight
-                  <div className="flex w-7">
-                    <Image
-                      className="object-cover w-full h-full"
-                      src={
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
-                      }
-                      alt="AI Icon"
-                      height={100}
-                      width={100}
-                    />
-                  </div>
-                </>
-              )}
-            </AppButton>
+            {submitButton}
           </form>
         </main>
         <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
@@ -316,13 +318,114 @@ export default function GenerateAIMarketSizeLMS(
             />
             <AppCalloutBox
               calloutTitle="Tips"
-              calloutContent="Gunakan Market Size Intelligence untuk memahami potensi pasar lewat
-          analisis TAM, SAM, dan SOM. Fitur ini membantu mengukur peluang
-          bisnis, bukan menilai daya beli konsumen."
+              calloutContent="Gunakan Market Size Intelligence untuk memahami potensi pasar lewat analisis TAM, SAM, dan SOM. Fitur ini membantu mengukur peluang bisnis, bukan menilai daya beli konsumen."
             />
           </div>
         </aside>
       </div>
     </PageContainerDashboard>
+
+      {/* Mobile */}
+      <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+        <div className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 bg-dashboard-bg border-b border-dashboard-border">
+          <Link href="/ai" className="flex items-center justify-center size-8 rounded-full hover:bg-card-inside-bg transition-colors">
+            <ChevronLeft className="size-5" />
+          </Link>
+          <h1 className="font-brand font-bold text-lg">Market Size</h1>
+        </div>
+        <form
+          className="flex flex-col gap-4 p-4 items-end"
+          onSubmit={handleAIGenerate}
+        >
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <h2 className="section-title font-bold font-bodycopy">
+              {tableofContents[0].name}
+            </h2>
+            <InputLMS
+              inputId="product-name"
+              inputName="Apa nama produk atau layanan Anda?"
+              inputType="text"
+              inputPlaceholder="e.g. NutriBlend Smoothie"
+              value={formData.productName}
+              onInputChange={handleInputChange("productName")}
+              required
+            />
+            <TextAreaLMS
+              textAreaId="product-description"
+              textAreaName="Deskripsikan produk/layanan Anda"
+              textAreaPlaceholder="e.g. Smoothie sehat dengan kandungan nutrisi seimbang untuk diet"
+              characterLength={4000}
+              value={formData.productDescription}
+              onTextAreaChange={handleInputChange("productDescription")}
+              required
+            />
+            <SelectLMS
+              selectId="product-type"
+              selectName="Apa jenis produk atau layanan Anda?"
+              selectPlaceholder="Pilih jenis produk"
+              value={formData.productType}
+              onChange={handleInputChange("productType")}
+              required
+              options={[
+                { label: "Fisik — produk atau layanan nyata yang bisa disentuh, dinikmati, atau dikonsumsi", value: AIMarketSize_ProductType.FISIK },
+                { label: "Digital — produk atau layanan non-fisik yang diakses secara online", value: AIMarketSize_ProductType.DIGITAL },
+                { label: "Gabungan — kombinasi fisik dan digital", value: AIMarketSize_ProductType.HYBRID },
+              ]}
+            />
+          </section>
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <h2 className="section-title font-bold font-bodycopy">
+              {tableofContents[1].name}
+            </h2>
+            <InputLMS
+              inputId="operating-area"
+              inputName="Dimana area produk/layanan dijual atau beroperasi?"
+              inputType="text"
+              inputPlaceholder="e.g. Bali, Vietnam, Southeast Asia"
+              value={formData.operatingArea}
+              onInputChange={handleInputChange("operatingArea")}
+              required
+            />
+            <SelectLMS
+              selectId="customer-type"
+              selectName="Siapa target pelanggan utama Anda?"
+              selectPlaceholder="Pilih type customer"
+              value={formData.customerType}
+              onChange={handleInputChange("customerType")}
+              required
+              options={[
+                { label: "B2C", value: AIMarketSize_CustomerType.B2C },
+                { label: "B2B", value: AIMarketSize_CustomerType.B2B },
+                { label: "Gabungan", value: AIMarketSize_CustomerType.HYBRID },
+              ]}
+            />
+          </section>
+          <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+            <h2 className="section-title font-bold font-bodycopy">
+              {tableofContents[2].name}
+            </h2>
+            <div className="sales-channel-options grid grid-cols-2 gap-y-4">
+              {salesChannelOptions.map((item, index) => (
+                <div
+                  className="checkbox-item flex gap-2 items-center font-bodycopy font-medium text-sm"
+                  key={index}
+                >
+                  <Checkbox
+                    checked={formData.salesChannel.includes(item)}
+                    onCheckedChange={(checked) =>
+                      handleSalesChannelChange(item, checked === true)
+                    }
+                    suppressHydrationWarning
+                  />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </section>
+          {submitButton}
+        </form>
+        <BottomNavLMS />
+      </div>
+    </>
   );
 }

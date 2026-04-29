@@ -6,6 +6,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import AppPageState from "../states/AppPageState";
 import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
+import LibraryMobileLMS from "./LibraryMobileLMS";
 import PageContainerDashboard from "./PageContainerDashboard";
 
 interface LibraryLMSProps extends AvatarBadgeLMSProps {
@@ -29,7 +30,15 @@ export default function LibraryLMS(props: LibraryLMSProps) {
   }, []);
 
   if (isMobile) {
-    return <AppPageState variant="ONLY_MOBILE" />;
+    return (
+      <LibraryMobileLMS
+        sessionUserName={props.sessionUserName}
+        sessionUserAvatar={props.sessionUserAvatar}
+        sessionUserRole={props.sessionUserRole}
+        templateList={props.templateList}
+        hasTemplateAccess={props.hasTemplateAccess}
+      />
+    );
   }
 
   return (

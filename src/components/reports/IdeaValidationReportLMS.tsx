@@ -6,12 +6,14 @@ import {
   AIIdeaValidation_ProblemFreq,
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { Gauge, gaugeClasses } from "@mui/x-charts";
-import { Minus, TrendingDown, TrendingUp } from "lucide-react";
+import { ChevronLeft, Loader2, Minus, TrendingDown, TrendingUp } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AICitationLMS, { SourcesArticle } from "../items/AICitationLMS";
 import AISegmentItemLMS from "../items/AISegmentItemLMS";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
 import PageContainerDashboard from "../pages/PageContainerDashboard";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
@@ -187,24 +189,46 @@ export default function IdeaValidationReportLMS(
     `${longevity.description} ${props.longevityReason}`
   );
 
+  const mobileHeader = (
+    <div className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 bg-dashboard-bg border-b border-dashboard-border">
+      <Link href="/ai" className="flex items-center justify-center size-8 rounded-full hover:bg-card-inside-bg transition-colors">
+        <ChevronLeft className="size-5" />
+      </Link>
+      <h1 className="font-brand font-bold text-lg truncate">Idea Validation</h1>
+    </div>
+  );
+
   if (!props.resultStatus) {
     return (
-      <PageContainerDashboard className="pb-8 items-center justify-center">
-        <HeaderAIResultDetailsLMS
-          sessionUserName={props.sessionUserName}
-          sessionUserAvatar={props.sessionUserAvatar}
-          sessionUserRole={props.sessionUserRole}
-          headerTitle="Idea Validation Result"
-          headerResultName={props.resultName}
-        />
-        <div className="flex flex-col w-full items-center">
-          <LoadingAIGeneratingResult />
+      <>
+        <PageContainerDashboard className="pb-8 items-center justify-center">
+          <HeaderAIResultDetailsLMS
+            sessionUserName={props.sessionUserName}
+            sessionUserAvatar={props.sessionUserAvatar}
+            sessionUserRole={props.sessionUserRole}
+            headerTitle="Idea Validation Result"
+            headerResultName={props.resultName}
+          />
+          <div className="flex flex-col w-full items-center">
+            <LoadingAIGeneratingResult />
+          </div>
+        </PageContainerDashboard>
+        <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+          {mobileHeader}
+          <div className="flex flex-col items-center justify-center flex-1 gap-3 p-8 text-center">
+            <Loader2 className="size-8 animate-spin text-tertiary" />
+            <p className="font-bodycopy font-medium text-emphasis text-sm">
+              Generating your report...
+            </p>
+          </div>
+          <BottomNavLMS />
         </div>
-      </PageContainerDashboard>
+      </>
     );
   }
 
   return (
+    <>
     <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderAIResultDetailsLMS
         sessionUserName={props.sessionUserName}
@@ -487,5 +511,98 @@ export default function IdeaValidationReportLMS(
         </div>
       </div>
     </PageContainerDashboard>
+
+    {/* Mobile */}
+    <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+      {mobileHeader}
+      <div className="flex flex-col gap-4 p-4">
+        <h2 className="font-bold font-brand text-lg">Problem-Fit Analysis</h2>
+        <div className={`flex flex-col gap-3 p-4 bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg`}>
+          <h3 className="font-bodycopy font-bold text-base">Ringkasan Temuan Penelitian</h3>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: problemDiscovery }} />
+        </div>
+        <div className={`flex flex-col items-center gap-3 p-4 text-center ${freq.icon_background} border border-dashboard-border rounded-lg`}>
+          <h3 className="font-bodycopy font-bold text-base">Frekuensi Masalah</h3>
+          <div className={`p-2 rounded-xl ${freq.icon_background}`}>{freq.icon}</div>
+          <p className={`font-brand font-bold text-2xl ${freq.color}`}>{props.problemFrequency.toUpperCase()}</p>
+          <p className="font-bodycopy font-medium text-[15px] text-emphasis">{freq.description}</p>
+        </div>
+        <div className="flex flex-col items-center gap-3 p-4 bg-card-bg border border-dashboard-border rounded-lg text-center">
+          <h3 className="font-bodycopy font-bold text-base">Kelayakan Masalah</h3>
+          <div className="relative flex max-w-[124px] items-center justify-center">
+            <Gauge value={props.problemFitScore} width={124} height={124} cornerRadius={50} sx={() => ({ [`& .${gaugeClasses.valueText}`]: { display: "none" }, [`& .${gaugeClasses.valueArc}`]: { fill: "#0165FC" }, [`& .${gaugeClasses.referenceArc}`]: { fill: "B8C9DD" } })} />
+            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-brand font-bold">{props.problemFitScore}</p>
+          </div>
+          <p className="font-bodycopy font-medium text-[15px] text-emphasis">Skor {props.problemFitScore} menunjukkan bahwa masalah ini {problemScoreDesc}</p>
+        </div>
+        <div className="flex flex-col gap-3 p-4 bg-card-bg border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Segmen yang Terdampak</h3>
+          <div className="flex flex-col gap-4">
+            {props.affectedSegments.map((post) => (
+              <AISegmentItemLMS key={post.segment_name} segmentName={post.segment_name} segmentDescription={post.segment_description} segmentSize={post.segment_size} segmentPercentage={post.severity_percentage} segmentPainPoints={post.pain_points} />
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 p-4 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Mengapa Masalah Ini Terjadi?</h3>
+          <p className="text-emphasis text-[15px] font-bodycopy">{props.problemFactor}</p>
+        </div>
+        <div className="flex flex-col gap-2 p-4 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Alternatif yang Tersedia</h3>
+          <p className="text-emphasis text-[15px] font-bodycopy">{props.existingAlternatives}</p>
+        </div>
+        <AICitationLMS sources={props.sources} confidenceLevel={props.confidenceLevel} />
+
+        <h2 className="font-bold font-brand text-lg">Solution-Fit Analysis</h2>
+        <div className={`flex flex-col gap-3 p-4 bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg`}>
+          <h3 className="font-bodycopy font-bold text-base">Nilai Utama Solusi</h3>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: solutionValue }} />
+        </div>
+        <div className="flex flex-col items-center gap-3 p-4 bg-card-bg border border-dashboard-border rounded-lg text-center">
+          <h3 className="font-bodycopy font-bold text-base">Kecocokan Solusi</h3>
+          <div className="relative flex max-w-[124px] items-center justify-center">
+            <Gauge value={props.solutionFitScore} width={124} height={124} cornerRadius={50} sx={() => ({ [`& .${gaugeClasses.valueText}`]: { display: "none" }, [`& .${gaugeClasses.valueArc}`]: { fill: "#0165FC" }, [`& .${gaugeClasses.referenceArc}`]: { fill: "B8C9DD" } })} />
+            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-brand font-bold">{props.solutionFitScore}</p>
+          </div>
+          <p className="font-bodycopy font-medium text-[15px] text-emphasis">Skor {props.solutionFitScore} menunjukkan solusi ini {solutionScoreDesc}</p>
+        </div>
+        <div className="flex flex-col gap-3 p-4 bg-card-bg border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Kemungkinan Pengembangan</h3>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: solutionFeasibility }} />
+          <h3 className="font-bodycopy font-bold text-base">Tren Industri ke Depan</h3>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: industryDirection }} />
+        </div>
+        <div className={`flex flex-col items-center gap-3 p-4 text-center ${longevity.icon_background} border border-dashboard-border rounded-lg`}>
+          <p className="text-[72px] leading-snug">{longevity.icon}</p>
+          <p className="font-bodycopy font-bold text-base">{longevity.name}</p>
+          <div className={styles.report} dangerouslySetInnerHTML={{ __html: longevityReason }} />
+        </div>
+
+        <h2 className="font-bold font-brand text-lg">Idea Refinement</h2>
+        <div className="flex flex-col gap-3 p-4 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Rekomendasi &amp; Saran</h3>
+          <div className="flex flex-col gap-3">
+            <div className="bg-card-inside-bg p-3 rounded-lg border border-dashboard-border"><div className={styles.report} dangerouslySetInnerHTML={{ __html: props.ideaMarketRecommendation }} /></div>
+            <div className="bg-card-inside-bg p-3 rounded-lg border border-dashboard-border"><div className={styles.report} dangerouslySetInnerHTML={{ __html: props.ideaCompetitiveRecommendation }} /></div>
+            <div className="bg-card-inside-bg p-3 rounded-lg border border-dashboard-border"><div className={styles.report} dangerouslySetInnerHTML={{ __html: props.ideaResourceRecommendation }} /></div>
+            <div className="bg-card-inside-bg p-3 rounded-lg border border-dashboard-border"><div className={styles.report} dangerouslySetInnerHTML={{ __html: props.ideaPriorityFocus }} /></div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-4 p-4 bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
+          <h3 className="font-bodycopy font-bold text-base">Next Step Actions</h3>
+          <div className="relative flex flex-col gap-4 pb-2">
+            {props.ideaNextStep.map((item) => (
+              <div key={item} className="flex items-center gap-6 z-10">
+                <div className="bg-primary size-3 rounded-full shrink-0 outline-primary-light/60 outline-4" />
+                <p className="font-bodycopy font-medium text-[15px] text-emphasis">{item}</p>
+              </div>
+            ))}
+            <div className="absolute left-1 w-[2px] h-full" style={{ backgroundImage: "repeating-linear-gradient(to bottom, #B8C9DD 0, #B8C9DD 6px, transparent 6px, transparent 12px)" }} />
+          </div>
+        </div>
+      </div>
+      <BottomNavLMS />
+    </div>
+    </>
   );
 }

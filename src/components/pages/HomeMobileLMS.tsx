@@ -1,17 +1,11 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import dayjs from "dayjs";
-import {
-  BotMessageSquare,
-  CalendarFold,
-  House,
-  LibraryBig,
-  User,
-} from "lucide-react";
+import { CalendarFold } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 
 export interface UpcomingSessionMobile {
   cohortId: number;
@@ -37,15 +31,7 @@ interface HomeMobileLMSProps extends AvatarBadgeLMSProps {
   totalSessionCount: number;
 }
 
-const navItems = [
-  { label: "Home", href: "/", icon: House },
-  { label: "AI Tools", href: "/ai", icon: BotMessageSquare },
-  { label: "Library", href: "/library", icon: LibraryBig },
-  { label: "Profile", href: "/account", icon: User },
-];
-
 export default function HomeMobileLMS(props: HomeMobileLMSProps) {
-  const pathname = usePathname();
   const nickName = props.sessionUserName.split(" ")[0];
 
   const attendanceRate =
@@ -236,28 +222,7 @@ export default function HomeMobileLMS(props: HomeMobileLMSProps) {
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="bottom-nav fixed bottom-0 left-0 right-0 flex items-center bg-card-bg border-t border-dashboard-border z-50 lg:hidden">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`nav-item flex flex-col items-center justify-center flex-1 py-3 gap-0.5 font-bodycopy text-[11px] font-medium transition-colors ${
-                isActive ? "text-tertiary" : "text-emphasis"
-              }`}
-            >
-              <Icon className="size-5" />
-              {item.label}
-            </Link>
-          );
-        })}
-      </div>
+      <BottomNavLMS />
     </div>
   );
 }

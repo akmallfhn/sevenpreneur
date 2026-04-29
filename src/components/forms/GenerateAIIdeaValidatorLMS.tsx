@@ -1,7 +1,8 @@
 "use client";
 import { GenerateAIIdeaValidation } from "@/lib/actions";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
@@ -10,8 +11,9 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import AppTableofContents from "../navigations/AppTableofContents";
-import PageContainerDashboard from "../pages/PageContainerDashboard";
+import BottomNavLMS from "../navigations/BottomNavLMS";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 
 interface GenerateAIIdeaValidatorLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -109,115 +111,185 @@ export default function GenerateAIIdeaValidatorLMS(
     }
   };
 
-  return (
-    <PageContainerDashboard className="pb-8 items-center justify-center">
-      <HeaderGenerateAIToolLMS
-        sessionUserRole={props.sessionUserRole}
-        sessionUserName={props.sessionUserName}
-        sessionUserAvatar={props.sessionUserAvatar}
-        pageName="Idea Validator"
-        headerTitle="Idea Validator"
-      />
-      <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
-        <main className="main-contents flex-2 w-full">
-          <form
-            className="form-generate-ai w-full flex flex-col gap-4 items-end"
-            onSubmit={handleAIGenerate}
-          >
-            <section
-              id={tableofContents[0].url}
-              className="product-overview bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
-            >
-              <h2 className="section-title font-bold font-bodycopy">
-                {tableofContents[0].name}
-              </h2>
-              <TextAreaLMS
-                textAreaId="problem-statement"
-                textAreaName="Masalah apa yang kamu temui?"
-                textAreaPlaceholder="e.g. Produk sering rusak saat diterima karena packaging tidak cukup aman"
-                characterLength={4000}
-                value={formData.problemStatement}
-                onTextAreaChange={handleInputChange("problemStatement")}
-                required
-              />
-              <TextAreaLMS
-                textAreaId="problem-context"
-                textAreaName="Dimana atau kapan masalah ini muncul?"
-                textAreaPlaceholder="e.g. Saat mengirim produk lewat jasa ekspedisi"
-                characterLength={4000}
-                value={formData.problemContext}
-                onTextAreaChange={handleInputChange("problemContext")}
-                required
-              />
-            </section>
-            <section
-              id={tableofContents[1].url}
-              className="customer-targeting bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg"
-            >
-              <h2 className="section-title font-bold font-bodycopy">
-                {tableofContents[1].name}
-              </h2>
-              <TextAreaLMS
-                textAreaId="proposed-solution"
-                textAreaName="Solusi seperti apa yang kamu bayangkan?"
-                textAreaPlaceholder="e.g. Menyediakan layanan packaging aman berbasis kebutuhan produk"
-                characterLength={4000}
-                value={formData.proposedSolution}
-                onTextAreaChange={handleInputChange("proposedSolution")}
-                required
-              />
-              <TextAreaLMS
-                textAreaId="available-resource"
-                textAreaName="Sumber daya apa yang sudah kamu punya?"
-                textAreaPlaceholder="e.g. Akses ke supplier bahan kemasan dan koneksi dengan komunitas UMKM lokal"
-                characterLength={4000}
-                value={formData.availableResource}
-                onTextAreaChange={handleInputChange("availableResource")}
-                required
-              />
-            </section>
-            <AppButton
-              className="w-fit"
-              type="submit"
-              disabled={isGeneratingContents}
-            >
-              {isGeneratingContents ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Please wait...
-                </>
-              ) : (
-                <>
-                  Generate Insight
-                  <div className="flex w-7">
-                    <Image
-                      className="object-cover w-full h-full"
-                      src={
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
-                      }
-                      alt="AI Icon"
-                      height={100}
-                      width={100}
-                    />
-                  </div>
-                </>
-              )}
-            </AppButton>
-          </form>
-        </main>
-        <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
-          <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
-            <AppTableofContents
-              tocName="Table of Contents"
-              tocList={tableofContents}
-            />
-            <AppCalloutBox
-              calloutTitle="Tips"
-              calloutContent="Idea Validator membantu memvalidasi ide bisnismu sebelum dieksekusi dengan menganalisis relevansi masalah (problem fit), potensi bisnis (solution fit), dan long-term viability agar kamu bisa mengambil keputusan berbasis data."
+  const formSections = (
+    <>
+      <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+        <h2 className="section-title font-bold font-bodycopy">
+          {tableofContents[0].name}
+        </h2>
+        <TextAreaLMS
+          textAreaId="problem-statement"
+          textAreaName="Masalah apa yang kamu temui?"
+          textAreaPlaceholder="e.g. Produk sering rusak saat diterima karena packaging tidak cukup aman"
+          characterLength={4000}
+          value={formData.problemStatement}
+          onTextAreaChange={handleInputChange("problemStatement")}
+          required
+        />
+        <TextAreaLMS
+          textAreaId="problem-context"
+          textAreaName="Dimana atau kapan masalah ini muncul?"
+          textAreaPlaceholder="e.g. Saat mengirim produk lewat jasa ekspedisi"
+          characterLength={4000}
+          value={formData.problemContext}
+          onTextAreaChange={handleInputChange("problemContext")}
+          required
+        />
+      </section>
+      <section className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg">
+        <h2 className="section-title font-bold font-bodycopy">
+          {tableofContents[1].name}
+        </h2>
+        <TextAreaLMS
+          textAreaId="proposed-solution"
+          textAreaName="Solusi seperti apa yang kamu bayangkan?"
+          textAreaPlaceholder="e.g. Menyediakan layanan packaging aman berbasis kebutuhan produk"
+          characterLength={4000}
+          value={formData.proposedSolution}
+          onTextAreaChange={handleInputChange("proposedSolution")}
+          required
+        />
+        <TextAreaLMS
+          textAreaId="available-resource"
+          textAreaName="Sumber daya apa yang sudah kamu punya?"
+          textAreaPlaceholder="e.g. Akses ke supplier bahan kemasan dan koneksi dengan komunitas UMKM lokal"
+          characterLength={4000}
+          value={formData.availableResource}
+          onTextAreaChange={handleInputChange("availableResource")}
+          required
+        />
+      </section>
+    </>
+  );
+
+  const submitButton = (
+    <AppButton className="w-fit" type="submit" disabled={isGeneratingContents}>
+      {isGeneratingContents ? (
+        <>
+          <Loader2 className="size-5 animate-spin" />
+          Please wait...
+        </>
+      ) : (
+        <>
+          Generate Insight
+          <div className="flex w-7">
+            <Image
+              className="object-cover w-full h-full"
+              src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/sparkles-icon.svg"
+              alt="AI Icon"
+              height={100}
+              width={100}
             />
           </div>
-        </aside>
+        </>
+      )}
+    </AppButton>
+  );
+
+  return (
+    <>
+      {/* Desktop */}
+      <PageContainerDashboard className="pb-8 items-center justify-center">
+        <HeaderGenerateAIToolLMS
+          sessionUserRole={props.sessionUserRole}
+          sessionUserName={props.sessionUserName}
+          sessionUserAvatar={props.sessionUserAvatar}
+          pageName="Idea Validator"
+          headerTitle="Idea Validator"
+        />
+        <div className="body-contents relative max-w-[calc(100%-4rem)] w-full flex gap-4">
+          <main className="main-contents flex-2 w-full">
+            <form
+              className="form-generate-ai w-full flex flex-col gap-4 items-end"
+              onSubmit={handleAIGenerate}
+            >
+              <section
+                id={tableofContents[0].url}
+                className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
+              >
+                <h2 className="section-title font-bold font-bodycopy">
+                  {tableofContents[0].name}
+                </h2>
+                <TextAreaLMS
+                  textAreaId="problem-statement"
+                  textAreaName="Masalah apa yang kamu temui?"
+                  textAreaPlaceholder="e.g. Produk sering rusak saat diterima karena packaging tidak cukup aman"
+                  characterLength={4000}
+                  value={formData.problemStatement}
+                  onTextAreaChange={handleInputChange("problemStatement")}
+                  required
+                />
+                <TextAreaLMS
+                  textAreaId="problem-context"
+                  textAreaName="Dimana atau kapan masalah ini muncul?"
+                  textAreaPlaceholder="e.g. Saat mengirim produk lewat jasa ekspedisi"
+                  characterLength={4000}
+                  value={formData.problemContext}
+                  onTextAreaChange={handleInputChange("problemContext")}
+                  required
+                />
+              </section>
+              <section
+                id={tableofContents[1].url}
+                className="bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg"
+              >
+                <h2 className="section-title font-bold font-bodycopy">
+                  {tableofContents[1].name}
+                </h2>
+                <TextAreaLMS
+                  textAreaId="proposed-solution"
+                  textAreaName="Solusi seperti apa yang kamu bayangkan?"
+                  textAreaPlaceholder="e.g. Menyediakan layanan packaging aman berbasis kebutuhan produk"
+                  characterLength={4000}
+                  value={formData.proposedSolution}
+                  onTextAreaChange={handleInputChange("proposedSolution")}
+                  required
+                />
+                <TextAreaLMS
+                  textAreaId="available-resource"
+                  textAreaName="Sumber daya apa yang sudah kamu punya?"
+                  textAreaPlaceholder="e.g. Akses ke supplier bahan kemasan dan koneksi dengan komunitas UMKM lokal"
+                  characterLength={4000}
+                  value={formData.availableResource}
+                  onTextAreaChange={handleInputChange("availableResource")}
+                  required
+                />
+              </section>
+              {submitButton}
+            </form>
+          </main>
+          <aside className="aside-contents flex flex-col flex-1 w-full gap-4">
+            <div className="toc-wrapper sticky flex flex-col top-[104px] gap-4">
+              <AppTableofContents
+                tocName="Table of Contents"
+                tocList={tableofContents}
+              />
+              <AppCalloutBox
+                calloutTitle="Tips"
+                calloutContent="Idea Validator membantu memvalidasi ide bisnismu sebelum dieksekusi dengan menganalisis relevansi masalah (problem fit), potensi bisnis (solution fit), dan long-term viability agar kamu bisa mengambil keputusan berbasis data."
+              />
+            </div>
+          </aside>
+        </div>
+      </PageContainerDashboard>
+
+      {/* Mobile */}
+      <div className="root-page relative flex flex-col w-full min-h-screen pb-20 lg:hidden">
+        <div className="sticky top-0 z-40 flex items-center gap-3 px-4 py-4 bg-dashboard-bg border-b border-dashboard-border">
+          <Link href="/ai" className="flex items-center justify-center size-8 rounded-full hover:bg-card-inside-bg transition-colors">
+            <ChevronLeft className="size-5" />
+          </Link>
+          <h1 className="font-brand font-bold text-lg">Idea Validator</h1>
+        </div>
+        <form
+          className="flex flex-col gap-4 p-4 items-end"
+          onSubmit={handleAIGenerate}
+        >
+          {formSections}
+          {submitButton}
+        </form>
+        <BottomNavLMS />
       </div>
-    </PageContainerDashboard>
+    </>
   );
 }
