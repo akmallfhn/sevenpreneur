@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 import AppButton from "../buttons/AppButton";
 import { PlusIcon, X } from "lucide-react";
 import InputNumberSVP from "../fields/InputNumberSVP";
-import InputSVP from "../fields/InputSVP";
+import AppInput from "../fields/AppInput";
 import { useEffect } from "react";
 
 export interface CostListForm {
@@ -75,7 +75,7 @@ export default function AICostListStepperLMS(props: AICostListStepperLMSProps) {
           className="cost-item relative flex items-center w-full gap-2"
         >
           <div className="w-full flex-3">
-            <InputSVP
+            <AppInput variant="SVP"
               inputId="cost-name"
               inputType="text"
               inputPlaceholder="Nama Bahan/Komponen"
@@ -97,7 +97,7 @@ export default function AICostListStepperLMS(props: AICostListStepperLMSProps) {
             />
           </div>
           <div className="w-full flex-1">
-            <InputSVP
+            <AppInput variant="SVP"
               inputId="cost-unit"
               inputType="text"
               inputPlaceholder="Unit"

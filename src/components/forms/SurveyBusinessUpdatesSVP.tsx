@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { UpdateUserBusiness } from "@/lib/actions";
 import {
   BusinessEmployeeNumber,
@@ -12,10 +12,10 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputNumberSVP from "../fields/InputNumberSVP";
-import InputSVP from "../fields/InputSVP";
+import AppInput from "../fields/AppInput";
 import RadioBoxSVP from "../fields/RadioBoxBooleanSVP";
-import SelectSVP from "../fields/SelectSVP";
-import TextAreaSVP from "../fields/TextAreaSVP";
+import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 
 interface IndustryList {
   id: number;
@@ -211,14 +211,14 @@ export default function SurveyBusinessUpdateSVP(
           <h2 className="section-title font-brand font-bold text-lg">
             Personal Information
           </h2>
-          <InputSVP
+          <AppInput variant="SVP"
             inputId="user-email"
             inputName="Email"
             inputType="email"
             value={props.sessionUserEmail}
             disabled
           />
-          <InputSVP
+          <AppInput variant="SVP"
             inputId={"user-date-of-birth"}
             inputName={"Kapan tanggal lahir kamu?"}
             inputType={"date"}
@@ -227,7 +227,7 @@ export default function SurveyBusinessUpdateSVP(
             onInputChange={handleInputChange("userDateofBirth")}
             required
           />
-          <SelectSVP
+          <AppSelect variant="SVP"
             selectId={"user-occupation"}
             selectName={"Apa kegiatan atau pekerjaan kamu saat ini?"}
             selectPlaceholder="Pilih profesi/aktivitas"
@@ -293,7 +293,7 @@ export default function SurveyBusinessUpdateSVP(
             <h2 className="section-title font-brand font-bold text-lg">
               Business Information
             </h2>
-            <SelectSVP
+            <AppSelect variant="SVP"
               selectId={"business-industry"}
               selectName={"Saat ini, bisnis kamu bergerak di industri apa?"}
               selectPlaceholder="Pilih industri bisnis"
@@ -307,7 +307,7 @@ export default function SurveyBusinessUpdateSVP(
               }
               required
             />
-            <InputSVP
+            <AppInput variant="SVP"
               inputId={"business-name"}
               inputName={"Apa nama brand atau bisnismu?"}
               inputType={"text"}
@@ -316,7 +316,7 @@ export default function SurveyBusinessUpdateSVP(
               onInputChange={handleInputChange("businessName")}
               required
             />
-            <TextAreaSVP
+            <AppTextArea variant="SVP"
               textAreaId={"business-description"}
               textAreaName={"Ceritakan sedikit tentang bisnismu"}
               textAreaPlaceholder={
@@ -336,7 +336,7 @@ export default function SurveyBusinessUpdateSVP(
               onInputChange={handleInputChange("businessAgeYears")}
               required
             />
-            <SelectSVP
+            <AppSelect variant="SVP"
               selectId={"business-legal-entity"}
               selectName={"Apa bentuk badan hukum bisnismu?"}
               selectPlaceholder="Pilih bentuk badan hukum"
@@ -378,7 +378,7 @@ export default function SurveyBusinessUpdateSVP(
               ]}
               required
             />
-            <SelectSVP
+            <AppSelect variant="SVP"
               selectId={"total-employees"}
               selectName={"Berapa jumlah karyawan di bisnis kamu?"}
               selectPlaceholder="Pilih jumlah karyawan"
@@ -417,7 +417,7 @@ export default function SurveyBusinessUpdateSVP(
               onInputChange={handleInputChange("averageSellingPrice")}
               required
             />
-            <SelectSVP
+            <AppSelect variant="SVP"
               selectId={"business-yearly-revenue"}
               selectName={"Berapa rentang omset tahunan bisnismu?"}
               selectPlaceholder="Pilih rentang omset"
@@ -455,7 +455,7 @@ export default function SurveyBusinessUpdateSVP(
               ]}
               required
             />
-            <InputSVP
+            <AppInput variant="SVP"
               inputId={"company-profile-url"}
               inputName={
                 "Cantumkan profil bisnis kamu (Instagram, website, atau dokumen)"

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { MakePaymentCohortXendit } from "@/lib/actions";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
@@ -10,7 +10,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import InputNumberSVP from "../fields/InputNumberSVP";
-import InputSVP from "../fields/InputSVP";
+import AppInput from "../fields/AppInput";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import RadioBoxPriceTierSVP from "../fields/RadioBoxPriceTierSVP";
 import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
@@ -354,14 +354,14 @@ export default function CheckoutCohortFormMobileSVP({
             <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
               <h2 className="font-bodycopy font-bold">Personal Information</h2>
               <div className="flex flex-col gap-3">
-                <InputSVP
+                <AppInput variant="SVP"
                   inputId="user-full-name"
                   inputName="Full Name"
                   inputType="text"
                   value={initialUserName}
                   disabled
                 />
-                <InputSVP
+                <AppInput variant="SVP"
                   inputId="user-email"
                   inputName="Email"
                   inputType="email"

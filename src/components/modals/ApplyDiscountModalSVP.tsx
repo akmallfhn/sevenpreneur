@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import {
   CheckDiscountCohort,
   CheckDiscountEvent,
@@ -8,7 +8,7 @@ import { ProductCategory } from "@/lib/app-types";
 import { Loader2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
-import InputSVP from "../fields/InputSVP";
+import AppInput from "../fields/AppInput";
 
 interface DiscountType {
   name: string | undefined;
@@ -132,7 +132,7 @@ export default function ApplyDiscountModalSVP({
               <h2 className="w-full font-bodycopy font-bold pl-0.5">
                 Redeem Promo
               </h2>
-              <InputSVP
+              <AppInput variant="SVP"
                 inputId="discount-code"
                 inputName="Promo Code"
                 inputType="text"

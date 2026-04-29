@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { trpc } from "@/trpc/client";
 import {
   BookOpen,
@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import TextAreaSVP from "../fields/TextAreaSVP";
+import AppTextArea from "../fields/AppTextArea";
 
 interface RatingCheckoutModalLMSProps {
   learningId: number;
@@ -385,7 +385,7 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
                   {section.textFields && section.textFields.length > 0 && (
                     <div className="flex flex-col gap-4">
                       {section.textFields.map((field) => (
-                        <TextAreaSVP
+                        <AppTextArea variant="SVP"
                           key={field.key}
                           textAreaId={field.key}
                           textAreaName={field.label}

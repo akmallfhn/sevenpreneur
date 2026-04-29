@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 import { CheckOutSession } from "@/lib/actions";
 import { Loader2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputSVP from "../fields/InputSVP";
+import AppInput from "../fields/AppInput";
 
 interface ApplyCheckOutSessionLMSProps {
   learningId: number;
@@ -93,7 +93,7 @@ export default function ApplyCheckOutSessionLMS(
                 feedback form first.
               </p>
             </div>
-            <InputSVP
+            <AppInput variant="SVP"
               inputId="check-out-code"
               inputType="text"
               inputPlaceholder="Enter check-out code here..."
