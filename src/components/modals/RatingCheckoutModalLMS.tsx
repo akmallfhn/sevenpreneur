@@ -385,7 +385,8 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
                   {section.textFields && section.textFields.length > 0 && (
                     <div className="flex flex-col gap-4">
                       {section.textFields.map((field) => (
-                        <AppTextArea variant="SVP"
+                        <AppTextArea
+                          variant="LMS"
                           key={field.key}
                           textAreaId={field.key}
                           textAreaName={field.label}
