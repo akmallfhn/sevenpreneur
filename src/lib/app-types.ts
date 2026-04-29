@@ -3,6 +3,7 @@ export type ProductCategory = "COHORT" | "PLAYLIST" | "AI" | "EVENT";
 export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
 export type StatusType = "ACTIVE" | "INACTIVE";
 export type NumberConfig = "numeric" | "decimal";
+export type PlatformType = "SVP" | "CMS" | "LMS" | "AILENE";
 export type SocialMediaVariant =
   | "instagram"
   | "facebook"

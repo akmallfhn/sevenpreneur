@@ -12,11 +12,11 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
+import AppInput from "../fields/AppInput";
 import InputNumberSVP from "../fields/InputNumberSVP";
-import InputSVP from "../fields/InputSVP";
 import UploadAvatarUserLMS from "../fields/UploadAvatarUserLMS";
-import SelectSVP from "../fields/SelectSVP";
-import TextAreaSVP from "../fields/TextAreaSVP";
+import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 
 export interface IndustryList {
   id: number;
@@ -226,12 +226,13 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <InputSVP
+            <AppInput
               inputId={"full-name"}
               inputType={"text"}
               inputPlaceholder={"Type your name..."}
               value={formData.userName}
               onInputChange={handleInputChange("userName")}
+              variant="LMS"
               required
             />
           </div>
@@ -244,10 +245,11 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input flex flex-col w-full gap-1">
-            <InputSVP
+            <AppInput
               inputId={"email"}
               inputType={"text"}
               value={props.initialData.email}
+              variant="LMS"
               disabled
             />
             <p className="text-[13px] text-emphasis font-[450] font-bodycopy">
@@ -289,11 +291,12 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <InputSVP
-              inputId={"full-name"}
+            <AppInput
+              inputId={"date-of-birth"}
               inputType={"date"}
               value={formData.userDateofBirth}
               onInputChange={handleInputChange("userDateofBirth")}
+              variant="LMS"
               required
             />
           </div>
@@ -306,11 +309,12 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input flex flex-col w-full">
-            <SelectSVP
+            <AppSelect
               selectId={"user-occupation"}
               selectPlaceholder="Select your occupation"
               value={formData.userOccupation}
               onChange={handleInputChange("userOccupation")}
+              variant="LMS"
               options={[
                 {
                   label: "Karyawan Swasta/Pegawai Negeri",
@@ -351,12 +355,13 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <InputSVP
-              inputId={"full-name"}
+            <AppInput
+              inputId={"business-name"}
               inputType={"text"}
               inputPlaceholder={"Enter your business name"}
               value={formData.businessName}
               onInputChange={handleInputChange("businessName")}
+              variant="LMS"
               required
             />
           </div>
@@ -369,12 +374,13 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <TextAreaSVP
+            <AppTextArea
               textAreaId={"business-description"}
               textAreaPlaceholder={"Describe what your business does"}
               textAreaHeight={"h-[120px]"}
               value={formData.businessDescription}
               onTextAreaChange={handleInputChange("businessDescription")}
+              variant="LMS"
               required
             />
           </div>
@@ -387,11 +393,12 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <SelectSVP
+            <AppSelect
               selectId={"business-industry"}
               selectPlaceholder="Choose an industry"
               value={formData.businessIndustry}
               onChange={handleInputChange("businessIndustry")}
+              variant="LMS"
               options={
                 props.industriesData?.map((item) => ({
                   label: item.name,
@@ -428,11 +435,12 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input flex flex-col w-full">
-            <SelectSVP
+            <AppSelect
               selectId="business-legal-entity"
               selectPlaceholder="Select legal status"
               value={formData.businessLegalEntity}
               onChange={handleInputChange("businessLegalEntity")}
+              variant="LMS"
               options={[
                 {
                   label: "CV",
@@ -479,11 +487,12 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input flex flex-col w-full">
-            <SelectSVP
+            <AppSelect
               selectId={"total-employees"}
               selectPlaceholder="Select number of employees"
               value={formData.businessEmployeeNum}
               onChange={handleInputChange("businessEmployeeNum")}
+              variant="LMS"
               options={[
                 {
                   label: "1-10 employee",
@@ -518,11 +527,12 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input flex flex-col w-full">
-            <SelectSVP
+            <AppSelect
               selectId={"business-yearly-revenue"}
               selectPlaceholder="Choose your revenue range"
               value={formData.businessYearlyRevenue}
               onChange={handleInputChange("businessYearlyRevenue")}
+              variant="LMS"
               options={[
                 {
                   label: "<50 juta",
@@ -585,12 +595,13 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <InputSVP
+            <AppInput
               inputId={"company-profile-url"}
               inputType={"url"}
               inputPlaceholder={"e.g. https://instagram.com/brand"}
               value={formData.companyProfileUrl}
               onInputChange={handleInputChange("companyProfileUrl")}
+              variant="LMS"
             />
           </div>
         </div>
