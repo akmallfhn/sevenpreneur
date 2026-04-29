@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
@@ -103,7 +103,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
           </div>
           <div className="filter-search flex w-full items-center">
             <div className="max-w-96 w-full">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="search-article"
                 inputType="search"
                 inputIcon={<Search className="size-5" />}

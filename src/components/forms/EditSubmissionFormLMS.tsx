@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { EditSubmission } from "@/lib/actions";
 import { getFileVariantFromURL } from "@/lib/file-variants";
 import { Loader2 } from "lucide-react";
@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import UploadSubmissionLMS from "../fields/UploadSubmissionLMS";
 
 export interface InitialData {
@@ -158,7 +158,7 @@ export default function EditSubmissionFormLMS({
         </div>
       )}
       {submitMode !== "attach" && (
-        <InputCMS
+        <AppInput variant="CMS"
           inputId="submission-url"
           inputName="Provide Document Link"
           inputType="url"

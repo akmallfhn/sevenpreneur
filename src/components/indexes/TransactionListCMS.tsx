@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { ProductCategory } from "@/lib/app-types";
@@ -19,7 +19,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import AppDropdown from "../elements/AppDropdown";
 import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
-import SelectCMS from "../fields/SelectCMS";
+import AppSelect from "../fields/AppSelect";
 import CreateInvoiceFormCMS from "../forms/CreateInvoiceFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import FilterLabelCMS from "../labels/FilterLabelCMS";
@@ -290,7 +290,7 @@ export default function TransactionListCMS({
                 <p className="font-bold font-bodycopy text-sm pl-1">
                   Filter by Product
                 </p>
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId="select-product"
                   selectIcon={<Funnel className="size-4" />}
                   selectPlaceholder="Filter by Product"

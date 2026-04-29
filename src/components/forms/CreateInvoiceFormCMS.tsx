@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
 import { trpc } from "@/trpc/client";
@@ -6,9 +6,9 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import InputNumberCMS from "../fields/InputNumberCMS";
-import SelectCMS from "../fields/SelectCMS";
+import AppSelect from "../fields/AppSelect";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import AppSheet from "../modals/AppSheet";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -417,7 +417,7 @@ export default function CreateInvoiceFormCMS({
         {!isLoading && !isError && (
           <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="invoice-user-id"
                 inputName="Billed to"
                 inputType="text"
@@ -438,7 +438,7 @@ export default function CreateInvoiceFormCMS({
               />
               <div className="bg-section-background/50 border flex flex-col gap-2 p-4 rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">Order Item</h5>
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId="invoice-product-category"
                   selectName="Product Category"
                   selectPlaceholder="Choose a product category"
@@ -473,7 +473,7 @@ export default function CreateInvoiceFormCMS({
                 {formData.invoiceProductCategory &&
                   !isLoadingProduct &&
                   !isErrorProduct && (
-                    <SelectCMS
+                    <AppSelect variant="CMS"
                       selectId="product-item"
                       selectName="Product Item"
                       selectPlaceholder="Select specific products"
@@ -486,7 +486,7 @@ export default function CreateInvoiceFormCMS({
               </div>
 
               {/* Payment Channel */}
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="payment-channel-id"
                 selectName="Payment Method"
                 selectPlaceholder="Select a payment method"
@@ -504,7 +504,7 @@ export default function CreateInvoiceFormCMS({
               <div className="discount-box flex flex-col">
                 <div className="apply-discount-form flex justify-between items-end gap-4">
                   <div className="flex-3">
-                    <InputCMS
+                    <AppInput variant="CMS"
                       inputId="payment-discount"
                       inputName="Promo Code"
                       inputType="text"

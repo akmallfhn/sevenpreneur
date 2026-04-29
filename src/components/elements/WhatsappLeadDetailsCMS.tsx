@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { trpc } from "@/trpc/client";
 import {
   BellPlus,
@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import AppButton from "../buttons/AppButton";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppTextArea from "../fields/AppTextArea";
 import CreateWhatsappAlertFormCMS from "../forms/CreateWhatsappAlertFormCMS";
 import EditLeadStatusFormCMS from "../forms/EditLeadStatusFormCMS";
 import LeadStatusLabelCMS from "../labels/LeadStatusLabelCMS";
@@ -239,7 +239,7 @@ export default function WhatsappLeadDetailsCMS(
                 <TextAlignStart className="size-4 text-emphasis" />
                 <h5 className="font-bodycopy text-[15px] font-bold">Notes</h5>
               </div>
-              <TextAreaCMS
+              <AppTextArea variant="CMS"
                 textAreaId="chat-notes"
                 textAreaPlaceholder="Take notes for important things"
                 textAreaHeight="h-32"

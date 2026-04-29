@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { RolesUser, StatusType } from "@/lib/app-types";
@@ -21,7 +21,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
@@ -172,7 +172,7 @@ export default function UserListCMS(props: UserListCMSProps) {
         </div>
         <div className="filter-search flex w-full items-center">
           <div className="max-w-96 w-full">
-            <InputCMS
+            <AppInput variant="CMS"
               inputId="search-user"
               inputType="search"
               inputIcon={<Search className="size-5" />}

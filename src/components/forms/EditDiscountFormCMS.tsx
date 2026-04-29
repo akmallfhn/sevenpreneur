@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { ProductCategory, StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
@@ -7,9 +7,9 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import InputNumberCMS from "../fields/InputNumberCMS";
-import SelectCMS from "../fields/SelectCMS";
+import AppSelect from "../fields/AppSelect";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -296,7 +296,7 @@ export default function EditDiscountFormCMS({
           )}
           {initialData && !isLoadingInitialData && !isErrorInitialData && (
             <div className="group-input flex flex-col gap-4">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="discount-name"
                 inputName="Discount Name"
                 inputType="text"
@@ -307,7 +307,7 @@ export default function EditDiscountFormCMS({
               />
               <div className="flex gap-4 justify-between">
                 <div className="w-full flex-1">
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="discount-code"
                     inputName="Promo Code"
                     inputType="text"
@@ -330,7 +330,7 @@ export default function EditDiscountFormCMS({
                   />
                 </div>
               </div>
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="discount-start-date"
                 inputName="Available from"
                 inputType="datetime-local"
@@ -338,7 +338,7 @@ export default function EditDiscountFormCMS({
                 onInputChange={handleInputChange("discountStartDate")}
                 required
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="discount-end-date"
                 inputName="Valid until"
                 inputType="datetime-local"
@@ -372,7 +372,7 @@ export default function EditDiscountFormCMS({
                 <h5 className="font-bodycopy font-bold text-sm">
                   Applies Discount to Product
                 </h5>
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId="product-category"
                   selectName="Product Category"
                   selectPlaceholder="Choose a product category"
@@ -401,7 +401,7 @@ export default function EditDiscountFormCMS({
                   </div>
                 )}
                 {formData.productCategory && !isLoading && !isError && (
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId="product-item"
                     selectName="Product Item"
                     selectPlaceholder="Select specific products"

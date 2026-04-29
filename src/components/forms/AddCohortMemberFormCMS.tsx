@@ -1,12 +1,12 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
-import SelectCMS from "../fields/SelectCMS";
+import AppInput from "../fields/AppInput";
+import AppSelect from "../fields/AppSelect";
 import AppSheet from "../modals/AppSheet";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
@@ -149,7 +149,7 @@ export default function AddCohortMemberFormCMS(
         {!isLoading && !isError && (
           <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="cohort-price-id"
                 selectName="Access Tier"
                 selectPlaceholder="Choose access tier"
@@ -164,7 +164,7 @@ export default function AddCohortMemberFormCMS(
                 )}
               />
               {fillUserMethod === "SELECT" && (
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId="user-email"
                   selectName="Select User"
                   selectPlaceholder="Select a user to invite"
@@ -183,7 +183,7 @@ export default function AddCohortMemberFormCMS(
                 />
               )}
               {fillUserMethod === "INPUT" && (
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="user-email"
                   inputName="User Email"
                   inputType="text"

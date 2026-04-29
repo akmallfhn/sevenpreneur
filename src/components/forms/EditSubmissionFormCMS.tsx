@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { getSubmissionTiming } from "@/lib/date-time-manipulation";
 import { trpc } from "@/trpc/client";
 import { AIResultSubmissionAnalysis } from "@/trpc/routers/ai_tool/prompt.ai_tool";
@@ -9,7 +9,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import AppReactionButton from "../buttons/AppReactionButton";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppTextArea from "../fields/AppTextArea";
 import FileItemLMS from "../items/FileItemLMS";
 import SheetLineItemCMS from "../items/SheetLineItemCMS";
 import UserItemCMS from "../items/UserItemCMS";
@@ -240,7 +240,7 @@ export default function EditSubmissionFormCMS(
               <p className="text-destructive">{longMessage}</p>
             )}
           </SheetLineItemCMS>
-          <TextAreaCMS
+          <AppTextArea variant="CMS"
             textAreaId="submission-comment"
             textAreaName="Mentor Feedback"
             textAreaHeight="h-80"

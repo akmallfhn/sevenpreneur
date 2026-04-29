@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 
 interface CreateWhatsappAlertFormCMSProps {
   sessionToken: string;
@@ -85,7 +85,7 @@ export default function CreateWhatsappAlertFormCMS(
             Set alert reminder
           </h2>
           <div className="flex flex-col gap-4">
-            <InputCMS
+            <AppInput variant="CMS"
               inputId="scheduled-at"
               inputType="datetime-local"
               value={formData.scheduledAt}

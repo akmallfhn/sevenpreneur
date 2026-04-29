@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import InputCMS from "@/components/fields/InputCMS";
-import SelectCMS from "@/components/fields/SelectCMS";
+import AppInput from "@/components/fields/AppInput";
+import AppSelect from "@/components/fields/AppSelect";
 import StatusLabelCMS from "@/components/labels/StatusLabelCMS";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { Switch } from "@/components/ui/switch";
@@ -278,7 +278,7 @@ export default function EditUserForm({
               />
               <div className="personal-information-data flex gap-5">
                 <div className="data-1 flex flex-col w-full gap-4">
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId={"full-name"}
                     inputName={"Full Name"}
                     inputType={"text"}
@@ -288,7 +288,7 @@ export default function EditUserForm({
                     onInputChange={handleInputChange("fullName")}
                     required
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId={"email"}
                     inputName={"Email"}
                     inputType={"email"}
@@ -307,7 +307,7 @@ export default function EditUserForm({
                     value={formData.phoneNumber}
                     onInputChange={handleInputChange("phoneNumber")}
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId={"role"}
                     selectName={"Role"}
                     selectPlaceholder="Pick a user role"
@@ -350,7 +350,7 @@ export default function EditUserForm({
                 {/* Data 2 */}
                 <div className="data-2 flex flex-col w-full gap-4">
                   {/* Date of Birth */}
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId={"date-of-birth"}
                     inputName={"Date of Birth"}
                     inputType={"date"}
@@ -369,7 +369,7 @@ export default function EditUserForm({
               </h2>
               <div className="data flex flex-col w-full gap-4">
                 {/* Business Name */}
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId={"business-name"}
                   inputName={"Business Name"}
                   inputType={"text"}
@@ -379,7 +379,7 @@ export default function EditUserForm({
                   onInputChange={handleInputChange("businessName")}
                 />
                 {/* Industry */}
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId={"industry"}
                   selectName={"Business Industry"}
                   selectPlaceholder="Choose business industry"

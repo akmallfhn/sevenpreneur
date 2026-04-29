@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
@@ -6,9 +6,9 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
-import SelectCMS from "../fields/SelectCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppInput from "../fields/AppInput";
+import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
@@ -249,7 +249,7 @@ export default function CreateLearningFormCMS(
         >
           <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="learning-name"
                 inputName="Session Topic"
                 inputType="text"
@@ -258,7 +258,7 @@ export default function CreateLearningFormCMS(
                 onInputChange={handleInputChange("learningName")}
                 required
               />
-              <TextAreaCMS
+              <AppTextArea variant="CMS"
                 textAreaId="learning-description"
                 textAreaName="Session Description"
                 textAreaPlaceholder="Give a short overview of what will be covered."
@@ -290,7 +290,7 @@ export default function CreateLearningFormCMS(
                   )}
                 </div>
               </div>
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="learning-date"
                 inputName="Session Schedule"
                 inputType="datetime-local"
@@ -298,7 +298,7 @@ export default function CreateLearningFormCMS(
                 onInputChange={handleInputChange("learningDate")}
                 required
               />
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="learning-method"
                 selectName="Session Method"
                 selectPlaceholder="Choose how this session will be delivered"
@@ -321,7 +321,7 @@ export default function CreateLearningFormCMS(
                 ]}
               />
               {["ONLINE", "HYBRID"].includes(formData.learningMethod) && (
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="learning-url"
                   inputName="Meeting Link"
                   inputType="url"
@@ -334,7 +334,7 @@ export default function CreateLearningFormCMS(
               )}
               {["ONSITE", "HYBRID"].includes(formData.learningMethod) && (
                 <>
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="learning-location"
                     inputName="Venue Name"
                     inputType="text"
@@ -343,7 +343,7 @@ export default function CreateLearningFormCMS(
                     onInputChange={handleInputChange("learningLocation")}
                     required
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="learning-location-url"
                     inputName="Google Maps Link"
                     inputType="url"
@@ -354,7 +354,7 @@ export default function CreateLearningFormCMS(
                   />
                 </>
               )}
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="learning-speaker"
                 selectName="Assigned Educator"
                 selectPlaceholder="Select person to leading this session"

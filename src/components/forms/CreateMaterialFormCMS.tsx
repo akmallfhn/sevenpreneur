@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
@@ -6,9 +6,9 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import RadioBoxCMS from "../fields/RadioBoxCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppTextArea from "../fields/AppTextArea";
 import UploadFilesCMS from "../fields/UploadFilesCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
@@ -138,7 +138,7 @@ export default function CreateMaterialFormCMS({
       >
         <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
           <div className="group-input flex flex-col gap-4">
-            <InputCMS
+            <AppInput variant="CMS"
               inputId="material-name"
               inputName="Document Title"
               inputType="text"
@@ -147,7 +147,7 @@ export default function CreateMaterialFormCMS({
               onInputChange={handleInputChange("materialName")}
               required
             />
-            <TextAreaCMS
+            <AppTextArea variant="CMS"
               textAreaId="material-description"
               textAreaName="Description"
               textAreaPlaceholder="Briefly describe the content or purpose of this document (optional)"
@@ -201,7 +201,7 @@ export default function CreateMaterialFormCMS({
                 />
               </div>
               {selectedUploadMethod === "attach" && (
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="learning-name"
                   inputName="Document Link"
                   inputType="url"

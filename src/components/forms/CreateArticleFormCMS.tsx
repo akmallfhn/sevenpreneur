@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { ArticleStatus } from "@/lib/app-types";
@@ -14,9 +14,9 @@ import {
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import InputCMS from "../fields/InputCMS";
-import SelectCMS from "../fields/SelectCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppInput from "../fields/AppInput";
+import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
@@ -396,7 +396,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     key={post.id}
                   >
                     {index !== 0 && (
-                      <InputCMS
+                      <AppInput variant="CMS"
                         inputId="publish-date"
                         inputName="Sub-Heading"
                         inputPlaceholder="Write section sub-title…"
@@ -455,7 +455,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   </h2>
                 </div>
                 <div className="flex flex-col gap-5 p-4 pt-0">
-                  <TextAreaCMS
+                  <AppTextArea variant="CMS"
                     textAreaId="insight"
                     textAreaName="Content Summary"
                     textAreaPlaceholder="Write a 3-sentence summary that captures the article’s main topic and overall takeaway"
@@ -464,7 +464,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     onTextAreaChange={handleInputChange("articleInsight")}
                     required
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="publish-date"
                     inputName="Publish Date"
                     inputType="datetime-local"
@@ -472,7 +472,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     onInputChange={handleInputChange("articlePublishDate")}
                     required
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId="category"
                     selectName="Category"
                     selectPlaceholder="Choose topic category"
@@ -486,7 +486,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     }
                     required
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId="author"
                     selectName="Author"
                     selectPlaceholder="Select Author"
@@ -501,7 +501,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     }
                     required
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId="reviewer"
                     selectName="Reviewer"
                     selectPlaceholder="Select Reviewer"
@@ -516,7 +516,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     }
                     required
                   />
-                  <TextAreaCMS
+                  <AppTextArea variant="CMS"
                     textAreaId="keywords"
                     textAreaName="Keywords"
                     textAreaPlaceholder="e.g. Bisnis 2 Milyar, Kerugian Perusahaan, etc"

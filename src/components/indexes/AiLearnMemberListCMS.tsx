@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import SelectCMS from "@/components/fields/SelectCMS";
-import InputCMS from "@/components/fields/InputCMS";
+import AppSelect from "@/components/fields/AppSelect";
+import AppInput from "@/components/fields/AppInput";
 import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "@/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/components/navigations/AppBreadcrumbItem";
@@ -338,7 +338,7 @@ export default function AiLearnMemberListCMS({
               </button>
             </div>
             <div className="flex flex-col gap-3">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="add-member-email"
                 inputName="Email"
                 inputType="email"
@@ -352,7 +352,7 @@ export default function AiLearnMemberListCMS({
                 errorMessage={addEmailError}
                 required
               />
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="add-member-role"
                 selectName="Role"
                 selectPlaceholder="Pilih role"
@@ -410,7 +410,7 @@ export default function AiLearnMemberListCMS({
                 <X className="size-5" />
               </button>
             </div>
-            <SelectCMS
+            <AppSelect variant="CMS"
               selectId="edit-member-role"
               selectName="Role Baru"
               selectPlaceholder="Pilih role"

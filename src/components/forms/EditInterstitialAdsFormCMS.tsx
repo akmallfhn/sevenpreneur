@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
@@ -232,7 +232,7 @@ export default function EditInterstitialAdsFormCMS(
           <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             {initialData && (
               <div className="group-input flex flex-col gap-4">
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="interstitial-title"
                   inputName="Title"
                   inputType="text"
@@ -268,7 +268,7 @@ export default function EditInterstitialAdsFormCMS(
                     />
                   </div>
                 </div>
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="interstitial-call-to-action"
                   inputName="Call To Action Label"
                   inputType="text"
@@ -277,7 +277,7 @@ export default function EditInterstitialAdsFormCMS(
                   onInputChange={handleInputChange("interstitialCallToAction")}
                   required
                 />
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="interstitial-target-url"
                   inputName="Target URL"
                   inputType="url"
@@ -286,7 +286,7 @@ export default function EditInterstitialAdsFormCMS(
                   onInputChange={handleInputChange("interstitialTargetUrl")}
                   required
                 />
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="interstitial-start-date"
                   inputName="Available from"
                   inputType="datetime-local"
@@ -294,7 +294,7 @@ export default function EditInterstitialAdsFormCMS(
                   onInputChange={handleInputChange("interstitialStartDate")}
                   required
                 />
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="interstitial-end-date"
                   inputName="Valid until"
                   inputType="datetime-local"

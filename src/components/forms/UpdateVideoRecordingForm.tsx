@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 import { trpc } from "@/trpc/client";
 import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import AppSheet from "../modals/AppSheet";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
@@ -141,7 +141,7 @@ export default function UpdateVideoRecordingFormCMS({
         >
           <div className="form-container flex flex-col h-full px-6 pb-96 gap-5 overflow-y-auto">
             <div className="group-input flex flex-col gap-4">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="learning-recording-youtube"
                 inputName="Add Recording from Youtube"
                 inputType="url"
@@ -149,7 +149,7 @@ export default function UpdateVideoRecordingFormCMS({
                 value={formData.learningRecordingYoutube}
                 onInputChange={handleInputChange("learningRecordingYoutube")}
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="learning-recording-cloudflare"
                 inputName="Add Recording from Cloudflare"
                 inputType="text"

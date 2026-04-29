@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { StatusType } from "@/lib/app-types";
 import { useClipboard } from "@/lib/use-clipboard";
 import { trpc } from "@/trpc/client";
@@ -26,10 +26,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import InputNumberCMS from "../fields/InputNumberCMS";
-import SelectCMS from "../fields/SelectCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
@@ -180,7 +180,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                   Personal Information
                 </h2>
                 <div className="personal-information-data flex flex-col w-full gap-4">
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId={"full-name"}
                     inputName={"Full Name"}
                     inputType={"text"}
@@ -188,7 +188,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     value={userDetailData.user.full_name || ""}
                     disabled
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId={"email"}
                     inputName={"Email"}
                     inputType={"email"}
@@ -205,7 +205,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     value={userDetailData.user.phone_number || ""}
                     disabled
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId={"occupation"}
                     selectName={"Occupation"}
                     selectIcon={<BriefcaseBusiness className="size-5" />}
@@ -235,7 +235,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId={"role"}
                     selectName={"Role"}
                     selectIcon={<KeyRound className="size-5" />}
@@ -294,7 +294,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                   Business Information
                 </h2>
                 <div className="business-information-data flex flex-col w-full gap-4">
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId={"business-name"}
                     inputName={"Business Name"}
                     inputType={"text"}
@@ -303,7 +303,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     value={userDetailData.user.business_name || ""}
                     disabled
                   />
-                  <TextAreaCMS
+                  <AppTextArea variant="CMS"
                     textAreaId="business-description"
                     textAreaName="Business Description"
                     textAreaHeight="h-44"
@@ -312,7 +312,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     disabled
                   />
                   <div className="grid grid-cols-2 gap-3">
-                    <SelectCMS
+                    <AppSelect variant="CMS"
                       selectId={"industry"}
                       selectName={"Industry"}
                       selectIcon={<Flag className="size-5" />}
@@ -326,7 +326,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                         })) || []
                       }
                     />
-                    <InputCMS
+                    <AppInput variant="CMS"
                       inputId="business-age-years"
                       inputName="Business Age (years)"
                       inputIcon={<Vegan className="size-5" />}
@@ -340,7 +340,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       disabled
                     />
                   </div>
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId={"business-yearly-revenue"}
                     selectName={"Yearly Revenue"}
                     selectIcon={<WalletCards className="size-5" />}
@@ -378,7 +378,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId={"total-employees"}
                     selectName={"Total Employees"}
                     selectIcon={<UserStar className="size-5" />}
@@ -408,7 +408,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <SelectCMS
+                  <AppSelect variant="CMS"
                     selectId={"business-legal-entity"}
                     selectName={"Legal Entity"}
                     selectIcon={<Scale className="size-5" />}
@@ -450,7 +450,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="average-selling-price"
                     inputName="Average Selling Price"
                     inputIcon={
@@ -465,7 +465,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     }
                     disabled
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="company-profile"
                     inputName="Company Profile"
                     inputIcon={<CircleStar className="size-5" />}

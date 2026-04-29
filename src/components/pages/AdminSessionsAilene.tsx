@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import InputCMS from "@/components/fields/InputCMS";
-import SelectCMS from "@/components/fields/SelectCMS";
+import AppInput from "@/components/fields/AppInput";
+import AppSelect from "@/components/fields/AppSelect";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -281,7 +281,7 @@ export default function AdminSessionsAilene({
 
             {/* Modal body */}
             <div className="flex flex-col gap-4 px-6 py-5">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="session-name"
                 inputName="Nama Session"
                 inputType="text"
@@ -290,7 +290,7 @@ export default function AdminSessionsAilene({
                 onInputChange={(v) => setForm((f) => ({ ...f, name: v }))}
                 required
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="session-description"
                 inputName="Deskripsi"
                 inputType="text"
@@ -302,7 +302,7 @@ export default function AdminSessionsAilene({
                 required
               />
               <div className="grid grid-cols-2 gap-4">
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId="session-method"
                   selectName="Metode"
                   selectPlaceholder="Pilih metode"
@@ -311,7 +311,7 @@ export default function AdminSessionsAilene({
                   options={METHOD_OPTIONS}
                   required
                 />
-                <SelectCMS
+                <AppSelect variant="CMS"
                   selectId="session-status"
                   selectName="Status"
                   selectPlaceholder="Pilih status"
@@ -334,7 +334,7 @@ export default function AdminSessionsAilene({
                   className="flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border focus:outline-none focus:border-tertiary focus:outline-primary/15 focus:outline-4"
                 />
               </div>
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="session-meeting-url"
                 inputName="Link Meeting (opsional)"
                 inputType="url"
@@ -345,7 +345,7 @@ export default function AdminSessionsAilene({
                 }
               />
               <div className="grid grid-cols-2 gap-4">
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="session-location-name"
                   inputName="Nama Lokasi (opsional)"
                   inputType="text"
@@ -355,7 +355,7 @@ export default function AdminSessionsAilene({
                     setForm((f) => ({ ...f, location_name: v }))
                   }
                 />
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="session-location-url"
                   inputName="Link Lokasi (opsional)"
                   inputType="url"
@@ -366,7 +366,7 @@ export default function AdminSessionsAilene({
                   }
                 />
               </div>
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="session-recording-url"
                 inputName="Link Recording (opsional)"
                 inputType="url"
@@ -376,7 +376,7 @@ export default function AdminSessionsAilene({
                   setForm((f) => ({ ...f, recording_url: v }))
                 }
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="session-feedback-form"
                 inputName="Link Feedback Form (opsional)"
                 inputType="url"

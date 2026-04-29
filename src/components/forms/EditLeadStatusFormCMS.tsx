@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 import { trpc } from "@/trpc/client";
 import { WALeadStatus } from "@prisma/client";
 import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import SelectCMS, { OptionType } from "../fields/SelectCMS";
+import AppSelect, { OptionType } from "../fields/AppSelect";
 
 interface EditLeadStatusFormCMSProps {
   sessionToken: string;
@@ -132,7 +132,7 @@ export default function EditLeadStatusFormCMS(
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="handler-select"
                 selectName="Handled By"
                 selectPlaceholder="Select handler"
@@ -140,7 +140,7 @@ export default function EditLeadStatusFormCMS(
                 options={handlerOptions}
                 onChange={handleInputChange("handler_id")}
               />
-              <SelectCMS
+              <AppSelect variant="CMS"
                 selectId="lead-status-select"
                 selectName="Lead Status"
                 selectPlaceholder="Select lead status"

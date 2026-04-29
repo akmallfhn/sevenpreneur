@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { SessionMethod, StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
@@ -7,9 +7,9 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
-import SelectCMS from "../fields/SelectCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppInput from "../fields/AppInput";
+import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
@@ -382,7 +382,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                 fileSize="500 KB"
                 imageRatio="16/9"
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="event-name"
                 inputName="Event Name"
                 inputType="text"
@@ -391,7 +391,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                 onInputChange={handleInputChange("eventName")}
                 required
               />
-              <TextAreaCMS
+              <AppTextArea variant="CMS"
                 textAreaId="event-description"
                 textAreaName="Event Overview"
                 textAreaPlaceholder="Tell us about this event"
@@ -422,7 +422,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                   )}
                 </div>
               </div>
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="event-start-date"
                 inputName="Event Starts"
                 inputType="datetime-local"
@@ -430,7 +430,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                 onInputChange={handleInputChange("eventStartDate")}
                 required
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="event-end-date"
                 inputName="Event Ends"
                 inputType="datetime-local"
@@ -439,7 +439,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                 required
               />
             </div>
-            <SelectCMS
+            <AppSelect variant="CMS"
               selectId="event-method"
               selectName="Session Method"
               selectPlaceholder="Choose how this session will be delivered"
@@ -463,7 +463,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
             />
             {formData.eventMethod &&
               ["ONLINE", "HYBRID"].includes(formData.eventMethod) && (
-                <InputCMS
+                <AppInput variant="CMS"
                   inputId="event-meeting-url"
                   inputName="Meeting Link"
                   inputType="url"
@@ -477,7 +477,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
             {formData.eventMethod &&
               ["ONSITE", "HYBRID"].includes(formData.eventMethod) && (
                 <>
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="event-location-name"
                     inputName="Venue Name"
                     inputType="text"
@@ -486,7 +486,7 @@ export default function EditEventFormCMS(props: EditEventFormCMSProps) {
                     onInputChange={handleInputChange("eventLocationName")}
                     required
                   />
-                  <InputCMS
+                  <AppInput variant="CMS"
                     inputId="event-location-url"
                     inputName="Google Maps Link"
                     inputType="url"

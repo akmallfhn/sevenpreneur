@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 import { supabase } from "@/lib/supabase";
 import { trpc } from "@/trpc/client";
 import { ArrowLeft, ArrowUp, Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppTextArea from "../fields/AppTextArea";
 import AppButton from "../buttons/AppButton";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
@@ -189,7 +189,7 @@ export default function WAImagePickerModal({
                   className="object-contain"
                 />
               </div>
-              <TextAreaCMS
+              <AppTextArea variant="CMS"
                 textAreaId="wa-image-caption"
                 textAreaPlaceholder="Add a caption (optional)"
                 textAreaHeight="min-h-20"

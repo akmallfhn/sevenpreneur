@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 import { StatusType } from "@/lib/app-types";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
+import AppInput from "../fields/AppInput";
 import { PlusIcon, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
@@ -61,7 +61,7 @@ export default function PriceTierStepperCMS({
         >
           <div className="flex gap-4">
             <div className="price-name w-full">
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="price-name"
                 inputName="Price Tier"
                 inputType="text"

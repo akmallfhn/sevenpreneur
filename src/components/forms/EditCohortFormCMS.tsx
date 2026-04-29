@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Switch } from "@/components/ui/switch";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
@@ -7,8 +7,8 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputCMS from "../fields/InputCMS";
-import TextAreaCMS from "../fields/TextAreaCMS";
+import AppInput from "../fields/AppInput";
+import AppTextArea from "../fields/AppTextArea";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
@@ -288,7 +288,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
                 fileSize="500 KB"
                 imageRatio="16/9"
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="cohort-name"
                 inputName="Program Name"
                 inputType="text"
@@ -297,7 +297,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
                 onInputChange={handleInputChange("cohortName")}
                 required
               />
-              <TextAreaCMS
+              <AppTextArea variant="CMS"
                 textAreaId="cohort-description"
                 textAreaName="Program Overview"
                 textAreaPlaceholder="Tell us about this program"
@@ -328,7 +328,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
                   )}
                 </div>
               </div>
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="start-date"
                 inputName="Program Starts"
                 inputType="datetime-local"
@@ -336,7 +336,7 @@ export default function EditCohortFormCMS(props: EditCohortFormCMSProps) {
                 onInputChange={handleInputChange("cohortStartDate")}
                 required
               />
-              <InputCMS
+              <AppInput variant="CMS"
                 inputId="end-date"
                 inputName="Program Ends"
                 inputType="datetime-local"
