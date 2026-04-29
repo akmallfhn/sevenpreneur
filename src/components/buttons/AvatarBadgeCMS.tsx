@@ -9,7 +9,7 @@ interface AvatarBadgeCMSProps {
 
 export default function AvatarBadgeCMS(props: AvatarBadgeCMSProps) {
   return (
-    <div className="avatar-container flex w-full p-2 px-3 items-center gap-3 bg-white border border-[#E3E3E3] rounded-lg">
+    <div className="avatar-container flex w-full p-2 px-3 items-center gap-3 bg-sevenpreneur-white border border-dashboard-border rounded-lg dark:bg-card-inside-bg">
       <div className="avatar aspect-square w-9 rounded-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"

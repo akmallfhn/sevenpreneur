@@ -473,13 +473,19 @@ export const readLMS = {
     .query(async (opts) => {
       const { learning_id } = opts.input;
 
-      const [checkInCount, checkOutCount, ratingAgg, attendances, ratings] =
+      const [checkInCount, checkOutCount, registeredCount, ratingAgg, attendances, ratings] =
         await Promise.all([
           opts.ctx.prisma.attendance.count({
             where: { learning_id, check_in_at: { not: null } },
           }),
           opts.ctx.prisma.attendance.count({
             where: { learning_id, check_out_at: { not: null } },
+          }),
+          opts.ctx.prisma.userCohort.count({
+            where: {
+              cohort: { learnings: { some: { id: learning_id } } },
+              user: { role_id: 3 },
+            },
           }),
           opts.ctx.prisma.learningRating.aggregate({
             where: { learning_id },
@@ -554,6 +560,7 @@ export const readLMS = {
       return {
         code: STATUS_OK,
         message: "Success",
+        registered_count: registeredCount,
         check_in_count: checkInCount,
         check_out_count: checkOutCount,
         rating_count: ratingCount,

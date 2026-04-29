@@ -258,7 +258,6 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
         className="relative bg-white dark:bg-card-bg w-full max-w-[820px] max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col sm:flex-row"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ── Sidebar ────────────────────────────────────── */}
         <div className="bg-sb-bg sm:w-[220px] sm:shrink-0 flex flex-col p-5 gap-5 sm:overflow-y-auto">
           {/* Header */}
           <div>
@@ -269,8 +268,6 @@ function ModalContent(props: RatingCheckoutModalLMSProps) {
               Isi semua pertanyaan di bawah ini
             </p>
           </div>
-
-          {/* Section list — desktop only */}
           <div className="hidden sm:flex flex-col gap-3">
             {SECTIONS.map((section) => {
               const Icon = section.icon;

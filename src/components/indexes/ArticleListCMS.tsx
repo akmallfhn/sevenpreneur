@@ -178,7 +178,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                             {post.category.name}
                           </div>
                           <div
-                            className={`article-id flex rounded-full items-center text-xs py-[2px] px-[10px] text-emphasis border border-[#D8D8D8] font-bodycopy font-medium`}
+                            className={`article-id flex rounded-full items-center text-xs py-[2px] px-[10px] text-emphasis border border-dashboard-border font-bodycopy font-medium`}
                             style={{
                               backgroundImage: "#FAFAFA",
                             }}

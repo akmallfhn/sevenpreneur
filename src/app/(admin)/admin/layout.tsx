@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/contexts/SidebarContext";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
 
@@ -51,19 +52,21 @@ export default async function AdminLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <SidebarProvider>
-        <div>
-          <SidebarCMS
-            sessionToken={sessionToken}
-            sessionUserRole={checkUser.role_id}
-          />
-          {props.children}
-          <div className="lg:hidden">
-            <AppPageState variant="ONLY_MOBILE" />
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <SidebarProvider>
+          <div className="root relative w-full min-h-screen bg-dashboard-bg">
+            <SidebarCMS
+              sessionToken={sessionToken}
+              sessionUserRole={checkUser.role_id}
+            />
+            {props.children}
+            <div className="lg:hidden">
+              <AppPageState variant="ONLY_MOBILE" />
+            </div>
+            <Toaster richColors position="top-center" />
           </div>
-          <Toaster richColors position="top-center" />
-        </div>
-      </SidebarProvider>
+        </SidebarProvider>
+      </ThemeProvider>
     </TRPCProvider>
   );
 }

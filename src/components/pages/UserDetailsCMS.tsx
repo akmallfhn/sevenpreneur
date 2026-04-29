@@ -137,7 +137,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                   />
                 </div>
                 <div className="user-group flex flex-col gap-2 z-20">
-                  <div className="user-avatar max-w-24 border-4 bg-[#0279D5] border-white aspect-square rounded-4xl overflow-hidden">
+                  <div className="user-avatar max-w-24 border-4 bg-[#0279D5] border-dashboard-border aspect-square rounded-4xl overflow-hidden">
                     <Image
                       className="object-cover w-full h-full"
                       src={

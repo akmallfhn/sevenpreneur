@@ -12,7 +12,7 @@ export default function TableHeaderCMS({
 }: TableHeaderCMSProps) {
   return (
     <thead
-      className={`bg-muted-background/15 border-y text-emphasis ${className}`}
+      className={`bg-muted-background/15 border-y border-dashboard-border text-emphasis ${className}`}
       {...props}
     >
       {children}

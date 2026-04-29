@@ -3,6 +3,7 @@ import { trpc } from "@/trpc/client";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
+import SectionContainerCMS from "../containers/SectionContainerCMS";
 import CreateMaterialFormCMS from "../forms/CreateMaterialFormCMS";
 import FileItemCMS from "../items/FileItemCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
@@ -43,30 +44,24 @@ export default function MaterialListCMS({
 
   return (
     <React.Fragment>
-      <div className="materials flex flex-col gap-3 p-3 bg-section-background rounded-md">
-        <div className="section-name flex justify-between items-center">
-          <h2 className="label-name font-brand font-bold">
-            Learning Materials
-          </h2>
-          {isAllowedCreateMaterial && (
-            <AppButton
-              variant="light"
-              size="small"
-              onClick={() => setCreateMaterial(true)}
-            >
+      <SectionContainerCMS
+        title="Learning Materials"
+        headerAction={
+          isAllowedCreateMaterial ? (
+            <AppButton variant="light" size="small" onClick={() => setCreateMaterial(true)}>
               <Plus className="size-4" />
               Add file
             </AppButton>
-          )}
-        </div>
-
+          ) : undefined
+        }
+      >
         {isLoading && <AppLoadingComponents />}
         {isError && <AppErrorComponents />}
 
         {!isLoading && !isError && materialListData && (
           <>
             {(materialListData.list ?? []).length > 0 ? (
-              <div className="material-list flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
                 {materialListData.list.map((post, index) => (
                   <FileItemCMS
                     key={index}
@@ -87,7 +82,7 @@ export default function MaterialListCMS({
             )}
           </>
         )}
-      </div>
+      </SectionContainerCMS>
 
       {/* Create Material */}
       {createMaterial && (
