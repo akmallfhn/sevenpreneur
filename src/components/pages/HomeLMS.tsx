@@ -6,12 +6,19 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import HeroHomeLMS from "../heroes/HeroHomeLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import CourseTabsLMS, { CourseList } from "../tabs/CourseTabsLMS";
-import HomeMobileLMS from "./HomeMobileLMS";
+import HomeMobileLMS, {
+  MobileCourseSummary,
+  UpcomingSessionMobile,
+} from "./HomeMobileLMS";
 import PageContainerDashboard from "./PageContainerDashboard";
 
 interface HomeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
   courseList: CourseList[];
+  mobileCourses: MobileCourseSummary[];
+  upcomingSessions: UpcomingSessionMobile[];
+  totalAttendanceCount: number;
+  totalSessionCount: number;
 }
 
 export default function HomeLMS(props: HomeLMSProps) {
@@ -35,7 +42,10 @@ export default function HomeLMS(props: HomeLMSProps) {
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
         sessionUserRole={props.sessionUserRole}
-        courseList={props.courseList}
+        courses={props.mobileCourses}
+        upcomingSessions={props.upcomingSessions}
+        totalAttendanceCount={props.totalAttendanceCount}
+        totalSessionCount={props.totalSessionCount}
       />
     );
   }
