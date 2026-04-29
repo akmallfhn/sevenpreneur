@@ -65,7 +65,7 @@ export default function SelectLMS({
       {selectName && (
         <label
           htmlFor={selectId}
-          className="select-label flex pl-1 gap-0.5 text-[15px] text-[#333333] font-bodycopy font-semibold"
+          className="select-label flex pl-1 gap-0.5 text-[15px] text-sb-text-strong font-bodycopy font-semibold"
         >
           {selectName}
           {required && (
@@ -75,7 +75,7 @@ export default function SelectLMS({
       )}
 
       <div
-        className={`select-container relative flex w-full p-2 pt-1 bg-white font-bodycopy font-medium text-[15px] border-b-2 transform transition-all ${
+        className={`select-container relative flex w-full p-2 pt-1 bg-transparent font-bodycopy font-medium text-[15px] border-b-2 transform transition-all ${
           isOpen ? "border-primary-deep" : ""
         } ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
         onClick={() => {
@@ -104,13 +104,13 @@ export default function SelectLMS({
         </div>
 
         {!disabled && (
-          <div className="dropdown-icon absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#616F86]">
+          <div className="dropdown-icon absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-emphasis">
             <ChevronDown className="size-5" />
           </div>
         )}
 
         {isOpen && !disabled && (
-          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-white border rounded-md shadow-md overflow-hidden">
+          <div className="dropdown-container absolute top-full mt-2 left-0 w-full z-30 bg-card-bg border border-dashboard-border rounded-md shadow-md overflow-hidden">
             <ul className="dropdown-options flex flex-col text-sm font-bodycopy font-medium max-h-60 overflow-auto">
               {options.map((opt, index) => (
                 <div
@@ -120,8 +120,8 @@ export default function SelectLMS({
                     onChange?.(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-[#E1EDFF] hover:text-primary ${
-                    value === opt.value ? "bg-[#E1EDFF] text-primary" : ""
+                  className={`dropdown-item-container flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-sb-item-hover hover:text-primary ${
+                    value === opt.value ? "bg-sb-item-active-bg text-sb-item-active-text" : ""
                   }`}
                 >
                   {opt.image && (

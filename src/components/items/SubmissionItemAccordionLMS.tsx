@@ -18,7 +18,7 @@ export default function SubmissionItemAccordionLMS(
 
   return (
     <div
-      className="submission-item flex flex-col w-full py-2.5 px-3 bg-white border rounded-md transform transition duration-500 hover:cursor-pointer"
+      className="submission-item flex flex-col w-full py-2.5 px-3 bg-card-bg border border-dashboard-border rounded-md transform transition duration-500 hover:cursor-pointer"
       onClick={handleOpen}
     >
       <div className="submission-attributes flex justify-between items-center gap-2">
@@ -45,11 +45,11 @@ export default function SubmissionItemAccordionLMS(
       >
         <div className="flex flex-col w-full gap-1">
           <div className="created-at flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[#333333]/80">
+            <div className="flex items-center gap-1 text-emphasis">
               <TimerIcon className="size-4" />
               <p className="font-bodycopy font-medium text-sm">Submitted at</p>
             </div>
-            <p className="font-bodycopy font-medium text-sm text-[#333333]/80 shrink-0">
+            <p className="font-bodycopy font-medium text-sm text-emphasis shrink-0">
               {!!props.submittedAt
                 ? dayjs(props.submittedAt).format("DD/MMM/YY [-] HH:mm")
                 : "-"}

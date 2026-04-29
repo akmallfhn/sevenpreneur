@@ -22,6 +22,7 @@ import SubmissionStatusLabelLMS from "../labels/SubmissionStatusLabelLMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
 import AppPageState from "../states/AppPageState";
+import PageContainerDashboard from "./PageContainerDashboard";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -168,7 +169,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
 
   return (
     <React.Fragment>
-      <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
+      <PageContainerDashboard className="h-full gap-4 items-center pb-8">
         <PageHeaderCohortLMS
           cohortId={props.cohortId}
           cohortName={props.cohortName}
@@ -177,11 +178,11 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
           sessionUserRole={props.sessionUserRole}
           headerTitle="Assignment"
           headerIcon={<FontAwesomeIcon icon={faPenRuler} size="lg" />}
-          headerIconColor="bg-[#FDE4D8] text-[#FB7A36]"
+          headerIconColor="bg-[#FDE4D8] dark:bg-[#3a1500] text-[#FB7A36]"
         />
         <div className="body-project max-w-[calc(100%-4rem)] w-full flex gap-4">
           <main className="w-full flex flex-col flex-2 gap-4">
-            <div className="project-attributes flex flex-col w-full gap-3 p-4 bg-white border rounded-lg">
+            <div className="project-attributes flex flex-col w-full gap-3 p-4 bg-card-bg border border-dashboard-border rounded-lg">
               <h2 className="project-name font-bodycopy font-bold text-2xl">
                 {props.projectName}
               </h2>
@@ -201,7 +202,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
               )}
             </div>
 
-            <div className="flex flex-col w-full bg-white p-4 gap-3 border rounded-xl">
+            <div className="flex flex-col w-full bg-card-bg p-4 gap-3 border border-dashboard-border rounded-xl">
               <div className="flex flex-col">
                 <h2 className="font-bold font-bodycopy">Submission</h2>
                 <p className="text-emphasis text-sm font-medium font-bodycopy">
@@ -260,7 +261,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
             </div>
           </main>
           <aside className="aside-contents w-full flex flex-col flex-1 gap-4">
-            <div className="submission-attributes flex flex-col w-full p-4 bg-white border gap-3 rounded-lg">
+            <div className="submission-attributes flex flex-col w-full p-4 bg-card-bg border border-dashboard-border gap-3 rounded-lg">
               <div className="submission-status flex gap-1">
                 <div
                   className={`flex size-2.5 m-1.5 justify-center items-center rounded-full bg-[#D99E00]`}
@@ -308,7 +309,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
                 </div>
               </div>
             </div>
-            <div className="submission-comment flex flex-col w-full p-4 bg-white border gap-3 rounded-lg">
+            <div className="submission-comment flex flex-col w-full p-4 bg-card-bg border border-dashboard-border gap-3 rounded-lg">
               <h3 className="section-name font-bodycopy font-bold text-[15px]">
                 Feedback from us
               </h3>
@@ -342,7 +343,7 @@ export default function ProjectDetailsLMS(props: ProjectDetailsLMS) {
             </div>
           </aside>
         </div>
-      </div>
+      </PageContainerDashboard>
 
       {/* Delete Submission */}
       {isOpenDeleteConfirmation && (

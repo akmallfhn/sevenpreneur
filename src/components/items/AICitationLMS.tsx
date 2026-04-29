@@ -24,7 +24,7 @@ export default function AICitationLMS(props: AICitationLMSProps) {
   }
 
   return (
-    <div className="data-confidence flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
+    <div className="data-confidence flex flex-col gap-4 w-full bg-card-bg p-5 rounded-lg border border-dashboard-border">
       <h3 className="section-title font-bold text-lg font-bodycopy">
         Confidence Index
       </h3>

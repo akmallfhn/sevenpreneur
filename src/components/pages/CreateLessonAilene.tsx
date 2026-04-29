@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { trpc } from "@/trpc/client";
 import { AiLearnLessonStatus } from "@prisma/client";
 import { ChevronLeft, Loader2 } from "lucide-react";
@@ -52,12 +52,15 @@ export default function CreateLessonAilene() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim()) return toast.warning("Judul tidak boleh kosong.");
-    if (!form.journey_id) return toast.warning("Pilih journey terlebih dahulu.");
+    if (!form.journey_id)
+      return toast.warning("Pilih journey terlebih dahulu.");
     createMutation.mutate({ ...form, journey_id: form.journey_id });
   };
 
-  const inputCls = "w-full px-3 py-2 rounded-lg border border-sevenpreneur-ash text-sm font-bodycopy focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition";
-  const labelCls = "font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest";
+  const inputCls =
+    "w-full px-3 py-2 rounded-lg border border-sevenpreneur-ash text-sm font-bodycopy focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition";
+  const labelCls =
+    "font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest";
 
   return (
     <div
@@ -87,7 +90,9 @@ export default function CreateLessonAilene() {
               className={inputCls}
               placeholder="Judul materi"
               value={form.title}
-              onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, title: e.target.value }))
+              }
             />
           </div>
 
@@ -97,7 +102,9 @@ export default function CreateLessonAilene() {
               className={inputCls}
               placeholder="Ringkasan singkat materi ini"
               value={form.description}
-              onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, description: e.target.value }))
+              }
             />
           </div>
 
@@ -106,11 +113,19 @@ export default function CreateLessonAilene() {
             <select
               className={inputCls}
               value={form.journey_id ?? ""}
-              onChange={(e) => setForm((p) => ({ ...p, journey_id: e.target.value ? Number(e.target.value) : null }))}
+              onChange={(e) =>
+                setForm((p) => ({
+                  ...p,
+                  journey_id: e.target.value ? Number(e.target.value) : null,
+                }))
+              }
             >
               <option value="">— Pilih journey —</option>
               {journeys.map((j) => (
-                <option key={j.id} value={j.id}>{j.name}{j.role ? ` (${j.role})` : ""}</option>
+                <option key={j.id} value={j.id}>
+                  {j.name}
+                  {j.role ? ` (${j.role})` : ""}
+                </option>
               ))}
             </select>
           </div>
@@ -121,10 +136,14 @@ export default function CreateLessonAilene() {
               <select
                 className={inputCls}
                 value={form.level}
-                onChange={(e) => setForm((p) => ({ ...p, level: Number(e.target.value) }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, level: Number(e.target.value) }))
+                }
               >
                 {LEVELS.map((l) => (
-                  <option key={l.value} value={l.value}>{l.label}</option>
+                  <option key={l.value} value={l.value}>
+                    {l.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -135,7 +154,9 @@ export default function CreateLessonAilene() {
                 className={inputCls}
                 min={1}
                 value={form.xp_reward}
-                onChange={(e) => setForm((p) => ({ ...p, xp_reward: Number(e.target.value) }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, xp_reward: Number(e.target.value) }))
+                }
               />
             </div>
             <div className="flex flex-col gap-1.5">
@@ -143,7 +164,12 @@ export default function CreateLessonAilene() {
               <select
                 className={inputCls}
                 value={form.status}
-                onChange={(e) => setForm((p) => ({ ...p, status: e.target.value as AiLearnLessonStatus }))}
+                onChange={(e) =>
+                  setForm((p) => ({
+                    ...p,
+                    status: e.target.value as AiLearnLessonStatus,
+                  }))
+                }
               >
                 <option value="DRAFT">Draft</option>
                 <option value="PUBLISHED">Published</option>
@@ -155,16 +181,23 @@ export default function CreateLessonAilene() {
           <div className="flex flex-col gap-1.5">
             <label className={labelCls}>
               Konten Materi{" "}
-              <span className="normal-case text-emphasis font-normal">(Markdown)</span>
+              <span className="normal-case text-emphasis font-normal">
+                (Markdown)
+              </span>
             </label>
             <textarea
               className={`${inputCls} min-h-72 resize-y font-mono text-xs leading-relaxed`}
-              placeholder={"# Judul\n\nTulis materi dalam format Markdown...\n\n## Sub-judul\n\nIsi konten di sini."}
+              placeholder={
+                "# Judul\n\nTulis materi dalam format Markdown...\n\n## Sub-judul\n\nIsi konten di sini."
+              }
               value={form.content}
-              onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, content: e.target.value }))
+              }
             />
             <p className="font-bodycopy text-xs text-emphasis">
-              Gunakan Markdown: # untuk heading, **bold**, *italic*, - untuk list
+              Gunakan Markdown: # untuk heading, **bold**, *italic*, - untuk
+              list
             </p>
           </div>
 
@@ -175,7 +208,9 @@ export default function CreateLessonAilene() {
               size="medium"
               disabled={createMutation.isPending}
             >
-              {createMutation.isPending && <Loader2 className="animate-spin size-4" />}
+              {createMutation.isPending && (
+                <Loader2 className="animate-spin size-4" />
+              )}
               Simpan & Lanjut Edit Quiz
             </AppButton>
             <Link href="/admin/lessons">

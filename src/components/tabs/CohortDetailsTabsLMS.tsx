@@ -76,15 +76,15 @@ export default function CohortDetailsTabsLMS(props: CohortDetailsTabsLMSProps) {
   const generalUser = props.userList.filter((user) => user.role_id === 3);
 
   return (
-    <div className="cohort-tabs w-full min-h-80 bg-white/70 rounded-lg border overflow-hidden">
-      <div className="tab-options flex border-b justify-around">
+    <div className="cohort-tabs w-full min-h-80 bg-card-bg rounded-lg border border-dashboard-border overflow-hidden">
+      <div className="tab-options flex border-b border-dashboard-border justify-around">
         {tabOptions.map((post) => (
           <div className="tab-item relative w-full" key={post.id}>
             <div
               className={`tab-item w-full p-3 text-center text-sm font-bodycopy transform transition hover:cursor-pointer ${
                 activeTab === post.id
-                  ? "bg-gradient-to-t from-0% from-primary-soft/50 to-60% to-primary-soft/0 text-primary font-bold"
-                  : "bg-white font-medium"
+                  ? "bg-gradient-to-t from-0% from-primary-soft/50 to-60% to-primary-soft/0 text-primary font-bold dark:from-sevenpreneur-blue-midnight/70 dark:to-sevenpreneur-blue-midnight/0"
+                  : "bg-card-bg font-medium"
               }`}
               onClick={() => setActiveTab(post.id)}
             >

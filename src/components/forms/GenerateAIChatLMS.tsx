@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import ChatSubmitterLMS from "../messages/ChatSubmitterLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 
 interface GenerateAIChatLMSProps {
   sessionUserName: string;
@@ -30,7 +31,7 @@ export default function GenerateAIChatLMS({
   };
 
   return (
-    <div className="root-page hidden flex-col pl-64 w-full min-h-screen items-center justify-center lg:flex">
+    <PageContainerDashboard className="min-h-screen items-center justify-center">
       <div className="generate-ai-chat flex flex-col items-center justify-center w-full max-w-[768px] gap-10">
         <div className="ai-persona flex flex-col w-full max-w-[450px] items-center text-center gap-2 font-bodycopy">
           <div className="ai-image size-16 rounded-full overflow-hidden">
@@ -45,7 +46,7 @@ export default function GenerateAIChatLMS({
           <h2 className="ai-name font-bodycopy font-semibold text-2xl">
             Sevenpreneur Virtual Coach
           </h2>
-          <p className="ai-description text-[#111111]/70 text-[15px] font-[450]">
+          <p className="ai-description text-emphasis text-[15px] font-[450]">
             Business mentor using Sevenpreneur Framework, built to solve
             real-world entrepreneurship gaps
           </p>
@@ -67,6 +68,6 @@ export default function GenerateAIChatLMS({
           </form>
         </div>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

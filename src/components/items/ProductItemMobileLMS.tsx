@@ -31,7 +31,7 @@ export default function ProductItemMobileLMS(props: ProductItemMobileLMSProps) {
   return (
     <Link
       href={`/${slugCategory}/${props.productId}`}
-      className="product-container flex w-full p-3 items-center gap-3 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
+      className="product-container flex w-full p-3 items-center gap-3 bg-card-bg border border-dashboard-border rounded-lg overflow-hidden transition transform active:scale-95"
     >
       <div className="product-image relative flex w-20 aspect-square rounded-md shrink-0 overflow-hidden">
         <Image
@@ -46,7 +46,7 @@ export default function ProductItemMobileLMS(props: ProductItemMobileLMSProps) {
         <h3 className="product-title text-base font-bodycopy font-bold line-clamp-2">
           {props.productName}
         </h3>
-        <p className="product-category text-[#111111]/70 font-bodycopy font-medium text-sm">
+        <p className="product-category text-emphasis font-bodycopy font-medium text-sm">
           {labelCategory?.toUpperCase()}
         </p>
       </div>

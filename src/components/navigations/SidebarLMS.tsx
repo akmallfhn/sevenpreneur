@@ -1,16 +1,19 @@
 "use client";
+import { useSidebar } from "@/contexts/SidebarContext";
+import { setSessionToken, trpc } from "@/trpc/client";
 import {
   BotMessageSquare,
   CircleFadingPlus,
   LayoutDashboard,
   LibraryBig,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import AppButton from "../buttons/AppButton";
 import AgoraSevenpreneurLogo from "../svg-logos/AgoraSevenpreneurLogo";
-import SidebarAIResultItemLMS from "./SidebarAIResultItemLMS";
-import SidebarMenuItemLMS from "./SidebarMenuItemLMS";
+import AppSidebar from "./AppSidebar";
+import AppSidebarMenuItem from "./AppSidebarMenuItem";
+import { useTheme } from "next-themes";
 
 export interface AIResultListProps {
   id: string;
@@ -20,77 +23,80 @@ export interface AIResultListProps {
 }
 
 interface SidebarLMSProps {
+  sessionToken: string;
   aiResultList: AIResultListProps[];
 }
 
-export default function SidebarLMS({ aiResultList }: SidebarLMSProps) {
+export default function SidebarLMS({
+  sessionToken,
+  aiResultList,
+}: SidebarLMSProps) {
+  const { isCollapsed } = useSidebar();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
+  const logoURL = isDark
+    ? "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square.svg"
+    : "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square-white.svg";
+
+  useEffect(() => {
+    if (sessionToken) setSessionToken(sessionToken);
+  }, [sessionToken]);
+
+  const { data } = trpc.auth.checkSession.useQuery(undefined, {
+    enabled: !!sessionToken,
+  });
+
   return (
-    <div className="sidebar-lms-root hidden fixed flex-col max-w-64 w-full h-full inset-y-0 left-0 items-center bg-[#FCFDFE] backdrop-blur-md z-50 dark:bg-surface-black lg:flex">
-      <div className="sidebar-lms-container relative flex flex-col w-full h-full">
-        <div className="sidebar-main-menu fixed top-0 left-0 w-64 flex flex-col p-3 pt-5 gap-5 bg-[#FCFDFE] z-10">
-          <div className="sidebar-logo flex items-center gap-4 pl-1">
-            <div className="sidebar-logo flex size-11 rounded-md outline-4 outline-primary/5 shrink-0 overflow-hidden">
-              <Image
-                className="object-cover w-full h-full"
-                src={
-                  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square-white.svg"
-                }
-                alt="logo-sevenpreneur"
-                width={400}
-                height={400}
-              />
-            </div>
-            <Link href="/" className="sidebar-logo flex">
-              <AgoraSevenpreneurLogo className="max-w-[142px] h-auto" />
+    <AppSidebar
+      logo={logoURL}
+      logoLabel="Agora Sevenpreneur"
+      logoLabelDisplay={
+        <AgoraSevenpreneurLogo className="max-w-[142px] h-auto" />
+      }
+      avatarSrc={data?.user.avatar ?? undefined}
+      avatarName={data?.user.full_name ?? undefined}
+      avatarRole={data?.user.role_name ?? undefined}
+    >
+      <AppSidebarMenuItem
+        menuName="Courses"
+        menuURL="/"
+        menuIcon={<LayoutDashboard />}
+        exact
+      />
+      <AppSidebarMenuItem
+        menuName="Library"
+        menuURL="/library"
+        menuIcon={<LibraryBig />}
+      />
+      <AppSidebarMenuItem
+        menuName="AI"
+        menuURL="/ai"
+        menuIcon={<BotMessageSquare />}
+      />
+      {aiResultList.length > 0 && (
+        <>
+          <hr className="border-b border-dashboard-border mt-3 mb-3" />
+          {!isCollapsed && (
+            <Link href="/ai/chat" className="w-full">
+              <AppButton
+                className="w-full"
+                size="small"
+                variant={isDark ? "tertiary" : "primarySoft"}
+              >
+                New Chat <CircleFadingPlus className="size-4" />
+              </AppButton>
             </Link>
-          </div>
-          <div className="sidebar-lms-menu flex flex-col w-full h-full gap-2">
-            <SidebarMenuItemLMS
-              menuTitle="Courses"
-              url="/"
-              icon={<LayoutDashboard />}
-              isHome
-            />
-            <SidebarMenuItemLMS
-              menuTitle="Library"
-              url="/library"
-              icon={<LibraryBig />}
-            />
-            <SidebarMenuItemLMS
-              menuTitle="AI"
-              url="/ai"
-              icon={<BotMessageSquare />}
-            />
-          </div>
-        </div>
-        <div className="sidebar-scroll-body flex flex-col w-full h-full gap-4 mt-[224px] px-3 overflow-y-auto">
-          <hr />
-          <Link href="/ai/chat" className="w-full">
-            <AppButton className="w-full" size="medium" variant="primarySoft">
-              New Chat <CircleFadingPlus className="size-4.5" />
-            </AppButton>
-          </Link>
-          {aiResultList.length > 0 && (
-            <div className="sidebar-lms-ai-result flex flex-col w-full gap-4">
-              <div className="flex flex-col gap-1">
-                <h2 className="m-2 mt-0 text-sm text-emphasis font-bodycopy font-medium">
-                  Generated Result
-                </h2>
-                <div className="sidebar-ai-result flex flex-col h-full gap-2">
-                  {aiResultList.map((post) => (
-                    <SidebarAIResultItemLMS
-                      key={post.id}
-                      aiToolSlug={post.ai_tool_slug_url}
-                      aiResultId={post.id}
-                      aiResultName={post.name || "Agora AI"}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
           )}
-        </div>
-      </div>
-    </div>
+          {aiResultList.map((item) => (
+            <AppSidebarMenuItem
+              key={item.id}
+              menuName={item.name || "Agora AI"}
+              menuURL={`/ai/${item.ai_tool_slug_url}/${item.id}`}
+            />
+          ))}
+        </>
+      )}
+    </AppSidebar>
   );
 }

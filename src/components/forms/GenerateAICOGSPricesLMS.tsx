@@ -19,6 +19,7 @@ import InputLMS from "../fields/InputLMS";
 import InputNumberSVP from "../fields/InputNumberSVP";
 import RadioBoxLMS from "../fields/RadioBoxLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 import AICostListStepperLMS, {
   CostListForm,
@@ -290,7 +291,7 @@ export default function GenerateAICOGSPricesLMS(
   };
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderGenerateAIToolLMS
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
@@ -306,7 +307,7 @@ export default function GenerateAICOGSPricesLMS(
           >
             <section
               id="product-information"
-              className="product-information bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              className="product-information bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
                 Product Information
@@ -330,7 +331,7 @@ export default function GenerateAICOGSPricesLMS(
                 required
               />
               <div className="product-category flex flex-col gap-2">
-                <h3 className="text-[15px] text-[#333333] font-bodycopy font-semibold">
+                <h3 className="text-[15px] text-sb-text-strong font-bodycopy font-semibold">
                   Pilih Kategori Produk
                   <span className="label-required text-destructive">*</span>
                 </h3>
@@ -398,13 +399,13 @@ export default function GenerateAICOGSPricesLMS(
             </section>
             <section
               id="variable-cost"
-              className="variable-cost bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              className="variable-cost bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
             >
               <div className="section-attributes flex flex-col">
                 <h2 className="section-title font-bold font-bodycopy">
                   Variable Cost
                 </h2>
-                <p className="section-description text-[15px] text-[#333333]/70 font-medium font-bodycopy">
+                <p className="section-description text-[15px] text-emphasis font-medium font-bodycopy">
                   Variable cost adalah biaya yang melekat pada setiap unit
                   produk seperti bahan baku atau komponen produk.
                 </p>
@@ -416,13 +417,13 @@ export default function GenerateAICOGSPricesLMS(
             </section>
             <section
               id="fixed-cost"
-              className="fixed-cost bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              className="fixed-cost bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
             >
               <div className="section-attributes flex flex-col">
                 <h2 className="section-title font-bold font-bodycopy">
                   Fixed Cost
                 </h2>
-                <p className="section-description text-[15px] text-[#333333]/70 font-medium font-bodycopy">
+                <p className="section-description text-[15px] text-emphasis font-medium font-bodycopy">
                   Fixed cost adalah biaya tetap yang tidak terikat pada jumlah
                   produk.
                 </p>
@@ -431,7 +432,7 @@ export default function GenerateAICOGSPricesLMS(
             </section>
             <section
               id="target-volume-per-month"
-              className="target-volume-per-month bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              className="target-volume-per-month bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
                 Volume Production per Month
@@ -483,6 +484,6 @@ export default function GenerateAICOGSPricesLMS(
           </div>
         </aside>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

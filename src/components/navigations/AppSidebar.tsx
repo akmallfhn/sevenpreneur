@@ -1,6 +1,6 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useSidebar } from "@/contexts/SidebarContext";
+import { useTheme } from "next-themes";
 import { Moon, PanelLeftClose, Sun } from "lucide-react";
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -9,26 +9,30 @@ import AppButton from "../buttons/AppButton";
 interface AppSidebarProps {
   logo: string | ReactNode;
   logoLabel: string;
-  avatarSrc: string;
-  avatarName: string;
-  avatarRole: string;
+  logoLabelDisplay?: ReactNode;
+  avatarSrc?: string;
+  avatarName?: string;
+  avatarRole?: string;
   children: ReactNode;
 }
 
 export default function AppSidebar({
   logo,
   logoLabel,
+  logoLabelDisplay,
   avatarSrc,
   avatarName,
   avatarRole,
   children,
 }: AppSidebarProps) {
   const { isCollapsed, toggleSidebar } = useSidebar();
-  const { isDark, toggleTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+  const toggleTheme = () => setTheme(isDark ? "light" : "dark");
 
   return (
     <div
-      className={`${isDark ? "dark" : ""} hidden fixed w-full h-full left-0 z-50 lg:flex lg:flex-col ${
+      className={`hidden fixed w-full h-full left-0 z-50 lg:flex lg:flex-col ${
         isCollapsed ? "max-w-16 items-center" : "max-w-64"
       }`}
     >
@@ -42,7 +46,11 @@ export default function AppSidebar({
         <div
           className={`absolute -right-5 ${isCollapsed ? "top-5" : "top-6"} z-10`}
         >
-          <AppButton size="mediumIcon" variant={isDark ? "dark" : "light"} onClick={toggleSidebar}>
+          <AppButton
+            size="mediumIcon"
+            variant={isDark ? "dark" : "light"}
+            onClick={toggleSidebar}
+          >
             <PanelLeftClose
               className={`size-4 text-emphasis transition-all duration-300 ease-in-out ${
                 isCollapsed ? "rotate-180" : ""
@@ -55,14 +63,13 @@ export default function AppSidebar({
         <div
           className={`flex flex-col w-full gap-5 flex-1 min-h-0 overflow-hidden ${isCollapsed ? "items-center" : ""}`}
         >
-          {/* Logo */}
           <div
             className={`flex items-center gap-3 shrink-0 ${
               isCollapsed ? "justify-center w-full" : "pl-1"
             }`}
           >
             <div
-              className={`flex aspect-square shrink-0 overflow-hidden rounded-lg ${
+              className={`flex aspect-square shrink-0 overflow-hidden rounded-lg border-4 border-dashboard-border ${
                 isCollapsed ? "w-9" : "w-11"
               }`}
             >
@@ -81,15 +88,15 @@ export default function AppSidebar({
               )}
             </div>
             {!isCollapsed && (
-              <p className="font-bodycopy font-semibold text-[13px] leading-snug line-clamp-2 transition-all duration-300 ease-in-out text-sb-text-strong">
-                {logoLabel}
-              </p>
+              <div className="font-bodycopy font-semibold text-[13px] leading-snug line-clamp-2 transition-all duration-300 ease-in-out text-sb-text-strong">
+                {logoLabelDisplay ?? logoLabel}
+              </div>
             )}
           </div>
 
           {/* Menu */}
           <nav
-            className={`flex flex-col gap-1 flex-1 overflow-y-auto w-full ${isCollapsed ? "items-center" : ""}`}
+            className={`flex flex-col gap-1 flex-1 overflow-y-auto w-full [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isCollapsed ? "items-center" : ""}`}
           >
             {children}
           </nav>
@@ -98,7 +105,6 @@ export default function AppSidebar({
         {/* Bottom: theme toggle + avatar */}
         <div
           className={`flex flex-col gap-2 pt-3 mt-3 shrink-0 w-full ${isCollapsed ? "items-center" : ""}`}
-          style={{ borderTop: "1px solid var(--sb-item-hover)" }}
         >
           {/* Dark / Light toggle */}
           {!isCollapsed && (
@@ -131,34 +137,35 @@ export default function AppSidebar({
           )}
 
           {/* Avatar badge */}
-          <div
-            className={`flex items-center rounded-md cursor-pointer bg-sb-avatar-bg ${
-              isCollapsed ? "justify-center py-2" : "gap-3 p-2"
-            }`}
-            style={
-              isCollapsed ? undefined : { border: "1px solid var(--dashboard-border)" }
-            }
-          >
-            <div className="flex size-8 rounded-full overflow-hidden shrink-0">
-              <Image
-                className="object-cover w-full h-full"
-                src={avatarSrc}
-                alt={avatarName}
-                width={100}
-                height={100}
-              />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col flex-1 min-w-0">
-                <p className="font-bodycopy font-semibold text-[13px] text-sb-text-strong truncate">
-                  {avatarName}
-                </p>
-                <p className="font-bodycopy text-xs text-sb-text truncate font-medium">
-                  {avatarRole}
-                </p>
+          {avatarSrc && avatarName && (
+            <div
+              className={`flex items-center rounded-md cursor-pointer bg-sb-avatar-bg ${
+                isCollapsed
+                  ? "justify-center py-2"
+                  : "gap-3 p-2 border border-dashboard-border"
+              }`}
+            >
+              <div className="flex size-8 rounded-full overflow-hidden shrink-0">
+                <Image
+                  className="object-cover w-full h-full"
+                  src={avatarSrc}
+                  alt={avatarName}
+                  width={100}
+                  height={100}
+                />
               </div>
-            )}
-          </div>
+              {!isCollapsed && (
+                <div className="flex flex-col flex-1 min-w-0">
+                  <p className="font-bodycopy font-semibold text-[13px] text-sb-text-strong truncate">
+                    {avatarName}
+                  </p>
+                  <p className="font-bodycopy text-xs text-sb-text truncate font-medium">
+                    {avatarRole}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

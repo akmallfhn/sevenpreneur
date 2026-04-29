@@ -14,7 +14,7 @@ export default function RadioBoxLMS(props: RadioBoxLMSProps) {
   return (
     <label
       className={`input-container flex p-3 gap-4 border rounded-md ${
-        isSelected ? "bg-[#F2F8FF] border-primary" : "bg-white"
+        isSelected ? "bg-[#F2F8FF] dark:bg-[#0d1f3d] border-primary" : "bg-card-bg border-dashboard-border"
       } `}
     >
       <input
@@ -28,13 +28,13 @@ export default function RadioBoxLMS(props: RadioBoxLMSProps) {
       <div className="input-attributes flex-col font-bodycopy text-sm">
         <p
           className={`input-label font-bold ${
-            isSelected ? "text-primary" : "text-black"
+            isSelected ? "text-primary" : "text-foreground"
           }`}
         >
           {props.radioName}
         </p>
         {props.radioDescription && (
-          <p className="input-description text-[#333333]/70 font-medium line-clamp-2">
+          <p className="input-description text-emphasis font-medium line-clamp-2">
             {props.radioDescription}
           </p>
         )}

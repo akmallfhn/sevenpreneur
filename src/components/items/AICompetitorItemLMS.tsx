@@ -16,23 +16,23 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   let leaderboardIcon = "";
-  let containerBg = "bg-white";
+  let containerBg = "bg-card-bg";
 
   if (props.leaderboardIndex === 1) {
     leaderboardIcon =
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/medal-gold.png";
     containerBg =
-      "bg-linear-to-r from-0% from-[#FEF9EB] via-40% via-[#FCF3D6] to-100% to-white";
+      "bg-linear-to-r from-0% from-[#FEF9EB] via-40% via-[#FCF3D6] to-100% to-white dark:from-[#2a2208] dark:via-[#1e1a06] dark:to-card-bg";
   } else if (props.leaderboardIndex === 2) {
     leaderboardIcon =
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/medal-silver.png";
     containerBg =
-      "bg-linear-to-r from-0% from-[#F3F3F3] via-40% via-[#F3F3F3] to-100% to-white";
+      "bg-linear-to-r from-0% from-[#F3F3F3] via-40% via-[#F3F3F3] to-100% to-white dark:from-[#1e1e1e] dark:via-[#1e1e1e] dark:to-card-bg";
   } else if (props.leaderboardIndex === 3) {
     leaderboardIcon =
       "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/medal-bronze.png";
     containerBg =
-      "bg-linear-to-r from-0% from-[#ECE3D4] via-40% via-[#F7F3ED] to-100% to-white";
+      "bg-linear-to-r from-0% from-[#ECE3D4] via-40% via-[#F7F3ED] to-100% to-white dark:from-[#221a0e] dark:via-[#1a1510] dark:to-card-bg";
   }
 
   return (
@@ -45,7 +45,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
         <div className="competitor-container flex items-center gap-3">
           <div className="leaderboard-index flex w-8 justify-center items-center shrink-0">
             {props.leaderboardIndex > 3 ? (
-              <p className="font-bodycopy text-[#111111] font-medium">
+              <p className="font-bodycopy text-foreground font-medium">
                 {props.leaderboardIndex}
               </p>
             ) : (
@@ -59,7 +59,7 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
             )}
           </div>
           <div className="competitor-attributes flex flex-col">
-            <h4 className="competitor-name font-bodycopy font-semibold text-[#111111] text-[15px] line-clamp-1">
+            <h4 className="competitor-name font-bodycopy font-semibold text-foreground text-[15px] line-clamp-1">
               {props.competitorName}
             </h4>
             <a
@@ -68,8 +68,8 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
               target="__blank"
               rel="noopener noreferrer"
             >
-              <ExternalLink className="size-3 text-[#111111]/80 shrink-0" />
-              <p className="competitor-url font-bodycopy text-sm text-[#111111]/80 line-clamp-1 hover:underline hover:underline-offset-2">
+              <ExternalLink className="size-3 text-foreground/80 shrink-0" />
+              <p className="competitor-url font-bodycopy text-sm text-foreground/80 line-clamp-1 hover:underline hover:underline-offset-2">
                 {props.competitorURL}
               </p>
             </a>
@@ -92,16 +92,16 @@ export default function AICompetitorItemLMS(props: AICompetitorItemLMSProps) {
             : "max-h-0 opacity-0 pointer-events-none"
         }`}
       >
-        <div className="market-score flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
+        <div className="market-score flex flex-col font-bodycopy font-medium text-emphasis text-[15px]">
           <b>Market Score:</b>
-          <div className="competitor-score flex w-fit items-center gap-2 bg-white py-1 px-2 border rounded-md shrink-0">
+          <div className="competitor-score flex w-fit items-center gap-2 bg-card-bg py-1 px-2 border border-dashboard-border rounded-md shrink-0">
             <div className="flex size-1.5 bg-alternative rounded-full" />
             <p className="text-sm font-bodycopy font-medium">
               {props.competitorScore}/100
             </p>
           </div>
         </div>
-        <p className="key-strength flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
+        <p className="key-strength flex flex-col font-bodycopy font-medium text-emphasis text-[15px]">
           <b>Key Strength:</b>
           {props.competitorKeyStrength}
         </p>

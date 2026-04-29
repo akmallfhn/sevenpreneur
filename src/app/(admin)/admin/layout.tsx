@@ -1,7 +1,7 @@
 import "@/app/globals.css";
 import SidebarCMS from "@/components/navigations/SidebarCMS";
 import AppPageState from "@/components/states/AppPageState";
-import { SidebarProviderCMS } from "@/contexts/SidebarContextCMS";
+import { SidebarProvider } from "@/contexts/SidebarContext";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -51,7 +51,7 @@ export default async function AdminLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <SidebarProviderCMS>
+      <SidebarProvider>
         <div>
           <SidebarCMS
             sessionToken={sessionToken}
@@ -63,7 +63,7 @@ export default async function AdminLayout(
           </div>
           <Toaster richColors position="top-center" />
         </div>
-      </SidebarProviderCMS>
+      </SidebarProvider>
     </TRPCProvider>
   );
 }

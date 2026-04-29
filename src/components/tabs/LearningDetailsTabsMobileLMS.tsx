@@ -120,14 +120,14 @@ export default function LearningDetailsTabsMobileLMS(
 
   return (
     <div className="learning-session-tabs flex flex-col w-full">
-      <div className="tab-options flex border-b justify-around">
+      <div className="tab-options flex border-b border-dashboard-border justify-around">
         {tabOptions.map((post) => (
           <div className="tab-item relative w-full" key={post.id}>
             <div
               className={`tab-item w-full p-3 text-center text-sm font-bodycopy transform transition hover:cursor-pointer ${
                 activeTab === post.id
                   ? "bg-gradient-to-t from-0% from-primary-light/50 to-60% to-primary-light/0 text-primary font-bold"
-                  : "bg-white font-medium"
+                  : "bg-card-bg font-medium"
               }`}
               onClick={() => {
                 setActiveTab(post.id);
@@ -145,13 +145,13 @@ export default function LearningDetailsTabsMobileLMS(
 
       {activeTab === "details" && (
         <div className="tab-content flex flex-col w-full gap-1">
-          <div className="learning-place-date flex flex-col gap-3 bg-white p-5">
+          <div className="learning-place-date flex flex-col gap-3 bg-card-bg p-5">
             <h2 className="section-title font-bodycopy font-bold">
               Class Information
             </h2>
             <div className="learning-place-date-box flex flex-col gap-3">
               <div className="learning-place-date-container flex w-full items-center gap-3">
-                <div className="learning-place-icon size-11 aspect-square bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
+                <div className="learning-place-icon size-11 aspect-square bg-card-bg p-1 border border-dashboard-border shrink-0 rounded-lg overflow-hidden">
                   <Image
                     className="object-cover w-full h-full"
                     src={learningPlaceIcon}
@@ -164,7 +164,7 @@ export default function LearningDetailsTabsMobileLMS(
                   <h2 className="learning-place-name font-bodycopy font-bold text-[15px]">
                     {learningPlaceName}
                   </h2>
-                  <p className="learning-session-date font-bodycopy font-medium text-sm text-[#333333]">
+                  <p className="learning-session-date font-bodycopy font-medium text-sm text-emphasis">
                     {dayjs(props.learningSessionDate).format(
                       "ddd[,] DD MMM YYYY [-] HH:mm"
                     )}
@@ -213,7 +213,7 @@ export default function LearningDetailsTabsMobileLMS(
               </div>
             </div>
           </div>
-          <div className="attendance flex flex-col bg-white p-5">
+          <div className="attendance flex flex-col bg-card-bg p-5">
             <AttendanceGatewayMobileLMS
               learningSessionId={props.learningSessionId}
               hasCheckIn={props.hasCheckIn}
@@ -223,7 +223,7 @@ export default function LearningDetailsTabsMobileLMS(
               sessionToken={props.sessionToken}
             />
           </div>
-          <div className="learning-description relative flex flex-col gap-3 bg-white p-5">
+          <div className="learning-description relative flex flex-col gap-3 bg-card-bg p-5">
             <h2 className="section-title font-bodycopy font-bold">
               What&apos;s on this sessions?
             </h2>
@@ -233,7 +233,7 @@ export default function LearningDetailsTabsMobileLMS(
                 isExpanded ? "max-h-[4000px]" : "max-h-32"
               }`}
             >
-              <p className="font-bodycopy font-medium text-sm text-[#333333] whitespace-pre-line">
+              <p className="font-bodycopy font-medium text-sm text-emphasis whitespace-pre-line">
                 {props.learningSessionDescription}
               </p>
             </div>
@@ -252,7 +252,7 @@ export default function LearningDetailsTabsMobileLMS(
               </AppButton>
             </div>
             {!isExpanded && isOverflowing && (
-              <div className="overlay absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-40% from-white to-100% to-transparent pointer-events-none" />
+              <div className="overlay absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-40% from-white dark:from-[#11141b] to-100% to-transparent pointer-events-none" />
             )}
           </div>
         </div>
@@ -260,7 +260,7 @@ export default function LearningDetailsTabsMobileLMS(
 
       {activeTab === "discussions" && (
         <div className="tab-content flex flex-col w-full gap-1 pb-11">
-          <div className="video-recording relative flex flex-col gap-3 bg-white p-5">
+          <div className="video-recording relative flex flex-col gap-3 bg-card-bg p-5">
             <h2 className="section-title font-bodycopy font-bold">
               Discussions
             </h2>
@@ -300,7 +300,7 @@ export default function LearningDetailsTabsMobileLMS(
 
       {activeTab === "materials" && (
         <div className="tab-content flex flex-col w-full gap-1">
-          <div className="video-recording relative flex flex-col gap-3 bg-white p-5">
+          <div className="video-recording relative flex flex-col gap-3 bg-card-bg p-5">
             <h2 className="section-title font-bodycopy font-bold">
               Video Recording
             </h2>
@@ -325,7 +325,7 @@ export default function LearningDetailsTabsMobileLMS(
             )}
             {!learningVideoKey && <EmptyComponentsLMS variant="RECORDING" />}
           </div>
-          <div className="learning-materials relative flex flex-col gap-3 bg-white p-5">
+          <div className="learning-materials relative flex flex-col gap-3 bg-card-bg p-5">
             <h2 className="section-title font-bodycopy font-bold">Materials</h2>
             {activeMaterials.length > 0 ? (
               <div className="material-list flex flex-col gap-2">

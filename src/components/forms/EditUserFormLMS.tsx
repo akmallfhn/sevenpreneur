@@ -196,7 +196,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
       className="form-container w-full flex flex-col gap-4 items-end pb-32"
       onSubmit={handleSubmit}
     >
-      <div className="form-avatar relative w-full aspect-[1486/248] bg-[#E8EBF1] rounded-md overflow-hidden">
+      <div className="form-avatar relative w-full aspect-[1486/248] bg-[#E8EBF1] dark:bg-[#1a1e2a] rounded-md overflow-hidden">
         <div className="flex absolute left-7 top-1/2 -translate-y-1/2 z-20">
           <UploadAvatarUserLMS
             fileValue={formData.userAvatar}
@@ -217,11 +217,11 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
           height={800}
         />
       </div>
-      <div className="personal-form-input flex flex-col w-full bg-white p-6 gap-6 border rounded-lg">
+      <div className="personal-form-input flex flex-col w-full bg-card-bg p-6 gap-6 border border-dashboard-border rounded-lg">
         <div className="form-name flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Full Name</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Your display name
             </p>
           </div>
@@ -239,7 +239,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-email flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Email</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Used for login and notifications
             </p>
           </div>
@@ -250,7 +250,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
               value={props.initialData.email}
               disabled
             />
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy">
               Need to update your email? Contact{" "}
               <a
                 href="https://wa.me/6285353533844"
@@ -266,7 +266,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-phone-number flex w-full items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Phone Number</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Used to WhatsApp community
             </p>
           </div>
@@ -284,7 +284,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-date-of-birth flex w-full items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Date of Birth</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Used to verify your age
             </p>
           </div>
@@ -301,7 +301,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-occupation flex w-full items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Occupation</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Your current role or profession
             </p>
           </div>
@@ -342,11 +342,11 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
           </div>
         </div>
       </div>
-      <div className="business-form-input flex flex-col w-full bg-white p-6 gap-6 border rounded-lg">
+      <div className="business-form-input flex flex-col w-full bg-card-bg p-6 gap-6 border border-dashboard-border rounded-lg">
         <div className="form-business-name flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Business Name</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Your brand name
             </p>
           </div>
@@ -364,7 +364,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-business-desc flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Description</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Brief overview of your business
             </p>
           </div>
@@ -382,7 +382,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-business-industry flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Industry</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Category your business belongs to
             </p>
           </div>
@@ -405,7 +405,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-business-age-years flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Business Age</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               How long your business has been operating
             </p>
           </div>
@@ -423,7 +423,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-legal-entity flex w-full items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Legal Status</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Business registration type
             </p>
           </div>
@@ -474,7 +474,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-total-employee flex w-full items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Team Size</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Total number of people in your company
             </p>
           </div>
@@ -513,7 +513,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-business-yearly-revenue flex w-full items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Revenue</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Total yearly revenue
             </p>
           </div>
@@ -560,7 +560,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
         <div className="form-average-selling-price flex items-center">
           <div className="label w-80">
             <p className="text-[15px] font-bodycopy font-bold">Avg. price</p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Average price per product or service
             </p>
           </div>
@@ -580,7 +580,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             <p className="text-[15px] font-bodycopy font-bold">
               Company Profile
             </p>
-            <p className="text-[13px] text-[#333333]/50 font-[450] font-bodycopy leading-snug">
+            <p className="text-[13px] text-emphasis font-[450] font-bodycopy leading-snug">
               Upload your company profile
             </p>
           </div>

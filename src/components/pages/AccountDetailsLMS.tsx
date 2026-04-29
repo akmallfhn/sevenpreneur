@@ -7,6 +7,7 @@ import EditUserFormLMS, {
   InitialDataUser,
 } from "../forms/EditUserFormLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
+import PageContainerDashboard from "./PageContainerDashboard";
 
 interface AccountDetailsLMSProps extends AvatarBadgeLMSProps {
   sessionUserId: string;
@@ -16,11 +17,11 @@ interface AccountDetailsLMSProps extends AvatarBadgeLMSProps {
 
 export default function AccountDetailsLMS(props: AccountDetailsLMSProps) {
   return (
-    <div className="root-page hidden flex-col pl-64 w-full h-full gap-5 items-center pb-8 lg:flex">
+    <PageContainerDashboard className="h-full gap-5 items-center pb-8">
       <PageHeaderLMS
         headerTitle="Account Settings"
         headerIcon={<FontAwesomeIcon icon={faUser} />}
-        headerIconColor="bg-[#FDE4D8] text-[#FB7A36]"
+        headerIconColor="bg-[#FDE4D8] dark:bg-[#2e1508] text-[#FB7A36]"
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -32,6 +33,6 @@ export default function AccountDetailsLMS(props: AccountDetailsLMSProps) {
           industriesData={props.industriesData}
         />
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

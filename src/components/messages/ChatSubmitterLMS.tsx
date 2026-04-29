@@ -41,14 +41,14 @@ export default function ChatSubmitterLMS({
   };
 
   return (
-    <div className="chat-submitter flex flex-col w-full p-3 bg-white gap-3 border rounded-xl">
+    <div className="chat-submitter flex flex-col w-full p-3 bg-card-bg gap-3 border border-dashboard-border rounded-xl">
       <div className="text-area-container relative w-full">
         <textarea
           id="chat-ai"
           placeholder="Ask anything about business!"
           rows={1}
           {...rest}
-          className={`text-area-placeholder flex w-full max-h-52 min-h-0 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-base resize-none transform transition-all overflow-auto placeholder:text-emphasis placeholder:font-medium placeholder:text-base focus:outline-none focus:ring-0`}
+          className={`text-area-placeholder flex w-full max-h-52 min-h-0 h-auto p-2 pt-1 bg-transparent font-medium font-bodycopy text-base resize-none transform transition-all overflow-auto placeholder:text-emphasis placeholder:font-medium placeholder:text-base focus:outline-none focus:ring-0`}
           value={value}
           onKeyDown={handleKeyDown}
           onChange={handleTextAreaChange}

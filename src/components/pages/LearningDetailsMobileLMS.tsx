@@ -152,7 +152,7 @@ export default function LearningDetailsMobileLMS(
 
       {/* Create Discussion */}
       {currentTab === "discussions" && (
-        <div className="discussions fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-white py-4 px-5 gap-6 border-t transition-all z-[90]">
+        <div className="discussions fixed flex w-full bottom-0 inset-x-0 items-center justify-between bg-card-bg py-4 px-5 gap-6 border-t border-dashboard-border transition-all z-[90]">
           <AppDiscussionStarterSubmitter
             sessionUserName={props.sessionUserName}
             sessionUserAvatar={props.sessionUserAvatar}

@@ -11,6 +11,7 @@ import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
 import SelectLMS from "../fields/SelectLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 
 interface IndustryList {
@@ -99,7 +100,7 @@ export default function GenerateAICompetitorGraderLMS(
   };
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderGenerateAIToolLMS
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
@@ -115,7 +116,7 @@ export default function GenerateAICompetitorGraderLMS(
           >
             <section
               id="business-profile"
-              className="business-profile bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              className="business-profile bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
                 Business Profile
@@ -198,6 +199,6 @@ export default function GenerateAICompetitorGraderLMS(
           </div>
         </aside>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

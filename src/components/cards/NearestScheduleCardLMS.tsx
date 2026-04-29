@@ -38,7 +38,7 @@ export default function NearestScheduleCardLMS({
   const nearestSchedule = upcomingSchedule[0] || null;
 
   return (
-    <div className="nearest-schedule-box relative flex flex-col w-full bg-sevenpreneur-coal p-4 gap-6 border rounded-lg">
+    <div className="nearest-schedule-box relative flex flex-col w-full bg-sevenpreneur-coal p-4 gap-6 border border-dashboard-border rounded-lg">
       {nearestSchedule ? (
         <div className="nearest-schedule-container flex flex-col gap-2">
           <p className="section-title font-bodycopy text-emphasis text-[15px]">

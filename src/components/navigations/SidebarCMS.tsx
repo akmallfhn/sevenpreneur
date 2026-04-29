@@ -1,6 +1,6 @@
 "use client";
 import AvatarBadgeCMS from "@/components/buttons/AvatarBadgeCMS";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { DeleteSession } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";

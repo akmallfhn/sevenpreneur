@@ -66,22 +66,22 @@ export default function CheckOutAttendanceLMS(
 
   return (
     <React.Fragment>
-      <div className="check-out-attendance relative flex items-center justify-between gap-3 bg-white p-4 border rounded-lg overflow-hidden">
+      <div className="relative flex items-center justify-between gap-3 bg-card-bg p-4 border border-dashboard-border rounded-lg overflow-hidden">
         <div className="flex items-center gap-2">
-          <div className="clock-icon size-11 aspect-square bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
+          <div className="size-11 aspect-square bg-card-bg p-1 border border-dashboard-border shrink-0 rounded-lg overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/icon/clock-icon.svg"
-              alt={"Test"}
+              alt="Check Out"
               width={400}
               height={400}
             />
           </div>
           <div className="flex flex-col z-10">
-            <h3 className="section-title font-bold font-bodycopy text-[15px] leading-tight">
+            <h3 className="font-bold font-bodycopy text-[15px] leading-tight text-sb-text-strong">
               Check Out
             </h3>
-            <p className="font-bodycopy font-medium text-[#111111]/70 text-sm leading-tight">
+            <p className="font-bodycopy font-medium text-emphasis text-sm leading-tight">
               For completion
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function CheckOutAttendanceLMS(
           {checkOutIcon}
         </AppButton>
 
-        <div className="check-out-background absolute bottom-2 -right-5 text-black/10 dark:text-white/[0.017]">
+        <div className="absolute bottom-2 -right-5 text-emphasis/10">
           <ClockFading className="size-20" />
         </div>
       </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { trpc } from "@/trpc/client";
 import { AiLearnLessonStatus } from "@prisma/client";
 import { ChevronLeft, Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
@@ -18,7 +18,10 @@ const LEVELS = [
 
 const OPTION_IDS = ["a", "b", "c", "d"];
 
-interface QuizOption { id: string; text: string; }
+interface QuizOption {
+  id: string;
+  text: string;
+}
 interface QuizFormState {
   id?: number;
   question: string;
@@ -44,7 +47,9 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
   const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
 
-  const { data, isLoading } = trpc.ailene.readLesson.useQuery({ id: props.lessonId });
+  const { data, isLoading } = trpc.ailene.readLesson.useQuery({
+    id: props.lessonId,
+  });
   const lesson = data?.lesson;
 
   const [form, setForm] = useState<{
@@ -134,7 +139,12 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
   const handleEditQuiz = (q: {
     id: number;
     question: string;
-    options: { option_id: string; text: string; is_correct: boolean; order_index: number }[];
+    options: {
+      option_id: string;
+      text: string;
+      is_correct: boolean;
+      order_index: number;
+    }[];
     explanation: string | null;
   }) => {
     setEditingQuizId(q.id);
@@ -176,8 +186,10 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
     }
   };
 
-  const inputCls = "w-full px-3 py-2 rounded-lg border border-sevenpreneur-ash text-sm font-bodycopy focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition";
-  const labelCls = "font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest";
+  const inputCls =
+    "w-full px-3 py-2 rounded-lg border border-sevenpreneur-ash text-sm font-bodycopy focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition";
+  const labelCls =
+    "font-bodycopy text-xs font-semibold text-emphasis uppercase tracking-widest";
 
   return (
     <div
@@ -208,7 +220,9 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                 <input
                   className={inputCls}
                   value={form.title}
-                  onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, title: e.target.value }))
+                  }
                 />
               </div>
               <div className="flex flex-col gap-1.5">
@@ -216,19 +230,25 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                 <input
                   className={inputCls}
                   value={form.description}
-                  onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, description: e.target.value }))
+                  }
                 />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className={labelCls}>
                   YouTube URL{" "}
-                  <span className="normal-case text-emphasis font-normal">(link video YouTube)</span>
+                  <span className="normal-case text-emphasis font-normal">
+                    (link video YouTube)
+                  </span>
                 </label>
                 <input
                   className={inputCls}
                   placeholder="https://youtube.com/watch?v=..."
                   value={form.youtube_url}
-                  onChange={(e) => setForm((p) => ({ ...p, youtube_url: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, youtube_url: e.target.value }))
+                  }
                 />
               </div>
               <div className="grid grid-cols-3 gap-4">
@@ -237,10 +257,14 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                   <select
                     className={inputCls}
                     value={form.level}
-                    onChange={(e) => setForm((p) => ({ ...p, level: Number(e.target.value) }))}
+                    onChange={(e) =>
+                      setForm((p) => ({ ...p, level: Number(e.target.value) }))
+                    }
                   >
                     {LEVELS.map((l) => (
-                      <option key={l.value} value={l.value}>{l.label}</option>
+                      <option key={l.value} value={l.value}>
+                        {l.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -251,7 +275,12 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                     className={inputCls}
                     min={1}
                     value={form.xp_reward}
-                    onChange={(e) => setForm((p) => ({ ...p, xp_reward: Number(e.target.value) }))}
+                    onChange={(e) =>
+                      setForm((p) => ({
+                        ...p,
+                        xp_reward: Number(e.target.value),
+                      }))
+                    }
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -259,7 +288,12 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                   <select
                     className={inputCls}
                     value={form.status}
-                    onChange={(e) => setForm((p) => ({ ...p, status: e.target.value as AiLearnLessonStatus }))}
+                    onChange={(e) =>
+                      setForm((p) => ({
+                        ...p,
+                        status: e.target.value as AiLearnLessonStatus,
+                      }))
+                    }
                   >
                     <option value="DRAFT">Draft</option>
                     <option value="PUBLISHED">Published</option>
@@ -270,12 +304,16 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
               <div className="flex flex-col gap-1.5">
                 <label className={labelCls}>
                   Konten{" "}
-                  <span className="normal-case text-emphasis font-normal">(Markdown)</span>
+                  <span className="normal-case text-emphasis font-normal">
+                    (Markdown)
+                  </span>
                 </label>
                 <textarea
                   className={`${inputCls} min-h-80 resize-y font-mono text-xs leading-relaxed`}
                   value={form.content}
-                  onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((p) => ({ ...p, content: e.target.value }))
+                  }
                 />
               </div>
               <AppButton
@@ -285,7 +323,9 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                 disabled={updateMutation.isPending}
                 className="self-start"
               >
-                {updateMutation.isPending && <Loader2 className="animate-spin size-4" />}
+                {updateMutation.isPending && (
+                  <Loader2 className="animate-spin size-4" />
+                )}
                 Simpan Perubahan
               </AppButton>
             </form>
@@ -299,7 +339,11 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                   Soal Quiz ({lesson.quiz_questions.length})
                 </h2>
                 {!showQuizForm && (
-                  <AppButton variant="primarySoft" size="small" onClick={handleOpenNewQuiz}>
+                  <AppButton
+                    variant="primarySoft"
+                    size="small"
+                    onClick={handleOpenNewQuiz}
+                  >
                     <Plus className="size-3.5" />
                     Tambah Soal
                   </AppButton>
@@ -313,7 +357,11 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                     <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal">
                       {editingQuizId != null ? "Edit Soal" : "Soal Baru"}
                     </p>
-                    <AppButton variant="light" size="mediumIcon" onClick={() => setShowQuizForm(false)}>
+                    <AppButton
+                      variant="light"
+                      size="mediumIcon"
+                      onClick={() => setShowQuizForm(false)}
+                    >
                       <X className="size-3.5" />
                     </AppButton>
                   </div>
@@ -323,7 +371,9 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                     <textarea
                       className={`${inputCls} min-h-20 resize-none`}
                       value={quizForm.question}
-                      onChange={(e) => setQuizForm((p) => ({ ...p, question: e.target.value }))}
+                      onChange={(e) =>
+                        setQuizForm((p) => ({ ...p, question: e.target.value }))
+                      }
                     />
                   </div>
 
@@ -335,7 +385,12 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                           type="radio"
                           name="correct"
                           checked={quizForm.correct_option === opt.id}
-                          onChange={() => setQuizForm((p) => ({ ...p, correct_option: opt.id }))}
+                          onChange={() =>
+                            setQuizForm((p) => ({
+                              ...p,
+                              correct_option: opt.id,
+                            }))
+                          }
                           className="accent-primary"
                         />
                         <span className="font-bodycopy text-xs font-bold text-emphasis w-4 shrink-0">
@@ -347,7 +402,10 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                           value={opt.text}
                           onChange={(e) => {
                             const newOpts = [...quizForm.options];
-                            newOpts[i] = { ...newOpts[i], text: e.target.value };
+                            newOpts[i] = {
+                              ...newOpts[i],
+                              text: e.target.value,
+                            };
                             setQuizForm((p) => ({ ...p, options: newOpts }));
                           }}
                         />
@@ -363,7 +421,12 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                     <textarea
                       className={`${inputCls} min-h-16 resize-none`}
                       value={quizForm.explanation}
-                      onChange={(e) => setQuizForm((p) => ({ ...p, explanation: e.target.value }))}
+                      onChange={(e) =>
+                        setQuizForm((p) => ({
+                          ...p,
+                          explanation: e.target.value,
+                        }))
+                      }
                     />
                   </div>
 
@@ -371,10 +434,14 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
                     variant="primary"
                     size="medium"
                     onClick={handleSaveQuiz}
-                    disabled={createQuizMutation.isPending || updateQuizMutation.isPending}
+                    disabled={
+                      createQuizMutation.isPending ||
+                      updateQuizMutation.isPending
+                    }
                     className="self-start"
                   >
-                    {(createQuizMutation.isPending || updateQuizMutation.isPending) && (
+                    {(createQuizMutation.isPending ||
+                      updateQuizMutation.isPending) && (
                       <Loader2 className="animate-spin size-4" />
                     )}
                     Simpan Soal
@@ -383,14 +450,25 @@ export default function EditLessonAilene(props: EditLessonAileneProps) {
               )}
 
               {/* Quiz list */}
-              {(lesson.quiz_questions as Array<{
-                id: number;
-                question: string;
-                options: { id: number; option_id: string; text: string; is_correct: boolean; order_index: number }[];
-                explanation: string | null;
-                order_index: number;
-              }>).map((q, idx) => (
-                <div key={q.id} className="flex flex-col gap-2 p-4 rounded-xl border border-sevenpreneur-ash">
+              {(
+                lesson.quiz_questions as Array<{
+                  id: number;
+                  question: string;
+                  options: {
+                    id: number;
+                    option_id: string;
+                    text: string;
+                    is_correct: boolean;
+                    order_index: number;
+                  }[];
+                  explanation: string | null;
+                  order_index: number;
+                }>
+              ).map((q, idx) => (
+                <div
+                  key={q.id}
+                  className="flex flex-col gap-2 p-4 rounded-xl border border-sevenpreneur-ash"
+                >
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-bodycopy font-semibold text-sm text-sevenpreneur-coal">
                       <span className="text-primary mr-1">{idx + 1}.</span>

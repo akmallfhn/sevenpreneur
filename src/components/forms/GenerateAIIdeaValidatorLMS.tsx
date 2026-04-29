@@ -10,6 +10,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import AppTableofContents from "../navigations/AppTableofContents";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import HeaderGenerateAIToolLMS from "../navigations/HeaderGenerateAIToolLMS";
 
 interface GenerateAIIdeaValidatorLMSProps extends AvatarBadgeLMSProps {
@@ -109,7 +110,7 @@ export default function GenerateAIIdeaValidatorLMS(
   };
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderGenerateAIToolLMS
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
@@ -125,7 +126,7 @@ export default function GenerateAIIdeaValidatorLMS(
           >
             <section
               id={tableofContents[0].url}
-              className="product-overview bg-white w-full flex flex-col gap-4 p-5 border rounded-lg scroll-mt-28"
+              className="product-overview bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg scroll-mt-28"
             >
               <h2 className="section-title font-bold font-bodycopy">
                 {tableofContents[0].name}
@@ -151,7 +152,7 @@ export default function GenerateAIIdeaValidatorLMS(
             </section>
             <section
               id={tableofContents[1].url}
-              className="customer-targeting bg-white w-full flex flex-col gap-4 p-5 border rounded-lg"
+              className="customer-targeting bg-card-bg w-full flex flex-col gap-4 p-5 border border-dashboard-border rounded-lg"
             >
               <h2 className="section-title font-bold font-bodycopy">
                 {tableofContents[1].name}
@@ -217,6 +218,6 @@ export default function GenerateAIIdeaValidatorLMS(
           </div>
         </aside>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

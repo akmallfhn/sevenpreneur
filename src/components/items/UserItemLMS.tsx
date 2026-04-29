@@ -19,7 +19,7 @@ export default function UserItemLMS({
   const currentUser = sessionUserId === userId;
 
   return (
-    <div className="user-container flex items-center p-3 gap-3 bg-section-background rounded-lg">
+    <div className="user-container flex items-center p-3 gap-3 bg-card-inside-bg rounded-lg">
       <div className="user-avatar size-9 shrink-0 rounded-full overflow-hidden">
         <Image
           className="object-cover w-full h-full"
@@ -31,7 +31,7 @@ export default function UserItemLMS({
       </div>
       <div className="user-attributes flex flex-col font-bodycopy leading-snug">
         <div className="user-name flex gap-2 items-center">
-          <p className="text-[15px] text-black font-semibold line-clamp-1">
+          <p className="text-[15px] text-foreground font-semibold line-clamp-1">
             {userName}
           </p>
           {currentUser && (

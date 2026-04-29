@@ -119,7 +119,7 @@ export default function UploadSubmissionLMS({
           className="upload-helper flex relative aspect-thumbnail w-full h-full border-[1.9px] border-dashed cursor-pointer rounded-md overflow-hidden"
           onClick={handleUploadClick}
         >
-          <div className=" flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">
+          <div className="flex flex-col w-full font-bodycopy items-center text-center justify-center text-foreground z-10">
             <div className="flex max-w-[86px] aspect-square">
               <Image
                 className="object-cover w-full h-full"

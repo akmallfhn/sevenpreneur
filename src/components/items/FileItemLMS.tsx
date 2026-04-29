@@ -15,7 +15,7 @@ export default function FileItemLMS({ fileName, fileURL }: FileItemLMSProps) {
   return (
     <Link
       href={fileURL}
-      className="file-container flex w-full h-fit items-center gap-2 p-2 bg-section-background rounded-md transform transition hover:bg-[#EDF0F6]"
+      className="file-container flex w-full h-fit items-center gap-2 p-2 bg-card-inside-bg rounded-md transform transition hover:bg-card-inside-bg/70"
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -29,7 +29,7 @@ export default function FileItemLMS({ fileName, fileURL }: FileItemLMSProps) {
         />
       </div>
       <div className="file-attribute flex flex-col">
-        <h3 className="file-name font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
+        <h3 className="file-name font-bodycopy font-semibold text-[15px] line-clamp-1 dark:text-sevenpreneur-white">
           {fileName}
         </h3>
         <p className="file-type font-bodycopy font-medium text-emphasis text-sm">

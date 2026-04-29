@@ -1,12 +1,5 @@
 "use client";
-import {
-  Blocks,
-  ChevronDown,
-  Compass,
-  LogOut,
-  User2,
-  Wallet,
-} from "lucide-react";
+import { Blocks, Compass, LogOut, User2, Wallet } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import AppDropdown from "../elements/AppDropdown";
@@ -73,22 +66,14 @@ export default function AvatarBadgeLMS(props: AvatarBadgeLMSProps) {
       ref={wrapperRef}
       onClick={handleActionsDropdown}
     >
-      <div className="avatar-container flex items-center gap-3 bg-white p-2 rounded-lg border">
-        <div className="avatar aspect-square size-6 rounded-md overflow-hidden ">
-          <Image
-            className="object-cover w-full h-full"
-            src={props.sessionUserAvatar}
-            alt="User Avatar"
-            width={320}
-            height={320}
-          />
-        </div>
-        <div className="nickname items-center gap-1 lg:flex">
-          <p className="max-w-36 font-bodycopy font-semibold text-sm overflow-hidden text-ellipsis whitespace-nowrap">
-            {props.sessionUserName}
-          </p>
-          <ChevronDown className="size-3" />
-        </div>
+      <div className="aspect-square size-8 rounded-full overflow-hidden">
+        <Image
+          className="object-cover w-full h-full"
+          src={props.sessionUserAvatar}
+          alt="User Avatar"
+          width={320}
+          height={320}
+        />
       </div>
       <AppDropdown
         isOpen={isActionsOpened}

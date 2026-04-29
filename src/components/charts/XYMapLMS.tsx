@@ -31,21 +31,21 @@ interface XYMapLMSProps {
 
 export default function XYMapLMS(props: XYMapLMSProps) {
   return (
-    <div className="brand-positioning flex flex-col gap-2 w-full bg-white p-5 rounded-lg border overflow-hidden">
+    <div className="brand-positioning flex flex-col gap-2 w-full bg-card-bg p-5 rounded-lg border border-dashboard-border overflow-hidden">
       <h3 className="section-title text-lg font-bold font-bodycopy">
         Brand Positioning
       </h3>
       <div className="x/y-map relative flex w-full h-96">
-        <p className="x-left absolute flex-wrap top-3/5 -translate-y-3/5 left-0 z-20 font-bodycopy font-medium text-[#111111] text-sm bg-white">
+        <p className="x-left absolute flex-wrap top-3/5 -translate-y-3/5 left-0 z-20 font-bodycopy font-medium text-foreground text-sm bg-card-bg">
           {props.xLeftAttribute}
         </p>
-        <p className="x-right absolute flex-wrap top-3/5 -translate-y-3/5 right-0 z-20 font-bodycopy font-medium text-[#111111] text-sm bg-white">
+        <p className="x-right absolute flex-wrap top-3/5 -translate-y-3/5 right-0 z-20 font-bodycopy font-medium text-foreground text-sm bg-card-bg">
           {props.xRightAttribute}
         </p>
-        <p className="y-top absolute flex-wrap left-1/2 -translate-x-1/2 top-0 z-20 font-bodycopy font-medium text-[#111111] text-sm bg-white">
+        <p className="y-top absolute flex-wrap left-1/2 -translate-x-1/2 top-0 z-20 font-bodycopy font-medium text-foreground text-sm bg-card-bg">
           {props.yTopAttribute}
         </p>
-        <p className="y-bottom absolute flex-wrap left-1/2 -translate-x-1/2 bottom-0 z-20 font-bodycopy font-medium text-[#111111] text-sm bg-white">
+        <p className="y-bottom absolute flex-wrap left-1/2 -translate-x-1/2 bottom-0 z-20 font-bodycopy font-medium text-foreground text-sm bg-card-bg">
           {props.yBottomAttribute}
         </p>
         <div className="x/y-curve relative flex w-full h-full">

@@ -7,6 +7,8 @@ import AppVideoPlayer from "../elements/AppVideoPlayer";
 import HeroPlaylistDetailsLMS from "../heroes/HeroPlaylistDetailsLMS";
 import VideoListItemLMS from "../items/VideoListItemLMS";
 import PlaylistDetailsMobileLMS from "./PlaylistDetailsMobileLMS";
+import PageContainerDashboard from "./PageContainerDashboard";
+import SectionContainerLMS from "../cards/SectionContainerLMS";
 
 export interface VideoItem {
   id: number;
@@ -96,7 +98,7 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 gap-7 items-center justify-center">
       <HeroPlaylistDetailsLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -105,8 +107,8 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
       />
       <div className="body-playlist max-w-[calc(100%-4rem)] w-full flex justify-between gap-4">
         <main className="main flex flex-col flex-2 w-full gap-4">
-          <div className="video-attributes flex flex-col w-full bg-white border gap-4 rounded-lg">
-            <div className="video-player relative w-full aspect-video bg-[#E1E5EF] rounded-lg overflow-hidden">
+          <div className="video-attributes flex flex-col w-full bg-card-bg border border-dashboard-border gap-4 rounded-lg">
+            <div className="video-player relative w-full aspect-video bg-dashboard-bg rounded-lg overflow-hidden">
               {selectedVideoData ? (
                 <AppVideoPlayer videoId={selectedVideoData.external_video_id} />
               ) : (
@@ -128,7 +130,7 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
                   ? selectedVideoData.name
                   : "Teaser RE:START Conference 2025"}
               </h1>
-              <p className="video-description font-bodycopy text-[15px] text-[#333333] whitespace-pre-line">
+              <p className="video-description font-bodycopy text-[15px] text-emphasis whitespace-pre-line dark:text-foreground">
                 {selectedVideoData
                   ? selectedVideoData.description
                   : props.playlistDescription}
@@ -137,10 +139,7 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
           </div>
         </main>
         <aside className="aside flex flex-col flex-1 w-full gap-3">
-          <div className="flex flex-col bg-white border p-4 gap-3 rounded-lg overflow-hidden">
-            <h2 className="section-title font-bodycopy font-bold">
-              Playlist Videos
-            </h2>
+          <SectionContainerLMS title="Playlist Video">
             <div className="playlist-video flex flex-col w-full gap-3">
               {activeVideos.map((post, index) => (
                 <VideoListItemLMS
@@ -154,9 +153,9 @@ export default function PlaylistDetailsLMS(props: PlaylistDetailsLMSProps) {
                 />
               ))}
             </div>
-          </div>
+          </SectionContainerLMS>
         </aside>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

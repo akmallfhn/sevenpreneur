@@ -1,26 +1,28 @@
 "use client";
 import AppButton from "@/components/buttons/AppButton";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { trpc } from "@/trpc/client";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
-import {
-  CalendarDays,
-  ExternalLink,
-  MapPin,
-  Video,
-} from "lucide-react";
+import { CalendarDays, ExternalLink, MapPin, Video } from "lucide-react";
 import Link from "next/link";
 
 dayjs.locale("id");
 
-const METHOD_BADGE: Record<LearningMethodEnum, { label: string; cls: string }> = {
-  ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
-  ONSITE: { label: "Onsite", cls: "bg-success-background text-success-foreground" },
-  HYBRID: { label: "Hybrid", cls: "bg-warning-background text-warning-foreground" },
-};
+const METHOD_BADGE: Record<LearningMethodEnum, { label: string; cls: string }> =
+  {
+    ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
+    ONSITE: {
+      label: "Onsite",
+      cls: "bg-success-background text-success-foreground",
+    },
+    HYBRID: {
+      label: "Hybrid",
+      cls: "bg-warning-background text-warning-foreground",
+    },
+  };
 
 export default function SessionsAilene() {
   const { isCollapsed } = useSidebar();
@@ -65,7 +67,9 @@ export default function SessionsAilene() {
             </p>
             <div className="flex items-center gap-3 text-xs text-emphasis font-bodycopy flex-wrap">
               <span>
-                {dayjs(session.meeting_date).format("dddd, D MMMM YYYY · HH:mm")}
+                {dayjs(session.meeting_date).format(
+                  "dddd, D MMMM YYYY · HH:mm"
+                )}
               </span>
               {session.speaker && <span>🎤 {session.speaker.full_name}</span>}
               {session.location_name && (

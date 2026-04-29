@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { ChevronDown } from "lucide-react";
 import { ReactNode, useState } from "react";
 
@@ -16,7 +16,9 @@ export default function AppSidebarGroupMenu({
   const { isCollapsed } = useSidebar();
 
   if (isCollapsed) {
-    return <div className="flex flex-col gap-1 items-center w-full">{children}</div>;
+    return (
+      <div className="flex flex-col gap-1 items-center w-full">{children}</div>
+    );
   }
 
   return (

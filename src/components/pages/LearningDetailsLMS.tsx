@@ -16,8 +16,10 @@ import FileItemLMS from "../items/FileItemLMS";
 import AppDiscussionStarterItem from "../messages/AppDiscussionStarterItem";
 import AppDiscussionStarterSubmitter from "../messages/AppDiscussionStarterSubmitter";
 import PageHeaderCohortLMS from "../navigations/PageHeaderCohortLMS";
+import PageContainerDashboard from "./PageContainerDashboard";
 import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 import LearningDetailsMobileLMS from "./LearningDetailsMobileLMS";
+import SectionContainerLMS from "../cards/SectionContainerLMS";
 
 export interface MaterialList {
   name: string;
@@ -178,7 +180,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 w-full h-full gap-4 items-center pb-8 lg:flex">
+    <PageContainerDashboard className="h-full gap-4 items-center pb-8">
       <PageHeaderCohortLMS
         cohortId={props.cohortId}
         cohortName={props.cohortName}
@@ -187,7 +189,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
         sessionUserRole={props.sessionUserRole}
         headerTitle="Learning Session"
         headerIcon={<FontAwesomeIcon icon={faTowerObservation} size="lg" />}
-        headerIconColor="bg-[#E3FEFC] text-[#2BC49C]"
+        headerIconColor="bg-[#E3FEFC] dark:bg-[#0d2f2a] text-[#2BC49C]"
       />
       <div className="body-learning max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
         <HeroLearningDetailsLMS
@@ -200,25 +202,19 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
         />
         <div className="learning-contents w-full flex gap-4">
           <main className="main-contents w-full flex flex-col flex-2 gap-4">
-            <div className="learning-description flex flex-col gap-3 bg-white p-4 border rounded-lg">
-              <h3 className="section-title font-bold font-bodycopy">
-                What&apos;s on this sessions?
-              </h3>
-              <p className="text-[#333333] font-sm font-bodycopy text-[15px] whitespace-pre-line">
+            <SectionContainerLMS title="What's on this sessions?">
+              <p className="text-[#333333] font-sm font-bodycopy text-[15px] whitespace-pre-line dark:text-foreground">
                 {props.learningSessionDescription}
               </p>
-            </div>
-            <div className="learning-session-recording flex flex-col gap-3 bg-white p-4 border rounded-lg">
-              <h3 className="section-title font-bold font-bodycopy">
-                Live Class Recording
-              </h3>
+            </SectionContainerLMS>
+            <SectionContainerLMS title="Live Class Recording">
               {props.learningRecordingCloudflare && (
-                <div className="learning-video-recording relative w-full h-auto overflow-hidden rounded-md">
+                <div className="relative w-full h-auto overflow-hidden rounded-md">
                   <AppVideoPlayer videoId={props.learningRecordingCloudflare} />
                 </div>
               )}
               {!props.learningRecordingCloudflare && learningVideoKey && (
-                <div className="learning-video-recording relative w-full aspect-video overflow-hidden rounded-md">
+                <div className="relative w-full aspect-video overflow-hidden rounded-md">
                   <iframe
                     width="100%"
                     height="100%"
@@ -232,12 +228,9 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                 </div>
               )}
               {!learningVideoKey && <EmptyComponentsLMS variant="RECORDING" />}
-            </div>
-            <div className="learning-discussions flex flex-col gap-3 bg-white p-4 border rounded-lg">
-              <h3 className="section-title font-bold font-bodycopy">
-                Discussions
-              </h3>
-              <div className="discussions-box flex flex-col gap-6">
+            </SectionContainerLMS>
+            <SectionContainerLMS title="Discussions">
+              <div className="flex flex-col gap-6">
                 <AppDiscussionStarterSubmitter
                   sessionUserName={props.sessionUserName}
                   sessionUserAvatar={props.sessionUserAvatar}
@@ -250,7 +243,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   isLoadingSubmit={isSendingDiscussion}
                 />
                 {discussion.length > 0 ? (
-                  <div className="discussions-list flex flex-col gap-4">
+                  <div className="flex flex-col gap-4">
                     {discussion.map((post) => (
                       <AppDiscussionStarterItem
                         key={post.id}
@@ -278,15 +271,12 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                   <EmptyComponentsLMS variant="DISCUSSIONS" />
                 )}
               </div>
-            </div>
+            </SectionContainerLMS>
           </main>
           <aside className="w-full flex flex-col flex-1 gap-4">
-            <div className="learning-description flex flex-col gap-3 bg-white p-4 border rounded-lg">
-              <h3 className="section-title font-bold font-bodycopy">
-                Lectured by
-              </h3>
-              <div className="educator-container flex items-center p-3 gap-3 bg-section-background rounded-lg">
-                <div className="educator-avatar size-9 shrink-0 rounded-full overflow-hidden">
+            <SectionContainerLMS title="Lectured by">
+              <div className="flex items-center p-3 gap-3 bg-card-inside-bg rounded-lg">
+                <div className="size-9 shrink-0 rounded-full overflow-hidden">
                   <Image
                     className="object-cover w-full h-full"
                     src={props.learningEducatorAvatar}
@@ -295,22 +285,19 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
                     height={80}
                   />
                 </div>
-                <div className="educator-attributes flex flex-col font-bodycopy">
-                  <p className="text-[15px] text-black font-semibold line-clamp-1">
+                <div className="flex flex-col font-bodycopy">
+                  <p className="text-[15px] font-semibold line-clamp-1 dark:text-sevenpreneur-white">
                     {props.learningEducatorName}
                   </p>
-                  <p className="educator-role text-[13px] text-emphasis font-medium">
+                  <p className="text-[13px] text-emphasis font-medium">
                     BUSINESS COACH
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="learning-materials flex flex-col gap-3 bg-white p-4 border rounded-lg">
-              <h3 className="section-title font-bold font-bodycopy">
-                Materials
-              </h3>
+            </SectionContainerLMS>
+            <SectionContainerLMS title="Materials">
               {activeMaterials.length > 0 ? (
-                <div className="material-list flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
                   {activeMaterials.map((post, index) => (
                     <FileItemLMS
                       key={index}
@@ -322,7 +309,7 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
               ) : (
                 <EmptyComponentsLMS variant="MATERIALS" />
               )}
-            </div>
+            </SectionContainerLMS>
             <CheckInAttendanceLMS
               learningSessionId={props.learningSessionId}
               hasCheckIn={props.hasCheckIn}
@@ -337,6 +324,6 @@ export default function LearningDetailsLMS(props: LearningDetailsLMSProps) {
           </aside>
         </div>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import { useTheme } from "next-themes";
 import {
   CreateDiscussionReply,
   DeleteDiscussionStarter,
@@ -44,6 +45,8 @@ interface AppDiscussionStarterItemProps {
 export default function AppDiscussionStarterItem(
   props: AppDiscussionStarterItemProps
 ) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [isOpenReplies, setIsOpenReplies] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
   const [isLoadingReplies, setIsLoadingReplies] = useState(false);
@@ -238,7 +241,7 @@ export default function AppDiscussionStarterItem(
             <AppButton
               className="discussion-starter-view-replies w-fit"
               size="small"
-              variant="light"
+              variant={isDark ? "primary" : "light"}
               onClick={handleViewReplies}
             >
               <ChevronDown

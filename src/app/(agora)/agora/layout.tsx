@@ -2,6 +2,8 @@ import "@/app/globals.css";
 import SidebarLMS, {
   AIResultListProps,
 } from "@/components/navigations/SidebarLMS";
+import { SidebarProvider } from "@/contexts/SidebarContext";
+import { ThemeProvider } from "next-themes";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -72,11 +74,18 @@ export default async function AgoraLayout({ children }: AgoraLayoutProps) {
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <div className="root relative w-full min-h-dvh bg-section-background">
-        <SidebarLMS aiResultList={aiResultList} />
-        {children}
-        <Toaster richColors position="top-center" />
-      </div>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <SidebarProvider>
+          <div className="root relative w-full min-h-screen bg-dashboard-bg">
+            <SidebarLMS
+              sessionToken={sessionToken}
+              aiResultList={aiResultList}
+            />
+            {children}
+            <Toaster richColors position="top-center" />
+          </div>
+        </SidebarProvider>
+      </ThemeProvider>
     </TRPCProvider>
   );
 }

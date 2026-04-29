@@ -19,7 +19,7 @@ interface SidebarProviderCMSProps {
   children: ReactNode;
 }
 
-export function SidebarProviderCMS(props: SidebarProviderCMSProps) {
+export function SidebarProvider(props: SidebarProviderCMSProps) {
   const [isCollapsed, setIsCollapsed] = useState(() => {
     if (typeof window === "undefined") return false;
     const saved = localStorage.getItem("sidebar");

@@ -16,7 +16,7 @@ export default function AppTableofContents({
   tocList,
 }: AppTableofContentsProps) {
   return (
-    <div className="table-of-contents-container relative flex flex-col p-5 gap-4 font-bodycopy bg-white border rounded-lg">
+    <div className="table-of-contents-container relative flex flex-col p-5 gap-4 font-bodycopy bg-card-bg border border-dashboard-border rounded-lg">
       <h2 className="font-bold text-primary">{tocName}</h2>
       <ul className="table-of-contents-list flex flex-col gap-2 pl-2">
         {tocList.map((post) => (

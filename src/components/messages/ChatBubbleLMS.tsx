@@ -12,7 +12,7 @@ export default function ChatBubbleLMS({ chatMessage }: ChatBubbleLMS) {
 
   return (
     <div className="chat-container flex flex-col gap-2 mt-2 w-full items-end">
-      <div className="chat-box w-fit max-w-[min(70%,560px)] px-4 py-2 bg-white border rounded-[18px] font-ui">
+      <div className="chat-box w-fit max-w-[min(70%,560px)] px-4 py-2 bg-card-bg border border-dashboard-border rounded-[18px] font-ui">
         <p className="chat-message break-words whitespace-pre-wrap">
           {chatMessage}
         </p>

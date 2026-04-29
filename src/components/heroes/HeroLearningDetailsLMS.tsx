@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { MapPinned, Video } from "lucide-react";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
+import { useTheme } from "next-themes";
 
 interface HeroLearningDetailsLMSProps {
   learningSessionName: string;
@@ -26,6 +27,7 @@ export default function HeroLearningDetailsLMS({
   learningLocationURL,
   learningLocationName,
 }: HeroLearningDetailsLMSProps) {
+  const { resolvedTheme } = useTheme();
   const conferencePlatform = getConferenceVariantFromURL(learningSessionURL);
   const { conferenceIcon, conferenceName } =
     getConferenceAttributes(conferencePlatform);
@@ -42,9 +44,9 @@ export default function HeroLearningDetailsLMS({
   }
 
   return (
-    <div className="hero-learning relative w-full aspect-[5208/702] border rounded-lg overflow-hidden">
+    <div className="hero-learning relative w-full aspect-[5208/702] border border-dashboard-border rounded-lg overflow-hidden">
       <Image
-        className="object-cover w-full h-full inset-0"
+        className="object-cover w-full h-full inset-0 dark:brightness-[0.2]"
         src={
           "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/bg-learning.webp"
         }
@@ -54,7 +56,7 @@ export default function HeroLearningDetailsLMS({
       />
       <div className="learning-attribute absolute flex w-full items-center top-1/2 -translate-y-1/2 left-5 gap-4 z-10">
         {learningSessionMethod !== "ONSITE" && (
-          <div className="conference-icon size-[50px] aspect-square bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
+          <div className="conference-icon size-[50px] aspect-square bg-card-bg p-1 border border-dashboard-border shrink-0 rounded-lg overflow-hidden">
             <Image
               className="object-cover w-full h-full"
               src={conferenceIcon}
@@ -84,7 +86,7 @@ export default function HeroLearningDetailsLMS({
         >
           <AppButton
             size="medium"
-            variant="light"
+            variant={resolvedTheme === "dark" ? "primary" : "light"}
             className="w-fit"
             disabled={isExpired}
           >

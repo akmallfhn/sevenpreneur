@@ -21,7 +21,7 @@ export default function LearningSessionItemMobileLMS(
   return (
     <Link
       href={`/cohorts/${props.cohortId}/learnings/${props.learningSessionId}`}
-      className="session-box flex w-full bg-white p-3 items-center gap-3 justify-between font-bodycopy rounded-md border transform transition hover:cursor-pointer active:scale-95 hover:bg-[#EDF0F6]"
+      className="session-box flex w-full bg-card-bg p-3 items-center gap-3 justify-between font-bodycopy rounded-md border border-dashboard-border transform transition hover:cursor-pointer active:scale-95 hover:bg-sb-item-hover"
     >
       <div className="session-container flex items-center gap-4">
         <div className="session-metadata flex items-center gap-3">
@@ -38,7 +38,7 @@ export default function LearningSessionItemMobileLMS(
             <h2 className="session-title text-[15px] font-bold line-clamp-1">
               {props.learningSessionName}
             </h2>
-            <p className="session-educator font-medium text-sm text-[#333333]">
+            <p className="session-educator font-medium text-sm text-emphasis">
               {dayjs(props.learningSessionDate).format("ddd[,] D MMM YYYY")}
             </p>
           </div>

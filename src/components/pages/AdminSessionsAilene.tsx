@@ -3,7 +3,7 @@ import AppButton from "@/components/buttons/AppButton";
 import InputCMS from "@/components/fields/InputCMS";
 import SelectCMS from "@/components/fields/SelectCMS";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import dayjs from "dayjs";
@@ -46,7 +46,9 @@ interface AdminSessionsAileneProps {
   sessionToken: string;
 }
 
-export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAileneProps) {
+export default function AdminSessionsAilene({
+  sessionToken,
+}: AdminSessionsAileneProps) {
   const { isCollapsed } = useSidebar();
   const utils = trpc.useUtils();
 
@@ -66,7 +68,8 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
       utils.ailene.listSessions.invalidate();
       closeModal();
     },
-    onError: (e) => toast.error("Gagal membuat session.", { description: e.message }),
+    onError: (e) =>
+      toast.error("Gagal membuat session.", { description: e.message }),
   });
 
   const updateMutation = trpc.ailene.updateSession.useMutation({
@@ -75,7 +78,8 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
       utils.ailene.listSessions.invalidate();
       closeModal();
     },
-    onError: (e) => toast.error("Gagal memperbarui session.", { description: e.message }),
+    onError: (e) =>
+      toast.error("Gagal memperbarui session.", { description: e.message }),
   });
 
   const deleteMutation = trpc.ailene.deleteSession.useMutation({
@@ -163,7 +167,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}>
+    <div
+      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}
+    >
       <div className="container max-w-[calc(100%-4rem)] mx-auto w-full flex flex-col gap-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -201,7 +207,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                     <span className="font-bodycopy font-bold text-sevenpreneur-coal dark:text-white truncate">
                       {session.name}
                     </span>
-                    <span className={`shrink-0 text-[11px] font-semibold font-bodycopy px-2 py-0.5 rounded-full capitalize ${METHOD_BADGE[session.method]}`}>
+                    <span
+                      className={`shrink-0 text-[11px] font-semibold font-bodycopy px-2 py-0.5 rounded-full capitalize ${METHOD_BADGE[session.method]}`}
+                    >
                       {session.method.toLowerCase()}
                     </span>
                     {session.status === StatusEnum.INACTIVE && (
@@ -214,7 +222,10 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                     {session.description}
                   </p>
                   <div className="flex items-center gap-3 text-xs text-emphasis font-bodycopy mt-0.5">
-                    <span>📅 {dayjs(session.meeting_date).format("D MMM YYYY, HH:mm")}</span>
+                    <span>
+                      📅{" "}
+                      {dayjs(session.meeting_date).format("D MMM YYYY, HH:mm")}
+                    </span>
                     {session.speaker && (
                       <span>🎤 {session.speaker.full_name}</span>
                     )}
@@ -222,7 +233,11 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <AppButton variant="light" size="small" onClick={() => openEdit(session)}>
+                  <AppButton
+                    variant="light"
+                    size="small"
+                    onClick={() => openEdit(session)}
+                  >
                     <Pencil className="size-3.5" />
                     Edit
                   </AppButton>
@@ -256,7 +271,10 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
               <h2 className="font-brand font-semibold text-lg text-sevenpreneur-coal dark:text-white">
                 {editingId ? "Edit Session" : "Tambah Session"}
               </h2>
-              <button onClick={closeModal} className="text-emphasis hover:text-black dark:hover:text-white">
+              <button
+                onClick={closeModal}
+                className="text-emphasis hover:text-black dark:hover:text-white"
+              >
                 <X className="size-5" />
               </button>
             </div>
@@ -278,7 +296,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                 inputType="text"
                 inputPlaceholder="Deskripsi singkat session"
                 value={form.description}
-                onInputChange={(v) => setForm((f) => ({ ...f, description: v }))}
+                onInputChange={(v) =>
+                  setForm((f) => ({ ...f, description: v }))
+                }
                 required
               />
               <div className="grid grid-cols-2 gap-4">
@@ -308,7 +328,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                 <input
                   type="datetime-local"
                   value={form.meeting_date}
-                  onChange={(e) => setForm((f) => ({ ...f, meeting_date: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, meeting_date: e.target.value }))
+                  }
                   className="flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border focus:outline-none focus:border-tertiary focus:outline-primary/15 focus:outline-4"
                 />
               </div>
@@ -318,7 +340,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                 inputType="url"
                 inputPlaceholder="https://meet.google.com/..."
                 value={form.meeting_url}
-                onInputChange={(v) => setForm((f) => ({ ...f, meeting_url: v }))}
+                onInputChange={(v) =>
+                  setForm((f) => ({ ...f, meeting_url: v }))
+                }
               />
               <div className="grid grid-cols-2 gap-4">
                 <InputCMS
@@ -327,7 +351,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                   inputType="text"
                   inputPlaceholder="Contoh: Aula Utama"
                   value={form.location_name}
-                  onInputChange={(v) => setForm((f) => ({ ...f, location_name: v }))}
+                  onInputChange={(v) =>
+                    setForm((f) => ({ ...f, location_name: v }))
+                  }
                 />
                 <InputCMS
                   inputId="session-location-url"
@@ -335,7 +361,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                   inputType="url"
                   inputPlaceholder="https://maps.google.com/..."
                   value={form.location_url}
-                  onInputChange={(v) => setForm((f) => ({ ...f, location_url: v }))}
+                  onInputChange={(v) =>
+                    setForm((f) => ({ ...f, location_url: v }))
+                  }
                 />
               </div>
               <InputCMS
@@ -344,7 +372,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                 inputType="url"
                 inputPlaceholder="https://youtube.com/..."
                 value={form.recording_url}
-                onInputChange={(v) => setForm((f) => ({ ...f, recording_url: v }))}
+                onInputChange={(v) =>
+                  setForm((f) => ({ ...f, recording_url: v }))
+                }
               />
               <InputCMS
                 inputId="session-feedback-form"
@@ -352,7 +382,9 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
                 inputType="url"
                 inputPlaceholder="https://forms.google.com/..."
                 value={form.feedback_form}
-                onInputChange={(v) => setForm((f) => ({ ...f, feedback_form: v }))}
+                onInputChange={(v) =>
+                  setForm((f) => ({ ...f, feedback_form: v }))
+                }
               />
             </div>
 
@@ -361,8 +393,17 @@ export default function AdminSessionsAilene({ sessionToken }: AdminSessionsAilen
               <AppButton variant="light" size="medium" onClick={closeModal}>
                 Batal
               </AppButton>
-              <AppButton variant="primary" size="medium" onClick={handleSubmit} disabled={isPending}>
-                {isPending ? "Menyimpan..." : editingId ? "Simpan Perubahan" : "Buat Session"}
+              <AppButton
+                variant="primary"
+                size="medium"
+                onClick={handleSubmit}
+                disabled={isPending}
+              >
+                {isPending
+                  ? "Menyimpan..."
+                  : editingId
+                    ? "Simpan Perubahan"
+                    : "Buat Session"}
               </AppButton>
             </div>
           </div>

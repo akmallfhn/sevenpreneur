@@ -6,6 +6,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import AppPageState from "../states/AppPageState";
 import LibraryTabsLMS, { TemplateList } from "../tabs/LibraryTabsLMS";
+import PageContainerDashboard from "./PageContainerDashboard";
 
 interface LibraryLMSProps extends AvatarBadgeLMSProps {
   templateList: TemplateList[];
@@ -32,11 +33,11 @@ export default function LibraryLMS(props: LibraryLMSProps) {
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 gap-5 w-full h-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 gap-5 h-full items-center justify-center">
       <PageHeaderLMS
         headerTitle="Library"
         headerIcon={<FontAwesomeIcon icon={faBookOpen} size="lg" />}
-        headerIconColor="bg-[#ECEBFE] text-tertiary"
+        headerIconColor="bg-[#ECEBFE] dark:bg-[#1a1640] text-tertiary"
         sessionUserRole={props.sessionUserRole}
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -47,6 +48,6 @@ export default function LibraryLMS(props: LibraryLMSProps) {
           hasTemplateAccess={props.hasTemplateAccess}
         />
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

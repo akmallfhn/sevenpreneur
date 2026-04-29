@@ -27,7 +27,7 @@ export default function TemplateItemCardLMS({
   return (
     <a
       href={templateURL}
-      className="template-container flex flex-col w-full gap-2 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
+      className="template-container flex flex-col w-full gap-2 bg-card-bg border border-dashboard-border rounded-lg overflow-hidden transition transform active:scale-95"
       target="_blank"
       rel="noopener noreferrer"
     >

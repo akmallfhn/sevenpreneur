@@ -96,7 +96,7 @@ export default function AppDiscussionReplySubmitter({
             rows={1}
             disabled={disabled}
             {...rest}
-            className={`text-area-placeholder flex w-full max-h-40 h-auto p-2 pt-1 bg-white font-medium font-bodycopy text-sm border-b-2 resize-none transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
+            className={`text-area-placeholder flex w-full max-h-40 h-auto p-2 pt-1 bg-transparent font-medium font-bodycopy text-sm border-b-2 resize-none transform transition-all placeholder:text-emphasis placeholder:font-medium placeholder:text-sm invalid:border-destructive required:border-destructive focus:outline-none focus:ring-0 focus:border-primary-deep ${
               computedError ? "border-destructive" : ""
             } ${isScrollable ? "overflow-y-auto" : "overflow-y-hidden"}`}
             value={textValue}

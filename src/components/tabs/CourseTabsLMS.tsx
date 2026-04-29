@@ -68,7 +68,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
       </div>
 
       {activeTab === "all" && (
-        <div className="tab-area w-full p-5 bg-white rounded-lg border">
+        <div className="tab-area w-full p-5 bg-card-bg rounded-lg border border-dashboard-border">
           {activeCourses.length > 0 ? (
             <div className="course-list grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
               {activeCourses.map((post) => (
@@ -95,7 +95,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
       )}
 
       {activeTab === "cohorts" && (
-        <div className="tab-area w-full p-5 bg-white rounded-lg border">
+        <div className="tab-area w-full p-5 bg-card-bg rounded-lg border border-dashboard-border">
           {activeCohorts.length > 0 ? (
             <div className="cohort-list grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
               {activeCohorts.map((post) => (
@@ -122,7 +122,7 @@ export default function CourseTabsLMS(props: CourseTabsLMSProps) {
       )}
 
       {activeTab === "playlists" && (
-        <div className="tab-area w-full p-5 bg-white rounded-lg border">
+        <div className="tab-area w-full p-5 bg-card-bg rounded-lg border border-dashboard-border">
           {activePlaylists.length > 0 ? (
             <div className="playlist grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
               {activePlaylists.map((post) => (

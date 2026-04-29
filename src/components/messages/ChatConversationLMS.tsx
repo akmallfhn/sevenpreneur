@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import ChatBubbleLMS from "./ChatBubbleLMS";
 import ChatResponseMarkdown from "./ChatResponseMarkdown";
 import ChatSubmitterLMS from "./ChatSubmitterLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 
 interface Chats {
   id?: string;
@@ -200,11 +201,11 @@ export default function ChatConversationLMS(props: ChatConversationLMSProps) {
   };
 
   return (
-    <div
+    <PageContainerDashboard
       ref={conversationRef}
-      className="root-page relative hidden flex-col pl-64 w-full h-screen overflow-y-auto lg:flex"
+      className="relative h-screen overflow-y-auto"
     >
-      <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-section-background border-b text-[#333333] z-10">
+      <div className="header-conversation sticky flex w-full items-center justify-center top-0 inset-x-0 bg-dashboard-bg border-b border-dashboard-border text-foreground z-10">
         <div className="conversation-name flex w-full max-w-[calc(100%-4rem)] items-center gap-2 py-3 font-bodycopy font-semibold">
           <MessageCircleMore className="size-5" />
           {props.conversationName ? props.conversationName : title}
@@ -237,7 +238,7 @@ export default function ChatConversationLMS(props: ChatConversationLMSProps) {
             ))}
         </div>
         <form
-          className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-section-background items-center justify-center gap-6 rounded-t-xl z-10"
+          className="form-generate-chat fixed flex flex-col w-full max-w-[768px] bottom-0 pb-6 bg-dashboard-bg items-center justify-center gap-6 rounded-t-xl z-10"
           onSubmit={handleSubmit}
         >
           <ChatSubmitterLMS
@@ -248,6 +249,6 @@ export default function ChatConversationLMS(props: ChatConversationLMSProps) {
           />
         </form>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

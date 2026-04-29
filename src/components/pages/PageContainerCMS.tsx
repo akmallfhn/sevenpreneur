@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { HTMLAttributes, ReactNode } from "react";
 
 interface PageContainerCMSProps extends HTMLAttributes<HTMLDivElement> {

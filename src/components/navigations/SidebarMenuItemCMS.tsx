@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, ReactNode } from "react";

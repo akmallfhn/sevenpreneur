@@ -15,7 +15,7 @@ export default function ProjectItemLMS(props: ProjectItemLMSProps) {
   return (
     <Link
       href={`/cohorts/${props.cohortId}/projects/${props.projectId}`}
-      className="project-box flex items-center justify-between p-4 bg-section-background rounded-lg transform transition hover:bg-[#EDF0F6]"
+      className="project-box flex items-center justify-between p-4 bg-card-inside-bg rounded-lg transform transition hover:bg-card-inside-bg/70"
     >
       <div className="project-container flex items-center gap-3">
         <div className="project-icon size-12 rounded-md shrink-0 overflow-hidden">
@@ -28,7 +28,7 @@ export default function ProjectItemLMS(props: ProjectItemLMSProps) {
           />
         </div>
         <div className="project-attributes flex flex-col gap-1.5 font-bodycopy leading-snug">
-          <p className="text-[15px] text-black font-semibold line-clamp-1">
+          <p className="text-[15px] text-foreground font-semibold line-clamp-1">
             {props.projectName}
           </p>
           <div className="flex items-center gap-2">

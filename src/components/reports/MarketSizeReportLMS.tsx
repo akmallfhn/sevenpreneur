@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AICitationLMS, { SourcesArticle } from "../items/AICitationLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import styles from "./Report.module.css";
 
@@ -62,7 +63,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
 
   if (!props.resultStatus) {
     return (
-      <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+      <PageContainerDashboard className="pb-8 items-center justify-center">
         <HeaderAIResultDetailsLMS
           sessionUserName={props.sessionUserName}
           sessionUserAvatar={props.sessionUserAvatar}
@@ -73,12 +74,12 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
         <div className="flex flex-col w-full items-center">
           <LoadingAIGeneratingResult />
         </div>
-      </div>
+      </PageContainerDashboard>
     );
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderAIResultDetailsLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -89,7 +90,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
       />
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="market-analysis flex w-full gap-4">
-          <div className="market-size-chart flex flex-col flex-2 items-center gap-8 w-full bg-white p-5 pb-10 rounded-lg border">
+          <div className="market-size-chart flex flex-col flex-2 items-center gap-8 w-full bg-card-bg p-5 pb-10 rounded-lg border border-dashboard-border">
             <h2 className="section-title font-bold text-lg font-bodycopy">
               Market Size Analysis
             </h2>
@@ -128,7 +129,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
           </div>
         </div>
 
-        <div className="market-size-insights flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
+        <div className="market-size-insights flex flex-col gap-4 w-full bg-card-bg p-5 rounded-lg border border-dashboard-border">
           <h2 className="section-title font-bold text-lg font-bodycopy">
             Detail & Insights
           </h2>
@@ -138,7 +139,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 <h3 className="text-lg font-bold">
                   Total Addressable Market (TAM)
                 </h3>
-                <p className="text-[#333333] text-[15px]">
+                <p className="text-emphasis text-[15px]">
                   TAM adalah total permintaan pasar untuk produk/jasa Anda,
                   mengasumsikan Anda menguasai 100% pasar.
                 </p>
@@ -159,7 +160,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 <h3 className="text-lg font-bold">
                   Serviceable Available Market (SAM)
                 </h3>
-                <p className="text-[#333333] text-[15px]">
+                <p className="text-emphasis text-[15px]">
                   SAM adalah bagian dari TAM yang dapat Anda jangkau dengan
                   channel penjualan dan model bisnis Anda saat ini.
                 </p>
@@ -180,7 +181,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 <h3 className="text-lg font-bold">
                   Serviceable Obtainable Market (SOM)
                 </h3>
-                <p className="text-[#333333] text-[15px]">
+                <p className="text-emphasis text-[15px]">
                   SOM adalah bagian dari SAM yang realistis untuk Anda dapatkan
                   dalam jangka waktu 1 tahun.
                 </p>
@@ -197,7 +198,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
             </div>
           </div>
         </div>
-        <div className="market-size-insights flex flex-col gap-4 w-full bg-white p-5 rounded-lg border">
+        <div className="market-size-insights flex flex-col gap-4 w-full bg-card-bg p-5 rounded-lg border border-dashboard-border">
           <h2 className="section-title font-bold text-lg font-bodycopy">
             Scenario Analysis (SOM)
           </h2>
@@ -207,7 +208,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 {getShortRupiahCurrency(conservativeScenario)}
               </p>
               <h3 className="text-lg font-bold">Conservative Scenario</h3>
-              <p className="text-[#333333] text-[15px]">
+              <p className="text-emphasis text-[15px]">
                 Menggambarkan hasil dengan pendekatan kehati-hatian tinggi.
                 <br /> Asumsi difokuskan pada kondisi pasar yang bergerak lebih
                 lambat, konversi lebih rendah, dan pertumbuhan adopsi minimal.
@@ -220,7 +221,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 {getShortRupiahCurrency(somValue)}
               </p>
               <h3 className="text-lg font-bold">Normal Scenario</h3>
-              <p className="text-[#333333] text-[15px]">
+              <p className="text-emphasis text-[15px]">
                 Menunjukkan estimasi paling rasional dan seimbang berdasarkan
                 tren, kapasitas eksekusi, serta dinamika pasar saat ini. <br />{" "}
                 Proyeksi ini menjadi acuan utama dalam menilai ukuran pasar yang
@@ -233,7 +234,7 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
                 {getShortRupiahCurrency(aggresiveScenario)}
               </p>
               <h3 className="text-lg font-bold">Aggresive Scenario</h3>
-              <p className="text-[#333333] text-[15px]">
+              <p className="text-emphasis text-[15px]">
                 Merepresentasikan potensi tertinggi yang dapat dicapai apabila
                 seluruh faktor pertumbuhan berjalan optimal, mencakup percepatan
                 penetrasi pasar, peningkatan adopsi pengguna, dan keunggulan
@@ -243,6 +244,6 @@ export default function MarketSizeReportLMS(props: MarketSizeReportLMSProps) {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

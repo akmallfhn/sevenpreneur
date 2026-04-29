@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import { trpc } from "@/trpc/client";
 import { AiLearnLessonStatus } from "@prisma/client";
 import { Pencil, Plus, Trash2 } from "lucide-react";
@@ -9,19 +9,33 @@ import { useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 
-const STATUS_BADGE: Record<AiLearnLessonStatus, { label: string; cls: string }> = {
-  DRAFT: { label: "Draft", cls: "bg-warning-background text-warning-foreground" },
-  PUBLISHED: { label: "Published", cls: "bg-success-background text-success-foreground" },
+const STATUS_BADGE: Record<
+  AiLearnLessonStatus,
+  { label: string; cls: string }
+> = {
+  DRAFT: {
+    label: "Draft",
+    cls: "bg-warning-background text-warning-foreground",
+  },
+  PUBLISHED: {
+    label: "Published",
+    cls: "bg-success-background text-success-foreground",
+  },
   ARCHIVED: { label: "Archived", cls: "bg-sevenpreneur-ash text-emphasis" },
 };
 
 const LEVEL_LABELS: Record<number, string> = {
-  1: "Foundations", 2: "Techniques", 3: "Advanced", 4: "Strategic",
+  1: "Foundations",
+  2: "Techniques",
+  3: "Advanced",
+  4: "Strategic",
 };
 
 export default function AdminLessonsAilene() {
   const { isCollapsed } = useSidebar();
-  const [statusFilter, setStatusFilter] = useState<AiLearnLessonStatus | undefined>(undefined);
+  const [statusFilter, setStatusFilter] = useState<
+    AiLearnLessonStatus | undefined
+  >(undefined);
   const utils = trpc.useUtils();
 
   const { data, isLoading } = trpc.ailene.listLessons.useQuery({
@@ -66,7 +80,12 @@ export default function AdminLessonsAilene() {
 
         {/* Filter */}
         <div className="flex items-center gap-2">
-          {([undefined, "DRAFT", "PUBLISHED", "ARCHIVED"] as (AiLearnLessonStatus | undefined)[]).map((s) => (
+          {(
+            [undefined, "DRAFT", "PUBLISHED", "ARCHIVED"] as (
+              | AiLearnLessonStatus
+              | undefined
+            )[]
+          ).map((s) => (
             <AppButton
               key={s ?? "all"}
               variant={statusFilter === s ? "primary" : "light"}
@@ -85,18 +104,31 @@ export default function AdminLessonsAilene() {
             <table className="w-full text-sm font-bodycopy">
               <thead className="bg-section-background border-b border-sevenpreneur-ash">
                 <tr>
-                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">JUDUL</th>
-                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">LEVEL</th>
-                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">XP</th>
-                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">QUIZ</th>
-                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">STATUS</th>
+                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">
+                    JUDUL
+                  </th>
+                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">
+                    LEVEL
+                  </th>
+                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">
+                    XP
+                  </th>
+                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">
+                    QUIZ
+                  </th>
+                  <th className="text-left px-4 py-3 font-semibold text-emphasis text-xs">
+                    STATUS
+                  </th>
                   <th className="px-4 py-3" />
                 </tr>
               </thead>
               <tbody>
                 {data?.list.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-12 text-emphasis text-sm">
+                    <td
+                      colSpan={6}
+                      className="text-center py-12 text-emphasis text-sm"
+                    >
                       Belum ada materi.
                     </td>
                   </tr>
@@ -104,9 +136,14 @@ export default function AdminLessonsAilene() {
                 {data?.list.map((lesson) => {
                   const badge = STATUS_BADGE[lesson.status];
                   return (
-                    <tr key={lesson.id} className="border-b border-sevenpreneur-ash/50 hover:bg-section-background/50">
+                    <tr
+                      key={lesson.id}
+                      className="border-b border-sevenpreneur-ash/50 hover:bg-section-background/50"
+                    >
                       <td className="px-4 py-3">
-                        <p className="font-semibold text-sevenpreneur-coal line-clamp-1">{lesson.title}</p>
+                        <p className="font-semibold text-sevenpreneur-coal line-clamp-1">
+                          {lesson.title}
+                        </p>
                       </td>
                       <td className="px-4 py-3 text-emphasis">
                         L{lesson.level} {LEVEL_LABELS[lesson.level]}
@@ -118,7 +155,9 @@ export default function AdminLessonsAilene() {
                         {lesson._count.quiz_questions} soal
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${badge.cls}`}>
+                        <span
+                          className={`text-xs font-semibold px-2 py-0.5 rounded-full ${badge.cls}`}
+                        >
                           {badge.label}
                         </span>
                       </td>
@@ -132,7 +171,9 @@ export default function AdminLessonsAilene() {
                           <AppButton
                             variant="destructiveSoft"
                             size="mediumIcon"
-                            onClick={() => handleDelete(lesson.id, lesson.title)}
+                            onClick={() =>
+                              handleDelete(lesson.id, lesson.title)
+                            }
                             disabled={deleteMutation.isPending}
                           >
                             <Trash2 className="size-3.5" />

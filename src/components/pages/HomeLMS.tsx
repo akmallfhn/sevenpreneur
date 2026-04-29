@@ -7,6 +7,7 @@ import HeroHomeLMS from "../heroes/HeroHomeLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
 import CourseTabsLMS, { CourseList } from "../tabs/CourseTabsLMS";
 import HomeMobileLMS from "./HomeMobileLMS";
+import PageContainerDashboard from "./PageContainerDashboard";
 
 interface HomeLMSProps extends AvatarBadgeLMSProps {
   sessionUserRole: number;
@@ -40,7 +41,7 @@ export default function HomeLMS(props: HomeLMSProps) {
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 gap-5 w-full h-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 gap-5 h-full items-center justify-center">
       <PageHeaderLMS
         headerTitle="Courses"
         headerIcon={<FontAwesomeIcon icon={faCubes} size="lg" />}
@@ -53,6 +54,6 @@ export default function HomeLMS(props: HomeLMSProps) {
         <HeroHomeLMS sessionUserName={props.sessionUserName} />
         <CourseTabsLMS courseList={props.courseList} />
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

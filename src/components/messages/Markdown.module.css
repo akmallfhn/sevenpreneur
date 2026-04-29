@@ -1,7 +1,7 @@
 .markdown {
   font-family: var(--font-ui), system-ui, sans-serif;
   line-height: 1.6;
-  color: #111111;
+  color: inherit;
   font-size: 16px;
   word-break: break-word;
 }
@@ -51,7 +51,7 @@
 .markdown b,
 .markdown strong {
   font-weight: 600;
-  color: #111111;
+  color: inherit;
 }
 .markdown i,
 .markdown em {
@@ -70,17 +70,20 @@
   border-left: 4px solid #d1d5db;
   padding: 1px 14px;
   margin: 12px 0;
-  color: #111111;
+  color: inherit;
 }
 
 /* Code inline */
 .markdown code {
   background-color: #f3f4f6;
-  color: #111111;
+  color: inherit;
   padding: 0.2rem 0.35rem;
   border-radius: 0.25rem;
   font-family: "JetBrains Mono", "Fira Code", monospace;
   font-size: 0.9em;
+}
+:global(.dark) .markdown code {
+  background-color: #1e293b;
 }
 
 /* Code block */
@@ -144,6 +147,23 @@
 
 .markdown tr:nth-child(even) td {
   background-color: #fafafa;
+}
+
+:global(.dark) .markdown th,
+:global(.dark) .markdown td {
+  border-color: #374151;
+}
+:global(.dark) .markdown th {
+  background-color: #1f2937;
+}
+:global(.dark) .markdown tr:nth-child(even) td {
+  background-color: #111827;
+}
+:global(.dark) .markdown blockquote {
+  border-left-color: #4b5563;
+}
+:global(.dark) .markdown hr {
+  border-top-color: #374151;
 }
 
 /* Links */

@@ -52,7 +52,7 @@ export default function LibraryTabsLMS(props: LibraryTabsLMSProps) {
       </div>
 
       {activeTab === "templates" && (
-        <div className="tab-area w-full p-5 bg-white rounded-lg border">
+        <div className="tab-area w-full p-5 bg-card-bg rounded-lg border border-dashboard-border">
           {props.hasTemplateAccess ? (
             <div className="template-list grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5">
               {activeTemplates

@@ -38,16 +38,16 @@ export default function AIItemCardLMS({
   return (
     <Link
       href={`/ai/${aiSlug}`}
-      className="ai-item-container flex flex-col w-full gap-2 p-3 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
+      className="ai-item-container flex flex-col w-full gap-2 p-3 bg-card-bg border border-dashboard-border rounded-lg overflow-hidden transition transform active:scale-95"
     >
-      <div className="ai-icon flex items-center justify-center size-11 border rounded-lg">
+      <div className="ai-icon flex items-center justify-center size-11 border border-dashboard-border rounded-lg">
         {aiIcon}
       </div>
       <div className="ai-attributes relative flex flex-col gap-1 font-bodycopy">
         <h3 className="ai-name text-base font-bold line-clamp-1 2xl:text-lg">
           {aiName}
         </h3>
-        <p className="ai-description text-sm text-[#333333]/80 font-medium line-clamp-2">
+        <p className="ai-description text-sm text-emphasis font-medium line-clamp-2">
           {aiDescriptions}
         </p>
       </div>

@@ -11,6 +11,7 @@ import AttendanceProgressBarLMS from "../cards/AttendanceProgressBarLMS";
 import NearestScheduleCardLMS from "../cards/NearestScheduleCardLMS";
 import { useEffect, useState } from "react";
 import CohortDetailsMobileLMS from "./CohortDetailsMobileLMS";
+import PageContainerDashboard from "./PageContainerDashboard";
 import Image from "next/image";
 import AppButton from "../buttons/AppButton";
 import { Eye } from "lucide-react";
@@ -58,7 +59,7 @@ export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full gap-7 items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 gap-7 items-center justify-center">
       <HeroCohortDetailsLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -112,6 +113,6 @@ export default function CohortDetailsLMS(props: CohortDetailsLMSProps) {
           </div>
         </aside>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

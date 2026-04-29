@@ -22,11 +22,11 @@ export default function HeaderGenerateAIToolLMS(
 ) {
   return (
     <React.Fragment>
-      <div className="header-root flex sticky w-full top-0 left-0 px-0 py-5 items-center justify-center bg-section-background z-40">
+      <div className="header-root flex sticky w-full top-0 left-0 px-0 py-5 items-center justify-center bg-dashboard-bg z-40">
         <div className="header-container flex w-full max-w-[calc(100%-4rem)] items-center justify-between">
           <div className="header-page-data flex flex-col gap-3">
             <div className="header-breadcrumb flex items-center gap-4">
-              <AppBreadcrumb className="text-[#333333]/90">
+              <AppBreadcrumb className="text-emphasis">
                 <p className="slash font-bodycopy">/</p>
                 <AppBreadcrumbItem href="/ai">AI</AppBreadcrumbItem>
                 <p className="slash font-bodycopy">/</p>

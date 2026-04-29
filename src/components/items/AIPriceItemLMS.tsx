@@ -14,9 +14,9 @@ const priceVariant: Record<
   value: {
     title: "Value Based Price",
     desc: "Harga berdasarkan pada perceived value dan willingness-to-pay yang selaras dengan manfaat",
-    background: "bg-[#F6F6FD] border-[#4F41B6]",
-    label_background: "bg-[#E8E7FC]",
-    color: "text-[#4F41B6]",
+    background: "bg-[#F6F6FD] dark:bg-[#13103a] border-[#4F41B6]",
+    label_background: "bg-[#E8E7FC] dark:bg-[#1e1a52]",
+    color: "text-[#4F41B6] dark:text-[#9b93f0]",
   },
   cost: {
     title: "Cost Based Price",
@@ -28,7 +28,7 @@ const priceVariant: Record<
   competition: {
     title: "Competition Based Price",
     desc: "Harga berdasarkan landscape kompetitor dan benchmark pasar",
-    background: "bg-[#F5F1F6] border-danger-foreground",
+    background: "bg-[#F5F1F6] dark:bg-[#1e0f1e] border-danger-foreground",
     label_background: "bg-danger-background",
     color: "text-danger-foreground",
   },
@@ -49,7 +49,7 @@ export default function AIPriceItemLMS(props: AIPriceItemLMSProps) {
   return (
     <div
       className={`value-based-price flex flex-col w-full font-bodycopy p-4 gap-2 rounded-lg hover:cursor-pointer ${
-        props.isSelected ? `border ${priceVar.background}` : "bg-white border"
+        props.isSelected ? `border ${priceVar.background}` : "bg-card-bg border border-dashboard-border"
       }`}
       onClick={props.onSelect}
     >
@@ -60,11 +60,11 @@ export default function AIPriceItemLMS(props: AIPriceItemLMSProps) {
           >
             {priceVar.title}
           </h4>
-          <p className="text-[15px] text-[#111111]/80">{priceVar.desc}</p>
+          <p className="text-[15px] text-foreground/80">{priceVar.desc}</p>
         </div>
         <h2
           className={`font-brand font-bold text-2xl shrink-0 ${
-            props.isSelected ? `${priceVar.color}` : "text-black"
+            props.isSelected ? `${priceVar.color}` : "text-foreground"
           }`}
         >
           {getRupiahCurrency(Math.round(props.estimatedPrice))}
@@ -72,11 +72,11 @@ export default function AIPriceItemLMS(props: AIPriceItemLMSProps) {
       </div>
       <hr className="border-b" />
       <div className="flex flex-col">
-        <div className="flex w-full items-center justify-between text-[15px] text-[#111111]">
+        <div className="flex w-full items-center justify-between text-[15px] text-foreground">
           <p className="font-medium">Persentase Margin per Unit</p>
           <p className="font-semibold">{props.marginProfit}%</p>
         </div>
-        <div className="flex w-full items-center justify-between text-[15px] text-[#111111]">
+        <div className="flex w-full items-center justify-between text-[15px] text-foreground">
           <p className="font-medium">Profit per Unit</p>
           <p className="font-semibold">{getRupiahCurrency(props.profit)}</p>
         </div>

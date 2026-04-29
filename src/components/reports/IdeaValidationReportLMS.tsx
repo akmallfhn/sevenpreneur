@@ -13,6 +13,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AICitationLMS, { SourcesArticle } from "../items/AICitationLMS";
 import AISegmentItemLMS from "../items/AISegmentItemLMS";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import styles from "./Report.module.css";
 
@@ -31,7 +32,7 @@ const freqAttributes: Record<
     color: "text-destructive",
     icon: <TrendingUp className="text-destructive size-10" />,
     icon_background:
-      "bg-linear-to-br from-0% from-semi-destructive to-70% to-[#FCFCFC]",
+      "bg-linear-to-br from-0% from-semi-destructive to-70% to-[#FCFCFC] dark:to-[#11141b]",
   },
   sedang: {
     description:
@@ -39,14 +40,14 @@ const freqAttributes: Record<
     color: "text-[#FB8C00]",
     icon: <Minus className="text-[#FB8C00] size-10" />,
     icon_background:
-      "bg-linear-to-br from-0% from-yellow-100 to-70% to-[#FCFCFC]",
+      "bg-linear-to-br from-0% from-yellow-100 to-70% to-[#FCFCFC] dark:to-[#11141b]",
   },
   rendah: {
     description: "hanya dialami sedikit pengguna dan jarang muncul.",
     color: "text-[#43A047]",
     icon: <TrendingDown className="text-[#43A047] size-10" />,
     icon_background:
-      "bg-linear-to-br from-0% from-green-200 to-70% to-[#FCFCFC]",
+      "bg-linear-to-br from-0% from-green-200 to-70% to-[#FCFCFC] dark:to-[#11141b]",
   },
 };
 
@@ -65,7 +66,7 @@ const longevityAttributes: Record<
       "Produk ini memiliki potensi jangka panjang dan relevan dalam waktu yang lama.",
     icon: "🌲",
     icon_background:
-      "bg-linear-to-br from-0% from-green-200 to-80% to-[#FCFCFC]",
+      "bg-linear-to-br from-0% from-green-200 to-80% to-[#FCFCFC] dark:to-[#11141b]",
   },
   shortterm: {
     name: "Short-term Product",
@@ -73,7 +74,7 @@ const longevityAttributes: Record<
       "Produk ini cocok untuk kebutuhan jangka pendek atau fase awal.",
     icon: "⚡",
     icon_background:
-      "bg-linear-to-br from-0% from-yellow-100 to-80% to-[#FCFCFC]",
+      "bg-linear-to-br from-0% from-yellow-100 to-80% to-[#FCFCFC] dark:to-[#11141b]",
   },
   seasonal: {
     name: "Seasonal Product",
@@ -81,7 +82,7 @@ const longevityAttributes: Record<
       "Produk ini bersifat musiman dan relevansinya bergantung pada momen tertentu.",
     icon: "🍂",
     icon_background:
-      "bg-linear-to-br from-0% from-semi-destructive to-80% to-[#FCFCFC]",
+      "bg-linear-to-br from-0% from-semi-destructive to-80% to-[#FCFCFC] dark:to-[#11141b]",
   },
 };
 
@@ -188,7 +189,7 @@ export default function IdeaValidationReportLMS(
 
   if (!props.resultStatus) {
     return (
-      <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+      <PageContainerDashboard className="pb-8 items-center justify-center">
         <HeaderAIResultDetailsLMS
           sessionUserName={props.sessionUserName}
           sessionUserAvatar={props.sessionUserAvatar}
@@ -199,12 +200,12 @@ export default function IdeaValidationReportLMS(
         <div className="flex flex-col w-full items-center">
           <LoadingAIGeneratingResult />
         </div>
-      </div>
+      </PageContainerDashboard>
     );
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderAIResultDetailsLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -216,8 +217,8 @@ export default function IdeaValidationReportLMS(
         <h2 className="section-title font-bold font-brand text-xl">
           Problem-Fit Analysis
         </h2>
-        <div className="problem-fit flex w-full h-[420px] gap-4 bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 border rounded-lg xl:h-[320px]">
-          <div className="discovery relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white p-4 border rounded-lg">
+        <div className="problem-fit flex w-full h-[420px] gap-4 bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] p-5 border border-dashboard-border rounded-lg xl:h-[320px]">
+          <div className="discovery relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-40% to-white dark:to-[#11141b] p-4 border border-dashboard-border rounded-lg">
             <h3 className="section-title sticky top-0 left-0 font-bodycopy font-bold text-lg">
               Ringkasan Temuan Penelitian
             </h3>
@@ -242,7 +243,7 @@ export default function IdeaValidationReportLMS(
                 {props.problemFrequency.toUpperCase()}
               </p>
             </div>
-            <p className="description font-bodycopy font-medium text-[15px] text-[#333333] text-center">
+            <p className="description font-bodycopy font-medium text-[15px] text-emphasis text-center">
               Masalah yang kamu identifikasi {freq.description}
             </p>
           </div>
@@ -272,14 +273,14 @@ export default function IdeaValidationReportLMS(
                 {props.problemFitScore}
               </p>
             </div>
-            <p className="description font-bodycopy font-medium text-[15px] text-[#333333] text-center">
+            <p className="description font-bodycopy font-medium text-[15px] text-emphasis text-center">
               Skor {props.problemFitScore} menunjukkan bahwa masalah ini{" "}
               {problemScoreDesc}
             </p>
           </div>
         </div>
         <div className="problem-fit flex w-full gap-4">
-          <div className="affected-segments flex flex-col flex-2 gap-2 w-full bg-white p-5 rounded-lg border">
+          <div className="affected-segments flex flex-col flex-2 gap-2 w-full bg-card-bg p-5 rounded-lg border border-dashboard-border">
             <h3 className="section-title font-bodycopy font-bold text-lg">
               Segmen yang Terdampak
             </h3>
@@ -303,13 +304,13 @@ export default function IdeaValidationReportLMS(
             />
           </div>
         </div>
-        <div className="problem-fit flex gap-6 font-bodycopy w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 rounded-lg border">
+        <div className="problem-fit flex gap-6 font-bodycopy w-full bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] p-5 rounded-lg border border-dashboard-border">
           <div className="problem-factors flex flex-col flex-1 gap-4">
             <div className="flex flex-col gap-1">
               <h3 className="section-title text-lg font-bold">
                 Mengapa Masalah Ini Terjadi?
               </h3>
-              <p className="text-[#333333] text-[15px]">
+              <p className="text-emphasis text-[15px]">
                 {props.problemFactor}
               </p>
             </div>
@@ -320,7 +321,7 @@ export default function IdeaValidationReportLMS(
               <h3 className="section-title text-lg font-bold">
                 Alternatif yang Tersedia
               </h3>
-              <p className="text-[#333333] text-[15px]">
+              <p className="text-emphasis text-[15px]">
                 {props.existingAlternatives}
               </p>
             </div>
@@ -329,8 +330,8 @@ export default function IdeaValidationReportLMS(
         <h2 className="section-title font-bold font-brand text-xl">
           Solution-Fit Analysis
         </h2>
-        <div className="solution-fit flex w-full h-[420px] gap-4 bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 border rounded-lg xl:h-[300px]">
-          <div className="value-proposition relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] to-40% to-white p-4 border rounded-lg">
+        <div className="solution-fit flex w-full h-[420px] gap-4 bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] p-5 border border-dashboard-border rounded-lg xl:h-[300px]">
+          <div className="value-proposition relative flex flex-col flex-2 gap-2 shrink-0 bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-40% to-white dark:to-[#11141b] p-4 border border-dashboard-border rounded-lg">
             <h3 className="section-title sticky top-0 left-0 font-bodycopy font-bold text-lg">
               Nilai Utama Solusi
             </h3>
@@ -367,14 +368,14 @@ export default function IdeaValidationReportLMS(
                 {props.solutionFitScore}
               </p>
             </div>
-            <p className="description font-bodycopy font-medium text-[15px] text-[#333333] text-center">
+            <p className="description font-bodycopy font-medium text-[15px] text-emphasis text-center">
               Skor {props.solutionFitScore} menunjukkan solusi ini{" "}
               {solutionScoreDesc}
             </p>
           </div>
         </div>
         <div className="solution-fit flex w-full gap-4">
-          <div className="affected-segments flex flex-col flex-2 gap-4 w-full bg-white p-5 rounded-lg border">
+          <div className="affected-segments flex flex-col flex-2 gap-4 w-full bg-card-bg p-5 rounded-lg border border-dashboard-border">
             <div className="solution-feasibility flex flex-col gap-2">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Kemungkinan Pengembangan
@@ -398,7 +399,7 @@ export default function IdeaValidationReportLMS(
               />
             </div>
           </div>
-          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 items-center text-center rounded-lg border">
+          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] p-5 items-center text-center rounded-lg border border-dashboard-border">
             <div
               className={`aspect-square p-1 rounded-full ${longevity.icon_background}`}
             >
@@ -419,12 +420,12 @@ export default function IdeaValidationReportLMS(
           Idea Refinement
         </h2>
         <div className="idea-refinement flex w-full gap-4">
-          <div className="suggestions flex flex-col flex-2 gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] to-20% to-white p-5 rounded-lg border">
+          <div className="suggestions flex flex-col flex-2 gap-2 w-full bg-linear-to-br from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-20% to-white dark:to-[#11141b] p-5 rounded-lg border border-dashboard-border">
             <h3 className="section-title font-bodycopy font-bold text-lg">
               Rekomendasi & Saran
             </h3>
             <div className="suggestion-list flex flex-col gap-3">
-              <div className="market-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
+              <div className="market-suggestions w-full bg-card-inside-bg p-3 rounded-lg border border-dashboard-border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -432,7 +433,7 @@ export default function IdeaValidationReportLMS(
                   }}
                 />
               </div>
-              <div className="competitive-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
+              <div className="competitive-suggestions w-full bg-card-inside-bg p-3 rounded-lg border border-dashboard-border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -440,7 +441,7 @@ export default function IdeaValidationReportLMS(
                   }}
                 />
               </div>
-              <div className="resource-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
+              <div className="resource-suggestions w-full bg-card-inside-bg p-3 rounded-lg border border-dashboard-border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -448,7 +449,7 @@ export default function IdeaValidationReportLMS(
                   }}
                 />
               </div>
-              <div className="priority-suggestions w-full bg-[#F7F6F6] p-3 rounded-lg border">
+              <div className="priority-suggestions w-full bg-card-inside-bg p-3 rounded-lg border border-dashboard-border">
                 <div
                   className={styles.report}
                   dangerouslySetInnerHTML={{
@@ -458,7 +459,7 @@ export default function IdeaValidationReportLMS(
               </div>
             </div>
           </div>
-          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] to-50% to-white p-5 rounded-lg border">
+          <div className="data-confidence flex flex-col flex-1 gap-4 w-full bg-linear-to-bl from-0% from-[#EFEDF9] dark:from-[#1a1640] to-50% to-white dark:to-[#11141b] p-5 rounded-lg border border-dashboard-border">
             <h3 className="section-title font-bold text-lg font-bodycopy">
               Next Step Actions
             </h3>
@@ -469,7 +470,7 @@ export default function IdeaValidationReportLMS(
                   className="step-item flex items-center gap-6 z-10"
                 >
                   <div className="step-point bg-primary size-3 rounded-full shrink-0 outline-primary-light/60 outline-4" />
-                  <p className="step-action font-bodycopy font-medium text-[15px] text-[#333333]">
+                  <p className="step-action font-bodycopy font-medium text-[15px] text-emphasis">
                     {item}
                   </p>
                 </div>
@@ -485,6 +486,6 @@ export default function IdeaValidationReportLMS(
           </div>
         </div>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

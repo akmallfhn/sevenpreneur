@@ -32,21 +32,21 @@ export default function AISegmentItemLMS(props: AISegmentItemLMSProps) {
   }, []);
 
   return (
-    <div className="segment-item relative flex flex-col gap-3 p-3 bg-linear-to-bl from-0% from-[#EFEDF9] to-60% to-white border rounded-lg overflow-hidden">
+    <div className="segment-item relative flex flex-col gap-3 p-3 bg-linear-to-bl from-0% from-[#EFEDF9] to-60% to-white dark:from-[#1a1640] dark:to-card-bg border border-dashboard-border rounded-lg overflow-hidden">
       <div className="segment-attributes flex items-center gap-3">
-        <div className="segment-icon p-2 bg-[#EFEDF9] shrink-0 rounded-md">
-          <User className="size-10 text-[#42359B]" />
+        <div className="segment-icon p-2 bg-[#EFEDF9] dark:bg-[#1a1640] shrink-0 rounded-md">
+          <User className="size-10 text-[#42359B] dark:text-[#9b93f0]" />
         </div>
         <div className="flex flex-col">
           <div className="segment-number flex gap-2 items-end">
-            <p className="segment-percentage font-brand font-bold text-[#42359B] text-3xl">
+            <p className="segment-percentage font-brand font-bold text-[#42359B] dark:text-[#9b93f0] text-3xl">
               {props.segmentPercentage}%
             </p>
-            <p className="segment-size font-bodycopy font-medium text-[#333333] text-[15px]">
+            <p className="segment-size font-bodycopy font-medium text-emphasis text-[15px]">
               dari {getShortNumber(props.segmentSize)}
             </p>
           </div>
-          <p className="segment-name flex flex-col font-bodycopy font-semibold text-[#333333]">
+          <p className="segment-name flex flex-col font-bodycopy font-semibold text-emphasis">
             {props.segmentName}
           </p>
         </div>
@@ -57,11 +57,11 @@ export default function AISegmentItemLMS(props: AISegmentItemLMSProps) {
           isExpanded ? "max-h-[2000px]" : "max-h-11"
         }`}
       >
-        <p className="segment-description flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
+        <p className="segment-description flex flex-col font-bodycopy font-medium text-emphasis text-[15px]">
           <b>Characteristics:</b>
           {props.segmentDescription}
         </p>
-        <p className="segment-pain-points flex flex-col font-bodycopy font-medium text-[#333333] text-[15px]">
+        <p className="segment-pain-points flex flex-col font-bodycopy font-medium text-emphasis text-[15px]">
           <b>Pain Points:</b> {props.segmentPainPoints}
         </p>
       </div>
@@ -82,7 +82,7 @@ export default function AISegmentItemLMS(props: AISegmentItemLMSProps) {
         </div>
       )}
       {!isExpanded && isOverflowing && (
-        <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-white to-100% to-transparent pointer-events-none" />
+        <div className="overlay absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-30% from-white dark:from-card-bg to-100% to-transparent pointer-events-none" />
       )}
     </div>
   );

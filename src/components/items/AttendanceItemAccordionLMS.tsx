@@ -19,7 +19,7 @@ export default function AttendanceItemAccordionLMS(
 
   return (
     <div
-      className="attendance-item flex flex-col w-full py-2.5 px-3 bg-white border rounded-md transform transition duration-500 hover:cursor-pointer"
+      className="attendance-item flex flex-col w-full py-2.5 px-3 bg-card-bg border border-dashboard-border rounded-md transform transition duration-500 hover:cursor-pointer"
       onClick={handleOpen}
     >
       <div className="attendance-attributes flex justify-between items-center gap-2">
@@ -46,22 +46,22 @@ export default function AttendanceItemAccordionLMS(
       >
         <div className="flex flex-col w-full gap-1">
           <div className="check-in-at flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[#333333]/80">
+            <div className="flex items-center gap-1 text-emphasis">
               <TimerIcon className="size-4" />
               <p className="font-bodycopy font-medium text-sm">Check In</p>
             </div>
-            <p className="font-bodycopy font-medium text-sm text-[#333333]/80 shrink-0">
+            <p className="font-bodycopy font-medium text-sm text-emphasis shrink-0">
               {!!props.attendanceCheckInAt
                 ? dayjs(props.attendanceCheckInAt).format("DD/MMM/YY [-] HH:mm")
                 : "-"}
             </p>
           </div>
           <div className="check-out-at flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[#333333]/80">
+            <div className="flex items-center gap-1 text-emphasis">
               <TimerIcon className="size-4" />
               <p className="font-bodycopy font-medium text-sm">Check Out</p>
             </div>
-            <p className="font-bodycopy font-medium text-sm text-[#333333]/80 shrink-0">
+            <p className="font-bodycopy font-medium text-sm text-emphasis shrink-0">
               {!!props.attendanceCheckOutAt
                 ? dayjs(props.attendanceCheckOutAt).format(
                     "DD/MMM/YY [-] HH:mm"

@@ -1,5 +1,5 @@
 "use client";
-import { useSidebar } from "@/contexts/SidebarContextCMS";
+import { useSidebar } from "@/contexts/SidebarContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { ReactNode, useEffect, useState } from "react";
 interface AppSidebarMenuItemProps {
   menuName: string;
   menuURL: string;
-  menuIcon: ReactNode;
+  menuIcon?: ReactNode;
   exact?: boolean;
 }
 
@@ -32,13 +32,15 @@ export default function AppSidebarMenuItem({
   return (
     <Link
       href={menuURL}
-      className={`relative flex items-center p-2 rounded-lg overflow-hidden transition-all transform active:scale-95
+      className={`relative flex items-center p-2 rounded-lg overflow-hidden transition-all transform active:scale-95 shrink-0
         ${isActive ? "sb-item-active" : "sb-item"}
         ${isCollapsed ? "w-fit justify-center gap-0" : "w-full gap-3"}`}
     >
-      <div className="flex size-[18px] items-center justify-center shrink-0">
-        {menuIcon}
-      </div>
+      {menuIcon && (
+        <div className="flex size-[18px] items-center justify-center shrink-0">
+          {menuIcon}
+        </div>
+      )}
       {!isCollapsed && (
         <p className="font-bodycopy text-[13px] line-clamp-1 flex-1">
           {menuName}

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AIItemCardLMS from "../items/AIItemCardLMS";
 import PageHeaderLMS from "../navigations/PageHeaderLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import AppPageState from "../states/AppPageState";
 import EmptyComponentsLMS from "../states/EmptyComponentsLMS";
 
@@ -52,16 +53,16 @@ export default function AIListLMS({
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 gap-5 w-full h-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 gap-5 h-full items-center justify-center">
       <PageHeaderLMS
         headerTitle="AI Business Tools"
         headerIcon={<FontAwesomeIcon icon={faBrain} size="lg" />}
-        headerIconColor="bg-[#FFE8E7] text-[#C76151]"
+        headerIconColor="bg-[#FFE8E7] dark:bg-[#2e1210] text-[#C76151]"
         sessionUserRole={sessionUserRole}
         sessionUserName={sessionUserName}
         sessionUserAvatar={sessionUserAvatar}
       />
-      <div className="index max-w-[calc(100%-4rem)] max-h-[calc(100vh-10rem)] w-full flex flex-col gap-4 bg-white px-5 py-7 rounded-lg overflow-y-auto">
+      <div className="index max-w-[calc(100%-4rem)] max-h-[calc(100vh-10rem)] w-full flex flex-col gap-4 bg-card-bg border border-dashboard-border px-5 py-7 rounded-lg overflow-y-auto">
         {hasAIAccess ? (
           <div className="template-list grid gap-4 items-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 3xl:grid-cols-5">
             {activeAI
@@ -80,7 +81,7 @@ export default function AIListLMS({
         )}
       </div>
       <div className="remarks-open-ai flex items-center pt-5 gap-2 opacity-60">
-        <p className="font-bodycopy font-medium text-[#333333] text-sm">
+        <p className="font-bodycopy font-medium text-emphasis text-sm">
           Powered by
         </p>
         <div className="logo-open-ai w-[70px] h-full">
@@ -95,6 +96,6 @@ export default function AIListLMS({
           />
         </div>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }

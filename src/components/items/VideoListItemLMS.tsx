@@ -37,10 +37,10 @@ export default function VideoListItemLMS(props: VideoListItemLMSProps) {
         )}
       </div>
       <div className="video-attributes flex flex-col font-bodycopy">
-        <p className="video-episode font-medium text-xs text-[#333333]/70">
+        <p className="video-episode font-medium text-xs text-emphasis">
           EPISODE {props.videoEpisode}
         </p>
-        <p className="video-title font-bold text-black text-sm line-clamp-3">
+        <p className="video-title font-bold text-foreground text-sm line-clamp-3">
           {props.videoName}
         </p>
       </div>

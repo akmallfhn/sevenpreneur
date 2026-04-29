@@ -39,10 +39,10 @@ export default function VideoListItemMobileLMS(
         )}
       </div>
       <div className="video-attributes flex flex-col font-ui">
-        <p className="video-episode font-medium text-sm text-[#333333]/80">
+        <p className="video-episode font-medium text-sm text-emphasis">
           EPISODE {props.index}
         </p>
-        <p className="video-title font-bold text-black line-clamp-2 text-[15px]">
+        <p className="video-title font-bold text-foreground line-clamp-2 text-[15px]">
           {props.videoName}
         </p>
       </div>

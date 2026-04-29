@@ -4,6 +4,7 @@ import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import { useEffect, useMemo, useState } from "react";
 import { setSessionToken, trpc } from "@/trpc/client";
 import HeaderAIResultDetailsLMS from "../navigations/HeaderAIResultDetailsLMS";
+import PageContainerDashboard from "../pages/PageContainerDashboard";
 import LoadingAIGeneratingResult from "../states/LoadingAIGeneratingResultLMS";
 import { getRupiahCurrency } from "@/lib/currency";
 import AIPriceItemLMS from "../items/AIPriceItemLMS";
@@ -157,7 +158,7 @@ export default function COGSPricesCalculationReportLMS(
 
   if (!props.resultStatus) {
     return (
-      <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+      <PageContainerDashboard className="pb-8 items-center justify-center">
         <HeaderAIResultDetailsLMS
           sessionUserName={props.sessionUserName}
           sessionUserAvatar={props.sessionUserAvatar}
@@ -168,12 +169,12 @@ export default function COGSPricesCalculationReportLMS(
         <div className="flex flex-col w-full items-center">
           <LoadingAIGeneratingResult />
         </div>
-      </div>
+      </PageContainerDashboard>
     );
   }
 
   return (
-    <div className="root-page hidden flex-col pl-64 pb-8 w-full items-center justify-center lg:flex">
+    <PageContainerDashboard className="pb-8 items-center justify-center">
       <HeaderAIResultDetailsLMS
         sessionUserName={props.sessionUserName}
         sessionUserAvatar={props.sessionUserAvatar}
@@ -184,7 +185,7 @@ export default function COGSPricesCalculationReportLMS(
       <div className="body-contents max-w-[calc(100%-4rem)] w-full flex flex-col justify-between gap-4">
         <div className="flex w-full gap-4">
           <main className="flex flex-col flex-2 gap-4 w-full">
-            <div className="target-profit flex flex-col w-full gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border rounded-lg">
+            <div className="target-profit flex flex-col w-full gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-40% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Simulasi Target
               </h3>
@@ -204,12 +205,12 @@ export default function COGSPricesCalculationReportLMS(
                 onInputChange={handleVolumeProductionChange}
               />
             </div>
-            <div className="price-strategy flex flex-col gap-3 p-5 bg-white border rounded-lg">
+            <div className="price-strategy flex flex-col gap-3 p-5 bg-card-bg border border-dashboard-border rounded-lg">
               <div className="flex flex-col">
                 <h3 className="section-title font-bodycopy font-bold text-lg">
                   Harga yang Disarankan
                 </h3>
-                <p className="text-[15px] text-[#111111]/80 font-bodycopy font-medium">
+                <p className="text-[15px] text-emphasis font-bodycopy font-medium">
                   Pilih salah satu
                 </p>
               </div>
@@ -238,7 +239,7 @@ export default function COGSPricesCalculationReportLMS(
                 variant="competition"
               />
             </div>
-            <div className="price-strategy flex flex-col gap-3 p-5 bg-white border rounded-lg">
+            <div className="price-strategy flex flex-col gap-3 p-5 bg-card-bg border border-dashboard-border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Kalkulasi & Proyeksi Penjualan
               </h3>
@@ -269,11 +270,11 @@ export default function COGSPricesCalculationReportLMS(
             </div>
           </main>
           <aside className="aside-industry-analisis flex flex-col flex-[1.2] gap-4 w-full">
-            <div className="cost-analysis flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border rounded-lg">
+            <div className="cost-analysis flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-40% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Rincian Biaya
               </h3>
-              <div className="fixed-cost-per-period flex items-center justify-between text-[#111111]">
+              <div className="fixed-cost-per-period flex items-center justify-between text-foreground">
                 <p className="font-bodycopy font-medium text-[15px]">
                   Fixed Cost per Bulan
                 </p>
@@ -281,7 +282,7 @@ export default function COGSPricesCalculationReportLMS(
                   {getRupiahCurrency(props.fixedCostPerPeriod)}
                 </p>
               </div>
-              <div className="production-per-period flex items-center justify-between text-[#111111]">
+              <div className="production-per-period flex items-center justify-between text-foreground">
                 <p className="font-bodycopy font-medium text-[15px]">
                   Volume Produksi
                 </p>
@@ -290,7 +291,7 @@ export default function COGSPricesCalculationReportLMS(
                 </p>
               </div>
               <hr className="divider border-b" />
-              <div className="fixed-cost-per-unit flex items-center justify-between text-[#111111]">
+              <div className="fixed-cost-per-unit flex items-center justify-between text-foreground">
                 <p className="font-bodycopy font-medium text-[15px]">
                   Fixed Cost per Unit
                 </p>
@@ -298,7 +299,7 @@ export default function COGSPricesCalculationReportLMS(
                   {getRupiahCurrency(fixedCostPerUnit)}
                 </p>
               </div>
-              <div className="variable-cost-per-unit flex items-center justify-between text-[#111111]">
+              <div className="variable-cost-per-unit flex items-center justify-between text-foreground">
                 <p className="font-bodycopy font-medium text-[15px]">
                   Variable Cost per Unit
                 </p>
@@ -307,7 +308,7 @@ export default function COGSPricesCalculationReportLMS(
                 </p>
               </div>
               <hr className="divider border-b" />
-              <div className="total-cost-per-unit flex items-center justify-between text-[#111111]">
+              <div className="total-cost-per-unit flex items-center justify-between text-foreground">
                 <p className="font-bodycopy font-bold text-[15px]">
                   Total Cost per Unit
                 </p>
@@ -316,25 +317,25 @@ export default function COGSPricesCalculationReportLMS(
                 </p>
               </div>
             </div>
-            <div className="value-communication flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] to-40% to-white border rounded-lg">
+            <div className="value-communication flex flex-col gap-2 p-5 bg-linear-to-bl from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-40% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Value Communication
               </h3>
-              <p className="font-bodycopy font-medium text-[15px] text-[#111111]">
+              <p className="font-bodycopy font-medium text-[15px] text-foreground">
                 {props.valueCommunication}
               </p>
             </div>
-            <div className="value-communication flex flex-col gap-2 p-5 bg-white border rounded-lg">
+            <div className="value-communication flex flex-col gap-2 p-5 bg-card-bg border border-dashboard-border rounded-lg">
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Benchmark Kompetitor
               </h3>
               <div className="flex flex-col gap-2">
                 {props.competitorList.map((post, index) => (
                   <div
-                    className="flex flex-col p-3 bg-section-background rounded-md"
+                    className="flex flex-col p-3 bg-section-background rounded-md dark:bg-card-inside-bg"
                     key={index}
                   >
-                    <p className="font-bodycopy font-medium text-[15px] text-[#111111]">
+                    <p className="font-bodycopy font-medium text-[15px] text-foreground">
                       {post.name}
                     </p>
                   </div>
@@ -344,6 +345,6 @@ export default function COGSPricesCalculationReportLMS(
           </aside>
         </div>
       </div>
-    </div>
+    </PageContainerDashboard>
   );
 }
