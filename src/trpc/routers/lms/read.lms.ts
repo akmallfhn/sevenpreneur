@@ -18,7 +18,7 @@ import {
 import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
-import { isEnrolledCohort, isEnrolledLearning } from "./util.lms";
+import { extractThemes, isEnrolledCohort, isEnrolledLearning, textSentiment } from "./util.lms";
 
 export const readLMS = {
   cohort: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
@@ -567,6 +567,63 @@ export const readLMS = {
         overall_avg: overallAvg,
         avg_scores: avgScores,
         attendees: attendeeList,
+      };
+    }),
+
+  learningFeedbackAnalysis: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(z.object({ learning_id: numberIsID() }))
+    .query(async (opts) => {
+      const { learning_id } = opts.input;
+
+      const ratings = await opts.ctx.prisma.learningRating.findMany({
+        where: { learning_id },
+        select: {
+          favorite_material: true,
+          disliked_material: true,
+          missing_topics: true,
+          improvement_suggestion: true,
+        },
+      });
+
+      if (ratings.length === 0) {
+        return {
+          code: STATUS_OK,
+          message: "Success",
+          total_responses: 0,
+          positive: [],
+          negative: [],
+          neutral: [],
+        };
+      }
+
+      const collect = (key: keyof typeof ratings[0]) =>
+        ratings
+          .map((r) => r[key])
+          .filter((v): v is string => !!v && v.trim().length > 0);
+
+      const positivePool = collect("favorite_material");
+      const negativePool: string[] = [];
+
+      for (const t of [...collect("disliked_material"), ...collect("missing_topics")]) {
+        if (textSentiment(t) === "positive") positivePool.push(t);
+        else negativePool.push(t);
+      }
+
+      const positive = extractThemes(positivePool);
+      const negative = extractThemes(negativePool);
+      const neutral = extractThemes(collect("improvement_suggestion"));
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        total_responses: ratings.length,
+        positive,
+        negative,
+        neutral,
       };
     }),
 };

@@ -11,9 +11,12 @@ import {
   CheckCircle,
   ChevronRight,
   Clock,
+  Lightbulb,
   MessageSquare,
   PenTool,
   Star,
+  ThumbsDown,
+  ThumbsUp,
   TvMinimalPlay,
   UserCheck,
   UserX,
@@ -46,7 +49,7 @@ interface LearningDetailsCMSProps {
 }
 
 const RATING_DIMENSIONS_LEFT = [
-  { key: "coach_clarity", label: "Kejelasan Penjelasan" },
+  { key: "coach_clarity", label: "Kejelasan Penyampaian" },
   { key: "coach_mastery", label: "Penguasaan Materi" },
   { key: "coach_responsiveness", label: "Responsivitas" },
   { key: "coach_engagement", label: "Engagement & Interaktif" },
@@ -74,6 +77,44 @@ function RatingBar({ value }: { value: number | null | undefined }) {
         {v.toFixed(1)}
       </span>
     </div>
+  );
+}
+
+function ThemeCard({
+  theme,
+  badgeClass,
+  cardClass,
+}: {
+  theme: { theme: string; count: number; example_quotes: string[] };
+  badgeClass: string;
+  cardClass: string;
+}) {
+  return (
+    <div className={`flex flex-col gap-1 p-2.5 rounded-md border ${cardClass}`}>
+      <div className="flex items-start justify-between gap-2">
+        <span className="text-sm font-bodycopy font-semibold text-foreground capitalize leading-snug">
+          {theme.theme}
+        </span>
+        <span
+          className={`text-xs font-bodycopy font-bold px-1.5 py-0.5 rounded-full shrink-0 ${badgeClass}`}
+        >
+          {theme.count}×
+        </span>
+      </div>
+      {theme.example_quotes[0] && (
+        <p className="text-xs font-bodycopy text-emphasis italic line-clamp-2">
+          &ldquo;{theme.example_quotes[0]}&rdquo;
+        </p>
+      )}
+    </div>
+  );
+}
+
+function EmptyTheme() {
+  return (
+    <p className="text-xs font-bodycopy text-emphasis">
+      Tidak ada tema terdeteksi.
+    </p>
   );
 }
 
@@ -116,6 +157,12 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
 
   const { data: statsData, isLoading: isLoadingStats } =
     trpc.read.learningStats.useQuery(
+      { learning_id: props.learningId },
+      { enabled: !!props.sessionToken }
+    );
+
+  const { data: feedbackData, isLoading: isLoadingFeedback } =
+    trpc.read.learningFeedbackAnalysis.useQuery(
       { learning_id: props.learningId },
       { enabled: !!props.sessionToken }
     );
@@ -421,7 +468,96 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                 </div>
               </div>
 
-              {/* Row 5: Attendance Details */}
+              {/* Row 5: Qualitative Feedback Analysis */}
+              <SectionContainerCMS title="Analisis Feedback Kualitatif">
+                {isLoadingFeedback ? (
+                  <p className="text-sm font-bodycopy text-emphasis">
+                    Memuat analisis...
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-1.5 text-success">
+                        <div className="flex items-center justify-center size-7 bg-success-background rounded-full">
+                          <ThumbsUp className="size-3.5" />
+                        </div>
+                        <span className="text-sm font-bodycopy font-semibold">
+                          Positif
+                        </span>
+                        <span className="text-xs text-emphasis ml-auto font-bodycopy">
+                          {feedbackData?.positive.length ?? 0} tema
+                        </span>
+                      </div>
+                      {feedbackData?.positive.length ? (
+                        feedbackData.positive.map((t) => (
+                          <ThemeCard
+                            key={t.theme}
+                            theme={t}
+                            badgeClass="bg-success/10 text-success"
+                            cardClass="bg-success/5 border-success/20"
+                          />
+                        ))
+                      ) : (
+                        <EmptyTheme />
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-1.5 text-destructive">
+                        <div className="flex items-center justify-center size-7 bg-destructive-soft-background rounded-full">
+                          <ThumbsDown className="size-3.5" />
+                        </div>
+                        <span className="text-sm font-bodycopy font-semibold">
+                          Negatif
+                        </span>
+                        <span className="text-xs text-emphasis ml-auto font-bodycopy">
+                          {feedbackData?.negative.length ?? 0} tema
+                        </span>
+                      </div>
+                      {feedbackData?.negative.length ? (
+                        feedbackData.negative.map((t) => (
+                          <ThemeCard
+                            key={t.theme}
+                            theme={t}
+                            badgeClass="bg-destructive/10 text-destructive"
+                            cardClass="bg-destructive/5 border-destructive/20"
+                          />
+                        ))
+                      ) : (
+                        <EmptyTheme />
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-1.5 text-warning">
+                        <div className="flex items-center justify-center size-7 bg-warning-background rounded-full">
+                          <Lightbulb className="size-3.5" />
+                        </div>
+                        <span className="text-sm font-bodycopy font-semibold">
+                          Netral / Saran
+                        </span>
+                        <span className="text-xs text-emphasis ml-auto font-bodycopy">
+                          {feedbackData?.neutral.length ?? 0} tema
+                        </span>
+                      </div>
+                      {feedbackData?.neutral.length ? (
+                        feedbackData.neutral.map((t) => (
+                          <ThemeCard
+                            key={t.theme}
+                            theme={t}
+                            badgeClass="bg-warning/10 text-warning"
+                            cardClass="bg-warning/5 border-warning/20"
+                          />
+                        ))
+                      ) : (
+                        <EmptyTheme />
+                      )}
+                    </div>
+                  </div>
+                )}
+              </SectionContainerCMS>
+
+              {/* Row 6: Attendance Details */}
               <SectionContainerCMS title="Attendance Details">
                 {!statsData || statsData.attendees.length === 0 ? (
                   <p className="text-sm font-bodycopy text-emphasis">
