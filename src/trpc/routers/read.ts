@@ -39,6 +39,7 @@ export const readRouter = createTRPCRouter({
   attendance: readLMS.attendance,
   learningStats: readLMS.learningStats,
   learningFeedbackAnalysis: readLMS.learningFeedbackAnalysis,
+  cohortRatingStats: readLMS.cohortRatingStats,
 
   // Business-assessment-related //
 

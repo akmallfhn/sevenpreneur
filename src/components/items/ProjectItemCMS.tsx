@@ -88,7 +88,7 @@ export default function ProjectItemCMS(props: ProjectItemCMSProps) {
   };
   return (
     <React.Fragment>
-      <div className="project-item flex items-center justify-between bg-white gap-2 p-1 rounded-md">
+      <div className="project-item flex items-center justify-between bg-card-inside-bg gap-2 p-1 rounded-md hover:bg-card-inside-bg/50">
         <Link
           href={`/cohorts/${props.cohortId}/projects/${props.projectId}/submissions`}
         >
@@ -100,18 +100,18 @@ export default function ProjectItemCMS(props: ProjectItemCMSProps) {
                 value={props.submissionPercentage}
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xs font-bold text-black bg-white font-bodycopy">
+                <span className="text-xs font-bold bg-card-bg font-bodycopy">
                   {props.submissionPercentage}%
                 </span>
               </div>
             </div>
             <div className="attribute-data flex flex-col">
-              <h3 className="font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
+              <h3 className="font-bodycopy font-semibold text-[15px] line-clamp-1 dark:text-sevenpreneur-white">
                 {props.projectName}
               </h3>
-              <p className="font-bodycopy font-medium text-emphasis text-[13px]">
+              <p className="font-bodycopy font-medium text-emphasis text-[13px] ">
                 Last submission:{" "}
-                {dayjs(props.lastSubmission).format("D MMM YYYY HH.mm")}
+                {dayjs(props.lastSubmission).format("D MMM YYYY")}
               </p>
             </div>
           </div>

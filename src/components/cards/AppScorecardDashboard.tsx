@@ -16,15 +16,15 @@ export default function AppScorecardDashboard({
   children,
 }: AppScorecardDashboardProps) {
   return (
-    <div className="flex flex-col gap-2 p-3 rounded-lg border border-dashboard-border bg-gradient-to-br from-card-bg to-sb-item-hover dark:to-card-bg">
+    <div className="flex flex-col gap-2 p-3 rounded-lg border border-dashboard-border bg-gradient-to-br from-card-bg from-50% to-sb-item-hover dark:to-card-bg">
       <div className="flex items-start gap-3">
         <div
-          className={`flex items-center justify-center size-9 rounded-md shrink-0 ${iconClassName ?? "bg-primary"}`}
+          className={`flex items-center justify-center size-10 rounded-md shrink-0 ${iconClassName ?? "bg-primary"}`}
         >
           {icon}
         </div>
-        <div className="flex flex-col gap-1">
-          <p className="font-bodycopy text-xs font-semibold text-emphasis">
+        <div className="flex flex-col">
+          <p className="font-bodycopy text-sm font-semibold text-emphasis leading-tight">
             {title}
           </p>
           <p className="font-bodycopy font-bold text-base text-sevenpreneur-coal dark:text-white">

@@ -148,24 +148,34 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
 
   const {
     data: learningDetailsData,
-    isLoading,
-    isError,
+    isLoading: isLoadingLearningDetails,
+    isError: isErrorLearningDetails,
   } = trpc.read.learning.useQuery(
     { id: props.learningId },
     { enabled: !!props.sessionToken }
   );
 
-  const { data: statsData, isLoading: isLoadingStats } =
-    trpc.read.learningStats.useQuery(
-      { learning_id: props.learningId },
-      { enabled: !!props.sessionToken }
-    );
+  const {
+    data: statsData,
+    isLoading: isLoadingStats,
+    isError: isErrorStats,
+  } = trpc.read.learningStats.useQuery(
+    { learning_id: props.learningId },
+    { enabled: !!props.sessionToken }
+  );
 
-  const { data: feedbackData, isLoading: isLoadingFeedback } =
-    trpc.read.learningFeedbackAnalysis.useQuery(
-      { learning_id: props.learningId },
-      { enabled: !!props.sessionToken }
-    );
+  const {
+    data: feedbackData,
+    isLoading: isLoadingFeedback,
+    isError: isErrorFeedback,
+  } = trpc.read.learningFeedbackAnalysis.useQuery(
+    { learning_id: props.learningId },
+    { enabled: !!props.sessionToken }
+  );
+
+  const isLoading =
+    isLoadingLearningDetails || isLoadingStats || isLoadingFeedback;
+  const isError = isErrorLearningDetails || isErrorStats || isErrorFeedback;
 
   const learningVideoKey = (() => {
     const learning = learningDetailsData?.learning;
@@ -277,19 +287,19 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                 <AppScorecardDashboard
                   title="Check-in"
                   value={isLoadingStats ? "—" : checkInCount}
-                  icon={<UserCheck className="size-4 text-white" />}
+                  icon={<UserCheck className="size-6 text-white" />}
                   iconClassName="bg-success"
                 />
                 <AppScorecardDashboard
                   title="Check-out"
                   value={isLoadingStats ? "—" : checkOutCount}
-                  icon={<UserX className="size-4 text-white" />}
+                  icon={<UserX className="size-6 text-white" />}
                   iconClassName="bg-primary"
                 />
                 <AppScorecardDashboard
                   title="Feedback Masuk"
                   value={isLoadingStats ? "—" : ratingCount}
-                  icon={<MessageSquare className="size-4 text-white" />}
+                  icon={<MessageSquare className="size-6 text-white" />}
                   iconClassName="bg-warning"
                 />
               </div>

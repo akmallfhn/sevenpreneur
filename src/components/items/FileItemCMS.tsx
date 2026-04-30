@@ -113,7 +113,7 @@ export default function FileItemCMS({
 
   return (
     <React.Fragment>
-      <div className="file-container flex items-center justify-between bg-white gap-2 p-1 rounded-md">
+      <div className="file-container flex items-center justify-between bg-card-inside-bg gap-2 p-1 rounded-md hover:bg-card-inside-bg/70">
         <Link
           href={fileURL}
           className="flex items-center w-[calc(87%)]"
@@ -130,7 +130,7 @@ export default function FileItemCMS({
             />
           </div>
           <div className="file-attribute flex flex-col">
-            <h3 className="file-name font-bodycopy font-semibold text-black text-[15px] line-clamp-1">
+            <h3 className="file-name font-bodycopy font-semibold text-[15px] line-clamp-1 dark:text-sevenpreneur-white">
               {fileName}
             </h3>
             <p className="file-type font-bodycopy font-medium text-emphasis text-sm">

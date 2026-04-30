@@ -110,7 +110,7 @@ export default function LearningSessionItemCMS({
 
   return (
     <React.Fragment>
-      <div className="session-item flex items-center justify-between bg-white gap-2 rounded-md hover:cursor-pointer hover:bg-[#F2F4FA]">
+      <div className="session-item flex items-center justify-between bg-card-inside-bg gap-2 rounded-md hover:cursor-pointer hover:bg-card-inside-bg/50">
         <Link
           href={`/cohorts/${cohortId}/learnings/${learningSessionId}`}
           className="session-box flex w-full p-3.5 max-w-[calc(90%)] items-center font-bodycopy"
@@ -150,7 +150,7 @@ export default function LearningSessionItemCMS({
                 />
               </div>
               <div className="session-title flex flex-col">
-                <h2 className="session-title text-[15px] font-bold line-clamp-1">
+                <h2 className="session-title text-[15px] font-bold line-clamp-1 dark:text-sevenpreneur-white">
                   {learningSessionName}
                 </h2>
                 <p className="session-educator font-medium text-sm text-emphasis">

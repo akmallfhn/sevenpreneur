@@ -626,4 +626,52 @@ export const readLMS = {
         neutral,
       };
     }),
+
+  cohortRatingStats: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(z.object({ id: numberIsID() }))
+    .query(async (opts) => {
+      const ratingAgg = await opts.ctx.prisma.learningRating.aggregate({
+        where: { learning: { cohort_id: opts.input.id } },
+        _count: { _all: true },
+        _avg: {
+          coach_clarity: true,
+          coach_mastery: true,
+          coach_responsiveness: true,
+          coach_engagement: true,
+          material_relevance: true,
+          material_flow: true,
+          material_depth: true,
+          learning_value: true,
+        },
+      });
+
+      const avgScores = ratingAgg._avg;
+      const ratingCount = ratingAgg._count._all;
+      const fields = [
+        avgScores.coach_clarity,
+        avgScores.coach_mastery,
+        avgScores.coach_responsiveness,
+        avgScores.coach_engagement,
+        avgScores.material_relevance,
+        avgScores.material_flow,
+        avgScores.material_depth,
+        avgScores.learning_value,
+      ] as (number | null)[];
+
+      const overallAvg =
+        ratingCount > 0
+          ? fields.reduce<number>((sum, v) => sum + (v ?? 0), 0) / 8
+          : null;
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        rating_count: ratingCount,
+        overall_avg: overallAvg,
+      };
+    }),
 };
