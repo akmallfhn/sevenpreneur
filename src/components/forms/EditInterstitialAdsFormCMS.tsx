@@ -244,7 +244,7 @@ export default function EditInterstitialAdsFormCMS(
                 <div className="flex flex-col w-full gap-1">
                   <label
                     htmlFor="interstitial-image"
-                    className="label-input flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                    className="label-input flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                   >
                     Key Visuals
                     <span className="label-required text-destructive">*</span>
@@ -305,7 +305,7 @@ export default function EditInterstitialAdsFormCMS(
                 <div className="interstitial-status flex flex-col gap-1">
                   <label
                     htmlFor="interstitial-status"
-                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                    className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                   >
                     Status <span className="text-red-700">*</span>
                   </label>
@@ -327,7 +327,7 @@ export default function EditInterstitialAdsFormCMS(
               </div>
             )}
           </div>
-          <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+          <div className="sticky bottom-0 w-full p-4 bg-sb-bg z-40">
             <AppButton
               className="w-full"
               variant="tertiary"

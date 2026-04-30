@@ -77,7 +77,7 @@ export default function CreateWhatsappAlertFormCMS(
       onClick={props.onClose}
     >
       <div
-        className="modal-container fixed flex bg-white max-w-[calc(100%-2rem)] p-6 w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md dark:bg-surface-black sm:max-w-lg"
+        className="modal-container fixed flex bg-card-bg max-w-[calc(100%-2rem)] p-6 w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md sm:max-w-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col w-full gap-5">

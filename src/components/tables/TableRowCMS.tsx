@@ -12,7 +12,7 @@ export default function TableRowCMS({
 }: TableRowCMSProps) {
   return (
     <tr
-      className={`border-b border-dashboard-border hover:bg-muted-background/10 transition-colors ${className}`}
+      className={`border-b border-dashboard-border hover:bg-tertiary-muted/[0.08] dark:hover:bg-sb-item-hover/50 transition-colors ${className}`}
       {...props}
     >
       {children}

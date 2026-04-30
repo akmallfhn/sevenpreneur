@@ -35,11 +35,11 @@ export default function AppSheet({
       onClick={onClose}
     >
       <div
-        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 bg-white transition transform ease-in-out sm:max-w-md`}
+        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 bg-sb-bg transition transform ease-in-out sm:max-w-md`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet-header relative flex flex-col p-4 px-6">
-          <h2 className="text-black text-lg font-brand font-bold">
+          <h2 className="text-foreground text-lg font-brand font-bold">
             {sheetName}
           </h2>
           <p className="sheet-description text-emphasis text-sm font-bodycopy font-medium">

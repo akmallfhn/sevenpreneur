@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { trpc } from "@/trpc/client";
 import { Loader2, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
@@ -200,7 +200,7 @@ export default function EditCohortMemberFormCMS(
         </div>
       )}
       {isAllowedUpdateCertificate && (
-        <div className="update-certificate sticky bottom-0 w-full p-4 bg-white border-t z-40">
+        <div className="update-certificate sticky bottom-0 w-full p-4 bg-sb-bg border-t z-40">
           <AppButton
             className="w-full"
             variant="tertiary"

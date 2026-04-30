@@ -252,7 +252,7 @@ export default function EditSubmissionFormCMS(
         </div>
       )}
       {isAllowedUpdateSubmission && (
-        <div className="update-comment sticky flex flex-col bottom-0 w-full p-4 gap-3 border-t bg-white z-40">
+        <div className="update-comment sticky flex flex-col bottom-0 w-full p-4 gap-3 border-t bg-sb-bg z-40">
           <AppButton
             className="w-full"
             variant="primarySoft"

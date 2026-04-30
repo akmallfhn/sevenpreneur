@@ -349,7 +349,7 @@ export default function EditDiscountFormCMS({
               <div className="status flex flex-col gap-1">
                 <label
                   htmlFor={"discount-status"}
-                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                 >
                   Status <span className="text-red-700">*</span>
                 </label>
@@ -368,7 +368,7 @@ export default function EditDiscountFormCMS({
                   )}
                 </div>
               </div>
-              <div className="flex flex-col bg-section-background/50 border gap-4 p-4 rounded-md">
+              <div className="flex flex-col bg-card-inside-bg border gap-4 p-4 rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">
                   Applies Discount to Product
                 </h5>
@@ -415,7 +415,7 @@ export default function EditDiscountFormCMS({
             </div>
           )}
         </div>
-        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+        <div className="sticky bottom-0 w-full p-4 bg-sb-bg z-40">
           <AppButton
             className="w-full"
             variant="tertiary"

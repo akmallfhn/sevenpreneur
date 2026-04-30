@@ -253,7 +253,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
         {!isLoading && !isError && (
           <div className="flex flex-col w-full gap-8 pb-20">
             <div className="personal-information-container flex flex-col w-full gap-5">
-              <h2 className="label-name text-xl text-black font-brand font-bold">
+              <h2 className="label-name text-xl text-foreground font-brand font-bold">
                 Personal Information
               </h2>
               <UploadAvatarUserCMS onUpload={handleImageForm} />
@@ -306,7 +306,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
                   <div className="select-group-component flex flex-col gap-1">
                     <label
                       htmlFor={"status"}
-                      className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                      className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                     >
                       Status <span className="text-red-700">*</span>
                     </label>
@@ -341,7 +341,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
 
             {/* Business Information */}
             <div className="business-information-container flex flex-col w-full gap-5">
-              <h2 className="label-name text-xl text-black font-brand font-bold">
+              <h2 className="label-name text-xl text-foreground font-brand font-bold">
                 Business Information
               </h2>
               <div className="data flex flex-col w-full gap-4">

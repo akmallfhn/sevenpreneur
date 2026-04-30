@@ -436,7 +436,7 @@ export default function CreateInvoiceFormCMS({
                 onInputChange={handleInputChange("invoiceUserPhone")}
                 required
               />
-              <div className="bg-section-background/50 border flex flex-col gap-2 p-4 rounded-md">
+              <div className="bg-card-inside-bg border flex flex-col gap-2 p-4 rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">Order Item</h5>
                 <AppSelect variant="CMS"
                   selectId="invoice-product-category"
@@ -551,7 +551,7 @@ export default function CreateInvoiceFormCMS({
 
               {/* Payment Details */}
               {formData.paymentChannelId && formData.invoiceProductItem && (
-                <div className="flex flex-col bg-section-background/50 gap-2 p-3 border rounded-md">
+                <div className="flex flex-col bg-card-inside-bg gap-2 p-3 border rounded-md">
                   <h5 className="font-bodycopy font-bold text-sm">
                     Payment Details
                   </h5>
@@ -593,7 +593,7 @@ export default function CreateInvoiceFormCMS({
             </div>
           </div>
         )}
-        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+        <div className="sticky bottom-0 w-full p-4 bg-sb-bg z-40">
           <AppButton
             className="w-full"
             variant="tertiary"

@@ -19,26 +19,26 @@ const variantStyles: Record<
   }
 > = {
   COHORT: {
-    backgroundColor: "bg-[#EFEDF9]",
-    labelColor: "text-[#42359B]",
+    backgroundColor: "bg-[#EFEDF9] dark:bg-tertiary/15",
+    labelColor: "text-[#42359B] dark:text-[#9088c4]",
     labelIcon: <FontAwesomeIcon icon={faPersonChalkboard} className="size-3" />,
     labelName: "Cohort",
   },
   PLAYLIST: {
-    backgroundColor: "bg-[#E2F0FF]",
-    labelColor: "text-[#164EA6]",
+    backgroundColor: "bg-[#E2F0FF] dark:bg-primary/15",
+    labelColor: "text-[#164EA6] dark:text-[#6f96d4]",
     labelIcon: <FontAwesomeIcon icon={faPlay} className="size-3" />,
     labelName: "Playlist",
   },
   AI: {
-    backgroundColor: "bg-[#ECFDF3]",
-    labelColor: "text-[#0A4F2D]",
+    backgroundColor: "bg-[#ECFDF3] dark:bg-success/15",
+    labelColor: "text-[#0A4F2D] dark:text-[#62a882]",
     labelIcon: <FontAwesomeIcon icon={faPenNib} className="size-3" />,
     labelName: "AI",
   },
   EVENT: {
-    backgroundColor: "bg-[#ECFDF3]",
-    labelColor: "text-[#0A4F2D]",
+    backgroundColor: "bg-[#ECFDF3] dark:bg-success/15",
+    labelColor: "text-[#0A4F2D] dark:text-[#62a882]",
     labelIcon: <FontAwesomeIcon icon={faFlag} className="size-3" />,
     labelName: "Event",
   },

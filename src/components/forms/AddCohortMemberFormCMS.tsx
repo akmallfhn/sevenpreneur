@@ -196,7 +196,7 @@ export default function AddCohortMemberFormCMS(
               <div className="fill-user-method flex flex-col gap-2">
                 <label
                   htmlFor={"fill-user-method"}
-                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                 >
                   User not found?<span className="text-red-700">*</span>
                 </label>
@@ -216,7 +216,7 @@ export default function AddCohortMemberFormCMS(
             </div>
           </div>
         )}
-        <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+        <div className="sticky bottom-0 w-full p-4 bg-sb-bg z-40">
           <AppButton
             className="w-full"
             variant="tertiary"

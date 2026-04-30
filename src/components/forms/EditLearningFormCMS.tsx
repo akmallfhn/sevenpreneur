@@ -318,7 +318,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
               <div className="learning-status flex flex-col gap-1">
                 <label
                   htmlFor={"learning-status"}
-                  className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                  className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                 >
                   Status <span className="text-red-700">*</span>
                 </label>
@@ -425,14 +425,14 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                   }
                 />
               )}
-              <div className="attendance-settings flex flex-col gap-4 p-4 bg-section-background/50 border rounded-md">
+              <div className="attendance-settings flex flex-col gap-4 p-4 bg-card-inside-bg border rounded-md">
                 <h5 className="font-bodycopy font-bold text-sm">
                   Attendance Settings
                 </h5>
                 <div className="check-in flex flex-col gap-1">
                   <label
                     htmlFor={"learning-check-in"}
-                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                    className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                   >
                     Check-In Enabled
                   </label>
@@ -446,7 +446,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                         )
                       }
                     />
-                    <div className="font-bodycopy text-[15px] font-medium text-[#333333]">
+                    <div className="font-bodycopy text-[15px] font-medium text-foreground">
                       {formData.learningCheckIn ? (
                         <BooleanLabelCMS label="OPEN" value={true} />
                       ) : (
@@ -458,7 +458,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                 <div className="check-out flex flex-col gap-1">
                   <label
                     htmlFor={"learning-check-out"}
-                    className="flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+                    className="flex pl-1 gap-0.5 text-sm text-foreground font-bodycopy font-semibold"
                   >
                     Check-Out Enabled
                   </label>
@@ -472,7 +472,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
                         )
                       }
                     />
-                    <div className="font-bodycopy text-[15px] font-medium text-[#333333]">
+                    <div className="font-bodycopy text-[15px] font-medium text-foreground">
                       {formData.learningCheckOut ? (
                         <BooleanLabelCMS label="OPEN" value={true} />
                       ) : (
@@ -484,7 +484,7 @@ export default function EditLearningFormCMS(props: EditLearningFormCMSProps) {
               </div>
             </div>
           </div>
-          <div className="sticky bottom-0 w-full p-4 bg-white z-40">
+          <div className="sticky bottom-0 w-full p-4 bg-sb-bg z-40">
             <AppButton
               className="w-full"
               variant="tertiary"

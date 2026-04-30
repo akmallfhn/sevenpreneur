@@ -433,10 +433,10 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                   imageRatio="16/9"
                 />
               </div>
-              <div className="body-content flex flex-col gap-4 bg-white rounded-md">
+              <div className="body-content flex flex-col gap-4 bg-transparent rounded-md">
                 {formData.articleBodyContent.map((post, index) => (
                   <div
-                    className="flex flex-col p-4 gap-4 bg-section-background/50 rounded-md border"
+                    className="flex flex-col p-4 gap-4 bg-card-inside-bg rounded-md border"
                     key={post.id}
                   >
                     {index !== 0 && (
@@ -492,7 +492,7 @@ export default function EditArticleForm(props: EditArticleFormProps) {
             </main>
             <aside className="aside-content flex flex-1 flex-col gap-5">
               <div className="flex flex-col w-full gap-4 border rounded-lg">
-                <div className="section-title flex gap-3 px-6 py-3 items-center bg-black text-white rounded-t-lg">
+                <div className="section-title flex gap-3 px-6 py-3 items-center bg-card-inside-bg text-foreground border-b border-dashboard-border rounded-t-lg">
                   <ListMinus />
                   <h2 className="font-bodycopy font-semibold text-sm">
                     Metadata Settings
