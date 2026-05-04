@@ -113,6 +113,7 @@ export default async function CheckoutPlaylistPage({
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <div className="flex-1 overflow-y-auto">
           <CheckoutPlaylistFormMobileSVP
+            sessionToken={sessionToken}
             playlistId={playlistData.id}
             playlistName={playlistData.name}
             playlistImage={playlistData.image_square_url}
@@ -122,6 +123,7 @@ export default async function CheckoutPlaylistPage({
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
             initialUserPhone={checkUser.phone_number}
+            initialUserPhoneCountryId={checkUser.phone_country_id ?? null}
             paymentMethodData={paymentMethodList}
           />
         </div>

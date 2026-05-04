@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import InputNumberCMS from "../fields/InputNumberCMS";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
@@ -63,6 +63,7 @@ export default function EditUserForm({
   const [formData, setFormData] = useState<{
     fullName: string;
     email: string;
+    phoneCountryId: number | null;
     phoneNumber: string;
     avatar: string;
     roleId: string | number;
@@ -73,6 +74,7 @@ export default function EditUserForm({
   }>({
     fullName: initialData?.user.full_name || "",
     email: initialData?.user.email || "",
+    phoneCountryId: initialData?.user.phone_country_id ?? null,
     phoneNumber: initialData?.user.phone_number || "",
     avatar: initialData?.user.avatar || "",
     roleId: initialData?.user.role.id ?? "",
@@ -90,6 +92,7 @@ export default function EditUserForm({
       setFormData({
         fullName: initialData.user.full_name || "",
         email: initialData.user.email || "",
+        phoneCountryId: initialData.user.phone_country_id ?? null,
         phoneNumber: initialData.user.phone_number || "",
         avatar: initialData.user.avatar || "",
         roleId: initialData.user.role.id ?? "",
@@ -177,7 +180,7 @@ export default function EditUserForm({
           phone_number: formData.phoneNumber.trim()
             ? formData.phoneNumber
             : null,
-          phone_country_id: formData.phoneNumber.trim() ? 1 : null,
+          phone_country_id: formData.phoneNumber.trim() ? (formData.phoneCountryId ?? 1) : null,
           avatar: formData.avatar.trim() ? formData.avatar : null,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
@@ -298,14 +301,18 @@ export default function EditUserForm({
                     onInputChange={handleInputChange("email")}
                     required
                   />
-                  <InputNumberCMS
+                  <AppNumberInputSVP
                     inputId={"phone-number"}
                     inputName={"Phone Number"}
-                    inputIcon={"🇮🇩 62"}
                     inputPlaceholder="Enter Mobile or WhatsApp number"
-                    inputConfig="numeric"
+                    inputConfig="phone_number"
                     value={formData.phoneNumber}
+                    defaultCountryId={formData.phoneCountryId}
                     onInputChange={handleInputChange("phoneNumber")}
+                    onCountryChange={(id) =>
+                      setFormData((prev) => ({ ...prev, phoneCountryId: id }))
+                    }
+                    variant="CMS"
                   />
                   <AppSelect variant="CMS"
                     selectId={"role"}

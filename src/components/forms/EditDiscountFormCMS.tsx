@@ -8,7 +8,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
-import InputNumberCMS from "../fields/InputNumberCMS";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppSelect from "../fields/AppSelect";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
@@ -318,7 +318,7 @@ export default function EditDiscountFormCMS({
                   />
                 </div>
                 <div className="w-full flex-1">
-                  <InputNumberCMS
+                  <AppNumberInputSVP
                     inputId="discount-rate"
                     inputName="Discount Percentage (%)"
                     inputConfig="decimal"
@@ -326,6 +326,7 @@ export default function EditDiscountFormCMS({
                     value={formData.discountRate}
                     onInputChange={handleInputChange("discountRate")}
                     characterLength={5}
+                    variant="CMS"
                     required
                   />
                 </div>

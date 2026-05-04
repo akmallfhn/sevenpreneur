@@ -13,7 +13,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import UploadAvatarUserLMS from "../fields/UploadAvatarUserLMS";
 import AppSelect from "../fields/AppSelect";
 import AppTextArea from "../fields/AppTextArea";
@@ -58,6 +58,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
   // Beginning Form State
   const [formData, setFormData] = useState<{
     userName: string;
+    userPhoneCountryId: number | null;
     userPhoneNumber: string;
     userAvatar: string;
     userDateofBirth: string;
@@ -73,6 +74,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
     averageSellingPrice: number | string;
   }>({
     userName: props.initialData.full_name,
+    userPhoneCountryId: props.initialData.phone_country_id ?? null,
     userPhoneNumber: props.initialData.phone_number ?? "",
     userAvatar: props.initialData.avatar ?? "",
     userDateofBirth: props.initialData.date_of_birth
@@ -95,6 +97,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
     if (props.initialData) {
       setFormData({
         userName: props.initialData.full_name,
+        userPhoneCountryId: props.initialData.phone_country_id ?? null,
         userPhoneNumber: props.initialData.phone_number ?? "",
         userAvatar: props.initialData.avatar ?? "",
         userDateofBirth: props.initialData.date_of_birth
@@ -147,6 +150,7 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
 
         // Optional Field
         userAvatar: formData.userAvatar ? formData.userAvatar : null,
+        userPhoneCountryId: formData.userPhoneCountryId,
         userPhoneNumber: formData.userPhoneNumber
           ? formData.userPhoneNumber.trim()
           : null,
@@ -273,13 +277,17 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input flex flex-col w-full">
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId={"phone-number"}
-              inputIcon={"🇮🇩 62"}
               inputPlaceholder="Enter Mobile or WhatsApp number"
-              inputConfig="numeric"
+              inputConfig="phone_number"
               value={formData.userPhoneNumber}
+              defaultCountryId={formData.userPhoneCountryId}
               onInputChange={handleInputChange("userPhoneNumber")}
+              onCountryChange={(id) =>
+                setFormData((prev) => ({ ...prev, userPhoneCountryId: id }))
+              }
+              variant="LMS"
             />
           </div>
         </div>
@@ -417,12 +425,13 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId={"business-age-years"}
               inputPlaceholder={"Enter number of years. e.g. 2"}
               inputConfig="numeric"
               value={String(formData.businessAgeYears)}
               onInputChange={handleInputChange("businessAgeYears")}
+              variant="LMS"
               required
             />
           </div>
@@ -575,12 +584,13 @@ export default function EditUserFormLMS(props: EditUserFormLMSProps) {
             </p>
           </div>
           <div className="input w-full">
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId={"average-selling-price"}
               inputPlaceholder={"Enter average selling price. e.g. 35000"}
               inputConfig="numeric"
               value={String(formData.averageSellingPrice)}
               onInputChange={handleInputChange("averageSellingPrice")}
+              variant="LMS"
               required
             />
           </div>

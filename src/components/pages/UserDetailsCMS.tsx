@@ -27,7 +27,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
-import InputNumberCMS from "../fields/InputNumberCMS";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppSelect from "../fields/AppSelect";
 import AppTextArea from "../fields/AppTextArea";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
@@ -196,13 +196,13 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     value={userDetailData.user.email || ""}
                     disabled
                   />
-                  <InputNumberCMS
+                  <AppNumberInputSVP
                     inputId={"phone-number"}
                     inputName={"Phone Number"}
-                    inputIcon={"🇮🇩 62"}
                     inputPlaceholder="None"
-                    inputConfig="numeric"
+                    inputConfig="phone_number"
                     value={userDetailData.user.phone_number || ""}
+                    variant="CMS"
                     disabled
                   />
                   <AppSelect variant="CMS"

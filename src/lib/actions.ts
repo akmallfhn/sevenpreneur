@@ -46,6 +46,7 @@ export async function DeleteSession() {
 interface UpdateUserDataProps {
   userId: string;
   userName: string;
+  userPhoneCountryId?: number | null;
   userPhoneNumber?: string | null;
   userAvatar?: string | null;
   userDateofBirth?: string | null;
@@ -74,6 +75,7 @@ export async function UpdateUserData(props: UpdateUserDataProps) {
     id: props.userId,
     full_name: props.userName,
     avatar: props.userAvatar,
+    phone_country_id: props.userPhoneCountryId,
     phone_number: props.userPhoneNumber,
     date_of_birth: props.userDateofBirth,
     occupation: props.userOccupation,
@@ -204,12 +206,14 @@ export async function CheckOutSession(props: CheckOutSessionProps) {
 interface MakePaymentCohortXenditProps {
   cohortPriceId: number;
   paymentChannelId: number | null;
+  phoneCountryId?: number | null;
   phoneNumber?: string | null | undefined;
   discountCode?: string | undefined;
 }
 export async function MakePaymentCohortXendit({
   cohortPriceId,
   paymentChannelId,
+  phoneCountryId,
   phoneNumber,
   discountCode,
 }: MakePaymentCohortXenditProps) {
@@ -225,7 +229,7 @@ export async function MakePaymentCohortXendit({
   const paymentResponse = await trpc.purchase.cohort({
     cohort_price_id: cohortPriceId,
     payment_channel_id: paymentChannelId,
-    phone_country_id: 1,
+    phone_country_id: phoneCountryId ?? undefined,
     phone_number: phoneNumber,
     discount_code: discountCode,
   });
@@ -241,12 +245,14 @@ export async function MakePaymentCohortXendit({
 interface MakePaymentEventXenditProps {
   eventPriceId: number;
   paymentChannelId: number | null;
+  phoneCountryId?: number | null;
   phoneNumber?: string | null | undefined;
   discountCode?: string | undefined;
 }
 export async function MakePaymentEventXenditProps({
   eventPriceId,
   paymentChannelId,
+  phoneCountryId,
   phoneNumber,
   discountCode,
 }: MakePaymentEventXenditProps) {
@@ -259,7 +265,7 @@ export async function MakePaymentEventXenditProps({
   const paymentResponse = await trpc.purchase.event({
     event_price_id: eventPriceId,
     payment_channel_id: paymentChannelId,
-    phone_country_id: 1,
+    phone_country_id: phoneCountryId ?? undefined,
     phone_number: phoneNumber,
     discount_code: discountCode,
   });
@@ -275,12 +281,14 @@ export async function MakePaymentEventXenditProps({
 interface MakePaymentPlaylistXenditProps {
   playlistId: number;
   paymentChannelId: number | null;
+  phoneCountryId?: number | null;
   phoneNumber?: string | null | undefined;
   discountCode?: string | undefined;
 }
 export async function MakePaymentPlaylistXendit({
   playlistId,
   paymentChannelId,
+  phoneCountryId,
   phoneNumber,
   discountCode,
 }: MakePaymentPlaylistXenditProps) {
@@ -293,7 +301,7 @@ export async function MakePaymentPlaylistXendit({
   const paymentResponse = await trpc.purchase.playlist({
     playlist_id: playlistId,
     payment_channel_id: paymentChannelId,
-    phone_country_id: 1,
+    phone_country_id: phoneCountryId ?? undefined,
     phone_number: phoneNumber,
     discount_code: discountCode,
   });

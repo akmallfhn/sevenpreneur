@@ -13,7 +13,7 @@ import { getRupiahCurrency } from "@/lib/currency";
 import AIPriceItemLMS from "../items/AIPriceItemLMS";
 import { AIPriceType } from "@/lib/app-types";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import { formatWithComma } from "@/lib/convert-number";
 
 interface CompetitorList {
@@ -216,19 +216,21 @@ export default function COGSPricesCalculationReportLMS(
               <h3 className="section-title font-bodycopy font-bold text-lg">
                 Simulasi Target
               </h3>
-              <InputNumberSVP
+              <AppNumberInputSVP
                 inputId="target-profit"
                 inputName="Masukkan target keuntungan per bulan (dalam rupiah)"
                 inputIcon="Rp"
                 value={String(profitTarget)}
                 inputConfig="numeric"
+                variant="SVP"
                 onInputChange={handleProfitTargetChange}
               />
-              <InputNumberSVP
+              <AppNumberInputSVP
                 inputId="production-per-periods"
                 inputName="Atur volume produksi/persediaan per bulan"
                 value={String(volumeProduction)}
                 inputConfig="numeric"
+                variant="SVP"
                 onInputChange={handleVolumeProductionChange}
               />
             </div>
@@ -380,17 +382,19 @@ export default function COGSPricesCalculationReportLMS(
       <div className="flex flex-col gap-4 p-4">
         <div className="flex flex-col gap-3 p-4 bg-linear-to-bl from-0% from-[#D2E5FC] dark:from-sevenpreneur-blue-midnight/50 to-40% to-white dark:to-[#11141b] border border-dashboard-border rounded-lg">
           <h3 className="font-bodycopy font-bold text-base">Simulasi Target</h3>
-          <InputNumberSVP
+          <AppNumberInputSVP
             inputId="target-profit-m"
             inputName="Masukkan target keuntungan per bulan (dalam rupiah)"
             inputIcon="Rp"
             value={String(profitTarget)}
             inputConfig="numeric"
+            variant="SVP"
             onInputChange={handleProfitTargetChange}
           />
-          <InputNumberSVP
+          <AppNumberInputSVP
             inputId="production-per-periods-m"
             inputName="Atur volume produksi/persediaan per bulan"
+            variant="SVP"
             value={String(volumeProduction)}
             inputConfig="numeric"
             onInputChange={handleVolumeProductionChange}

@@ -205,7 +205,8 @@ CREATE TABLE phone_country_codes (
   id            SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   country_name  VARCHAR  NOT NULL,
   phone_code    VARCHAR  NOT NULL  UNIQUE,
-  emoji         VARCHAR  NOT NULL
+  emoji         VARCHAR  NOT NULL,
+  icon          VARCHAR      NULL
 );
 
 CREATE TABLE payment_channels (

@@ -17,7 +17,7 @@ import AppButton from "../buttons/AppButton";
 import { AvatarBadgeLMSProps } from "../buttons/AvatarBadgeLMS";
 import AppCalloutBox from "../elements/AppCalloutBox";
 import InputLMS from "../fields/InputLMS";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import RadioBoxLMS from "../fields/RadioBoxLMS";
 import TextAreaLMS from "../fields/TextAreaLMS";
 import BottomNavLMS from "../navigations/BottomNavLMS";
@@ -484,11 +484,12 @@ export default function GenerateAICOGSPricesLMS(
               <h2 className="section-title font-bold font-bodycopy">
                 Volume Production per Month
               </h2>
-              <InputNumberSVP
+              <AppNumberInputSVP
                 inputId="production-per-month"
                 inputName={productionQuestion}
                 inputPlaceholder="e.g. 1000"
                 inputConfig="numeric"
+                variant="SVP"
                 value={String(formData.productionPerMonth)}
                 onInputChange={handleInputChange("productionPerMonth")}
               />
@@ -621,11 +622,12 @@ export default function GenerateAICOGSPricesLMS(
             <h2 className="section-title font-bold font-bodycopy">
               Volume Production per Month
             </h2>
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId="production-per-month-m"
               inputName={productionQuestion}
               inputPlaceholder="e.g. 1000"
               inputConfig="numeric"
+              variant="SVP"
               value={String(formData.productionPerMonth)}
               onInputChange={handleInputChange("productionPerMonth")}
             />

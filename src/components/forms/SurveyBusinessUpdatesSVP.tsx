@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppInput from "../fields/AppInput";
 import RadioBoxSVP from "../fields/RadioBoxBooleanSVP";
 import AppSelect from "../fields/AppSelect";
@@ -327,13 +327,14 @@ export default function SurveyBusinessUpdateSVP(
               onTextAreaChange={handleInputChange("businessDescription")}
               required
             />
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId={"business-age-years"}
               inputName={"Berapa tahun bisnis kamu berjalan?"}
               inputPlaceholder={"e.g. 2"}
               inputConfig="numeric"
               value={String(formData.businessAgeYears)}
               onInputChange={handleInputChange("businessAgeYears")}
+              variant="SVP"
               required
             />
             <AppSelect variant="SVP"
@@ -408,13 +409,14 @@ export default function SurveyBusinessUpdateSVP(
               ]}
               required
             />
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId={"average-selling-price"}
               inputName={"Berapa rata-rata harga produk bisnismu?"}
               inputPlaceholder={"e.g. 35000"}
               inputConfig="numeric"
               value={String(formData.averageSellingPrice)}
               onInputChange={handleInputChange("averageSellingPrice")}
+              variant="SVP"
               required
             />
             <AppSelect variant="SVP"

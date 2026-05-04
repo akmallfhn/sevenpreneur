@@ -1,5 +1,6 @@
 ﻿"use client";
 import { MakePaymentPlaylistXendit } from "@/lib/actions";
+import { setSessionToken } from "@/trpc/client";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
 import { encodeSHA256 } from "@/lib/encode";
@@ -9,7 +10,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppInput from "../fields/AppInput";
 import RadioBoxPaymentChannelSVP from "../fields/RadioBoxPaymentChannelSVP";
 import AppliedDiscountCardSVP from "../gateways/AppliedDiscountCardSVP";
@@ -38,6 +39,7 @@ interface DiscountType {
 }
 
 interface CheckoutPlaylistFormSVPProps {
+  sessionToken: string;
   playlistId: number;
   playlistName: string;
   playlistImage: string;
@@ -47,10 +49,12 @@ interface CheckoutPlaylistFormSVPProps {
   initialUserName: string;
   initialUserEmail: string;
   initialUserPhone: string | null;
+  initialUserPhoneCountryId: number | null;
   paymentMethodData: PaymentMethodItem[];
 }
 
 export default function CheckoutPlaylistFormMobileSVP({
+  sessionToken,
   playlistId,
   playlistName,
   playlistImage,
@@ -60,6 +64,7 @@ export default function CheckoutPlaylistFormMobileSVP({
   initialUserName,
   initialUserEmail,
   initialUserPhone,
+  initialUserPhoneCountryId,
   paymentMethodData,
 }: CheckoutPlaylistFormSVPProps) {
   const [selectedPaymentChannel, setSelectedPaymentChannel] = useState("");
@@ -72,12 +77,18 @@ export default function CheckoutPlaylistFormMobileSVP({
   const [formData, setFormData] = useState<{
     userFullName: string;
     userEmail: string;
+    userPhoneCountryId: number | null;
     userPhoneNumber: string;
   }>({
     userFullName: initialUserName || "",
     userEmail: initialUserEmail || "",
+    userPhoneCountryId: initialUserPhoneCountryId ?? 1,
     userPhoneNumber: initialUserPhone || "",
   });
+
+  useEffect(() => {
+    setSessionToken(sessionToken);
+  }, [sessionToken]);
 
   // --- Set default payment channel to QRIS
   const defaultPaymentChannel = useMemo(() => {
@@ -206,6 +217,7 @@ export default function CheckoutPlaylistFormMobileSVP({
         // Mandatory fields
         playlistId: playlistId,
         paymentChannelId: chosenPaymentChannelData.id,
+        phoneCountryId: formData.userPhoneCountryId,
         phoneNumber: formData.userPhoneNumber.trim(),
 
         // Optional fields
@@ -253,29 +265,35 @@ export default function CheckoutPlaylistFormMobileSVP({
           <div className="payment-method flex flex-col gap-3 bg-white p-5 dark:bg-coal-black">
             <h2 className="font-bodycopy font-bold">Personal Information</h2>
             <div className="flex flex-col gap-3">
-              <AppInput variant="SVP"
+              <AppInput
+                variant="SVP"
                 inputId="user-full-name"
                 inputName="Full Name"
                 inputType="text"
                 value={initialUserName}
                 disabled
               />
-              <AppInput variant="SVP"
+              <AppInput
+                variant="SVP"
                 inputId="user-email"
                 inputName="Email"
                 inputType="email"
                 value={initialUserEmail}
                 disabled
               />
-              <InputNumberSVP
+              <AppNumberInputSVP
                 inputId="user-phone-number"
                 inputName="Phone Number"
-                inputIcon="🇮🇩 62"
                 inputPlaceholder="Enter Mobile or WhatsApp number"
-                inputConfig="numeric"
+                inputConfig="phone_number"
                 characterLength={15}
                 value={formData.userPhoneNumber}
                 onInputChange={handleInputChange("userPhoneNumber")}
+                onCountryChange={(id) =>
+                  setFormData((prev) => ({ ...prev, userPhoneCountryId: id }))
+                }
+                defaultCountryId={formData.userPhoneCountryId}
+                variant="SVP"
                 required
               />
             </div>

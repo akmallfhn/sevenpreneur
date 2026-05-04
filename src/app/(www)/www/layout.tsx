@@ -2,12 +2,17 @@ import "@/app/globals.css";
 import FooterSVP from "@/components/navigations/FooterSVP";
 import HeaderSVP from "@/components/navigations/HeaderSVP";
 import { StatusType } from "@/lib/app-types";
+import { TRPCProvider } from "@/trpc/client";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
+
+let baseURL = "https://api.sevenpreneur.com/trpc";
+if (process.env.DOMAIN_MODE === "local")
+  baseURL = "https://api.example.com:3000/trpc";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sevenpreneur.com"),
@@ -56,25 +61,27 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   };
 
   return (
-    <div>
-      <ThemeProvider attribute="class" defaultTheme="light">
-        <HeaderSVP
-          userName={userData?.full_name ?? null}
-          userAvatar={userData?.avatar ?? null}
-          userRole={userData?.role_id ?? null}
-          userEmail={userData?.email ?? null}
-          isLoggedIn={!!userData}
-          tickerTitle={tickerData.title ?? ""}
-          tickerCallout={tickerData.callout ?? ""}
-          tickerTargetURL={tickerData.target_url ?? ""}
-          tickerStatus={tickerData.status as StatusType}
-          tickerStartDate={tickerData.start_date ?? ""}
-          tickerEndDate={tickerData.end_date ?? ""}
-        />
-        {children}
-        <Toaster richColors position="top-center" />
-        <FooterSVP />
-      </ThemeProvider>
-    </div>
+    <TRPCProvider baseURL={baseURL}>
+      <div>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <HeaderSVP
+            userName={userData?.full_name ?? null}
+            userAvatar={userData?.avatar ?? null}
+            userRole={userData?.role_id ?? null}
+            userEmail={userData?.email ?? null}
+            isLoggedIn={!!userData}
+            tickerTitle={tickerData.title ?? ""}
+            tickerCallout={tickerData.callout ?? ""}
+            tickerTargetURL={tickerData.target_url ?? ""}
+            tickerStatus={tickerData.status as StatusType}
+            tickerStartDate={tickerData.start_date ?? ""}
+            tickerEndDate={tickerData.end_date ?? ""}
+          />
+          {children}
+          <Toaster richColors position="top-center" />
+          <FooterSVP />
+        </ThemeProvider>
+      </div>
+    </TRPCProvider>
   );
 }

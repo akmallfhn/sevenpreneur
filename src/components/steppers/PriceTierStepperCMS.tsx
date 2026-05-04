@@ -5,7 +5,7 @@ import AppInput from "../fields/AppInput";
 import { PlusIcon, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import InputNumberCMS from "../fields/InputNumberCMS";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 
 export interface PriceTier {
   id?: number;
@@ -74,7 +74,7 @@ export default function PriceTierStepperCMS({
               />
             </div>
             <div className="price-amount w-full">
-              <InputNumberCMS
+              <AppNumberInputSVP
                 inputId="price-amount"
                 inputName="Amount"
                 inputConfig="numeric"
@@ -84,6 +84,7 @@ export default function PriceTierStepperCMS({
                 onInputChange={(value: string) =>
                   handleChange(index, "amount", value)
                 }
+                variant="CMS"
                 required
               />
               {tiers.length > 1 && (

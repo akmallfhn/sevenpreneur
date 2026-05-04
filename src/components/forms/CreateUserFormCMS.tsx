@@ -22,7 +22,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import InputNumberCMS from "../fields/InputNumberCMS";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppBreadcrumb from "../navigations/AppBreadcrumb";
@@ -65,6 +65,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
     fullName: string;
     email: string;
     avatar: string;
+    phoneCountryId: number | null;
     phoneNumber: string;
     roleId: string | number;
     status: "ACTIVE" | "INACTIVE";
@@ -75,6 +76,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
     fullName: "",
     email: "",
     avatar: "",
+    phoneCountryId: null,
     phoneNumber: "",
     roleId: "",
     status: "ACTIVE",
@@ -154,7 +156,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
           phone_number: formData.phoneNumber.trim()
             ? formData.phoneNumber
             : undefined,
-          phone_country_id: formData.phoneNumber.trim() ? 1 : undefined,
+          phone_country_id: formData.phoneNumber.trim() ? (formData.phoneCountryId ?? 1) : undefined,
           avatar: formData.avatar?.trim() ? formData.avatar : undefined,
           date_of_birth: formData.dateOfBirth.trim()
             ? formData.dateOfBirth
@@ -172,8 +174,9 @@ export default function CreateUserForm(props: CreateUserFormProps) {
             setFormData({
               fullName: "",
               email: "",
-              phoneNumber: "",
               avatar: "",
+              phoneCountryId: null,
+              phoneNumber: "",
               roleId: "",
               status: "ACTIVE",
               dateOfBirth: "",
@@ -279,14 +282,17 @@ export default function CreateUserForm(props: CreateUserFormProps) {
                     onInputChange={handleInputChange("email")}
                     required
                   />
-                  <InputNumberCMS
+                  <AppNumberInputSVP
                     inputId={"phone-number"}
                     inputName={"Phone Number"}
-                    inputIcon={"🇮🇩 62"}
                     inputPlaceholder="Enter Mobile or WhatsApp number"
-                    inputConfig="numeric"
+                    inputConfig="phone_number"
                     value={formData.phoneNumber}
                     onInputChange={handleInputChange("phoneNumber")}
+                    onCountryChange={(id) =>
+                      setFormData((prev) => ({ ...prev, phoneCountryId: id }))
+                    }
+                    variant="CMS"
                   />
                   <AppSelect variant="CMS"
                     selectId={"role"}

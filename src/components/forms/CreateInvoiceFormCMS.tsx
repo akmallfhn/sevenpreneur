@@ -7,7 +7,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
-import InputNumberCMS from "../fields/InputNumberCMS";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppSelect from "../fields/AppSelect";
 import ReceiptLineItemCMS from "../items/ReceiptLineItemCMS";
 import AppSheet from "../modals/AppSheet";
@@ -47,6 +47,7 @@ export default function CreateInvoiceFormCMS({
   // Beginning State
   const [formData, setFormData] = useState<{
     invoiceUserId: string;
+    invoiceUserPhoneCountryId: number | null;
     invoiceUserPhone: string;
     invoiceProductCategory: ProductCategory | null;
     invoiceProductItem: number | string;
@@ -54,6 +55,7 @@ export default function CreateInvoiceFormCMS({
     paymentDiscount: string;
   }>({
     invoiceUserId: "",
+    invoiceUserPhoneCountryId: null,
     invoiceUserPhone: "",
     invoiceProductCategory: null,
     invoiceProductItem: "",
@@ -341,7 +343,7 @@ export default function CreateInvoiceFormCMS({
             playlist_id: Number(formData.invoiceProductItem),
 
             // Optional fields:
-            phone_country_id: 1,
+            phone_country_id: formData.invoiceUserPhoneCountryId ?? 1,
             phone_number: formData.invoiceUserPhone.trim()
               ? formData.invoiceUserPhone
               : null,
@@ -360,7 +362,7 @@ export default function CreateInvoiceFormCMS({
             cohort_price_id: Number(formData.invoiceProductItem),
 
             // Optional fields:
-            phone_country_id: 1,
+            phone_country_id: formData.invoiceUserPhoneCountryId ?? 1,
             phone_number: formData.invoiceUserPhone.trim()
               ? formData.invoiceUserPhone
               : null,
@@ -379,7 +381,7 @@ export default function CreateInvoiceFormCMS({
             event_price_id: Number(formData.invoiceProductItem),
 
             // Optional fields:
-            phone_country_id: 1,
+            phone_country_id: formData.invoiceUserPhoneCountryId ?? 1,
             phone_number: formData.invoiceUserPhone.trim()
               ? formData.invoiceUserPhone
               : null,
@@ -426,14 +428,20 @@ export default function CreateInvoiceFormCMS({
                 onInputChange={handleInputChange("invoiceUserId")}
                 required
               />
-              <InputNumberCMS
+              <AppNumberInputSVP
                 inputId="invoice-user-phone"
                 inputName="Phone Number"
-                inputIcon="🇮🇩 62"
-                inputConfig="numeric"
+                inputConfig="phone_number"
                 inputPlaceholder="Enter Mobile or WhatsApp number"
                 value={formData.invoiceUserPhone}
                 onInputChange={handleInputChange("invoiceUserPhone")}
+                onCountryChange={(id) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    invoiceUserPhoneCountryId: id,
+                  }))
+                }
+                variant="CMS"
                 required
               />
               <div className="bg-card-inside-bg border flex flex-col gap-2 p-4 rounded-md">

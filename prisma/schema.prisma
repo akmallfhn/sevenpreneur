@@ -283,6 +283,7 @@ model PhoneCountryCode {
   country_name String @db.VarChar()
   phone_code   String @unique @db.VarChar()
   emoji        String @db.VarChar()
+  icon         String? @db.VarChar()
   users        User[]
 
   @@map("phone_country_codes")

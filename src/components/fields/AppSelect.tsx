@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 
-const varianStyles: Record<
+const variantStyles: Record<
   PlatformType,
   {
     focus: string;
@@ -97,7 +97,7 @@ export default function AppSelect({
 }: AppSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const styles = varianStyles[variant];
+  const styles = variantStyles[variant];
 
   // Sent open state to parent
   useEffect(() => {

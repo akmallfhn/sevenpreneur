@@ -47,6 +47,7 @@ export const listLookup = {
         country_name: entry.country_name,
         phone_code: entry.phone_code,
         emoji: entry.emoji,
+        icon: entry.icon ?? null,
       };
     });
     return {

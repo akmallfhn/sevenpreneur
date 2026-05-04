@@ -1,7 +1,7 @@
 ﻿"use client";
 import AppButton from "../buttons/AppButton";
 import { PlusIcon, X } from "lucide-react";
-import InputNumberSVP from "../fields/InputNumberSVP";
+import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppInput from "../fields/AppInput";
 import { useEffect } from "react";
 
@@ -86,7 +86,7 @@ export default function AICostListStepperLMS(props: AICostListStepperLMSProps) {
             />
           </div>
           <div className="w-full flex-1">
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId="cost-quantity"
               inputPlaceholder="Jumlah"
               inputConfig="decimal"
@@ -94,6 +94,7 @@ export default function AICostListStepperLMS(props: AICostListStepperLMSProps) {
               onInputChange={(value: string) =>
                 handleChange(index, "quantity", value)
               }
+              variant="SVP"
             />
           </div>
           <div className="w-full flex-1">
@@ -108,10 +109,11 @@ export default function AICostListStepperLMS(props: AICostListStepperLMSProps) {
             />
           </div>
           <div className="w-full flex-2">
-            <InputNumberSVP
+            <AppNumberInputSVP
               inputId="cost-price"
               inputPlaceholder="Harga"
               inputConfig="numeric"
+              variant="SVP"
               value={post.total_cost}
               onInputChange={(value: string) =>
                 handleChange(index, "total_cost", value)

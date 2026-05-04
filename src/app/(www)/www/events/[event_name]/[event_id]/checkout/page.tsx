@@ -151,6 +151,7 @@ export default async function CheckoutEventPage({
       <div className="flex flex-col max-w-md w-full mx-auto h-screen">
         <div className="flex-1 overflow-y-auto">
           <CheckoutEventFormMobileSVP
+            sessionToken={sessionToken}
             eventId={eventData.id}
             eventName={eventData.name}
             eventImage={eventData.image}
@@ -158,6 +159,7 @@ export default async function CheckoutEventPage({
             initialUserName={checkUser.full_name}
             initialUserEmail={checkUser.email}
             initialUserPhone={checkUser.phone_number}
+            initialUserPhoneCountryId={checkUser.phone_country_id ?? null}
             ticketListData={ticketList}
             paymentMethodData={paymentMethodList}
           />

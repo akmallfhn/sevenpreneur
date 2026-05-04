@@ -2,7 +2,7 @@
 import { PlatformType } from "@/lib/app-types";
 import React, { InputHTMLAttributes, useState } from "react";
 
-const varianStyles: Record<
+const variantStyles: Record<
   PlatformType,
   {
     focus: string;
@@ -67,7 +67,7 @@ export default function AppInput({
 }: AppInputProps) {
   const [textValue, setTextValue] = useState(value);
   const [internalError, setInternalError] = useState("");
-  const styles = varianStyles[variant];
+  const styles = variantStyles[variant];
 
   // Sync only when parent value changes AND it's different
   if (textValue !== value) {
