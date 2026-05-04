@@ -1,3 +1,4 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
@@ -7,7 +8,6 @@ import {
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const listPlaylist = {

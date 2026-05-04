@@ -1,6 +1,6 @@
+import { WACType, WAMode } from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
-import { WACType, WAMode } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
 import {
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
             msg.timestamp
           );
           if (!appendResult) {
-            console.error("whatsapp.webhook: Failed to append chat from user.")
+            console.error("whatsapp.webhook: Failed to append chat from user.");
             return new NextResponse(undefined, { status: 500 });
           }
 
@@ -142,7 +142,9 @@ export async function POST(req: NextRequest) {
             status.timestamp
           );
           if (!isSuccess) {
-            console.error("whatsapp.webhook: Failed to update status by message ID.")
+            console.error(
+              "whatsapp.webhook: Failed to update status by message ID."
+            );
             return new NextResponse(undefined, { status: 500 });
           }
         }

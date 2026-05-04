@@ -1,14 +1,21 @@
+import {
+  CategoryEnum,
+  Prisma,
+  PrismaClient,
+  StatusEnum,
+  TStatusEnum,
+} from "@/generated/prisma/client";
 import { afterPaidTrigger } from "@/lib/after-payment";
 import { Optional } from "@/lib/optional-type";
 import { calculateFinalPrice } from "@/lib/price-calc";
 import {
+  errorStatusCodeToName,
   STATUS_BAD_REQUEST,
   STATUS_CREATED,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NO_CONTENT,
   STATUS_NOT_FOUND,
   STATUS_OK,
-  errorStatusCodeToName,
 } from "@/lib/status_code";
 import {
   XenditInvoiceResponse,
@@ -22,14 +29,6 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import {
-  CategoryEnum,
-  Prisma,
-  PrismaClient,
-  StatusEnum,
-  TStatusEnum,
-} from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -40,7 +39,7 @@ async function createTransaction(
   item: {
     id: number;
     name: string;
-    amount: Decimal;
+    amount: Prisma.Decimal;
   },
   paymentChannelId: number | null,
   discountCode: Optional<string>

@@ -1,3 +1,4 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import {
   STATUS_FORBIDDEN,
@@ -15,10 +16,14 @@ import {
   objectHasOnlyID,
   stringIsUUID,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
-import { extractThemes, isEnrolledCohort, isEnrolledLearning, textSentiment } from "./util.lms";
+import {
+  extractThemes,
+  isEnrolledCohort,
+  isEnrolledLearning,
+  textSentiment,
+} from "./util.lms";
 
 export const readLMS = {
   cohort: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
@@ -473,56 +478,62 @@ export const readLMS = {
     .query(async (opts) => {
       const { learning_id } = opts.input;
 
-      const [checkInCount, checkOutCount, registeredCount, ratingAgg, attendances, ratings] =
-        await Promise.all([
-          opts.ctx.prisma.attendance.count({
-            where: { learning_id, check_in_at: { not: null } },
-          }),
-          opts.ctx.prisma.attendance.count({
-            where: { learning_id, check_out_at: { not: null } },
-          }),
-          opts.ctx.prisma.userCohort.count({
-            where: {
-              cohort: { learnings: { some: { id: learning_id } } },
-              user: { role_id: 3 },
-            },
-          }),
-          opts.ctx.prisma.learningRating.aggregate({
-            where: { learning_id },
-            _count: { _all: true },
-            _avg: {
-              coach_clarity: true,
-              coach_mastery: true,
-              coach_responsiveness: true,
-              coach_engagement: true,
-              material_relevance: true,
-              material_flow: true,
-              material_depth: true,
-              learning_value: true,
-            },
-          }),
-          opts.ctx.prisma.attendance.findMany({
-            where: { learning_id },
-            include: {
-              user: { select: { id: true, full_name: true, avatar: true } },
-            },
-            orderBy: { check_in_at: { sort: "asc", nulls: "last" } },
-          }),
-          opts.ctx.prisma.learningRating.findMany({
-            where: { learning_id },
-            select: {
-              user_id: true,
-              coach_clarity: true,
-              coach_mastery: true,
-              coach_responsiveness: true,
-              coach_engagement: true,
-              material_relevance: true,
-              material_flow: true,
-              material_depth: true,
-              learning_value: true,
-            },
-          }),
-        ]);
+      const [
+        checkInCount,
+        checkOutCount,
+        registeredCount,
+        ratingAgg,
+        attendances,
+        ratings,
+      ] = await Promise.all([
+        opts.ctx.prisma.attendance.count({
+          where: { learning_id, check_in_at: { not: null } },
+        }),
+        opts.ctx.prisma.attendance.count({
+          where: { learning_id, check_out_at: { not: null } },
+        }),
+        opts.ctx.prisma.userCohort.count({
+          where: {
+            cohort: { learnings: { some: { id: learning_id } } },
+            user: { role_id: 3 },
+          },
+        }),
+        opts.ctx.prisma.learningRating.aggregate({
+          where: { learning_id },
+          _count: { _all: true },
+          _avg: {
+            coach_clarity: true,
+            coach_mastery: true,
+            coach_responsiveness: true,
+            coach_engagement: true,
+            material_relevance: true,
+            material_flow: true,
+            material_depth: true,
+            learning_value: true,
+          },
+        }),
+        opts.ctx.prisma.attendance.findMany({
+          where: { learning_id },
+          include: {
+            user: { select: { id: true, full_name: true, avatar: true } },
+          },
+          orderBy: { check_in_at: { sort: "asc", nulls: "last" } },
+        }),
+        opts.ctx.prisma.learningRating.findMany({
+          where: { learning_id },
+          select: {
+            user_id: true,
+            coach_clarity: true,
+            coach_mastery: true,
+            coach_responsiveness: true,
+            coach_engagement: true,
+            material_relevance: true,
+            material_flow: true,
+            material_depth: true,
+            learning_value: true,
+          },
+        }),
+      ]);
 
       const ratingMap = new Map(ratings.map((r) => [r.user_id, r]));
 
@@ -530,19 +541,18 @@ export const readLMS = {
       const ratingCount = ratingAgg._count._all;
       const overallAvg =
         ratingCount > 0
-          ? ([
-              avgScores.coach_clarity,
-              avgScores.coach_mastery,
-              avgScores.coach_responsiveness,
-              avgScores.coach_engagement,
-              avgScores.material_relevance,
-              avgScores.material_flow,
-              avgScores.material_depth,
-              avgScores.learning_value,
-            ] as (number | null)[]).reduce(
-              (sum: number, v) => sum + (v ?? 0),
-              0
-            ) / 8
+          ? (
+              [
+                avgScores.coach_clarity,
+                avgScores.coach_mastery,
+                avgScores.coach_responsiveness,
+                avgScores.coach_engagement,
+                avgScores.material_relevance,
+                avgScores.material_flow,
+                avgScores.material_depth,
+                avgScores.learning_value,
+              ] as (number | null)[]
+            ).reduce((sum: number, v) => sum + (v ?? 0), 0) / 8
           : null;
 
       const attendeeList = attendances.map((a) => {
@@ -600,7 +610,7 @@ export const readLMS = {
         };
       }
 
-      const collect = (key: keyof typeof ratings[0]) =>
+      const collect = (key: keyof (typeof ratings)[0]) =>
         ratings
           .map((r) => r[key])
           .filter((v): v is string => !!v && v.trim().length > 0);
@@ -608,7 +618,10 @@ export const readLMS = {
       const positivePool = collect("favorite_material");
       const negativePool: string[] = [];
 
-      for (const t of [...collect("disliked_material"), ...collect("missing_topics")]) {
+      for (const t of [
+        ...collect("disliked_material"),
+        ...collect("missing_topics"),
+      ]) {
         if (textSentiment(t) === "positive") positivePool.push(t);
         else negativePool.push(t);
       }

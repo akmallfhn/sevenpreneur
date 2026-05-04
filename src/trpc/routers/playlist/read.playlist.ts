@@ -1,9 +1,9 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export const readPlaylist = {

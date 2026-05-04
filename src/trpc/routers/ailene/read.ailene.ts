@@ -1,7 +1,7 @@
+import { AiLearnLessonStatus } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
-import { aileneProcedure, administratorProcedure } from "@/trpc/init";
+import { administratorProcedure, aileneProcedure } from "@/trpc/init";
 import { numberIsID } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import dayjs from "dayjs";
 import z from "zod";
@@ -72,7 +72,12 @@ export const readAilene = {
         session_attendances: {
           include: {
             session: {
-              select: { id: true, name: true, meeting_date: true, method: true },
+              select: {
+                id: true,
+                name: true,
+                meeting_date: true,
+                method: true,
+              },
             },
           },
           orderBy: { session: { meeting_date: "desc" } },

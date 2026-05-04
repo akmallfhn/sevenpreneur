@@ -1,5 +1,4 @@
-import { PrismaClient, StatusEnum } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Prisma, PrismaClient, StatusEnum } from "@/generated/prisma/client";
 
 export async function calculateBAScore(
   prisma: PrismaClient,
@@ -35,10 +34,10 @@ export async function calculateBAScore(
           prev.add(
             subcategory.questions.reduce(
               (prev, question) => prev.add(question.weight),
-              new Decimal(0)
+              new Prisma.Decimal(0)
             )
           ),
-        new Decimal(0)
+        new Prisma.Decimal(0)
       );
       const totalWeightedScore = category.subcategories.reduce(
         (prev, subcategory) =>
@@ -48,14 +47,14 @@ export async function calculateBAScore(
                 answerByID[question.id]
               );
               return prev.add(weightedScore);
-            }, new Decimal(0))
+            }, new Prisma.Decimal(0))
           ),
-        new Decimal(0)
+        new Prisma.Decimal(0)
       );
       return prev.add(
         totalWeightedScore.dividedBy(totalWeight).mul(category.weight.div(100)) // Category weight is in percent (%).
       );
-    }, new Decimal(0))
+    }, new Prisma.Decimal(0))
     .div(5) // Score is in [0, 5] range.
     .mul(100); // Answer sheet score is in percent (%).
 

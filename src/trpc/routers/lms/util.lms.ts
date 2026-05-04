@@ -1,6 +1,6 @@
+import { PrismaClient } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN } from "@/lib/status_code";
-import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export async function isEnrolledCohort(
@@ -174,21 +174,57 @@ function ngrams(tokens: string[], n: number): string[] {
 }
 
 const POSITIVE_SIGNALS = new Set([
-  "bagus", "baik", "oke", "ok", "mantap", "keren", "seru",
-  "mudah", "jelas", "menarik", "informatif", "bermanfaat", "membantu",
-  "senang", "puas", "suka", "nyaman", "relevan", "tepat", "pas",
-  "cocok", "sesuai", "cukup",
+  "bagus",
+  "baik",
+  "oke",
+  "ok",
+  "mantap",
+  "keren",
+  "seru",
+  "mudah",
+  "jelas",
+  "menarik",
+  "informatif",
+  "bermanfaat",
+  "membantu",
+  "senang",
+  "puas",
+  "suka",
+  "nyaman",
+  "relevan",
+  "tepat",
+  "pas",
+  "cocok",
+  "sesuai",
+  "cukup",
 ]);
 
 const NEGATIVE_SIGNALS = new Set([
-  "kurang", "tidak", "susah", "sulit", "bingung", "membingungkan",
-  "lama", "lambat", "membosankan", "bosan", "boring", "terlalu",
-  "sayang", "kecewa", "belum", "capek", "lelah",
+  "kurang",
+  "tidak",
+  "susah",
+  "sulit",
+  "bingung",
+  "membingungkan",
+  "lama",
+  "lambat",
+  "membosankan",
+  "bosan",
+  "boring",
+  "terlalu",
+  "sayang",
+  "kecewa",
+  "belum",
+  "capek",
+  "lelah",
 ]);
 
-export function textSentiment(text: string): "positive" | "negative" | "neutral" {
+export function textSentiment(
+  text: string
+): "positive" | "negative" | "neutral" {
   const tokens = normText(text).split(" ");
-  let pos = 0, neg = 0;
+  let pos = 0,
+    neg = 0;
   for (const w of tokens) {
     if (POSITIVE_SIGNALS.has(w)) pos++;
     if (NEGATIVE_SIGNALS.has(w)) neg++;

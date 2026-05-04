@@ -1,3 +1,10 @@
+import {
+  CategoryEnum,
+  Prisma,
+  PrismaClient,
+  StatusEnum,
+  TStatusEnum,
+} from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import {
   STATUS_BAD_REQUEST,
@@ -12,13 +19,6 @@ import {
   numberIsPosInt,
   stringIsUUID,
 } from "@/trpc/utils/validation";
-import {
-  CategoryEnum,
-  Prisma,
-  PrismaClient,
-  StatusEnum,
-  TStatusEnum,
-} from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import {

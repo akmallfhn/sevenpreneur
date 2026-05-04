@@ -1,9 +1,9 @@
+import { AStatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
-import { AStatusEnum } from "@prisma/client";
 import {
   ArticleBodyContent,
   estimateReadingTime,

@@ -1,7 +1,7 @@
 "use client";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
+import { AiLearnRoleEnum, SessionMethod } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { AiLearnRoleEnum, LearningMethodEnum } from "@prisma/client";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 import {
@@ -22,23 +22,38 @@ dayjs.locale("id");
 
 const ROLE_BADGE: Record<AiLearnRoleEnum, { label: string; cls: string }> = {
   MARKETING: { label: "Marketing", cls: "bg-primary/10 text-primary" },
-  OPERATIONAL: { label: "Operational", cls: "bg-success-background text-success-foreground" },
+  OPERATIONAL: {
+    label: "Operational",
+    cls: "bg-success-background text-success-foreground",
+  },
   CEO: { label: "CEO", cls: "bg-warning-background text-warning-foreground" },
   FINANCE: { label: "Finance", cls: "bg-tertiary/10 text-tertiary" },
-  HR: { label: "HR", cls: "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400" },
+  HR: {
+    label: "HR",
+    cls: "bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400",
+  },
 };
 
 const LEVEL_BADGE: Record<number, { label: string; cls: string }> = {
   1: { label: "Level 1", cls: "bg-primary/10 text-primary" },
   2: { label: "Level 2", cls: "bg-success-background text-success-foreground" },
   3: { label: "Level 3", cls: "bg-warning-background text-warning-foreground" },
-  4: { label: "Level 4", cls: "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400" },
+  4: {
+    label: "Level 4",
+    cls: "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400",
+  },
 };
 
-const METHOD_BADGE: Record<LearningMethodEnum, { label: string; cls: string }> = {
+const METHOD_BADGE: Record<SessionMethod, { label: string; cls: string }> = {
   ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
-  ONSITE: { label: "Onsite", cls: "bg-success-background text-success-foreground" },
-  HYBRID: { label: "Hybrid", cls: "bg-warning-background text-warning-foreground" },
+  ONSITE: {
+    label: "Onsite",
+    cls: "bg-success-background text-success-foreground",
+  },
+  HYBRID: {
+    label: "Hybrid",
+    cls: "bg-warning-background text-warning-foreground",
+  },
 };
 
 function getInitials(name: string) {
@@ -84,7 +99,6 @@ export default function ProfileAilene() {
   return (
     <PageContainerCMS className="overflow-y-auto">
       <div className="w-full flex flex-col gap-6 pb-8">
-
         {/* Header */}
         <div className="flex flex-col gap-1">
           <h1 className="font-brand font-bold text-2xl text-sevenpreneur-coal dark:text-white">
@@ -243,7 +257,9 @@ export default function ProfileAilene() {
                     return (
                       <tr
                         key={att.session.id}
-                        className={`border-b border-dashboard-border last:border-0 ${i % 2 === 1 ? "bg-sb-item-hover/40" : ""}`}
+                        className={`border-b border-dashboard-border last:border-0 ${
+                          i % 2 === 1 ? "bg-sb-item-hover/40" : ""
+                        }`}
                       >
                         <td className="px-4 py-3">
                           <Link
@@ -339,11 +355,14 @@ export default function ProfileAilene() {
                 </thead>
                 <tbody>
                   {(lesson_progress as LessonProgressItem[]).map((prog, i) => {
-                    const levelBadge = LEVEL_BADGE[prog.lesson.level] ?? LEVEL_BADGE[1];
+                    const levelBadge =
+                      LEVEL_BADGE[prog.lesson.level] ?? LEVEL_BADGE[1];
                     return (
                       <tr
                         key={prog.lesson.id}
-                        className={`border-b border-dashboard-border last:border-0 ${i % 2 === 1 ? "bg-sb-item-hover/40" : ""}`}
+                        className={`border-b border-dashboard-border last:border-0 ${
+                          i % 2 === 1 ? "bg-sb-item-hover/40" : ""
+                        }`}
                       >
                         <td className="px-4 py-3">
                           <Link
@@ -368,7 +387,11 @@ export default function ProfileAilene() {
                         <td className="px-4 py-3">
                           {prog.score !== null ? (
                             <span
-                              className={`font-bodycopy font-semibold text-sm ${prog.score >= 70 ? "text-success-foreground" : "text-red-500"}`}
+                              className={`font-bodycopy font-semibold text-sm ${
+                                prog.score >= 70
+                                  ? "text-success-foreground"
+                                  : "text-red-500"
+                              }`}
                             >
                               {prog.score}%
                             </span>
@@ -389,7 +412,6 @@ export default function ProfileAilene() {
             </div>
           )}
         </div>
-
       </div>
     </PageContainerCMS>
   );

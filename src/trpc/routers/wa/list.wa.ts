@@ -1,3 +1,11 @@
+import {
+  Prisma,
+  WAAssetType,
+  WACDirection,
+  WACStatus,
+  WACType,
+  WALeadStatus,
+} from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
@@ -8,14 +16,6 @@ import {
   stringIsNanoid,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import {
-  Prisma,
-  WAAssetType,
-  WACDirection,
-  WACStatus,
-  WACType,
-  WALeadStatus,
-} from "@prisma/client";
 import z from "zod";
 import { convertToWhatsAppChatWithAttachment } from "./type.wa";
 

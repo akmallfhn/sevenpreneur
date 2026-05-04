@@ -1,7 +1,7 @@
+import { TStatusEnum } from "@/generated/prisma/client";
 import { afterPaidTrigger } from "@/lib/after-payment";
 import GetPrismaClient from "@/lib/prisma";
 import { XenditInvoiceCallback } from "@/lib/xendit";
-import { TStatusEnum } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

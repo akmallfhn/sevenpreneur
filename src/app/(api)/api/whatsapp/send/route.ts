@@ -1,3 +1,8 @@
+import {
+  WACDirection,
+  WACSenderType,
+  WACType,
+} from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
 import {
   whatsappAudioMessageRequest,
@@ -15,7 +20,6 @@ import {
   WhatsappAttachmentSticker,
   WhatsappAttachmentVideo,
 } from "@/lib/whatsapp-types";
-import { WACDirection, WACSenderType, WACType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

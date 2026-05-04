@@ -1,3 +1,10 @@
+import {
+  WACDirection,
+  WACSenderType,
+  WACStatus,
+  WACType,
+  WAMode,
+} from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
 import { supabase } from "@/lib/supabase";
 import {
@@ -5,13 +12,6 @@ import {
   whatsappGetMediaURLRequest,
 } from "@/lib/whatsapp";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
-import {
-  WACDirection,
-  WACSenderType,
-  WACStatus,
-  WACType,
-  WAMode,
-} from "@prisma/client";
 import { WhatsAppWebhookMessageStatusType } from "./type.wa.webhook";
 
 async function getOrCreateConversation(

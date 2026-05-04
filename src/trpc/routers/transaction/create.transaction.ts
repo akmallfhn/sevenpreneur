@@ -1,3 +1,4 @@
+import { CategoryEnum, StatusEnum } from "@/generated/prisma/client";
 import {
   STATUS_CREATED,
   STATUS_INTERNAL_SERVER_ERROR,
@@ -8,7 +9,6 @@ import {
   stringIsTimestampTz,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { CategoryEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 

@@ -2,8 +2,8 @@
 import AppButton from "@/components/buttons/AppButton";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { SessionMethod, StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 import { CalendarDays, ExternalLink, MapPin, Video } from "lucide-react";
@@ -11,18 +11,17 @@ import Link from "next/link";
 
 dayjs.locale("id");
 
-const METHOD_BADGE: Record<LearningMethodEnum, { label: string; cls: string }> =
-  {
-    ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
-    ONSITE: {
-      label: "Onsite",
-      cls: "bg-success-background text-success-foreground",
-    },
-    HYBRID: {
-      label: "Hybrid",
-      cls: "bg-warning-background text-warning-foreground",
-    },
-  };
+const METHOD_BADGE: Record<SessionMethod, { label: string; cls: string }> = {
+  ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
+  ONSITE: {
+    label: "Onsite",
+    cls: "bg-success-background text-success-foreground",
+  },
+  HYBRID: {
+    label: "Hybrid",
+    cls: "bg-warning-background text-warning-foreground",
+  },
+};
 
 export default function SessionsAilene() {
   const { isCollapsed } = useSidebar();
@@ -31,10 +30,10 @@ export default function SessionsAilene() {
   const now = new Date();
   const sessions = data?.list ?? [];
   const upcoming = sessions.filter(
-    (s) => new Date(s.meeting_date) >= now && s.status === StatusEnum.ACTIVE
+    (s) => new Date(s.meeting_date) >= now && s.status === StatusType.ACTIVE
   );
   const past = sessions.filter(
-    (s) => new Date(s.meeting_date) < now && s.status === StatusEnum.ACTIVE
+    (s) => new Date(s.meeting_date) < now && s.status === StatusType.ACTIVE
   );
 
   const renderCard = (session: (typeof sessions)[number]) => {
@@ -45,10 +44,16 @@ export default function SessionsAilene() {
       <Link key={session.id} href={`/sessions/${session.id}`}>
         <div className="flex items-start gap-4 px-5 py-4 rounded-lg border border-dashboard-border bg-card-bg hover:border-primary/40 transition-colors cursor-pointer">
           <div
-            className={`flex items-center justify-center size-11 rounded-lg shrink-0 mt-0.5 ${isUpcoming ? "bg-gradient-to-br from-tertiary/70 to-tertiary" : "bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke"}`}
+            className={`flex items-center justify-center size-11 rounded-lg shrink-0 mt-0.5 ${
+              isUpcoming
+                ? "bg-gradient-to-br from-tertiary/70 to-tertiary"
+                : "bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke"
+            }`}
           >
             <CalendarDays
-              className={`size-5 ${isUpcoming ? "text-white" : "text-emphasis"}`}
+              className={`size-5 ${
+                isUpcoming ? "text-white" : "text-emphasis"
+              }`}
             />
           </div>
           <div className="flex-1 min-w-0 flex flex-col gap-1.5">
@@ -115,7 +120,9 @@ export default function SessionsAilene() {
 
   return (
     <div
-      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}
+      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${
+        isCollapsed ? "pl-16" : "pl-64"
+      }`}
     >
       <div className="container max-w-[calc(100%-4rem)] mx-auto w-full flex flex-col gap-6">
         <div className="flex flex-col gap-1">
