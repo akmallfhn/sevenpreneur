@@ -373,7 +373,6 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                         />
                       ))}
                     </div>
-                    {/* Labels */}
                     <div
                       className="flex flex-col justify-around flex-1"
                       style={{ height: 160 }}
@@ -429,7 +428,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                 >
                   {learningDetailsData.learning.external_video_id &&
                     learningVideoKey && (
-                      <div className="relative w-full aspect-video overflow-hidden rounded-md">
+                      <div className="relative w-full h-auto overflow-hidden rounded-md">
                         <AppVideoPlayer videoId={learningVideoKey} />
                       </div>
                     )}

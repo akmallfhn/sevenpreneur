@@ -1,6 +1,15 @@
 "use client";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { CalendarDays, LayoutDashboard, Settings, Trophy, UserCircle, Users } from "lucide-react";
+import {
+  BookOpen,
+  Building2,
+  CalendarDays,
+  LayoutDashboard,
+  Trophy,
+  UserCircle,
+  Users,
+  Zap,
+} from "lucide-react";
 import { useEffect } from "react";
 import AppSidebar from "./AppSidebar";
 import AppSidebarGroupMenu from "./AppSidebarGroupMenu";
@@ -33,7 +42,7 @@ export default function SidebarAilene(props: SidebarAileneProps) {
       avatarName={isLoading ? "..." : (data?.user.full_name ?? "")}
       avatarRole={isLoading ? "" : (data?.user.role_name ?? "")}
     >
-      <AppSidebarGroupMenu groupName="Menu">
+      <AppSidebarGroupMenu groupName="Overview">
         <AppSidebarMenuItem
           menuName="Dashboard"
           menuURL="/"
@@ -41,7 +50,21 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           exact
         />
         <AppSidebarMenuItem
-          menuName="Sessions"
+          menuName="B2B Platform"
+          menuURL="/b2b"
+          menuIcon={<Building2 className="size-[18px]" />}
+          badge="New"
+        />
+      </AppSidebarGroupMenu>
+
+      <AppSidebarGroupMenu groupName="Belajar">
+        <AppSidebarMenuItem
+          menuName="Learning Path"
+          menuURL="/lessons"
+          menuIcon={<BookOpen className="size-[18px]" />}
+        />
+        <AppSidebarMenuItem
+          menuName="Sesi Live"
           menuURL="/sessions"
           menuIcon={<CalendarDays className="size-[18px]" />}
         />
@@ -50,8 +73,11 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           menuURL="/leaderboard"
           menuIcon={<Trophy className="size-[18px]" />}
         />
+      </AppSidebarGroupMenu>
+
+      <AppSidebarGroupMenu groupName="Akun">
         <AppSidebarMenuItem
-          menuName="Profile"
+          menuName="Profil Saya"
           menuURL="/profile"
           menuIcon={<UserCircle className="size-[18px]" />}
         />
@@ -62,7 +88,7 @@ export default function SidebarAilene(props: SidebarAileneProps) {
           <AppSidebarMenuItem
             menuName="Kelola Materi"
             menuURL="/admin/lessons"
-            menuIcon={<Settings className="size-[18px]" />}
+            menuIcon={<BookOpen className="size-[18px]" />}
           />
           <AppSidebarMenuItem
             menuName="Kelola Members"
@@ -70,9 +96,15 @@ export default function SidebarAilene(props: SidebarAileneProps) {
             menuIcon={<Users className="size-[18px]" />}
           />
           <AppSidebarMenuItem
-            menuName="Kelola Sessions"
+            menuName="Kelola Sesi"
             menuURL="/admin/sessions"
             menuIcon={<CalendarDays className="size-[18px]" />}
+          />
+          <AppSidebarMenuItem
+            menuName="AI Adoption Insights"
+            menuURL="/admin/insights"
+            menuIcon={<Zap className="size-[18px]" />}
+            badge="Soon"
           />
         </AppSidebarGroupMenu>
       )}

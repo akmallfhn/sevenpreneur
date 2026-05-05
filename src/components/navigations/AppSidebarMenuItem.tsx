@@ -9,6 +9,7 @@ interface AppSidebarMenuItemProps {
   menuURL: string;
   menuIcon?: ReactNode;
   exact?: boolean;
+  badge?: string;
 }
 
 export default function AppSidebarMenuItem({
@@ -16,6 +17,7 @@ export default function AppSidebarMenuItem({
   menuURL,
   menuIcon,
   exact,
+  badge,
 }: AppSidebarMenuItemProps) {
   const pathname = usePathname();
   const [clientPath, setClientPath] = useState("");
@@ -45,6 +47,11 @@ export default function AppSidebarMenuItem({
         <p className="font-bodycopy text-[13px] line-clamp-1 flex-1">
           {menuName}
         </p>
+      )}
+      {!isCollapsed && badge && (
+        <span className="font-bodycopy text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary shrink-0">
+          {badge}
+        </span>
       )}
       {isActive && !isCollapsed && (
         <div className="sb-indicator absolute right-0 w-[3px] h-5 rounded-full" />
