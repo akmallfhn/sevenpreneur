@@ -19,8 +19,8 @@ export default function PageHeaderCMS({
   return (
     <div className="page-header flex justify-between items-center">
       <div className="flex items-center gap-4">
-        <div className="flex items-center justify-center size-12 rounded-md bg-tertiary flex-shrink-0">
-          <Icon className="size-8 text-white" />
+        <div className="flex items-center justify-center size-11 rounded-md bg-tertiary flex-shrink-0">
+          <Icon className="size-7 text-white" />
         </div>
         <div className="flex flex-col">
           <h1 className="font-bodycopy font-bold text-lg leading-snug dark:text-sevenpreneur-white lg:text-2xl">

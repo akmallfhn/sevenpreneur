@@ -520,6 +520,10 @@ export const readLMS = {
               material_flow: true,
               material_depth: true,
               learning_value: true,
+              missing_topics: true,
+              favorite_material: true,
+              disliked_material: true,
+              improvement_suggestion: true,
             },
           }),
         ]);
@@ -672,6 +676,38 @@ export const readLMS = {
         message: "Success",
         rating_count: ratingCount,
         overall_avg: overallAvg,
+      };
+    }),
+
+  userRating: roleBasedProcedure([
+    "Administrator",
+    "Educator",
+    "Class Manager",
+  ])
+    .input(z.object({ learning_id: numberIsID(), user_id: z.string() }))
+    .query(async (opts) => {
+      const { learning_id, user_id } = opts.input;
+
+      const [attendance, rating] = await Promise.all([
+        opts.ctx.prisma.attendance.findFirst({
+          where: { learning_id, user_id },
+          include: { user: { select: { full_name: true, avatar: true } } },
+        }),
+        opts.ctx.prisma.learningRating.findFirst({
+          where: { learning_id, user_id },
+        }),
+      ]);
+
+      if (!attendance) throw readFailedNotFound("Attendance");
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        full_name: attendance.user.full_name,
+        avatar: attendance.user.avatar,
+        check_in_at: attendance.check_in_at?.toISOString() ?? null,
+        check_out_at: attendance.check_out_at?.toISOString() ?? null,
+        rating: rating ?? null,
       };
     }),
 };

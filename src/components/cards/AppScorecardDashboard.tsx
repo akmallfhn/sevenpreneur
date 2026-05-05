@@ -32,7 +32,7 @@ export default function AppScorecardDashboard({
           </p>
         </div>
       </div>
-      {children && <div className="w-full">{children}</div>}
+      {children && <div className="w-full pt-1">{children}</div>}
     </div>
   );
 }

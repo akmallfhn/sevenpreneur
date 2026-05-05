@@ -31,11 +31,11 @@ export default function AppSheet({
 
   return (
     <div
-      className={`sheet-root fixed inset-0 flex w-full h-full bg-black/40 items-end justify-center z-50 transition transform ease-in-out`}
+      className={`sheet-root fixed inset-0 flex w-full h-full bg-black/40 items-end justify-center z-50 transition transform ease-in-out dark:bg-black/80`}
       onClick={onClose}
     >
       <div
-        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 bg-sb-bg transition transform ease-in-out sm:max-w-md`}
+        className={`sheet-container fixed flex flex-col w-3/4 h-full inset-y-0 right-0 bg-sb-bg border-l border-dashboard-border transition transform ease-in-out sm:max-w-md`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet-header relative flex flex-col p-4 px-6">

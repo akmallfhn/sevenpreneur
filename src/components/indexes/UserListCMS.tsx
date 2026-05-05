@@ -162,7 +162,8 @@ export default function UserListCMS(props: UserListCMSProps) {
         </PageHeaderCMS>
         <div className="filter-search flex w-full items-center">
           <div className="max-w-96 w-full">
-            <AppInput variant="CMS"
+            <AppInput
+              variant="CMS"
               inputId="search-user"
               inputType="search"
               inputIcon={<Search className="size-5" />}
@@ -218,7 +219,7 @@ export default function UserListCMS(props: UserListCMSProps) {
                       </div>
                       <div className="user-name-email flex flex-col">
                         <Link href={`/users/${post.id}`}>
-                          <h2 className="user-name font-bold font-bodycopy text-black line-clamp-1">
+                          <h2 className="user-name font-bold font-bodycopy line-clamp-1 dark:text-sevenpreneur-white">
                             {post.full_name}
                           </h2>
                         </Link>

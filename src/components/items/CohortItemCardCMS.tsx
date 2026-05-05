@@ -106,7 +106,7 @@ export default function CohortItemCardCMS({
       <div className="cohort-wrapper relative flex w-full h-full">
         <Link
           href={`/cohorts/${cohortId}`}
-          className="cohort-container flex flex-col w-full p-3 gap-2 bg-white border rounded-lg overflow-hidden transition transform active:scale-95"
+          className="cohort-container flex flex-col w-full p-3 gap-2 bg-card-bg border border-dashboard-border rounded-lg overflow-hidden transition transform active:scale-95"
         >
           <div className="cohort-image flex w-full aspect-thumbnail rounded-md overflow-hidden">
             <Image

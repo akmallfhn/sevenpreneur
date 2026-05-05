@@ -35,6 +35,7 @@ import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import PageHeaderCMS from "../titles/PageHeaderCMS";
 import PageContainerCMS from "./PageContainerCMS";
+import SectionContainerCMS from "../cards/SectionContainerCMS";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -113,7 +114,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
         {!isLoading && !isError && userDetailData && (
           <div className="flex w-full gap-4">
             <div className="left-side flex flex-col flex-1 gap-4">
-              <div className="profile-container relative flex w-full bg-section-background p-5 rounded-xl overflow-hidden">
+              <div className="profile-container relative flex w-full bg-card-bg p-5 rounded-xl border border-dashboard-border overflow-hidden">
                 <div className="background-image absolute flex top-0 left-0 w-full h-20 z-0">
                   <Image
                     className="object-cover w-full h-full"
@@ -139,7 +140,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     />
                   </div>
                   <div className="user-name-login flex flex-col">
-                    <h2 className="user-name font-brand text-lg font-bold">
+                    <h2 className="user-name font-brand text-lg font-bold dark:text-sevenpreneur-white">
                       {userDetailData.user.full_name}
                     </h2>
                     <p className="last-login font-bodycopy font-medium text-emphasis text-sm">
@@ -164,12 +165,10 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                   </div>
                 </div>
               </div>
-              <div className="personal-information-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl">
-                <h2 className="label-name font-brand font-bold">
-                  Personal Information
-                </h2>
+              <SectionContainerCMS title="Personal Information">
                 <div className="personal-information-data flex flex-col w-full gap-4">
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId={"full-name"}
                     inputName={"Full Name"}
                     inputType={"text"}
@@ -177,7 +176,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     value={userDetailData.user.full_name || ""}
                     disabled
                   />
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId={"email"}
                     inputName={"Email"}
                     inputType={"email"}
@@ -194,7 +194,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     variant="CMS"
                     disabled
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId={"occupation"}
                     selectName={"Occupation"}
                     selectIcon={<BriefcaseBusiness className="size-5" />}
@@ -224,7 +225,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId={"role"}
                     selectName={"Role"}
                     selectIcon={<KeyRound className="size-5" />}
@@ -248,11 +250,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="transactions-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl overflow-hidden">
-                <h2 className="label-name font-brand font-bold">
-                  Transaction History
-                </h2>
+              </SectionContainerCMS>
+              <SectionContainerCMS title="Transaction History">
                 {(transactionsData?.list ?? []).length > 0 ? (
                   <div className="transaction-list flex flex-col w-full max-h-[230px] p-1 gap-1 bg-white rounded-lg border overflow-y-auto">
                     {transactionsData?.list.map((post) => (
@@ -275,15 +274,13 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     No Transactions
                   </div>
                 )}
-              </div>
+              </SectionContainerCMS>
             </div>
             <div className="right-side flex flex-col flex-1 gap-4">
-              <div className="business-information-container flex flex-col w-full h-fit bg-section-background gap-5 p-5 rounded-xl overflow-hidden">
-                <h2 className="label-name font-brand font-bold">
-                  Business Information
-                </h2>
+              <SectionContainerCMS title="Business Information">
                 <div className="business-information-data flex flex-col w-full gap-4">
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId={"business-name"}
                     inputName={"Business Name"}
                     inputType={"text"}
@@ -292,7 +289,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     value={userDetailData.user.business_name || ""}
                     disabled
                   />
-                  <AppTextArea variant="CMS"
+                  <AppTextArea
+                    variant="CMS"
                     textAreaId="business-description"
                     textAreaName="Business Description"
                     textAreaHeight="h-44"
@@ -301,7 +299,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     disabled
                   />
                   <div className="grid grid-cols-2 gap-3">
-                    <AppSelect variant="CMS"
+                    <AppSelect
+                      variant="CMS"
                       selectId={"industry"}
                       selectName={"Industry"}
                       selectIcon={<Flag className="size-5" />}
@@ -315,7 +314,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                         })) || []
                       }
                     />
-                    <AppInput variant="CMS"
+                    <AppInput
+                      variant="CMS"
                       inputId="business-age-years"
                       inputName="Business Age (years)"
                       inputIcon={<Vegan className="size-5" />}
@@ -329,7 +329,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       disabled
                     />
                   </div>
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId={"business-yearly-revenue"}
                     selectName={"Yearly Revenue"}
                     selectIcon={<WalletCards className="size-5" />}
@@ -367,7 +368,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId={"total-employees"}
                     selectName={"Total Employees"}
                     selectIcon={<UserStar className="size-5" />}
@@ -397,7 +399,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId={"business-legal-entity"}
                     selectName={"Legal Entity"}
                     selectIcon={<Scale className="size-5" />}
@@ -439,7 +442,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                       },
                     ]}
                   />
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId="average-selling-price"
                     inputName="Average Selling Price"
                     inputIcon={
@@ -454,7 +458,8 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     }
                     disabled
                   />
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId="company-profile"
                     inputName="Company Profile"
                     inputIcon={<CircleStar className="size-5" />}
@@ -464,7 +469,7 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
                     disabled
                   />
                 </div>
-              </div>
+              </SectionContainerCMS>
             </div>
           </div>
         )}

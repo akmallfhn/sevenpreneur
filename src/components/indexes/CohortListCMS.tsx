@@ -44,7 +44,10 @@ export default function CohortListCMS({
             icon={GraduationCap}
           >
             {allowedRolesCreateCohort.includes(sessionUserRole) && (
-              <AppButton onClick={() => setCreateCohort(true)} variant="tertiary">
+              <AppButton
+                onClick={() => setCreateCohort(true)}
+                variant="tertiary"
+              >
                 <PlusCircle className="size-5" />
                 Create Cohort
               </AppButton>
@@ -55,22 +58,20 @@ export default function CohortListCMS({
           {isError && <AppErrorComponents />}
 
           {cohortListData && !isLoading && !isError && (
-            <div className="index w-full flex flex-col gap-4 bg-section-background px-5 py-7 rounded-lg overflow-y-auto max-h-[calc(100vh-8rem)]">
-              <div className="cohort-list grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
-                {cohortListData?.list.map((post) => (
-                  <CohortItemCardCMS
-                    key={post.id}
-                    sessionToken={sessionToken}
-                    sessionUserRole={sessionUserRole}
-                    cohortId={post.id}
-                    cohortName={post.name}
-                    cohortImage={post.image}
-                    cohortStartDate={post.start_date}
-                    cohortEndDate={post.end_date}
-                    onDeleteSuccess={() => utils.list.cohorts.invalidate()}
-                  />
-                ))}
-              </div>
+            <div className="cohort-list grid gap-4 items-center lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5">
+              {cohortListData?.list.map((post) => (
+                <CohortItemCardCMS
+                  key={post.id}
+                  sessionToken={sessionToken}
+                  sessionUserRole={sessionUserRole}
+                  cohortId={post.id}
+                  cohortName={post.name}
+                  cohortImage={post.image}
+                  cohortStartDate={post.start_date}
+                  cohortEndDate={post.end_date}
+                  onDeleteSuccess={() => utils.list.cohorts.invalidate()}
+                />
+              ))}
             </div>
           )}
         </div>
