@@ -210,7 +210,8 @@ FROM users_cohorts
   LEFT JOIN (
     SELECT cohort_prices.id AS price_id, COUNT(*) AS learning_count
     FROM cohort_prices
-    LEFT JOIN learnings ON learnings.price_id IS NULL OR cohort_prices.id = learnings.price_id
+    LEFT JOIN learnings ON (learnings.price_id IS NULL OR cohort_prices.id = learnings.price_id)
+      AND learnings.cohort_id = ${opts.input.cohort_id}
     GROUP BY cohort_prices.id
   ) AS learnings_count ON users_cohorts.cohort_price_id = learnings_count.price_id
   LEFT JOIN (
