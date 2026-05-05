@@ -1,6 +1,6 @@
 ﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { ProductCategory } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
 import { trpc } from "@/trpc/client";
@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
-  ChevronRight,
+  CreditCard,
   Eye,
   FileSpreadsheet,
   Funnel,
@@ -27,8 +27,6 @@ import ProductCategoryLabelCMS from "../labels/ProductCategoryLabelCMS";
 import TransactionStatusLabelCMS from "../labels/TransactionStatusLabelCMS";
 import TransactionDetailsCMS from "../modals/TransactionDetailsCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import TableHeaderCMS from "../tables/TableHeaderCMS";
 import TableRowCMS from "../tables/TableRowCMS";
@@ -211,27 +209,16 @@ export default function TransactionListCMS({
     <React.Fragment>
       <PageContainerCMS>
         <div className="index w-full flex flex-col gap-4">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href="/transactions" isCurrentPage>
-                Transactions
-              </AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="Transaction List"
-                pageDesc="View and monitor all payment records in one place."
-              />
-              <AppButton
-                variant="tertiary"
-                onClick={() => setIsOpenCreateInvoice(true)}
-              >
-                <FileSpreadsheet className="size-5" />
-                Create Invoice
-              </AppButton>
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="Transaction List"
+            desc="View and monitor all payment records in one place."
+            icon={CreditCard}
+          >
+            <AppButton variant="tertiary" onClick={() => setIsOpenCreateInvoice(true)}>
+              <FileSpreadsheet className="size-5" />
+              Create Invoice
+            </AppButton>
+          </PageHeaderCMS>
           <div className="stats-list grid grid-cols-5 gap-3">
             <ScorecardItemCMS
               scorecardName="Total Revenue"

@@ -1,13 +1,13 @@
 ﻿"use client";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { useClipboard } from "@/lib/use-clipboard";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import {
-  ChevronRight,
   Copy,
   ExternalLink,
   FilePenLine,
+  Newspaper,
   PlusCircle,
   Search,
 } from "lucide-react";
@@ -18,8 +18,6 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
@@ -81,26 +79,20 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
     <React.Fragment>
       <PageContainerCMS>
         <div className="web-marketing-tools w-full flex flex-col gap-4">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>SEO Articles</AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="SEO Articles"
-                pageDesc="SEO content management hub to create, optimize, and drive organic traffic."
-              />
-              {allowedRolesMutateArticle.includes(props.sessionUserRole) && (
-                <Link href="/articles/create">
-                  <AppButton variant="tertiary">
-                    <PlusCircle className="size-5" />
-                    Create Article
-                  </AppButton>
-                </Link>
-              )}
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="SEO Articles"
+            desc="SEO content management hub to create, optimize, and drive organic traffic."
+            icon={Newspaper}
+          >
+            {allowedRolesMutateArticle.includes(props.sessionUserRole) && (
+              <Link href="/articles/create">
+                <AppButton variant="tertiary">
+                  <PlusCircle className="size-5" />
+                  Create Article
+                </AppButton>
+              </Link>
+            )}
+          </PageHeaderCMS>
           <div className="filter-search flex w-full items-center">
             <div className="max-w-96 w-full">
               <AppInput variant="CMS"

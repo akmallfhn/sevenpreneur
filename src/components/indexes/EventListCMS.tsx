@@ -1,12 +1,12 @@
 "use client";
 import AppButton from "@/components/buttons/AppButton";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
-  ChevronRight,
+  CalendarDays,
   EllipsisVertical,
   PlusCircle,
   Settings2,
@@ -21,8 +21,6 @@ import CreateEventFormCMS from "../forms/CreateEventFormCMS";
 import EditEventFormCMS from "../forms/EditEventFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -136,25 +134,16 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
     <React.Fragment>
       <PageContainerCMS>
         <div className="index w-full flex flex-col gap-4">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>Events</AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="Event List"
-                pageDesc="Manage event listings, details, and maintain content efficiently"
-              />
-              <AppButton
-                variant="tertiary"
-                onClick={() => setIsOpenCreateForm(true)}
-              >
-                <PlusCircle className="size-5" />
-                Create Event
-              </AppButton>
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="Event List"
+            desc="Manage event listings, details, and maintain content efficiently"
+            icon={CalendarDays}
+          >
+            <AppButton variant="tertiary" onClick={() => setIsOpenCreateForm(true)}>
+              <PlusCircle className="size-5" />
+              Create Event
+            </AppButton>
+          </PageHeaderCMS>
 
           {isLoading && <AppLoadingComponents />}
           {isError && <AppErrorComponents />}

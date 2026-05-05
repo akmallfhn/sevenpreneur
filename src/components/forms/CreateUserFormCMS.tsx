@@ -3,7 +3,7 @@ import AppButton from "@/components/buttons/AppButton";
 import AppInput from "@/components/fields/AppInput";
 import AppSelect from "@/components/fields/AppSelect";
 import StatusLabelCMS from "@/components/labels/StatusLabelCMS";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { Switch } from "@/components/ui/switch";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -11,12 +11,12 @@ import {
   AtSign,
   Building2,
   CalendarRange,
-  ChevronRight,
   Flag,
   KeyRound,
   Loader2,
   Save,
   User2,
+  UserPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,8 +25,6 @@ import { toast } from "sonner";
 import AppNumberInputSVP from "../fields/AppNumberInput";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface CreateUserFormProps {
@@ -206,45 +204,27 @@ export default function CreateUserForm(props: CreateUserFormProps) {
         className="container w-full flex flex-col gap-4"
         onSubmit={handleSubmit}
       >
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users/create" isCurrentPage>
-              Create
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Add New User"
-              pageDesc="Fill out the form to add a new user to the system, including basic profile information."
-            />
-            <div className="page-actions flex items-center gap-4">
-              <Link href="/users">
-                <AppButton
-                  onClick={() => router.back()}
-                  variant="light"
-                  type="button"
-                >
-                  Cancel
-                </AppButton>
-              </Link>
-              <AppButton
-                variant="tertiary"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <Loader2 className="animate-spin size-5" />
-                ) : (
-                  <Save className="size-5" />
-                )}
-                Create Account
+        <PageHeaderCMS
+          name="Add New User"
+          desc="Fill out the form to add a new user to the system, including basic profile information."
+          icon={UserPlus}
+        >
+          <div className="page-actions flex items-center gap-4">
+            <Link href="/users">
+              <AppButton onClick={() => router.back()} variant="light" type="button">
+                Cancel
               </AppButton>
-            </div>
+            </Link>
+            <AppButton variant="tertiary" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Loader2 className="animate-spin size-5" />
+              ) : (
+                <Save className="size-5" />
+              )}
+              Create Account
+            </AppButton>
           </div>
-        </div>
+        </PageHeaderCMS>
 
         {isLoading && <AppLoadingComponents />}
         {isError && (

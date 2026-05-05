@@ -4,7 +4,7 @@ import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { ChevronRight, Eye, Star } from "lucide-react";
+import { BarChart3, Eye, Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
@@ -12,8 +12,6 @@ import AppButton from "../buttons/AppButton";
 import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -22,7 +20,7 @@ import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
 import TableHeaderCMS from "../tables/TableHeaderCMS";
 import TableRowCMS from "../tables/TableRowCMS";
-import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
+import PageHeaderCMS from "../titles/PageHeaderCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -72,24 +70,11 @@ export default function CohortMembersPerformanceCMS(
     <React.Fragment>
       <PageContainerCMS>
         <div className="container w-full flex flex-col gap-5">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
-                Details
-              </AppBreadcrumbItem>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>Performance</AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="Student Performance Tracker"
-                pageDesc="Track student attendance, assignment progress, and overall learning performance"
-              />
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="Student Performance Tracker"
+            desc="Track student attendance, assignment progress, and overall learning performance"
+            icon={BarChart3}
+          />
 
           {isLoading && <AppLoadingComponents />}
           {isError && <AppErrorComponents />}

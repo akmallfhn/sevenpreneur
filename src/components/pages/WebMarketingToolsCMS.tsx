@@ -1,16 +1,14 @@
 "use client";
 import AppButton from "@/components/buttons/AppButton";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { ChevronRight, Pen } from "lucide-react";
+import { Megaphone, Pen } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import EditInterstitialAdsFormCMS from "../forms/EditInterstitialAdsFormCMS";
 import EditTickerMarketingFormCMS from "../forms/EditTickerMarketingFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import PageContainerCMS from "./PageContainerCMS";
@@ -53,18 +51,11 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
     <React.Fragment>
       <PageContainerCMS>
         <div className="web-marketing-tools max-w-[calc(100%-4rem)] w-full flex flex-col gap-4">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>Web Marketing</AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="Web Marketing"
-                pageDesc="Centralized tools to manage internal marketing channels"
-              />
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="Web Marketing"
+            desc="Centralized tools to manage internal marketing channels"
+            icon={Megaphone}
+          />
 
           {/* Loading & Error State */}
           {isLoading && <AppLoadingComponents />}

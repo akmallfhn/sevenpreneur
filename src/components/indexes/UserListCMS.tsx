@@ -1,18 +1,18 @@
 ﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { RolesUser, StatusType } from "@/lib/app-types";
 import { toCamelCase } from "@/lib/convert-case";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import {
-  ChevronRight,
   EllipsisVertical,
   Eye,
   PlusCircle,
   Search,
   Settings2,
   Trash2,
+  Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,8 +25,6 @@ import AppInput from "../fields/AppInput";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
@@ -148,28 +146,20 @@ export default function UserListCMS(props: UserListCMSProps) {
   return (
     <PageContainerCMS>
       <div className="index w-full flex flex-col gap-4">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users" isCurrentPage>
-              Users
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="User List"
-              pageDesc="View and manage all registered users in one place, with quick access to actions like edit or delete."
-            />
-            {isAllowedMutateUser && (
-              <Link href={"/users/create"} className="w-fit h-fit">
-                <AppButton variant="tertiary">
-                  <PlusCircle className="size-5" />
-                  Add Account
-                </AppButton>
-              </Link>
-            )}
-          </div>
-        </div>
+        <PageHeaderCMS
+          name="User List"
+          desc="View and manage all registered users in one place, with quick access to actions like edit or delete."
+          icon={Users}
+        >
+          {isAllowedMutateUser && (
+            <Link href={"/users/create"} className="w-fit h-fit">
+              <AppButton variant="tertiary">
+                <PlusCircle className="size-5" />
+                Add Account
+              </AppButton>
+            </Link>
+          )}
+        </PageHeaderCMS>
         <div className="filter-search flex w-full items-center">
           <div className="max-w-96 w-full">
             <AppInput variant="CMS"

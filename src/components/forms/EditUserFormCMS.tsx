@@ -3,19 +3,19 @@ import AppButton from "@/components/buttons/AppButton";
 import AppInput from "@/components/fields/AppInput";
 import AppSelect from "@/components/fields/AppSelect";
 import StatusLabelCMS from "@/components/labels/StatusLabelCMS";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { Switch } from "@/components/ui/switch";
 import { trpc } from "@/trpc/client";
 import {
   AtSign,
   Building2,
   CalendarRange,
-  ChevronRight,
   Flag,
   KeyRound,
   Loader2,
   Save,
   User2,
+  UserCog,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,8 +24,6 @@ import { toast } from "sonner";
 import AppNumberInputSVP from "../fields/AppNumberInput";
 import UploadAvatarUserCMS from "../fields/UploadAvatarUserCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EditUserFormProps {
@@ -217,49 +215,27 @@ export default function EditUserForm({
         className="container w-full flex flex-col gap-4"
         onSubmit={handleSubmit}
       >
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href={`/users/${userId}`}>
-              Profile
-            </AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href={`/users/${userId}/edit`} isCurrentPage>
-              Edit
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Edit User"
-              pageDesc="Update user details, adjust roles or permissions, and manage account status easily."
-            />
-            <div className="page-actions flex items-center gap-4">
-              <Link href={"/users"}>
-                <AppButton
-                  onClick={() => router.back()}
-                  variant="light"
-                  type="button"
-                >
-                  Cancel
-                </AppButton>
-              </Link>
-              <AppButton
-                variant="tertiary"
-                type="submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <Loader2 className="animate-spin size-5" />
-                ) : (
-                  <Save className="size-5" />
-                )}
-                Save Changes
+        <PageHeaderCMS
+          name="Edit User"
+          desc="Update user details, adjust roles or permissions, and manage account status easily."
+          icon={UserCog}
+        >
+          <div className="page-actions flex items-center gap-4">
+            <Link href={"/users"}>
+              <AppButton onClick={() => router.back()} variant="light" type="button">
+                Cancel
               </AppButton>
-            </div>
+            </Link>
+            <AppButton variant="tertiary" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Loader2 className="animate-spin size-5" />
+              ) : (
+                <Save className="size-5" />
+              )}
+              Save Changes
+            </AppButton>
           </div>
-        </div>
+        </PageHeaderCMS>
 
         {isLoading && <AppLoadingComponents />}
         {isError && (

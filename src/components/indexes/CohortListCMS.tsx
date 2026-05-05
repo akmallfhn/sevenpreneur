@@ -2,14 +2,12 @@
 import AppButton from "@/components/buttons/AppButton";
 import CreateCohortFormCMS from "@/components/forms/CreateCohortFormCMS";
 import CohortItemCardCMS from "@/components/items/CohortItemCardCMS";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { ChevronRight, PlusCircle } from "lucide-react";
+import { GraduationCap, PlusCircle } from "lucide-react";
 import React, { useState } from "react";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -40,27 +38,18 @@ export default function CohortListCMS({
     <React.Fragment>
       <PageContainerCMS>
         <div className="index w-full flex flex-col gap-4">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>Cohorts</AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="Cohort Programs"
-                pageDesc="View and manage all your existing cohort programs in one place"
-              />
-              {allowedRolesCreateCohort.includes(sessionUserRole) && (
-                <AppButton
-                  onClick={() => setCreateCohort(true)}
-                  variant="tertiary"
-                >
-                  <PlusCircle className="size-5" />
-                  Create Cohort
-                </AppButton>
-              )}
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="Cohort Programs"
+            desc="View and manage all your existing cohort programs in one place"
+            icon={GraduationCap}
+          >
+            {allowedRolesCreateCohort.includes(sessionUserRole) && (
+              <AppButton onClick={() => setCreateCohort(true)} variant="tertiary">
+                <PlusCircle className="size-5" />
+                Create Cohort
+              </AppButton>
+            )}
+          </PageHeaderCMS>
 
           {isLoading && <AppLoadingComponents />}
           {isError && <AppErrorComponents />}

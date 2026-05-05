@@ -2,18 +2,16 @@
 import { LeadStatus } from "@/lib/app-types";
 import { supabase } from "@/lib/supabase";
 import { trpc } from "@/trpc/client";
-import { ChevronRight } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import WhatsappLeadDetailsCMS from "../elements/WhatsappLeadDetailsCMS";
 import WhatsappConvItemCMS from "../items/WhatsappConvItemCMS";
 import WhatsappChatsCMS from "../messages/WhatsappChatsCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
-import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
+import PageHeaderCMS from "../titles/PageHeaderCMS";
 
 interface WhatsappConvsCMSProps {
   sessionToken: string;
@@ -95,17 +93,7 @@ export default function WhatsappConvsCMS(props: WhatsappConvsCMSProps) {
   return (
     <PageContainerCMS className="h-screen">
       <div className="page-wrapper flex flex-col w-full h-full gap-4">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users" isCurrentPage>
-              Whatsapp Chats
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS pageTitle="Whatsapp Chats" />
-          </div>
-        </div>
+        <PageHeaderCMS name="Whatsapp Chats" icon={MessageCircle} />
         <div className="conv-details flex flex-1 w-full min-h-0">
           <div className="convs-panels flex flex-col flex-1 min-h-0 shrink-0 border rounded-l-lg overflow-y-auto">
             <div className="column-title sticky inset-0 top-0 p-3 bg-white font-bodycopy font-bold border-b z-30">

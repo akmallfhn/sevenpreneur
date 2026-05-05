@@ -10,7 +10,6 @@ import {
   AtSign,
   BriefcaseBusiness,
   Building2,
-  ChevronRight,
   CircleStar,
   Copy,
   Flag,
@@ -32,11 +31,9 @@ import AppSelect from "../fields/AppSelect";
 import AppTextArea from "../fields/AppTextArea";
 import UserTransactionItemCMS from "../items/UserTransactionItemCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
-import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
+import PageHeaderCMS from "../titles/PageHeaderCMS";
 import PageContainerCMS from "./PageContainerCMS";
 
 dayjs.extend(localizedFormat);
@@ -97,26 +94,18 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
   return (
     <PageContainerCMS>
       <div className="page-container w-full flex flex-col gap-4">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/users">Users</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>Profile</AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Details Profile"
-              pageDesc="View detailed user information, activity logs, and account status in a read-only profile view."
-            />
-            <Link href={`/users/${props.userId}/edit`} className="w-fit h-fit">
-              <AppButton variant="tertiary">
-                <Settings2 className="size-5" />
-                Edit Profile
-              </AppButton>
-            </Link>
-          </div>
-        </div>
+        <PageHeaderCMS
+          name="Details Profile"
+          desc="View detailed user information, activity logs, and account status in a read-only profile view."
+          icon={User2}
+        >
+          <Link href={`/users/${props.userId}/edit`} className="w-fit h-fit">
+            <AppButton variant="tertiary">
+              <Settings2 className="size-5" />
+              Edit Profile
+            </AppButton>
+          </Link>
+        </PageHeaderCMS>
 
         {isLoading && <AppLoadingComponents />}
         {isError && <AppErrorComponents />}

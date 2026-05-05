@@ -1,10 +1,10 @@
 ﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { ArticleStatus } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
-  ChevronRight,
+  FilePlus,
   ListMinus,
   Loader2,
   PlusCircle,
@@ -21,8 +21,6 @@ import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
 export interface BodyContentArticle {
@@ -321,46 +319,36 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
   return (
     <PageContainerCMS>
       <form className="container w-full flex flex-col gap-4">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/articles">Articles</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>Create</AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Create SEO Article"
-              pageDesc="Write and manage a new SEO article by optimizing keywords, metadata, and structure"
-            />
-            <div className="page-actions flex items-center gap-4">
-              <AppButton
-                onClick={(e) => handleSubmit(e, "DRAFT")}
-                type="submit"
-                variant="light"
-                disabled={isSubmittingDraft}
-              >
-                {isSubmittingDraft && (
-                  <Loader2 className="animate-spin size-5" />
-                )}
-                Save as Draft
-              </AppButton>
-              <AppButton
-                onClick={(e) => handleSubmit(e, "PUBLISHED")}
-                variant="tertiary"
-                type="submit"
-                disabled={isSubmittingPublished}
-              >
-                {isSubmittingPublished ? (
-                  <Loader2 className="animate-spin size-5" />
-                ) : (
-                  <Send className="size-5" />
-                )}
-                Publish
-              </AppButton>
-            </div>
+        <PageHeaderCMS
+          name="Create SEO Article"
+          desc="Write and manage a new SEO article by optimizing keywords, metadata, and structure"
+          icon={FilePlus}
+        >
+          <div className="page-actions flex items-center gap-4">
+            <AppButton
+              onClick={(e) => handleSubmit(e, "DRAFT")}
+              type="submit"
+              variant="light"
+              disabled={isSubmittingDraft}
+            >
+              {isSubmittingDraft && <Loader2 className="animate-spin size-5" />}
+              Save as Draft
+            </AppButton>
+            <AppButton
+              onClick={(e) => handleSubmit(e, "PUBLISHED")}
+              variant="tertiary"
+              type="submit"
+              disabled={isSubmittingPublished}
+            >
+              {isSubmittingPublished ? (
+                <Loader2 className="animate-spin size-5" />
+              ) : (
+                <Send className="size-5" />
+              )}
+              Publish
+            </AppButton>
           </div>
-        </div>
+        </PageHeaderCMS>
 
         {isLoading && <AppLoadingComponents />}
         {isError && (

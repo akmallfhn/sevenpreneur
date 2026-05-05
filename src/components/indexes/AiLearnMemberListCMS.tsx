@@ -3,8 +3,6 @@ import AppButton from "@/components/buttons/AppButton";
 import AppSelect from "@/components/fields/AppSelect";
 import AppInput from "@/components/fields/AppInput";
 import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
-import AppBreadcrumb from "@/components/navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "@/components/navigations/AppBreadcrumbItem";
 import PageContainerCMS from "@/components/pages/PageContainerCMS";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
@@ -13,13 +11,13 @@ import TableCellCMS from "@/components/tables/TableCellCMS";
 import TableHeadCMS from "@/components/tables/TableHeadCMS";
 import TableHeaderCMS from "@/components/tables/TableHeaderCMS";
 import TableRowCMS from "@/components/tables/TableRowCMS";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { AiLearnRoleEnum } from "@prisma/client";
 import dayjs from "dayjs";
 import {
   BookOpen,
-  ChevronRight,
+  BrainCircuit,
   EllipsisVertical,
   Mail,
   PlusCircle,
@@ -165,25 +163,16 @@ export default function AiLearnMemberListCMS({
   return (
     <PageContainerCMS>
       <div className="index w-full flex flex-col gap-4">
-        {/* Header */}
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/ailene/members" isCurrentPage>
-              Ailene Members
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Ailene Members"
-              pageDesc="Kelola akses member Ailene AI Learn. Tambah user berdasarkan email dan atur role mereka."
-            />
-            <AppButton variant="tertiary" onClick={() => setIsAddOpen(true)}>
-              <PlusCircle className="size-5" />
-              Add Member
-            </AppButton>
-          </div>
-        </div>
+        <PageHeaderCMS
+          name="Ailene Members"
+          desc="Kelola akses member Ailene AI Learn. Tambah user berdasarkan email dan atur role mereka."
+          icon={BrainCircuit}
+        >
+          <AppButton variant="tertiary" onClick={() => setIsAddOpen(true)}>
+            <PlusCircle className="size-5" />
+            Add Member
+          </AppButton>
+        </PageHeaderCMS>
 
         {/* Loading & Error */}
         {isLoading && <AppLoadingComponents />}

@@ -1,11 +1,11 @@
 ﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
+import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
 import { ArticleStatus } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import {
-  ChevronRight,
+  FilePenLine,
   ListMinus,
   Loader2,
   PlusCircle,
@@ -22,8 +22,6 @@ import TextAreaRichEditorCMS from "../fields/TextAreaRichEditorCMS";
 import TextAreaTitleCMS from "../fields/TextAreaTitleCMS";
 import UploadImageCMS from "../fields/UploadImageCMS";
 import PageContainerCMS from "../pages/PageContainerCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
 export interface BodyContentArticle {
@@ -363,48 +361,38 @@ export default function EditArticleForm(props: EditArticleFormProps) {
   return (
     <PageContainerCMS>
       <form className="container w-full flex flex-col gap-4">
-        <div className="page-header flex flex-col gap-3">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/articles">Articles</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>Edit</AppBreadcrumbItem>
-          </AppBreadcrumb>
-          <div className="page-title-actions flex justify-between items-center">
-            <PageTitleSectionCMS
-              pageTitle="Edit SEO Article"
-              pageDesc="Improve search performance by updating keywords, metadata, and on-page structure"
-            />
-            <div className="page-actions flex items-center gap-4">
-              {initialData?.status === "DRAFT" && (
-                <AppButton
-                  onClick={(e) => handleSubmit(e, "DRAFT")}
-                  type="submit"
-                  variant="light"
-                  disabled={isSubmittingDraft}
-                >
-                  {isSubmittingDraft && (
-                    <Loader2 className="animate-spin size-5" />
-                  )}
-                  Save as Draft
-                </AppButton>
-              )}
+        <PageHeaderCMS
+          name="Edit SEO Article"
+          desc="Improve search performance by updating keywords, metadata, and on-page structure"
+          icon={FilePenLine}
+        >
+          <div className="page-actions flex items-center gap-4">
+            {initialData?.status === "DRAFT" && (
               <AppButton
-                onClick={(e) => handleSubmit(e, "PUBLISHED")}
-                variant="tertiary"
+                onClick={(e) => handleSubmit(e, "DRAFT")}
                 type="submit"
-                disabled={isSubmittingPublished}
+                variant="light"
+                disabled={isSubmittingDraft}
               >
-                {isSubmittingPublished ? (
-                  <Loader2 className="animate-spin size-5" />
-                ) : (
-                  <Save className="size-5" />
-                )}
-                Save Changes
+                {isSubmittingDraft && <Loader2 className="animate-spin size-5" />}
+                Save as Draft
               </AppButton>
-            </div>
+            )}
+            <AppButton
+              onClick={(e) => handleSubmit(e, "PUBLISHED")}
+              variant="tertiary"
+              type="submit"
+              disabled={isSubmittingPublished}
+            >
+              {isSubmittingPublished ? (
+                <Loader2 className="animate-spin size-5" />
+              ) : (
+                <Save className="size-5" />
+              )}
+              Save Changes
+            </AppButton>
           </div>
-        </div>
+        </PageHeaderCMS>
 
         {isLoading && <AppLoadingComponents />}
         {isError && (

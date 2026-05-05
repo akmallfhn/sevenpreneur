@@ -5,7 +5,7 @@ import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { ChevronRight, UserPlus, UserRoundMinus } from "lucide-react";
+import { UserCog, UserPlus, UserRoundMinus } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -14,8 +14,6 @@ import AddCohortMemberFormCMS from "../forms/AddCohortMemberFormCMS";
 import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import RolesLabelCMS from "../labels/RolesLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -24,7 +22,7 @@ import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
 import TableHeaderCMS from "../tables/TableHeaderCMS";
 import TableRowCMS from "../tables/TableRowCMS";
-import PageTitleSectionCMS from "../titles/PageTitleSectionCMS";
+import PageHeaderCMS from "../titles/PageHeaderCMS";
 
 dayjs.extend(localizedFormat);
 
@@ -78,33 +76,16 @@ export default function CohortMemberListCMS(props: CohortMemberListCMSProps) {
     <React.Fragment>
       <PageContainerCMS>
         <div className="container w-full flex flex-col gap-5">
-          <div className="page-header flex flex-col gap-3">
-            <AppBreadcrumb>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem href={`/cohorts/${props.cohortId}`}>
-                Details
-              </AppBreadcrumbItem>
-              <ChevronRight className="size-3.5" />
-              <AppBreadcrumbItem isCurrentPage>
-                Manage Members
-              </AppBreadcrumbItem>
-            </AppBreadcrumb>
-            <div className="page-title-actions flex justify-between items-center">
-              <PageTitleSectionCMS
-                pageTitle="Manage Members"
-                pageDesc="Invite fast. Revoke smarter. Stay in control."
-              />
-              <AppButton
-                variant="tertiary"
-                onClick={() => setIsOpenInvitationForm(true)}
-              >
-                <UserPlus className="size-5" />
-                Add Members
-              </AppButton>
-            </div>
-          </div>
+          <PageHeaderCMS
+            name="Manage Members"
+            desc="Invite fast. Revoke smarter. Stay in control."
+            icon={UserCog}
+          >
+            <AppButton variant="tertiary" onClick={() => setIsOpenInvitationForm(true)}>
+              <UserPlus className="size-5" />
+              Add Members
+            </AppButton>
+          </PageHeaderCMS>
 
           <div className="members-stats grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
             <ScorecardItemCMS
