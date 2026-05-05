@@ -91,7 +91,7 @@ export default function UseCasesLab({ sessionToken }: UseCasesLabProps) {
 
   const useCases = data?.list ?? [];
 
-  const handleSubmit = async (e: FormEvent, status: LabUseCaseStatus) => {
+  const handleSubmit = async (e: FormEvent, status: "DRAFT" | "SUBMITTED") => {
     e.preventDefault();
     if (!form.title) return toast.error("Title is required");
     if (!form.competency_area) return toast.error("AI area is required");
@@ -119,7 +119,7 @@ export default function UseCasesLab({ sessionToken }: UseCasesLabProps) {
     );
   };
 
-  const handleReview = async (id: number, status: LabUseCaseStatus.REVIEWED | LabUseCaseStatus.APPROVED) => {
+  const handleReview = async (id: number, status: "REVIEWED" | "APPROVED") => {
     setIsReviewing(true);
     reviewUseCase.mutate(
       { id, status, champion_note: reviewNote.trim() || undefined },
@@ -287,7 +287,7 @@ export default function UseCasesLab({ sessionToken }: UseCasesLabProps) {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {isStudent && uc.status === LabUseCaseStatus.DRAFT && (
-                      <AppButton size="smallIcon" variant="destructive" type="button" onClick={() => handleDelete(uc.id)}>
+                      <AppButton size="icon" variant="destructive" type="button" onClick={() => handleDelete(uc.id)}>
                         <Trash2 className="size-3.5" />
                       </AppButton>
                     )}

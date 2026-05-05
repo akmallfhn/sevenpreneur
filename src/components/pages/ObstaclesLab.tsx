@@ -164,7 +164,7 @@ export default function ObstaclesLab({ sessionToken }: ObstaclesLabProps) {
                           </AppButton>
                         )}
                         {isStudent && (
-                          <AppButton size="smallIcon" variant="destructive" type="button" onClick={() => handleDelete(o.id)}>
+                          <AppButton size="icon" variant="destructive" type="button" onClick={() => handleDelete(o.id)}>
                             <Trash2 className="size-3.5" />
                           </AppButton>
                         )}
