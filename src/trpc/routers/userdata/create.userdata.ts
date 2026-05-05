@@ -1,4 +1,11 @@
 import {
+  LegalEntityEnum,
+  NumEmployeeEnum,
+  OccupationEnum,
+  RevenueEnum,
+  StatusEnum,
+} from "@/generated/prisma/client";
+import {
   STATUS_CREATED,
   STATUS_INTERNAL_SERVER_ERROR,
 } from "@/lib/status_code";
@@ -9,13 +16,6 @@ import {
   numberIsRoleID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import {
-  LegalEntityEnum,
-  NumEmployeeEnum,
-  OccupationEnum,
-  RevenueEnum,
-  StatusEnum,
-} from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 

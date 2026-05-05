@@ -1,5 +1,5 @@
+import { WAAssetType } from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
-import { WAAssetType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 

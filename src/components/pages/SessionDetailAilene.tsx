@@ -2,12 +2,12 @@
 import AppButton from "@/components/buttons/AppButton";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { SessionMethod } from "@/lib/app-types";
 import {
   getConferenceAttributes,
   getConferenceVariantFromURL,
 } from "@/lib/conference-variant";
 import { trpc } from "@/trpc/client";
-import { LearningMethodEnum } from "@prisma/client";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 import {
@@ -27,18 +27,17 @@ dayjs.locale("id");
 const DEFAULT_AVATAR =
   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png";
 
-const METHOD_BADGE: Record<LearningMethodEnum, { label: string; cls: string }> =
-  {
-    ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
-    ONSITE: {
-      label: "Onsite",
-      cls: "bg-success-background text-success-foreground",
-    },
-    HYBRID: {
-      label: "Hybrid",
-      cls: "bg-warning-background text-warning-foreground",
-    },
-  };
+const METHOD_BADGE: Record<SessionMethod, { label: string; cls: string }> = {
+  ONLINE: { label: "Online", cls: "bg-primary/10 text-primary" },
+  ONSITE: {
+    label: "Onsite",
+    cls: "bg-success-background text-success-foreground",
+  },
+  HYBRID: {
+    label: "Hybrid",
+    cls: "bg-warning-background text-warning-foreground",
+  },
+};
 
 function getVideoEmbed(
   url: string
@@ -116,15 +115,17 @@ export default function SessionDetailAilene({
 
   const locationDisplay = useMemo(() => {
     if (!session) return "";
-    if (session.method === LearningMethodEnum.ONLINE) return conferenceName;
-    if (session.method === LearningMethodEnum.ONSITE)
+    if (session.method === SessionMethod.ONLINE) return conferenceName;
+    if (session.method === SessionMethod.ONSITE)
       return session.location_name ?? "";
     return "Hybrid Meeting";
   }, [session, conferenceName]);
 
   return (
     <div
-      className={`root hidden w-full min-h-screen overflow-y-auto lg:flex lg:flex-col pb-10 ${isCollapsed ? "pl-16" : "pl-64"}`}
+      className={`root hidden w-full min-h-screen overflow-y-auto lg:flex lg:flex-col pb-10 ${
+        isCollapsed ? "pl-16" : "pl-64"
+      }`}
     >
       {/* Back nav */}
       <div className="sticky top-0 z-30 bg-dashboard-bg border-b border-dashboard-border px-8 py-3 flex items-center">
@@ -160,7 +161,7 @@ export default function SessionDetailAilene({
 
             {/* Session info overlay */}
             <div className="absolute inset-y-0 left-8 flex items-center gap-4 z-10">
-              {session.method !== LearningMethodEnum.ONSITE &&
+              {session.method !== SessionMethod.ONSITE &&
                 session.meeting_url && (
                   <div className="size-[50px] bg-white p-1 border shrink-0 rounded-lg overflow-hidden">
                     <Image
@@ -187,7 +188,7 @@ export default function SessionDetailAilene({
 
             {/* Action button on hero */}
             <div className="absolute inset-y-0 right-8 flex items-center z-10">
-              {session.method !== LearningMethodEnum.ONSITE &&
+              {session.method !== SessionMethod.ONSITE &&
                 session.meeting_url &&
                 isUpcoming && (
                   <a
@@ -205,7 +206,7 @@ export default function SessionDetailAilene({
                     </AppButton>
                   </a>
                 )}
-              {session.method === LearningMethodEnum.ONSITE &&
+              {session.method === SessionMethod.ONSITE &&
                 session.location_url && (
                   <a
                     href={session.location_url}
@@ -309,7 +310,9 @@ export default function SessionDetailAilene({
                       Metode
                     </span>
                     <span
-                      className={`text-[11px] font-semibold font-bodycopy px-2.5 py-0.5 rounded-full ${METHOD_BADGE[session.method].cls}`}
+                      className={`text-[11px] font-semibold font-bodycopy px-2.5 py-0.5 rounded-full ${
+                        METHOD_BADGE[session.method].cls
+                      }`}
                     >
                       {METHOD_BADGE[session.method].label}
                     </span>
@@ -351,7 +354,11 @@ export default function SessionDetailAilene({
                       Status
                     </span>
                     <span
-                      className={`text-[11px] font-semibold font-bodycopy px-2.5 py-0.5 rounded-full ${isUpcoming ? "bg-tertiary/10 text-tertiary" : "bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke text-emphasis"}`}
+                      className={`text-[11px] font-semibold font-bodycopy px-2.5 py-0.5 rounded-full ${
+                        isUpcoming
+                          ? "bg-tertiary/10 text-tertiary"
+                          : "bg-sevenpreneur-ash dark:bg-sevenpreneur-smoke text-emphasis"
+                      }`}
                     >
                       {isUpcoming ? "Upcoming" : "Selesai"}
                     </span>

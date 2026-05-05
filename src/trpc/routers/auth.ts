@@ -1,3 +1,4 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -12,7 +13,6 @@ import {
 } from "@/trpc/init";
 import { GoogleTokenVerifier } from "@/trpc/utils/google_verifier";
 import { stringNotBlank } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { randomBytes } from "crypto";
 import jwt from "jsonwebtoken";
@@ -62,15 +62,17 @@ export const authRouter = createTRPCRouter({
         });
       } else {
         if (findUser.full_name === findUser.email) {
-          const updatedProfile = await opts.ctx.prisma.user.updateManyAndReturn({
-            data: {
-              full_name: userInfo.name,
-              avatar: userInfo.picture,
-            },
-            where: {
-              email: userInfo.email,
-            },
-          });
+          const updatedProfile = await opts.ctx.prisma.user.updateManyAndReturn(
+            {
+              data: {
+                full_name: userInfo.name,
+                avatar: userInfo.picture,
+              },
+              where: {
+                email: userInfo.email,
+              },
+            }
+          );
           if (updatedProfile.length > 1) {
             console.error(
               "auth.login: More-than-one users have its profile updated at once."

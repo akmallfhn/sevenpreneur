@@ -1,5 +1,5 @@
+import { WACType } from "@/generated/prisma/client";
 import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
-import { WACType } from "@prisma/client";
 
 export type { WhatsAppTypeAttachmentPairUnion };
 

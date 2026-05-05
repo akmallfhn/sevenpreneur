@@ -1,3 +1,9 @@
+import {
+  AiLearnLessonStatus,
+  AiLearnRoleEnum,
+  LearningMethodEnum,
+  StatusEnum,
+} from "@/generated/prisma/client";
 import { STATUS_CREATED } from "@/lib/status_code";
 import { administratorProcedure, aileneProcedure } from "@/trpc/init";
 import { createSlugFromTitle } from "@/trpc/utils/slug";
@@ -7,7 +13,6 @@ import {
   numberIsPosInt,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus, AiLearnRoleEnum, LearningMethodEnum, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
@@ -156,10 +161,14 @@ export const createAilene = {
       const user_id = opts.ctx.user.id;
       const PASS_THRESHOLD = 70;
 
-      const member = await opts.ctx.prisma.aiLearnMember.findUnique({ where: { user_id } });
+      const member = await opts.ctx.prisma.aiLearnMember.findUnique({
+        where: { user_id },
+      });
       if (!member) throw new Error("Not an Ailene member");
 
-      const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({ where: { id: lesson_id } });
+      const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({
+        where: { id: lesson_id },
+      });
       if (!lesson) throw new Error("Lesson not found");
 
       const existing = await opts.ctx.prisma.aiLearnUserProgress.findUnique({
@@ -172,10 +181,29 @@ export const createAilene = {
 
       await opts.ctx.prisma.aiLearnUserProgress.upsert({
         where: { member_id_lesson_id: { member_id: member.id, lesson_id } },
-        create: { member_id: member.id, lesson_id, score, xp_earned: xpToAward, completed_at: new Date(), answers },
-        update: { score, xp_earned: xpToAward, completed_at: new Date(), answers, submitted_at: new Date() },
+        create: {
+          member_id: member.id,
+          lesson_id,
+          score,
+          xp_earned: xpToAward,
+          completed_at: new Date(),
+          answers,
+        },
+        update: {
+          score,
+          xp_earned: xpToAward,
+          completed_at: new Date(),
+          answers,
+          submitted_at: new Date(),
+        },
       });
 
-      return { code: STATUS_CREATED, message: "Success", passed, xp_awarded: xpToAward, score };
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        passed,
+        xp_awarded: xpToAward,
+        score,
+      };
     }),
 };

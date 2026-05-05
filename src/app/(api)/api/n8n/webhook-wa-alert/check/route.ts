@@ -1,5 +1,5 @@
+import { WAAStatus } from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
-import { WAAStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

@@ -1,3 +1,4 @@
+import { WAAssetType, WALeadStatus } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
@@ -9,7 +10,6 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { WAAssetType, WALeadStatus } from "@prisma/client";
 import z from "zod";
 
 export const updateWA = {

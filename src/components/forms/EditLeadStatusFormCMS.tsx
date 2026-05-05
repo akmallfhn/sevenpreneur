@@ -1,6 +1,6 @@
 ﻿"use client";
+import { LeadStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { WALeadStatus } from "@prisma/client";
 import { Loader2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -52,10 +52,10 @@ export default function EditLeadStatusFormCMS(
   // Form data
   const [formData, setFormData] = useState<{
     handler_id: string | null;
-    lead_status: WALeadStatus | null;
+    lead_status: LeadStatus | null;
   }>({
     handler_id: conversation?.handler_id ?? null,
-    lead_status: (conversation?.lead_status as WALeadStatus) ?? null,
+    lead_status: (conversation?.lead_status as LeadStatus) ?? null,
   });
 
   // Sync formData when conversation data loads or convId changes
@@ -64,7 +64,7 @@ export default function EditLeadStatusFormCMS(
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
         handler_id: conversation.handler_id ?? null,
-        lead_status: (conversation.lead_status as WALeadStatus) ?? null,
+        lead_status: (conversation.lead_status as LeadStatus) ?? null,
       });
     }
   }, [conversation]);
@@ -132,7 +132,8 @@ export default function EditLeadStatusFormCMS(
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              <AppSelect variant="CMS"
+              <AppSelect
+                variant="CMS"
                 selectId="handler-select"
                 selectName="Handled By"
                 selectPlaceholder="Select handler"
@@ -140,7 +141,8 @@ export default function EditLeadStatusFormCMS(
                 options={handlerOptions}
                 onChange={handleInputChange("handler_id")}
               />
-              <AppSelect variant="CMS"
+              <AppSelect
+                variant="CMS"
                 selectId="lead-status-select"
                 selectName="Lead Status"
                 selectPlaceholder="Select lead status"

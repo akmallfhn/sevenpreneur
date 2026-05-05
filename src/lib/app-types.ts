@@ -1,7 +1,11 @@
 // General type
 export type ProductCategory = "COHORT" | "PLAYLIST" | "AI" | "EVENT";
 export type TransactionStatus = "PAID" | "PENDING" | "FAILED";
-export type StatusType = "ACTIVE" | "INACTIVE";
+export const StatusType = {
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+} as const;
+export type StatusType = (typeof StatusType)[keyof typeof StatusType];
 export type NumberConfig = "numeric" | "decimal" | "phone_number";
 export type PlatformType = "SVP" | "CMS" | "LMS" | "AILENE";
 export type SocialMediaVariant =
@@ -12,7 +16,12 @@ export type SocialMediaVariant =
   | "whatsapp";
 
 // LMS related
-export type SessionMethod = "ONLINE" | "ONSITE" | "HYBRID";
+export const SessionMethod = {
+  ONLINE: "ONLINE",
+  ONSITE: "ONSITE",
+  HYBRID: "HYBRID",
+} as const;
+export type SessionMethod = (typeof SessionMethod)[keyof typeof SessionMethod];
 export type ScheduleStatus = "UPCOMING" | "ON GOING" | "FINISHED";
 export type SubmissionStatus = "SUBMITTED" | "NOT_SUBMITTED";
 export type ConferenceVariant = "GMEET" | "ZOOM" | "TEAMS" | "UNKNOWN";
@@ -113,3 +122,22 @@ export type WhatsappChatType =
 
 // Article related
 export type ArticleStatus = "DRAFT" | "PUBLISHED" | "UNPUBLISHED";
+
+// AI learn related
+export const AiLearnLessonStatus = {
+  DRAFT: "DRAFT",
+  PUBLISHED: "PUBLISHED",
+  ARCHIVED: "ARCHIVED",
+} as const;
+export type AiLearnLessonStatus =
+  (typeof AiLearnLessonStatus)[keyof typeof AiLearnLessonStatus];
+
+export const AiLearnRoleEnum = {
+  MARKETING: "MARKETING",
+  OPERATIONAL: "OPERATIONAL",
+  CEO: "CEO",
+  FINANCE: "FINANCE",
+  HR: "HR",
+} as const;
+export type AiLearnRoleEnum =
+  (typeof AiLearnRoleEnum)[keyof typeof AiLearnRoleEnum];

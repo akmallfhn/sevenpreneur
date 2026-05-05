@@ -1,7 +1,7 @@
 "use client";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { AiLearnLessonStatus } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { AiLearnLessonStatus } from "@prisma/client";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -64,7 +64,9 @@ export default function CreateLessonAilene() {
 
   return (
     <div
-      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}
+      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${
+        isCollapsed ? "pl-16" : "pl-64"
+      }`}
     >
       <div className="container max-w-3xl mx-auto w-full flex flex-col gap-6 px-8">
         <Link href="/admin/lessons">

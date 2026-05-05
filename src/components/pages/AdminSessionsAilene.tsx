@@ -4,25 +4,25 @@ import AppInput from "@/components/fields/AppInput";
 import AppSelect from "@/components/fields/AppSelect";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { SessionMethod, StatusType } from "@/lib/app-types";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import dayjs from "dayjs";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const METHOD_OPTIONS = [
-  { label: "Online", value: LearningMethodEnum.ONLINE },
-  { label: "Onsite", value: LearningMethodEnum.ONSITE },
-  { label: "Hybrid", value: LearningMethodEnum.HYBRID },
+  { label: "Online", value: SessionMethod.ONLINE },
+  { label: "Onsite", value: SessionMethod.ONSITE },
+  { label: "Hybrid", value: SessionMethod.HYBRID },
 ];
 
 const STATUS_OPTIONS = [
-  { label: "Active", value: StatusEnum.ACTIVE },
-  { label: "Inactive", value: StatusEnum.INACTIVE },
+  { label: "Active", value: StatusType.ACTIVE },
+  { label: "Inactive", value: StatusType.INACTIVE },
 ];
 
-const METHOD_BADGE: Record<LearningMethodEnum, string> = {
+const METHOD_BADGE: Record<SessionMethod, string> = {
   ONLINE: "bg-primary/10 text-primary",
   ONSITE: "bg-success-background text-success-foreground",
   HYBRID: "bg-warning-background text-warning-foreground",
@@ -31,7 +31,7 @@ const METHOD_BADGE: Record<LearningMethodEnum, string> = {
 const EMPTY_FORM = {
   name: "",
   description: "",
-  method: LearningMethodEnum.ONLINE as string | number | null,
+  method: SessionMethod.ONLINE as string | number | null,
   meeting_date: "",
   meeting_url: "",
   location_name: "",
@@ -39,7 +39,7 @@ const EMPTY_FORM = {
   recording_url: "",
   external_video_id: "",
   feedback_form: "",
-  status: StatusEnum.ACTIVE as string | number | null,
+  status: StatusType.ACTIVE as string | number | null,
 };
 
 interface AdminSessionsAileneProps {
@@ -132,7 +132,7 @@ export default function AdminSessionsAilene({
         id: editingId,
         name: form.name,
         description: form.description,
-        method: form.method as LearningMethodEnum,
+        method: form.method as SessionMethod,
         meeting_date: meetingDateISO,
         meeting_url: form.meeting_url || undefined,
         location_name: form.location_name || undefined,
@@ -140,13 +140,13 @@ export default function AdminSessionsAilene({
         recording_url: form.recording_url || undefined,
         external_video_id: form.external_video_id || undefined,
         feedback_form: form.feedback_form || undefined,
-        status: form.status as StatusEnum,
+        status: form.status as StatusType,
       });
     } else {
       createMutation.mutate({
         name: form.name,
         description: form.description,
-        method: form.method as LearningMethodEnum,
+        method: form.method as SessionMethod,
         meeting_date: meetingDateISO,
         meeting_url: form.meeting_url || undefined,
         location_name: form.location_name || undefined,
@@ -154,7 +154,7 @@ export default function AdminSessionsAilene({
         recording_url: form.recording_url || undefined,
         external_video_id: form.external_video_id || undefined,
         feedback_form: form.feedback_form || undefined,
-        status: form.status as StatusEnum,
+        status: form.status as StatusType,
       });
     }
   };
@@ -168,7 +168,9 @@ export default function AdminSessionsAilene({
 
   return (
     <div
-      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${isCollapsed ? "pl-16" : "pl-64"}`}
+      className={`root hidden w-full min-h-screen py-8 overflow-y-auto lg:flex lg:flex-col ${
+        isCollapsed ? "pl-16" : "pl-64"
+      }`}
     >
       <div className="container max-w-[calc(100%-4rem)] mx-auto w-full flex flex-col gap-6">
         {/* Header */}
@@ -208,11 +210,13 @@ export default function AdminSessionsAilene({
                       {session.name}
                     </span>
                     <span
-                      className={`shrink-0 text-[11px] font-semibold font-bodycopy px-2 py-0.5 rounded-full capitalize ${METHOD_BADGE[session.method]}`}
+                      className={`shrink-0 text-[11px] font-semibold font-bodycopy px-2 py-0.5 rounded-full capitalize ${
+                        METHOD_BADGE[session.method]
+                      }`}
                     >
                       {session.method.toLowerCase()}
                     </span>
-                    {session.status === StatusEnum.INACTIVE && (
+                    {session.status === StatusType.INACTIVE && (
                       <span className="shrink-0 text-[11px] font-semibold font-bodycopy px-2 py-0.5 rounded-full bg-sevenpreneur-ash text-emphasis">
                         Inactive
                       </span>
@@ -281,7 +285,8 @@ export default function AdminSessionsAilene({
 
             {/* Modal body */}
             <div className="flex flex-col gap-4 px-6 py-5">
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="session-name"
                 inputName="Nama Session"
                 inputType="text"
@@ -290,7 +295,8 @@ export default function AdminSessionsAilene({
                 onInputChange={(v) => setForm((f) => ({ ...f, name: v }))}
                 required
               />
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="session-description"
                 inputName="Deskripsi"
                 inputType="text"
@@ -302,7 +308,8 @@ export default function AdminSessionsAilene({
                 required
               />
               <div className="grid grid-cols-2 gap-4">
-                <AppSelect variant="CMS"
+                <AppSelect
+                  variant="CMS"
                   selectId="session-method"
                   selectName="Metode"
                   selectPlaceholder="Pilih metode"
@@ -311,7 +318,8 @@ export default function AdminSessionsAilene({
                   options={METHOD_OPTIONS}
                   required
                 />
-                <AppSelect variant="CMS"
+                <AppSelect
+                  variant="CMS"
                   selectId="session-status"
                   selectName="Status"
                   selectPlaceholder="Pilih status"
@@ -334,7 +342,8 @@ export default function AdminSessionsAilene({
                   className="flex w-full p-2 bg-white font-medium font-bodycopy text-sm rounded-md border focus:outline-none focus:border-tertiary focus:outline-primary/15 focus:outline-4"
                 />
               </div>
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="session-meeting-url"
                 inputName="Link Meeting (opsional)"
                 inputType="url"
@@ -345,7 +354,8 @@ export default function AdminSessionsAilene({
                 }
               />
               <div className="grid grid-cols-2 gap-4">
-                <AppInput variant="CMS"
+                <AppInput
+                  variant="CMS"
                   inputId="session-location-name"
                   inputName="Nama Lokasi (opsional)"
                   inputType="text"
@@ -355,7 +365,8 @@ export default function AdminSessionsAilene({
                     setForm((f) => ({ ...f, location_name: v }))
                   }
                 />
-                <AppInput variant="CMS"
+                <AppInput
+                  variant="CMS"
                   inputId="session-location-url"
                   inputName="Link Lokasi (opsional)"
                   inputType="url"
@@ -366,7 +377,8 @@ export default function AdminSessionsAilene({
                   }
                 />
               </div>
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="session-recording-url"
                 inputName="Link Recording (opsional)"
                 inputType="url"
@@ -376,7 +388,8 @@ export default function AdminSessionsAilene({
                   setForm((f) => ({ ...f, recording_url: v }))
                 }
               />
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="session-feedback-form"
                 inputName="Link Feedback Form (opsional)"
                 inputType="url"
@@ -402,8 +415,8 @@ export default function AdminSessionsAilene({
                 {isPending
                   ? "Menyimpan..."
                   : editingId
-                    ? "Simpan Perubahan"
-                    : "Buat Session"}
+                  ? "Simpan Perubahan"
+                  : "Buat Session"}
               </AppButton>
             </div>
           </div>

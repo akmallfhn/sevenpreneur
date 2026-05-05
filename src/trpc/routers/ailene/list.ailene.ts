@@ -1,7 +1,7 @@
+import { AiLearnLessonStatus, StatusEnum } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
-import { aileneProcedure, administratorProcedure } from "@/trpc/init";
+import { administratorProcedure, aileneProcedure } from "@/trpc/init";
 import { numberIsID } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus, StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const listAilene = {
@@ -62,7 +62,9 @@ export const listAilene = {
   members: administratorProcedure.query(async (opts) => {
     const members = await opts.ctx.prisma.aiLearnMember.findMany({
       include: {
-        user: { select: { id: true, full_name: true, email: true, avatar: true } },
+        user: {
+          select: { id: true, full_name: true, email: true, avatar: true },
+        },
         _count: { select: { progress: true } },
       },
       orderBy: { created_at: "desc" },
@@ -92,7 +94,11 @@ export const listAilene = {
         include: {
           _count: { select: { quiz_questions: true } },
         },
-        orderBy: [{ level: "asc" }, { order_index: "asc" }, { created_at: "asc" }],
+        orderBy: [
+          { level: "asc" },
+          { order_index: "asc" },
+          { created_at: "asc" },
+        ],
       });
       return { code: STATUS_OK, message: "Success", list: lessons };
     }),
@@ -132,7 +138,10 @@ export const listAilene = {
       const user_id = opts.ctx.user.id;
 
       const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({
-        where: { id: opts.input.lesson_id, status: AiLearnLessonStatus.PUBLISHED },
+        where: {
+          id: opts.input.lesson_id,
+          status: AiLearnLessonStatus.PUBLISHED,
+        },
       });
       if (!lesson) throw new Error("Lesson not found");
 
@@ -148,8 +157,18 @@ export const listAilene = {
 
       const progress = member
         ? await opts.ctx.prisma.aiLearnUserProgress.findUnique({
-            where: { member_id_lesson_id: { member_id: member.id, lesson_id: opts.input.lesson_id } },
-            select: { completed_at: true, score: true, xp_earned: true, answers: true },
+            where: {
+              member_id_lesson_id: {
+                member_id: member.id,
+                lesson_id: opts.input.lesson_id,
+              },
+            },
+            select: {
+              completed_at: true,
+              score: true,
+              xp_earned: true,
+              answers: true,
+            },
           })
         : null;
 
@@ -164,14 +183,24 @@ export const listAilene = {
 
   myProgress: aileneProcedure.query(async (opts) => {
     const user_id = opts.ctx.user.id;
-    const member = await opts.ctx.prisma.aiLearnMember.findUnique({ where: { user_id } });
+    const member = await opts.ctx.prisma.aiLearnMember.findUnique({
+      where: { user_id },
+    });
     if (!member) {
-      return { code: STATUS_OK, message: "Success", list: [], total_xp: 0, completed_count: 0 };
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        list: [],
+        total_xp: 0,
+        completed_count: 0,
+      };
     }
     const progress = await opts.ctx.prisma.aiLearnUserProgress.findMany({
       where: { member_id: member.id },
       include: {
-        lesson: { select: { id: true, title: true, level: true, xp_reward: true } },
+        lesson: {
+          select: { id: true, title: true, level: true, xp_reward: true },
+        },
       },
     });
     const totalXp = progress.reduce((sum, p) => sum + p.xp_earned, 0);
@@ -207,12 +236,22 @@ export const listAilene = {
           scores.length > 0
             ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
             : null;
-        return { id: m.user.id, full_name: m.user.full_name, avatar: m.user.avatar, totalXp, completedCount, avgScore };
+        return {
+          id: m.user.id,
+          full_name: m.user.full_name,
+          avatar: m.user.avatar,
+          totalXp,
+          completedCount,
+          avgScore,
+        };
       })
       .sort((a, b) => b.totalXp - a.totalXp);
 
     const teamTotalXp = ranked.reduce((sum, u) => sum + u.totalXp, 0);
-    const teamTotalCompleted = ranked.reduce((sum, u) => sum + u.completedCount, 0);
+    const teamTotalCompleted = ranked.reduce(
+      (sum, u) => sum + u.completedCount,
+      0
+    );
     const teamScores = ranked.flatMap((u) =>
       u.avgScore != null ? [u.avgScore] : []
     );

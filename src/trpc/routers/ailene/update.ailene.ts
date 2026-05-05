@@ -1,7 +1,17 @@
+import {
+  AiLearnLessonStatus,
+  AiLearnRoleEnum,
+  LearningMethodEnum,
+  StatusEnum,
+} from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
-import { numberIsID, numberIsNonNegInt, numberIsPosInt, stringNotBlank } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus, AiLearnRoleEnum, LearningMethodEnum, StatusEnum } from "@prisma/client";
+import {
+  numberIsID,
+  numberIsNonNegInt,
+  numberIsPosInt,
+  stringNotBlank,
+} from "@/trpc/utils/validation";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
@@ -58,7 +68,6 @@ export const updateAilene = {
       if (!member) throw new TRPCError({ code: "NOT_FOUND" });
       return { code: STATUS_OK, message: "Success", member };
     }),
-
 
   lesson: administratorProcedure
     .input(

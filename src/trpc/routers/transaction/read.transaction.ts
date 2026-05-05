@@ -1,10 +1,9 @@
+import { CategoryEnum, Prisma, TStatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure, loggedInProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID, stringIsNanoid } from "@/trpc/utils/validation";
-import { CategoryEnum, TStatusEnum } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import {
@@ -138,7 +137,7 @@ export const readTransaction = {
       }
 
       let discountCode: Optional<string>;
-      let discountPercent: Optional<Decimal>;
+      let discountPercent: Optional<Prisma.Decimal>;
       if (theTransaction.discount_id) {
         const theDiscount = await opts.ctx.prisma.discount.findFirst({
           where: { id: theTransaction.discount_id },

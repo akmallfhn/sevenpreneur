@@ -1,6 +1,6 @@
+import { WAAStatus } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import GetPrismaClient from "@/lib/prisma";
-import { WAAStatus } from "@prisma/client";
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 

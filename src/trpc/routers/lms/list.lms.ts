@@ -1,3 +1,4 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_FORBIDDEN, STATUS_OK } from "@/lib/status_code";
 import {
@@ -13,7 +14,6 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import { isEnrolledCohort, isEnrolledLearning } from "./util.lms";

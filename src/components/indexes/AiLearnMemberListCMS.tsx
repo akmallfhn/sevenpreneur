@@ -1,7 +1,7 @@
 ﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
-import AppSelect from "@/components/fields/AppSelect";
 import AppInput from "@/components/fields/AppInput";
+import AppSelect from "@/components/fields/AppSelect";
 import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
 import AppBreadcrumb from "@/components/navigations/AppBreadcrumb";
 import AppBreadcrumbItem from "@/components/navigations/AppBreadcrumbItem";
@@ -15,8 +15,8 @@ import TableHeaderCMS from "@/components/tables/TableHeaderCMS";
 import TableRowCMS from "@/components/tables/TableRowCMS";
 import PageTitleSectionCMS from "@/components/titles/PageTitleSectionCMS";
 import { setSessionToken, trpc } from "@/trpc/client";
-import { AiLearnRoleEnum } from "@prisma/client";
 import dayjs from "dayjs";
+import { AiLearnRoleEnum } from "lib/app-types";
 import {
   BookOpen,
   ChevronRight,
@@ -338,7 +338,8 @@ export default function AiLearnMemberListCMS({
               </button>
             </div>
             <div className="flex flex-col gap-3">
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="add-member-email"
                 inputName="Email"
                 inputType="email"
@@ -352,7 +353,8 @@ export default function AiLearnMemberListCMS({
                 errorMessage={addEmailError}
                 required
               />
-              <AppSelect variant="CMS"
+              <AppSelect
+                variant="CMS"
                 selectId="add-member-role"
                 selectName="Role"
                 selectPlaceholder="Pilih role"
@@ -410,7 +412,8 @@ export default function AiLearnMemberListCMS({
                 <X className="size-5" />
               </button>
             </div>
-            <AppSelect variant="CMS"
+            <AppSelect
+              variant="CMS"
               selectId="edit-member-role"
               selectName="Role Baru"
               selectPlaceholder="Pilih role"

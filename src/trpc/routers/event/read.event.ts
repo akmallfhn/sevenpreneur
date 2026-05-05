@@ -1,9 +1,9 @@
+import { StatusEnum } from "@/generated/prisma/client";
 import { Optional } from "@/lib/optional-type";
 import { STATUS_OK } from "@/lib/status_code";
 import { loggedInProcedure, publicProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
 
 export const readEvent = {
   event: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {

@@ -1,3 +1,8 @@
+import {
+  WACDirection,
+  WACSenderType,
+  WACType,
+} from "@/generated/prisma/client";
 import GetPrismaClient from "@/lib/prisma";
 import { STATUS_INTERNAL_SERVER_ERROR, STATUS_OK } from "@/lib/status_code";
 import {
@@ -19,7 +24,6 @@ import {
 import { administratorProcedure } from "@/trpc/init";
 import { readFailedNotFound } from "@/trpc/utils/errors";
 import { stringIsNanoid, stringNotBlank } from "@/trpc/utils/validation";
-import { WACDirection, WACSenderType, WACType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 

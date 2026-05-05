@@ -1,3 +1,4 @@
+import { AStatusEnum, StatusEnum } from "@/generated/prisma/client";
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure, roleBasedProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
@@ -8,7 +9,6 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { AStatusEnum, StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const updateArticle = {
