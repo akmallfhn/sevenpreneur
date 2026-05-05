@@ -84,11 +84,9 @@ export default function LearningListCMS({
                         post.speaker?.avatar ||
                         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
                       }
-                      learningSessionMethod={post.method}
                       learningSessionDate={post.meeting_date}
-                      learningSessionPlace={
-                        post.location_name || "To Be Announced"
-                      }
+                      attendanceCount={post.check_in_count}
+                      noAttendanceCount={post.has_no_attendance}
                       onDeleteSuccess={() => utils.list.learnings.invalidate()}
                     />
                   ))}
