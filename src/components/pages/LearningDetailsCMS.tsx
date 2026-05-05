@@ -26,7 +26,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import AvatarBadgeCMS from "../buttons/AvatarBadgeCMS";
-import SectionContainerCMS from "../containers/SectionContainerCMS";
+import SectionContainerCMS from "../cards/SectionContainerCMS";
 import AppVideoPlayer from "../elements/AppVideoPlayer";
 import EditLearningFormCMS from "../forms/EditLearningFormCMS";
 import UpdateVideoRecordingFormCMS from "../forms/UpdateVideoRecordingForm";

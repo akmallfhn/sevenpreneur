@@ -24,7 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
-import SectionContainerCMS from "../containers/SectionContainerCMS";
+import SectionContainerCMS from "../cards/SectionContainerCMS";
 import CreateLearningFormCMS from "../forms/CreateLearningFormCMS";
 import CreateModuleFormCMS from "../forms/CreateModuleFormCMS";
 import CreateProjectFormCMS from "../forms/CreateProjectFormCMS";

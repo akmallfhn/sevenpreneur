@@ -3,7 +3,7 @@ import { trpc } from "@/trpc/client";
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
-import SectionContainerCMS from "../containers/SectionContainerCMS";
+import SectionContainerCMS from "../cards/SectionContainerCMS";
 import CreateMaterialFormCMS from "../forms/CreateMaterialFormCMS";
 import FileItemCMS from "../items/FileItemCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
@@ -48,7 +48,11 @@ export default function MaterialListCMS({
         title="Learning Materials"
         headerAction={
           isAllowedCreateMaterial ? (
-            <AppButton variant="light" size="small" onClick={() => setCreateMaterial(true)}>
+            <AppButton
+              variant="light"
+              size="small"
+              onClick={() => setCreateMaterial(true)}
+            >
               <Plus className="size-4" />
               Add file
             </AppButton>
