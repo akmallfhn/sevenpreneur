@@ -38,6 +38,8 @@ export async function UpdateLearningReminderSchedule(
     LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE
   );
   if (!upcomingLearning) {
+    // Delete schedule if there is no upcoming learning.
+    await qstash.schedules.delete(LEARNING_REMINDER_SCHEDULE_ID);
     return true;
   }
 
