@@ -5,17 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "static.wixstatic.com",
-        port: "",
-      },
-      {
-        protocol: "https",
         hostname: "yt3.googleusercontent.com",
-        port: "",
-      },
-      {
-        protocol: "https",
-        hostname: "media.licdn.com",
         port: "",
       },
       {
@@ -53,7 +43,7 @@ const nextConfig = {
           {
             type: "header",
             key: "host",
-            value: "(agora|admin|ailene).sevenpreneur.com.*",
+            value: "(agora|admin|ailene|lab).sevenpreneur.com.*",
           },
         ],
         missing: [
@@ -72,7 +62,7 @@ const nextConfig = {
           {
             type: "header",
             key: "host",
-            value: "(agora|admin|ailene).example.com:3000.*",
+            value: "(agora|admin|ailene|lab).example.com:3000.*",
           },
         ],
         missing: [
@@ -115,7 +105,7 @@ const nextConfig = {
     return {
       beforeFiles: [
         {
-          source: "/(admin|agora|ailene|api|www)",
+          source: "/(admin|agora|ailene|lab|api|www)",
           destination: "/_not-found/page",
         },
       ],
