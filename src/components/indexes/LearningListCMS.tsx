@@ -1,114 +1,109 @@
 "use client";
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
-import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import { ChevronDown, ChevronUp, Plus } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useState } from "react";
 import AppButton from "../buttons/AppButton";
-import CreateLearningFormCMS from "../forms/CreateLearningFormCMS";
+import SectionContainerCMS from "../cards/SectionContainerCMS";
 import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
-import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface LearningListCMSProps {
   sessionToken: string;
   sessionUserRole: number;
   cohortId: number;
+  onClickAdd?: () => void;
 }
 
 export default function LearningListCMS({
-  cohortId,
-  sessionUserRole,
   sessionToken,
+  sessionUserRole,
+  cohortId,
+  onClickAdd,
 }: LearningListCMSProps) {
   const utils = trpc.useUtils();
-  const [createLearning, setCreateLearning] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [showAll, setShowAll] = useState(false);
 
-  const allowedRolesCreateLearning = [0, 2];
-  const allowedRolesListLearning = [0, 1, 2, 3];
-  const isAllowedCreateLearning =
-    allowedRolesCreateLearning.includes(sessionUserRole);
-  const isAllowedListLearning =
-    allowedRolesListLearning.includes(sessionUserRole);
+  const isAllowedCreate = [0, 2].includes(sessionUserRole);
 
-  // Fetch tRPC data
-  const {
-    data: learningListData,
-    isLoading,
-    isError,
-  } = trpc.list.learnings.useQuery(
+  const { data, isLoading } = trpc.list.learnings.useQuery(
     { cohort_id: cohortId },
     { enabled: !!sessionToken }
   );
 
-  if (!isAllowedListLearning) return;
+  const allLearnings = [...(data?.list ?? [])].sort((a, b) =>
+    dayjs(a.meeting_date).diff(dayjs(b.meeting_date))
+  );
+  const sessionsToShow = showAll ? allLearnings : allLearnings.slice(0, 3);
 
   return (
-    <React.Fragment>
-      <div className="flex flex-col gap-3 p-3 bg-section-background rounded-md">
-        <div className="section-name flex justify-between items-center">
-          <h2 className="label-name font-brand font-bold">Learning Sessions</h2>
-          {isAllowedCreateLearning && (
-            <AppButton
-              variant="light"
-              size="small"
-              onClick={() => setCreateLearning(true)}
+    <SectionContainerCMS
+      title="Learning Sessions"
+      headerAction={
+        isAllowedCreate && onClickAdd ? (
+          <AppButton
+            variant={resolvedTheme === "dark" ? "dark" : "light"}
+            size="small"
+            onClick={onClickAdd}
+          >
+            <Plus className="size-3.5" />
+            Add Session
+          </AppButton>
+        ) : undefined
+      }
+    >
+      {isLoading ? (
+        <AppLoadingComponents />
+      ) : allLearnings.length > 0 ? (
+        <div className="flex flex-col gap-2">
+          {sessionsToShow.map((post) => (
+            <LearningSessionItemCMS
+              key={post.id}
+              sessionToken={sessionToken}
+              sessionUserRole={sessionUserRole}
+              cohortId={cohortId}
+              learningSessionId={post.id}
+              learningSessionName={post.name}
+              learningSessionEducatorName={
+                post.speaker?.full_name || "Sevenpreneur Educator"
+              }
+              learningSessionEducatorAvatar={
+                post.speaker?.avatar ||
+                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
+              }
+              learningSessionDate={post.meeting_date}
+              attendanceCount={post.check_in_count}
+              noAttendanceCount={post.has_no_attendance}
+              onDeleteSuccess={() => utils.list.learnings.invalidate()}
+            />
+          ))}
+
+          {allLearnings.length > 3 && (
+            <button
+              className="flex items-center justify-center gap-1.5 w-full py-2 text-sm font-bodycopy font-medium text-emphasis hover:text-foreground hover:bg-card-inside-bg rounded-lg transition"
+              onClick={() => setShowAll((p) => !p)}
             >
-              <Plus className="size-4" />
-              Add sessions
-            </AppButton>
+              {showAll ? (
+                <>
+                  <ChevronUp className="size-4" />
+                  Show less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="size-4" />
+                  Show all {allLearnings.length} sessions
+                </>
+              )}
+            </button>
           )}
         </div>
-        {isLoading && <AppLoadingComponents />}
-        {isError && <AppErrorComponents />}
-
-        {!isLoading && !isError && learningListData && (
-          <>
-            {(learningListData.list ?? []).length > 0 ? (
-              <div className="learning-list flex flex-col gap-3">
-                {learningListData?.list
-                  .sort((a, b) =>
-                    dayjs(a.meeting_date).diff(dayjs(b.meeting_date))
-                  )
-                  .map((post) => (
-                    <LearningSessionItemCMS
-                      key={post.id}
-                      sessionToken={sessionToken}
-                      sessionUserRole={sessionUserRole}
-                      cohortId={cohortId}
-                      learningSessionId={post.id}
-                      learningSessionName={post.name}
-                      learningSessionEducatorName={
-                        post.speaker?.full_name || "Sevenpreneur Educator"
-                      }
-                      learningSessionEducatorAvatar={
-                        post.speaker?.avatar ||
-                        "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                      }
-                      learningSessionDate={post.meeting_date}
-                      attendanceCount={post.check_in_count}
-                      noAttendanceCount={post.has_no_attendance}
-                      onDeleteSuccess={() => utils.list.learnings.invalidate()}
-                    />
-                  ))}
-              </div>
-            ) : (
-              <p className="flex w-full h-full items-center justify-center p-5 text-emphasis font-bodycopy font-medium">
-                No Data
-              </p>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Create Learning */}
-      {createLearning && (
-        <CreateLearningFormCMS
-          sessionToken={sessionToken}
-          cohortId={cohortId}
-          isOpen={createLearning}
-          onClose={() => setCreateLearning(false)}
-        />
+      ) : (
+        <p className="text-sm text-center text-emphasis font-bodycopy py-4">
+          No sessions yet
+        </p>
       )}
-    </React.Fragment>
+    </SectionContainerCMS>
   );
 }

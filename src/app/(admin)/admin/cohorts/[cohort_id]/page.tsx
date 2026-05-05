@@ -33,6 +33,7 @@ export default async function CohortDetailsPage({
   return (
     <CohortDetailsCMS
       sessionToken={sessionToken}
+      sessionUserId={userSession.user.id}
       sessionUserRole={userSession.user.role_id}
       cohortId={cohortId}
     />

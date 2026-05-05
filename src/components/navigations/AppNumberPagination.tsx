@@ -13,11 +13,13 @@ import {
 interface AppNumberPaginationProps {
   currentPage: number;
   totalPages: number;
+  onPageChange?: (page: number) => void;
 }
 
 export default function AppNumberPagination({
   currentPage,
   totalPages,
+  onPageChange,
 }: AppNumberPaginationProps) {
   // React Hook
   const router = useRouter();
@@ -26,6 +28,10 @@ export default function AppNumberPagination({
   // Setter halaman
   const handlePageChange = (newPage: number) => {
     if (newPage === currentPage || newPage < 1 || newPage > totalPages) return;
+    if (onPageChange) {
+      onPageChange(newPage);
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.set("page", String(newPage));
     router.push(`?${params.toString()}`, { scroll: true });

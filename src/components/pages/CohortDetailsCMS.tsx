@@ -1,19 +1,12 @@
 "use client";
 import { StatusType } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
-import { BarChart, PieChart } from "@mui/x-charts";
 import dayjs from "dayjs";
-import "dayjs/locale/en";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   BookOpen,
   CalendarDays,
-  ChevronDown,
-  ChevronRight,
-  ChevronUp,
   ClipboardList,
   PenTool,
-  Plus,
   Star,
   TrendingUp,
   Upload,
@@ -25,52 +18,35 @@ import Link from "next/link";
 import React, { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import SectionContainerCMS from "../cards/SectionContainerCMS";
+import ParticipantAttendanceCMS from "../charts/ParticipantAttendanceCMS";
+import PerformanceSnapshotCMS from "../charts/PerformanceSnapshotCMS";
 import CreateLearningFormCMS from "../forms/CreateLearningFormCMS";
 import CreateModuleFormCMS from "../forms/CreateModuleFormCMS";
 import CreateProjectFormCMS from "../forms/CreateProjectFormCMS";
 import EditCohortFormCMS from "../forms/EditCohortFormCMS";
-import FileItemCMS from "../items/FileItemCMS";
-import LearningSessionItemCMS from "../items/LearningSessionItemCMS";
-import ProjectItemCMS from "../items/ProjectItemCMS";
+import CohortMembersPerformanceCMS from "../indexes/CohortMembersPerformanceCMS";
+import LearningListCMS from "../indexes/LearningListCMS";
+import ModuleListCMS from "../indexes/ModuleListCMS";
+import ProjectListCMS from "../indexes/ProjectListCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
-import AppBreadcrumb from "../navigations/AppBreadcrumb";
-import AppBreadcrumbItem from "../navigations/AppBreadcrumbItem";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import PageContainerCMS from "./PageContainerCMS";
-import { useTheme } from "next-themes";
-
-dayjs.extend(localizedFormat);
 
 interface CohortDetailsCMSProps {
   sessionToken: string;
+  sessionUserId: string;
   sessionUserRole: number;
   cohortId: number;
 }
 
-function SectionSkeleton({ rows = 3 }: { rows?: number }) {
-  return (
-    <div className="flex flex-col gap-2.5 animate-pulse">
-      {Array.from({ length: rows }).map((_, i) => (
-        <div
-          key={i}
-          className="h-3 rounded-md bg-dashboard-border"
-          style={{ width: `${[72, 50, 62][i % 3]}%` }}
-        />
-      ))}
-    </div>
-  );
-}
-
 export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
   const utils = trpc.useUtils();
-  const { resolvedTheme } = useTheme();
 
   const [editCohort, setEditCohort] = useState(false);
   const [createLearning, setCreateLearning] = useState(false);
   const [createProject, setCreateProject] = useState(false);
   const [createModule, setCreateModule] = useState(false);
-  const [showAllSessions, setShowAllSessions] = useState(false);
 
   const isAllowedUpdate = [0, 2].includes(props.sessionUserRole);
   const isAllowedCreate = [0, 2].includes(props.sessionUserRole);
@@ -91,29 +67,15 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
       { enabled: !!props.sessionToken }
     );
 
-  const { data: attendanceCount, isLoading: isLoadingAttendance } =
-    trpc.list.attendance_counts.useQuery(
-      { cohort_id: props.cohortId },
-      { enabled: !!props.sessionToken }
-    );
+  const { data: attendanceCount } = trpc.list.attendance_counts.useQuery(
+    { cohort_id: props.cohortId },
+    { enabled: !!props.sessionToken }
+  );
 
-  const { data: learningListData, isLoading: isLoadingLearnings } =
-    trpc.list.learnings.useQuery(
-      { cohort_id: props.cohortId },
-      { enabled: !!props.sessionToken }
-    );
-
-  const { data: moduleListData, isLoading: isLoadingModules } =
-    trpc.list.modules.useQuery(
-      { cohort_id: props.cohortId },
-      { enabled: !!props.sessionToken }
-    );
-
-  const { data: projectListData, isLoading: isLoadingProjects } =
-    trpc.list.projects.useQuery(
-      { cohort_id: props.cohortId },
-      { enabled: !!props.sessionToken }
-    );
+  const { data: learningListData } = trpc.list.learnings.useQuery(
+    { cohort_id: props.cohortId },
+    { enabled: !!props.sessionToken }
+  );
 
   const { data: ratingStats, isLoading: isLoadingRating } =
     trpc.read.cohortRatingStats.useQuery(
@@ -174,40 +136,10 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
       ? `${Math.round(durationDays / 7)} Week${Math.round(durationDays / 7) !== 1 ? "s" : ""}`
       : `${durationDays} Day${durationDays !== 1 ? "s" : ""}`;
 
-  const pastSessionsCount = pastLearnings.length;
-  const performanceBands = enrolledStudents.reduce(
-    (acc, s) => {
-      const rate =
-        pastSessionsCount > 0
-          ? s.attended_learning_count / pastSessionsCount
-          : 0;
-      if (rate >= 1.0) acc.excellent++;
-      else if (rate >= 0.8) acc.good++;
-      else if (rate >= 0.6) acc.average++;
-      else acc.poor++;
-      return acc;
-    },
-    { excellent: 0, good: 0, average: 0, poor: 0 }
-  );
-
-  const sessionsToShow = showAllSessions
-    ? allLearnings
-    : allLearnings.slice(0, 3);
-  const chartData = attendanceCount?.list ?? [];
-
   return (
     <React.Fragment>
       <PageContainerCMS>
         <div className="container w-full flex flex-col gap-5">
-          <AppBreadcrumb>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem href="/cohorts">Cohorts</AppBreadcrumbItem>
-            <ChevronRight className="size-3.5" />
-            <AppBreadcrumbItem isCurrentPage>
-              {cohortDetailsData?.cohort.name}
-            </AppBreadcrumbItem>
-          </AppBreadcrumb>
-
           {isLoading && <AppLoadingComponents />}
           {isError && <AppErrorComponents />}
 
@@ -274,7 +206,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                   )}
                 </div>
 
-                {/* STATS — individual cards, no outer section */}
+                {/* STATS */}
                 <div className="grid grid-cols-4 gap-3">
                   <div className="flex flex-col gap-2.5 p-3.5 rounded-xl border bg-card-bg border-dashboard-border">
                     <div className="flex items-center gap-2">
@@ -372,159 +304,24 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                   </div>
                 </div>
 
-                {/* ATTENDANCE CHART */}
-                <SectionContainerCMS
-                  title="Participants Attendance"
-                  headerAction={
-                    <div className="flex items-center gap-3">
-                      <span className="flex items-center gap-1.5 text-[11px] font-bodycopy text-emphasis">
-                        <span
-                          className="inline-block size-2 rounded-sm"
-                          style={{ background: "#0165fc" }}
-                        />
-                        Attendance
-                      </span>
-                      <span className="flex items-center gap-1.5 text-[11px] font-bodycopy text-emphasis">
-                        <span
-                          className="inline-block size-2 rounded-sm"
-                          style={{ background: "#e74d79" }}
-                        />
-                        No Attendance
-                      </span>
-                    </div>
-                  }
-                >
-                  {isLoadingAttendance ? (
-                    <SectionSkeleton rows={4} />
-                  ) : (
-                    <div className="flex flex-col gap-3">
-                      <div className="bg-card-inside-bg rounded-lg overflow-hidden">
-                        {chartData.length > 0 ? (
-                          <BarChart
-                            height={240}
-                            series={[
-                              {
-                                data: chartData.map((a) => a.check_in_count),
-                                label: "Attendance",
-                                color: "#0165fc",
-                                stack: "total",
-                              },
-                              {
-                                data: chartData.map((a) => a.has_no_attendance),
-                                label: "No Attendance",
-                                color: "#e74d79",
-                                stack: "total",
-                              },
-                            ]}
-                            xAxis={[
-                              {
-                                data: chartData.map((_, i) => `S${i + 1}`),
-                                scaleType: "band",
-                                tickLabelStyle: { fontSize: 10 },
-                              },
-                            ]}
-                            yAxis={[{ tickLabelStyle: { fontSize: 10 } }]}
-                            slots={{ legend: () => null }}
-                            margin={{
-                              top: 10,
-                              right: 16,
-                              bottom: 28,
-                              left: 36,
-                            }}
-                            sx={{
-                              "& .MuiChartsAxis-tickLabel": {
-                                fill: "var(--color-foreground)",
-                              },
-                              "& .MuiChartsAxis-line": {
-                                stroke: "var(--color-border)",
-                              },
-                              "& .MuiChartsAxis-tick": {
-                                stroke: "var(--color-border)",
-                              },
-                              "& .MuiChartsGrid-line": {
-                                stroke: "var(--color-border)",
-                              },
-                            }}
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center h-[240px] text-sm text-emphasis font-bodycopy">
-                            No session data yet
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </SectionContainerCMS>
+                <ParticipantAttendanceCMS
+                  sessionToken={props.sessionToken}
+                  cohortId={props.cohortId}
+                />
 
-                {/* LEARNING SESSIONS */}
-                <SectionContainerCMS
-                  title="Learning Sessions"
-                  headerAction={
-                    isAllowedCreate ? (
-                      <AppButton
-                        variant={resolvedTheme === "dark" ? "dark" : "light"}
-                        size="small"
-                        onClick={() => setCreateLearning(true)}
-                      >
-                        <Plus className="size-3.5" />
-                        Add Session
-                      </AppButton>
-                    ) : undefined
-                  }
-                >
-                  {isLoadingLearnings ? (
-                    <SectionSkeleton rows={3} />
-                  ) : allLearnings.length > 0 ? (
-                    <div className="flex flex-col gap-2">
-                      {sessionsToShow.map((post) => (
-                        <LearningSessionItemCMS
-                          key={post.id}
-                          sessionToken={props.sessionToken}
-                          sessionUserRole={props.sessionUserRole}
-                          cohortId={props.cohortId}
-                          learningSessionId={post.id}
-                          learningSessionName={post.name}
-                          learningSessionEducatorName={
-                            post.speaker?.full_name || "Sevenpreneur Educator"
-                          }
-                          learningSessionEducatorAvatar={
-                            post.speaker?.avatar ||
-                            "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/default-avatar.svg.png"
-                          }
-                          learningSessionDate={post.meeting_date}
-                          attendanceCount={post.check_in_count}
-                          noAttendanceCount={post.has_no_attendance}
-                          onDeleteSuccess={() =>
-                            utils.list.learnings.invalidate()
-                          }
-                        />
-                      ))}
+                <LearningListCMS
+                  sessionToken={props.sessionToken}
+                  sessionUserRole={props.sessionUserRole}
+                  cohortId={props.cohortId}
+                  onClickAdd={() => setCreateLearning(true)}
+                />
 
-                      {allLearnings.length > 3 && (
-                        <button
-                          className="flex items-center justify-center gap-1.5 w-full py-2 text-sm font-bodycopy font-medium text-emphasis hover:text-foreground hover:bg-card-inside-bg rounded-lg transition"
-                          onClick={() => setShowAllSessions((p) => !p)}
-                        >
-                          {showAllSessions ? (
-                            <>
-                              <ChevronUp className="size-4" />
-                              Show less
-                            </>
-                          ) : (
-                            <>
-                              <ChevronDown className="size-4" />
-                              Show all {allLearnings.length} sessions
-                            </>
-                          )}
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-center text-emphasis font-bodycopy py-4">
-                      No sessions yet
-                    </p>
-                  )}
-                </SectionContainerCMS>
+                <CohortMembersPerformanceCMS
+                  sessionToken={props.sessionToken}
+                  sessionUserId={props.sessionUserId}
+                  sessionUserRole={props.sessionUserRole}
+                  cohortId={props.cohortId}
+                />
               </main>
 
               {/* ── RIGHT / ASIDE ── */}
@@ -651,7 +448,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                 {/* ENROLLED OVERVIEW */}
                 <SectionContainerCMS title="Enrolled Overview">
                   {isLoadingEnrolled ? (
-                    <SectionSkeleton rows={3} />
+                    <AppLoadingComponents />
                   ) : (
                     <div className="flex flex-col gap-2">
                       {[
@@ -690,197 +487,24 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                   )}
                 </SectionContainerCMS>
 
-                {/* PERFORMANCE SNAPSHOT */}
-                <SectionContainerCMS title="Performance Snapshot">
-                  {isLoadingEnrolled || isLoadingLearnings ? (
-                    <SectionSkeleton rows={3} />
-                  ) : pastSessionsCount > 0 && totalStudents > 0 ? (
-                    <>
-                      <div className="bg-card-inside-bg rounded-lg overflow-hidden">
-                        <PieChart
-                          series={[
-                            {
-                              data: [
-                                {
-                                  id: 0,
-                                  value: performanceBands.excellent,
-                                  label: "Excellent",
-                                  color: "#22c55e",
-                                },
-                                {
-                                  id: 1,
-                                  value: performanceBands.good,
-                                  label: "Good",
-                                  color: "#60a5fa",
-                                },
-                                {
-                                  id: 2,
-                                  value: performanceBands.average,
-                                  label: "Average",
-                                  color: "#fbbf24",
-                                },
-                                {
-                                  id: 3,
-                                  value: performanceBands.poor,
-                                  label: "Poor",
-                                  color: "#f87171",
-                                },
-                              ].filter((d) => d.value > 0),
-                              innerRadius: 42,
-                              outerRadius: 68,
-                              paddingAngle: 2,
-                              cornerRadius: 3,
-                            },
-                          ]}
-                          height={160}
-                          slots={{ legend: () => null }}
-                          margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
-                          sx={{
-                            "& .MuiPieArc-root": {
-                              stroke: "var(--color-card-inside-bg)",
-                              strokeWidth: 2,
-                            },
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        {[
-                          {
-                            label: "Excellent (100%)",
-                            value: performanceBands.excellent,
-                            color: "bg-green-500",
-                          },
-                          {
-                            label: "Good (≥80%)",
-                            value: performanceBands.good,
-                            color: "bg-blue-400",
-                          },
-                          {
-                            label: "Average (≥60%)",
-                            value: performanceBands.average,
-                            color: "bg-amber-400",
-                          },
-                          {
-                            label: "Poor (<60%)",
-                            value: performanceBands.poor,
-                            color: "bg-red-400",
-                          },
-                        ].map(({ label, value, color }) => (
-                          <div
-                            key={label}
-                            className="flex items-center justify-between"
-                          >
-                            <div className="flex items-center gap-2">
-                              <div className={`size-2 rounded-full ${color}`} />
-                              <p className="text-xs font-bodycopy text-emphasis">
-                                {label}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <p className="text-xs font-bodycopy font-bold">
-                                {value}
-                              </p>
-                              {totalStudents > 0 && (
-                                <p className="text-[10px] text-emphasis font-bodycopy">
-                                  ({Math.round((value / totalStudents) * 100)}
-                                  %)
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <p className="text-xs text-emphasis font-bodycopy text-center py-3">
-                      No sessions have run yet
-                    </p>
-                  )}
-                </SectionContainerCMS>
+                <PerformanceSnapshotCMS
+                  sessionToken={props.sessionToken}
+                  cohortId={props.cohortId}
+                />
 
-                {/* MODULES */}
-                <SectionContainerCMS
-                  title="Modules"
-                  headerAction={
-                    isAllowedCreate ? (
-                      <AppButton
-                        variant={resolvedTheme === "dark" ? "dark" : "light"}
-                        size="small"
-                        onClick={() => setCreateModule(true)}
-                      >
-                        <Plus className="size-3.5" />
-                        Add
-                      </AppButton>
-                    ) : undefined
-                  }
-                >
-                  {isLoadingModules ? (
-                    <SectionSkeleton rows={3} />
-                  ) : (moduleListData?.list ?? []).length > 0 ? (
-                    <div className="flex flex-col gap-2">
-                      {moduleListData?.list.map((post) => (
-                        <FileItemCMS
-                          key={post.id}
-                          sessionToken={props.sessionToken}
-                          sessionUserRole={props.sessionUserRole}
-                          cohortId={props.cohortId}
-                          fileId={post.id}
-                          fileName={post.name}
-                          fileURL={post.document_url}
-                          onDeleteSuccess={() =>
-                            utils.list.modules.invalidate()
-                          }
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-[13px] text-center text-emphasis font-bodycopy py-2">
-                      No modules yet
-                    </p>
-                  )}
-                </SectionContainerCMS>
+                <ModuleListCMS
+                  sessionToken={props.sessionToken}
+                  sessionUserRole={props.sessionUserRole}
+                  cohortId={props.cohortId}
+                  onClickAdd={() => setCreateModule(true)}
+                />
 
-                {/* PROJECTS */}
-                <SectionContainerCMS
-                  title="Projects"
-                  headerAction={
-                    isAllowedCreate ? (
-                      <AppButton
-                        variant={resolvedTheme === "dark" ? "dark" : "light"}
-                        size="small"
-                        onClick={() => setCreateProject(true)}
-                      >
-                        <Plus className="size-3.5" />
-                        Add
-                      </AppButton>
-                    ) : undefined
-                  }
-                >
-                  {isLoadingProjects ? (
-                    <SectionSkeleton rows={3} />
-                  ) : (projectListData?.list ?? []).length > 0 ? (
-                    <div className="flex flex-col gap-2">
-                      {projectListData?.list.map((post) => (
-                        <ProjectItemCMS
-                          key={post.id}
-                          sessionUserRole={props.sessionUserRole}
-                          cohortId={props.cohortId}
-                          projectId={post.id}
-                          projectName={post.name}
-                          lastSubmission={post.deadline_at}
-                          submissionPercentage={post.submission_percentage}
-                          onDeleteSuccess={() =>
-                            utils.list.projects.invalidate()
-                          }
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-[13px] text-center text-emphasis font-bodycopy py-2">
-                      No projects yet
-                    </p>
-                  )}
-                </SectionContainerCMS>
+                <ProjectListCMS
+                  sessionToken={props.sessionToken}
+                  sessionUserRole={props.sessionUserRole}
+                  cohortId={props.cohortId}
+                  onClickAdd={() => setCreateProject(true)}
+                />
               </aside>
             </div>
           )}

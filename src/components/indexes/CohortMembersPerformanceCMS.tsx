@@ -1,28 +1,23 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
-import dayjs from "dayjs";
-import "dayjs/locale/en";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import { BarChart3, Eye, Star } from "lucide-react";
+import { Eye, Search } from "lucide-react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
+import SectionContainerCMS from "../cards/SectionContainerCMS";
+import AppInput from "../fields/AppInput";
 import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
-import ScorecardItemCMS from "../items/ScorecardItemCMS";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
-import PageContainerCMS from "../pages/PageContainerCMS";
-import AppErrorComponents from "../states/AppErrorComponents";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import TableBodyCMS from "../tables/TableBodyCMS";
 import TableCellCMS from "../tables/TableCellCMS";
 import TableHeadCMS from "../tables/TableHeadCMS";
 import TableHeaderCMS from "../tables/TableHeaderCMS";
 import TableRowCMS from "../tables/TableRowCMS";
-import PageHeaderCMS from "../titles/PageHeaderCMS";
 
-dayjs.extend(localizedFormat);
+const PAGE_SIZE = 10;
 
 interface CohortMembersPerformanceCMSProps {
   sessionToken: string;
@@ -31,222 +26,193 @@ interface CohortMembersPerformanceCMSProps {
   cohortId: number;
 }
 
-export default function CohortMembersPerformanceCMS(
-  props: CohortMembersPerformanceCMSProps
-) {
-  const router = useRouter();
-  const searchParam = useSearchParams();
-  const params = new URLSearchParams(searchParam.toString());
-  const selectedId = searchParam.get("id");
-  const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
+export default function CohortMembersPerformanceCMS({
+  sessionToken,
+  sessionUserId,
+  sessionUserRole,
+  cohortId,
+}: CohortMembersPerformanceCMSProps) {
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openDetailsId, setOpenDetailsId] = useState<string | null>(null);
 
-  const allowedRolesDetailsMembers = [0, 1, 2];
-  const isAllowedDetailsMembers = allowedRolesDetailsMembers.includes(
-    props.sessionUserRole
+  const isAllowedDetails = [0, 1, 2].includes(sessionUserRole);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedKeyword(keyword.trim());
+      setCurrentPage(1);
+    }, 400);
+    return () => clearTimeout(t);
+  }, [keyword]);
+
+  const { data, isLoading } = trpc.list.cohortMembers.useQuery(
+    { cohort_id: cohortId },
+    { enabled: !!sessionToken }
   );
 
-  // Push Parameter to URL
-  const viewMemberDetails = (userId: string) => {
-    setOpenDetailsId(userId);
-    params.set("id", userId);
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
+  const allStudents = (data?.list ?? [])
+    .filter((m) => m.role_id === 3)
+    .sort((a, b) => a.full_name.localeCompare(b.full_name));
 
-  // Close modal when close
-  const handleClose = () => {
-    setOpenDetailsId(null);
-    params.delete("id");
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
+  const filtered = debouncedKeyword
+    ? allStudents.filter((m) =>
+        m.full_name.toLowerCase().includes(debouncedKeyword.toLowerCase())
+      )
+    : allStudents;
 
-  // Fetch tRPC for Cohort Member List
-  const { data, isLoading, isError } = trpc.list.cohortMembers.useQuery({
-    cohort_id: props.cohortId,
-  });
-
-  const cohortMemberList = data?.list.filter((item) => item.role_id === 3);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paged = filtered.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE
+  );
 
   return (
-    <React.Fragment>
-      <PageContainerCMS>
-        <div className="container w-full flex flex-col gap-5">
-          <PageHeaderCMS
-            name="Student Performance Tracker"
-            desc="Track student attendance, assignment progress, and overall learning performance"
-            icon={BarChart3}
-          />
+    <>
+      <SectionContainerCMS title="Student Performance">
+        <div className="flex flex-col gap-3">
+          <div className="w-full max-w-xs">
+            <AppInput
+              variant="CMS"
+              inputId="search-performance"
+              inputType="search"
+              inputIcon={<Search className="size-4" />}
+              inputPlaceholder="Search students..."
+              value={keyword}
+              onInputChange={setKeyword}
+            />
+          </div>
 
-          {isLoading && <AppLoadingComponents />}
-          {isError && <AppErrorComponents />}
+          {isLoading ? (
+            <AppLoadingComponents />
+          ) : (
+            <>
+              <table className="w-full relative rounded-sm">
+                <TableHeaderCMS>
+                  <TableRowCMS>
+                    <TableHeadCMS>NO.</TableHeadCMS>
+                    <TableHeadCMS>NAME</TableHeadCMS>
 
-          {!isLoading && !isError && (
-            <React.Fragment>
-              <div className="progress-review grid grid-cols-4 w-full gap-3 xl:grid-cols-5">
-                <ScorecardItemCMS
-                  scorecardName="Total Students"
-                  scorecardValue={cohortMemberList?.length || 0}
-                  scorecardBackground="bg-primary"
-                />
-                <ScorecardItemCMS
-                  scorecardName="Student Scouts"
-                  scorecardValue={
-                    cohortMemberList?.filter((item) => item.is_scout).length ||
-                    0
-                  }
-                  scorecardBackground="bg-warning-foreground"
-                />
-                <ScorecardItemCMS
-                  scorecardName="Completed Information"
-                  scorecardValue={
-                    cohortMemberList?.filter(
-                      (item) => item.has_completed_survey
-                    ).length || 0
-                  }
-                  scorecardBackground="bg-tertiary"
-                />
-                <ScorecardItemCMS
-                  scorecardName="Certified Students"
-                  scorecardValue={
-                    cohortMemberList?.filter((item) => !!item.certificate_url)
-                      .length || 0
-                  }
-                  scorecardBackground="bg-success-foreground"
-                />
-              </div>
-              <div className="submission-list flex flex-col gap-2">
-                <table className="table-submission relative w-full rounded-sm">
-                  <TableHeaderCMS>
-                    <TableRowCMS>
-                      <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
-                      <TableHeadCMS>{`Name`.toUpperCase()}</TableHeadCMS>
-                      <TableHeadCMS>{`Sct`.toUpperCase()}</TableHeadCMS>
-                      <TableHeadCMS>{`Biz Info`.toUpperCase()}</TableHeadCMS>
-                      <TableHeadCMS>{`Attendance`.toUpperCase()}</TableHeadCMS>
-                      <TableHeadCMS>{`Assignment`.toUpperCase()}</TableHeadCMS>
-                      <TableHeadCMS>{`Certificate`.toUpperCase()}</TableHeadCMS>
-                      {isAllowedDetailsMembers && (
-                        <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
+                    <TableHeadCMS>ATTENDANCE</TableHeadCMS>
+                    <TableHeadCMS>ASSIGNMENT</TableHeadCMS>
+                    <TableHeadCMS>CERTIFICATE</TableHeadCMS>
+                    {isAllowedDetails && <TableHeadCMS>ACTION</TableHeadCMS>}
+                  </TableRowCMS>
+                </TableHeaderCMS>
+                <TableBodyCMS>
+                  {paged.map((post, index) => (
+                    <TableRowCMS key={post.id}>
+                      <TableCellCMS>
+                        {(safePage - 1) * PAGE_SIZE + index + 1}
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <div className="flex items-center gap-3">
+                          <div className="flex size-6 rounded-full shrink-0 overflow-hidden">
+                            <Image
+                              className="object-cover w-full h-full"
+                              src={
+                                post.avatar ||
+                                "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
+                              }
+                              alt={post.full_name}
+                              width={300}
+                              height={300}
+                            />
+                          </div>
+                          <p className="font-semibold font-bodycopy text-sm line-clamp-1">
+                            {post.full_name}
+                          </p>
+                        </div>
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <div className="flex items-center gap-2 w-full min-w-[80px]">
+                          <Progress
+                            value={Math.round(
+                              (post.attended_learning_count /
+                                post.learning_count) *
+                                100
+                            )}
+                          />
+                          <p className="text-xs shrink-0">
+                            {post.attended_learning_count}/{post.learning_count}
+                          </p>
+                        </div>
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        <div className="flex items-center gap-2 w-full min-w-[80px]">
+                          <Progress
+                            value={Math.round(
+                              (post.submitted_project_count /
+                                post.project_count) *
+                                100
+                            )}
+                          />
+                          <p className="text-xs shrink-0">
+                            {post.submitted_project_count}/{post.project_count}
+                          </p>
+                        </div>
+                      </TableCellCMS>
+                      <TableCellCMS>
+                        {!!post.certificate_url ? (
+                          <BooleanLabelCMS label="UPLOADED" value={true} />
+                        ) : (
+                          <BooleanLabelCMS label="NOT UPLOADED" value={false} />
+                        )}
+                      </TableCellCMS>
+                      {isAllowedDetails && (
+                        <TableCellCMS>
+                          <AppButton
+                            variant="light"
+                            size="icon"
+                            onClick={() => setOpenDetailsId(post.id)}
+                          >
+                            <Eye className="size-4" />
+                          </AppButton>
+                        </TableCellCMS>
                       )}
                     </TableRowCMS>
-                  </TableHeaderCMS>
-                  <TableBodyCMS>
-                    {cohortMemberList
-                      ?.sort((a, b) => a.full_name.localeCompare(b.full_name))
-                      .map((post, index) => (
-                        <TableRowCMS key={index}>
-                          <TableCellCMS>{index + 1}</TableCellCMS>
-                          <TableCellCMS>
-                            <div className="user-id flex items-center gap-4 w-full">
-                              <div className="flex size-6 rounded-full shrink-0 overflow-hidden">
-                                <Image
-                                  className="object-cover w-full h-full"
-                                  src={
-                                    post.avatar ||
-                                    "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png"
-                                  }
-                                  alt={`Image ${post.full_name}`}
-                                  width={300}
-                                  height={300}
-                                />
-                              </div>
-                              <p className="user-name font-semibold line-clamp-1">
-                                {post.full_name}
-                              </p>
-                            </div>
-                          </TableCellCMS>
-                          <TableCellCMS>
-                            {!!post.is_scout && (
-                              <Star
-                                className="size-5"
-                                fill={!!post.is_scout ? "#E5BA39" : "none"}
-                                strokeWidth={!!post.is_scout ? 0 : 2}
-                              />
-                            )}
-                          </TableCellCMS>
-                          <TableCellCMS>
-                            {post.has_completed_survey ? (
-                              <BooleanLabelCMS label="COMPLETED" value={true} />
-                            ) : (
-                              <BooleanLabelCMS
-                                label="UNFINISHED"
-                                value={false}
-                              />
-                            )}
-                          </TableCellCMS>
-                          <TableCellCMS>
-                            <div className="flex items-center gap-2 w-full">
-                              <Progress
-                                value={Math.round(
-                                  (post.attended_learning_count /
-                                    post.learning_count) *
-                                    100
-                                )}
-                              />
-                              <p className="text-xs">
-                                {post.attended_learning_count}/
-                                {post.learning_count}
-                              </p>
-                            </div>
-                          </TableCellCMS>
-                          <TableCellCMS>
-                            <div className="flex items-center gap-2 w-full">
-                              <Progress
-                                value={Math.round(
-                                  (post.submitted_project_count /
-                                    post.project_count) *
-                                    100
-                                )}
-                              />
-                              <p className="text-xs">
-                                {post.submitted_project_count}/
-                                {post.project_count}
-                              </p>
-                            </div>
-                          </TableCellCMS>
-                          <TableCellCMS>
-                            {!!post.certificate_url ? (
-                              <BooleanLabelCMS label="UPLOADED" value={true} />
-                            ) : (
-                              <BooleanLabelCMS
-                                label="NOT UPLOADED"
-                                value={false}
-                              />
-                            )}
-                          </TableCellCMS>
-                          {isAllowedDetailsMembers && (
-                            <TableCellCMS>
-                              <AppButton
-                                variant="light"
-                                size="small"
-                                onClick={() => viewMemberDetails(post.id)}
-                              >
-                                <Eye className="size-4" />
-                                Preview
-                              </AppButton>
-                            </TableCellCMS>
-                          )}
-                        </TableRowCMS>
-                      ))}
-                  </TableBodyCMS>
-                </table>
-              </div>
-            </React.Fragment>
+                  ))}
+                </TableBodyCMS>
+              </table>
+
+              {filtered.length === 0 && (
+                <p className="text-sm text-center text-emphasis font-bodycopy py-4">
+                  {debouncedKeyword
+                    ? `No results for "${debouncedKeyword}"`
+                    : "No students enrolled yet"}
+                </p>
+              )}
+
+              {totalPages > 1 && (
+                <div className="flex flex-col items-center gap-2">
+                  <AppNumberPagination
+                    currentPage={safePage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                  <p className="text-xs text-emphasis font-bodycopy">
+                    Showing {paged.length} of {filtered.length} students
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
-      </PageContainerCMS>
+      </SectionContainerCMS>
 
-      {/* Open Submission Details */}
       {openDetailsId && (
         <EditCohortMemberFormCMS
-          sessionToken={props.sessionToken}
-          sessionUserId={props.sessionUserId}
-          sessionUserRole={props.sessionUserRole}
+          sessionToken={sessionToken}
+          sessionUserId={sessionUserId}
+          sessionUserRole={sessionUserRole}
           userId={openDetailsId}
-          cohortId={props.cohortId}
+          cohortId={cohortId}
           isOpen={!!openDetailsId}
-          onClose={handleClose}
+          onClose={() => setOpenDetailsId(null)}
         />
       )}
-    </React.Fragment>
+    </>
   );
 }
