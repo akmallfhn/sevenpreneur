@@ -1,6 +1,6 @@
 "use client";
 import { trpc } from "@/trpc/client";
-import { faClock, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faUserCheck, faUserXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -26,9 +26,9 @@ interface LearningSessionItemCMSProps {
   learningSessionName: string;
   learningSessionEducatorName: string;
   learningSessionEducatorAvatar: string;
-  learningSessionMethod: string;
   learningSessionDate: string;
-  learningSessionPlace?: string;
+  attendanceCount?: number;
+  noAttendanceCount?: number;
   onDeleteSuccess?: () => void;
 }
 
@@ -40,9 +40,9 @@ export default function LearningSessionItemCMS({
   learningSessionName,
   learningSessionEducatorName,
   learningSessionEducatorAvatar,
-  learningSessionMethod,
   learningSessionDate,
-  learningSessionPlace,
+  attendanceCount,
+  noAttendanceCount,
   onDeleteSuccess,
 }: LearningSessionItemCMSProps) {
   const [isActionsOpened, setIsActionsOpened] = useState(false);
@@ -57,13 +57,6 @@ export default function LearningSessionItemCMS({
     allowedRolesUpdateLearning.includes(sessionUserRole);
   const isAllowedDeleteLearning =
     allowedRolesDeleteLearning.includes(sessionUserRole);
-
-  let learningLocation;
-  if (learningSessionMethod === "ONLINE") {
-    learningLocation = "Online";
-  } else if (learningSessionPlace) {
-    learningLocation = learningSessionPlace;
-  }
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -125,20 +118,34 @@ export default function LearningSessionItemCMS({
               </p>
             </div>
             <div className="divider w-[1px] self-stretch bg-border" />
-            <div className="session-schedule flex flex-col w-30 text-sm gap-1 font-medium text-emphasis shrink-0">
-              <div className="session-time flex items-center gap-2">
-                <FontAwesomeIcon icon={faClock} className="text-emphasis" />
-                <p>{dayjs(learningSessionDate).format("HH:mm")}</p>
-              </div>
-              <div className="session-place flex items-center gap-2">
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  className="text-emphasis shrink-0"
-                />
-                <p className="line-clamp-1">{learningLocation}</p>
-              </div>
-            </div>
-            <div className="divider w-[1px] self-stretch bg-border" />
+            {attendanceCount !== undefined &&
+              noAttendanceCount !== undefined && (
+                <>
+                  <div className="flex flex-col gap-1.5 w-16 shrink-0 font-bodycopy">
+                    <span className="flex items-center gap-2">
+                      <FontAwesomeIcon
+                        icon={faUserCheck}
+                        className="w-3.5"
+                        style={{ color: "#0165fc" }}
+                      />
+                      <span className="font-semibold text-sm text-emphasis">
+                        {attendanceCount}
+                      </span>
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <FontAwesomeIcon
+                        icon={faUserXmark}
+                        className="w-3.5"
+                        style={{ color: "#e74d79" }}
+                      />
+                      <span className="font-semibold text-sm text-emphasis">
+                        {noAttendanceCount}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="divider w-[1px] self-stretch bg-border" />
+                </>
+              )}
             <div className="session-metadata flex items-center gap-3">
               <div className="session-educator-avatar aspect-square size-9 shrink-0 rounded-full overflow-hidden">
                 <Image

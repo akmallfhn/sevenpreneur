@@ -419,11 +419,44 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
         },
         orderBy: [{ meeting_date: "desc" }, { created_at: "desc" }],
       });
+      const attCounts = await opts.ctx.prisma.$queryRaw<AttendanceCount[]>`
+SELECT
+  learnings.id AS learning_id,
+  COUNT(CASE WHEN attendances.check_in_at IS NOT NULL OR attendances.check_out_at IS NOT NULL THEN 1 END)::INTEGER AS check_in_count,
+  0::INTEGER AS check_out_count,
+  COALESCE(
+    member_counts.member_count - COUNT(CASE WHEN attendances.check_in_at IS NOT NULL OR attendances.check_out_at IS NOT NULL THEN 1 END),
+    0
+  )::INTEGER AS has_no_attendance
+FROM learnings
+  LEFT JOIN attendances ON learnings.id = attendances.learning_id
+  LEFT JOIN users ON attendances.user_id = users.id
+  LEFT JOIN (
+      SELECT cohort_prices.id AS price_id, COUNT(users.id) AS member_count
+      FROM cohort_prices
+        LEFT JOIN users_cohorts ON cohort_prices.id = users_cohorts.cohort_price_id
+        INNER JOIN users ON users_cohorts.user_id = users.id
+      WHERE cohort_prices.cohort_id = ${opts.input.cohort_id}
+        AND users.role_id = 3
+      GROUP BY cohort_prices.id
+    UNION
+      SELECT 0::INTEGER AS price_id, COUNT(users.id) AS member_count
+      FROM users_cohorts
+        INNER JOIN users ON users_cohorts.user_id = users.id
+      WHERE cohort_id = ${opts.input.cohort_id}
+        AND users.role_id = 3
+  ) AS member_counts ON COALESCE(learnings.price_id, 0) = member_counts.price_id
+WHERE cohort_id = ${opts.input.cohort_id}
+  AND (users.role_id IS NULL OR users.role_id = 3)
+GROUP BY learnings.id, member_counts.member_count`;
+      const attMap = new Map(attCounts.map((a) => [a.learning_id, a]));
+
       const returnedList = learningsList.map((entry) => {
         const attended =
           entry.attendances.length == 1 && // only one attendance row for each (learning_id, user_id)
           !!entry.attendances[0].check_in_at &&
           !!entry.attendances[0].check_out_at;
+        const att = attMap.get(entry.id);
         return {
           id: entry.id,
           cohort_id: entry.cohort_id,
@@ -436,6 +469,8 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           speaker: entry.speaker,
           status: entry.status,
           attended: attended,
+          check_in_count: att?.check_in_count ?? 0,
+          has_no_attendance: att?.has_no_attendance ?? 0,
         };
       });
       const attendanceCount = await opts.ctx.prisma.attendance.aggregate({
@@ -760,9 +795,12 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
       const countsList = await opts.ctx.prisma.$queryRaw<AttendanceCount[]>`
 SELECT
   learnings.id AS learning_id,
-  COUNT(check_in_at)::INTEGER AS check_in_count,
-  COUNT(check_out_at)::INTEGER AS check_out_count,
-  COALESCE((member_counts.member_count - COUNT(users.id)), 0)::INTEGER AS has_no_attendance
+  COUNT(CASE WHEN attendances.check_in_at IS NOT NULL OR attendances.check_out_at IS NOT NULL THEN 1 END)::INTEGER AS check_in_count,
+  COUNT(attendances.check_out_at)::INTEGER AS check_out_count,
+  COALESCE(
+    member_counts.member_count - COUNT(CASE WHEN attendances.check_in_at IS NOT NULL OR attendances.check_out_at IS NOT NULL THEN 1 END),
+    0
+  )::INTEGER AS has_no_attendance
 FROM learnings
   LEFT JOIN attendances ON learnings.id = attendances.learning_id
   LEFT JOIN users ON attendances.user_id = users.id
