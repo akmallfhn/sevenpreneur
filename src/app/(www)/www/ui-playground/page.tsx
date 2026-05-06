@@ -1,7 +1,8 @@
 import AppButton from "@/components/buttons/AppButton";
 import AppPageState from "@/components/states/AppPageState";
+import SendTestEmailButton from "./SendTestEmailButton";
 
-export default function Page() {
+export default async function Page() {
   if (process.env.DOMAIN_MODE === "production") {
     return <AppPageState variant="NOT_FOUND" />;
   }
@@ -52,6 +53,9 @@ export default function Page() {
       </div>
       <div className="flex items-center justify-center gap-2">
         <p className="font-bodycopy">Lorem ipsum dolor sit amet</p>
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        <SendTestEmailButton />
       </div>
     </div>
   );

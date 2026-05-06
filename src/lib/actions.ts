@@ -863,3 +863,28 @@ export async function GenerateAIPriceStrategy(
     id: generatePriceStrategy.result_id,
   };
 }
+
+// SEND TEST SESSION REMINDER EMAIL
+// export async function SendTestSessionReminder(to: string) {
+//   if (process.env.DOMAIN_MODE === "production") {
+//     throw new Error("Not available in production");
+//   }
+
+//   const html = await render(
+//     SessionReminderEmail({
+//       firstName: "Akmal",
+//       cohortName: "Sevenprneuer Business Blueprint Program Batch 8",
+//       cohortImage:
+//         "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/cohorts/1775832454007.webp",
+//       sessionName: "Day 7. Business Skills",
+//       sessionPlace: "Zoom",
+//       sessionDate: "Rabu, 24 Mei 2026 - Pukul 22.00 WIB",
+//       joinUrl: "#",
+//     })
+//   );
+//   await sendEmail({
+//     mailRecipients: [to],
+//     mailSubject: `Mulai Sebentar Lagi: `,
+//     mailHtml: html,
+//   });
+// }
