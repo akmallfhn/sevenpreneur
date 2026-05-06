@@ -1,3 +1,4 @@
+import { SessionReminderEmail } from "@/components/emails/SessionReminderEmail";
 import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
 import GetQStashClient from "@/lib/qstash";
@@ -6,7 +7,21 @@ import {
   LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE,
   UpdateLearningReminderSchedule,
 } from "@/trpc/utils/schedule_reminder";
+import {
+  getConferenceAttributes,
+  getConferenceVariantFromURL,
+} from "@/lib/conference-variant";
+import { render } from "@react-email/render";
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { NextRequest, NextResponse } from "next/server";
+import { createElement } from "react";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale("id");
 
 type QStashLearningRemider = {
   learning_id?: number;
@@ -21,9 +36,7 @@ export async function POST(req: NextRequest) {
     LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 10
   );
   if (!upcomingLearning) {
-    return new NextResponse("OK", {
-      status: 200,
-    });
+    return new NextResponse("OK", { status: 200 });
   }
 
   if (upcomingLearning.id !== (reqBody.learning_id || 0)) {
@@ -37,9 +50,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return new NextResponse("OK", {
-      status: 200,
-    });
+    return new NextResponse("OK", { status: 200 });
   }
 
   const selectedLearning = await prisma.learning.findFirst({
@@ -47,6 +58,15 @@ export async function POST(req: NextRequest) {
       cohort_id: true,
       name: true,
       meeting_date: true,
+      method: true,
+      meeting_url: true,
+      location_name: true,
+      cohort: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
     },
     where: { id: reqBody.learning_id },
   });
@@ -55,9 +75,24 @@ export async function POST(req: NextRequest) {
       `qstash.schedule-learning: The learning with the given ID (${reqBody.learning_id}) is not found.`
     );
 
-    return new NextResponse("OK", {
-      status: 200,
-    });
+    return new NextResponse("OK", { status: 200 });
+  }
+
+  const sessionDate = dayjs(selectedLearning.meeting_date)
+    .tz("Asia/Jakarta")
+    .format("dddd, D MMMM YYYY - HH:mm [WIB]");
+
+  const conferenceName = selectedLearning.meeting_url
+    ? getConferenceAttributes(
+        getConferenceVariantFromURL(selectedLearning.meeting_url)
+      ).conferenceName
+    : "Online";
+
+  let sessionPlace = conferenceName;
+  if (selectedLearning.method === "ONSITE") {
+    sessionPlace = selectedLearning.location_name ?? "Onsite";
+  } else if (selectedLearning.method === "HYBRID") {
+    sessionPlace = `${selectedLearning.location_name ?? "Onsite"} (Hybrid via ${conferenceName})`;
   }
 
   const memberList = await prisma.userCohort.findMany({
@@ -75,22 +110,26 @@ export async function POST(req: NextRequest) {
   });
 
   for (const member of memberList) {
+    const firstName = member.user.full_name.split(" ")[0];
+
+    const html = await render(
+      createElement(SessionReminderEmail, {
+        firstName,
+        cohortName: selectedLearning.cohort.name,
+        cohortImage: selectedLearning.cohort.image,
+        sessionName: selectedLearning.name,
+        sessionPlace,
+        sessionDate,
+        joinUrl: selectedLearning.meeting_url ?? undefined,
+      })
+    );
+
     await sendEmail({
       mailRecipients: [member.user.email],
-      mailSubject: `Learning Reminder: ${selectedLearning.name}`,
-      mailBody:
-        `Hi, ${member.user.full_name},\n\n` +
-        "We sent you this email to remind you about the upcoming learning session:\n" +
-        `Name: ${selectedLearning.name}\n` +
-        `Date: ${selectedLearning.meeting_date}\n\n` +
-        "More details are posted on Agora LMS.\n\n" +
-        "Intensity gets you started; Consistency keeps you growing. 🚀\n\n" +
-        "Cheers,\n" +
-        "Sevenpreneur Team",
+      mailSubject: `Mulai Sebentar Lagi! ${selectedLearning.name} - ${selectedLearning.cohort.name}`,
+      mailHtml: html,
     });
   }
 
-  return new NextResponse("OK", {
-    status: 200,
-  });
+  return new NextResponse("OK", { status: 200 });
 }
