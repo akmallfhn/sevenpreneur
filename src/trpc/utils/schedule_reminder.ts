@@ -3,6 +3,8 @@ import GetQStashClient from "@/lib/qstash";
 
 const LEARNING_REMINDER_SCHEDULE_ID = "sch_learning_reminder";
 
+const SCHEDULE_MINIMUM_MINUTE_FROM_NOW = 2;
+
 export const LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE = 30;
 
 export async function GetUpcomingLearning(
@@ -43,10 +45,20 @@ export async function UpdateLearningReminderSchedule(
     return true;
   }
 
+  const minimumTime = new Date();
+  minimumTime.setMinutes(
+    minimumTime.getMinutes() + SCHEDULE_MINIMUM_MINUTE_FROM_NOW
+  );
+
   const meetingDate = upcomingLearning.meeting_date;
   const scheduledTime = new Date(meetingDate.getTime());
   scheduledTime.setMinutes(
     meetingDate.getMinutes() - LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE
+  );
+
+  // Minimum time to schedule a reminder to avoid "in a year" schedule
+  scheduledTime.setTime(
+    Math.max(minimumTime.getTime(), scheduledTime.getTime())
   );
 
   const cronString = [
