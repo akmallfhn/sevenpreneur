@@ -20,7 +20,7 @@ export async function GetUpcomingLearning(
       meeting_date: true,
     },
     where: {
-      meeting_date: { gte: minusXMinutes },
+      meeting_date: { gt: minusXMinutes },
     },
     orderBy: [{ meeting_date: "asc" }],
   });
