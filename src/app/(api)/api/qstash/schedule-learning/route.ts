@@ -49,7 +49,7 @@ export async function POST() {
 
   const upcomingLearning = await GetUpcomingLearning(
     prisma,
-    LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 10
+    LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 5
   );
   if (!upcomingLearning) {
     return await updateScheduleAndReturn(prisma);
