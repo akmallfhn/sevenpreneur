@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
 
     await sendEmail({
       mailRecipients: [member.user.email],
-      mailSubject: `Mulai Sebentar Lagi! ${selectedLearning.name} - ${selectedLearning.cohort.name}`,
+      mailSubject: `Mulai Sebentar Lagi! ${selectedLearning.name} by MIFX`,
       mailHtml: html,
     });
   }
