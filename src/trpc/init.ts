@@ -121,23 +121,6 @@ export const aileneProcedure = t.procedure.use(async (opts) => {
   });
 });
 
-export const labProcedure = t.procedure.use(async (opts) => {
-  const { ctx } = opts;
-  if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
-  const member = await ctx.prisma.labMember.findUnique({
-    where: { user_id: ctx.user.id },
-    include: { company: true },
-  });
-  if (!member) throw new TRPCError({ code: "FORBIDDEN" });
-  return opts.next({
-    ctx: {
-      prisma: ctx.prisma,
-      user: ctx.user,
-      labMember: member,
-    },
-  });
-});
-
 export const roleBasedProcedure = (roleList: string[]) => {
   return t.procedure.use(async (opts) => {
     const { ctx } = opts;

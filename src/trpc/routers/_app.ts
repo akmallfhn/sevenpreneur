@@ -1,6 +1,5 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { aileneRouter } from "./ailene/_router.ailene";
-import { labRouter } from "./lab/_router.lab";
 import { authRouter } from "./auth";
 import { checkRouter } from "./check";
 import { createRouter } from "./create";
@@ -16,7 +15,6 @@ import { useRouter } from "./use";
 export const appRouter = createTRPCRouter({
   hello: helloRouter,
   ailene: aileneRouter,
-  lab: labRouter,
   auth: authRouter,
   list: listRouter,
   create: createRouter,
