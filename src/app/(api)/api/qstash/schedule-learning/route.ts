@@ -27,6 +27,24 @@ type QStashLearningRemider = {
   learning_id?: number;
 };
 
+async function updateScheduleAndReturn(
+  prisma: ReturnType<typeof GetPrismaClient>
+) {
+  const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
+    prisma,
+    GetQStashClient()
+  );
+  if (!isUpdateScheduleSuccess) {
+    console.error(
+      "qstash.schedule-learning: Failed to update learning reminder schedule."
+    );
+  }
+
+  return new NextResponse("OK", {
+    status: 200,
+  });
+}
+
 export async function POST(req: NextRequest) {
   const reqBody: QStashLearningRemider = await req.json();
   const prisma = GetPrismaClient();
@@ -36,21 +54,11 @@ export async function POST(req: NextRequest) {
     LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 10
   );
   if (!upcomingLearning) {
-    return new NextResponse("OK", { status: 200 });
+    return await updateScheduleAndReturn(prisma);
   }
 
   if (upcomingLearning.id !== (reqBody.learning_id || 0)) {
-    const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
-      prisma,
-      GetQStashClient()
-    );
-    if (!isUpdateScheduleSuccess) {
-      console.error(
-        "qstash.schedule-learning: Failed to update learning reminder schedule."
-      );
-    }
-
-    return new NextResponse("OK", { status: 200 });
+    return await updateScheduleAndReturn(prisma);
   }
 
   const selectedLearning = await prisma.learning.findFirst({
@@ -76,7 +84,7 @@ export async function POST(req: NextRequest) {
       `qstash.schedule-learning: The learning with the given ID (${reqBody.learning_id}) is not found.`
     );
 
-    return new NextResponse("OK", { status: 200 });
+    return await updateScheduleAndReturn(prisma);
   }
 
   const sessionDate = dayjs(selectedLearning.meeting_date)
