@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
       method: true,
       meeting_url: true,
       location_name: true,
+      location_url: true,
       cohort: {
         select: {
           name: true,
@@ -120,7 +121,10 @@ export async function POST(req: NextRequest) {
         sessionName: selectedLearning.name,
         sessionPlace,
         sessionDate,
-        joinUrl: selectedLearning.meeting_url ?? undefined,
+        joinUrl:
+          selectedLearning.method === "ONSITE"
+            ? (selectedLearning.location_url ?? undefined)
+            : (selectedLearning.meeting_url ?? undefined),
       })
     );
 
