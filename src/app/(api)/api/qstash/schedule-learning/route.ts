@@ -143,5 +143,5 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  return new NextResponse("OK", { status: 200 });
+  return await updateScheduleAndReturn(prisma);
 }
