@@ -33,5 +33,6 @@ export async function sendEmail({
     return responseMail;
   } catch (error) {
     console.error("Mailtrap send error:", error);
+    throw error;
   }
 }
