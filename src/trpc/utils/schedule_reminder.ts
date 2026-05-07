@@ -1,5 +1,6 @@
 import GetPrismaClient from "@/lib/prisma";
 import GetQStashClient from "@/lib/qstash";
+import { StatusEnum } from "@prisma/client";
 
 const LEARNING_REMINDER_SCHEDULE_ID = "sch_learning_reminder";
 
@@ -23,6 +24,7 @@ export async function GetUpcomingLearning(
     where: {
       id: { notIn: exclusionList },
       meeting_date: { gt: minusXMinutes },
+      status: StatusEnum.ACTIVE,
     },
     orderBy: [{ meeting_date: "asc" }, { id: "asc" }],
   });
@@ -79,6 +81,7 @@ export async function GetNearbyLearnings(
         gte: meetingDate,
         lte: searchDate,
       },
+      status: StatusEnum.ACTIVE,
     },
     orderBy: [{ meeting_date: "asc" }, { id: "asc" }],
   });
