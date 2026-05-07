@@ -7,6 +7,8 @@ import {
   Transaction,
   User,
 } from "@prisma/client";
+import { render } from "@react-email/components";
+import { InvoiceEmail } from "@/components/emails/InvoiceEmail";
 import { encodeSHA256 } from "./encode";
 import { sendEmail } from "./mailtrap";
 
@@ -58,10 +60,23 @@ export async function afterPaidTrigger(
     );
 
     try {
+      const invoiceHtml = await render(
+        InvoiceEmail({
+          firstName: theTransaction.user.full_name,
+          itemName: theCohort.name,
+          itemImage: theCohort.image_banner,
+          itemType: "cohort",
+          invoiceNumber: theTransaction.invoice_number,
+          paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
+          paymentMethod: theTransaction.payment_method,
+          paymentChannel: theTransaction.payment_channel,
+          amount: Number(theTransaction.amount),
+        }),
+      );
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
-        mailSubject: welcomeMail.cohort.subject,
-        mailBody: welcomeMail.cohort.body(theTransaction, theCohort),
+        mailSubject: `Invoice Pembelian #${theTransaction.invoice_number} — ${theCohort.name}`,
+        mailHtml: invoiceHtml,
       });
     } catch (error) {
       console.error("afterPaidTrigger: Failed to send email", error);
@@ -94,10 +109,23 @@ export async function afterPaidTrigger(
     }
 
     try {
+      const invoiceHtml = await render(
+        InvoiceEmail({
+          firstName: theTransaction.user.full_name,
+          itemName: thePlaylist.name,
+          itemImage: thePlaylist.image_banner_url,
+          itemType: "playlist",
+          invoiceNumber: theTransaction.invoice_number,
+          paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
+          paymentMethod: theTransaction.payment_method,
+          paymentChannel: theTransaction.payment_channel,
+          amount: Number(theTransaction.amount),
+        }),
+      );
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
-        mailSubject: welcomeMail.playlist.subject(thePlaylist),
-        mailBody: welcomeMail.playlist.body(theTransaction, thePlaylist),
+        mailSubject: `Invoice Pembelian #${theTransaction.invoice_number} — ${thePlaylist.name}`,
+        mailHtml: invoiceHtml,
       });
     } catch (error) {
       console.error("afterPaidTrigger: Failed to send email", error);
@@ -136,10 +164,23 @@ export async function afterPaidTrigger(
     notifyMetaEvent(theTransaction, "PurchaseEvent", "event", "Business Event");
 
     try {
+      const invoiceHtml = await render(
+        InvoiceEmail({
+          firstName: theTransaction.user.full_name,
+          itemName: theEvent.name,
+          itemImage: theEvent.image,
+          itemType: "event",
+          invoiceNumber: theTransaction.invoice_number,
+          paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
+          paymentMethod: theTransaction.payment_method,
+          paymentChannel: theTransaction.payment_channel,
+          amount: Number(theTransaction.amount),
+        }),
+      );
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
-        mailSubject: welcomeMail.event.subject(theEvent),
-        mailBody: welcomeMail.event.body(theTransaction, theEvent),
+        mailSubject: `Invoice Pembelian #${theTransaction.invoice_number} — ${theEvent.name}`,
+        mailHtml: invoiceHtml,
       });
     } catch (error) {
       console.error("afterPaidTrigger: Failed to send email", error);
@@ -211,75 +252,3 @@ async function notifyMetaEvent(
     console.error("afterPaidTrigger: Failed to notify Meta API", error);
   }
 }
-
-const welcomeMail = {
-  cohort: {
-    subject: "You’re In! Here’s What’s Next for Business Blueprint Program 🎉",
-    body: (transaction: TransactionWithUser, cohort: Cohort) =>
-      `Hi ${transaction.user.full_name},\n\n` +
-      "Welcome aboard! 🎉\n" +
-      `Terima kasih sudah melakukan checkout dan resmi bergabung di ${cohort.name}.\n\n` +
-      "Di program ini, kamu akan mendapatkan:\n" +
-      "✅ Sesi blueprint membahas Seven Framework dipandu oleh Professional Business Coach\n" +
-      "✅ Akses ke komunitas entrepreneur inspiratif\n" +
-      "✅ Insight & strategi langsung dari para praktisi\n" +
-      "✅ Pembelajaran bisnis dengan integrasi penggunaan AI\n\n" +
-      "✨ Jika kamu terdaftar dalam paket VIP, kamu akan mendapatkan kesempatan untuk:\n" +
-      "🌟 Sesi offline di Jakarta\n" +
-      "🌟 Sesi eksklusif bersama para top speaker and business leader\n" +
-      "🌟 Intimate Dinner & Networking\n" +
-      "🌟 Mentoring privat 1-on-1 dengan business coach\n\n" +
-      "📌 What’s Next?\n" +
-      "Klik link berikut untuk masuk ke LMS dan mulai akses materi:\n" +
-      "https://agora.sevenpreneur.com/cohorts\n" +
-      "Gunakan email ini untuk login ke LMS.\n\n" +
-      "Di LMS kamu bisa menemukan:\n" +
-      "• Jadwal lengkap program\n" +
-      "• Materi & kurikulum terstruktur\n" +
-      "• Info sesi live & recording\n" +
-      "• Akses ke Q&A bersama mentor\n" +
-      "…dan banyak lagi!\n\n" +
-      "Sekali lagi, selamat datang di perjalanan bisnis bareng Sevenpreneur 🚀\n" +
-      "This is the beginning of something big!\n\n" +
-      "Cheers,\n" +
-      "Sevenpreneur Team",
-  },
-  playlist: {
-    subject: (playlist: Playlist) =>
-      `You’re In! Access Your Learning Series: ${playlist.name} 🎉`,
-    body: (transaction: TransactionWithUser, playlist: Playlist) =>
-      `Hi ${transaction.user.full_name},\n\n` +
-      "Congrats and welcome aboard! 🎉\n\n" +
-      `Kamu baru saja berhasil membeli Learning Series: "${playlist.name}".\n` +
-      "Sekarang kamu bisa langsung mulai belajar dan menikmati video-on-demand (VOD) di platform LMS Sevenpreneur.\n\n" +
-      "Dalam Learning Series ini kamu akan mendapatkan:\n" +
-      "✅ Materi pembelajaran bisnis yang praktis & actionable\n" +
-      "✅ Insight dari para praktisi berpengalaman\n" +
-      "✅ Akses kapan pun tanpa batas waktu (on-demand)\n\n" +
-      "📌 What’s Next?\n" +
-      "Klik link berikut untuk mulai belajar di LMS:\n" +
-      "https://agora.sevenpreneur.com/playlists\n\n" +
-      "Gunakan email ini untuk login ke LMS Sevenpreneur\n\n" +
-      "Selamat belajar dan semoga materi ini membantu kamu bertumbuh sebagai entrepreneur yang lebih kuat 💪\n\n" +
-      "Cheers,\n" +
-      "Sevenpreneur Team",
-  },
-  event: {
-    subject: (event: Event) =>
-      `You’re In! Your Spot for ${event.name} is Confirmed 🎟️`,
-    body: (transaction: TransactionWithUser, event: Event) =>
-      `Hi ${transaction.user.full_name},\n\n` +
-      `Kamu telah berhasil membeli tiket untuk event ${event.name} yang diselenggarakan oleh Sevenpreneur.\n` +
-      "Kami sangat senang kamu bergabung dalam perjalanan ini!\n\n" +
-      "Berikut informasi mengenai event:\n" +
-      `• Event: ${event.name}\n` +
-      (event.start_date ? `• Tanggal: ${event.start_date}\n` : "") +
-      (event.location_name ? `• Lokasi: ${event.location_name}\n` : "") +
-      "\n" +
-      "📌 What’s Next?\n" +
-      "Untuk pertanyaan seputar acara atau bantuan teknis, kamu dapat mengirim email ke event@sevenpreneur.com. 🙌\n\n" +
-      "Terima kasih sudah jadi bagian dari komunitas Sevenpreneur. See you at the event! 🚀\n\n" +
-      "Cheers,\n" +
-      "Sevenpreneur Team",
-  },
-};
