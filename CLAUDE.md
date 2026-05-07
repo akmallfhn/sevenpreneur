@@ -185,6 +185,12 @@ const mutation = trpc.something.create.useMutation({
 - Upload ke Supabase Storage via `src/lib/supabase.ts`
 - Simpan public URL di field DB
 
+### Date & Time
+
+- **Semua operasi tanggal dan waktu wajib pakai `dayjs`** — jangan pakai native `Date` untuk manipulasi/formatting
+- Helper umum tersedia di `src/lib/date-time-manipulation.ts` — cek dulu sebelum bikin baru
+- Untuk timezone, parsing, dan formatting konsisten, selalu lewat dayjs (`dayjs()`, `dayjs.utc()`, `dayjs.tz()`)
+
 ## What to Avoid
 
 - Jangan pakai `fetch` langsung untuk data internal — pakai tRPC

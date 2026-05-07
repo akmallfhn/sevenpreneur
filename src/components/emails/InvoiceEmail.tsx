@@ -12,9 +12,20 @@ import {
   Section,
   Text,
 } from "@react-email/components";
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import "dayjs/locale/id";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale("id");
 
 const LOGO_URL =
   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-main.png";
+
+const LMS_URL_LABEL = "agora.sevenpreneur.com";
+const LMS_URL_HREF = "https://agora.sevenpreneur.com";
 
 const SOCIAL = [
   {
@@ -48,10 +59,10 @@ export type InvoiceItemType = "cohort" | "event" | "playlist";
 export interface InvoiceEmailProps {
   /** Buyer's full name */
   firstName: string;
+  /** Buyer's email — used as LMS username */
+  userEmail: string;
   /** Product name (cohort name, event name, or playlist name) */
   itemName: string;
-  /** Product thumbnail/banner image URL */
-  itemImage: string;
   /** Product category */
   itemType: InvoiceItemType;
   /** Invoice / transaction number (e.g. "INV-2024-001") */
@@ -64,21 +75,7 @@ export interface InvoiceEmailProps {
   paymentChannel: string;
   /** Total amount paid in IDR (numeric) */
   amount: number;
-  /** Deep-link to the purchased product on Agora LMS */
-  itemUrl?: string;
 }
-
-const ITEM_TYPE_LABEL: Record<InvoiceItemType, string> = {
-  cohort: "Program Cohort",
-  event: "Event",
-  playlist: "Learning Series",
-};
-
-const ITEM_TYPE_URL: Record<InvoiceItemType, string> = {
-  cohort: "https://agora.sevenpreneur.com/cohorts",
-  event: "https://agora.sevenpreneur.com/events",
-  playlist: "https://agora.sevenpreneur.com/playlists",
-};
 
 function formatIDR(amount: number): string {
   return new Intl.NumberFormat("id-ID", {
@@ -90,20 +87,9 @@ function formatIDR(amount: number): string {
 }
 
 function formatDate(isoDate: string): string {
-  try {
-    return (
-      new Date(isoDate).toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "Asia/Jakarta",
-      }) + " WIB"
-    );
-  } catch {
-    return isoDate;
-  }
+  const d = dayjs(isoDate);
+  if (!d.isValid()) return isoDate;
+  return `${d.tz("Asia/Jakarta").format("D MMMM YYYY, HH.mm")} WIB`;
 }
 
 function humanize(str: string): string {
@@ -115,19 +101,14 @@ function humanize(str: string): string {
 
 export function InvoiceEmail({
   firstName,
+  userEmail,
   itemName,
-  itemImage,
-  itemType,
   invoiceNumber,
   paidAt,
   paymentMethod,
   paymentChannel,
   amount,
-  itemUrl,
 }: InvoiceEmailProps) {
-  const categoryLabel = ITEM_TYPE_LABEL[itemType];
-  const ctaUrl = itemUrl ?? ITEM_TYPE_URL[itemType];
-
   return (
     <Html lang="id">
       <Head />
@@ -158,95 +139,153 @@ export function InvoiceEmail({
               pembelianmu. Simpan email ini sebagai bukti transaksi yang sah.
             </Text>
 
-            {/* Product thumbnail */}
-            <Img
-              src={itemImage}
-              alt={itemName}
-              width={544}
-              style={bannerImg}
-            />
+            {/* Two-column: Detail Invoice + Detail Akses LMS */}
+            <Row>
+              <Column style={leftCol}>
+                <Section style={infoCard}>
+                  <Text style={cardTitle}>DETAIL INVOICE</Text>
 
-            {/* Product info */}
-            <Text style={categoryTag}>{categoryLabel}</Text>
-            <Text style={productTitle}>{itemName}</Text>
+                  <HRow
+                    icon="📄"
+                    label="No. Invoice"
+                    value={`#${invoiceNumber}`}
+                  />
+                  <HRow
+                    icon="📅"
+                    label="Tanggal Bayar"
+                    value={formatDate(paidAt)}
+                  />
+                  <HRow
+                    icon="💳"
+                    label="Metode Pembayaran"
+                    value={humanize(paymentMethod)}
+                  />
+                  <HRow
+                    icon="🏦"
+                    label="Channel"
+                    value={humanize(paymentChannel)}
+                  />
 
-            <Hr style={divider} />
+                  <Section style={totalRowBox}>
+                    <Row>
+                      <Column style={iconCol}>
+                        <div style={iconBox}>💰</div>
+                      </Column>
+                      <Column style={{ verticalAlign: "middle" }}>
+                        <Text style={totalLabel}>Total Dibayar</Text>
+                      </Column>
+                      <Column
+                        style={{ textAlign: "right", verticalAlign: "middle" }}
+                      >
+                        <Text style={totalValue}>{formatIDR(amount)}</Text>
+                      </Column>
+                    </Row>
+                  </Section>
+                </Section>
+              </Column>
 
-            {/* Invoice detail table */}
-            <Section style={detailCard}>
-              <Row style={detailRow}>
-                <Column style={detailLabelCol}>
-                  <Text style={detailLabel}>No. Invoice</Text>
-                </Column>
-                <Column style={detailValueCol}>
-                  <Text style={detailValue}>#{invoiceNumber}</Text>
-                </Column>
-              </Row>
-              <Hr style={rowDivider} />
-              <Row style={detailRow}>
-                <Column style={detailLabelCol}>
-                  <Text style={detailLabel}>Tanggal Bayar</Text>
-                </Column>
-                <Column style={detailValueCol}>
-                  <Text style={detailValue}>{formatDate(paidAt)}</Text>
-                </Column>
-              </Row>
-              <Hr style={rowDivider} />
-              <Row style={detailRow}>
-                <Column style={detailLabelCol}>
-                  <Text style={detailLabel}>Metode Pembayaran</Text>
-                </Column>
-                <Column style={detailValueCol}>
-                  <Text style={detailValue}>{humanize(paymentMethod)}</Text>
-                </Column>
-              </Row>
-              <Hr style={rowDivider} />
-              <Row style={detailRow}>
-                <Column style={detailLabelCol}>
-                  <Text style={detailLabel}>Channel</Text>
-                </Column>
-                <Column style={detailValueCol}>
-                  <Text style={detailValue}>{humanize(paymentChannel)}</Text>
-                </Column>
-              </Row>
-              <Hr style={rowDivider} />
-              <Row style={detailRow}>
-                <Column style={detailLabelCol}>
-                  <Text style={totalLabel}>Total Dibayar</Text>
-                </Column>
-                <Column style={detailValueCol}>
-                  <Text style={totalValue}>{formatIDR(amount)}</Text>
-                </Column>
-              </Row>
-            </Section>
-
-            {/* CTA */}
-            <Section style={{ marginTop: 28, marginBottom: 10 }}>
-              <Link href={ctaUrl} style={ctaButton}>
-                Mulai Akses Sekarang →
-              </Link>
-            </Section>
-            <Text style={ctaNote}>
-              Gunakan email ini untuk login ke platform LMS Sevenpreneur.
-            </Text>
-
-            {/* Support */}
-            <Section style={supportCard}>
-              <Row>
-                <Column style={{ width: 44, paddingRight: 14 }}>
-                  <div style={supportIcon}>💬</div>
-                </Column>
-                <Column>
-                  <Text style={supportTitle}>Ada pertanyaan?</Text>
-                  <Text style={supportDesc}>
-                    Tim kami siap membantu kamu kapan pun dibutuhkan.
+              <Column style={rightCol}>
+                <Section style={infoCard}>
+                  <Text style={cardTitle}>DETAIL AKSES LMS</Text>
+                  <Text style={lmsSubtitle}>
+                    Gunakan informasi berikut untuk mengakses program pada
+                    Learning Management System (LMS) Sevenpreneur.
                   </Text>
-                  <Link href="https://wa.me/6282312492067" style={supportLink}>
-                    Hubungi Customer Support
-                  </Link>
-                </Column>
+
+                  <SRow
+                    icon="🌐"
+                    label="URL LMS"
+                    valueNode={
+                      <Link href={LMS_URL_HREF} style={lmsLink}>
+                        {LMS_URL_LABEL}
+                      </Link>
+                    }
+                  />
+                  <SRow icon="👤" label="Email / Username" value={userEmail} />
+                  <SRow
+                    iconNode={<div style={googleIcon}>G</div>}
+                    label="Metode Login"
+                    value="Login melalui Google"
+                    subText="Gunakan akun Google yang terhubung dengan email di atas."
+                  />
+
+                  <Section style={lmsNote}>
+                    <Row>
+                      <Column style={{ width: 24, verticalAlign: "top" }}>
+                        <Text style={lmsNoteIcon}>ℹ️</Text>
+                      </Column>
+                      <Column>
+                        <Text style={lmsNoteText}>
+                          Pastikan kamu login dengan akun Google yang sama untuk
+                          mengakses program.
+                        </Text>
+                      </Column>
+                    </Row>
+                  </Section>
+                </Section>
+              </Column>
+            </Row>
+
+            {/* Rincian Pembelian */}
+            <Text style={sectionHeader}>RINCIAN PEMBELIAN</Text>
+            <Section style={purchaseTable}>
+              <Row style={tableHeadRow}>
+                <Column style={tableHeadCellLeft}>DESKRIPSI</Column>
+                <Column style={tableHeadCellRight}>JUMLAH</Column>
+              </Row>
+              <Hr style={tableDivider} />
+              <Row>
+                <Column style={tableBodyCellLeft}>{itemName}</Column>
+                <Column style={tableBodyCellRight}>{formatIDR(amount)}</Column>
+              </Row>
+              <Hr style={tableDivider} />
+              <Row>
+                <Column style={tableTotalCellLeft}>TOTAL</Column>
+                <Column style={tableTotalCellRight}>{formatIDR(amount)}</Column>
               </Row>
             </Section>
+
+            {/* Two-column footer cards: confirmation + support */}
+            <Row style={{ marginTop: 24 }}>
+              <Column style={leftCol}>
+                <Section style={confirmCard}>
+                  <Row>
+                    <Column style={{ width: 40, paddingRight: 12 }}>
+                      <div style={checkIconWrap}>
+                        <div style={checkIcon}>✓</div>
+                      </div>
+                    </Column>
+                    <Column>
+                      <Text style={confirmText}>
+                        Pembayaran telah kami terima. Terima kasih atas
+                        kepercayaanmu kepada Sevenpreneur.
+                      </Text>
+                    </Column>
+                  </Row>
+                </Section>
+              </Column>
+              <Column style={rightCol}>
+                <Section style={supportCard}>
+                  <Row>
+                    <Column style={{ width: 40, paddingRight: 12 }}>
+                      <div style={supportIcon}>💬</div>
+                    </Column>
+                    <Column>
+                      <Text style={supportTitle}>Ada pertanyaan?</Text>
+                      <Text style={supportDesc}>
+                        Tim kami siap membantu kamu kapan pun dibutuhkan.
+                      </Text>
+                      <Link
+                        href="https://wa.me/6282312492067"
+                        style={supportLink}
+                      >
+                        Hubungi Customer Support →
+                      </Link>
+                    </Column>
+                  </Row>
+                </Section>
+              </Column>
+            </Row>
 
             {/* Signature */}
             <Section style={signature}>
@@ -308,6 +347,67 @@ export function InvoiceEmail({
   );
 }
 
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
+// Horizontal row: icon | label …………… value
+function HRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: string;
+  label: string;
+  value: string;
+}) {
+  return (
+    <Row style={hRow}>
+      <Column style={iconCol}>
+        <div style={iconBox}>{icon}</div>
+      </Column>
+      <Column style={{ verticalAlign: "middle" }}>
+        <Text style={hLabel}>{label}</Text>
+      </Column>
+      <Column style={{ textAlign: "right", verticalAlign: "middle" }}>
+        <Text style={hValue}>{value}</Text>
+      </Column>
+    </Row>
+  );
+}
+
+// Stacked row: icon | (label / value / optional subtext)
+function SRow({
+  icon,
+  iconNode,
+  label,
+  value,
+  valueNode,
+  subText,
+}: {
+  icon?: string;
+  iconNode?: React.ReactNode;
+  label: string;
+  value?: string;
+  valueNode?: React.ReactNode;
+  subText?: string;
+}) {
+  return (
+    <Row style={sRow}>
+      <Column style={iconCol}>
+        {iconNode ?? <div style={iconBox}>{icon}</div>}
+      </Column>
+      <Column style={{ verticalAlign: "top" }}>
+        <Text style={sLabel}>{label}</Text>
+        {valueNode ? (
+          <div style={sValueWrap}>{valueNode}</div>
+        ) : (
+          <Text style={sValue}>{value}</Text>
+        )}
+        {subText && <Text style={sSub}>{subText}</Text>}
+      </Column>
+    </Row>
+  );
+}
+
 // ─── Styles ──────────────────────────────────────────────────────────────────
 
 const body: React.CSSProperties = {
@@ -319,7 +419,7 @@ const body: React.CSSProperties = {
 const container: React.CSSProperties = {
   backgroundColor: "#ffffff",
   borderRadius: 16,
-  maxWidth: 600,
+  maxWidth: 720,
   margin: "0 auto",
   overflow: "hidden",
 };
@@ -328,9 +428,9 @@ const header: React.CSSProperties = {
   borderBottom: "1px solid #f0f0f0",
 };
 const invoiceLabel: React.CSSProperties = {
-  fontSize: 10,
-  fontWeight: 700,
-  color: "#9ca3af",
+  fontSize: 16,
+  fontWeight: 800,
+  color: "#0f0f1a",
   letterSpacing: "1.5px",
   margin: "0 0 2px",
   textAlign: "right",
@@ -353,106 +453,260 @@ const intro: React.CSSProperties = {
   fontSize: 14,
   color: "#6b7280",
   lineHeight: "1.7",
-  margin: "0 0 24px",
+  margin: "0 0 20px",
 };
-const bannerImg: React.CSSProperties = {
-  display: "block",
-  width: "100%",
-  borderRadius: 12,
-  marginBottom: 16,
-  objectFit: "cover",
+
+// Two-column wrappers
+const leftCol: React.CSSProperties = {
+  width: "50%",
+  paddingRight: 6,
+  verticalAlign: "top",
 };
-const categoryTag: React.CSSProperties = {
-  display: "inline-block",
-  backgroundColor: "#ede9fe",
-  color: "#4f46e5",
-  fontSize: 11,
-  fontWeight: 700,
-  letterSpacing: "0.5px",
-  textTransform: "uppercase",
-  borderRadius: 6,
-  padding: "4px 10px",
-  margin: "0 0 8px",
+const rightCol: React.CSSProperties = {
+  width: "50%",
+  paddingLeft: 6,
+  verticalAlign: "top",
 };
-const productTitle: React.CSSProperties = {
-  fontSize: 20,
-  fontWeight: 700,
-  color: "#0f0f1a",
-  margin: "0 0 4px",
-};
-const divider: React.CSSProperties = {
-  borderColor: "#e5e7eb",
-  margin: "20px 0",
-};
-const detailCard: React.CSSProperties = {
+
+// Card
+const infoCard: React.CSSProperties = {
   border: "1px solid #e5e7eb",
   borderRadius: 12,
-  overflow: "hidden",
-  marginBottom: 8,
+  padding: "16px 16px",
+  backgroundColor: "#ffffff",
 };
-const detailRow: React.CSSProperties = { padding: "14px 20px" };
-const rowDivider: React.CSSProperties = { borderColor: "#f3f4f6", margin: 0 };
-const detailLabelCol: React.CSSProperties = { width: "45%" };
-const detailValueCol: React.CSSProperties = {
-  width: "55%",
-  textAlign: "right",
+const cardTitle: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 700,
+  color: "#4f46e5",
+  letterSpacing: "1px",
+  margin: "0 0 12px",
 };
-const detailLabel: React.CSSProperties = {
-  fontSize: 13,
+
+// LMS subtitle (only on right card)
+const lmsSubtitle: React.CSSProperties = {
+  fontSize: 12,
   color: "#6b7280",
+  lineHeight: "1.6",
+  margin: "0 0 12px",
+  paddingBottom: 12,
+  borderBottom: "1px solid #f3f4f6",
+};
+
+// Icon
+const iconCol: React.CSSProperties = {
+  width: 40,
+  paddingRight: 8,
+  verticalAlign: "top",
+};
+const iconBox: React.CSSProperties = {
+  width: 32,
+  height: 32,
+  borderRadius: 8,
+  backgroundColor: "#eff6ff",
+  textAlign: "center",
+  lineHeight: "32px",
+  fontSize: 16,
+};
+const googleIcon: React.CSSProperties = {
+  width: 32,
+  height: 32,
+  borderRadius: 8,
+  backgroundColor: "#ffffff",
+  border: "1px solid #e5e7eb",
+  textAlign: "center",
+  lineHeight: "30px",
+  fontSize: 16,
+  fontWeight: 700,
+  color: "#4285F4",
+};
+
+// Horizontal row (left card)
+const hRow: React.CSSProperties = { marginBottom: 10 };
+const hLabel: React.CSSProperties = {
+  fontSize: 13,
+  color: "#374151",
   margin: 0,
 };
-const detailValue: React.CSSProperties = {
+const hValue: React.CSSProperties = {
   fontSize: 13,
-  fontWeight: 600,
+  fontWeight: 700,
   color: "#0f0f1a",
   margin: 0,
   textAlign: "right",
 };
+
+// Total row
+const totalRowBox: React.CSSProperties = {
+  backgroundColor: "#eff6ff",
+  borderRadius: 10,
+  padding: "10px 12px",
+  marginTop: 6,
+};
 const totalLabel: React.CSSProperties = {
-  fontSize: 14,
+  fontSize: 13,
   fontWeight: 700,
   color: "#0f0f1a",
   margin: 0,
 };
 const totalValue: React.CSSProperties = {
   fontSize: 16,
-  fontWeight: 700,
+  fontWeight: 800,
   color: "#4f46e5",
   margin: 0,
   textAlign: "right",
 };
-const ctaButton: React.CSSProperties = {
-  display: "block",
-  backgroundColor: "#4f46e5",
-  color: "#ffffff",
-  textDecoration: "none",
-  borderRadius: 12,
-  padding: "14px 20px",
-  fontSize: 15,
+
+// Stacked row (right card)
+const sRow: React.CSSProperties = { marginBottom: 12 };
+const sLabel: React.CSSProperties = {
+  fontSize: 13,
   fontWeight: 700,
-  textAlign: "center",
+  color: "#0f0f1a",
+  margin: 0,
 };
-const ctaNote: React.CSSProperties = {
-  textAlign: "center",
-  fontSize: 12,
+const sValue: React.CSSProperties = {
+  fontSize: 13,
+  color: "#374151",
+  margin: "2px 0 0",
+};
+const sValueWrap: React.CSSProperties = {
+  marginTop: 2,
+};
+const sSub: React.CSSProperties = {
+  fontSize: 11,
   color: "#9ca3af",
-  margin: "6px 0 24px",
+  margin: "4px 0 0",
+  lineHeight: "1.5",
 };
+const lmsLink: React.CSSProperties = {
+  fontSize: 13,
+  color: "#4f46e5",
+  fontWeight: 600,
+  textDecoration: "none",
+};
+
+// LMS info note
+const lmsNote: React.CSSProperties = {
+  backgroundColor: "#eff6ff",
+  borderRadius: 8,
+  padding: "10px 12px",
+  marginTop: 4,
+};
+const lmsNoteIcon: React.CSSProperties = {
+  fontSize: 12,
+  margin: 0,
+  lineHeight: "1.4",
+};
+const lmsNoteText: React.CSSProperties = {
+  fontSize: 11,
+  color: "#3b5b8b",
+  lineHeight: "1.5",
+  margin: 0,
+};
+
+// Rincian Pembelian section
+const sectionHeader: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 700,
+  color: "#4f46e5",
+  letterSpacing: "1px",
+  margin: "24px 0 8px",
+};
+const purchaseTable: React.CSSProperties = {
+  border: "1px solid #e5e7eb",
+  borderRadius: 12,
+  overflow: "hidden",
+};
+const tableHeadRow: React.CSSProperties = {
+  backgroundColor: "#f9fafb",
+};
+const tableHeadCellLeft: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 700,
+  color: "#6b7280",
+  letterSpacing: "0.5px",
+  padding: "12px 16px",
+};
+const tableHeadCellRight: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 700,
+  color: "#6b7280",
+  letterSpacing: "0.5px",
+  padding: "12px 16px",
+  textAlign: "right",
+};
+const tableBodyCellLeft: React.CSSProperties = {
+  fontSize: 13,
+  color: "#0f0f1a",
+  padding: "14px 16px",
+};
+const tableBodyCellRight: React.CSSProperties = {
+  fontSize: 13,
+  color: "#0f0f1a",
+  padding: "14px 16px",
+  textAlign: "right",
+};
+const tableTotalCellLeft: React.CSSProperties = {
+  fontSize: 12,
+  fontWeight: 700,
+  color: "#0f0f1a",
+  letterSpacing: "0.5px",
+  padding: "14px 16px",
+};
+const tableTotalCellRight: React.CSSProperties = {
+  fontSize: 18,
+  fontWeight: 800,
+  color: "#4f46e5",
+  padding: "14px 16px",
+  textAlign: "right",
+};
+const tableDivider: React.CSSProperties = {
+  borderColor: "#e5e7eb",
+  margin: 0,
+};
+
+// Confirmation card
+const confirmCard: React.CSSProperties = {
+  border: "1px solid #e5e7eb",
+  borderRadius: 12,
+  padding: "16px 18px",
+};
+const checkIconWrap: React.CSSProperties = {
+  paddingTop: 2,
+};
+const checkIcon: React.CSSProperties = {
+  backgroundColor: "#22c55e",
+  color: "#ffffff",
+  borderRadius: "50%",
+  width: 28,
+  height: 28,
+  textAlign: "center",
+  lineHeight: "28px",
+  fontSize: 14,
+  fontWeight: 800,
+};
+const confirmText: React.CSSProperties = {
+  fontSize: 13,
+  color: "#0f0f1a",
+  lineHeight: "1.6",
+  margin: 0,
+};
+
+// Support card
 const supportCard: React.CSSProperties = {
   border: "1px solid #e5e7eb",
   borderRadius: 12,
-  padding: "16px 20px",
-  marginBottom: 28,
+  padding: "16px 18px",
 };
 const supportIcon: React.CSSProperties = {
   backgroundColor: "#dcfce7",
   borderRadius: "50%",
-  width: 44,
-  height: 44,
+  width: 36,
+  height: 36,
   textAlign: "center",
-  lineHeight: "44px",
-  fontSize: 22,
+  lineHeight: "36px",
+  fontSize: 18,
 };
 const supportTitle: React.CSSProperties = {
   fontSize: 14,
@@ -471,9 +725,12 @@ const supportLink: React.CSSProperties = {
   fontWeight: 700,
   textDecoration: "none",
 };
+
+// Signature
 const signature: React.CSSProperties = {
   borderLeft: "3px solid #4f46e5",
   paddingLeft: 14,
+  marginTop: 28,
   marginBottom: 36,
 };
 const sigFrom: React.CSSProperties = {
@@ -487,6 +744,8 @@ const sigName: React.CSSProperties = {
   color: "#0f0f1a",
   margin: 0,
 };
+
+// Footer
 const socialIconWrap = (bg: string): React.CSSProperties => ({
   backgroundColor: bg,
   borderRadius: "50%",

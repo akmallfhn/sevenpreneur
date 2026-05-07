@@ -63,8 +63,8 @@ export async function afterPaidTrigger(
       const invoiceHtml = await render(
         InvoiceEmail({
           firstName: theTransaction.user.full_name,
+          userEmail: theTransaction.user.email,
           itemName: theCohort.name,
-          itemImage: theCohort.image_banner,
           itemType: "cohort",
           invoiceNumber: theTransaction.invoice_number,
           paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
@@ -112,8 +112,8 @@ export async function afterPaidTrigger(
       const invoiceHtml = await render(
         InvoiceEmail({
           firstName: theTransaction.user.full_name,
+          userEmail: theTransaction.user.email,
           itemName: thePlaylist.name,
-          itemImage: thePlaylist.image_banner_url,
           itemType: "playlist",
           invoiceNumber: theTransaction.invoice_number,
           paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
@@ -167,8 +167,8 @@ export async function afterPaidTrigger(
       const invoiceHtml = await render(
         InvoiceEmail({
           firstName: theTransaction.user.full_name,
+          userEmail: theTransaction.user.email,
           itemName: theEvent.name,
-          itemImage: theEvent.image,
           itemType: "event",
           invoiceNumber: theTransaction.invoice_number,
           paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),

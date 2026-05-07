@@ -6,13 +6,16 @@ import {
 } from "@/trpc/routers/ai_tool/enum.ai_tool";
 import { AIModelName } from "@/trpc/routers/ai_tool/util.ai_tool";
 import { setSecretKey, setSessionToken, trpc } from "@/trpc/server";
+import { render } from "@react-email/components";
 import { cookies } from "next/headers";
+import { InvoiceEmail } from "@/components/emails/InvoiceEmail";
 import {
   BusinessEmployeeNumber,
   BusinessLegalEntity,
   BusinessYearlyRevenue,
   OccupationUser,
 } from "./app-types";
+import { sendEmail } from "./mailtrap";
 import { STATUS_NO_CONTENT, STATUS_NOT_FOUND } from "./status_code";
 
 // DELETE SESSION FOR LOGOUT
@@ -888,3 +891,31 @@ export async function GenerateAIPriceStrategy(
 //     mailHtml: html,
 //   });
 // }
+
+// SEND TEST INVOICE EMAIL
+export async function SendTestInvoiceEmail(to: string) {
+  if (process.env.DOMAIN_MODE === "production") {
+    throw new Error("Not available in production");
+  }
+
+  const invoiceNumber = "INV-TEST-2026-001";
+  const html = await render(
+    InvoiceEmail({
+      firstName: "Akmal",
+      userEmail: to,
+      itemName: "Sevenpreneur Business Blueprint Program Batch 8",
+      itemType: "cohort",
+      invoiceNumber,
+      paidAt: new Date().toISOString(),
+      paymentMethod: "BANK_TRANSFER",
+      paymentChannel: "BCA",
+      amount: 4500000,
+    })
+  );
+
+  await sendEmail({
+    mailRecipients: [to],
+    mailSubject: `Invoice Pembelian #${invoiceNumber} — Sevenpreneur Business Blueprint Program Batch 8`,
+    mailHtml: html,
+  });
+}
