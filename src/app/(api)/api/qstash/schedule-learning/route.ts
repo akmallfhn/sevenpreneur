@@ -90,6 +90,7 @@ export const POST = verifySignatureAppRouter(async () => {
       where: {
         cohort_id: learning.cohort_id,
       },
+      orderBy: [{ user: { created_at: "asc" } }, { user: { id: "asc" } }],
     });
 
     for (const member of memberList) {
