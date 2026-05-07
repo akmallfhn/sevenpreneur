@@ -13,11 +13,11 @@ import {
   getConferenceVariantFromURL,
 } from "@/lib/conference-variant";
 import { render } from "@react-email/render";
+import { verifySignatureAppRouter } from "@upstash/qstash/dist/nextjs";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import { NextResponse } from "next/server";
 import { createElement } from "react";
 
 dayjs.extend(utc);
@@ -39,12 +39,12 @@ async function updateScheduleAndReturn(
     );
   }
 
-  return new NextResponse("OK", {
-    status: 200,
+  return Response.json({
+    received: true, // Tell QStash that the result has been received successfully
   });
 }
 
-export async function POST() {
+export const POST = verifySignatureAppRouter(async () => {
   const prisma = GetPrismaClient();
 
   const upcomingLearning = await GetUpcomingLearning(
@@ -122,4 +122,4 @@ export async function POST() {
     prisma,
     selectedLearnings.map((entry) => entry.id)
   );
-}
+});
