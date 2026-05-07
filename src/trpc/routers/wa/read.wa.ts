@@ -13,6 +13,7 @@ export const readWA = {
           phone_number: true,
           lead_status: true,
           winning_rate: true,
+          mode: true,
           note: true,
           last_read_id: true,
           handler_id: true,

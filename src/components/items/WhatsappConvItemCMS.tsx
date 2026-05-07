@@ -51,6 +51,7 @@ interface WhatsappConvItemCMSProps {
   convLastMessageAt: string;
   convLeadStatus: LeadStatus;
   convUnreadMessage: number;
+  convIsAssigned: boolean;
   selectedConvId: string;
   onClick?: () => void;
 }
@@ -74,7 +75,7 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
   return (
     <div
       onClick={props.onClick}
-      className={`conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-[#ebebeb] ${isActive ? "bg-[#EBEBEB]" : ""}`}
+      className={`conv-item flex gap-2 p-3 justify-between rounded-md overflow-hidden hover:cursor-pointer hover:bg-sb-item-hover ${isActive ? "bg-sb-item-active-bg/50" : ""}`}
     >
       <div className="conv-metadata flex items-center gap-3">
         <div className="conv-sender-avatar relative flex">
@@ -88,7 +89,7 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
                 height={500}
               />
             ) : (
-              <div className="flex w-full h-full items-center justify-center bg-secondary-soft-background text-secondary-soft-foreground">
+              <div className="flex w-full h-full items-center justify-center bg-secondary-soft-background text-secondary-soft-foreground dark:bg-sevenpreneur-pink-midgnight dark:text-sevenpreneur-pink-blush">
                 <p className="font-bodycopy font-medium">{initialName}</p>
               </div>
             )}
@@ -101,15 +102,26 @@ export default function WhatsappConvItemCMS(props: WhatsappConvItemCMSProps) {
             </div>
           )}
         </div>
-        <div className="flex flex-col">
-          <p className="conv-full-name text-[15px] font-semibold font-bodycopy leading-snug line-clamp-1">
-            {props.convUserFullName}
-          </p>
+        <div className="flex flex-col min-w-0">
+          <div className="flex items-center gap-1.5">
+            <p className="conv-full-name text-[15px] font-semibold font-bodycopy leading-snug line-clamp-1">
+              {props.convUserFullName}
+            </p>
+            <span
+              className={`conv-assignment shrink-0 text-[10px] font-bodycopy font-semibold py-0.5 px-1.5 rounded-full ${
+                props.convIsAssigned
+                  ? "bg-success-foreground/10 text-success-foreground"
+                  : "bg-secondary-soft-background text-secondary-soft-foreground dark:bg-sevenpreneur-pink-midgnight dark:text-sevenpreneur-pink-rose"
+              }`}
+            >
+              {props.convIsAssigned ? "Assigned" : "Unassigned"}
+            </span>
+          </div>
           <div className="flex items-center gap-1.5">
             {props.convLastMessageDirection === "OUTBOUND" && (
               <div>{iconStatus}</div>
             )}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 min-w-0">
               {props.convLastMessageType !== "TEXT" && <div>{iconType}</div>}
               <p className="conv-last-message text-sm text-emphasis font-bodycopy font-[450] line-clamp-1">
                 {props.convLastMessageType === "TEXT"

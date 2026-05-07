@@ -9,7 +9,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { WAAssetType, WALeadStatus } from "@prisma/client";
+import { WAAssetType, WALeadStatus, WAMode } from "@prisma/client";
 import z from "zod";
 
 export const updateWA = {
@@ -21,6 +21,7 @@ export const updateWA = {
         handler_id: stringIsUUID().nullable().optional(),
         lead_status: z.enum(WALeadStatus).optional(),
         winning_rate: numberIsNonNegInt().optional(),
+        mode: z.enum(WAMode).optional(),
         note: stringNotBlank().nullable().optional(),
       })
     )
@@ -32,6 +33,7 @@ export const updateWA = {
             handler_id: opts.input.handler_id,
             lead_status: opts.input.lead_status,
             winning_rate: opts.input.winning_rate,
+            mode: opts.input.mode,
             note: opts.input.note,
           },
           where: {

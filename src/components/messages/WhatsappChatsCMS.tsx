@@ -3,7 +3,9 @@ import { playNotificationSound } from "@/lib/sounds";
 import { supabase } from "@/lib/supabase";
 import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import { trpc } from "@/trpc/client";
+import { WAMode } from "@prisma/client";
 import dayjs from "dayjs";
+import { Bot } from "lucide-react";
 import React, {
   useEffect,
   useLayoutEffect,
@@ -21,6 +23,9 @@ import WhatsappChatSubmitterCMS from "./WhatsappChatSubmitterCMS";
 interface WhatsappChatsCMSProps {
   sessionToken: string;
   convId: string;
+  headerName: string;
+  headerPhoneNumber: string;
+  mode: WAMode;
 }
 
 export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
@@ -127,7 +132,8 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
     sendImage.mutate(
       { conv_id: props.convId, image_url, caption },
       {
-        onSuccess: () => utils.list.wa.chats.invalidate({ conv_id: props.convId }),
+        onSuccess: () =>
+          utils.list.wa.chats.invalidate({ conv_id: props.convId }),
         onError: () => toast.error("Failed to send image"),
       }
     );
@@ -161,69 +167,93 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
   };
 
   return (
-    <div
-      ref={conversationRef}
-      className="chats-panel relative hidden flex-col w-full h-full bg-linear-to-t from-0% from-[#DDE4F1] to-100% to-[#F2F2F2] overflow-y-auto lg:flex"
-    >
-      <div className="chats-conversation relative flex flex-col w-full p-3 min-h-full">
-        {isLoading && <AppLoadingComponents />}
-        {isError && <AppErrorComponents />}
+    <div className="hidden lg:flex flex-col w-full h-full min-h-0">
+      <div className="chat-header flex items-center gap-3 p-4 border-b border-dashboard-border shrink-0 bg-card-bg">
+        <div className="flex flex-col min-w-0">
+          <p className="font-bodycopy font-bold text-base leading-snug line-clamp-1 dark:text-sevenpreneur-white">
+            {props.headerName}
+          </p>
+          <p className="text-sm text-emphasis font-bodycopy font-medium leading-snug">
+            {props.headerPhoneNumber}
+          </p>
+        </div>
+      </div>
+      <div
+        ref={conversationRef}
+        className="chats-panel relative flex flex-col w-full flex-1 min-h-0 bg-linear-to-t from-0% from-[#DDE4F1] to-100% to-[#F2F2F2] dark:from-sevenpreneur-coal dark:to-sevenpreneur-surface-black overflow-y-auto"
+      >
+        <div className="chats-conversation relative flex flex-col w-full p-3 min-h-full">
+          {isLoading && <AppLoadingComponents />}
+          {isError && <AppErrorComponents />}
 
-        {!isLoading && !isError && sortedChatList.length > 0 && (
-          <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
-            {sortedChatList.map((post, index, sorted) => {
-              const currentDate = dayjs(post.created_at).format("YYYY-MM-DD");
-              const prevDate =
-                index > 0
-                  ? dayjs(sorted[index - 1].created_at).format("YYYY-MM-DD")
-                  : null;
-              const showDateLabel = currentDate !== prevDate;
+          {!isLoading && !isError && sortedChatList.length > 0 && (
+            <div className="chat-list w-full flex flex-col pt-5 mb-5 flex-grow">
+              {sortedChatList.map((post, index, sorted) => {
+                const currentDate = dayjs(post.created_at).format("YYYY-MM-DD");
+                const prevDate =
+                  index > 0
+                    ? dayjs(sorted[index - 1].created_at).format("YYYY-MM-DD")
+                    : null;
+                const showDateLabel = currentDate !== prevDate;
 
-              return (
-                <React.Fragment key={index}>
-                  {showDateLabel && (
-                    <div className="flex w-full justify-center my-1">
-                      <p className="flex w-fit px-3 py-1 text-xs font-medium font-bodycopy text-[#333333]/70 bg-white/70 rounded-full">
-                        {dayjs(post.created_at).format("ddd, DD MMM YYYY")}
-                      </p>
+                return (
+                  <React.Fragment key={index}>
+                    {showDateLabel && (
+                      <div className="flex w-full justify-center my-1">
+                        <p className="flex w-fit px-3 py-1 text-xs font-medium font-bodycopy text-[#333333]/70 bg-white/70 rounded-full">
+                          {dayjs(post.created_at).format("ddd, DD MMM YYYY")}
+                        </p>
+                      </div>
+                    )}
+                    <div
+                      className={`chat-wrapper flex w-full gap-10 ${
+                        post.direction === "INBOUND"
+                          ? "justify-start"
+                          : "justify-end"
+                      }`}
+                    >
+                      <WhatsappChatItemCMS
+                        chat={
+                          post as unknown as WhatsAppTypeAttachmentPairUnion
+                        }
+                        chatMessage={post.message}
+                        chatDirection={post.direction}
+                        chatStatus={post.status}
+                        createdAt={post.created_at}
+                        sentAt={post.sent_at}
+                        deliveredAt={post.delivered_at}
+                        readAt={post.read_at}
+                        failedAt={post.failed_at}
+                      />
                     </div>
-                  )}
-                  <div
-                    className={`chat-wrapper flex w-full gap-10 ${
-                      post.direction === "INBOUND"
-                        ? "justify-start"
-                        : "justify-end"
-                    }`}
-                  >
-                    <WhatsappChatItemCMS
-                      chat={post as unknown as WhatsAppTypeAttachmentPairUnion}
-                      chatMessage={post.message}
-                      chatDirection={post.direction}
-                      chatStatus={post.status}
-                      createdAt={post.created_at}
-                      sentAt={post.sent_at}
-                      deliveredAt={post.delivered_at}
-                      readAt={post.read_at}
-                      failedAt={post.failed_at}
-                    />
-                  </div>
-                </React.Fragment>
-              );
-            })}
-          </div>
-        )}
-        <form
-          className="send-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
-          onSubmit={handleSendChat}
-        >
-          <WhatsappChatSubmitterCMS
-            value={textValue}
-            onTextAreaChange={(value) => setTextValue(value)}
-            onSubmit={handleSendChat}
-            onOpenImagePicker={() => setShowImagePicker(true)}
-            isLoadingSubmit={sendChat.isPending}
-          />
-        </form>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          )}
+          {props.mode === "AI" ? (
+            <div className="ai-mode-notice sticky bottom-3 flex items-center gap-2 w-full p-3 px-4 bg-card-bg border border-dashboard-border rounded-xl text-sm text-emphasis font-bodycopy font-medium z-10">
+              <Bot className="size-4 shrink-0 text-tertiary" />
+              <p>
+                AI is currently handling this chat. Switch to Human mode to
+                send a message.
+              </p>
+            </div>
+          ) : (
+            <form
+              className="send-chat sticky flex flex-col bottom-3 w-full items-center justify-center gap-6 rounded-t-xl z-10"
+              onSubmit={handleSendChat}
+            >
+              <WhatsappChatSubmitterCMS
+                value={textValue}
+                onTextAreaChange={(value) => setTextValue(value)}
+                onSubmit={handleSendChat}
+                onOpenImagePicker={() => setShowImagePicker(true)}
+                isLoadingSubmit={sendChat.isPending}
+              />
+            </form>
+          )}
+        </div>
       </div>
 
       <WAImagePickerModal

@@ -6,6 +6,7 @@ import { calculatePage } from "@/trpc/utils/paging";
 import {
   numberIsPosInt,
   stringIsNanoid,
+  stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import {
@@ -15,6 +16,7 @@ import {
   WACStatus,
   WACType,
   WALeadStatus,
+  WAMode,
 } from "@prisma/client";
 import z from "zod";
 import { convertToWhatsAppChatWithAttachment } from "./type.wa";
@@ -25,6 +27,8 @@ export const listWA = {
       z.object({
         full_name: stringNotBlank().optional(),
         lead_status: z.enum(WALeadStatus).optional(),
+        mode: z.enum(WAMode).optional(),
+        handler_id: stringIsUUID().nullable().optional(),
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
       })
@@ -36,6 +40,8 @@ export const listWA = {
           mode: "insensitive";
         }>,
         lead_status: undefined as Optional<WALeadStatus>,
+        mode: undefined as Optional<WAMode>,
+        handler_id: undefined as Optional<string | null>,
       };
       let whereClauseSql = Prisma.sql`WHERE 1 = 1`;
 
@@ -60,6 +66,26 @@ ${whereClauseSql}
 AND wa_conversations.lead_status = ${opts.input.lead_status.toLowerCase()}::wa_lead_status`;
       }
 
+      if (opts.input.mode !== undefined) {
+        whereClause.mode = opts.input.mode;
+        whereClauseSql = Prisma.sql`
+${whereClauseSql}
+AND wa_conversations.mode = ${opts.input.mode.toLowerCase()}::wa_mode`;
+      }
+
+      if (opts.input.handler_id !== undefined) {
+        whereClause.handler_id = opts.input.handler_id;
+        if (opts.input.handler_id === null) {
+          whereClauseSql = Prisma.sql`
+${whereClauseSql}
+AND wa_conversations.handler_id IS NULL`;
+        } else {
+          whereClauseSql = Prisma.sql`
+${whereClauseSql}
+AND wa_conversations.handler_id = ${opts.input.handler_id}::uuid`;
+        }
+      }
+
       const paging = calculatePage(
         opts.input,
         await opts.ctx.prisma.wAConversation.aggregate({
@@ -71,7 +97,10 @@ AND wa_conversations.lead_status = ${opts.input.lead_status.toLowerCase()}::wa_l
       type WAConvItem = {
         id: string;
         full_name: string;
+        phone_number: string;
         lead_status: WALeadStatus;
+        mode: WAMode;
+        handler_id: string | null;
         last_message: string;
         last_message_at: Date;
         last_message_status: WACStatus | null;
@@ -80,12 +109,15 @@ AND wa_conversations.lead_status = ${opts.input.lead_status.toLowerCase()}::wa_l
         unread_count: number;
         user_full_name?: string;
         user_avatar?: string;
+        handler_full_name?: string;
+        handler_avatar?: string;
       };
       const conversationList = await opts.ctx.prisma.$queryRaw<WAConvItem[]>`
 SELECT *
 FROM (
   SELECT DISTINCT ON (wa_conversations.id)
-    wa_conversations.id, wa_conversations.full_name, wa_conversations.lead_status,
+    wa_conversations.id, wa_conversations.full_name, wa_conversations.phone_number,
+    wa_conversations.lead_status, wa_conversations.mode, wa_conversations.handler_id,
     wa_chats.message AS last_message, wa_chats.created_at AS last_message_at,
     wa_chats.status AS last_message_status, wa_chats.type AS last_message_type,
     wa_chats.direction AS last_message_direction,
@@ -100,10 +132,12 @@ FROM (
         LIMIT 1
       )
     ) AS unread_count,
-    users.full_name AS user_full_name, users.avatar AS user_avatar
+    users.full_name AS user_full_name, users.avatar AS user_avatar,
+    handlers.full_name AS handler_full_name, handlers.avatar AS handler_avatar
   FROM wa_conversations
     LEFT JOIN wa_chats ON wa_conversations.id = wa_chats.conv_id
     LEFT JOIN users ON wa_conversations.user_id = users.id
+    LEFT JOIN users AS handlers ON wa_conversations.handler_id = handlers.id
   ${whereClauseSql}
   ORDER BY wa_conversations.id, wa_chats.created_at DESC
 ) AS t
@@ -111,6 +145,7 @@ ORDER BY last_message_at DESC`;
 
       const returnedList = conversationList.map((entry) => {
         entry.lead_status = entry.lead_status.toUpperCase() as WALeadStatus;
+        entry.mode = entry.mode.toUpperCase() as WAMode;
         entry.last_message_type =
           entry.last_message_type.toUpperCase() as WACType;
         entry.last_message_direction =
@@ -127,6 +162,8 @@ ORDER BY last_message_at DESC`;
         ...paging.metapaging,
         full_name: opts.input.full_name,
         lead_status: opts.input.lead_status,
+        mode: opts.input.mode,
+        handler_id: opts.input.handler_id,
       };
 
       return {

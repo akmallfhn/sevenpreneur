@@ -100,7 +100,7 @@ export default function WhatsappChatSubmitterCMS({
   return (
     <React.Fragment>
       <div className="relative w-full" ref={wrapperRef}>
-        <div className="chat-submitter flex items-center w-full p-3 px-4 bg-white gap-2 border rounded-xl">
+        <div className="chat-submitter flex items-center w-full p-3 px-4 bg-white dark:bg-card-bg gap-2 border border-dashboard-border rounded-xl">
           <div className="emoji flex items-center justify-center">
             <AppButton
               size="iconRounded"
@@ -127,7 +127,7 @@ export default function WhatsappChatSubmitterCMS({
               placeholder="Message.."
               ref={textAreaRef}
               rows={1}
-              className={`text-area-placeholder flex w-full max-h-52 min-h-0 h-auto bg-white font-medium font-bodycopy text-[15px] resize-none transform transition-all overflow-auto placeholder:text-emphasis placeholder:font-medium placeholder:text-[15px] focus:outline-none focus:ring-0`}
+              className={`text-area-placeholder flex w-full max-h-52 min-h-0 h-auto bg-white dark:bg-card-bg dark:text-foreground font-medium font-bodycopy text-[15px] resize-none transform transition-all overflow-auto placeholder:text-emphasis placeholder:font-medium placeholder:text-[15px] focus:outline-none focus:ring-0`}
               value={value}
               onKeyDown={handleKeyDown}
               onChange={handleTextAreaChange}

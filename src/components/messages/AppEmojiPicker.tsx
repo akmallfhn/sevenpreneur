@@ -1,5 +1,10 @@
 "use client";
-import EmojiPicker, { EmojiClickData, EmojiStyle } from "emoji-picker-react";
+import EmojiPicker, {
+  EmojiClickData,
+  EmojiStyle,
+  Theme,
+} from "emoji-picker-react";
+import { useTheme } from "next-themes";
 
 interface AppEmojiPickerProps {
   isOpen: boolean;
@@ -7,6 +12,9 @@ interface AppEmojiPickerProps {
 }
 
 export default function AppEmojiPicker(props: AppEmojiPickerProps) {
+  const { resolvedTheme } = useTheme();
+  const pickerTheme = resolvedTheme === "dark" ? Theme.DARK : Theme.LIGHT;
+
   return (
     <div>
       <EmojiPicker
@@ -14,6 +22,7 @@ export default function AppEmojiPicker(props: AppEmojiPickerProps) {
         onEmojiClick={props.onEmojiClick}
         height={400}
         emojiStyle={EmojiStyle.NATIVE}
+        theme={pickerTheme}
         searchDisabled
       />
     </div>

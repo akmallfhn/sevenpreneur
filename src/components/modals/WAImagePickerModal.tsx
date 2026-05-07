@@ -131,12 +131,12 @@ export default function WAImagePickerModal({
       onClick={handleClose}
     >
       <div
-        className="modal-container fixed flex flex-col bg-white w-full max-w-lg max-h-[80vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md overflow-hidden"
+        className="modal-container fixed flex flex-col bg-white dark:bg-card-bg w-full max-w-lg max-h-[80vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b">
-          <h2 className="font-bodycopy font-bold text-sm">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-dashboard-border">
+          <h2 className="font-bodycopy font-bold text-sm dark:text-sevenpreneur-white">
             {selectedUrl ? "Add Caption" : "Choose Image"}
           </h2>
           <AppButton
@@ -201,7 +201,7 @@ export default function WAImagePickerModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-5 py-4 border-t">
+        <div className="flex items-center justify-between px-5 py-4 border-t border-dashboard-border">
           <div>
             {!selectedUrl ? (
               <>
