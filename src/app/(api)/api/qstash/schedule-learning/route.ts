@@ -19,7 +19,6 @@ import dayjs from "dayjs";
 import "dayjs/locale/id";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import { NextRequest } from "next/server";
 import { createElement } from "react";
 
 const SEND_REMINDER_MAX_DURATION = 40 * 1000; // 40 seconds
@@ -53,7 +52,7 @@ async function updateScheduleAndReturn(
   });
 }
 
-export const POST = verifySignatureAppRouter(async (req: NextRequest) => {
+export const POST = verifySignatureAppRouter(async (req: Request) => {
   const startTime = Date.now();
 
   const reqBody: QStashLearningReminder = await req.json();
