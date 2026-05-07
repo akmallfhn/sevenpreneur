@@ -33,16 +33,11 @@ export async function GetUpcomingLearning(
   return upcomingLearning;
 }
 
-export async function GetNearbyLearnings(
+export async function GetLearnings(
   prisma: ReturnType<typeof GetPrismaClient>,
-  meetingDate: Date
+  idList: number[]
 ) {
-  const searchDate = new Date(meetingDate.getTime());
-  searchDate.setMinutes(
-    searchDate.getMinutes() + SCHEDULE_MINIMUM_MINUTE_FROM_NOW
-  );
-
-  const upcomingLearnings = await prisma.learning.findMany({
+  const learningList = await prisma.learning.findMany({
     select: {
       id: true,
       cohort_id: true,
@@ -60,6 +55,26 @@ export async function GetNearbyLearnings(
       },
     },
     where: {
+      id: { in: idList },
+    },
+    orderBy: [{ meeting_date: "asc" }, { id: "asc" }],
+  });
+
+  return learningList;
+}
+
+export async function GetNearbyLearnings(
+  prisma: ReturnType<typeof GetPrismaClient>,
+  meetingDate: Date
+) {
+  const searchDate = new Date(meetingDate.getTime());
+  searchDate.setMinutes(
+    searchDate.getMinutes() + SCHEDULE_MINIMUM_MINUTE_FROM_NOW
+  );
+
+  const upcomingLearningList = await prisma.learning.findMany({
+    select: { id: true },
+    where: {
       meeting_date: {
         gte: meetingDate,
         lte: searchDate,
@@ -67,6 +82,10 @@ export async function GetNearbyLearnings(
     },
     orderBy: [{ meeting_date: "asc" }, { id: "asc" }],
   });
+
+  const upcomingLearningIDs = upcomingLearningList.map((entry) => entry.id);
+
+  const upcomingLearnings = await GetLearnings(prisma, upcomingLearningIDs);
 
   return upcomingLearnings;
 }
