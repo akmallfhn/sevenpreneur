@@ -1,4 +1,8 @@
 import { SessionReminderEmail } from "@/components/emails/SessionReminderEmail";
+import {
+  getConferenceAttributes,
+  getConferenceVariantFromURL,
+} from "@/lib/conference-variant";
 import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
 import GetQStashClient from "@/lib/qstash";
@@ -9,18 +13,14 @@ import {
   LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE,
   UpdateLearningReminderSchedule,
 } from "@/trpc/utils/schedule_reminder";
-import {
-  getConferenceAttributes,
-  getConferenceVariantFromURL,
-} from "@/lib/conference-variant";
 import { render } from "@react-email/render";
 import { verifySignatureAppRouter } from "@upstash/qstash/dist/nextjs";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
-import { createElement } from "react";
 import { NextRequest } from "next/server";
+import { createElement } from "react";
 
 const SEND_REMINDER_MAX_DURATION = 40 * 1000; // 40 seconds
 
