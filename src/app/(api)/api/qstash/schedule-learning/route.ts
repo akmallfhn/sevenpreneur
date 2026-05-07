@@ -3,6 +3,7 @@ import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
 import GetQStashClient from "@/lib/qstash";
 import {
+  GetLearnings,
   GetNearbyLearnings,
   GetUpcomingLearning,
   LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE,
@@ -19,18 +20,26 @@ import "dayjs/locale/id";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { createElement } from "react";
+import { NextRequest } from "next/server";
+
+const SEND_REMINDER_MAX_DURATION = 40 * 1000; // 40 seconds
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("id");
 
+type QStashLearningReminder = {
+  progress?: Record<number, number>;
+};
+
 async function updateScheduleAndReturn(
   prisma: ReturnType<typeof GetPrismaClient>,
+  qstash: ReturnType<typeof GetQStashClient>,
   exclusionList?: number[] // learning IDs to be excluded
 ) {
   const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
     prisma,
-    GetQStashClient(),
+    qstash,
     exclusionList
   );
   if (!isUpdateScheduleSuccess) {
@@ -44,21 +53,40 @@ async function updateScheduleAndReturn(
   });
 }
 
-export const POST = verifySignatureAppRouter(async () => {
+export const POST = verifySignatureAppRouter(async (req: NextRequest) => {
+  const startTime = Date.now();
+
+  const reqBody: QStashLearningReminder = await req.json();
+
   const prisma = GetPrismaClient();
+  const qstash = GetQStashClient();
 
-  const upcomingLearning = await GetUpcomingLearning(
-    prisma,
-    LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 5
-  );
-  if (!upcomingLearning) {
-    return await updateScheduleAndReturn(prisma);
+  let currentProgress = {} as Record<number, number>;
+  let selectedLearnings = [] as Awaited<ReturnType<typeof GetLearnings>>;
+  if (reqBody.progress) {
+    currentProgress = reqBody.progress;
+    selectedLearnings = await GetLearnings(
+      prisma,
+      Object.keys(reqBody.progress).map((entry) => Number(entry))
+    );
+  } else {
+    const upcomingLearning = await GetUpcomingLearning(
+      prisma,
+      LEARNING_REMINDER_SCHEDULE_MINUS_MINUTE - 5
+    );
+    if (!upcomingLearning) {
+      return await updateScheduleAndReturn(prisma, qstash);
+    }
+
+    selectedLearnings = await GetNearbyLearnings(
+      prisma,
+      upcomingLearning.meeting_date
+    );
+
+    for (const learning of selectedLearnings) {
+      currentProgress[learning.id] = -1; // None (before index 0)
+    }
   }
-
-  const selectedLearnings = await GetNearbyLearnings(
-    prisma,
-    upcomingLearning.meeting_date
-  );
 
   for (const learning of selectedLearnings) {
     const sessionDate = dayjs(learning.meeting_date)
@@ -93,7 +121,10 @@ export const POST = verifySignatureAppRouter(async () => {
       orderBy: [{ user: { created_at: "asc" } }, { user: { id: "asc" } }],
     });
 
-    for (const member of memberList) {
+    // +1 to get the next index
+    for (let i = currentProgress[learning.id] + 1; i < memberList.length; i++) {
+      const member = memberList[i];
+
       const firstName = member.user.full_name.split(" ")[0];
 
       const html = await render(
@@ -116,11 +147,29 @@ export const POST = verifySignatureAppRouter(async () => {
         mailSubject: `Mulai Sebentar Lagi! ${learning.name} by MIFX`,
         mailHtml: html,
       });
+
+      currentProgress[learning.id] = i;
+
+      // Queue another batch if already running for more than max duration
+      const duration = Date.now() - startTime;
+      if (duration >= SEND_REMINDER_MAX_DURATION) {
+        await qstash.publishJSON({
+          url: "https://api.sevenpreneur.com/qstash/schedule-learning",
+          body: {
+            progress: currentProgress,
+          },
+        });
+
+        return Response.json({
+          received: true,
+        });
+      }
     }
   }
 
   return await updateScheduleAndReturn(
     prisma,
+    qstash,
     selectedLearnings.map((entry) => entry.id)
   );
 });
