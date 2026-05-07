@@ -24,7 +24,7 @@ export async function GetUpcomingLearning(
       id: { notIn: exclusionList },
       meeting_date: { gt: minusXMinutes },
     },
-    orderBy: [{ meeting_date: "asc" }],
+    orderBy: [{ meeting_date: "asc" }, { id: "asc" }],
   });
   if (!upcomingLearning) {
     return null;
@@ -65,7 +65,7 @@ export async function GetNearbyLearnings(
         lte: searchDate,
       },
     },
-    orderBy: [{ meeting_date: "asc" }],
+    orderBy: [{ meeting_date: "asc" }, { id: "asc" }],
   });
 
   return upcomingLearnings;
