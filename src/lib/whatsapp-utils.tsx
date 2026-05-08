@@ -4,6 +4,7 @@ import {
   Check,
   CheckCheck,
   FileQuestionMark,
+  FileText,
   ImageIcon,
   TriangleAlert,
   Video,
@@ -74,6 +75,11 @@ export function getLabelWhatsappChatType(
     return {
       iconType: <AudioLines className="size-4 text-emphasis" />,
       labelType: "Voice Recording",
+    };
+  } else if (chatType === "DOCUMENT") {
+    return {
+      iconType: <FileText className="size-4 text-emphasis" />,
+      labelType: "Document",
     };
   }
 

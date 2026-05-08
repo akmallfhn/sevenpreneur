@@ -200,42 +200,23 @@ export const whatsappGetMediaURLRequest = (
 };
 
 // https://developers.facebook.com/documentation/business-messaging/whatsapp/business-phone-numbers/media/?locale=en_US#download-media
-export const whatsappDownloadMediaRequest = (
+export const whatsappDownloadMediaRequest = async (
   mediaURL: string
-): Promise<Buffer<ArrayBuffer>> => {
-  return new Promise((resolve, reject) => {
-    const whatsappRequestOptions: https.RequestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + process.env.WHATSAPP_ACCESS_TOKEN,
-      },
-    };
-
-    const whatsappReq = https.request(
-      mediaURL,
-      whatsappRequestOptions,
-      (res) => {
-        const chunks: Uint8Array<ArrayBufferLike>[] = [];
-
-        res.on("data", (chunk) => {
-          chunks.push(chunk);
-        });
-
-        res.on("end", async () => {
-          try {
-            const fileBuffer = Buffer.concat(chunks);
-            resolve(fileBuffer);
-          } catch (e) {
-            reject(e);
-          }
-        });
-      }
-    );
-
-    whatsappReq.on("error", (e) => {
-      reject(e);
-    });
-
-    whatsappReq.end();
+): Promise<Buffer> => {
+  const response = await fetch(mediaURL, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + process.env.WHATSAPP_ACCESS_TOKEN,
+    },
+    redirect: "follow",
   });
+
+  if (!response.ok) {
+    throw new Error(
+      `WhatsApp media download failed: ${response.status} ${response.statusText}`
+    );
+  }
+
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer);
 };

@@ -1,18 +1,13 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { WhatsappChatDirection, WhatsappChatStatus } from "@/lib/app-types";
 import { resolveWhatsappChatStatus } from "@/lib/whatsapp-utils";
 import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import WhatsappChatBubbleCMS from "./WhatsappChatBubbleCMS";
+import WhatsappAudioPlayerCMS from "./WhatsappAudioPlayerCMS";
 import WhatsappImagePreviewCMS from "../modals/WhatsappImagePreviewCMS";
 import Image from "next/image";
-import {
-  FileText,
-  Download,
-  Play,
-  Pause,
-  FileQuestion,
-} from "lucide-react";
+import { FileText, Download, FileQuestion } from "lucide-react";
 
 interface WhatsappChatItemCMSProps {
   chat: WhatsAppTypeAttachmentPairUnion;
@@ -24,114 +19,6 @@ interface WhatsappChatItemCMSProps {
   deliveredAt: string | null;
   readAt: string | null;
   failedAt: string | null;
-}
-
-// ─── Audio Player Sub-component ───────────────────────────────────────────────
-interface AudioPlayerProps {
-  src: string;
-}
-
-function WhatsappAudioPlayer({ src }: AudioPlayerProps) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
-      setIsLoading(false);
-    };
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-    };
-
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("ended", handleEnded);
-
-    return () => {
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, []);
-
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const newTime = Number(e.target.value);
-    audio.currentTime = newTime;
-    setCurrentTime(newTime);
-  };
-
-  const formatTime = (seconds: number) => {
-    if (!isFinite(seconds) || isNaN(seconds)) return "0:00";
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  };
-
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
-
-  return (
-    <div className="audio-player flex items-center gap-2 px-1 py-0.5 w-[220px]">
-      <audio ref={audioRef} src={src} preload="metadata" />
-
-      {/* Play / Pause button */}
-      <button
-        onClick={togglePlay}
-        disabled={isLoading}
-        className="flex-shrink-0 flex items-center justify-center size-8 rounded-full bg-primary/10 hover:bg-primary/20 disabled:opacity-40 transition-colors"
-        aria-label={isPlaying ? "Pause" : "Play"}
-      >
-        {isPlaying ? (
-          <Pause className="size-4 text-primary" />
-        ) : (
-          <Play className="size-4 text-primary" />
-        )}
-      </button>
-
-      {/* Progress bar + timestamps */}
-      <div className="flex flex-col flex-1 gap-0.5">
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          step={0.1}
-          value={currentTime}
-          onChange={handleSeek}
-          disabled={isLoading}
-          style={{
-            background: `linear-gradient(to right, var(--primary) ${progress}%, #d1d5db ${progress}%)`,
-          }}
-          className="w-full h-1 rounded-full appearance-none cursor-pointer disabled:opacity-40 accent-primary"
-          aria-label="Audio progress"
-        />
-        <div className="flex justify-between text-[10px] text-muted-foreground font-bodycopy leading-none">
-          <span>{formatTime(currentTime)}</span>
-          <span>{isLoading ? "--:--" : formatTime(duration)}</span>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 // ─── Loading Skeleton ──────────────────────────────────────────────────────────
@@ -148,7 +35,6 @@ function MediaLoadingSkeleton({ label }: { label: string }) {
   );
 }
 
-// ─── Main Component ────────────────────────────────────────────────────────────
 export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
   const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -165,7 +51,6 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     }
   );
 
-  // ── TEXT ─────────────────────────────────────────────────────────────────
   if (props.chat.type === "TEXT") {
     return (
       <WhatsappChatBubbleCMS
@@ -180,7 +65,6 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     );
   }
 
-  // ── IMAGE ────────────────────────────────────────────────────────────────
   if (props.chat.type === "IMAGE") {
     return (
       <>
@@ -224,7 +108,6 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     );
   }
 
-  // ── VIDEO ────────────────────────────────────────────────────────────────
   if (props.chat.type === "VIDEO") {
     const videoSrc = props.chat.attachment.storage_url;
     return (
@@ -239,9 +122,11 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
           {videoSrc && !videoError ? (
             <>
               {/* Show skeleton until video metadata is loaded */}
-              {!videoLoaded && <MediaLoadingSkeleton label="Loading video..." />}
+              {!videoLoaded && (
+                <MediaLoadingSkeleton label="Loading video..." />
+              )}
               <video
-                className={`w-full rounded-sm max-h-[320px] object-cover ${videoLoaded ? "block" : "hidden"}`}
+                className={`max-w-full max-h-[320px] mx-auto rounded-sm object-contain ${videoLoaded ? "block" : "hidden"}`}
                 src={videoSrc}
                 controls
                 preload="metadata"
@@ -267,11 +152,31 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     );
   }
 
-  // ── DOCUMENT ─────────────────────────────────────────────────────────────
   if (props.chat.type === "DOCUMENT") {
-    const docSrc = props.chat.attachment.storage_url || props.chat.attachment.url;
+    const docSrc =
+      props.chat.attachment.storage_url || props.chat.attachment.url;
     const fileName = props.chat.attachment.filename || "Document";
     const ext = fileName.split(".").pop()?.toUpperCase() ?? "FILE";
+
+    const handleDownload = async () => {
+      if (!docSrc) return;
+      try {
+        const response = await fetch(docSrc);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.error("Download failed:", err);
+        window.open(docSrc, "_blank", "noopener,noreferrer");
+      }
+    };
 
     return (
       <WhatsappChatBubbleCMS
@@ -292,23 +197,19 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
             <p className="text-sm font-medium font-bodycopy truncate leading-snug">
               {fileName}
             </p>
-            <p className="text-xs text-muted-foreground font-bodycopy">
-              {ext}
-            </p>
+            <p className="text-xs text-muted-foreground font-bodycopy">{ext}</p>
           </div>
 
           {/* Download button */}
           {docSrc ? (
-            <a
-              href={docSrc}
-              download={fileName}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-shrink-0 flex items-center justify-center size-8 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="flex-shrink-0 flex items-center justify-center size-8 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors cursor-pointer"
               aria-label={`Download ${fileName}`}
             >
               <Download className="size-4 text-primary" />
-            </a>
+            </button>
           ) : (
             <div className="flex-shrink-0 size-8 flex items-center justify-center opacity-40">
               <Download className="size-4 text-muted-foreground" />
@@ -322,9 +223,9 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     );
   }
 
-  // ── AUDIO ────────────────────────────────────────────────────────────────
   if (props.chat.type === "AUDIO") {
-    const audioSrc = props.chat.attachment.storage_url || props.chat.attachment.url;
+    const audioSrc =
+      props.chat.attachment.storage_url || props.chat.attachment.url;
     const isVoice = props.chat.attachment.voice;
 
     return (
@@ -337,8 +238,9 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
       >
         <div className="audio flex flex-col w-full">
           {audioSrc && !audioError ? (
-            <WhatsappAudioPlayer
+            <WhatsappAudioPlayerCMS
               src={audioSrc}
+              onError={() => setAudioError(true)}
             />
           ) : audioError ? (
             <div className="flex items-center gap-2 px-2 py-1 text-muted-foreground">
@@ -353,7 +255,6 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
     );
   }
 
-  // ── FALLBACK (unsupported / unknown types) ───────────────────────────────
   return (
     <WhatsappChatBubbleCMS
       chatDirection={props.chatDirection}
@@ -362,10 +263,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
       timestampStatus={timestampStatus}
       createdAt={props.createdAt}
     >
-      <div className="flex items-center gap-2 px-2 py-1 text-muted-foreground">
-        <FileQuestion className="size-4 flex-shrink-0" />
-        <p className="text-sm italic">Format tidak didukung</p>
-      </div>
+      <p className="px-2 italic text-muted-foreground">Format unsupported</p>
     </WhatsappChatBubbleCMS>
   );
 }
