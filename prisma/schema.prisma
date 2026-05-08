@@ -66,6 +66,25 @@ enum BAPeriodEnum {
   @@map("ba_period_enum")
 }
 
+// Enumeration for the Bari* models (Business AI Readiness Index)
+
+enum BariRevenueModelEnum {
+  PRODUCTS     @map("products")
+  SERVICES     @map("services")
+  SUBSCRIPTION @map("subscription")
+  MARKETPLACE  @map("marketplace")
+  MIXED        @map("mixed")
+
+  @@map("bari_revenue_model_enum")
+}
+
+enum BariAssessmentStatusEnum {
+  IN_PROGRESS @map("in_progress")
+  COMPLETED   @map("completed")
+
+  @@map("bari_assessment_status_enum")
+}
+
 // Enumeration for the BDFinCostMTD model (Cost*)
 
 enum CostCategoryEnum {
@@ -270,10 +289,11 @@ model Role {
 }
 
 model Industry {
-  id            Int      @id @default(autoincrement()) @db.SmallInt
-  industry_name String   @unique @db.VarChar()
-  created_at    DateTime @default(now()) @db.Timestamptz()
+  id            Int              @id @default(autoincrement()) @db.SmallInt
+  industry_name String           @unique @db.VarChar()
+  created_at    DateTime         @default(now()) @db.Timestamptz()
   users         User[]
+  bari_assessments BariAssessment[]
 
   @@map("industries")
 }
@@ -359,6 +379,7 @@ model User {
   wa_conversations         WAConversation[]       @relation("wa_conversation")
   wa_handleds              WAConversation[]       @relation("wa_handle")
   ai_learn_member          AiLearnMember?
+  bari_assessments         BariAssessment[]
 
   @@map("users")
 }
@@ -636,6 +657,45 @@ model BAAnswerItem {
   updated_at  DateTime      @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("ba_answer_items")
+}
+
+// BARI (Business AI Readiness Index)
+// Question bank is hardcoded in src/lib/bari-questions.ts.
+// DB only stores user assessments and their answers.
+
+model BariAssessment {
+  id              String                   @id @default(uuid()) @db.Uuid
+  user            User                     @relation(fields: [user_id], references: [id])
+  user_id         String                   @db.Uuid
+  industry        Industry?                @relation(fields: [industry_id], references: [id])
+  industry_id     Int?                     @db.SmallInt
+  team_size       NumEmployeeEnum?
+  revenue_model   BariRevenueModelEnum?
+  website_url     String?                  @db.VarChar()
+  linkedin_url    String?                  @db.VarChar()
+  primary_ai_tool String?                  @db.VarChar()
+  status          BariAssessmentStatusEnum @default(IN_PROGRESS)
+  completed_at    DateTime?                @db.Timestamptz()
+  created_at      DateTime                 @default(now()) @db.Timestamptz()
+  updated_at      DateTime                 @default(now()) @updatedAt @db.Timestamptz()
+  answers         BariAnswer[]
+
+  @@map("bari_assessments")
+}
+
+model BariAnswer {
+  id            Int            @id @default(autoincrement()) @db.Integer
+  assessment    BariAssessment @relation(fields: [assessment_id], references: [id], onDelete: Cascade)
+  assessment_id String         @db.Uuid
+  question_code String         @db.VarChar()
+  option_codes  String[]       @default([])
+  likert_value  Int?           @db.SmallInt
+  text_answer   String?        @db.Text
+  created_at    DateTime       @default(now()) @db.Timestamptz()
+  updated_at    DateTime       @default(now()) @updatedAt @db.Timestamptz()
+
+  @@unique([assessment_id, question_code])
+  @@map("bari_answers")
 }
 
 // Business-metric-related

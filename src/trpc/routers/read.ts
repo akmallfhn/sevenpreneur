@@ -3,6 +3,7 @@ import { readAdv } from "./ads/read.ads";
 import { readAIResult } from "./ai_tool/read.ai_tool";
 import { readArticle } from "./article/read.article";
 import { readBA } from "./ba/read.ba";
+import { readBari } from "./bari/read.bari";
 import { readBD } from "./bd/read.bd";
 import { readEvent } from "./event/read.event";
 import { readLMS } from "./lms/read.lms";
@@ -50,6 +51,12 @@ export const readRouter = createTRPCRouter({
     question: readBA.question,
     sheet: readBA.sheet,
     answerSheet: readBA.answerSheet,
+  },
+
+  // BARI-related //
+
+  bari: {
+    assessment: readBari.assessment,
   },
 
   // Business-metric-related //
