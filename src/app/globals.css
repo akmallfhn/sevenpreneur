@@ -253,6 +253,8 @@
   --font-read: var(--font-inter);
   --font-ui: var(--font-open-sauce-one);
   --font-fraunces: var(--font-fraunces);
+  --font-cormorant: var(--font-cormorant-garamond);
+  --font-jetbrains: var(--font-jetbrains-mono);
 
   /* --- Default Shadcn --- */
 

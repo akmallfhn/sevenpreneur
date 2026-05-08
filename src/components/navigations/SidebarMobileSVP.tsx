@@ -2,6 +2,7 @@
 import { DeleteSession } from "@/lib/actions";
 import {
   Flag,
+  Gauge,
   HouseIcon,
   LayoutDashboard,
   LayoutList,
@@ -145,6 +146,13 @@ export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
               menuName="Insights"
               menuIcon={<LayoutList className="size-5" />}
               menuURL="/insights"
+              onClick={props.onClose}
+            />
+            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
+              menuName="BARI"
+              menuIcon={<Gauge className="size-5" />}
+              menuURL="/business-ai-readiness-index"
               onClick={props.onClose}
             />
           </ul>

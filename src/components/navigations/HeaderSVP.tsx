@@ -88,6 +88,10 @@ export default function HeaderSVP(props: HeaderSVPProps) {
                       menuUrl="/insights"
                     />
                     <HeaderNavbarItemSVP
+                      menuTitle="BARI"
+                      menuUrl="/business-ai-readiness-index"
+                    />
+                    <HeaderNavbarItemSVP
                       menuTitle="About Us"
                       menuUrl="/company"
                     />
