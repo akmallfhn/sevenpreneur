@@ -1,11 +1,12 @@
 import GetPrismaClient from "@/lib/prisma";
+import GetQStashClient from "@/lib/qstash";
 import { WhatsappAttachmentAllTypes } from "@/lib/whatsapp-types";
 import { WACType, WAMode } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { WhatsAppWebhookBody } from "./type.wa.webhook";
 import {
   appendChatFromUser,
-  saveWhatsappAttachment,
+  enqueueSaveAttachment,
   triggerLangGraphAgent,
   updateStatusByMessageID,
 } from "./util.wa.webhook";
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest) {
   }
 
   const prisma = GetPrismaClient();
+  const qstash = GetQStashClient();
 
   for (const entry of reqBody.entry) {
     for (const change of entry.changes) {
@@ -116,17 +118,18 @@ export async function POST(req: NextRequest) {
             });
           }
 
-          // Save the attachment after successfully appending chat
+          // Enqueue media upload to Supabase Storage as a background QStash job.
+          // QStash retries on failure (3x) and avoids serverless tear-down killing the upload.
           if (msg.type == "audio") {
-            saveWhatsappAttachment(prisma, "audio", msg.audio, msg.id);
+            await enqueueSaveAttachment(qstash, "audio", msg.audio, msg.id);
           } else if (msg.type == "document") {
-            saveWhatsappAttachment(prisma, "document", msg.document, msg.id);
+            await enqueueSaveAttachment(qstash, "document", msg.document, msg.id);
           } else if (msg.type == "image") {
-            saveWhatsappAttachment(prisma, "image", msg.image, msg.id);
+            await enqueueSaveAttachment(qstash, "image", msg.image, msg.id);
           } else if (msg.type == "sticker") {
-            saveWhatsappAttachment(prisma, "sticker", msg.sticker, msg.id);
+            await enqueueSaveAttachment(qstash, "sticker", msg.sticker, msg.id);
           } else if (msg.type == "video") {
-            saveWhatsappAttachment(prisma, "video", msg.video, msg.id);
+            await enqueueSaveAttachment(qstash, "video", msg.video, msg.id);
           }
         }
       }

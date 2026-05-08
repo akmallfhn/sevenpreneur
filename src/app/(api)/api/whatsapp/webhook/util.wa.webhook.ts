@@ -1,4 +1,5 @@
 import GetPrismaClient from "@/lib/prisma";
+import GetQStashClient from "@/lib/qstash";
 import { supabase } from "@/lib/supabase";
 import {
   whatsappDownloadMediaRequest,
@@ -13,6 +14,36 @@ import {
   WAMode,
 } from "@prisma/client";
 import { WhatsAppWebhookMessageStatusType } from "./type.wa.webhook";
+
+const SAVE_ATTACHMENT_URL =
+  "https://api.sevenpreneur.com/qstash/save-whatsapp-attachment";
+
+export type WhatsappMediaType =
+  | "audio"
+  | "document"
+  | "image"
+  | "sticker"
+  | "video";
+
+export async function enqueueSaveAttachment(
+  qstash: ReturnType<typeof GetQStashClient>,
+  media_type: WhatsappMediaType,
+  attachment: object & { id: string },
+  wam_id: string
+) {
+  try {
+    await qstash.publishJSON({
+      url: SAVE_ATTACHMENT_URL,
+      body: { media_type, attachment, wam_id },
+      retries: 3,
+    });
+  } catch (e) {
+    console.error(
+      `whatsapp.webhook: Failed to enqueue save-attachment for wam_id ${wam_id}:`,
+      e
+    );
+  }
+}
 
 async function getOrCreateConversation(
   prisma: ReturnType<typeof GetPrismaClient>,
@@ -214,17 +245,28 @@ export async function updateStatusByMessageID(
 
 export async function saveWhatsappAttachment(
   prisma: ReturnType<typeof GetPrismaClient>,
-  media_type: "audio" | "document" | "image" | "sticker" | "video",
+  media_type: WhatsappMediaType,
   attachment: object & { id: string },
   wam_id: string
 ) {
   const getMediaURL = await whatsappGetMediaURLRequest(attachment.id);
+  if (!getMediaURL.url) {
+    throw new Error(
+      `WhatsApp media URL fetch failed for media id ${attachment.id}: ${JSON.stringify(getMediaURL)}`
+    );
+  }
+
   const fileBuffer = await whatsappDownloadMediaRequest(getMediaURL.url);
+  if (fileBuffer.length === 0) {
+    throw new Error(
+      `WhatsApp media download returned empty buffer for media id ${attachment.id}`
+    );
+  }
 
   const fileExt = getMediaURL.mime_type.split("/")[1] || "bin";
   const fileName = `${Date.now()}_${attachment.id}.${fileExt}`;
   const filePath = `whatsapp/${media_type}s/${fileName}`;
-  const { error } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from("sevenpreneur")
     .upload(filePath, fileBuffer, {
       contentType: getMediaURL.mime_type,
@@ -232,8 +274,10 @@ export async function saveWhatsappAttachment(
       upsert: false,
     });
 
-  if (error) {
-    console.error("whatsapp.webhook: Supabase upload error:", error.message);
+  if (uploadError) {
+    throw new Error(
+      `Supabase upload failed for ${filePath}: ${uploadError.message}`
+    );
   }
 
   const { data } = supabase.storage.from("sevenpreneur").getPublicUrl(filePath);
@@ -248,7 +292,10 @@ export async function saveWhatsappAttachment(
     where: { wam_id: wam_id },
   });
   if (updatedChat.length != 1) {
-    console.error("whatsapp.webhook: Failed to update chat.");
-    return false;
+    throw new Error(
+      `Failed to update chat with storage_url for wam_id ${wam_id}`
+    );
   }
+
+  return data.publicUrl;
 }
