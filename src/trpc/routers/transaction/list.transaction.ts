@@ -11,6 +11,7 @@ import {
   numberIsID,
   numberIsPosInt,
   stringIsUUID,
+  stringNotBlank,
 } from "@/trpc/utils/validation";
 import {
   CategoryEnum,
@@ -90,15 +91,46 @@ export const listTransaction = {
       z.object({
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
+        keyword: stringNotBlank().optional(),
       })
     )
     .query(async (opts) => {
+      const whereClause = {
+        OR: undefined as Optional<
+          [
+            { name: { contains: string; mode: "insensitive" } },
+            { code: { contains: string; mode: "insensitive" } }
+          ]
+        >,
+      };
+
+      if (opts.input.keyword !== undefined) {
+        whereClause.OR = [
+          {
+            name: {
+              contains: opts.input.keyword,
+              mode: "insensitive",
+            },
+          },
+          {
+            code: {
+              contains: opts.input.keyword,
+              mode: "insensitive",
+            },
+          },
+        ];
+      }
+
       const paging = calculatePage(
         opts.input,
-        await opts.ctx.prisma.discount.aggregate({ _count: true })
+        await opts.ctx.prisma.discount.aggregate({
+          _count: true,
+          where: whereClause,
+        })
       );
 
       const discountList = await opts.ctx.prisma.discount.findMany({
+        where: whereClause,
         orderBy: [{ created_at: "desc" }],
         skip: paging.prisma.skip,
         take: paging.prisma.take,
@@ -167,11 +199,16 @@ export const listTransaction = {
         };
       });
 
+      const returnedMetapaging = {
+        ...paging.metapaging,
+        keyword: opts.input.keyword,
+      };
+
       return {
         code: STATUS_OK,
         message: "Success",
         list: returnedList,
-        metapaging: paging.metapaging,
+        metapaging: returnedMetapaging,
       };
     }),
 

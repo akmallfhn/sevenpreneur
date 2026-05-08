@@ -8,6 +8,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import {
   EllipsisVertical,
   PlusCircle,
+  Search,
   Settings2,
   Tag,
   Trash2,
@@ -17,10 +18,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
+import AppInput from "../fields/AppInput";
 import CreateDiscountFormCMS from "../forms/CreateDiscountFormCMS";
 import EditDiscountFormCMS from "../forms/EditDiscountFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -57,6 +60,25 @@ export default function DiscountListCMS({
   const setWrapperRef = (id: number) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;
   };
+
+  // State for Pagination
+  const pageSize = 20;
+  const pageParam = searchParams.get("page");
+  const currentPage = Number(pageParam) || 1;
+
+  // State for Filter Search
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
+    ""
+  );
+
+  // Debounce Typing for 600ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword.trim() === "" ? undefined : keyword);
+    }, 600);
+    return () => clearTimeout(handler);
+  }, [keyword]);
 
   const utils = trpc.useUtils();
 
@@ -107,7 +129,7 @@ export default function DiscountListCMS({
 
   // Fetch tRPC for Discount List
   const { data, isLoading, isError } = trpc.list.discounts.useQuery(
-    {},
+    { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
     { enabled: !!sessionToken }
   );
   const discountList = data?.list;
@@ -146,13 +168,31 @@ export default function DiscountListCMS({
               New Discount
             </AppButton>
           </PageHeaderCMS>
+          <div className="filter-search flex w-full items-center">
+            <div className="max-w-96 w-full">
+              <AppInput
+                variant="CMS"
+                inputId="search-discount"
+                inputType="search"
+                inputIcon={<Search className="size-5" />}
+                inputPlaceholder="Search discounts..."
+                value={keyword}
+                onInputChange={(value) => {
+                  setKeyword(value);
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set("page", "1");
+                  router.push(`?${params.toString()}`, { scroll: false });
+                }}
+              />
+            </div>
+          </div>
 
           {/* Conditional Rendering */}
           {isLoading && <AppLoadingComponents />}
           {isError && <AppErrorComponents />}
 
           {/* TABLE */}
-          {!isLoading && !isError && (
+          {discountList && !isLoading && !isError && (
             <table className="relative w-full">
               <TableHeaderCMS>
                 <TableRowCMS>
@@ -169,7 +209,9 @@ export default function DiscountListCMS({
               <TableBodyCMS>
                 {discountList?.map((post, index) => (
                   <TableRowCMS key={index}>
-                    <TableCellCMS>{index + 1}</TableCellCMS>
+                    <TableCellCMS>
+                      {(currentPage - 1) * pageSize + (index + 1)}
+                    </TableCellCMS>
                     <TableCellCMS>{post.name}</TableCellCMS>
                     <TableCellCMS>{post.code}</TableCellCMS>
                     <TableCellCMS>{`${post.calc_percent}%`}</TableCellCMS>
@@ -223,6 +265,18 @@ export default function DiscountListCMS({
                 ))}
               </TableBodyCMS>
             </table>
+          )}
+          {discountList?.length === 0 && (
+            <p className="empty-state mt-2 font-bodycopy text-center text-emphasis">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+          )}
+          {!isLoading && !isError && (
+            <div className="pagination flex flex-col w-full items-center gap-3">
+              <AppNumberPagination
+                currentPage={currentPage}
+                totalPages={data?.metapaging.total_page ?? 1}
+              />
+              <p className="text-sm text-emphasis text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} discounts`}</p>
+            </div>
           )}
         </div>
       </PageContainerCMS>

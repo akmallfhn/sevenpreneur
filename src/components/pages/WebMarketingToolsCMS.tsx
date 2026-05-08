@@ -64,44 +64,44 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
           {!isLoadingTickerData && !isErrorTickerData && (
             <div className="flex flex-col w-full gap-4">
               {tickerDetailsData && (
-                <div className="tools flex items-center justify-between p-5 bg-section-background/50 border rounded-md">
+                <div className="tools flex items-center justify-between p-5 bg-card-bg border border-dashboard-border rounded-lg">
                   <div className="flex flex-col gap-2">
                     <div className="tools-name flex flex-col">
                       <div className="tool-name flex items-center gap-3">
-                        <h2 className="font-bodycopy font-bold text-lg">
+                        <h2 className="font-bodycopy font-bold text-lg dark:text-sevenpreneur-white">
                           Ticker Running Text
                         </h2>
                         <StatusLabelCMS
                           variants={tickerDetailsData.status as StatusType}
                         />
                       </div>
-                      <h3 className="text-black/40 font-bodycopy font-medium">
+                      <h3 className="text-emphasis font-bodycopy font-medium">
                         a short running text at the top of the screen for quick
                         updates.
                       </h3>
                     </div>
                     <div className="tools-data flex flex-col font-bodycopy text-[15px] gap-1.5">
                       <div className="flex items-center">
-                        <div className="flex w-36 items-center gap-2 text-black/40">
+                        <div className="flex w-36 items-center gap-2 text-emphasis">
                           <p className="font-medium">Headline:</p>
                         </div>
-                        <p className="font-medium ">
+                        <p className="font-medium dark:text-sevenpreneur-white">
                           {tickerDetailsData.title}
                         </p>
                       </div>
                       <div className="call-to-action flex items-center">
-                        <div className="flex w-36 items-center gap-2 text-black/40">
+                        <div className="flex w-36 items-center gap-2 text-emphasis">
                           <p className="font-medium">Call To Action:</p>
                         </div>
-                        <p className="font-medium ">
+                        <p className="font-medium dark:text-sevenpreneur-white">
                           {tickerDetailsData.callout}
                         </p>
                       </div>
                       <div className="date-periods flex items-center">
-                        <div className="flex w-36 items-center gap-2 text-black/40">
+                        <div className="flex w-36 items-center gap-2 text-emphasis">
                           <p className="font-medium">Periods:</p>
                         </div>
-                        <p className="font-medium">
+                        <p className="font-medium dark:text-sevenpreneur-white">
                           {dayjs(tickerDetailsData.start_date).format(
                             "D MMMM YYYY [at] HH:mm"
                           )}{" "}
@@ -125,11 +125,11 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
               )}
 
               {interstitialDetailsData && (
-                <div className="tool-item flex items-center justify-between p-5 bg-section-background/50 border rounded-md">
+                <div className="tool-item flex items-center justify-between p-5 bg-card-bg border border-dashboard-border rounded-lg">
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col">
                       <div className="tool-name flex items-center gap-3">
-                        <h2 className="font-bodycopy font-bold text-lg">
+                        <h2 className="font-bodycopy font-bold text-lg dark:text-sevenpreneur-white">
                           Interstitial Ads
                         </h2>
                         <StatusLabelCMS
@@ -138,33 +138,33 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
                           }
                         />
                       </div>
-                      <h3 className="tool-desc text-black/40 font-bodycopy font-medium">
+                      <h3 className="tool-desc text-emphasis font-bodycopy font-medium">
                         a full-screen ad shown between content transitions for
                         maximum visibility.
                       </h3>
                     </div>
                     <div className="tools-data flex flex-col font-bodycopy text-[15px] gap-1.5">
                       <div className="flex items-center">
-                        <div className="flex w-36 items-center gap-2 text-black/40">
+                        <div className="flex w-36 items-center gap-2 text-emphasis">
                           <p className="font-medium">Title:</p>
                         </div>
-                        <p className="font-medium">
+                        <p className="font-medium dark:text-sevenpreneur-white">
                           {interstitialDetailsData.title}
                         </p>
                       </div>
                       <div className="call-to-action flex items-center">
-                        <div className="flex w-36 items-center gap-2 text-black/40">
+                        <div className="flex w-36 items-center gap-2 text-emphasis">
                           <p className="font-medium">Call To Action:</p>
                         </div>
-                        <p className="font-medium ">
+                        <p className="font-medium dark:text-sevenpreneur-white">
                           {interstitialDetailsData.call_to_action}
                         </p>
                       </div>
                       <div className="date-periods flex items-center">
-                        <div className="flex w-36 items-center gap-2 text-black/40">
+                        <div className="flex w-36 items-center gap-2 text-emphasis">
                           <p className="font-medium">Periods:</p>
                         </div>
-                        <p className="font-medium">
+                        <p className="font-medium dark:text-sevenpreneur-white">
                           {dayjs(interstitialDetailsData.start_date).format(
                             "D MMMM YYYY [at] HH:mm"
                           )}{" "}

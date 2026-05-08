@@ -9,6 +9,7 @@ import {
   CalendarDays,
   EllipsisVertical,
   PlusCircle,
+  Search,
   Settings2,
   Trash2,
 } from "lucide-react";
@@ -17,10 +18,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
+import AppInput from "../fields/AppInput";
 import CreateEventFormCMS from "../forms/CreateEventFormCMS";
 import EditEventFormCMS from "../forms/EditEventFormCMS";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
+import AppNumberPagination from "../navigations/AppNumberPagination";
 import PageContainerCMS from "../pages/PageContainerCMS";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -55,6 +58,25 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
   const setWrapperRef = (id: number) => (el: HTMLDivElement | null) => {
     wrapperRef.current[id] = el;
   };
+
+  // State for Pagination
+  const pageSize = 20;
+  const pageParam = searchParams.get("page");
+  const currentPage = Number(pageParam) || 1;
+
+  // State for Filter Search
+  const [keyword, setKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
+    ""
+  );
+
+  // Debounce Typing for 600ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword.trim() === "" ? undefined : keyword);
+    }, 600);
+    return () => clearTimeout(handler);
+  }, [keyword]);
 
   const utils = trpc.useUtils();
 
@@ -105,7 +127,7 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
 
   // Fetch tRPC for Event List
   const { data, isLoading, isError } = trpc.list.events.useQuery(
-    {},
+    { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
     { enabled: !!sessionToken }
   );
   const eventList = data?.list;
@@ -144,12 +166,30 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
               Create Event
             </AppButton>
           </PageHeaderCMS>
+          <div className="filter-search flex w-full items-center">
+            <div className="max-w-96 w-full">
+              <AppInput
+                variant="CMS"
+                inputId="search-event"
+                inputType="search"
+                inputIcon={<Search className="size-5" />}
+                inputPlaceholder="Search events..."
+                value={keyword}
+                onInputChange={(value) => {
+                  setKeyword(value);
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set("page", "1");
+                  router.push(`?${params.toString()}`, { scroll: false });
+                }}
+              />
+            </div>
+          </div>
 
           {isLoading && <AppLoadingComponents />}
           {isError && <AppErrorComponents />}
 
           {/* TABLE */}
-          {!isLoading && !isError && (
+          {eventList && !isLoading && !isError && (
             <table className="relative w-full rounded-sm">
               <TableHeaderCMS>
                 <TableRowCMS>
@@ -164,7 +204,9 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
               <TableBodyCMS>
                 {eventList?.map((post, index) => (
                   <TableRowCMS key={index}>
-                    <TableCellCMS>{index + 1}</TableCellCMS>
+                    <TableCellCMS>
+                      {(currentPage - 1) * pageSize + (index + 1)}
+                    </TableCellCMS>
                     <TableCellCMS>{post.name}</TableCellCMS>
                     <TableCellCMS>
                       {dayjs(post.start_date).format("D MMM YYYY HH:mm")}
@@ -214,6 +256,18 @@ export default function EventListCMS({ sessionToken }: EventListCMSProps) {
                 ))}
               </TableBodyCMS>
             </table>
+          )}
+          {eventList?.length === 0 && (
+            <p className="empty-state mt-2 font-bodycopy text-center text-emphasis">{`Looks like there are no results for "${debouncedKeyword}"`}</p>
+          )}
+          {!isLoading && !isError && (
+            <div className="pagination flex flex-col w-full items-center gap-3">
+              <AppNumberPagination
+                currentPage={currentPage}
+                totalPages={data?.metapaging.total_page ?? 1}
+              />
+              <p className="text-sm text-emphasis text-center font-bodycopy font-medium">{`Showing all ${data?.metapaging.total_data} events`}</p>
+            </div>
           )}
         </div>
       </PageContainerCMS>
