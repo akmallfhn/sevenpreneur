@@ -8,6 +8,8 @@ import {
   whatsappStickerMessageRequest,
   whatsappTextMessageRequest,
   whatsappVideoMessageRequest,
+  whatsappTemplateMessageRequest,
+  whatsappListTemplatesRequest,
 } from "@/lib/whatsapp";
 import {
   WhatsappAttachmentAudio,
@@ -273,4 +275,87 @@ export const sendWA = {
         } as WhatsappAttachmentVideo // Most values are set to blank
       );
     }),
+
+  template: administratorProcedure
+    .input(
+      z.object({
+        conv_id: stringIsNanoid(),
+        template_name: stringNotBlank(),
+        language_code: z.string().optional().default("id"),
+      })
+    )
+    .mutation(async (opts) => {
+      const { conv_id, template_name, language_code } = opts.input;
+      const prisma = opts.ctx.prisma;
+
+      const conversation = await prisma.wAConversation.findFirst({
+        select: { phone_number: true },
+        where: { id: conv_id },
+      });
+      if (!conversation) {
+        throw readFailedNotFound("conversation");
+      }
+
+      const { phone_number } = conversation;
+      let messageId: string | null = null;
+      let status = "sent";
+      let errorDetail: string | null = null;
+
+      try {
+        const response = await whatsappTemplateMessageRequest(
+          phone_number,
+          template_name,
+          language_code
+        );
+        if (!response.messages || response.messages.length < 1) {
+          throw new Error("No message ID returned from Meta");
+        }
+        messageId = response.messages[0].id;
+      } catch (e) {
+        console.error("[sendWA.template] Meta API error:", e);
+        status = "failed";
+        errorDetail = e instanceof Error ? e.message : String(e);
+        throw new TRPCError({
+          code: STATUS_INTERNAL_SERVER_ERROR,
+          message: "Failed to send template message via WhatsApp.",
+        });
+      }
+
+      const log = await prisma.wATemplateMessageLog.create({
+        data: {
+          conv_id,
+          phone_number,
+          template_name,
+          language_code,
+          message_id: messageId,
+          status,
+          error_detail: errorDetail,
+          sent_at: new Date(),
+        },
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Template sent successfully",
+        log,
+      };
+    }),
+
+  listTemplates: administratorProcedure.query(async () => {
+    try {
+      const result = await whatsappListTemplatesRequest(100);
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        templates: result.data ?? [],
+      };
+    } catch (e) {
+      console.error("[sendWA.listTemplates] Error:", e);
+      throw new TRPCError({
+        code: STATUS_INTERNAL_SERVER_ERROR,
+        message: "Failed to fetch WhatsApp templates.",
+      });
+    }
+  }),
+
 };

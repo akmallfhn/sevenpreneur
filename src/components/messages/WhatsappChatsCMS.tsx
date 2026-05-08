@@ -15,6 +15,7 @@ import React, {
 } from "react";
 import { toast } from "sonner";
 import WAImagePickerModal from "../modals/WAImagePickerModal";
+import WATemplateSenderModal from "../modals/WATemplateSenderModal";
 import AppErrorComponents from "../states/AppErrorComponents";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import WhatsappChatItemCMS from "./WhatsappChatItemCMS";
@@ -37,6 +38,7 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
 
   const [textValue, setTextValue] = useState("");
   const [showImagePicker, setShowImagePicker] = useState(false);
+  const [showTemplateSender, setShowTemplateSender] = useState(false);
   const sendChat = trpc.send.wa.chat.useMutation();
   const sendImage = trpc.send.wa.image.useMutation();
 
@@ -59,6 +61,22 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
       ),
     [data?.list]
   );
+
+  // Determine whether the 24-hour WhatsApp session window has expired.
+  // The window is considered expired when the most recent INBOUND message
+  // was received more than 24 hours ago (or there are no inbound messages at all).
+  const isWindowExpired = useMemo(() => {
+    const inboundChats = sortedChatList.filter(
+      (chat) => chat.direction === "INBOUND"
+    );
+    if (inboundChats.length === 0) return true;
+    const lastInbound = inboundChats[inboundChats.length - 1];
+    const hoursSinceLastInbound = dayjs().diff(
+      dayjs(lastInbound.created_at),
+      "hour"
+    );
+    return hoursSinceLastInbound >= 24;
+  }, [sortedChatList]);
 
   // Subscribe to Supabase Realtime for live wa_chats updates.
   useEffect(() => {
@@ -249,7 +267,9 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
                 onTextAreaChange={(value) => setTextValue(value)}
                 onSubmit={handleSendChat}
                 onOpenImagePicker={() => setShowImagePicker(true)}
+                onOpenTemplateSender={() => setShowTemplateSender(true)}
                 isLoadingSubmit={sendChat.isPending}
+                isWindowExpired={isWindowExpired}
               />
             </form>
           )}
@@ -264,6 +284,13 @@ export default function WhatsappChatsCMS(props: WhatsappChatsCMSProps) {
           handleSendImage(image_url, caption);
           setShowImagePicker(false);
         }}
+      />
+
+      <WATemplateSenderModal
+        isOpen={showTemplateSender}
+        convId={props.convId}
+        onClose={() => setShowTemplateSender(false)}
+        onSent={() => utils.list.wa.chats.invalidate({ conv_id: props.convId })}
       />
     </div>
   );

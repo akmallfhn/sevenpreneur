@@ -1,5 +1,7 @@
 "use client";
 import { ArrowUp, ImagePlus, Loader2, SmilePlus } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import React, {
   FormEvent,
   KeyboardEvent,
@@ -15,8 +17,11 @@ interface WhatsappChatSubmitterCMSProps extends TextareaHTMLAttributes<HTMLTextA
   onTextAreaChange?: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
   onOpenImagePicker: () => void;
+  onOpenTemplateSender?: () => void;
   value: string;
   isLoadingSubmit: boolean;
+  /** When true, the normal submit button is disabled and "Kirim Template" button is shown */
+  isWindowExpired?: boolean;
 }
 
 export default function WhatsappChatSubmitterCMS({
@@ -24,7 +29,9 @@ export default function WhatsappChatSubmitterCMS({
   onTextAreaChange,
   onSubmit,
   onOpenImagePicker,
+  onOpenTemplateSender,
   isLoadingSubmit,
+  isWindowExpired = false,
   ...rest
 }: WhatsappChatSubmitterCMSProps) {
   const [showEmoji, setShowEmoji] = useState(false);
@@ -136,19 +143,32 @@ export default function WhatsappChatSubmitterCMS({
               suppressHydrationWarning
             />
           </div>
-          <div className="chat-submitter flex items-center justify-center">
-            <AppButton
-              className="chat-submitter"
-              type="submit"
-              size="iconRounded"
-              disabled={!value.trim() || isLoadingSubmit}
-            >
-              {isLoadingSubmit ? (
-                <Loader2 className="size-5 animate-spin" />
-              ) : (
-                <ArrowUp className="size-5" />
-              )}
-            </AppButton>
+          <div className="chat-submitter flex items-center justify-center gap-2">
+            {isWindowExpired && onOpenTemplateSender ? (
+              <AppButton
+                type="button"
+                size="smallRounded"
+                variant="whatsapp"
+                onClick={onOpenTemplateSender}
+                title="Kirim Template WhatsApp"
+              >
+                <FontAwesomeIcon icon={faWhatsapp} className="size-4" />
+                <span className="text-xs font-bodycopy font-semibold">Kirim Template</span>
+              </AppButton>
+            ) : (
+              <AppButton
+                className="chat-submitter"
+                type="submit"
+                size="iconRounded"
+                disabled={!value.trim() || isLoadingSubmit || isWindowExpired}
+              >
+                {isLoadingSubmit ? (
+                  <Loader2 className="size-5 animate-spin" />
+                ) : (
+                  <ArrowUp className="size-5" />
+                )}
+              </AppButton>
+            )}
           </div>
         </div>
 

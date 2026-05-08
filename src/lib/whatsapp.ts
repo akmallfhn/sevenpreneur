@@ -239,3 +239,89 @@ export const whatsappDownloadMediaRequest = (
     whatsappReq.end();
   });
 };
+
+// https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates
+// Sends a pre-approved Meta template message to a recipient.
+export const whatsappTemplateMessageRequest = (
+  userPhoneNumber: string,
+  templateName: string,
+  languageCode: string = "id"
+): Promise<WhatsappMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: userPhoneNumber,
+      type: "template",
+      template: {
+        name: templateName,
+        language: { code: languageCode },
+      },
+    });
+
+    const options: https.RequestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(body),
+        Authorization: "Bearer " + process.env.WHATSAPP_ACCESS_TOKEN,
+      },
+    };
+
+    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+    const req = https.request(
+      `https://graph.facebook.com/v23.0/${phoneNumberId}/messages`,
+      options,
+      (res) => {
+        let data = "";
+        res.on("data", (chunk) => (data += chunk));
+        res.on("end", () => {
+          try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+        });
+      }
+    );
+    req.on("error", reject);
+    req.write(body);
+    req.end();
+  });
+};
+
+export type WhatsappTemplateListResponse = {
+  data: {
+    id: string;
+    name: string;
+    status: string;
+    category: string;
+    language: string;
+    components: { type: string; text?: string; format?: string }[];
+  }[];
+  paging?: { cursors: { before: string; after: string }; next?: string };
+};
+
+// https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#list-templates
+// Fetches all APPROVED templates from the connected WABA.
+export const whatsappListTemplatesRequest = (
+  limit: number = 50
+): Promise<WhatsappTemplateListResponse> => {
+  return new Promise((resolve, reject) => {
+    const wabaId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
+    const token = process.env.WHATSAPP_ACCESS_TOKEN;
+
+    const options: https.RequestOptions = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + token },
+    };
+
+    const url = `https://graph.facebook.com/v23.0/${wabaId}/message_templates?status=APPROVED&limit=${limit}&fields=id,name,status,category,language,components`;
+
+    const req = https.request(url, options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => (data += chunk));
+      res.on("end", () => {
+        try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+      });
+    });
+    req.on("error", reject);
+    req.end();
+  });
+};
