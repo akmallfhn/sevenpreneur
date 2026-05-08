@@ -1,189 +1,84 @@
 "use client";
-import { useEffect, useRef } from "react";
-import AppButton from "../buttons/AppButton";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock, Mail, Phone, Rocket } from "lucide-react";
+import Image from "next/image";
+
+const contactInfo = [
+  { Icon: Phone, text: "WhatsApp +62 853-5353-3844" },
+  { Icon: Mail, text: "event@sevenpreneur.com" },
+  { Icon: Clock, text: "Respon dalam 1×24 jam kerja" },
+];
 
 export default function FinalCTACorporateAITrainingSVP() {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const els = ref.current?.querySelectorAll(".cat-reveal");
-    if (!els) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("opacity-100", "translate-y-0");
-            e.target.classList.remove("opacity-0", "translate-y-6");
-            obs.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
   return (
     <section
-      ref={ref}
       id="cta"
-      className="py-24 md:py-32 relative overflow-hidden"
-      style={{ background: "#050505", color: "#ffffff" }}
+      className="section-root relative flex items-center justify-center bg-gradient-to-b from-0% from-black via-60% via-[#1a1640] to-100% to-[#3417E3] overflow-hidden"
     >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 20% 30%, rgba(1,101,252,0.22), transparent 60%), radial-gradient(ellipse 50% 50% at 90% 80%, rgba(231,77,121,0.18), transparent 60%)",
-        }}
-      />
-      <div className="relative z-10 max-w-[1240px] mx-auto px-5 md:px-8">
-        {/* Tag */}
-        <div className="cat-reveal opacity-0 translate-y-6 transition-all duration-700 flex items-center gap-3 mb-8">
-          <span
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-[11px] uppercase tracking-[0.12em]"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              borderColor: "rgba(255,255,255,0.1)",
-              color: "rgba(255,255,255,0.7)",
-              backdropFilter: "blur(10px)",
-              fontFamily: "JetBrains Mono, monospace",
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0165fc]" />
-            Final Step
-          </span>
-        </div>
+      <div className="section-container flex flex-col w-full items-center gap-10 p-5 py-16 z-20 lg:px-0 lg:py-[120px] lg:gap-12 lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+        <div className="cta-card w-full max-w-[1100px] mx-auto p-[1.5px] rounded-3xl bg-gradient-to-br from-[#7B6FF0] via-[#B89FE0]/50 to-[#CC446A] overflow-hidden">
+          <div className="cta-inner relative flex flex-col gap-10 w-full bg-[#0F0E1F]/95 rounded-3xl p-8 backdrop-blur-xl lg:flex-row lg:items-center lg:p-14 lg:gap-16">
+            {/* Left: Headline + CTA */}
+            <div className="flex flex-col gap-7 flex-1">
+              <div className="flex items-center gap-3 text-xs font-bodycopy font-medium tracking-[0.25em] uppercase text-white/70 self-start lg:self-auto">
+                Final Step
+              </div>
 
-        {/* Content */}
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-10 md:gap-16 items-end">
-          <div className="cat-reveal opacity-0 translate-y-6 transition-all duration-700">
-            <h2
-              className="font-brand font-semibold leading-[0.98]"
-              style={{
-                fontSize: "clamp(40px, 6vw, 68px)",
-                letterSpacing: "-0.035em",
-              }}
-            >
-              Siap untuk lompatan{" "}
-              <em className="not-italic" style={{ color: "#e74d79" }}>
-                berikutnya?
-              </em>
-            </h2>
-            <p
-              className="font-bodycopy mt-8"
-              style={{
-                fontSize: "clamp(18px, 1.4vw, 22px)",
-                color: "rgba(255,255,255,0.62)",
-                lineHeight: 1.5,
-                maxWidth: 680,
-              }}
-            >
-              Jangan biarkan tim Anda tertinggal, sementara kompetitor sudah
-              memanfaatkan AI untuk efisiensi 60% lebih tinggi. Mulai dari
-              konsultasi gratis.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-8">
+              <h2 className="cta-title text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-3xl leading-[1.05] sm:text-4xl lg:text-5xl xl:text-[56px]">
+                Siap untuk lompatan{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#B89FE0] via-[#7B6FF0] to-[#CC446A]">
+                  berikutnya?
+                </span>
+              </h2>
               <a
                 href="https://wa.me/6285353533844?text=Halo%2C%20MinSeven!%20%F0%9F%91%8B%0ASaya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20*Corporate%20AI%20Training*%20dari%20Sevenpreneur.%20Boleh%20konsultasi%20dulu%3F%0A%0A%E2%80%A2%20Nama%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Perusahaan%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Jumlah%20Tim%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%20%F0%9F%99%8F"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex lg:hidden"
+                className="group relative inline-flex items-center justify-center gap-3 h-[58px] pl-6 pr-2 rounded-full bg-gradient-to-r from-[#7B6FF0] via-[#5E47ED] to-[#4C3FEC] text-white font-bodycopy font-semibold text-base shadow-[0_8px_32px_-4px_rgba(123,111,240,0.5)] hover:shadow-[0_12px_40px_-4px_rgba(123,111,240,0.7)] transition-all overflow-hidden self-start"
               >
-                <AppButton variant="flux">
-                  Jadwalkan konsultasi gratis
-                  <ArrowRight />
-                </AppButton>
-              </a>
-              <a
-                href="https://wa.me/6285353533844?text=Halo%2C%20MinSeven!%20%F0%9F%91%8B%0ASaya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20*Corporate%20AI%20Training*%20dari%20Sevenpreneur.%20Boleh%20konsultasi%20dulu%3F%0A%0A%E2%80%A2%20Nama%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Perusahaan%3A%20(isi%20di%20sini)%0A%E2%80%A2%20Jumlah%20Tim%3A%20(isi%20di%20sini)%0A%0ATerima%20kasih%20%F0%9F%99%8F"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden lg:flex"
-              >
-                <AppButton variant="flux" size="large">
-                  Jadwalkan konsultasi gratis
-                  <ArrowRight />
-                </AppButton>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <Rocket className="size-5 relative" />
+                <span className="relative">Jadwalkan konsultasi gratis</span>
+                <span className="relative flex items-center justify-center size-10 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors">
+                  <ArrowRight className="size-4" />
+                </span>
               </a>
             </div>
-          </div>
 
-          {/* Contact info */}
-          <div className="cat-reveal opacity-0 translate-y-6 transition-all duration-700 delay-100 flex flex-col gap-5">
-            {[
-              {
-                icon: (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ),
-                text: "WhatsApp +62 853-5353-3844",
-              },
-              {
-                icon: (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ),
-                text: "event@sevenpreneur.com",
-              },
-              {
-                icon: (
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                    />
-                    <path
-                      d="M12 6v6l4 2"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                ),
-                text: "Respon dalam 1×24 jam kerja",
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="font-bodycopy flex items-center gap-3 text-[15px]"
-                style={{ color: "rgba(255,255,255,0.62)" }}
-              >
-                <span
-                  className="w-8 h-8 rounded-lg grid place-items-center flex-shrink-0 border"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    borderColor: "rgba(255,255,255,0.08)",
-                    backdropFilter: "blur(10px)",
-                  }}
+            {/* Right: Contact info */}
+            <div className="flex flex-col gap-3 w-full lg:max-w-[320px] shrink-0">
+              <h4 className="font-bodycopy text-[11px] font-bold tracking-[2px] uppercase text-[#B89FE0] mb-1">
+                Kontak Langsung
+              </h4>
+              {contactInfo.map((item) => (
+                <div
+                  key={item.text}
+                  className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md"
                 >
-                  {item.icon}
-                </span>
-                {item.text}
-              </div>
-            ))}
+                  <span className="flex items-center justify-center size-10 rounded-full bg-gradient-to-br from-[#3417E3] to-[#7B6FF0] shrink-0">
+                    <item.Icon className="size-4 text-white" />
+                  </span>
+                  <span className="font-bodycopy text-sm text-white/85">
+                    {item.text}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Overlay Decoration */}
+      <Image
+        className="absolute inset-x-0 bottom-0 w-full h-auto object-cover mix-blend-plus-lighter opacity-50 z-[2]"
+        src="https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/overlay-curiculum%201.webp"
+        alt="Overlay Background"
+        width={1000}
+        height={1000}
+      />
+
+      {/* Decoration Blur */}
+      <div className="absolute bg-[#CC446A] size-72 top-20 -left-32 blur-[120px] rounded-full z-[1] opacity-40" />
+      <div className="absolute bg-[#7B6FF0] size-72 bottom-20 -right-32 blur-[120px] rounded-full z-[1] opacity-50" />
     </section>
   );
 }

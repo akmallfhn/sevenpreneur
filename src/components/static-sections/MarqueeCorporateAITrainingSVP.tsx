@@ -1,39 +1,63 @@
+"use client";
+import Image from "next/image";
+
+const logos = [
+  {
+    src: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-claude.webp",
+    alt: "Claude",
+  },
+  {
+    src: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-chatgpt.webp",
+    alt: "ChatGPT",
+  },
+  {
+    src: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-copilot.webp",
+    alt: "Copilot",
+  },
+  {
+    src: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-gemini.webp",
+    alt: "Gemini",
+  },
+  {
+    src: "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-perplexity.webp",
+    alt: "Perplexity",
+  },
+];
+
 export default function MarqueeCorporateAITrainingSVP() {
-  const items = [
-    "Banking & Finance",
-    "FMCG",
-    "Retail",
-    "Manufacturing",
-    "Property",
-    "Healthcare",
-    "Tech & Startup",
-    "Professional Services",
-  ];
-  const doubled = [...items, ...items];
+  const repeated = Array.from({ length: 8 }, () => logos).flat();
 
   return (
-    <div
-      className="py-8 border-t border-b border-[#e8e8e8] overflow-hidden"
-      style={{ borderColor: "#e8e8e8" }}
-    >
-      <p
-        className="text-center mb-5 text-[11px] uppercase tracking-[0.16em] text-[#777]"
-        style={{ fontFamily: "JetBrains Mono, monospace" }}
-      >
-        Telah dipercaya oleh tim di lintas industri
+    <div className="section-root relative flex flex-col items-center justify-center bg-black border-y border-white/5 overflow-hidden py-10 lg:py-14">
+      <p className="font-bodycopy text-center text-[11px] font-medium uppercase tracking-[0.25em] text-white/60 mb-8 px-4 lg:text-xs">
+        Tools terdepan untuk transformasi bisnis
       </p>
-      <div className="flex" style={{ animation: "cat-marquee 40s linear infinite", width: "max-content" }}>
-        {doubled.map((item, i) => (
+      <div
+        className="flex items-center"
+        style={{
+          animation: "cat-marquee 120s linear infinite",
+          width: "max-content",
+        }}
+      >
+        {repeated.map((logo, i) => (
           <div
             key={i}
-            className="font-brand flex items-center gap-2.5 mx-8 opacity-70 whitespace-nowrap text-[22px] font-semibold tracking-tight text-[#777]"
-            style={{ letterSpacing: "-0.02em" }}
+            className="flex items-center justify-center mx-10 lg:mx-16 opacity-70 hover:opacity-100 transition-opacity"
           >
-            <span className="w-5 h-5 rounded-md bg-[#777] flex-shrink-0" />
-            {item}
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={400}
+              height={120}
+              className="object-contain h-8 w-auto lg:h-10"
+            />
           </div>
         ))}
       </div>
+
+      {/* Edge fade */}
+      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
     </div>
   );
 }

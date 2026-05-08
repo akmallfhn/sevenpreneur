@@ -1,14 +1,15 @@
 "use client";
 import { DeleteSession } from "@/lib/actions";
 import {
-  Flag,
-  Gauge,
+  Briefcase,
+  Compass,
   HouseIcon,
   LayoutDashboard,
   LayoutList,
   LogOut,
+  Mic2,
   PlayCircle,
-  Presentation,
+  Users,
   Wallet,
 } from "lucide-react";
 import Image from "next/image";
@@ -121,24 +122,41 @@ export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
               onClick={props.onClose}
             />
             <hr className="border-t" />
+
+            {/* Learning Programs group */}
+            <p className="font-bodycopy font-bold text-[11px] tracking-[0.15em] uppercase text-emphasis dark:text-white/50 mt-1">
+              Learning Programs
+            </p>
             <SidebarMenuItemMobileSVP
-              menuName="Program"
-              menuIcon={<Presentation className="size-5" />}
+              menuName="Sevenpreneur Business Blueprint Program"
+              menuIcon={<Compass className="size-5" />}
               menuURL="/cohorts/sevenpreneur-business-blueprint-program"
               onClick={props.onClose}
             />
-            <hr className="border-t" />
+            <SidebarMenuItemMobileSVP
+              menuName="RE:START Conference"
+              menuIcon={<Mic2 className="size-5" />}
+              menuURL="/events/restart-conference"
+              onClick={props.onClose}
+            />
             <SidebarMenuItemMobileSVP
               menuName="Video Series"
               menuIcon={<PlayCircle className="size-5" />}
               menuURL="/playlists/restart-conference-2025/1"
               onClick={props.onClose}
             />
+            <SidebarMenuItemMobileSVP
+              menuName="Community Events"
+              menuIcon={<Users className="size-5" />}
+              menuURL="/events/spill-your-bizz-iftar-meet-2026/5"
+              onClick={props.onClose}
+            />
+
             <hr className="border-t" />
             <SidebarMenuItemMobileSVP
-              menuName="Event"
-              menuIcon={<Flag className="size-5" />}
-              menuURL="/events/spill-your-bizz-iftar-meet-2026/5"
+              menuName="Corporate Training"
+              menuIcon={<Briefcase className="size-5" />}
+              menuURL="/corporate-ai-training"
               onClick={props.onClose}
             />
             <hr className="border-t" />
@@ -146,13 +164,6 @@ export default function SidebarMobileSVP(props: SidebarMobileSVPProps) {
               menuName="Insights"
               menuIcon={<LayoutList className="size-5" />}
               menuURL="/insights"
-              onClick={props.onClose}
-            />
-            <hr className="border-t" />
-            <SidebarMenuItemMobileSVP
-              menuName="BARI"
-              menuIcon={<Gauge className="size-5" />}
-              menuURL="/business-ai-readiness-index"
               onClick={props.onClose}
             />
           </ul>

@@ -1,122 +1,91 @@
 "use client";
-import { useEffect, useRef } from "react";
 
 const modules = [
   {
-    n: "Module 01",
+    n: "01",
     t: "AI Foundation untuk Profesional",
     d: "Memahami AI tanpa jargon teknis. Bagaimana AI bekerja, apa yang bisa dan tidak bisa dilakukan, dan bagaimana cara berpikir tentang AI dalam konteks bisnis.",
   },
   {
-    n: "Module 02",
+    n: "02",
     t: "Practical AI Tools per Departemen",
     d: "Tools AI terbaik untuk Marketing, Sales, Operations, HR, Finance, dan Customer Service. Hands-on workshop, bukan demo.",
   },
   {
-    n: "Module 03",
+    n: "03",
     t: "Prompt Engineering for Business",
     d: "Cara menulis prompt yang menghasilkan output berkualitas profesional. Dari brief sederhana sampai workflow kompleks.",
   },
   {
-    n: "Module 04",
+    n: "04",
     t: "AI Workflow Automation",
     d: "Membangun workflow otomatis yang nyambung antar tools. Memangkas pekerjaan manual yang memakan waktu.",
   },
   {
-    n: "Module 05",
+    n: "05",
     t: "AI Strategy & Implementation",
     d: "Untuk leader: bagaimana merancang AI roadmap, menghitung ROI, dan mendrive adopsi di seluruh organisasi.",
   },
   {
-    n: "Module 06",
+    n: "06",
     t: "Ethics, Security & Risk",
-    d: "Menggunakan AI dengan bertanggung jawab—data privacy, security, compliance, dan risk mitigation.",
+    d: "Menggunakan AI dengan bertanggung jawab — data privacy, security, compliance, dan risk mitigation.",
   },
 ];
 
 export default function CurriculumCorporateAITrainingSVP() {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const els = ref.current?.querySelectorAll(".cat-reveal");
-    if (!els) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("opacity-100", "translate-y-0");
-            e.target.classList.remove("opacity-0", "translate-y-6");
-            obs.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.08 }
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
   return (
-    <section ref={ref} id="curriculum" className="py-24 pb-0">
-      <div className="max-w-[1240px] mx-auto px-5 md:px-8">
-        {/* Header */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-end mb-14 cat-reveal opacity-0 translate-y-6 transition-all duration-700">
-          <div>
-            <span
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-6 text-[11px] uppercase tracking-[0.12em] text-[#777]"
-              style={{
-                background: "#f5f5f5",
-                borderColor: "#e8e8e8",
-                fontFamily: "JetBrains Mono, monospace",
-              }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0165fc]" />
-              Curriculum
-            </span>
-            <h2
-              className="font-brand font-semibold leading-[0.98] text-[#0a0a0a]"
-              style={{
-                fontSize: "clamp(36px, 5vw, 64px)",
-                letterSpacing: "-0.035em",
-              }}
-            >
-              Apa yang akan dipelajari tim Anda.
-            </h2>
+    <section
+      id="curriculum"
+      className="section-root relative flex items-center justify-center bg-black overflow-hidden"
+    >
+      <div className="section-container flex flex-col w-full items-center gap-10 p-5 py-10 z-20 lg:px-0 lg:py-[80px] lg:gap-[64px] lg:max-w-[988px] xl:max-w-[1208px] 2xl:max-w-[1300px]">
+        {/* Section Title & Desc */}
+        <div className="section-title-desc flex flex-col w-full text-center items-center gap-3 z-10">
+          <div className="flex items-center gap-3 text-xs font-bodycopy font-medium tracking-[0.25em] uppercase text-white/70 mb-2">
+            Curriculum
           </div>
+          <h2 className="section-title text-transparent w-fit bg-clip-text bg-gradient-to-r from-[#FFFFFF] to-[#B89FE0] font-brand font-bold text-2xl sm:text-3xl sm:max-w-[600px] lg:text-4xl lg:max-w-[788px]">
+            Apa yang akan dipelajari tim kamu
+          </h2>
+          <p className="section-desc text-sm font-bodycopy text-white/80 max-w-[326px] sm:text-base sm:max-w-[480px] lg:text-xl lg:max-w-[640px]">
+            6 modul terstruktur dari fondasi sampai strategi implementasi —
+            dirancang khusus untuk tim corporate yang mau adopsi AI secara
+            sistematis.
+          </p>
         </div>
 
-        {/* Module grid */}
-        <div
-          className="cat-reveal opacity-0 translate-y-6 transition-all duration-700 delay-100 grid grid-cols-1 md:grid-cols-3 rounded-[18px] overflow-hidden border border-[#e8e8e8]"
-          style={{ gap: "1px", background: "#e8e8e8" }}
-        >
-          {modules.map((m, i) => (
+        {/* Modules Grid */}
+        <div className="modules grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 w-full">
+          {modules.map((m) => (
             <div
-              key={i}
-              className="bg-white p-8 transition-colors hover:bg-[#f5f5f5] cursor-default"
+              key={m.n}
+              className="module-card relative p-[1px] rounded-2xl bg-gradient-to-br from-white/15 via-white/5 to-transparent overflow-hidden group"
             >
-              <span
-                className="block mb-5 text-[11px] uppercase tracking-[0.12em]"
-                style={{
-                  fontFamily: "JetBrains Mono, monospace",
-                  color: i % 2 === 0 ? "#0165fc" : "#e74d79",
-                }}
-              >
-                {m.n}
-              </span>
-              <h4
-                className="font-brand font-semibold text-[22px] text-[#0a0a0a] mb-3 leading-[1.2]"
-                style={{ letterSpacing: "-0.02em" }}
-              >
-                {m.t}
-              </h4>
-              <p className="font-bodycopy text-[15px] text-[#3a3a3a] leading-[1.5]">
-                {m.d}
-              </p>
+              <div className="relative w-full h-full bg-[#0F0E1F] rounded-2xl p-6 lg:p-7 transition-colors group-hover:bg-[#16142a]">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center justify-center size-10 rounded-full bg-[#3417E3] outline-4 outline-[#1a1640] font-brand font-bold text-white text-sm">
+                    {m.n}
+                  </div>
+                  <span className="font-bodycopy text-[10px] font-bold tracking-[1.5px] uppercase text-[#B89FE0]">
+                    Module
+                  </span>
+                </div>
+                <h3 className="font-brand font-bold text-lg text-white mb-2.5 leading-tight lg:text-xl">
+                  {m.t}
+                </h3>
+                <p className="font-bodycopy text-sm text-white/70 leading-[1.6] lg:text-[15px]">
+                  {m.d}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Decoration Blur */}
+      <div className="absolute bg-[#3417E3] size-80 top-1/2 -translate-y-1/2 -left-40 blur-[140px] rounded-full z-[1] opacity-50" />
+      <div className="absolute bg-[#CC446A] size-80 top-1/2 -translate-y-1/2 -right-40 blur-[140px] rounded-full z-[1] opacity-30" />
     </section>
   );
 }

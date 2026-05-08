@@ -99,7 +99,7 @@ export default function WhatsappAudioPlayerCMS({
   const displayTime = currentTime > 0 ? currentTime : duration;
 
   return (
-    <div className="audio-player flex items-center gap-2 px-1 py-1 w-[280px]">
+    <div className="audio-player flex items-center gap-2 px-1 py-1 w-[280px] max-w-full">
       <audio ref={audioRef} src={src} preload="metadata" onError={onError} />
 
       {/* Play / Pause button */}

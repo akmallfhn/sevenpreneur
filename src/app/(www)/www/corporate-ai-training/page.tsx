@@ -3,9 +3,9 @@ import CorporateAITrainingSVP from "@/components/pages/CorporateAITrainingSVP";
 
 export const metadata: Metadata = {
   title:
-    "Corporate AI Training Program | Tingkatkan Produktivitas Tim 60% — Sevenpreneur",
+    "Corporate AI Training Program | Tingkatkan Produktivitas Tim 270% — Sevenpreneur",
   description:
-    "Program pelatihan AI untuk tim perusahaan Anda. Dari prompt engineering hingga AI workflow automation — langsung applicable ke pekerjaan sehari-hari. Terbukti meningkatkan produktivitas tim hingga 60%.",
+    "Program pelatihan AI untuk tim perusahaan Anda. Dari prompt engineering hingga AI workflow automation — langsung applicable ke pekerjaan sehari-hari. Terbukti meningkatkan produktivitas tim hingga 270%.",
   keywords: [
     "corporate AI training",
     "pelatihan AI perusahaan",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "sevenpreneur",
   ],
   openGraph: {
-    title: "Corporate AI Training Program | Tingkatkan Produktivitas Tim 60%",
+    title: "Corporate AI Training Program | Tingkatkan Produktivitas Tim 270%",
     description:
       "Program pelatihan AI untuk tim perusahaan Anda. Dari prompt engineering hingga AI workflow automation — langsung applicable ke pekerjaan sehari-hari.",
     url: "https://sevenpreneur.com/www/corporate-ai-training",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Corporate AI Training Program | Tingkatkan Produktivitas Tim 60%",
+    title: "Corporate AI Training Program | Tingkatkan Produktivitas Tim 270%",
     description:
       "Program pelatihan AI untuk tim perusahaan Anda. Dari prompt engineering hingga AI workflow automation — langsung applicable ke pekerjaan sehari-hari.",
   },

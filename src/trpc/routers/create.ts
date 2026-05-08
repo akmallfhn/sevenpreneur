@@ -2,7 +2,6 @@ import { createTRPCRouter } from "@/trpc/init";
 import { createArticle } from "./article/create.article";
 import { createWA } from "./wa/create.wa";
 import { createBA } from "./ba/create.ba";
-import { createBari } from "./bari/create.bari";
 import { createBD } from "./bd/create.bd";
 import { createEvent } from "./event/create.event";
 import { createLMS } from "./lms/create.lms";
@@ -39,12 +38,6 @@ export const createRouter = createTRPCRouter({
     subcategory: createBA.subcategory,
     question: createBA.question,
     answerSheet: createBA.answerSheet,
-  },
-
-  // BARI-related //
-
-  bari: {
-    assessment: createBari.assessment,
   },
 
   // Business-metric-related //

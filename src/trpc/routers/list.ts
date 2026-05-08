@@ -2,7 +2,6 @@ import { createTRPCRouter } from "@/trpc/init";
 import { listAITool } from "./ai_tool/list.ai_tool";
 import { listArticle } from "./article/list.article";
 import { listBA } from "./ba/list.ba";
-import { listBari } from "./bari/list.bari";
 import { listBD } from "./bd/list.bd";
 import { listEvent } from "./event/list.event";
 import { listLMS } from "./lms/list.lms";
@@ -48,13 +47,6 @@ export const listRouter = createTRPCRouter({
     subcategories: listBA.subcategories,
     questions: listBA.questions,
     answerSheets: listBA.answerSheets,
-  },
-
-  // BARI-related //
-
-  bari: {
-    questions: listBari.questions,
-    assessments: listBari.assessments,
   },
 
   // Business-metric-related //

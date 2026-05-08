@@ -45,21 +45,6 @@ CREATE TYPE ba_period_enum AS ENUM (
   'asesmen_ketiga'
 );
 
--- Enumeration for the bari_* tables (Business AI Readiness Index)
-
-CREATE TYPE bari_revenue_model_enum AS ENUM (
-  'products',
-  'services',
-  'subscription',
-  'marketplace',
-  'mixed'
-);
-
-CREATE TYPE bari_assessment_status_enum AS ENUM (
-  'in_progress',
-  'completed'
-);
-
 -- Enumeration for the bd_fin_cost_mtds table (cost_*)
 
 CREATE TYPE cost_category_enum AS ENUM (
@@ -467,43 +452,6 @@ CREATE TABLE ba_answer_items (
   score        SMALLINT     NOT NULL, -- in [0, 5] range
   created_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
   updated_at   TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
-);
-
--- BARI (Business AI Readiness Index)
--- Question bank is hardcoded in src/lib/bari-questions.ts
--- DB only stores user submissions and their answers.
-
-CREATE TABLE bari_assessments (
-  id              UUID                         PRIMARY KEY  DEFAULT gen_random_uuid(),
-  user_id         UUID                         NOT NULL,
-  industry_id     SMALLINT                         NULL, -- Q1
-  team_size       num_employee_enum                NULL, -- Q2
-  revenue_model   bari_revenue_model_enum          NULL, -- Q3
-  website_url     VARCHAR                          NULL, -- S2-Q23 / OPT-1
-  linkedin_url    VARCHAR                          NULL, -- OPT-2
-  primary_ai_tool VARCHAR                          NULL, -- OPT-3
-  status          bari_assessment_status_enum  NOT NULL  DEFAULT 'in_progress',
-  completed_at    TIMESTAMPTZ                      NULL,
-  created_at      TIMESTAMPTZ                  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at      TIMESTAMPTZ                  NOT NULL  DEFAULT CURRENT_TIMESTAMP
-);
-
--- One row per answered question in an assessment.
--- question_code references the hardcoded bank (e.g. "Q4", "S2-Q1").
--- option_codes holds the selected option key(s) for MC single/multi (e.g. ["a"], ["a","c"]).
--- likert_value used for Likert questions (1..5).
--- text_answer used for open-text / URL questions.
-
-CREATE TABLE bari_answers (
-  id             SERIAL       PRIMARY KEY,
-  assessment_id  UUID         NOT NULL,
-  question_code  VARCHAR      NOT NULL,
-  option_codes   VARCHAR[]    NOT NULL  DEFAULT '{}',
-  likert_value   SMALLINT         NULL,
-  text_answer    TEXT             NULL,
-  created_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at     TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (assessment_id, question_code)
 );
 
 -- Business-metric-related
@@ -936,15 +884,6 @@ ALTER TABLE ba_answer_items
   ADD FOREIGN KEY (sheet_id)    REFERENCES ba_answer_sheets (id),
   ADD FOREIGN KEY (question_id) REFERENCES ba_questions (id);
 
--- BARI-related
-
-ALTER TABLE bari_assessments
-  ADD FOREIGN KEY (user_id)     REFERENCES users (id),
-  ADD FOREIGN KEY (industry_id) REFERENCES industries (id);
-
-ALTER TABLE bari_answers
-  ADD FOREIGN KEY (assessment_id) REFERENCES bari_assessments (id) ON DELETE CASCADE;
-
 -- Business-metric-related
 
 ALTER TABLE bd_fin_revenue_mtds
@@ -1183,18 +1122,6 @@ CREATE TRIGGER update_ba_answer_sheets_updated_at_trigger
 
 CREATE TRIGGER update_ba_answer_items_updated_at_trigger
   BEFORE UPDATE ON ba_answer_items
-  FOR EACH ROW
-    EXECUTE FUNCTION update_updated_at();
-
--- BARI-related
-
-CREATE TRIGGER update_bari_assessments_updated_at_trigger
-  BEFORE UPDATE ON bari_assessments
-  FOR EACH ROW
-    EXECUTE FUNCTION update_updated_at();
-
-CREATE TRIGGER update_bari_answers_updated_at_trigger
-  BEFORE UPDATE ON bari_answers
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 

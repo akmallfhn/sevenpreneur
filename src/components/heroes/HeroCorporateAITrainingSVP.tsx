@@ -1,554 +1,295 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import AppButton from "../buttons/AppButton";
+import {
+  ArrowRight,
+  BarChart3,
+  GraduationCap,
+  MessageCircle,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  Workflow,
+  Zap,
+} from "lucide-react";
+import Link from "next/link";
 
-function ArrowIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      <path
-        d="M5 12h14M13 5l7 7-7 7"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function HeroIcon({ name }: { name: string }) {
-  const icons: Record<string, React.ReactNode> = {
-    spark: (
-      <path
-        d="M12 2v6m0 8v6M2 12h6m8 0h6M5 5l4 4m6 6l4 4M5 19l4-4m6-6l4-4"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    ),
-    brain: (
-      <path
-        d="M9 4a3 3 0 0 0-3 3v1a3 3 0 0 0-2 5.83V15a3 3 0 0 0 3 3h1a3 3 0 0 0 5 0h1a3 3 0 0 0 3-3v-1.17A3 3 0 0 0 18 8V7a3 3 0 0 0-6-1 3 3 0 0 0-3-2zM9 10v0M15 10v0M9 16v0M15 16v0"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    ),
-    chip: (
-      <>
-        <rect
-          x="6"
-          y="6"
-          width="12"
-          height="12"
-          rx="2"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        />
-        <rect
-          x="9"
-          y="9"
-          width="6"
-          height="6"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        />
-        <path
-          d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-        />
-      </>
-    ),
-    bolt: (
-      <path
-        d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-    ),
-    flow: (
-      <>
-        <circle cx="6" cy="6" r="2" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="18" cy="6" r="2" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="12" cy="18" r="2" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M8 7l3 9M16 7l-3 9" stroke="currentColor" strokeWidth="1.6" />
-      </>
-    ),
-    chat: (
-      <path
-        d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.5A8 8 0 1 1 21 12z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-    ),
-    shield: (
-      <path
-        d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5l8-3z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-    ),
-    chart: (
-      <path
-        d="M3 3v18h18M7 14l4-4 3 3 5-7"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    ),
-    code: (
-      <path
-        d="M8 6l-6 6 6 6M16 6l6 6-6 6M14 4l-4 16"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    ),
-  };
-  return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      {icons[name]}
-    </svg>
-  );
-}
-
-const chips = [
-  {
-    icon: "spark",
-    label: "AI Tools",
-    color: "#5cc7ff",
-    pos: "top-[8%] left-[3%]",
-    delay: "0s",
-  },
-  {
-    icon: "brain",
-    label: "LLM",
-    color: "#ff8fb1",
-    pos: "top-[4%] left-[24%]",
-    delay: "-1.2s",
-  },
-  {
-    icon: "bolt",
-    label: "Automation",
-    color: "#a48aff",
-    pos: "top-[8%] right-[3%]",
-    delay: "-2.4s",
-  },
-  {
-    icon: "flow",
-    label: "Workflow",
-    color: "#ffc94d",
-    pos: "top-[4%] right-[26%]",
-    delay: "-3.6s",
-  },
-  {
-    icon: "chart",
-    label: "+60% ROI",
-    color: "#5cc7ff",
-    pos: "bottom-[8%] left-[3%]",
-    delay: "-4.8s",
-  },
-  {
-    icon: "shield",
-    label: "Secure",
-    color: "#ff8fb1",
-    pos: "bottom-[4%] left-[24%]",
-    delay: "-1.6s",
-  },
-  {
-    icon: "chat",
-    label: "Prompts",
-    color: "#a48aff",
-    pos: "bottom-[8%] right-[3%]",
-    delay: "-2.8s",
-  },
-  {
-    icon: "chip",
-    label: "Stack",
-    color: "#ffc94d",
-    pos: "bottom-[4%] right-[26%]",
-    delay: "-4s",
-  },
+const trustBadges = [
+  { Icon: GraduationCap, label: "Praktisi AI Industri" },
+  { Icon: ShieldCheck, label: "Enterprise-Grade" },
+  { Icon: Sparkles, label: "Custom LMS" },
 ];
 
-function HeroDemoCard() {
-  const [pct, setPct] = useState(0);
-  useEffect(() => {
-    const t = setTimeout(() => setPct(60), 400);
-    return () => clearTimeout(t);
-  }, []);
+const adoptionRows = [
+  { Icon: BarChart3, name: "Reporting", pct: 72, label: "+72%" },
+  { Icon: Workflow, name: "Operations", pct: 64, label: "+64%" },
+  { Icon: MessageCircle, name: "Marketing", pct: 58, label: "+58%" },
+];
 
-  const bars = [
-    { label: "Reporting", pct: 72 },
-    { label: "Marketing", pct: 64 },
-    { label: "Operations", pct: 58 },
-    { label: "HR Ops", pct: 51 },
-  ];
-
+export default function HeroCorporateAITrainingSVP() {
   return (
-    <div className="my-16 md:my-20 border border-[#e8e8e8] rounded-2xl bg-[#f5f5f5] p-4 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.25)]">
-      <div
-        className="rounded-2xl p-6 min-h-[320px] relative overflow-hidden text-white"
-        style={{
-          background: "#050505",
-        }}
-      >
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 50% 50% at 0% 0%, rgba(1,101,252,0.22), transparent 60%), radial-gradient(ellipse 50% 50% at 100% 100%, rgba(231,77,121,0.16), transparent 60%)",
-          }}
-        />
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-5">
-            <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-            <span
-              className="ml-3 text-[11px] text-white/60 px-3 py-1.5 rounded-md"
-              style={{
-                fontFamily: "JetBrains Mono, monospace",
-                background: "rgba(255,255,255,0.06)",
-              }}
-            >
-              sevenpreneur.com / dashboard
-            </span>
-            <span
-              className="ml-auto text-[11px] text-white/60 tracking-widest"
-              style={{ fontFamily: "JetBrains Mono, monospace" }}
-            >
-              LIVE · Q1 2026
-            </span>
-          </div>
+    <div className="hero-root relative gap-5 flex flex-col items-center w-full bg-black overflow-hidden">
+      <div className="hero-container relative flex w-full items-center py-12 px-4 z-[70] lg:px-8 lg:pt-24 lg:pb-28 lg:max-w-[988px] xl:max-w-[1280px] 2xl:max-w-[1380px]">
+        <div className="hero-grid grid grid-cols-1 w-full gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-12 xl:gap-14">
+          {/* LEFT — Content */}
+          <div className="hero-content flex flex-col w-full items-center text-center gap-7 lg:items-start lg:text-left">
+            {/* Eyebrow */}
+            <div className="hero-eyebrow inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-[11px] font-bodycopy font-semibold tracking-[0.25em] uppercase text-white/80 bg-white/5 border border-white/10 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0fd4a3] animate-pulse" />
+              Corporate AI Training
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-4">
-            <div
-              className="rounded-xl p-4 border border-white/8"
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                backdropFilter: "blur(20px)",
-              }}
-            >
-              <p
-                className="text-[11px] uppercase tracking-widest text-white/50 mb-3"
-                style={{ fontFamily: "JetBrains Mono, monospace" }}
+            {/* Title */}
+            <h1 className="hero-title font-brand font-bold text-white leading-[1.05] text-4xl sm:text-5xl lg:text-[58px] xl:text-[68px] tracking-tight max-w-[680px]">
+              Tingkatkan produktivitas tim hingga{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#B89FE0] via-[#7B6FF0] to-[#CC446A]">
+                270%
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="hero-description font-bodycopy text-white/70 text-base max-w-[540px] sm:text-lg lg:text-xl">
+              Tim yang cuma andelin ChatGPT udah ketinggalan jauh. Kami bangun
+              sistem AI yang langsung applicable ke workflow tim kamu.
+            </p>
+
+            {/* CTAs */}
+            <div className="hero-ctas flex flex-col w-full items-stretch gap-3 sm:flex-row sm:w-fit sm:items-center">
+              <a
+                href="https://wa.me/6285353533844?text=Halo%2C%20MinSeven!%20%F0%9F%91%8B%0ASaya%20tertarik%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20*Corporate%20AI%20Training*%20dari%20Sevenpreneur.%20Boleh%20konsultasi%20dulu%3F"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative inline-flex items-center justify-center gap-3 h-[58px] pl-6 pr-2 rounded-full bg-gradient-to-r from-[#7B6FF0] via-[#5E47ED] to-[#4C3FEC] text-white font-bodycopy font-semibold text-base shadow-[0_8px_32px_-4px_rgba(123,111,240,0.5)] hover:shadow-[0_12px_40px_-4px_rgba(123,111,240,0.7)] transition-all overflow-hidden"
               >
-                Productivity Lift — Cohort 14
-              </p>
-              <div className="flex items-baseline gap-3 mb-4">
-                <span className="font-brand text-[64px] md:text-[80px] font-semibold leading-none tracking-tighter text-white">
-                  +{Math.round(pct)}
-                  <span style={{ color: "#0165fc" }}>%</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <Rocket className="size-5 relative" />
+                <span className="relative">Konsultasi Gratis</span>
+                <span className="relative flex items-center justify-center size-10 rounded-full bg-white/15 group-hover:bg-white/25 transition-colors">
+                  <ArrowRight className="size-4" />
                 </span>
-                <span
-                  className="text-[11px] uppercase text-white/50 tracking-widest leading-tight"
-                  style={{ fontFamily: "JetBrains Mono, monospace" }}
-                >
-                  vs. baseline
-                  <br />
-                  30-day window
+              </a>
+
+              <Link
+                href="#program"
+                className="group inline-flex items-center justify-center gap-3 h-[58px] px-6 rounded-full bg-white/5 border border-white/15 text-white font-bodycopy font-semibold text-base hover:bg-white/10 hover:border-white/25 transition-all backdrop-blur-sm"
+              >
+                <span className="flex items-center justify-center size-7 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors">
+                  <Sparkles className="size-3.5" />
                 </span>
-              </div>
-              {bars.map((b, i) => (
+                Lihat program
+              </Link>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="trust-badges flex flex-wrap items-center justify-center gap-x-5 gap-y-3 mt-1 lg:justify-start">
+              {trustBadges.map((b) => (
                 <div
-                  key={i}
-                  className="grid gap-2 items-center mb-2 text-[12px]"
-                  style={{
-                    gridTemplateColumns: "80px 1fr 40px",
-                    fontFamily: "JetBrains Mono, monospace",
-                    color: "rgba(255,255,255,0.6)",
-                  }}
+                  key={b.label}
+                  className="flex items-center gap-2 font-bodycopy text-sm text-white/60"
                 >
-                  <span>{b.label}</span>
-                  <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        background: "#0165fc",
-                        width: `${(pct / 60) * b.pct}%`,
-                        transition: "width 1.2s cubic-bezier(.2,.8,.2,1)",
-                      }}
-                    />
-                  </div>
-                  <span className="text-right text-white">
-                    +{Math.round((pct / 60) * b.pct)}%
+                  <span className="flex items-center justify-center size-7 rounded-full bg-white/5 border border-white/10">
+                    <b.Icon className="size-3.5 text-[#B89FE0]" />
                   </span>
+                  {b.label}
                 </div>
               ))}
             </div>
+          </div>
 
-            <div className="flex flex-col gap-4">
-              <div
-                className="rounded-xl p-4 border border-white/8"
-                style={{
-                  background: "rgba(255,255,255,0.04)",
-                  backdropFilter: "blur(20px)",
-                }}
-              >
-                <p
-                  className="text-[11px] uppercase tracking-widest text-white/50 mb-3"
-                  style={{ fontFamily: "JetBrains Mono, monospace" }}
-                >
-                  Adoption
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { k: "Active users", v: "94%" },
-                    { k: "Completion", v: "88%" },
-                    { k: "Daily prompt", v: "11.4" },
-                    { k: "Hours saved", v: "18.2" },
-                  ].map((s, i) => (
-                    <div
-                      key={i}
-                      className="p-3 rounded-lg"
-                      style={{ background: "rgba(255,255,255,0.04)" }}
-                    >
-                      <p
-                        className="text-[10px] uppercase tracking-widest text-white/50 mb-1"
-                        style={{ fontFamily: "JetBrains Mono, monospace" }}
-                      >
-                        {s.k}
-                      </p>
-                      <p className="font-brand text-xl font-semibold tracking-tight">
-                        {s.v}
-                      </p>
-                    </div>
-                  ))}
+          {/* RIGHT — Productivity Dashboard Card */}
+          <div className="hero-card relative w-full max-w-[480px] mx-auto lg:max-w-none lg:mx-0">
+            <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-br from-[#7B6FF0]/70 via-white/10 to-[#CC446A]/50 shadow-[0_30px_80px_-20px_rgba(76,63,236,0.5)]">
+              <div className="relative bg-[#0A0918]/95 rounded-3xl p-7 backdrop-blur-xl overflow-hidden lg:p-8">
+                <div
+                  className="absolute pointer-events-none"
+                  style={{
+                    top: -120,
+                    right: -120,
+                    width: 320,
+                    height: 320,
+                    background:
+                      "radial-gradient(circle, rgba(123,111,240,0.18) 0%, transparent 70%)",
+                  }}
+                />
+
+                {/* Header */}
+                <div className="relative flex items-center justify-between mb-7">
+                  <span className="font-bodycopy text-sm text-white/60">
+                    Live Dashboard Preview
+                  </span>
+                  <span className="font-brand text-[10px] font-bold tracking-[1.5px] uppercase rounded-full px-3 py-1.5 bg-gradient-to-r from-[#7B6FF0] to-[#CC446A] text-white">
+                    Q1 2026
+                  </span>
                 </div>
-              </div>
-              <div
-                className="rounded-xl p-4 border border-white/8"
-                style={{
-                  background: "rgba(255,255,255,0.04)",
-                  backdropFilter: "blur(20px)",
-                }}
-              >
-                <p
-                  className="text-[11px] uppercase tracking-widest text-white/50 mb-3"
-                  style={{ fontFamily: "JetBrains Mono, monospace" }}
-                >
-                  Active modules
-                </p>
-                <div className="flex flex-col gap-2">
-                  {[
-                    "Prompt Engineering",
-                    "AI Workflow",
-                    "Department Tools",
-                    "Strategy & ROI",
-                  ].map((m, i) => (
+
+                {/* Productivity uplift big number */}
+                <div className="relative mb-6">
+                  <p className="font-bodycopy text-[10px] font-bold tracking-[2px] uppercase text-white/50 mb-3">
+                    Productivity Uplift — Cohort 14
+                  </p>
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-brand font-bold text-7xl text-white leading-none lg:text-[88px]">
+                      +270
+                      <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#B89FE0] via-[#7B6FF0] to-[#CC446A]">
+                        %
+                      </span>
+                    </span>
+                    <div className="flex flex-col pb-2">
+                      <span className="font-bodycopy text-[11px] text-white/50 tracking-[1.5px] uppercase">
+                        vs. baseline
+                      </span>
+                      <span className="font-bodycopy text-[11px] text-white/50 tracking-[1.5px] uppercase">
+                        30-day window
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section header */}
+                <div className="relative flex items-center gap-3 mb-4">
+                  <span className="font-bodycopy text-[10px] font-bold tracking-[2px] uppercase text-white/50">
+                    Adoption per Departemen
+                  </span>
+                  <span className="flex-1 h-px bg-white/10" />
+                </div>
+
+                {/* Rows */}
+                <div className="relative flex flex-col gap-3.5 mb-6">
+                  {adoptionRows.map((r) => (
                     <div
-                      key={i}
-                      className="flex justify-between items-center px-3 py-2 rounded-md text-[13px]"
-                      style={{ background: "rgba(255,255,255,0.03)" }}
+                      key={r.name}
+                      className="grid grid-cols-[28px_1fr_auto_50px] items-center gap-3"
                     >
-                      <span className="font-bodycopy text-white">{m}</span>
-                      <span
-                        className="text-[10px]"
-                        style={{
-                          fontFamily: "JetBrains Mono, monospace",
-                          color: "#0165fc",
-                        }}
-                      >
-                        ● live
+                      <span className="flex items-center justify-center size-7 rounded-full bg-white/5 border border-white/10">
+                        <r.Icon className="size-3.5 text-[#B89FE0]" />
+                      </span>
+                      <span className="font-bodycopy text-[13px] text-white/85 truncate">
+                        {r.name}
+                      </span>
+                      <div className="w-20 h-1.5 bg-white/10 rounded-full overflow-hidden lg:w-24">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-[#7B6FF0] to-[#CC446A]"
+                          style={{ width: `${r.pct}%` }}
+                        />
+                      </div>
+                      <span className="font-bodycopy text-[11px] tracking-[0.5px] font-bold text-right text-[#B89FE0]">
+                        {r.label}
                       </span>
                     </div>
                   ))}
                 </div>
+
+                {/* Bottom CTA bar */}
+                <div className="relative p-[1px] rounded-2xl bg-gradient-to-r from-[#7B6FF0]/60 via-white/10 to-[#CC446A]/60">
+                  <div className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-[#13102E]/90">
+                    <span className="flex items-center justify-center size-8 rounded-full bg-gradient-to-br from-[#7B6FF0] to-[#4C3FEC] shrink-0">
+                      <Zap className="size-4 text-white fill-white" />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bodycopy text-[13px] font-semibold text-white leading-tight">
+                        Custom LMS untuk tim kamu
+                      </p>
+                      <p className="font-bodycopy text-[11px] text-white/55 leading-tight">
+                        branded · accessible · scalable
+                      </p>
+                    </div>
+                    <ArrowRight className="size-4 text-white/60 shrink-0" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
 
-export default function HeroCorporateAITrainingSVP() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+      {/* === Background Decoration === */}
 
-  useEffect(() => {
-    const els = sectionRef.current?.querySelectorAll(".cat-reveal");
-    if (!els) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("opacity-100", "translate-y-0");
-            e.target.classList.remove("opacity-0", "translate-y-6");
-            obs.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <div ref={sectionRef}>
-      {/* Hero */}
-      <section
-        className="relative overflow-hidden flex items-center min-h-[88vh] pt-14 pb-16 md:pt-16 md:pb-20 isolate"
-        style={{ background: "#000000", color: "#ffffff" }}
+      {/* Orbital ring SVG */}
+      <svg
+        className="absolute pointer-events-none z-[2] opacity-60"
+        style={{
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "min(1600px, 140vw)",
+          height: "min(1600px, 140vw)",
+        }}
+        viewBox="0 0 1600 1600"
+        fill="none"
       >
-        {/* Background layers */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div
-            className="absolute inset-[-2px]"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
-              backgroundSize: "56px 56px",
-              WebkitMaskImage:
-                "radial-gradient(ellipse 60% 50% at 50% 50%, black 30%, transparent 80%)",
-              maskImage:
-                "radial-gradient(ellipse 60% 50% at 50% 50%, black 30%, transparent 80%)",
-            }}
-          />
-          <div
-            className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E\")",
-            }}
-          />
-          <div
-            className="absolute inset-0 z-10"
-            style={{
-              background:
-                "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(0,0,0,0) 0%, #000 70%)",
-            }}
-          />
-        </div>
-
-        {/* Floating chips */}
-        <div className="absolute inset-0 z-10 pointer-events-none hidden md:block">
-          {chips.map((chip, i) => (
-            <div
-              key={i}
-              className={`absolute ${chip.pos} hidden lg:inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-white/12 text-white/92 text-[12px] tracking-wide`}
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                backdropFilter: "blur(20px) saturate(140%)",
-                WebkitBackdropFilter: "blur(20px) saturate(140%)",
-                boxShadow:
-                  "0 8px 24px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)",
-                fontFamily: "JetBrains Mono, monospace",
-                animation: `cat-chip-float 8s ease-in-out infinite`,
-                animationDelay: chip.delay,
-                color: "rgba(255,255,255,0.92)",
-              }}
-            >
-              <span style={{ color: chip.color, flexShrink: 0 }}>
-                <HeroIcon name={chip.icon} />
-              </span>
-              <span>{chip.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div className="relative z-20 w-full max-w-[1240px] mx-auto px-5 md:px-8 text-center">
-          {/* Tag */}
-          <div className="cat-reveal opacity-0 translate-y-6 transition-all duration-700 flex justify-center mb-7">
-            <span
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] tracking-widest uppercase"
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                borderColor: "rgba(255,255,255,0.12)",
-                color: "rgba(255,255,255,0.85)",
-                backdropFilter: "blur(20px) saturate(140%)",
-                fontFamily: "JetBrains Mono, monospace",
-              }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full bg-[#0fd4a3]"
-                style={{ animation: "cat-dot-pulse 2s infinite" }}
-              />
-              CORPORATE AI TRAINING PROGRAM
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1
-            className="cat-reveal opacity-0 translate-y-6 transition-all duration-700 delay-100 font-brand font-semibold tracking-[-0.04em] leading-[0.96] mx-auto mb-8 text-white"
-            style={{
-              fontSize: "clamp(40px, 8vw, 88px)",
-              maxWidth: "1180px",
-              textShadow: "0 4px 60px rgba(0,0,0,0.4)",
-            }}
+        <defs>
+          <linearGradient
+            id="cat-ring-grad"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
           >
-            Tingkatkan Produktivitas Tim Anda Hingga{" "}
-            <span
-              style={{
-                background:
-                  "linear-gradient(95deg, #0165fc 0%, #5a3df0 30%, #e74d79 60%, #ff8a3d 90%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-                fontWeight: 700,
-                letterSpacing: "-0.05em",
-                display: "inline-block",
-                position: "relative",
-              }}
-            >
-              60%
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p
-            className="cat-reveal font-bodycopy opacity-0 translate-y-6 transition-all duration-700 delay-150 mx-auto text-center"
-            style={{
-              color: "rgba(255,255,255,0.72)",
-              fontSize: "clamp(17px, 1.4vw, 20px)",
-              maxWidth: "720px",
-              lineHeight: 1.5,
-            }}
+            <stop offset="0%" stopColor="#7B6FF0" stopOpacity="0" />
+            <stop offset="50%" stopColor="#7B6FF0" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#CC446A" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient
+            id="cat-ring-grad-2"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
           >
-            Tim yang cuma andalin ChatGPT udah ketinggalan jauh. Tingkatkan
-            produktivitas tim langsung applicable ke workflow.
-          </p>
+            <stop offset="0%" stopColor="#CC446A" stopOpacity="0" />
+            <stop offset="50%" stopColor="#B89FE0" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#7B6FF0" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <ellipse
+          cx="800"
+          cy="800"
+          rx="780"
+          ry="780"
+          stroke="url(#cat-ring-grad)"
+          strokeWidth="1"
+        />
+        <ellipse
+          cx="800"
+          cy="800"
+          rx="640"
+          ry="640"
+          stroke="url(#cat-ring-grad-2)"
+          strokeWidth="1"
+          transform="rotate(35 800 800)"
+        />
+        <ellipse
+          cx="800"
+          cy="800"
+          rx="500"
+          ry="500"
+          stroke="url(#cat-ring-grad)"
+          strokeWidth="1"
+          transform="rotate(70 800 800)"
+        />
+        <ellipse
+          cx="800"
+          cy="800"
+          rx="360"
+          ry="360"
+          stroke="url(#cat-ring-grad-2)"
+          strokeWidth="1"
+        />
+      </svg>
 
-          {/* CTA buttons */}
-          <div className="cat-reveal opacity-0 translate-y-6 transition-all duration-700 delay-200 flex flex-wrap justify-center gap-3 mt-10">
-            <a
-              href="https://wa.me/6285353533844"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex lg:hidden"
-            >
-              <AppButton variant="flux">
-                Konsultasi Gratis untuk Tim Anda
-                <ArrowIcon />
-              </AppButton>
-            </a>
-            <a
-              href="https://wa.me/6285353533844"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden lg:flex"
-            >
-              <AppButton variant="flux" size="largeRounded">
-                Konsultasi Gratis untuk Tim Anda
-                <ArrowIcon />
-              </AppButton>
-            </a>
-          </div>
-        </div>
-      </section>
-      <div className="max-w-[1240px] mx-auto px-5 md:px-8">
-        <HeroDemoCard />
-      </div>
+      {/* Dotted starfield */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1] opacity-40"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 1px, transparent 1px), radial-gradient(circle at 70% 60%, rgba(255,255,255,0.3) 1px, transparent 1px), radial-gradient(circle at 40% 80%, rgba(184,159,224,0.4) 1px, transparent 1px), radial-gradient(circle at 85% 20%, rgba(255,255,255,0.3) 1px, transparent 1px), radial-gradient(circle at 15% 70%, rgba(123,111,240,0.4) 1px, transparent 1px)",
+          backgroundSize:
+            "200px 200px, 280px 280px, 320px 320px, 240px 240px, 360px 360px",
+        }}
+      />
+
+      {/* Circle Blur */}
+      <div className="absolute flex bg-[#3417E3] size-[400px] -top-40 -left-40 blur-[140px] rounded-full z-[0] opacity-50 lg:size-[600px] lg:blur-[180px]" />
+      <div className="absolute flex bg-[#CC446A] size-[400px] bottom-0 -right-40 blur-[140px] rounded-full z-[0] opacity-30 lg:size-[600px] lg:blur-[180px]" />
+      <div className="absolute flex bg-[#7B6FF0] w-[800px] h-[260px] -bottom-[120px] left-1/2 -translate-x-1/2 blur-[120px] rounded-full z-[0] opacity-30" />
     </div>
   );
 }

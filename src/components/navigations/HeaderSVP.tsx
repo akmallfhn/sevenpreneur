@@ -2,7 +2,14 @@
 import { StatusType } from "@/lib/app-types";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { AlignLeftIcon, UserCircle2 } from "lucide-react";
+import {
+  AlignLeftIcon,
+  Bot,
+  Compass,
+  PlayCircle,
+  UserCircle2,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
@@ -14,8 +21,40 @@ import SevenpreneurLogo from "../svg-logos/SevenpreneurLogo";
 import AnnouncementTickerSVP, {
   AnnouncementTickerSVPProps,
 } from "./AnnouncementTickerSVP";
+import HeaderMegaMenuSVP, { type MegaMenuItem } from "./HeaderMegaMenuSVP";
 import HeaderNavbarItemSVP from "./HeaderNavbarItemSVP";
 import SidebarMobileSVP from "./SidebarMobileSVP";
+
+const productServiceItems: MegaMenuItem[] = [
+  {
+    Icon: Compass,
+    name: "Business Blueprint Program",
+    desc: "Kelas strategi & growth bisnis untuk executive dan entrepreneur.",
+    url: "/cohorts/sevenpreneur-business-blueprint-program",
+    accent: "bg-gradient-to-br from-[#3417E3] to-[#7B6FF0]",
+  },
+  {
+    Icon: Bot,
+    name: "RE:START Conference",
+    desc: "Konferensi tahunan tentang masa depan bisnis dan AI.",
+    url: "/events/restart-conference",
+    accent: "bg-gradient-to-br from-[#CC446A] to-[#7B6FF0]",
+  },
+  {
+    Icon: PlayCircle,
+    name: "Video Series",
+    desc: "Library video pembelajaran dari para business leader terkemuka.",
+    url: "/playlists/restart-conference-2025/1",
+    accent: "bg-gradient-to-br from-[#7B6FF0] to-[#B89FE0]",
+  },
+  {
+    Icon: Users,
+    name: "Community Events",
+    desc: "Networking & komunitas untuk founder dan entrepreneur Indonesia.",
+    url: "/events/spill-your-bizz-iftar-meet-2026/5",
+    accent: "bg-gradient-to-br from-[#0165fc] to-[#3417E3]",
+  },
+];
 
 dayjs.extend(isBetween);
 
@@ -71,29 +110,17 @@ export default function HeaderSVP(props: HeaderSVPProps) {
               {!isConstrainedPath && (
                 <nav className="desktop-menu hidden lg:flex">
                   <ul className="menu-item-list flex items-center gap-7">
-                    <HeaderNavbarItemSVP
-                      menuTitle="Program"
-                      menuUrl="/cohorts/sevenpreneur-business-blueprint-program"
+                    <HeaderMegaMenuSVP
+                      menuTitle="Learning Programs"
+                      items={productServiceItems}
                     />
                     <HeaderNavbarItemSVP
-                      menuTitle="Video Series"
-                      menuUrl="/playlists/restart-conference-2025/1"
-                    />
-                    <HeaderNavbarItemSVP
-                      menuTitle="Event"
-                      menuUrl="/events/spill-your-bizz-iftar-meet-2026/5"
+                      menuTitle="Corporate Training"
+                      menuUrl="/corporate-ai-training"
                     />
                     <HeaderNavbarItemSVP
                       menuTitle="Insights"
                       menuUrl="/insights"
-                    />
-                    <HeaderNavbarItemSVP
-                      menuTitle="BARI"
-                      menuUrl="/business-ai-readiness-index"
-                    />
-                    <HeaderNavbarItemSVP
-                      menuTitle="About Us"
-                      menuUrl="/company"
                     />
                     <Link href={`https://agora.${domain}`}>
                       <AppButton size="mediumRounded" variant="flux">

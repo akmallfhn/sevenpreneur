@@ -6,6 +6,7 @@ import { WhatsAppTypeAttachmentPairUnion } from "@/lib/whatsapp-types";
 import WhatsappChatBubbleCMS from "./WhatsappChatBubbleCMS";
 import WhatsappAudioPlayerCMS from "./WhatsappAudioPlayerCMS";
 import WhatsappImagePreviewCMS from "../modals/WhatsappImagePreviewCMS";
+import AppLoadingComponents from "../states/AppLoadingComponents";
 import Image from "next/image";
 import { FileText, Download, FileQuestion } from "lucide-react";
 
@@ -21,7 +22,6 @@ interface WhatsappChatItemCMSProps {
   failedAt: string | null;
 }
 
-// ─── Loading Skeleton ──────────────────────────────────────────────────────────
 function MediaLoadingSkeleton({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-2 px-1 py-1 animate-pulse">
@@ -31,6 +31,17 @@ function MediaLoadingSkeleton({ label }: { label: string }) {
         <div className="h-2 rounded bg-muted w-1/2" />
       </div>
       <span className="text-xs text-muted-foreground italic">{label}</span>
+    </div>
+  );
+}
+
+function MediaDownloadingState() {
+  return (
+    <div className="flex flex-col items-center justify-center w-[200px] max-w-full">
+      <AppLoadingComponents />
+      <span className="text-xs text-muted-foreground italic font-bodycopy pb-2">
+        Downloading...
+      </span>
     </div>
   );
 }
@@ -86,9 +97,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
                 onClick={() => setIsImagePreviewOpen(true)}
               />
             ) : (
-              <p className="px-2 italic text-muted-foreground">
-                Image not found
-              </p>
+              <MediaDownloadingState />
             )}
             {!!props.chat.attachment.caption && (
               <p className="p-1">{props.chat.attachment.caption}</p>
@@ -140,9 +149,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
               <p className="text-sm italic">Format tidak didukung</p>
             </div>
           ) : (
-            <p className="px-2 italic text-muted-foreground text-sm">
-              Video not found
-            </p>
+            <MediaDownloadingState />
           )}
           {!!props.chat.attachment.caption && (
             <p className="p-1 text-sm">{props.chat.attachment.caption}</p>
@@ -153,8 +160,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
   }
 
   if (props.chat.type === "DOCUMENT") {
-    const docSrc =
-      props.chat.attachment.storage_url || props.chat.attachment.url;
+    const docSrc = props.chat.attachment.storage_url;
     const fileName = props.chat.attachment.filename || "Document";
     const ext = fileName.split(".").pop()?.toUpperCase() ?? "FILE";
 
@@ -186,22 +192,24 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
         timestampStatus={timestampStatus}
         createdAt={props.createdAt}
       >
-        <div className="document flex items-center gap-2 px-1 py-1 w-[240px]">
-          {/* File icon */}
-          <div className="flex-shrink-0 flex items-center justify-center size-10 rounded-md bg-primary/10">
-            <FileText className="size-5 text-primary" />
-          </div>
+        {docSrc ? (
+          <div className="document flex items-center gap-2 px-1 py-1 w-[240px] max-w-full">
+            {/* File icon */}
+            <div className="flex-shrink-0 flex items-center justify-center size-10 rounded-md bg-primary/10">
+              <FileText className="size-5 text-primary" />
+            </div>
 
-          {/* File info */}
-          <div className="flex flex-col flex-1 min-w-0">
-            <p className="text-sm font-medium font-bodycopy truncate leading-snug">
-              {fileName}
-            </p>
-            <p className="text-xs text-muted-foreground font-bodycopy">{ext}</p>
-          </div>
+            {/* File info */}
+            <div className="flex flex-col flex-1 min-w-0">
+              <p className="text-sm font-medium font-bodycopy truncate leading-snug">
+                {fileName}
+              </p>
+              <p className="text-xs text-muted-foreground font-bodycopy">
+                {ext}
+              </p>
+            </div>
 
-          {/* Download button */}
-          {docSrc ? (
+            {/* Download button */}
             <button
               type="button"
               onClick={handleDownload}
@@ -210,12 +218,10 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
             >
               <Download className="size-4 text-primary" />
             </button>
-          ) : (
-            <div className="flex-shrink-0 size-8 flex items-center justify-center opacity-40">
-              <Download className="size-4 text-muted-foreground" />
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <MediaDownloadingState />
+        )}
         {!!props.chat.attachment.caption && (
           <p className="px-1 pb-1 text-sm">{props.chat.attachment.caption}</p>
         )}
@@ -224,10 +230,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
   }
 
   if (props.chat.type === "AUDIO") {
-    const audioSrc =
-      props.chat.attachment.storage_url || props.chat.attachment.url;
-    const isVoice = props.chat.attachment.voice;
-
+    const audioSrc = props.chat.attachment.storage_url;
     return (
       <WhatsappChatBubbleCMS
         chatDirection={props.chatDirection}
@@ -248,7 +251,7 @@ export default function WhatsappChatItemCMS(props: WhatsappChatItemCMSProps) {
               <p className="text-sm italic">Format tidak didukung</p>
             </div>
           ) : (
-            <MediaLoadingSkeleton label={isVoice ? "Voice note" : "Audio"} />
+            <MediaDownloadingState />
           )}
         </div>
       </WhatsappChatBubbleCMS>
