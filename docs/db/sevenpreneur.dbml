@@ -635,7 +635,7 @@ Table transactions {
 
 // Tickers
 
-Table ticker {
+Table ads_ticker {
   id          integer      [primary key, note: 'default 1']
   title       varchar
   callout     varchar
@@ -674,7 +674,7 @@ Table articles {
 
 // Interstitial Ads
 
-Table interstitial_ads {
+Table ads_interstitial {
   id              integer      [primary key, note: 'default 1']
   title           varchar
   call_to_action  varchar

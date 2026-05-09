@@ -9,7 +9,6 @@ import { readLMS } from "./lms/read.lms";
 import { readLookup } from "./lookup/read.lookup";
 import { readPlaylist } from "./playlist/read.playlist";
 import { readTemplate } from "./templates/templates";
-import { readTicker } from "./ticker/read.ticker";
 import { readTransaction } from "./transaction/read.transaction";
 import { readUserData } from "./userdata/read.userdata";
 import { readWA } from "./wa/read.wa";
@@ -93,18 +92,15 @@ export const readRouter = createTRPCRouter({
   discount: readTransaction.discount,
   transaction: readTransaction.transaction,
 
-  // Tickers //
-
-  ticker: readTicker.ticker,
-
   // Article-related //
 
   article: readArticle.article,
 
-  // Interstitial Ads //
+  // Ads //
 
   ad: {
     interstitial: readAdv.interstitial,
+    ticker: readAdv.ticker,
   },
 
   // WhatsApp-chat-related //

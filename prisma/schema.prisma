@@ -918,7 +918,7 @@ model Ticker {
   end_date   DateTime   @db.Timestamptz()
   updated_at DateTime   @default(now()) @updatedAt @db.Timestamptz()
 
-  @@map("ticker")
+  @@map("ads_ticker")
 }
 
 // Article-related
@@ -969,7 +969,7 @@ model InterstitialAd {
   end_date       DateTime   @db.Timestamptz()
   updated_at     DateTime   @default(now()) @updatedAt @db.Timestamptz()
 
-  @@map("interstitial_ads")
+  @@map("ads_interstitial")
 }
 
 // WhatsApp-chat-related

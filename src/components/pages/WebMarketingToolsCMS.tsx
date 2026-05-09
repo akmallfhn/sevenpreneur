@@ -32,7 +32,7 @@ export default function WebMarketingToolsCMS(props: WebMarketingToolsCMSProps) {
     data: tickerData,
     isLoading: isLoadingTickerData,
     isError: isErrorTickerData,
-  } = trpc.read.ticker.useQuery({ id: 1 });
+  } = trpc.read.ad.ticker.useQuery({ id: 1 });
   const tickerDetailsData = tickerData?.ticker;
 
   const {

@@ -671,7 +671,7 @@ CREATE TABLE transactions (
 
 -- Tickers
 
-CREATE TABLE ticker (
+CREATE TABLE ads_ticker (
   id          INTEGER      PRIMARY KEY  DEFAULT 1,
   title       VARCHAR      NOT NULL,
   callout     VARCHAR          NULL,
@@ -710,7 +710,7 @@ CREATE TABLE articles (
 
 -- Interstitial Ads
 
-CREATE TABLE interstitial_ads (
+CREATE TABLE ads_interstitial (
   id              INTEGER      PRIMARY KEY  DEFAULT 1,
   title           VARCHAR      NOT NULL,
   call_to_action  VARCHAR          NULL,
@@ -1182,8 +1182,8 @@ CREATE TRIGGER update_transactions_updated_at_trigger
 
 -- Tickers
 
-CREATE TRIGGER update_ticker_updated_at_trigger
-  BEFORE UPDATE ON ticker
+CREATE TRIGGER update_ads_ticker_updated_at_trigger
+  BEFORE UPDATE ON ads_ticker
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
@@ -1196,8 +1196,8 @@ CREATE TRIGGER update_articles_updated_at_trigger
 
 -- Interstitial Ads
 
-CREATE TRIGGER update_interstitial_ads_updated_at_trigger
-  BEFORE UPDATE ON interstitial_ads
+CREATE TRIGGER update_ads_interstitial_updated_at_trigger
+  BEFORE UPDATE ON ads_interstitial
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 
@@ -1249,11 +1249,11 @@ CREATE UNIQUE INDEX idx_discounts_unique_combination ON discounts (code, categor
 
 -- Tickers
 
-CREATE UNIQUE INDEX one_row_only ON ticker ((TRUE));
+CREATE UNIQUE INDEX ads_ticker_one_row_only ON ads_ticker ((TRUE));
 
 -- Interstitial Ads
 
-CREATE UNIQUE INDEX interstitial_ads_one_row_only ON interstitial_ads ((TRUE));
+CREATE UNIQUE INDEX ads_interstitial_one_row_only ON ads_interstitial ((TRUE));
 
 --------------------------------
 -- Other Table Configurations --

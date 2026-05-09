@@ -19,4 +19,20 @@ export const readAdv = {
       interstitial: theInterstitialAd,
     };
   }),
+
+  ticker: publicProcedure.input(objectHasOnlyID()).query(async (opts) => {
+    const theTicker = await opts.ctx.prisma.ticker.findUnique({
+      where: {
+        id: opts.input.id,
+      },
+    });
+    if (!theTicker) {
+      throw readFailedNotFound("ticker");
+    }
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      ticker: theTicker,
+    };
+  }),
 };

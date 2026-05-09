@@ -50,7 +50,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
 
   let tickerDataRaw = null;
   try {
-    tickerDataRaw = (await trpc.read.ticker({ id: 1 })).ticker;
+    tickerDataRaw = (await trpc.read.ad.ticker({ id: 1 })).ticker;
   } catch {
     tickerDataRaw = null;
   }

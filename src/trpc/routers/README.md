@@ -581,10 +581,10 @@ These table below shows all routes/endpoints/procedures, categorized by object t
 
 ## Tickers 🚨
 
-| Procedure Name  | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
-| :-------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
-| `read.ticker`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
-| `update.ticker` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
+| Procedure Name     | Administrator (`0`) | Educator (`1`) | Class Manager (`2`) | Marketer (`4`) | General User (`3`) | Public/Not Logged-In |
+| :----------------- | :-----------------: | :------------: | :-----------------: | :------------: | :----------------: | :------------------: |
+| `read.ad.ticker`   |         ✅          |       ✅       |         ✅          |       ✅       |         ✅         |          ✅          |
+| `update.ad.ticker` |         ✅          |       ❌       |         ❌          |       ✅       |         ❌         |          ❌          |
 
 **Scopes:**
 

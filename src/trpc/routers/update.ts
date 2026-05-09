@@ -7,7 +7,6 @@ import { updateEvent } from "./event/update.event";
 import { updateLMS } from "./lms/update.lms";
 import { updatePlaylist } from "./playlist/update.playlist";
 import { updateTemplate } from "./templates/templates";
-import { updateTicker } from "./ticker/update.ticker";
 import { updateTransaction } from "./transaction/update.transaction";
 import { updateUserData } from "./userdata/update.userdata";
 import { updateWA } from "./wa/update.wa";
@@ -69,19 +68,16 @@ export const updateRouter = createTRPCRouter({
 
   discount: updateTransaction.discount,
 
-  // Tickers //
-
-  ticker: updateTicker.ticker,
-
   // Article-related //
 
   articleCategory: updateArticle.articleCategory,
   article: updateArticle.article,
 
-  // Interstitial Ads //
+  // Ads //
 
   ad: {
     interstitial: updateAdv.interstitial,
+    ticker: updateAdv.ticker,
   },
 
   // WhatsApp-chat-related //

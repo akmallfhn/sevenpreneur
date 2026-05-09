@@ -23,11 +23,11 @@ interface EditTickerMarketingFormCMSProps {
 export default function EditTickerMarketingFormCMS(
   props: EditTickerMarketingFormCMSProps
 ) {
-  const editTicker = trpc.update.ticker.useMutation();
+  const editTicker = trpc.update.ad.ticker.useMutation();
   const utils = trpc.useUtils();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { data, isLoading, isError } = trpc.read.ticker.useQuery(
+  const { data, isLoading, isError } = trpc.read.ad.ticker.useQuery(
     { id: props.tickerId },
     { enabled: !!props.sessionToken }
   );
@@ -151,7 +151,7 @@ export default function EditTickerMarketingFormCMS(
           onSuccess: () => {
             toast.success("Ticker Announcement successfully updated");
             setIsSubmitting(false);
-            utils.read.ticker.invalidate();
+            utils.read.ad.ticker.invalidate();
             props.onClose();
           },
           onError: (error) => {
