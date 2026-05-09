@@ -133,6 +133,7 @@ export async function triggerLangGraphAgent(payload: {
   sender_type: string;
   type: string;
   message: string;
+  name: string;
   attachment: object | null;
   sent_at: string | null;
 }) {

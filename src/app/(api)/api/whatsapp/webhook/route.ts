@@ -113,6 +113,7 @@ export async function POST(req: NextRequest) {
               sender_type: "user",
               type: msg.type,
               message: message,
+              name: userProfileName,
               attachment: attachment ?? null,
               sent_at: new Date(Number(msg.timestamp) * 1e3).toISOString(),
             });
