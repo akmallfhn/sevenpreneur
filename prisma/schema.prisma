@@ -868,6 +868,7 @@ model AIChat {
 model Discount {
   id           Int           @id @default(autoincrement()) @db.Integer
   name         String        @db.VarChar()
+  description  String?       @db.Text
   code         String        @db.VarChar()
   category     CategoryEnum
   item_id      Int           @db.Integer

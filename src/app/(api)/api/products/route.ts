@@ -1,7 +1,7 @@
 import GetPrismaClient from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const authHeader = req.headers.get("authorization");
   const expectedKey = process.env.SECRET_KEY_PUBLIC_API;
   if (!expectedKey || authHeader !== `Bearer ${expectedKey}`) {
@@ -74,10 +74,24 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
+  const baseUrl = "https://www.sevenpreneur.com";
+
   const list = [
-    ...cohorts.map((item) => ({ ...item, category: "cohort" as const })),
-    ...events.map((item) => ({ ...item, category: "event" as const })),
-    ...playlists.map((item) => ({ ...item, category: "playlist" as const })),
+    ...cohorts.map((item) => ({
+      ...item,
+      category: "cohort" as const,
+      payment_url: `${baseUrl}/cohorts/${item.slug_url}/${item.id}/checkout`,
+    })),
+    ...events.map((item) => ({
+      ...item,
+      category: "event" as const,
+      payment_url: `${baseUrl}/events/${item.slug_url}/${item.id}/checkout`,
+    })),
+    ...playlists.map((item) => ({
+      ...item,
+      category: "playlist" as const,
+      payment_url: `${baseUrl}/playlists/${item.slug_url}/${item.id}/checkout`,
+    })),
   ];
 
   return NextResponse.json({ list });

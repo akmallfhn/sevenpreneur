@@ -15,6 +15,7 @@ export const updateTransaction = {
       z.object({
         id: numberIsID(),
         name: stringNotBlank().optional(),
+        description: stringNotBlank().nullable().optional(),
         code: stringNotBlank().optional(),
         category: z.enum(CategoryEnum).optional(),
         item_id: numberIsID().optional(),
@@ -29,6 +30,7 @@ export const updateTransaction = {
         await opts.ctx.prisma.discount.updateManyAndReturn({
           data: {
             name: opts.input.name,
+            description: opts.input.description,
             code: opts.input.code,
             category: opts.input.category,
             item_id: opts.input.item_id,

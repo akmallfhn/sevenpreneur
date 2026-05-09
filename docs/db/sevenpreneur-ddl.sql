@@ -638,6 +638,7 @@ CREATE TABLE ai_chats (
 CREATE TABLE discounts (
   id            SERIAL         PRIMARY KEY,
   name          VARCHAR        NOT NULL,
+  description   TEXT               NULL,
   code          VARCHAR        NOT NULL,
   category      category_enum  NOT NULL,
   item_id       INTEGER        NOT NULL,

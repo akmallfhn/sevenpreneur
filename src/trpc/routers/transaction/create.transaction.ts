@@ -17,6 +17,7 @@ export const createTransaction = {
     .input(
       z.object({
         name: stringNotBlank(),
+        description: stringNotBlank().nullable().optional(),
         code: stringNotBlank(),
         category: z.enum(CategoryEnum),
         item_id: numberIsID(),
@@ -30,6 +31,7 @@ export const createTransaction = {
       const createdDiscount = await opts.ctx.prisma.discount.create({
         data: {
           name: opts.input.name,
+          description: opts.input.description,
           code: opts.input.code,
           category: opts.input.category,
           item_id: opts.input.item_id,

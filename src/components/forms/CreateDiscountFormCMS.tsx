@@ -10,6 +10,7 @@ import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
 import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -35,6 +36,7 @@ export default function CreateDiscountFormCMS({
   // Beginning State
   const [formData, setFormData] = useState<{
     discountName: string;
+    discountDescription: string;
     discountCode: string;
     discountRate: string;
     discountStartDate: string;
@@ -44,6 +46,7 @@ export default function CreateDiscountFormCMS({
     productItem: number;
   }>({
     discountName: "",
+    discountDescription: "",
     discountCode: "",
     discountRate: "",
     discountStartDate: "",
@@ -217,6 +220,10 @@ export default function CreateDiscountFormCMS({
           end_date: new Date(formData.discountEndDate).toISOString(),
           category: formData.productCategory as ProductCategory,
           item_id: formData.productItem,
+          // Optional fields:
+          description: formData.discountDescription.trim()
+            ? formData.discountDescription.trim()
+            : null,
         },
         {
           onSuccess: () => {
@@ -260,6 +267,14 @@ export default function CreateDiscountFormCMS({
               value={formData.discountName}
               onInputChange={handleInputChange("discountName")}
               required
+            />
+            <AppTextArea variant="CMS"
+              textAreaId="discount-description"
+              textAreaName="Description"
+              textAreaHeight="h-24"
+              textAreaPlaceholder="e.g. Special discount for early summer enrollees"
+              value={formData.discountDescription}
+              onTextAreaChange={handleInputChange("discountDescription")}
             />
             <div className="flex gap-4 justify-between">
               <div className="w-full flex-1">

@@ -74,6 +74,7 @@ export const readTransaction = {
         discount: {
           id: theDiscount.id,
           name: theDiscount.name,
+          description: theDiscount.description,
           code: theDiscount.code,
           category: theDiscount.category,
           item_id: theDiscount.item_id,

@@ -99,7 +99,7 @@ export const listTransaction = {
         OR: undefined as Optional<
           [
             { name: { contains: string; mode: "insensitive" } },
-            { code: { contains: string; mode: "insensitive" } }
+            { code: { contains: string; mode: "insensitive" } },
           ]
         >,
       };

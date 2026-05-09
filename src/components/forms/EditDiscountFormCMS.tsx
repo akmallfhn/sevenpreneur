@@ -10,6 +10,7 @@ import AppButton from "../buttons/AppButton";
 import AppInput from "../fields/AppInput";
 import AppNumberInputSVP from "../fields/AppNumberInput";
 import AppSelect from "../fields/AppSelect";
+import AppTextArea from "../fields/AppTextArea";
 import StatusLabelCMS from "../labels/StatusLabelCMS";
 import AppSheet from "../modals/AppSheet";
 import AppLoadingComponents from "../states/AppLoadingComponents";
@@ -48,6 +49,7 @@ export default function EditDiscountFormCMS({
   // Beginning State
   const [formData, setFormData] = useState<{
     discountName: string;
+    discountDescription: string;
     discountCode: string;
     discountRate: string;
     discountStartDate: string;
@@ -57,6 +59,9 @@ export default function EditDiscountFormCMS({
     productItem?: number;
   }>({
     discountName: initialData?.name.trim() ? initialData.name : "",
+    discountDescription: initialData?.description?.trim()
+      ? initialData.description
+      : "",
     discountCode: initialData?.code.trim() ? initialData.code : "",
     discountRate: initialData?.calc_percent.trim()
       ? initialData.calc_percent
@@ -77,6 +82,9 @@ export default function EditDiscountFormCMS({
     if (initialData) {
       setFormData({
         discountName: initialData?.name.trim() ? initialData.name : "",
+        discountDescription: initialData?.description?.trim()
+          ? initialData.description
+          : "",
         discountCode: initialData?.code.trim() ? initialData.code : "",
         discountRate: initialData?.calc_percent.trim()
           ? initialData.calc_percent
@@ -249,6 +257,10 @@ export default function EditDiscountFormCMS({
           item_id: formData.productItem
             ? Number(formData.productItem)
             : undefined,
+          // Optional fields:
+          description: formData.discountDescription.trim()
+            ? formData.discountDescription.trim()
+            : null,
         },
         {
           onSuccess: () => {
@@ -304,6 +316,14 @@ export default function EditDiscountFormCMS({
                 value={formData.discountName}
                 onInputChange={handleInputChange("discountName")}
                 required
+              />
+              <AppTextArea variant="CMS"
+                textAreaId="discount-description"
+                textAreaName="Description"
+                textAreaHeight="h-24"
+                textAreaPlaceholder="e.g. Special discount for early summer enrollees"
+                value={formData.discountDescription}
+                onTextAreaChange={handleInputChange("discountDescription")}
               />
               <div className="flex gap-4 justify-between">
                 <div className="w-full flex-1">
