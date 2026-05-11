@@ -37,17 +37,16 @@ type TransactionWithRelations = Prisma.TransactionGetPayload<{
 }>;
 
 /**
- * Net amount = base price + admin_fee + VAT − discount.
- * Pajak & admin fee dibebankan ke user, jadi ini total yang user bayar
- * (gross revenue dari sisi merchant).
+ * Revenue murni Sevenpreneur = amount − discount_amount.
+ * `admin_fee` & `vat` di-pass-through ke Xendit / pemerintah — mereka
+ * cuma jadi penambah di total yang user bayar biar Sevenpreneur tetap
+ * terima `amount` utuh, jadi tidak masuk hitungan revenue.
  */
-function calcNetAmount(t: {
+function calcRevenue(t: {
   amount: Prisma.Decimal;
-  admin_fee: Prisma.Decimal;
-  vat: Prisma.Decimal;
   discount_amount: Prisma.Decimal;
 }): Prisma.Decimal {
-  return t.amount.plus(t.admin_fee).plus(t.vat).minus(t.discount_amount);
+  return t.amount.minus(t.discount_amount);
 }
 
 function serializeTransaction(t: TransactionWithRelations) {
@@ -72,7 +71,7 @@ function serializeTransaction(t: TransactionWithRelations) {
     discount_amount: t.discount_amount.toString(),
     admin_fee: t.admin_fee.toString(),
     vat: t.vat.toString(),
-    net_amount: calcNetAmount(t).toString(),
+    revenue: calcRevenue(t).toString(),
     currency: t.currency,
     invoice_number: t.invoice_number,
     status: t.status,
@@ -240,7 +239,7 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "aggregate_transactions",
-      "Aggregate transaction metrics with optional filters and grouping. Returns count, total_amount (base price sum), total_admin_fee, total_vat, total_discount_amount, and total_net_amount (= amount + admin_fee + vat − discount, what user actually paid). Use status=PAID for actual revenue. Group by status, category, payment_channel, day, or month.",
+      "Aggregate transaction metrics with optional filters and grouping. Returns count, total_amount (base price sum), total_discount_amount, and total_revenue (= amount − discount_amount, the actual Sevenpreneur revenue; admin_fee & vat are pass-through to Xendit/government and not included). Use status=PAID for realized revenue. Group by status, category, payment_channel, day, or month.",
       {
         status: TStatus.optional().describe("Filter by status (use PAID for revenue)"),
         category: Category.optional(),
@@ -263,16 +262,10 @@ const handler = createSevenpreneurMcp(
         }
 
         const ZERO = new Prisma.Decimal(0);
-        const sumNet = (sums: {
+        const sumRevenue = (sums: {
           amount: Prisma.Decimal | null;
-          admin_fee: Prisma.Decimal | null;
-          vat: Prisma.Decimal | null;
           discount_amount: Prisma.Decimal | null;
-        }) =>
-          (sums.amount ?? ZERO)
-            .plus(sums.admin_fee ?? ZERO)
-            .plus(sums.vat ?? ZERO)
-            .minus(sums.discount_amount ?? ZERO);
+        }) => (sums.amount ?? ZERO).minus(sums.discount_amount ?? ZERO);
 
         if (args.group_by === "none") {
           const agg = await prisma.transaction.aggregate({
@@ -281,8 +274,6 @@ const handler = createSevenpreneurMcp(
             _sum: {
               amount: true,
               discount_amount: true,
-              admin_fee: true,
-              vat: true,
             },
           });
           return jsonText({
@@ -295,9 +286,7 @@ const handler = createSevenpreneurMcp(
             count: agg._count._all,
             total_amount: (agg._sum.amount ?? ZERO).toString(),
             total_discount_amount: (agg._sum.discount_amount ?? ZERO).toString(),
-            total_admin_fee: (agg._sum.admin_fee ?? ZERO).toString(),
-            total_vat: (agg._sum.vat ?? ZERO).toString(),
-            total_net_amount: sumNet(agg._sum).toString(),
+            total_revenue: sumRevenue(agg._sum).toString(),
           });
         }
 
@@ -331,20 +320,16 @@ const handler = createSevenpreneurMcp(
               bucket: Date;
               count: bigint;
               total_amount: Prisma.Decimal | null;
-              total_admin_fee: Prisma.Decimal | null;
-              total_vat: Prisma.Decimal | null;
               total_discount_amount: Prisma.Decimal | null;
-              total_net_amount: Prisma.Decimal | null;
+              total_revenue: Prisma.Decimal | null;
             }>
           >(
             Prisma.sql`
               SELECT date_trunc(${truncUnit}, created_at) AS bucket,
                      COUNT(*)::bigint AS count,
                      COALESCE(SUM(amount), 0) AS total_amount,
-                     COALESCE(SUM(admin_fee), 0) AS total_admin_fee,
-                     COALESCE(SUM(vat), 0) AS total_vat,
                      COALESCE(SUM(discount_amount), 0) AS total_discount_amount,
-                     COALESCE(SUM(amount + admin_fee + vat - discount_amount), 0) AS total_net_amount
+                     COALESCE(SUM(amount - discount_amount), 0) AS total_revenue
               FROM transactions
               ${whereClause}
               GROUP BY bucket
@@ -358,10 +343,8 @@ const handler = createSevenpreneurMcp(
               bucket: dayjs(r.bucket).toISOString(),
               count: Number(r.count),
               total_amount: (r.total_amount ?? ZERO).toString(),
-              total_admin_fee: (r.total_admin_fee ?? ZERO).toString(),
-              total_vat: (r.total_vat ?? ZERO).toString(),
               total_discount_amount: (r.total_discount_amount ?? ZERO).toString(),
-              total_net_amount: (r.total_net_amount ?? ZERO).toString(),
+              total_revenue: (r.total_revenue ?? ZERO).toString(),
             })),
           });
         }
@@ -369,8 +352,6 @@ const handler = createSevenpreneurMcp(
         // group_by: status | category | payment_channel
         const sumSelect = {
           amount: true,
-          admin_fee: true,
-          vat: true,
           discount_amount: true,
         } as const;
 
@@ -378,10 +359,8 @@ const handler = createSevenpreneurMcp(
           key: string | null;
           count: number;
           total_amount: string;
-          total_admin_fee: string;
-          total_vat: string;
           total_discount_amount: string;
-          total_net_amount: string;
+          total_revenue: string;
         };
 
         let grouped: GroupRow[] = [];
@@ -391,8 +370,6 @@ const handler = createSevenpreneurMcp(
             _count: { _all: number };
             _sum: {
               amount: Prisma.Decimal | null;
-              admin_fee: Prisma.Decimal | null;
-              vat: Prisma.Decimal | null;
               discount_amount: Prisma.Decimal | null;
             };
           },
@@ -400,10 +377,8 @@ const handler = createSevenpreneurMcp(
           key,
           count: row._count._all,
           total_amount: (row._sum.amount ?? ZERO).toString(),
-          total_admin_fee: (row._sum.admin_fee ?? ZERO).toString(),
-          total_vat: (row._sum.vat ?? ZERO).toString(),
           total_discount_amount: (row._sum.discount_amount ?? ZERO).toString(),
-          total_net_amount: sumNet(row._sum).toString(),
+          total_revenue: sumRevenue(row._sum).toString(),
         });
 
         if (args.group_by === "status") {
