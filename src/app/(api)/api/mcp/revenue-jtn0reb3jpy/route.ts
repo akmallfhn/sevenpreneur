@@ -36,6 +36,20 @@ type TransactionWithRelations = Prisma.TransactionGetPayload<{
   };
 }>;
 
+/**
+ * Net amount = base price + admin_fee + VAT − discount.
+ * Pajak & admin fee dibebankan ke user, jadi ini total yang user bayar
+ * (gross revenue dari sisi merchant).
+ */
+function calcNetAmount(t: {
+  amount: Prisma.Decimal;
+  admin_fee: Prisma.Decimal;
+  vat: Prisma.Decimal;
+  discount_amount: Prisma.Decimal;
+}): Prisma.Decimal {
+  return t.amount.plus(t.admin_fee).plus(t.vat).minus(t.discount_amount);
+}
+
 function serializeTransaction(t: TransactionWithRelations) {
   return {
     id: t.id,
@@ -58,6 +72,7 @@ function serializeTransaction(t: TransactionWithRelations) {
     discount_amount: t.discount_amount.toString(),
     admin_fee: t.admin_fee.toString(),
     vat: t.vat.toString(),
+    net_amount: calcNetAmount(t).toString(),
     currency: t.currency,
     invoice_number: t.invoice_number,
     status: t.status,
@@ -85,10 +100,38 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "list_transactions",
-      "List Sevenpreneur transactions (Xendit invoices) with optional filters and pagination. Ordered by created_at descending.",
+      "List Sevenpreneur transactions (Xendit invoices) with optional filters and pagination. Ordered by created_at descending. Use cohort_id / event_id / playlist_id (mutually exclusive) to scope to a specific product across all its price tiers.",
       {
         status: TStatus.optional().describe("Filter by payment status"),
         category: Category.optional().describe("Filter by purchase category"),
+        cohort_id: z
+          .number()
+          .int()
+          .optional()
+          .describe(
+            "Filter to all transactions for any price tier of this cohort (resolves via cohort_prices)",
+          ),
+        event_id: z
+          .number()
+          .int()
+          .optional()
+          .describe(
+            "Filter to all transactions for any price tier of this event (resolves via event_prices)",
+          ),
+        playlist_id: z
+          .number()
+          .int()
+          .optional()
+          .describe(
+            "Filter to transactions for this playlist (item_id matches playlist.id directly)",
+          ),
+        item_id: z
+          .number()
+          .int()
+          .optional()
+          .describe(
+            "Direct filter on Transaction.item_id (cohort_price.id / event_price.id / playlist.id depending on category)",
+          ),
         user_id: z.uuid().optional().describe("Filter by user UUID"),
         user_email: z
           .email()
@@ -104,6 +147,18 @@ const handler = createSevenpreneurMcp(
         offset: z.number().int().min(0).optional().default(0),
       },
       async (args) => {
+        const productFilters = [
+          args.cohort_id,
+          args.event_id,
+          args.playlist_id,
+        ].filter((v) => v !== undefined);
+        if (productFilters.length > 1) {
+          return jsonText({
+            error:
+              "Set at most one of: cohort_id, event_id, playlist_id (a transaction can only belong to one product type).",
+          });
+        }
+
         const prisma = GetPrismaClient();
         const where: Prisma.TransactionWhereInput = {};
         if (args.status) where.status = args.status;
@@ -111,10 +166,31 @@ const handler = createSevenpreneurMcp(
         if (args.user_id) where.user_id = args.user_id;
         if (args.user_email) where.user = { email: args.user_email };
         if (args.invoice_number) where.invoice_number = args.invoice_number;
+        if (args.item_id !== undefined) where.item_id = args.item_id;
         if (args.from || args.to) {
           where.created_at = {};
           if (args.from) where.created_at.gte = dayjs(args.from).toDate();
           if (args.to) where.created_at.lte = dayjs(args.to).toDate();
+        }
+
+        // Resolve high-level product IDs → category + item_id IN [...]
+        if (args.cohort_id !== undefined) {
+          const prices = await prisma.cohortPrice.findMany({
+            where: { cohort_id: args.cohort_id },
+            select: { id: true },
+          });
+          where.category = "COHORT";
+          where.item_id = { in: prices.map((p) => p.id) };
+        } else if (args.event_id !== undefined) {
+          const prices = await prisma.eventPrice.findMany({
+            where: { event_id: args.event_id },
+            select: { id: true },
+          });
+          where.category = "EVENT";
+          where.item_id = { in: prices.map((p) => p.id) };
+        } else if (args.playlist_id !== undefined) {
+          where.category = "PLAYLIST";
+          where.item_id = args.playlist_id;
         }
 
         const [items, total] = await Promise.all([
@@ -164,7 +240,7 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "aggregate_transactions",
-      "Aggregate transaction metrics (count + sum of amount) with optional filters and grouping. Use status=PAID to get actual revenue. Group by status, category, payment_channel, day, or month.",
+      "Aggregate transaction metrics with optional filters and grouping. Returns count, total_amount (base price sum), total_admin_fee, total_vat, total_discount_amount, and total_net_amount (= amount + admin_fee + vat − discount, what user actually paid). Use status=PAID for actual revenue. Group by status, category, payment_channel, day, or month.",
       {
         status: TStatus.optional().describe("Filter by status (use PAID for revenue)"),
         category: Category.optional(),
@@ -186,6 +262,18 @@ const handler = createSevenpreneurMcp(
           if (args.to) where.created_at.lte = dayjs(args.to).toDate();
         }
 
+        const ZERO = new Prisma.Decimal(0);
+        const sumNet = (sums: {
+          amount: Prisma.Decimal | null;
+          admin_fee: Prisma.Decimal | null;
+          vat: Prisma.Decimal | null;
+          discount_amount: Prisma.Decimal | null;
+        }) =>
+          (sums.amount ?? ZERO)
+            .plus(sums.admin_fee ?? ZERO)
+            .plus(sums.vat ?? ZERO)
+            .minus(sums.discount_amount ?? ZERO);
+
         if (args.group_by === "none") {
           const agg = await prisma.transaction.aggregate({
             where,
@@ -205,10 +293,11 @@ const handler = createSevenpreneurMcp(
               to: args.to ?? null,
             },
             count: agg._count._all,
-            total_amount: agg._sum.amount?.toString() ?? "0",
-            total_discount_amount: agg._sum.discount_amount?.toString() ?? "0",
-            total_admin_fee: agg._sum.admin_fee?.toString() ?? "0",
-            total_vat: agg._sum.vat?.toString() ?? "0",
+            total_amount: (agg._sum.amount ?? ZERO).toString(),
+            total_discount_amount: (agg._sum.discount_amount ?? ZERO).toString(),
+            total_admin_fee: (agg._sum.admin_fee ?? ZERO).toString(),
+            total_vat: (agg._sum.vat ?? ZERO).toString(),
+            total_net_amount: sumNet(agg._sum).toString(),
           });
         }
 
@@ -242,12 +331,20 @@ const handler = createSevenpreneurMcp(
               bucket: Date;
               count: bigint;
               total_amount: Prisma.Decimal | null;
+              total_admin_fee: Prisma.Decimal | null;
+              total_vat: Prisma.Decimal | null;
+              total_discount_amount: Prisma.Decimal | null;
+              total_net_amount: Prisma.Decimal | null;
             }>
           >(
             Prisma.sql`
               SELECT date_trunc(${truncUnit}, created_at) AS bucket,
                      COUNT(*)::bigint AS count,
-                     COALESCE(SUM(amount), 0) AS total_amount
+                     COALESCE(SUM(amount), 0) AS total_amount,
+                     COALESCE(SUM(admin_fee), 0) AS total_admin_fee,
+                     COALESCE(SUM(vat), 0) AS total_vat,
+                     COALESCE(SUM(discount_amount), 0) AS total_discount_amount,
+                     COALESCE(SUM(amount + admin_fee + vat - discount_amount), 0) AS total_net_amount
               FROM transactions
               ${whereClause}
               GROUP BY bucket
@@ -260,59 +357,204 @@ const handler = createSevenpreneurMcp(
             groups: rows.map((r) => ({
               bucket: dayjs(r.bucket).toISOString(),
               count: Number(r.count),
-              total_amount: r.total_amount?.toString() ?? "0",
+              total_amount: (r.total_amount ?? ZERO).toString(),
+              total_admin_fee: (r.total_admin_fee ?? ZERO).toString(),
+              total_vat: (r.total_vat ?? ZERO).toString(),
+              total_discount_amount: (r.total_discount_amount ?? ZERO).toString(),
+              total_net_amount: (r.total_net_amount ?? ZERO).toString(),
             })),
           });
         }
 
         // group_by: status | category | payment_channel
-        let grouped: Array<{
+        const sumSelect = {
+          amount: true,
+          admin_fee: true,
+          vat: true,
+          discount_amount: true,
+        } as const;
+
+        type GroupRow = {
           key: string | null;
           count: number;
           total_amount: string;
-        }> = [];
+          total_admin_fee: string;
+          total_vat: string;
+          total_discount_amount: string;
+          total_net_amount: string;
+        };
+
+        let grouped: GroupRow[] = [];
+        const formatRow = (
+          key: string | null,
+          row: {
+            _count: { _all: number };
+            _sum: {
+              amount: Prisma.Decimal | null;
+              admin_fee: Prisma.Decimal | null;
+              vat: Prisma.Decimal | null;
+              discount_amount: Prisma.Decimal | null;
+            };
+          },
+        ): GroupRow => ({
+          key,
+          count: row._count._all,
+          total_amount: (row._sum.amount ?? ZERO).toString(),
+          total_admin_fee: (row._sum.admin_fee ?? ZERO).toString(),
+          total_vat: (row._sum.vat ?? ZERO).toString(),
+          total_discount_amount: (row._sum.discount_amount ?? ZERO).toString(),
+          total_net_amount: sumNet(row._sum).toString(),
+        });
 
         if (args.group_by === "status") {
           const rows = await prisma.transaction.groupBy({
             by: ["status"],
             where,
             _count: { _all: true },
-            _sum: { amount: true },
+            _sum: sumSelect,
           });
-          grouped = rows.map((r) => ({
-            key: r.status,
-            count: r._count._all,
-            total_amount: r._sum.amount?.toString() ?? "0",
-          }));
+          grouped = rows.map((r) => formatRow(r.status, r));
         } else if (args.group_by === "category") {
           const rows = await prisma.transaction.groupBy({
             by: ["category"],
             where,
             _count: { _all: true },
-            _sum: { amount: true },
+            _sum: sumSelect,
           });
-          grouped = rows.map((r) => ({
-            key: r.category,
-            count: r._count._all,
-            total_amount: r._sum.amount?.toString() ?? "0",
-          }));
+          grouped = rows.map((r) => formatRow(r.category, r));
         } else {
           const rows = await prisma.transaction.groupBy({
             by: ["payment_channel"],
             where,
             _count: { _all: true },
-            _sum: { amount: true },
+            _sum: sumSelect,
           });
-          grouped = rows.map((r) => ({
-            key: r.payment_channel,
-            count: r._count._all,
-            total_amount: r._sum.amount?.toString() ?? "0",
-          }));
+          grouped = rows.map((r) => formatRow(r.payment_channel, r));
         }
 
         return jsonText({
           group_by: args.group_by,
           groups: grouped,
+        });
+      },
+    );
+
+    // ────────────────────────────────────────────────────────────────────
+    // PRODUCTS (cohorts, events, playlists)
+    // ────────────────────────────────────────────────────────────────────
+
+    server.tool(
+      "list_products",
+      "List sellable products: cohorts, events, and playlists. Each cohort/event includes its price tiers — those tier IDs are what appear as Transaction.item_id. For playlists, the playlist.id is the item_id directly.",
+      {
+        status: Status.optional().describe("Filter products by status"),
+        include_deleted: z
+          .boolean()
+          .optional()
+          .default(false)
+          .describe("Include soft-deleted products"),
+      },
+      async ({ status, include_deleted }) => {
+        const prisma = GetPrismaClient();
+        const where: { deleted_at?: null; status?: "ACTIVE" | "INACTIVE" } = {};
+        if (!include_deleted) where.deleted_at = null;
+        if (status) where.status = status;
+
+        const [cohorts, events, playlists] = await Promise.all([
+          prisma.cohort.findMany({
+            where,
+            select: {
+              id: true,
+              name: true,
+              slug_url: true,
+              status: true,
+              start_date: true,
+              end_date: true,
+              tags: true,
+              cohort_prices: {
+                select: { id: true, name: true, amount: true, status: true },
+              },
+            },
+            orderBy: { id: "desc" },
+          }),
+          prisma.event.findMany({
+            where,
+            select: {
+              id: true,
+              name: true,
+              slug_url: true,
+              status: true,
+              method: true,
+              start_date: true,
+              end_date: true,
+              tags: true,
+              event_prices: {
+                select: { id: true, name: true, amount: true, status: true },
+              },
+            },
+            orderBy: { id: "desc" },
+          }),
+          prisma.playlist.findMany({
+            where,
+            select: {
+              id: true,
+              name: true,
+              tagline: true,
+              slug_url: true,
+              status: true,
+              price: true,
+              tags: true,
+            },
+            orderBy: { id: "desc" },
+          }),
+        ]);
+
+        return jsonText({
+          counts: {
+            cohorts: cohorts.length,
+            events: events.length,
+            playlists: playlists.length,
+          },
+          cohorts: cohorts.map((c) => ({
+            id: c.id,
+            name: c.name,
+            slug_url: c.slug_url,
+            status: c.status,
+            tags: c.tags,
+            start_date: dayjs(c.start_date).toISOString(),
+            end_date: dayjs(c.end_date).toISOString(),
+            prices: c.cohort_prices.map((p) => ({
+              id: p.id, // ← this is Transaction.item_id when category=COHORT
+              name: p.name,
+              amount: p.amount.toString(),
+              status: p.status,
+            })),
+          })),
+          events: events.map((e) => ({
+            id: e.id,
+            name: e.name,
+            slug_url: e.slug_url,
+            status: e.status,
+            method: e.method,
+            tags: e.tags,
+            start_date: dayjs(e.start_date).toISOString(),
+            end_date: dayjs(e.end_date).toISOString(),
+            prices: e.event_prices.map((p) => ({
+              id: p.id, // ← this is Transaction.item_id when category=EVENT
+              name: p.name,
+              amount: p.amount.toString(),
+              status: p.status,
+            })),
+          })),
+          playlists: playlists.map((p) => ({
+            id: p.id, // ← this is Transaction.item_id when category=PLAYLIST
+            name: p.name,
+            tagline: p.tagline,
+            slug_url: p.slug_url,
+            status: p.status,
+            price: p.price.toString(),
+            tags: p.tags,
+          })),
         });
       },
     );
