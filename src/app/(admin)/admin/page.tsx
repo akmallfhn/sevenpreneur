@@ -12,5 +12,5 @@ export default async function HomePageCMS() {
   const checkSession = await trpc.auth.checkSession();
   const sessionUser = checkSession.user;
 
-  return <HomeCMS sessionUserName={sessionUser.full_name} />;
+  return <HomeCMS sessionUserName={sessionUser.full_name} sessionToken={sessionToken} />;
 }
