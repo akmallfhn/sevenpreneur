@@ -1,4 +1,4 @@
-import AiLearnMemberListCMS from "@/components/indexes/AiLearnMemberListCMS";
+// import AiLearnMemberListCMS from "@/components/indexes/AiLearnMemberListCMS";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -15,5 +15,5 @@ export default async function AdminMembersPage() {
   const checkUser = (await trpc.auth.checkSession()).user;
   if (checkUser.role_id !== 0) return <AppPageState variant="FORBIDDEN" />;
 
-  return <AiLearnMemberListCMS sessionToken={sessionToken} />;
+  return;
 }

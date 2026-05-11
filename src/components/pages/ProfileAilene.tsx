@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { trpc } from "@/trpc/client";

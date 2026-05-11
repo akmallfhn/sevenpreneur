@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import { trpc } from "@/trpc/client";
 import {

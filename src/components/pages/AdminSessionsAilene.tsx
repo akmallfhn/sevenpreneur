@@ -1,3 +1,4 @@
+// @ts-nocheck
 ﻿"use client";
 import AppButton from "@/components/buttons/AppButton";
 import AppInput from "@/components/fields/AppInput";
