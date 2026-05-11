@@ -18,6 +18,12 @@ CREATE TYPE ail_use_case_frequency AS ENUM (
   'occasionally'
 );
 
+CREATE TYPE ail_learning_type AS ENUM (
+  'quiz',
+  'video',
+  'material'
+);
+
 ------------
 -- Tables --
 ------------
@@ -32,12 +38,14 @@ CREATE TABLE ail_categories (
 -- Organizational access related
 
 CREATE TABLE ail_members (
-    id             SERIAL              PRIMARY KEY,
-    user_id        UUID                NOT NULL UNIQUE,
-    role           ail_role            NOT NULL,
-    job_title      VARCHAR             NOT NULL,
-    last_active_at TIMESTAMPTZ             NULL,
-    created_at     TIMESTAMPTZ         NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id               SERIAL              PRIMARY KEY,
+    user_id          UUID                NOT NULL UNIQUE,
+    role             ail_role            NOT NULL,
+    job_title        VARCHAR             NOT NULL,
+    current_level_id INTEGER             NOT NULL DEFAULT 0,
+    level_history    JSON                NOT NULL DEFAULT '[]',
+    last_active_at   TIMESTAMPTZ             NULL,
+    created_at       TIMESTAMPTZ         NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE ail_groups (
@@ -49,11 +57,6 @@ CREATE TABLE ail_groups (
 );
 
 -- Learning related
-
--- Level progression. `level_number` 0 = entry (selalu unlocked, min_xp biasanya 0).
--- Level N (N > 0) unlocked saat: total XP member >= min_xp DAN semua chapter
--- dengan level_id = (level_number N - 1) sudah completed untuk member itu.
--- Evaluasi unlock dilakukan di app layer, bukan DB.
 
 CREATE TABLE ail_levels (
     id           SERIAL       PRIMARY KEY,
@@ -200,9 +203,6 @@ CREATE TABLE ail_group_members (
     PRIMARY KEY (group_id, member_id)
 );
 
--- Quiz submission — multiple attempts per member-quiz.
--- `answers` JSON shape: { "<question_id>": "<option_code>" }
--- Member dianggap pass kalau ada attempt dengan score >= passing threshold (di app).
 CREATE TABLE ail_quiz_submissions (
     id             SERIAL       PRIMARY KEY,
     member_id      INTEGER      NOT NULL,
@@ -210,7 +210,6 @@ CREATE TABLE ail_quiz_submissions (
     attempt_number SMALLINT     NOT NULL,
     answers        JSON         NOT NULL,
     score          SMALLINT     NOT NULL,
-    xp_earned      SMALLINT     NOT NULL DEFAULT 0,
     submitted_at   TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (member_id, quiz_id, attempt_number)
 );
@@ -218,7 +217,6 @@ CREATE TABLE ail_quiz_submissions (
 CREATE TABLE ail_video_completions (
     member_id    INTEGER      NOT NULL,
     video_id     INTEGER      NOT NULL,
-    xp_earned    SMALLINT     NOT NULL DEFAULT 0,
     completed_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (member_id, video_id)
 );
@@ -226,16 +224,18 @@ CREATE TABLE ail_video_completions (
 CREATE TABLE ail_material_completions (
     member_id    INTEGER      NOT NULL,
     material_id  INTEGER      NOT NULL,
-    xp_earned    SMALLINT     NOT NULL DEFAULT 0,
     completed_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (member_id, material_id)
 );
 
-CREATE TABLE ail_member_levels (
-    member_id   INTEGER      NOT NULL,
-    level_id    INTEGER      NOT NULL,
-    unlocked_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (member_id, level_id)
+CREATE TABLE ail_xp_earnings (
+    id            SERIAL              PRIMARY KEY,
+    member_id     INTEGER             NOT NULL,
+    learning_type ail_learning_type   NOT NULL,
+    learning_id   INTEGER             NOT NULL,
+    xp_earned     SMALLINT            NOT NULL,
+    earned_at     TIMESTAMPTZ         NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (member_id, learning_type, learning_id)
 );
 
 ----------------
@@ -243,7 +243,8 @@ CREATE TABLE ail_member_levels (
 ----------------
 
 ALTER TABLE ail_members
-  ADD FOREIGN KEY (user_id) REFERENCES users (id);
+  ADD FOREIGN KEY (user_id)          REFERENCES users (id),
+  ADD FOREIGN KEY (current_level_id) REFERENCES ail_levels (id);
 
 ALTER TABLE ail_groups
   ADD FOREIGN KEY (champion_id) REFERENCES ail_members (id);
@@ -282,9 +283,8 @@ ALTER TABLE ail_material_completions
   ADD FOREIGN KEY (member_id)   REFERENCES ail_members (id),
   ADD FOREIGN KEY (material_id) REFERENCES ail_materials (id);
 
-ALTER TABLE ail_member_levels
-  ADD FOREIGN KEY (member_id) REFERENCES ail_members (id),
-  ADD FOREIGN KEY (level_id)  REFERENCES ail_levels (id);
+ALTER TABLE ail_xp_earnings
+  ADD FOREIGN KEY (member_id) REFERENCES ail_members (id);
 
 --------------
 -- Triggers --

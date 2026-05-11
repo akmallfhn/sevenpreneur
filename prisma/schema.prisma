@@ -251,6 +251,14 @@ enum AilUseCaseFrequency {
   @@map("ail_use_case_frequency")
 }
 
+enum AilLearningType {
+  QUIZ     @map("quiz")
+  VIDEO    @map("video")
+  MATERIAL @map("material")
+
+  @@map("ail_learning_type")
+}
+
 ////////////
 // Models //
 ////////////
@@ -1054,20 +1062,23 @@ model AilCategory {
 }
 
 model AilMember {
-  id             Int       @id @default(autoincrement()) @db.Integer
-  user           User      @relation(fields: [user_id], references: [id])
-  user_id        String    @unique @db.Uuid
-  role           AilRole
-  job_title      String    @db.VarChar()
-  last_active_at DateTime? @db.Timestamptz()
-  created_at     DateTime  @default(now()) @db.Timestamptz()
+  id               Int       @id @default(autoincrement()) @db.Integer
+  user             User      @relation(fields: [user_id], references: [id])
+  user_id          String    @unique @db.Uuid
+  role             AilRole
+  job_title        String    @db.VarChar()
+  current_level    AilLevel  @relation("member_current_level", fields: [current_level_id], references: [id])
+  current_level_id Int       @default(0) @db.Integer
+  level_history    Json      @default("[]") @db.Json
+  last_active_at   DateTime? @db.Timestamptz()
+  created_at       DateTime  @default(now()) @db.Timestamptz()
 
   championed_groups    AilGroup[]              @relation("group_champion")
   groups               AilGroupMember[]
   quiz_submissions     AilQuizSubmission[]
   video_completions    AilVideoCompletion[]
   material_completions AilMaterialCompletion[]
-  level_unlocks        AilMemberLevel[]
+  xp_earnings          AilXpEarning[]
 
   @@map("ail_members")
 }
@@ -1085,15 +1096,15 @@ model AilGroup {
 }
 
 model AilLevel {
-  id           Int              @id @default(autoincrement()) @db.Integer
-  level_number Int              @unique @db.SmallInt
-  name         String           @db.VarChar()
-  min_xp       Int              @default(0) @db.Integer
-  status       StatusEnum       @default(ACTIVE)
-  created_at   DateTime         @default(now()) @db.Timestamptz()
-  updated_at   DateTime         @default(now()) @updatedAt @db.Timestamptz()
-  chapters     AilChapter[]
-  unlocks      AilMemberLevel[]
+  id              Int          @id @default(autoincrement()) @db.Integer
+  level_number    Int          @unique @db.SmallInt
+  name            String       @db.VarChar()
+  min_xp          Int          @default(0) @db.Integer
+  status          StatusEnum   @default(ACTIVE)
+  created_at      DateTime     @default(now()) @db.Timestamptz()
+  updated_at      DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  chapters        AilChapter[]
+  current_members AilMember[]  @relation("member_current_level")
 
   @@map("ail_levels")
 }
@@ -1260,7 +1271,6 @@ model AilQuizSubmission {
   attempt_number Int       @db.SmallInt
   answers        Json      @db.Json
   score          Int       @db.SmallInt
-  xp_earned      Int       @default(0) @db.SmallInt
   submitted_at   DateTime  @default(now()) @db.Timestamptz()
 
   @@unique([member_id, quiz_id, attempt_number])
@@ -1272,7 +1282,6 @@ model AilVideoCompletion {
   member_id    Int       @db.Integer
   video        AilVideo  @relation(fields: [video_id], references: [id])
   video_id     Int       @db.Integer
-  xp_earned    Int       @default(0) @db.SmallInt
   completed_at DateTime  @default(now()) @db.Timestamptz()
 
   @@id([member_id, video_id])
@@ -1284,22 +1293,23 @@ model AilMaterialCompletion {
   member_id    Int         @db.Integer
   material     AilMaterial @relation(fields: [material_id], references: [id])
   material_id  Int         @db.Integer
-  xp_earned    Int         @default(0) @db.SmallInt
   completed_at DateTime    @default(now()) @db.Timestamptz()
 
   @@id([member_id, material_id])
   @@map("ail_material_completions")
 }
 
-model AilMemberLevel {
-  member      AilMember @relation(fields: [member_id], references: [id])
-  member_id   Int       @db.Integer
-  level       AilLevel  @relation(fields: [level_id], references: [id])
-  level_id    Int       @db.Integer
-  unlocked_at DateTime  @default(now()) @db.Timestamptz()
+model AilXpEarning {
+  id            Int             @id @default(autoincrement()) @db.Integer
+  member        AilMember       @relation(fields: [member_id], references: [id])
+  member_id     Int             @db.Integer
+  learning_type AilLearningType
+  learning_id   Int             @db.Integer
+  xp_earned     Int             @db.SmallInt
+  earned_at     DateTime        @default(now()) @db.Timestamptz()
 
-  @@id([member_id, level_id])
-  @@map("ail_member_levels")
+  @@unique([member_id, learning_type, learning_id])
+  @@map("ail_xp_earnings")
 }
 
 view UserTemplate {
