@@ -22,13 +22,16 @@ export function mcpJsonText(data: unknown) {
  *   Server ID: sevenpreneur-<name>
  *
  * The returned handler:
- *   - Validates `Authorization: Bearer ${SECRET_KEY_MCP}` on every request
+ *   - By default validates `Authorization: Bearer ${SECRET_KEY_MCP}`
+ *   - Pass `{ public: true }` to skip auth (for Claude.ai connector use,
+ *     which only supports OAuth or no-auth — pair with an obscure URL path)
  *   - Exposes Streamable HTTP transport only (SSE disabled)
  *   - Should be re-exported as GET, POST, and DELETE from the route file
  */
 export function createSevenpreneurMcp(
   name: string,
   setup: (server: McpServer) => void | Promise<void>,
+  options: { public?: boolean } = {},
 ) {
   // NOTE: do NOT pass `basePath` — when set, mcp-handler force-derives the
   // endpoint as `${basePath}/mcp` and ignores `streamableHttpEndpoint`. We
@@ -43,6 +46,10 @@ export function createSevenpreneurMcp(
       verboseLogs: false,
     },
   );
+
+  if (options.public) {
+    return handler;
+  }
 
   return async (req: Request) => {
     const expected = process.env.SECRET_KEY_MCP;

@@ -76,7 +76,9 @@ const txInclude = {
   discount: { select: { id: true, code: true, name: true } },
 } as const satisfies Prisma.TransactionInclude;
 
-const handler = createSevenpreneurMcp("revenue", (server) => {
+const handler = createSevenpreneurMcp(
+  "revenue-jtn0reb3jpy",
+  (server) => {
     // ────────────────────────────────────────────────────────────────────
     // TRANSACTIONS
     // ────────────────────────────────────────────────────────────────────
@@ -604,6 +606,7 @@ const handler = createSevenpreneurMcp("revenue", (server) => {
       },
     );
   },
+  { public: true },
 );
 
 export const GET = handler;
