@@ -7,6 +7,7 @@ import {
   CircleUserIcon,
   FlagTriangleRight,
   Globe,
+  LayoutKanban,
   PenTool,
   Presentation,
   Tags,
@@ -38,6 +39,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
   const allowedRolesMenuWebMarketing = [0, 4];
   const allowedRolesMenuArticles = [0];
   const allowedRolesMenuWhatsapp = [0];
+  const allowedRolesMenuCRM = [0];
 
   const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
     props.sessionUserRole
@@ -61,6 +63,9 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     props.sessionUserRole
   );
   const isAllowedMenuWhatsapp = allowedRolesMenuWhatsapp.includes(
+    props.sessionUserRole
+  );
+  const isAllowedMenuCRM = allowedRolesMenuCRM.includes(
     props.sessionUserRole
   );
 
@@ -129,7 +134,8 @@ export default function SidebarCMS(props: SidebarCMSProps) {
       )}
       {(isAllowedMenuWebMarketing ||
         isAllowedMenuArticles ||
-        isAllowedMenuWhatsapp) && (
+        isAllowedMenuWhatsapp ||
+        isAllowedMenuCRM) && (
         <AppSidebarGroupMenu groupName="Marketing">
           {isAllowedMenuWebMarketing && (
             <AppSidebarMenuItem
@@ -150,6 +156,13 @@ export default function SidebarCMS(props: SidebarCMSProps) {
               menuName="Whatsapp"
               menuURL="/whatsapp"
               menuIcon={<FontAwesomeIcon icon={faWhatsapp} size="lg" />}
+            />
+          )}
+          {isAllowedMenuCRM && (
+            <AppSidebarMenuItem
+              menuName="CRM"
+              menuURL="/CRM"
+              menuIcon={<LayoutKanban />}
             />
           )}
         </AppSidebarGroupMenu>

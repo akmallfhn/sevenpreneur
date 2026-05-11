@@ -147,9 +147,10 @@ enum AStatusEnum {
 // Enumeration for the WAConversation model (WA*)
 
 enum WALeadStatus {
-  COLD @map("cold")
-  WARM @map("warm")
-  HOT  @map("hot")
+  COLD      @map("cold")
+  WARM      @map("warm")
+  HOT       @map("hot")
+  CONVERTED @map("converted")
 
   @@map("wa_lead_status")
 }

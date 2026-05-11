@@ -10,6 +10,7 @@ import {
   resolveWhatsappChatStatus,
 } from "@/lib/whatsapp-utils";
 import {
+  faCheckDouble,
   faFire,
   faMugHot,
   faSnowflake,
@@ -37,6 +38,10 @@ const variantStyles: Record<
   HOT: {
     icon: faFire,
     bg_color: "text-[#FED106] bg-destructive",
+  },
+  CONVERTED: {
+    icon: faCheckDouble,
+    bg_color: "text-[#FFFFFF] bg-[#F97316]",
   },
 };
 

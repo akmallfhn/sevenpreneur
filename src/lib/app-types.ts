@@ -90,7 +90,7 @@ export type AIChatEventType =
   | "error";
 
 // Whatsapp related
-export type LeadStatus = "COLD" | "WARM" | "HOT";
+export type LeadStatus = "COLD" | "WARM" | "HOT" | "CONVERTED";
 export type WhatsappChatStatus = "SENT" | "DELIVERED" | "READ" | "FAILED";
 export type WhatsappChatDirection = "INBOUND" | "OUTBOUND";
 export type WhatsappChatType =
