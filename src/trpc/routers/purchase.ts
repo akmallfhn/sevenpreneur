@@ -1,14 +1,15 @@
 import { afterPaidTrigger } from "@/lib/after-payment";
 import { Optional } from "@/lib/optional-type";
 import { calculateFinalPrice } from "@/lib/price-calc";
+import LogError from "@/lib/prisma-log-error";
 import {
+  errorStatusCodeToName,
   STATUS_BAD_REQUEST,
   STATUS_CREATED,
   STATUS_INTERNAL_SERVER_ERROR,
   STATUS_NO_CONTENT,
   STATUS_NOT_FOUND,
   STATUS_OK,
-  errorStatusCodeToName,
 } from "@/lib/status_code";
 import {
   XenditInvoiceResponse,
@@ -154,14 +155,15 @@ async function createTransaction(
       });
       invoiceUrl = xenditResponse.invoice_url;
     } catch (e) {
-      console.error(e);
+      await LogError("purchase", e);
       // Undo transaction creation
       const deletedTransaction = await prisma.transaction.deleteMany({
         where: { id: theTransaction.id },
       });
       if (deletedTransaction.count > 1) {
-        console.error(
-          "purchase: More-than-one transactions are deleted at once."
+        await LogError(
+          "purchase",
+          "More-than-one transactions are deleted at once."
         );
       }
       // Rethrow error using TRPCError
@@ -184,8 +186,9 @@ async function createTransaction(
         message: "The selected transaction is not found.",
       });
     } else if (updatedTransaction.length > 1) {
-      console.error(
-        "purchase: More-than-one transactions are updated at once."
+      await LogError(
+        "purchase",
+        "More-than-one transactions are updated at once."
       );
     }
 
@@ -211,7 +214,7 @@ async function createTransaction(
         console.log("Payment reminder response:", paymentReminderBody);
       }
     } catch (err) {
-      console.error("Failed to call payment reminder hook:", err);
+      await LogError("purchase", "Failed to call payment reminder hook:", err);
     }
   } else {
     const updatedTransaction = await prisma.transaction.updateManyAndReturn({
@@ -232,8 +235,9 @@ async function createTransaction(
         message: "The selected transaction is not found.",
       });
     } else if (updatedTransaction.length > 1) {
-      console.error(
-        "purchase: More-than-one transactions are updated at once."
+      await LogError(
+        "purchase",
+        "More-than-one transactions are updated at once."
       );
     }
 
@@ -271,7 +275,7 @@ async function changePhoneNumber(
       message: "The selected user is not found.",
     });
   } else if (updatedUser.length > 1) {
-    console.error("purchase: More-than-one users are updated at once.");
+    await LogError("purchase", "More-than-one users are updated at once.");
   }
 }
 
@@ -561,7 +565,7 @@ export const purchaseRouter = createTRPCRouter({
           invoice_id: theTransaction.invoice_number,
         });
       } catch (e) {
-        console.error(e);
+        await LogError("purchase.cancel", e);
         // Rethrow error using TRPCError
         throw new TRPCError({
           code: STATUS_INTERNAL_SERVER_ERROR,
@@ -582,8 +586,9 @@ export const purchaseRouter = createTRPCRouter({
           message: "The selected transaction is not found.",
         });
       } else if (updatedTransaction.length > 1) {
-        console.error(
-          "purchase.cohort: More-than-one transactions are updated at once."
+        await LogError(
+          "purchase.cancel",
+          "More-than-one transactions are updated at once."
         );
       }
 

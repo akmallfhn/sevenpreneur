@@ -1203,6 +1203,17 @@ model AilMaterial {
   @@map("ail_materials")
 }
 
+// Error Logs
+
+model ErrorLog {
+  id         Int      @id @default(autoincrement()) @db.Integer
+  context    String   @db.VarChar()
+  message    Json     @db.Json
+  created_at DateTime @default(now()) @db.Timestamptz()
+
+  @@map("error_logs")
+}
+
 // Relation Tables //
 
 model UserCohort {

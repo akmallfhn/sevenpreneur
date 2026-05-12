@@ -1,3 +1,5 @@
+import LogError from "@/lib/prisma-log-error";
+
 export type GoogleTokenVerificationResult =
   | {
       name: string;
@@ -41,7 +43,7 @@ export async function GoogleTokenVerifier(
 
     return { name, email, picture };
   } catch (error) {
-    console.error(error);
+    await LogError("GoogleTokenVerifier", error);
     return false;
   }
 }

@@ -1,4 +1,5 @@
 import GetPrismaClient from "@/lib/prisma";
+import LogError from "@/lib/prisma-log-error";
 import { STATUS_INTERNAL_SERVER_ERROR, STATUS_OK } from "@/lib/status_code";
 import {
   whatsappAudioMessageRequest,
@@ -45,11 +46,11 @@ async function sendWhatsappMessage(
     if (!response.messages || response.messages.length < 1) {
       throw Error("No message ID");
     } else if (response.messages.length > 1) {
-      console.error("send.whatsapp: More-than-one messages are returned.");
+      await LogError("send.whatsapp", "More-than-one messages are returned.");
     }
     messageId = response.messages[0].id;
   } catch (e) {
-    console.error(e);
+    await LogError("send.whatsapp", e);
     // Rethrow error using TRPCError
     throw new TRPCError({
       code: STATUS_INTERNAL_SERVER_ERROR,

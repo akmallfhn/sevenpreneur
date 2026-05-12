@@ -1,3 +1,4 @@
+import LogError from "@/lib/prisma-log-error";
 import {
   STATUS_BAD_REQUEST,
   STATUS_FORBIDDEN,
@@ -62,18 +63,21 @@ export const authRouter = createTRPCRouter({
         });
       } else {
         if (findUser.full_name === findUser.email) {
-          const updatedProfile = await opts.ctx.prisma.user.updateManyAndReturn({
-            data: {
-              full_name: userInfo.name,
-              avatar: userInfo.picture,
-            },
-            where: {
-              email: userInfo.email,
-            },
-          });
+          const updatedProfile = await opts.ctx.prisma.user.updateManyAndReturn(
+            {
+              data: {
+                full_name: userInfo.name,
+                avatar: userInfo.picture,
+              },
+              where: {
+                email: userInfo.email,
+              },
+            }
+          );
           if (updatedProfile.length > 1) {
-            console.error(
-              "auth.login: More-than-one users have its profile updated at once."
+            await LogError(
+              "auth.login",
+              "More-than-one users have its profile updated at once."
             );
           }
           registeredUser = updatedProfile[0];
@@ -87,8 +91,9 @@ export const authRouter = createTRPCRouter({
             },
           });
           if (updatedAvatar.length > 1) {
-            console.error(
-              "auth.login: More-than-one users have its avatar updated at once."
+            await LogError(
+              "auth.login",
+              "More-than-one users have its avatar updated at once."
             );
           }
           registeredUser = updatedAvatar[0];
@@ -98,8 +103,9 @@ export const authRouter = createTRPCRouter({
         const updatedLogin: number = await opts.ctx.prisma
           .$executeRaw`UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE email = ${userInfo.email};`;
         if (updatedLogin > 1) {
-          console.error(
-            "auth.login: More-than-one users have its last_login updated at once."
+          await LogError(
+            "auth.login",
+            "More-than-one users have its last_login updated at once."
           );
         }
       }
@@ -174,7 +180,10 @@ export const authRouter = createTRPCRouter({
         },
       });
       if (deletedTokens.count > 1) {
-        console.error("auth.logout: More-than-one tokens are removed at once.");
+        await LogError(
+          "auth.logout",
+          "More-than-one tokens are removed at once."
+        );
       }
 
       return {

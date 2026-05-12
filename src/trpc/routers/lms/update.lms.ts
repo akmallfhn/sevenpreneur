@@ -1,4 +1,5 @@
 import { Optional } from "@/lib/optional-type";
+import LogError from "@/lib/prisma-log-error";
 import GetQStashClient from "@/lib/qstash";
 import {
   STATUS_BAD_REQUEST,
@@ -219,7 +220,10 @@ export const updateLMS = {
         GetQStashClient()
       );
       if (!isUpdateScheduleSuccess) {
-        console.error("Failed to update learning reminder schedule.");
+        await LogError(
+          "update.learning",
+          "Failed to update learning reminder schedule."
+        );
       }
 
       return {

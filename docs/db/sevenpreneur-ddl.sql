@@ -779,6 +779,15 @@ CREATE TABLE wa_alerts (
   updated_at        TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Error Logs
+
+CREATE TABLE error_logs (
+  id          SERIAL       PRIMARY KEY,
+  context     VARCHAR      NOT NULL,
+  message     JSON         NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Relation Tables --
 
 CREATE TABLE users_cohorts (

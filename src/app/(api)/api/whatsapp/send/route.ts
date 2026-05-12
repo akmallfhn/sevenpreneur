@@ -1,4 +1,5 @@
 import GetPrismaClient from "@/lib/prisma";
+import LogError from "@/lib/prisma-log-error";
 import {
   whatsappAudioMessageRequest,
   whatsappDocumentMessageRequest,
@@ -90,7 +91,7 @@ async function sendMessage(args: SendArgs): Promise<NextResponse> {
     }
     messageId = response.messages[0].id;
   } catch (e) {
-    console.error(e);
+    await LogError("whatsapp.send", e);
     return NextResponse.json(
       { error: "Failed to send WhatsApp message" },
       { status: 502 }

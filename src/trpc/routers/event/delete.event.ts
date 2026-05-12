@@ -1,3 +1,4 @@
+import LogError from "@/lib/prisma-log-error";
 import { STATUS_NO_CONTENT } from "@/lib/status_code";
 import { roleBasedProcedure } from "@/trpc/init";
 import { checkDeleteResult } from "@/trpc/utils/errors";
@@ -11,8 +12,9 @@ export const deleteEvent = {
       const deletedEvent: number = await opts.ctx.prisma
         .$executeRaw`UPDATE events SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id}::uuid WHERE id = ${opts.input.id};`;
       if (deletedEvent > 1) {
-        console.error(
-          "delete.event: More-than-one events are deleted at once."
+        await LogError(
+          "delete.event",
+          "More-than-one events are deleted at once."
         );
       }
       return {

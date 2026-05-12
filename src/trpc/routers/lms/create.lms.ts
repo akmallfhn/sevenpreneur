@@ -1,3 +1,4 @@
+import LogError from "@/lib/prisma-log-error";
 import GetQStashClient from "@/lib/qstash";
 import {
   STATUS_CREATED,
@@ -267,7 +268,10 @@ export const createLMS = {
         GetQStashClient()
       );
       if (!isUpdateScheduleSuccess) {
-        console.error("Failed to update learning reminder schedule.");
+        await LogError(
+          "create.learning",
+          "Failed to update learning reminder schedule."
+        );
       }
 
       return {
