@@ -1,5 +1,6 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
+import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
 import { TaskVariant } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import {
@@ -12,12 +13,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+const QUIZ_DURATION_MINUTES = 20;
 
 interface Quiz {
   id: string;
   name: string;
   attempts: number;
   best_score: number | null;
+  question_count: number;
   xp_reward: number;
   xp_earned: number;
 }
@@ -65,7 +71,9 @@ type ChapterTaskItemAILNProps =
 
 export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
   const style = variantStyles[props.variant];
+  const router = useRouter();
   const utils = trpc.useUtils();
+  const [isStartQuizDialogOpen, setIsStartQuizDialogOpen] = useState(false);
   const invalidateProgress = () => {
     utils.ailene.list.tasks.invalidate();
     utils.auth.checkAilMember.invalidate();
@@ -98,12 +106,20 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
       <ButtonAILN size="small" disabled className="w-full">
         Locked
       </ButtonAILN>
-    ) : (
+    ) : hasAttempt ? (
       <Link href={`/student/quizzes/${props.quiz.id}`} className="block">
         <ButtonAILN size="small" className="w-full">
-          {!hasAttempt ? "Ikut Quiz" : "Lihat Hasil"}
+          Lihat Hasil
         </ButtonAILN>
       </Link>
+    ) : (
+      <ButtonAILN
+        size="small"
+        className="w-full"
+        onClick={() => setIsStartQuizDialogOpen(true)}
+      >
+        Mulai Quiz
+      </ButtonAILN>
     );
   } else if (props.variant === "Video") {
     const v = props.video;
@@ -172,6 +188,9 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
   }
 
   const locked = !props.unlocked;
+  const quizQuestionCount =
+    props.variant === "Quiz" ? props.quiz.question_count : 0;
+  const quizId = props.variant === "Quiz" ? props.quiz.id : "";
 
   return (
     <div
@@ -212,6 +231,20 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
           <span className="block h-4 w-4 rounded-full border-2 border-gray-300" />
         )}
       </div>
+      {props.variant === "Quiz" && (
+        <AppAlertConfirmDialog
+          isOpen={isStartQuizDialogOpen}
+          alertDialogHeader="Mulai Quiz Sekarang?"
+          alertDialogMessage={`Quiz ini terdiri dari ${quizQuestionCount} pertanyaan dengan total waktu ${QUIZ_DURATION_MINUTES} menit. Waktu akan terus berjalan setelah quiz dimulai dan tidak bisa di-pause walaupun kamu keluar halaman.`}
+          alertCancelLabel="Batal"
+          alertConfirmLabel="Mulai sekarang"
+          onClose={() => setIsStartQuizDialogOpen(false)}
+          onConfirm={() => {
+            setIsStartQuizDialogOpen(false);
+            router.push(`/student/quizzes/${quizId}`);
+          }}
+        />
+      )}
     </div>
   );
 }

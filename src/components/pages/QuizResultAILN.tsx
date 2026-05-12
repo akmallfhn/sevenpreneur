@@ -4,9 +4,11 @@ import AppErrorComponents from "@/components/states/AppErrorComponents";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { trpc } from "@/trpc/client";
 import {
+  faChartPie,
   faCircleCheck,
   faCircleXmark,
-  faClock,
+  faFileLines,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -87,137 +89,276 @@ export default function QuizResultAILN({ quizId }: QuizResultAILNProps) {
       ? (submission.answers as Record<string, string | null>)
       : {};
 
+  // Hitung statistik
+  const totalQuestions = questions.length;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let unansweredCount = 0;
+  for (const q of questions) {
+    const sel = answers[String(q.id)];
+    if (sel === null || sel === undefined) {
+      unansweredCount += 1;
+    } else if (q.options.some((o) => o.is_correct && o.option_code === sel)) {
+      correctCount += 1;
+    } else {
+      wrongCount += 1;
+    }
+  }
+  const accuracy =
+    totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+
   return (
     <PageContainerAILN>
-      <div className="mx-auto flex w-full max-w-[880px] flex-col gap-6">
-        <div>
-          <h1 className="text-2xl font-bold">{quiz.name}</h1>
+      <div className="flex w-full flex-col gap-4">
+        {/* Header bar */}
+        <div className="flex flex-1 flex-col">
+          <h1 className="text-xl font-bold leading-tight">{quiz.name}</h1>
           {quiz.description && (
             <p className="text-sm text-gray-500">{quiz.description}</p>
           )}
         </div>
 
-        <div
-          className={`flex flex-col items-center gap-2 rounded-xl border p-8 text-center ${
-            score >= PASS_THRESHOLD
-              ? "border-green-300 bg-green-50"
-              : "border-red-300 bg-red-50"
-          }`}
-        >
-          <span
-            className={`text-[52px] font-bold leading-none ${
-              score >= PASS_THRESHOLD ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {score}%
-          </span>
-          <p className="text-[15px] text-gray-700">
-            {motivationalMessage(score)}
-          </p>
-          {xp_earned > 0 && (
-            <span className="mt-1 rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-700">
-              +{xp_earned} XP diperoleh
+        {/* Top stats card */}
+        <div className="flex flex-wrap items-stretch gap-6 rounded-xl border bg-white p-6">
+          {/* Skor */}
+          <div className="flex flex-1 flex-col justify-between gap-3 min-w-[200px]">
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-medium text-gray-500">
+                Skor Kamu
+              </span>
+              <span
+                className={`text-5xl font-bold leading-none ${
+                  score >= PASS_THRESHOLD ? "text-gray-900" : "text-gray-900"
+                }`}
+              >
+                {score}%
+              </span>
+              <p className="text-sm text-gray-600">
+                {motivationalMessage(score)}
+              </p>
+            </div>
+            {xp_earned > 0 && (
+              <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                <FontAwesomeIcon icon={faStar} className="h-3 w-3" />+
+                {xp_earned} XP diperoleh
+              </span>
+            )}
+          </div>
+
+          {/* Donut chart */}
+          <div className="flex shrink-0 items-center justify-center">
+            <DonutChart correct={correctCount} total={totalQuestions} />
+          </div>
+
+          {/* Ringkasan Performa */}
+          <div className="flex flex-1 flex-col gap-2 min-w-[200px]">
+            <span className="text-sm font-semibold text-gray-900">
+              Ringkasan Performa
             </span>
-          )}
+            <StatRow
+              icon={faFileLines}
+              label="Total Pertanyaan"
+              value={totalQuestions}
+              iconClass="text-gray-500"
+            />
+            <StatRow
+              icon={faCircleCheck}
+              label="Benar"
+              value={correctCount}
+              iconClass="text-emerald-600"
+              valueClass="text-emerald-600"
+            />
+            <StatRow
+              icon={faCircleXmark}
+              label="Salah"
+              value={wrongCount + unansweredCount}
+              iconClass="text-red-500"
+              valueClass="text-red-500"
+            />
+            <StatRow
+              icon={faChartPie}
+              label="Akurasi"
+              value={`${accuracy}%`}
+              iconClass="text-gray-500"
+            />
+          </div>
         </div>
 
+        {/* Pembahasan Jawaban */}
         <div className="flex flex-col gap-3">
-          <h3 className="text-sm font-semibold">Pembahasan Jawaban</h3>
+          <h3 className="text-base font-semibold">Pembahasan Jawaban</h3>
           {questions.map((q, idx) => {
             const selected = answers[String(q.id)];
-            const isTimeout = selected === null || selected === undefined;
+            const isUnanswered = selected === null || selected === undefined;
             const isCorrect =
-              !isTimeout &&
-              q.options.some(
-                (o) => o.is_correct && o.option_code === selected
-              );
+              !isUnanswered &&
+              q.options.some((o) => o.is_correct && o.option_code === selected);
             const correctOpt = q.options.find((o) => o.is_correct);
             const selectedOpt = q.options.find(
               (o) => o.option_code === selected
             );
 
+            let badgeCls = "";
+            let badgeIcon = faCircleCheck;
+            let badgeLabel = "";
+            if (isUnanswered) {
+              badgeCls = "border border-amber-200 bg-amber-50 text-amber-700";
+              badgeIcon = faCircleXmark;
+              badgeLabel = "Belum Dijawab";
+            } else if (isCorrect) {
+              badgeCls =
+                "border border-emerald-200 bg-emerald-50 text-emerald-700";
+              badgeIcon = faCircleCheck;
+              badgeLabel = "Benar";
+            } else {
+              badgeCls = "border border-red-200 bg-red-50 text-red-600";
+              badgeIcon = faCircleXmark;
+              badgeLabel = "Salah";
+            }
+
             return (
               <div
                 key={q.id}
-                className={`flex flex-col gap-3 rounded-xl border p-4 ${
-                  isTimeout
-                    ? "border-amber-200 bg-amber-50"
-                    : isCorrect
-                      ? "border-green-200 bg-green-50"
-                      : "border-red-200 bg-red-50"
-                }`}
+                className="flex items-start gap-4 rounded-xl border bg-white p-5"
               >
-                <div className="flex items-start gap-2">
-                  {isTimeout ? (
-                    <FontAwesomeIcon
-                      icon={faClock}
-                      className="mt-0.5 h-4 w-4 text-amber-500"
-                    />
-                  ) : isCorrect ? (
-                    <FontAwesomeIcon
-                      icon={faCircleCheck}
-                      className="mt-0.5 h-4 w-4 text-green-600"
-                    />
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={faCircleXmark}
-                      className="mt-0.5 h-4 w-4 text-red-600"
-                    />
-                  )}
-                  <p className="text-sm font-semibold">
-                    <span className="mr-1 font-normal text-gray-500">
-                      {idx + 1}.
-                    </span>
-                    {q.question}
-                  </p>
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-black text-xs font-bold text-white">
+                  {idx + 1}
                 </div>
 
-                <div className="flex flex-col gap-1 pl-6">
-                  {isTimeout ? (
-                    <p className="text-xs text-amber-700">
-                      Belum dijawab · Jawaban benar:{" "}
-                      <strong>
-                        {correctOpt?.option_code.toUpperCase()}.{" "}
-                        {correctOpt?.text}
-                      </strong>
-                    </p>
-                  ) : isCorrect ? (
-                    <p className="text-xs text-green-700">
-                      Jawaban kamu benar:{" "}
-                      <strong>
-                        {selectedOpt?.option_code.toUpperCase()}.{" "}
-                        {selectedOpt?.text}
-                      </strong>
-                    </p>
-                  ) : (
-                    <>
-                      <p className="text-xs text-red-700">
-                        Jawaban kamu:{" "}
-                        <strong>
-                          {selectedOpt?.option_code.toUpperCase()}.{" "}
-                          {selectedOpt?.text}
-                        </strong>
+                <div className="flex flex-1 flex-col gap-2">
+                  <p className="text-sm font-semibold text-gray-900">
+                    {q.question}
+                  </p>
+
+                  <div className="flex flex-col gap-1">
+                    {!isUnanswered && (
+                      <p className="flex items-baseline gap-2 text-xs">
+                        <FontAwesomeIcon
+                          icon={faCircleXmark}
+                          className={`h-3 w-3 ${
+                            isCorrect ? "text-emerald-600" : "text-red-500"
+                          }`}
+                        />
+                        <span
+                          className={
+                            isCorrect ? "text-emerald-700" : "text-red-600"
+                          }
+                        >
+                          Jawaban kamu:{" "}
+                          <strong>
+                            {selectedOpt?.option_code.toUpperCase()}.{" "}
+                            {selectedOpt?.text}
+                          </strong>
+                        </span>
                       </p>
-                      <p className="text-xs text-green-700">
+                    )}
+                    <p className="flex items-baseline gap-2 text-xs">
+                      <FontAwesomeIcon
+                        icon={faCircleCheck}
+                        className="h-3 w-3 text-emerald-600"
+                      />
+                      <span className="text-emerald-700">
                         Jawaban benar:{" "}
                         <strong>
                           {correctOpt?.option_code.toUpperCase()}.{" "}
                           {correctOpt?.text}
                         </strong>
-                      </p>
-                    </>
-                  )}
+                      </span>
+                    </p>
+                  </div>
+
                   {q.explanation && (
-                    <p className="mt-1 rounded-lg border bg-white/70 px-3 py-2 text-xs text-gray-700">
+                    <p className="rounded-lg border bg-gray-50 px-3 py-2 text-xs text-gray-700">
+                      <strong className="font-semibold">Penjelasan: </strong>
                       {q.explanation}
                     </p>
                   )}
                 </div>
+
+                <span
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${badgeCls}`}
+                >
+                  <FontAwesomeIcon icon={badgeIcon} className="h-3 w-3" />
+                  {badgeLabel}
+                </span>
               </div>
             );
           })}
         </div>
       </div>
     </PageContainerAILN>
+  );
+}
+
+function StatRow({
+  icon,
+  label,
+  value,
+  iconClass = "text-gray-500",
+  valueClass = "text-gray-900",
+}: {
+  icon: typeof faFileLines;
+  label: string;
+  value: number | string;
+  iconClass?: string;
+  valueClass?: string;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="flex items-center gap-2 text-sm text-gray-700">
+        <FontAwesomeIcon icon={icon} className={`h-3.5 w-3.5 ${iconClass}`} />
+        {label}
+      </span>
+      <span className={`text-sm font-semibold ${valueClass}`}>{value}</span>
+    </div>
+  );
+}
+
+function DonutChart({ correct, total }: { correct: number; total: number }) {
+  const radius = 56;
+  const stroke = 12;
+  const normalizedRadius = radius - stroke / 2;
+  const circumference = 2 * Math.PI * normalizedRadius;
+  const ratio = total > 0 ? correct / total : 0;
+  const offset = circumference * (1 - ratio);
+  const size = radius * 2;
+
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="-rotate-90"
+      >
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill="none"
+          stroke="#E5E7EB"
+          strokeWidth={stroke}
+        />
+        <circle
+          cx={radius}
+          cy={radius}
+          r={normalizedRadius}
+          fill="none"
+          stroke="#111827"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-lg font-bold leading-none text-gray-900">
+          {correct}/{total}
+        </span>
+        <span className="mt-0.5 text-[10px] font-medium text-gray-500">
+          Benar
+        </span>
+      </div>
+    </div>
   );
 }

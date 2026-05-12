@@ -55,7 +55,7 @@ export interface QuizDetailsData {
   xp_earned: number;
 }
 
-const AUTOSAVE_DEBOUNCE_MS = 600;
+const AUTOSAVE_DEBOUNCE_MS = 400;
 
 interface QuizAttemptAILNProps {
   quizId: string;
@@ -70,38 +70,25 @@ export default function QuizAttemptAILN({
   const utils = trpc.useUtils();
   const { quiz, questions } = data;
 
-  // ===== STATE =====
   // Jawaban user, key = question id (string), value = option_code yang dipilih
-  // Format DB: { "16": "c", "19": "b", ... }
   const [answers, setAnswers] = useState<Record<string, string | null>>({});
   // Index soal yang lagi ditampilin (mulai dari 0)
   const [currentIdx, setCurrentIdx] = useState(0);
   // Sisa waktu dalam detik. null = belum selesai inisialisasi dari server
-  // (timer baru dibuat setelah startQuizAttempt sukses)
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
-  // Toggle dialog konfirmasi sebelum keluar
   const [isExitDialogOpen, setIsExitDialogOpen] = useState(false);
 
-  // ===== REFS (flag yang ga butuh trigger re-render) =====
   // Tandain quiz udah disubmit. Dipakai buat block autosave + submit dobel
   const submittedRef = useRef(false);
   // Tandain startAttempt udah dipanggil sekali. Buat StrictMode/dobel mount
   const startedRef = useRef(false);
   // Tandain user beneran udah pilih jawaban minimal sekali.
   // Autosave cuma fire setelah ini true, supaya seed answers dari server
-  // (yang nge-set state pas mount) ga ke-trigger autosave palsu
   const userInteractedRef = useRef(false);
 
-  // ===== MUTATION: START / RESUME ATTEMPT =====
   // Dipanggil pas component mount. Server-lah yang nentuin sisa waktu
-  // berdasarkan started_at di DB — bukan client. Jadi refresh = tetep akurat.
   const startAttempt = trpc.ailene.startQuizAttempt.useMutation({
-    onError: () => toast.error("Gagal memulai quiz."),
     onSuccess: (res) => {
-      // Kalo server mendeteksi draft existing tapi udah expired (lewat 20 menit),
-      // dia finalize duluan dan return status "finalized".
-      // Client tinggal invalidate cache → parent QuizDetailsAILN re-render
-      // ke QuizResultAILN secara otomatis.
       if (res.status === "finalized") {
         submittedRef.current = true;
         utils.ailene.list.quizQuestions.invalidate({ quiz_id: quizId });
@@ -111,15 +98,13 @@ export default function QuizAttemptAILN({
         utils.auth.checkAilMember.invalidate();
         return;
       }
-      // Status "active" = attempt valid, lanjut quiz.
-      // Seed answers dari draft tersimpan (kalo resume) atau {} (kalo baru).
       setAnswers((res.answers as Record<string, string | null>) ?? {});
       setSecondsLeft(res.seconds_left);
     },
+    onError: () => toast.error("Gagal memulai quiz."),
   });
 
   // Trigger startAttempt sekali pas mount. startedRef guard biar ga dobel call
-  // (React StrictMode di dev bisa render dua kali).
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
@@ -127,10 +112,7 @@ export default function QuizAttemptAILN({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizId]);
 
-  // ===== TIMER COUNTDOWN =====
-  // Tiap detik, kurangi secondsLeft. Saat udah 0, biarin — effect lain yang
-  // handle auto-submit. Pattern setTimeout di-recreate tiap render lebih
-  // aman daripada setInterval (auto-cleanup, ga ada drift).
+  // Tiap detik, kurangi secondsLeft. Saat udah 0, biarin — effect lain yang handle auto-submit.
   useEffect(() => {
     if (secondsLeft === null) return;
     if (secondsLeft <= 0) return;
@@ -141,10 +123,7 @@ export default function QuizAttemptAILN({
     return () => clearTimeout(id);
   }, [secondsLeft]);
 
-  // ===== MUTATION: AUTOSAVE DRAFT =====
   // Simpan jawaban ke DB (is_completed=false). Server juga nge-check kalo draft
-  // udah expired, dia finalize duluan dan return "finalized" — sama kayak
-  // startAttempt, kita invalidate ke result view.
   const saveDraft = trpc.ailene.saveQuizDraft.useMutation({
     onSuccess: (res) => {
       if (res.status === "finalized") {
@@ -158,9 +137,7 @@ export default function QuizAttemptAILN({
     },
   });
 
-  // ===== MUTATION: SUBMIT FINAL =====
   // Finalize quiz: hitung score, set is_completed=true, award XP.
-  // Setelah sukses, invalidate semua cache yang nampilin progress.
   const submitMutation = trpc.ailene.submitQuiz.useMutation({
     onError: () => toast.error("Gagal menyimpan jawaban quiz."),
     onSuccess: () => {
@@ -172,15 +149,7 @@ export default function QuizAttemptAILN({
     },
   });
 
-  // ===== AUTOSAVE DEBOUNCED =====
-  // Tiap kali `answers` berubah, tunggu 600ms (AUTOSAVE_DEBOUNCE_MS) — kalo
-  // user pilih jawaban lagi sebelum 600ms, timeout di-reset (cleanup function).
-  // Setelah idle 600ms, fire saveDraft.mutate.
-  //
-  // Guard yang penting:
-  // - userInteractedRef: skip seed answers dari startAttempt onSuccess
-  // - submittedRef: skip kalo udah submit (race condition setelah submit)
-  // - secondsLeft===null: skip kalo attempt belum siap
+  // Autosave tiap kali `answers` berubah
   useEffect(() => {
     if (!userInteractedRef.current) return;
     if (submittedRef.current) return;
@@ -193,11 +162,7 @@ export default function QuizAttemptAILN({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers, quizId]);
 
-  // ===== AUTO-SUBMIT PAS TIMER HABIS =====
-  // Begitu secondsLeft jadi 0, kalo belum disubmit, fire submitMutation
-  // pakai jawaban terakhir di state. Kalo user offline pas ini fire,
-  // QStash job di server tetep jalan T+20min dari started_at — jadi
-  // submit tetap kejadi walau client ga sempat fire.
+  // Auto-submit pas waktu habis
   useEffect(() => {
     if (secondsLeft === null) return;
     if (secondsLeft > 0) return;
@@ -211,9 +176,7 @@ export default function QuizAttemptAILN({
   const currentQ = questions[currentIdx];
   const totalQuestions = questions.length;
 
-  // ===== HANDLERS =====
   // User pilih opsi. Set userInteractedRef supaya autosave aktif.
-  // Pakai functional setState ({...prev}) biar tahan terhadap rapid clicks.
   const handleSelect = (optionCode: string) => {
     if (!currentQ) return;
     const qid = String(currentQ.id);
@@ -221,32 +184,28 @@ export default function QuizAttemptAILN({
     setAnswers((prev) => ({ ...prev, [qid]: optionCode }));
   };
 
-  // Navigasi antar soal — clamp di range [0, totalQuestions-1]
+  // Navigasi antar soal
   const handlePrev = () => setCurrentIdx((i) => Math.max(0, i - 1));
   const handleNext = () =>
     setCurrentIdx((i) => Math.min(totalQuestions - 1, i + 1));
 
   // Submit manual via tombol "Submit jawaban".
-  // submittedRef guard cegah dobel-submit (klik 2x cepat / timer expired
-  // bareng klik submit).
   const handleSubmit = () => {
     if (submittedRef.current) return;
     submittedRef.current = true;
     submitMutation.mutate({ quiz_id: quizId, answers });
   };
 
-  // Tombol "Keluar" → buka dialog konfirmasi dulu (warn user bahwa timer
-  // tetep jalan di background). Confirm → router.back().
+  // Buka dialog konfirmasi dulu saat mau keluar
   const handleExit = () => setIsExitDialogOpen(true);
   const handleConfirmExit = () => {
     setIsExitDialogOpen(false);
-    router.back();
+    router.push("/student");
   };
 
   const isLast = currentIdx === totalQuestions - 1;
 
   // Loading state: tunggu startAttempt response dulu sebelum render UI quiz,
-  // supaya timer ga ke-render dengan nilai placeholder.
   if (secondsLeft === null) {
     return (
       <PageContainerAILN>

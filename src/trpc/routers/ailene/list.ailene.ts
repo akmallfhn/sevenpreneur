@@ -195,6 +195,7 @@ export const listAilene = {
             name: q.name,
             description: q.description,
             order_index: q.order_index,
+            question_count: q.questions.length,
             xp_reward,
             xp_earned: xpByKey.get(`quiz:${q.id}`) ?? 0,
             best_score: meta?.best_score ?? null,
