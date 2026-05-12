@@ -1,4 +1,5 @@
 import GetPrismaClient from "@/lib/prisma";
+import LogError from "@/lib/prisma-log-error";
 import GetQStashClient from "@/lib/qstash";
 import { supabase } from "@/lib/supabase";
 import {
@@ -38,8 +39,9 @@ export async function enqueueSaveAttachment(
       retries: 3,
     });
   } catch (e) {
-    console.error(
-      `whatsapp.webhook: Failed to enqueue save-attachment for wam_id ${wam_id}:`,
+    await LogError(
+      "whatsapp.webhook",
+      `Failed to enqueue save-attachment for wam_id ${wam_id}:`,
       e
     );
   }
@@ -67,7 +69,10 @@ async function getOrCreateConversation(
       where: { id: createdConversation.id },
     });
     if (!waConversation) {
-      console.error("whatsapp.webhook: Failed to create a new conversation.");
+      await LogError(
+        "whatsapp.webhook",
+        "Failed to create a new conversation."
+      );
       return undefined;
     }
   }
@@ -101,7 +106,7 @@ export async function appendChatFromUser(
       }
     );
     if (updatedConversation.length != 1) {
-      console.error("whatsapp.webhook: Failed to update conversation.");
+      await LogError("whatsapp.webhook", "Failed to update conversation.");
     }
   }
 
@@ -119,7 +124,7 @@ export async function appendChatFromUser(
     },
   });
   if (!createdChat) {
-    console.error("whatsapp.webhook: Failed to create a new chat.");
+    await LogError("whatsapp.webhook", "Failed to create a new chat.");
     return false;
   }
 
@@ -140,8 +145,9 @@ export async function triggerLangGraphAgent(payload: {
   const agentUrl = process.env.AGENT_URL;
   const agentSecretKey = process.env.AGENT_SECRET_KEY;
   if (!agentUrl || !agentSecretKey) {
-    console.error(
-      "whatsapp.webhook: AGENT_URL or AGENT_SECRET_KEY not configured."
+    await LogError(
+      "whatsapp.webhook",
+      "AGENT_URL or AGENT_SECRET_KEY not configured."
     );
     return;
   }
@@ -155,7 +161,7 @@ export async function triggerLangGraphAgent(payload: {
       body: JSON.stringify(payload),
     });
   } catch (e) {
-    console.error("whatsapp.webhook: Failed to trigger LangGraph agent.", e);
+    await LogError("whatsapp.webhook", "Failed to trigger LangGraph agent.", e);
   }
 }
 
@@ -198,7 +204,7 @@ export async function updateStatusByMessageID(
       where: { id: createdChat.id },
     });
     if (!waChat) {
-      console.error("whatsapp.webhook: Failed to create a new chat.");
+      await LogError("whatsapp.webhook", "Failed to create a new chat.");
       return undefined;
     }
   }
@@ -229,7 +235,7 @@ export async function updateStatusByMessageID(
       updateChatData["failed_at"] = updatedAtAsDate;
       break;
     default:
-      console.error("whatsapp.webhook: Unknown message status type.");
+      await LogError("whatsapp.webhook", "Unknown message status type.");
       return false;
   }
   const updatedChat = await prisma.wAChat.updateManyAndReturn({
@@ -237,7 +243,7 @@ export async function updateStatusByMessageID(
     where: { id: waChat.id },
   });
   if (updatedChat.length != 1) {
-    console.error("whatsapp.webhook: Failed to update chat.");
+    await LogError("whatsapp.webhook", "Failed to update chat.");
     return false;
   }
 

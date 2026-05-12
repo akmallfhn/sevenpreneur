@@ -5,6 +5,7 @@ import {
 } from "@/lib/conference-variant";
 import { sendEmail } from "@/lib/mailtrap";
 import GetPrismaClient from "@/lib/prisma";
+import LogError from "@/lib/prisma-log-error";
 import GetQStashClient from "@/lib/qstash";
 import {
   GetLearnings,
@@ -42,8 +43,9 @@ async function updateScheduleAndReturn(
     exclusionList
   );
   if (!isUpdateScheduleSuccess) {
-    console.error(
-      "qstash.schedule-learning: Failed to update learning reminder schedule."
+    await LogError(
+      "qstash.schedule-learning",
+      "Failed to update learning reminder schedule."
     );
   }
 

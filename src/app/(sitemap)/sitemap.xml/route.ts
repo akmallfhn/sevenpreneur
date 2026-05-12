@@ -1,3 +1,4 @@
+import LogError from "@/lib/prisma-log-error";
 import { NextResponse } from "next/server";
 
 interface SitemapItem {
@@ -42,7 +43,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Error generating sitemap index:", error);
+    await LogError("sitemap", "Error generating sitemap index:", error);
     return NextResponse.error();
   }
 }

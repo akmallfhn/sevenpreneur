@@ -1,5 +1,6 @@
 import { afterPaidTrigger } from "@/lib/after-payment";
 import GetPrismaClient from "@/lib/prisma";
+import LogError from "@/lib/prisma-log-error";
 import { XenditInvoiceCallback } from "@/lib/xendit";
 import { TStatusEnum } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -29,13 +30,14 @@ export async function POST(req: NextRequest) {
     },
   });
   if (updatedTransaction.length < 1) {
-    console.error("xendit.webhook: The selected transaction is not found.");
+    await LogError("xendit.webhook", "The selected transaction is not found.");
     return new NextResponse("The selected transaction is not found.", {
       status: 404,
     });
   } else if (updatedTransaction.length > 1) {
-    console.error(
-      "xendit.webhook: More-than-one transactions are updated at once."
+    await LogError(
+      "xendit.webhook",
+      "More-than-one transactions are updated at once."
     );
   }
 

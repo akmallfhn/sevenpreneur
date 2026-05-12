@@ -1,16 +1,9 @@
-import {
-  CategoryEnum,
-  Cohort,
-  Event,
-  Playlist,
-  PrismaClient,
-  Transaction,
-  User,
-} from "@prisma/client";
-import { render } from "@react-email/components";
 import { InvoiceEmail } from "@/components/emails/InvoiceEmail";
+import { CategoryEnum, PrismaClient, Transaction, User } from "@prisma/client";
+import { render } from "@react-email/components";
 import { encodeSHA256 } from "./encode";
 import { sendEmail } from "./mailtrap";
+import LogError from "./prisma-log-error";
 
 type TransactionWithUser = Transaction & {
   user: User;
@@ -18,14 +11,17 @@ type TransactionWithUser = Transaction & {
 
 export async function afterPaidTrigger(
   prisma: PrismaClient,
-  transactionId: string,
+  transactionId: string
 ) {
   const theTransaction = await prisma.transaction.findFirst({
     where: { id: transactionId },
     include: { user: true },
   });
   if (!theTransaction) {
-    console.error("afterPaidTrigger: The selected transaction is not found.");
+    await LogError(
+      "afterPaidTrigger",
+      "The selected transaction is not found."
+    );
     return { status: 404, message: "The selected transaction is not found." };
   }
 
@@ -35,8 +31,9 @@ export async function afterPaidTrigger(
       where: { id: theTransaction.item_id },
     });
     if (!theCohortPrice) {
-      console.error(
-        "afterPaidTrigger: The selected cohort price is not found.",
+      await LogError(
+        "afterPaidTrigger",
+        "The selected cohort price is not found."
       );
       return {
         status: 404,
@@ -48,7 +45,7 @@ export async function afterPaidTrigger(
       where: { id: theCohortPrice.cohort_id },
     });
     if (!theCohort) {
-      console.error("afterPaidTrigger: The selected cohort is not found.");
+      await LogError("afterPaidTrigger", "The selected cohort is not found.");
       return { status: 404, message: "The selected cohort is not found." };
     }
 
@@ -56,7 +53,7 @@ export async function afterPaidTrigger(
       theTransaction,
       "Purchase",
       "service",
-      "Business Education Program",
+      "Business Education Program"
     );
 
     try {
@@ -67,11 +64,12 @@ export async function afterPaidTrigger(
           itemName: theCohort.name,
           itemType: "cohort",
           invoiceNumber: theTransaction.invoice_number,
-          paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
+          paidAt:
+            theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
           paymentMethod: theTransaction.payment_method,
           paymentChannel: theTransaction.payment_channel,
           amount: Number(theTransaction.amount),
-        }),
+        })
       );
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
@@ -79,7 +77,7 @@ export async function afterPaidTrigger(
         mailHtml: invoiceHtml,
       });
     } catch (error) {
-      console.error("afterPaidTrigger: Failed to send email", error);
+      await LogError("afterPaidTrigger", "Failed to send email", error);
     }
 
     try {
@@ -101,7 +99,7 @@ export async function afterPaidTrigger(
       where: { id: theTransaction.item_id },
     });
     if (!thePlaylist) {
-      console.error("afterPaidTrigger: The selected playlist is not found.");
+      await LogError("afterPaidTrigger", "The selected playlist is not found.");
       return {
         status: 404,
         message: "The selected playlist is not found.",
@@ -116,11 +114,12 @@ export async function afterPaidTrigger(
           itemName: thePlaylist.name,
           itemType: "playlist",
           invoiceNumber: theTransaction.invoice_number,
-          paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
+          paidAt:
+            theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
           paymentMethod: theTransaction.payment_method,
           paymentChannel: theTransaction.payment_channel,
           amount: Number(theTransaction.amount),
-        }),
+        })
       );
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
@@ -128,7 +127,7 @@ export async function afterPaidTrigger(
         mailHtml: invoiceHtml,
       });
     } catch (error) {
-      console.error("afterPaidTrigger: Failed to send email", error);
+      await LogError("afterPaidTrigger", "Failed to send email", error);
     }
 
     try {
@@ -149,7 +148,10 @@ export async function afterPaidTrigger(
       where: { id: theTransaction.item_id },
     });
     if (!theEventPrice) {
-      console.error("afterPaidTrigger: The selected event price is not found.");
+      await LogError(
+        "afterPaidTrigger",
+        "The selected event price is not found."
+      );
       return { status: 404, message: "The selected event price is not found." };
     }
 
@@ -157,7 +159,7 @@ export async function afterPaidTrigger(
       where: { id: theEventPrice.event_id },
     });
     if (!theEvent) {
-      console.error("afterPaidTrigger: The selected event is not found.");
+      await LogError("afterPaidTrigger", "The selected event is not found.");
       return { status: 404, message: "The selected event is not found." };
     }
 
@@ -171,11 +173,12 @@ export async function afterPaidTrigger(
           itemName: theEvent.name,
           itemType: "event",
           invoiceNumber: theTransaction.invoice_number,
-          paidAt: theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
+          paidAt:
+            theTransaction.paid_at?.toISOString() ?? new Date().toISOString(),
           paymentMethod: theTransaction.payment_method,
           paymentChannel: theTransaction.payment_channel,
           amount: Number(theTransaction.amount),
-        }),
+        })
       );
       await sendEmail({
         mailRecipients: [theTransaction.user.email],
@@ -183,7 +186,7 @@ export async function afterPaidTrigger(
         mailHtml: invoiceHtml,
       });
     } catch (error) {
-      console.error("afterPaidTrigger: Failed to send email", error);
+      await LogError("afterPaidTrigger", "Failed to send email", error);
     }
 
     try {
@@ -202,7 +205,7 @@ export async function afterPaidTrigger(
   else {
     console.warn(
       "afterPaidTrigger: Unsupported category",
-      theTransaction.category,
+      theTransaction.category
     );
   }
 
@@ -213,7 +216,7 @@ async function notifyMetaEvent(
   transaction: TransactionWithUser,
   eventName: string,
   contentType: string,
-  contentCategory: string,
+  contentCategory: string
 ) {
   try {
     const metaResponse = await fetch(
@@ -244,11 +247,11 @@ async function notifyMetaEvent(
             },
           ],
         }),
-      },
+      }
     );
     const metaResult = await metaResponse.json();
     console.log("Meta Result:", metaResult);
   } catch (error) {
-    console.error("afterPaidTrigger: Failed to notify Meta API", error);
+    await LogError("afterPaidTrigger", "Failed to notify Meta API", error);
   }
 }

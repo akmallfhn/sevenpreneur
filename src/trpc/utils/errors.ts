@@ -1,3 +1,4 @@
+import LogError from "@/lib/prisma-log-error";
 import { STATUS_NOT_FOUND } from "@/lib/status_code";
 import { TRPCError } from "@trpc/server";
 
@@ -8,7 +9,7 @@ export function readFailedNotFound(nameSingular: string) {
   });
 }
 
-export function checkUpdateResult(
+export async function checkUpdateResult(
   length: number,
   nameSingular: string,
   namePlural: string,
@@ -23,20 +24,22 @@ export function checkUpdateResult(
     if (!procedureName) {
       procedureName = nameSingular;
     }
-    console.error(
-      `update.${procedureName}: More-than-one ${namePlural} are updated at once.`
+    await LogError(
+      `update.${procedureName}`,
+      `More-than-one ${namePlural} are updated at once.`
     );
   }
 }
 
-export function checkDeleteResult(
+export async function checkDeleteResult(
   count: number,
   namePlural: string,
   procedureName: string
 ) {
   if (count > 1) {
-    console.error(
-      `delete.${procedureName}: More-than-one ${namePlural} are deleted at once.`
+    await LogError(
+      `delete.${procedureName}`,
+      `More-than-one ${namePlural} are deleted at once.`
     );
   }
 }

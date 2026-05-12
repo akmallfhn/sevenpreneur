@@ -1,4 +1,5 @@
 import { MailtrapClient } from "mailtrap";
+import LogError from "./prisma-log-error";
 
 interface SendEmailProps {
   mailRecipients: string[];
@@ -32,7 +33,7 @@ export async function sendEmail({
     });
     return responseMail;
   } catch (error) {
-    console.error("Mailtrap send error:", error);
+    await LogError("sendEmail", "Mailtrap send error:", error);
     throw error;
   }
 }
