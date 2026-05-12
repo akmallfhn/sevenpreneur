@@ -1,9 +1,14 @@
+import DashboardChampionAILN from "@/components/pages/DashboardChampionAILN";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
-export default async function AILNRootPage() {
+export const metadata: Metadata = {
+  title: "Champion",
+};
+
+export default async function ChampionPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
 
@@ -11,10 +16,9 @@ export default async function AILNRootPage() {
   setSessionToken(sessionToken);
 
   const ailMember = (await trpc.auth.checkAilMember()).ail_member;
-  if (!ailMember) return <AppPageState variant="FORBIDDEN" />;
+  if (!ailMember || ailMember.role !== "CHAMPION") {
+    return <AppPageState variant="FORBIDDEN" />;
+  }
 
-  if (ailMember.role === "CHAMPION") redirect("/champion");
-  if (ailMember.role === "STUDENT") redirect("/student");
-
-  return <AppPageState variant="FORBIDDEN" />;
+  return <DashboardChampionAILN sessionToken={sessionToken} />;
 }

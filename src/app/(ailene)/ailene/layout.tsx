@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-import SidebarAilene from "@/components/navigations/SidebarAilene";
 import AppPageState from "@/components/states/AppPageState";
 import { SidebarProvider } from "@/contexts/SidebarContext";
 import { ThemeProvider } from "next-themes";
@@ -42,7 +41,6 @@ export default async function AileneLayout(
   setSessionToken(sessionToken);
 
   const checkUser = (await trpc.auth.checkSession()).user;
-
   if (!checkUser || checkUser.role_id === 3) {
     return <AppPageState variant="FORBIDDEN" />;
   }
@@ -51,11 +49,7 @@ export default async function AileneLayout(
     <TRPCProvider baseURL={baseURL}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <SidebarProvider>
-          <div className="min-h-screen bg-dashboard-bg">
-            <SidebarAilene
-              sessionToken={sessionToken}
-              sessionUserRole={checkUser.role_id}
-            />
+          <div className="font-read min-h-screen bg-dashboard-bg">
             {props.children}
             <div className="lg:hidden">
               <AppPageState variant="ONLY_MOBILE" />

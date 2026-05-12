@@ -62,6 +62,7 @@ CREATE TABLE ail_levels (
     id           SERIAL       PRIMARY KEY,
     level_number SMALLINT     NOT NULL UNIQUE,
     name         VARCHAR      NOT NULL,
+    icon         VARCHAR          NULL,
     min_xp       INTEGER      NOT NULL DEFAULT 0,
     status       status_enum  NOT NULL DEFAULT 'active',
     created_at   TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,

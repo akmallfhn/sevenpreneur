@@ -1099,6 +1099,7 @@ model AilLevel {
   id              Int          @id @default(autoincrement()) @db.Integer
   level_number    Int          @unique @db.SmallInt
   name            String       @db.VarChar()
+  icon            String?      @db.VarChar()
   min_xp          Int          @default(0) @db.Integer
   status          StatusEnum   @default(ACTIVE)
   created_at      DateTime     @default(now()) @db.Timestamptz()
