@@ -31,7 +31,11 @@ export const deleteEvent = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedEventPrice.count, "event prices", "eventPrice");
+      await checkDeleteResult(
+        deletedEventPrice.count,
+        "event prices",
+        "eventPrice"
+      );
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

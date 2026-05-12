@@ -49,7 +49,7 @@ export const updateEvent = {
           deleted_at: null,
         },
       });
-      checkUpdateResult(updatedEvent.length, "event", "events");
+      await checkUpdateResult(updatedEvent.length, "event", "events");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -81,7 +81,7 @@ export const updateEvent = {
             // deleted_at: null,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedEventPrice.length,
         "event price",
         "event prices",

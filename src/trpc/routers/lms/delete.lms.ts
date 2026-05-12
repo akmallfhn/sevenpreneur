@@ -24,7 +24,7 @@ export const deleteLMS = {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedCohortCount: number = await opts.ctx.prisma
         .$executeRaw`UPDATE cohorts SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
-      checkDeleteResult(deletedCohortCount, "cohorts", "cohort");
+      await checkDeleteResult(deletedCohortCount, "cohorts", "cohort");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -39,7 +39,7 @@ export const deleteLMS = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedCohortPrice.count,
         "cohort prices",
         "cohortPrice"
@@ -64,7 +64,7 @@ export const deleteLMS = {
           cohort_id: opts.input.cohort_id,
         },
       });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedCohortMember.count,
         "cohort members",
         "cohortMember"
@@ -83,7 +83,7 @@ export const deleteLMS = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedModule.count, "modules", "module");
+      await checkDeleteResult(deletedModule.count, "modules", "module");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -98,7 +98,7 @@ export const deleteLMS = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedLearning.count, "learnings", "learning");
+      await checkDeleteResult(deletedLearning.count, "learnings", "learning");
 
       const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
         opts.ctx.prisma,
@@ -125,7 +125,7 @@ export const deleteLMS = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedMaterial.count, "materials", "material");
+      await checkDeleteResult(deletedMaterial.count, "materials", "material");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -151,7 +151,7 @@ export const deleteLMS = {
             user_id: selectedUserId,
           },
         });
-        checkDeleteResult(
+        await checkDeleteResult(
           deletedDiscussionStarter.count,
           "discussion starters",
           "discussionStarter"
@@ -177,7 +177,7 @@ export const deleteLMS = {
             user_id: selectedUserId,
           },
         });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedDiscussionReply.count,
         "discussion replies",
         "discussionReply"
@@ -202,7 +202,7 @@ export const deleteLMS = {
             id: opts.input.id,
           },
         });
-        checkDeleteResult(deletedProject.count, "projects", "project");
+        await checkDeleteResult(deletedProject.count, "projects", "project");
       });
       return {
         code: STATUS_NO_CONTENT,
@@ -249,7 +249,11 @@ export const deleteLMS = {
           submitter_id: selectedUserId,
         },
       });
-      checkDeleteResult(deletedSubmission.count, "submissions", "submission");
+      await checkDeleteResult(
+        deletedSubmission.count,
+        "submissions",
+        "submission"
+      );
 
       return {
         code: STATUS_NO_CONTENT,

@@ -12,7 +12,11 @@ export const deleteBA = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedCategory.count, "BA category", "ba.category");
+      await checkDeleteResult(
+        deletedCategory.count,
+        "BA category",
+        "ba.category"
+      );
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -29,7 +33,7 @@ export const deleteBA = {
           },
         }
       );
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedSubcategory.count,
         "BA subcategory",
         "ba.subcategory"
@@ -48,7 +52,11 @@ export const deleteBA = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedQuestion.count, "BA question", "ba.question");
+      await checkDeleteResult(
+        deletedQuestion.count,
+        "BA question",
+        "ba.question"
+      );
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -70,7 +78,7 @@ export const deleteBA = {
             user_id: opts.ctx.user.id,
           },
         });
-        checkDeleteResult(
+        await checkDeleteResult(
           deletedAnswerSheet.count,
           "BA answer sheet",
           "ba.answer sheet"

@@ -49,7 +49,7 @@ export const updatePlaylist = {
             deleted_at: null,
           },
         });
-      checkUpdateResult(updatedPlaylist.length, "playlist", "playlists");
+      await checkUpdateResult(updatedPlaylist.length, "playlist", "playlists");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -89,7 +89,7 @@ export const updatePlaylist = {
           id: opts.input.id,
         },
       });
-      checkUpdateResult(updatedVideo.length, "video", "videos");
+      await checkUpdateResult(updatedVideo.length, "video", "videos");
       return {
         code: STATUS_OK,
         message: "Success",

@@ -10,7 +10,7 @@ export const deleteWA = {
       const deletedAsset = await opts.ctx.prisma.wAAsset.deleteMany({
         where: { id: opts.input.id },
       });
-      checkDeleteResult(deletedAsset.count, "assets", "wa.asset");
+      await checkDeleteResult(deletedAsset.count, "assets", "wa.asset");
 
       return {
         code: STATUS_NO_CONTENT,
@@ -24,7 +24,7 @@ export const deleteWA = {
       const deletedAlert = await opts.ctx.prisma.wAAlert.deleteMany({
         where: { id: opts.input.id },
       });
-      checkDeleteResult(deletedAlert.count, "alerts", "wa.alert");
+      await checkDeleteResult(deletedAlert.count, "alerts", "wa.alert");
 
       return {
         code: STATUS_NO_CONTENT,

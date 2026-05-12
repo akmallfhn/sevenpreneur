@@ -13,7 +13,7 @@ export const deleteAITool = {
           user_id: opts.ctx.user.id,
         },
       });
-      checkDeleteResult(deletedAIResult.count, "AI results", "aiResult");
+      await checkDeleteResult(deletedAIResult.count, "AI results", "aiResult");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -38,7 +38,7 @@ export const deleteAITool = {
             user_id: opts.ctx.user.id,
           },
         });
-        checkDeleteResult(
+        await checkDeleteResult(
           deletedAIConversation.count,
           "AI conversations",
           "aiConversation"

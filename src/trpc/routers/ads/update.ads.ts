@@ -41,7 +41,7 @@ export const updateAdv = {
             id: opts.input.id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedInterstitialAd.length,
         "interstitial ad",
         "interstitial ads"
@@ -80,7 +80,7 @@ export const updateAdv = {
           id: opts.input.id,
         },
       });
-      checkUpdateResult(updatedTicker.length, "ticker", "tickers");
+      await checkUpdateResult(updatedTicker.length, "ticker", "tickers");
       return {
         code: STATUS_OK,
         message: "Success",

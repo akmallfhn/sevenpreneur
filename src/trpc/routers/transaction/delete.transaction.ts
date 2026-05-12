@@ -12,7 +12,7 @@ export const deleteTransaction = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedDiscount.count, "discounts", "discount");
+      await checkDeleteResult(deletedDiscount.count, "discounts", "discount");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

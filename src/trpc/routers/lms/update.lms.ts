@@ -55,7 +55,7 @@ export const updateLMS = {
           deleted_at: null,
         },
       });
-      checkUpdateResult(updatedCohort.length, "cohort", "cohorts");
+      await checkUpdateResult(updatedCohort.length, "cohort", "cohorts");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -87,7 +87,7 @@ export const updateLMS = {
             // deleted_at: null,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedCohortPrice.length,
         "cohort price",
         "cohort prices",
@@ -121,7 +121,7 @@ export const updateLMS = {
             cohort_id: opts.input.cohort_id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedCohortMember.length,
         "cohort member",
         "cohort members",
@@ -159,7 +159,7 @@ export const updateLMS = {
           // deleted_at: null,
         },
       });
-      checkUpdateResult(updatedModule.length, "module", "modules");
+      await checkUpdateResult(updatedModule.length, "module", "modules");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -213,7 +213,7 @@ export const updateLMS = {
             // deleted_at: null,
           },
         });
-      checkUpdateResult(updatedLearning.length, "learning", "learnings");
+      await checkUpdateResult(updatedLearning.length, "learning", "learnings");
 
       const isUpdateScheduleSuccess = await UpdateLearningReminderSchedule(
         opts.ctx.prisma,
@@ -259,7 +259,7 @@ export const updateLMS = {
             // deleted_at: null,
           },
         });
-      checkUpdateResult(updatedMaterial.length, "material", "materials");
+      await checkUpdateResult(updatedMaterial.length, "material", "materials");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -285,7 +285,7 @@ export const updateLMS = {
             user_id: opts.ctx.user.id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedDiscussionStarter.length,
         "discussion starter",
         "discussion starters",
@@ -316,7 +316,7 @@ export const updateLMS = {
             user_id: opts.ctx.user.id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedDiscussionReply.length,
         "discussion reply",
         "discussion replies",
@@ -356,7 +356,7 @@ export const updateLMS = {
           // deleted_at: null,
         },
       });
-      checkUpdateResult(updatedProject.length, "project", "projects");
+      await checkUpdateResult(updatedProject.length, "project", "projects");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -441,7 +441,11 @@ export const updateLMS = {
             // deleted_at: null,
           },
         });
-      checkUpdateResult(updatedSubmission.length, "submission", "submissions");
+      await checkUpdateResult(
+        updatedSubmission.length,
+        "submission",
+        "submissions"
+      );
 
       return {
         code: STATUS_OK,
