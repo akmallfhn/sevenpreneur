@@ -71,7 +71,7 @@ export const championAilene = {
           where: { member_id: { in: memberIds } },
         }),
         opts.ctx.prisma.ailQuizSubmission.findMany({
-          where: { member_id: { in: memberIds } },
+          where: { member_id: { in: memberIds }, is_completed: true },
           orderBy: { submitted_at: "desc" },
           distinct: ["member_id"],
           include: { quiz: { include: { chapter: true } } },

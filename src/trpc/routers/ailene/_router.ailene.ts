@@ -14,12 +14,15 @@ export const aileneRouter = createTRPCRouter({
   }),
   read: createTRPCRouter({
     materialDetail: readAilene.materialDetail,
+    quizResult: readAilene.quizResult,
   }),
   champion: createTRPCRouter({
     listGroups: championAilene.listGroups,
     listMembers: championAilene.listMembers,
   }),
   unlockLevel: updateAilene.unlockLevel,
+  startQuizAttempt: updateAilene.startQuizAttempt,
+  saveQuizDraft: updateAilene.saveQuizDraft,
   submitQuiz: updateAilene.submitQuiz,
   completeMaterial: updateAilene.completeMaterial,
   completeVideo: updateAilene.completeVideo,

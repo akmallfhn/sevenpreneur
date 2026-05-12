@@ -58,4 +58,70 @@ export const readAilene = {
         xp_earned: xp?.xp_earned ?? 0,
       };
     }),
+
+  quizResult: ailMemberProcedure
+    .input(z.object({ quiz_id: z.string().min(1) }))
+    .query(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const { quiz_id } = opts.input;
+
+      const quiz = await opts.ctx.prisma.ailQuiz.findUnique({
+        where: { id: quiz_id },
+        include: {
+          chapter: { select: { id: true, name: true } },
+          questions: {
+            orderBy: { order_index: "asc" },
+            include: { options: { orderBy: { id: "asc" } } },
+          },
+        },
+      });
+      if (!quiz) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Quiz not found.",
+        });
+      }
+
+      const [latestCompleted, xp] = await Promise.all([
+        opts.ctx.prisma.ailQuizSubmission.findFirst({
+          where: { member_id: memberId, quiz_id, is_completed: true },
+          orderBy: { attempt_number: "desc" },
+        }),
+        opts.ctx.prisma.ailXpEarning.findUnique({
+          where: {
+            member_id_learning_type_learning_id: {
+              member_id: memberId,
+              learning_type: "QUIZ",
+              learning_id: quiz_id,
+            },
+          },
+        }),
+      ]);
+
+      if (!latestCompleted) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Quiz submission not found.",
+        });
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        quiz: {
+          id: quiz.id,
+          name: quiz.name,
+          description: quiz.description,
+          chapter: quiz.chapter,
+        },
+        questions: quiz.questions,
+        submission: {
+          attempt_number: latestCompleted.attempt_number,
+          score: latestCompleted.score,
+          answers: latestCompleted.answers,
+          submitted_at: latestCompleted.submitted_at,
+        },
+        xp_earned: xp?.xp_earned ?? 0,
+      };
+    }),
 };

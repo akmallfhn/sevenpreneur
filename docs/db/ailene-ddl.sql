@@ -211,6 +211,8 @@ CREATE TABLE ail_quiz_submissions (
     attempt_number SMALLINT     NOT NULL,
     answers        JSON         NOT NULL,
     score          SMALLINT     NOT NULL,
+    is_completed   BOOLEAN      NOT NULL DEFAULT FALSE,
+    started_at     TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     submitted_at   TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (member_id, quiz_id, attempt_number)
 );

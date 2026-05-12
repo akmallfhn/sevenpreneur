@@ -45,7 +45,11 @@ export const listAilene = {
         },
       }),
       opts.ctx.prisma.ailQuizSubmission.findMany({
-        where: { member_id: memberId, quiz: { status: "ACTIVE" } },
+        where: {
+          member_id: memberId,
+          quiz: { status: "ACTIVE" },
+          is_completed: true,
+        },
         select: { quiz_id: true, quiz: { select: { chapter_id: true } } },
       }),
       opts.ctx.prisma.ailVideoCompletion.findMany({
@@ -138,7 +142,11 @@ export const listAilene = {
           orderBy: { order_index: "asc" },
         }),
         opts.ctx.prisma.ailQuizSubmission.findMany({
-          where: { member_id: memberId, quiz: { chapter_id } },
+          where: {
+            member_id: memberId,
+            quiz: { chapter_id },
+            is_completed: true,
+          },
         }),
         opts.ctx.prisma.ailVideoCompletion.findMany({
           where: { member_id: memberId, video: { chapter_id } },
@@ -240,10 +248,13 @@ export const listAilene = {
         });
       }
 
-      const [latest, xp] = await Promise.all([
+      const [latestCompleted, draft, xp] = await Promise.all([
         opts.ctx.prisma.ailQuizSubmission.findFirst({
-          where: { member_id: memberId, quiz_id },
+          where: { member_id: memberId, quiz_id, is_completed: true },
           orderBy: { attempt_number: "desc" },
+        }),
+        opts.ctx.prisma.ailQuizSubmission.findFirst({
+          where: { member_id: memberId, quiz_id, is_completed: false },
         }),
         opts.ctx.prisma.ailXpEarning.findUnique({
           where: {
@@ -266,12 +277,20 @@ export const listAilene = {
           chapter: quiz.chapter,
         },
         questions: quiz.questions,
-        progress: latest
+        progress: latestCompleted
           ? {
-              attempt_number: latest.attempt_number,
-              score: latest.score,
-              answers: latest.answers,
-              submitted_at: latest.submitted_at,
+              attempt_number: latestCompleted.attempt_number,
+              score: latestCompleted.score,
+              answers: latestCompleted.answers,
+              submitted_at: latestCompleted.submitted_at,
+            }
+          : null,
+        draft: draft
+          ? {
+              attempt_number: draft.attempt_number,
+              answers: draft.answers,
+              started_at: draft.started_at,
+              updated_at: draft.submitted_at,
             }
           : null,
         xp_earned: xp?.xp_earned ?? 0,

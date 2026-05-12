@@ -1,4 +1,4 @@
-import QuizAILN from "@/components/pages/QuizAILN";
+import QuizDetailsAILN from "@/components/pages/QuizDetailsAILN";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -32,5 +32,5 @@ export default async function QuizPage({
     return <AppPageState variant="FORBIDDEN" />;
   }
 
-  return <QuizAILN sessionToken={sessionToken} quizId={quizId} />;
+  return <QuizDetailsAILN sessionToken={sessionToken} quizId={quizId} />;
 }
