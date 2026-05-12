@@ -1128,7 +1128,7 @@ model AilChapter {
 }
 
 model AilQuiz {
-  id          Int                 @id @default(autoincrement()) @db.Integer
+  id          String              @id @default(nanoid()) @db.VarChar()
   chapter     AilChapter          @relation(fields: [chapter_id], references: [id])
   chapter_id  Int                 @db.Integer
   name        String              @db.VarChar()
@@ -1146,7 +1146,7 @@ model AilQuiz {
 model AilQuizQuestion {
   id          Int             @id @default(autoincrement()) @db.Integer
   quiz        AilQuiz         @relation(fields: [quiz_id], references: [id])
-  quiz_id     Int             @db.Integer
+  quiz_id     String          @db.VarChar()
   question    String          @db.Text
   explanation String?         @db.Text
   order_index Int             @default(0) @db.SmallInt
@@ -1187,7 +1187,7 @@ model AilVideo {
 }
 
 model AilMaterial {
-  id          Int                     @id @default(autoincrement()) @db.Integer
+  id          String                  @id @default(nanoid()) @db.VarChar()
   chapter     AilChapter              @relation(fields: [chapter_id], references: [id])
   chapter_id  Int                     @db.Integer
   title       String                  @db.VarChar()
@@ -1268,7 +1268,7 @@ model AilQuizSubmission {
   member         AilMember @relation(fields: [member_id], references: [id])
   member_id      Int       @db.Integer
   quiz           AilQuiz   @relation(fields: [quiz_id], references: [id])
-  quiz_id        Int       @db.Integer
+  quiz_id        String    @db.VarChar()
   attempt_number Int       @db.SmallInt
   answers        Json      @db.Json
   score          Int       @db.SmallInt
@@ -1293,7 +1293,7 @@ model AilMaterialCompletion {
   member       AilMember   @relation(fields: [member_id], references: [id])
   member_id    Int         @db.Integer
   material     AilMaterial @relation(fields: [material_id], references: [id])
-  material_id  Int         @db.Integer
+  material_id  String      @db.VarChar()
   completed_at DateTime    @default(now()) @db.Timestamptz()
 
   @@id([member_id, material_id])
@@ -1305,7 +1305,7 @@ model AilXpEarning {
   member        AilMember       @relation(fields: [member_id], references: [id])
   member_id     Int             @db.Integer
   learning_type AilLearningType
-  learning_id   Int             @db.Integer
+  learning_id   String          @db.VarChar()
   xp_earned     Int             @db.SmallInt
   earned_at     DateTime        @default(now()) @db.Timestamptz()
 

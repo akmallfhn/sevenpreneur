@@ -1,7 +1,7 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
 import { trpc } from "@/trpc/client";
-import { faLock, faWandMagicSparkles } from "@fortawesome/free-solid-svg-icons";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -42,7 +42,7 @@ export default function LevelDividerAILN(props: LevelDividerAILNProps) {
   if (props.unlocked) {
     return (
       <div className="relative pl-12">
-        <div className="overflow-hidden rounded-xl border-2 border-red-300 bg-gradient-to-r from-red-50 via-white to-blue-50 p-4 shadow-sm">
+        <div className="overflow-hidden rounded-xl border-2 border-red-300 bg-gradient-to-r from-red-50 to-white p-4 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <Image
@@ -71,10 +71,6 @@ export default function LevelDividerAILN(props: LevelDividerAILNProps) {
                   You&apos;ve unlocked Level {props.level.level_number}
                 </div>
               </div>
-              <FontAwesomeIcon
-                icon={faWandMagicSparkles}
-                className="h-8 w-8 text-red-400"
-              />
             </div>
           </div>
         </div>

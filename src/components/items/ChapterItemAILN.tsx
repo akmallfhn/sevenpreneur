@@ -1,12 +1,10 @@
 "use client";
 import ChapterTaskItemAILN from "@/components/items/ChapterTaskItemAILN";
 import { trpc } from "@/trpc/client";
-import {
-  faChevronDown,
-  faChevronUp,
-  faLock,
-} from "@fortawesome/free-solid-svg-icons";
+import type { ChapterProgress } from "@/trpc/routers/ailene/utils.ailene";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ChevronDown } from "lucide-react";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import AppErrorComponents from "../states/AppErrorComponents";
 
@@ -14,7 +12,14 @@ interface Chapter {
   id: number;
   name: string;
   description: string | null;
+  progress: ChapterProgress;
 }
+
+const progressMeta: Record<ChapterProgress, { label: string; cls: string }> = {
+  not_started: { label: "Not Started", cls: "bg-gray-100 text-gray-600" },
+  in_progress: { label: "In Progress", cls: "bg-blue-100 text-blue-500" },
+  completed: { label: "Completed", cls: "bg-green-100 text-green-700" },
+};
 
 interface ChapterItemAILNProps {
   chapter: Chapter;
@@ -47,14 +52,14 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
       </div>
 
       <div
-        className={`rounded-xl bg-white shadow-sm ${
+        className={`rounded-md bg-white shadow-sm ${
           !props.unlocked ? "opacity-60" : ""
         }`}
       >
         <button
           type="button"
           onClick={props.onToggle}
-          className="flex w-full items-start justify-between gap-4 p-4 text-left"
+          className="flex w-full items-center justify-between gap-4 p-4 text-left"
         >
           <div className="flex-1">
             <div className="text-xs tracking-widest uppercase text-emphasis">
@@ -68,27 +73,32 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
             )}
           </div>
           <div className="flex items-center gap-3">
-            {!props.unlocked && (
+            {props.unlocked ? (
+              <span
+                className={`rounded px-2 py-0.5 text-xs font-medium ${progressMeta[props.chapter.progress].cls}`}
+              >
+                {progressMeta[props.chapter.progress].label}
+              </span>
+            ) : (
               <span className="rounded bg-gray-200 px-2 py-0.5 text-xs text-gray-600">
                 Locked
               </span>
             )}
-            {props.expanded ? (
-              <FontAwesomeIcon
-                icon={faChevronUp}
-                className="h-4 w-4 text-gray-400"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                className="h-4 w-4 text-gray-400"
-              />
-            )}
+            <ChevronDown
+              className={`h-4 w-4 text-gray-400 transition-transform duration-300 ${
+                props.expanded ? "rotate-180" : ""
+              }`}
+            />
           </div>
         </button>
-
-        {props.expanded && (
-          <>
+        <div
+          className={`grid transition-all duration-300 ease-in-out ${
+            props.expanded
+              ? "grid-rows-[1fr] opacity-100"
+              : "grid-rows-[0fr] opacity-0"
+          }`}
+        >
+          <div className="overflow-hidden">
             {tasksQ.isLoading && <AppLoadingComponents />}
             {(tasksQ.error || (!tasksQ.isLoading && !tasksQ.data)) && (
               <AppErrorComponents />
@@ -121,8 +131,8 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
                 ))}
               </div>
             )}
-          </>
-        )}
+          </div>
+        </div>
       </div>
     </div>
   );

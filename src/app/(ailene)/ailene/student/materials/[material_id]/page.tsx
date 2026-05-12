@@ -1,26 +1,26 @@
-import QuizAILN from "@/components/pages/QuizAILN";
+import MaterialDetailsAILN from "@/components/pages/MaterialDetailsAILN";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "Quiz",
+  title: "Materi",
 };
 
-export default async function QuizPage({
+export default async function MaterialPage({
   params,
 }: {
-  params: Promise<{ quiz_id: string }>;
+  params: Promise<{ material_id: string }>;
 }) {
-  const { quiz_id: quizId } = await params;
+  const { material_id: materialId } = await params;
 
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session_token")?.value;
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
-  if (!quizId) {
+  if (!materialId) {
     return <AppPageState variant="NOT_FOUND" />;
   }
 
@@ -32,5 +32,7 @@ export default async function QuizPage({
     return <AppPageState variant="FORBIDDEN" />;
   }
 
-  return <QuizAILN sessionToken={sessionToken} quizId={quizId} />;
+  return (
+    <MaterialDetailsAILN sessionToken={sessionToken} materialId={materialId} />
+  );
 }

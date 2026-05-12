@@ -81,7 +81,7 @@ CREATE TABLE ail_chapters (
 );
 
 CREATE TABLE ail_quizzes (
-    id          SERIAL             PRIMARY KEY,
+    id          VARCHAR            PRIMARY KEY DEFAULT encode(gen_random_bytes(12), 'hex'),
     chapter_id  INTEGER            NOT NULL,
     name        VARCHAR            NOT NULL,
     description TEXT                   NULL,
@@ -93,7 +93,7 @@ CREATE TABLE ail_quizzes (
 
 CREATE TABLE ail_quiz_questions (
     id          SERIAL      PRIMARY KEY,
-    quiz_id     INTEGER     NOT NULL,
+    quiz_id     VARCHAR     NOT NULL,
     question    TEXT        NOT NULL,
     explanation TEXT            NULL,
     order_index SMALLINT    NOT NULL DEFAULT 0,
@@ -124,7 +124,7 @@ CREATE TABLE ail_videos (
 );
 
 CREATE TABLE ail_materials (
-    id          SERIAL             PRIMARY KEY,
+    id          VARCHAR            PRIMARY KEY DEFAULT encode(gen_random_bytes(12), 'hex'),
     chapter_id  INTEGER            NOT NULL,
     title       VARCHAR            NOT NULL,
     description TEXT                   NULL,
@@ -207,7 +207,7 @@ CREATE TABLE ail_group_members (
 CREATE TABLE ail_quiz_submissions (
     id             SERIAL       PRIMARY KEY,
     member_id      INTEGER      NOT NULL,
-    quiz_id        INTEGER      NOT NULL,
+    quiz_id        VARCHAR      NOT NULL,
     attempt_number SMALLINT     NOT NULL,
     answers        JSON         NOT NULL,
     score          SMALLINT     NOT NULL,
@@ -224,7 +224,7 @@ CREATE TABLE ail_video_completions (
 
 CREATE TABLE ail_material_completions (
     member_id    INTEGER      NOT NULL,
-    material_id  INTEGER      NOT NULL,
+    material_id  VARCHAR      NOT NULL,
     completed_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (member_id, material_id)
 );
@@ -233,7 +233,7 @@ CREATE TABLE ail_xp_earnings (
     id            SERIAL              PRIMARY KEY,
     member_id     INTEGER             NOT NULL,
     learning_type ail_learning_type   NOT NULL,
-    learning_id   INTEGER             NOT NULL,
+    learning_id   VARCHAR             NOT NULL,
     xp_earned     SMALLINT            NOT NULL,
     earned_at     TIMESTAMPTZ         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (member_id, learning_type, learning_id)

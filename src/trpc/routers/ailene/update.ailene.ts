@@ -1,4 +1,8 @@
-import { STATUS_BAD_REQUEST, STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
+import {
+  STATUS_BAD_REQUEST,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
 import { ailMemberProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -12,7 +16,10 @@ export const updateAilene = {
         where: { id: opts.input.level_id },
       });
       if (!targetLevel) {
-        throw new TRPCError({ code: STATUS_NOT_FOUND, message: "Level not found." });
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Level not found.",
+        });
       }
 
       const currentLevelNumber = member.current_level?.level_number ?? 0;
@@ -58,10 +65,127 @@ export const updateAilene = {
       };
     }),
 
+  completeMaterial: ailMemberProcedure
+    .input(z.object({ material_id: z.string().min(1) }))
+    .mutation(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const materialId = opts.input.material_id;
+
+      const material = await opts.ctx.prisma.ailMaterial.findUnique({
+        where: { id: materialId },
+      });
+      if (!material) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Material not found.",
+        });
+      }
+
+      // Idempotent: composite PK prevents duplicate completion
+      await opts.ctx.prisma.ailMaterialCompletion.upsert({
+        where: {
+          member_id_material_id: {
+            member_id: memberId,
+            material_id: materialId,
+          },
+        },
+        create: { member_id: memberId, material_id: materialId },
+        update: {},
+      });
+
+      // Award XP only on first completion
+      const existingXp = await opts.ctx.prisma.ailXpEarning.findUnique({
+        where: {
+          member_id_learning_type_learning_id: {
+            member_id: memberId,
+            learning_type: "MATERIAL",
+            learning_id: materialId,
+          },
+        },
+      });
+      let xpAwarded = 0;
+      if (!existingXp) {
+        await opts.ctx.prisma.ailXpEarning.create({
+          data: {
+            member_id: memberId,
+            learning_type: "MATERIAL",
+            learning_id: materialId,
+            xp_earned: material.xp_reward,
+          },
+        });
+        xpAwarded = material.xp_reward;
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        xp_awarded: xpAwarded,
+      };
+    }),
+
+  completeVideo: ailMemberProcedure
+    .input(z.object({ video_id: z.number().int().positive() }))
+    .mutation(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const videoId = opts.input.video_id;
+
+      const video = await opts.ctx.prisma.ailVideo.findUnique({
+        where: { id: videoId },
+      });
+      if (!video) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Video not found.",
+        });
+      }
+
+      // Idempotent: composite PK prevents duplicate completion
+      await opts.ctx.prisma.ailVideoCompletion.upsert({
+        where: {
+          member_id_video_id: {
+            member_id: memberId,
+            video_id: videoId,
+          },
+        },
+        create: { member_id: memberId, video_id: videoId },
+        update: {},
+      });
+
+      // Award XP only on first completion (learning_id stored as string)
+      const learningIdStr = String(videoId);
+      const existingXp = await opts.ctx.prisma.ailXpEarning.findUnique({
+        where: {
+          member_id_learning_type_learning_id: {
+            member_id: memberId,
+            learning_type: "VIDEO",
+            learning_id: learningIdStr,
+          },
+        },
+      });
+      let xpAwarded = 0;
+      if (!existingXp) {
+        await opts.ctx.prisma.ailXpEarning.create({
+          data: {
+            member_id: memberId,
+            learning_type: "VIDEO",
+            learning_id: learningIdStr,
+            xp_earned: video.xp_reward,
+          },
+        });
+        xpAwarded = video.xp_reward;
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        xp_awarded: xpAwarded,
+      };
+    }),
+
   submitQuiz: ailMemberProcedure
     .input(
       z.object({
-        quiz_id: z.number().int().positive(),
+        quiz_id: z.string().min(1),
         answers: z.record(z.string(), z.string().nullable()),
       })
     )

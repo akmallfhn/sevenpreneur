@@ -34,7 +34,7 @@ interface QuizQuestion {
 
 interface QuizAILNProps {
   sessionToken: string;
-  quizId: number;
+  quizId: string;
 }
 
 type Phase = "idle" | "active" | "result";

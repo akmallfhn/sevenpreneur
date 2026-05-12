@@ -5,22 +5,36 @@ import PageContainerAILN from "@/components/pages/PageContainerAILN";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { setSessionToken, trpc } from "@/trpc/client";
-import type { AppRouter } from "@/trpc/routers/_app";
-import type { inferRouterOutputs } from "@trpc/server";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import dayjs from "dayjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-type RO = inferRouterOutputs<AppRouter>;
-type Level = RO["ailene"]["list"]["levels"]["list"][number];
-type Chapter = RO["ailene"]["list"]["chapters"]["list"][number];
+interface Level {
+  id: number;
+  level_number: number;
+  name: string;
+  icon: string | null;
+  min_xp: number;
+}
+
+interface Chapter {
+  id: number;
+  level_id: number;
+  name: string;
+  description: string | null;
+  session_date: string;
+  progress: "not_started" | "in_progress" | "completed";
+}
 
 export default function DashboardStudentAILN({
   sessionToken,
 }: {
   sessionToken: string;
 }) {
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+
   useEffect(() => {
     setSessionToken(sessionToken);
   }, [sessionToken]);
@@ -28,7 +42,6 @@ export default function DashboardStudentAILN({
   const memberQ = trpc.auth.checkAilMember.useQuery();
   const levelsQ = trpc.ailene.list.levels.useQuery();
   const chaptersQ = trpc.ailene.list.chapters.useQuery();
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   if (memberQ.isLoading || levelsQ.isLoading || chaptersQ.isLoading) {
     return (
@@ -66,20 +79,47 @@ export default function DashboardStudentAILN({
       return next;
     });
 
-  // Interleave chapters with level-divider when level transitions
+  // Interleave chapters with level-divider when level transitions.
+  // unlocked/claimable derived here so the render block stays presentational.
   type Item =
-    | { kind: "chapter"; chapter: Chapter; index: number }
-    | { kind: "level"; level: Level };
+    | {
+        kind: "chapter";
+        chapter: Chapter;
+        index: number;
+        unlocked: boolean;
+      }
+    | {
+        kind: "level";
+        level: Level;
+        unlocked: boolean;
+        claimable: boolean;
+      };
   const items: Item[] = [];
   let lastLevelId: number | null = null;
   let weekIndex = 0;
   for (const ch of chapters) {
     if (ch.level_id !== lastLevelId && lastLevelId !== null) {
       const newLevel = levelById.get(ch.level_id);
-      if (newLevel) items.push({ kind: "level", level: newLevel });
+      if (newLevel) {
+        const levelUnlocked = newLevel.level_number <= currentLevelNumber;
+        items.push({
+          kind: "level",
+          level: newLevel,
+          unlocked: levelUnlocked,
+          claimable: !levelUnlocked && member.total_xp >= newLevel.min_xp,
+        });
+      }
     }
     weekIndex += 1;
-    items.push({ kind: "chapter", chapter: ch, index: weekIndex });
+    const lvl = levelById.get(ch.level_id);
+    const levelOk = (lvl?.level_number ?? 0) <= currentLevelNumber;
+    const sessionStarted = !dayjs(ch.session_date).isAfter(dayjs());
+    items.push({
+      kind: "chapter",
+      chapter: ch,
+      index: weekIndex,
+      unlocked: levelOk && sessionStarted,
+    });
     lastLevelId = ch.level_id;
   }
 
@@ -94,7 +134,7 @@ export default function DashboardStudentAILN({
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-md border border-dashboard-border bg-white p-3 shadow-sm">
+            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
               {member.current_level?.icon && (
                 <Image
                   src={member.current_level.icon}
@@ -106,16 +146,16 @@ export default function DashboardStudentAILN({
               )}
               <div className="flex flex-col">
                 <div className="text-xs text-gray-500">Current Level</div>
-                <div className="text-lg font-bold">
+                <div className="font-bold">
                   Level {member.current_level?.level_number ?? 0}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 rounded-md border border-dashboard-border bg-white p-3 shadow-sm">
+            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
               <FontAwesomeIcon icon={faStar} className="text-warning" />
               <div className="flex flex-col">
                 <div className="text-xs text-gray-500">Total XP</div>
-                <div className="text-lg font-bold">
+                <div className="font-bold">
                   {member.total_xp.toLocaleString()} XP
                 </div>
               </div>
@@ -127,33 +167,25 @@ export default function DashboardStudentAILN({
         <div className="relative">
           <div className="absolute top-0 bottom-0 left-4 w-0.5 bg-red-200" />
           <div className="space-y-4">
-            {items.map((item, i) => {
-              if (item.kind === "level") {
-                const unlocked = item.level.level_number <= currentLevelNumber;
-                const claimable =
-                  !unlocked && member.total_xp >= item.level.min_xp;
-                return (
-                  <LevelDividerAILN
-                    key={`lvl-${item.level.id}-${i}`}
-                    level={item.level}
-                    unlocked={unlocked}
-                    claimable={claimable}
-                  />
-                );
-              }
-              const lvl = levelById.get(item.chapter.level_id);
-              const unlocked = (lvl?.level_number ?? 0) <= currentLevelNumber;
-              return (
+            {items.map((item, i) =>
+              item.kind === "level" ? (
+                <LevelDividerAILN
+                  key={`lvl-${item.level.id}-${i}`}
+                  level={item.level}
+                  unlocked={item.unlocked}
+                  claimable={item.claimable}
+                />
+              ) : (
                 <ChapterItemAILN
                   key={item.chapter.id}
                   chapter={item.chapter}
                   chapterNumber={item.index}
-                  unlocked={unlocked}
+                  unlocked={item.unlocked}
                   expanded={expanded.has(item.chapter.id)}
                   onToggle={() => toggle(item.chapter.id)}
                 />
-              );
-            })}
+              )
+            )}
           </div>
         </div>
       </div>

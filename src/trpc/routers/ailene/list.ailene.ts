@@ -2,6 +2,7 @@ import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
 import { ailMemberProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { type ChapterProgress } from "./utils.ailene";
 
 export const listAilene = {
   myGroups: ailMemberProcedure.query(async (opts) => {
@@ -26,11 +27,85 @@ export const listAilene = {
   }),
 
   chapters: ailMemberProcedure.query(async (opts) => {
-    const list = await opts.ctx.prisma.ailChapter.findMany({
-      where: { status: "ACTIVE" },
-      orderBy: { session_date: "asc" },
-      include: { level: true },
+    const memberId = opts.ctx.ail_member.id;
+
+    const [chapters, quizSubs, videoComps, materialComps] = await Promise.all([
+      opts.ctx.prisma.ailChapter.findMany({
+        where: { status: "ACTIVE" },
+        orderBy: { session_date: "asc" },
+        include: {
+          level: true,
+          _count: {
+            select: {
+              quizzes: { where: { status: "ACTIVE" } },
+              videos: { where: { status: "ACTIVE" } },
+              materials: { where: { status: "ACTIVE" } },
+            },
+          },
+        },
+      }),
+      opts.ctx.prisma.ailQuizSubmission.findMany({
+        where: { member_id: memberId, quiz: { status: "ACTIVE" } },
+        select: { quiz_id: true, quiz: { select: { chapter_id: true } } },
+      }),
+      opts.ctx.prisma.ailVideoCompletion.findMany({
+        where: { member_id: memberId, video: { status: "ACTIVE" } },
+        select: { video_id: true, video: { select: { chapter_id: true } } },
+      }),
+      opts.ctx.prisma.ailMaterialCompletion.findMany({
+        where: { member_id: memberId, material: { status: "ACTIVE" } },
+        select: {
+          material_id: true,
+          material: { select: { chapter_id: true } },
+        },
+      }),
+    ]);
+
+    // Build per-chapter sets of unique completed task IDs
+    const quizDone = new Map<number, Set<string>>();
+    for (const s of quizSubs) {
+      const cid = s.quiz.chapter_id;
+      if (!quizDone.has(cid)) quizDone.set(cid, new Set());
+      quizDone.get(cid)!.add(s.quiz_id);
+    }
+    const videoDone = new Map<number, Set<number>>();
+    for (const v of videoComps) {
+      const cid = v.video.chapter_id;
+      if (!videoDone.has(cid)) videoDone.set(cid, new Set());
+      videoDone.get(cid)!.add(v.video_id);
+    }
+    const materialDone = new Map<number, Set<string>>();
+    for (const m of materialComps) {
+      const cid = m.material.chapter_id;
+      if (!materialDone.has(cid)) materialDone.set(cid, new Set());
+      materialDone.get(cid)!.add(m.material_id);
+    }
+
+    const list = chapters.map((ch) => {
+      const totalTasks =
+        ch._count.quizzes + ch._count.videos + ch._count.materials;
+      const doneTasks =
+        (quizDone.get(ch.id)?.size ?? 0) +
+        (videoDone.get(ch.id)?.size ?? 0) +
+        (materialDone.get(ch.id)?.size ?? 0);
+
+      let progress: ChapterProgress;
+      if (totalTasks === 0 || doneTasks === 0) {
+        progress = "not_started";
+      } else if (doneTasks >= totalTasks) {
+        progress = "completed";
+      } else {
+        progress = "in_progress";
+      }
+
+      return {
+        ...ch,
+        progress,
+        done_tasks: doneTasks,
+        total_tasks: totalTasks,
+      };
     });
+
     return { code: STATUS_OK, message: "Success", list };
   }),
 
@@ -81,7 +156,7 @@ export const listAilene = {
         xpByKey.set(`${x.learning_type}:${x.learning_id}`, x.xp_earned);
 
       const quizMeta = new Map<
-        number,
+        string,
         { best_score: number; attempts: number }
       >();
       for (const s of submissions) {
@@ -95,7 +170,7 @@ export const listAilene = {
         vidDone.map((c: { video_id: number }) => c.video_id)
       );
       const matDoneSet = new Set(
-        matDone.map((c: { material_id: number }) => c.material_id)
+        matDone.map((c: { material_id: string }) => c.material_id)
       );
 
       return {
@@ -143,7 +218,7 @@ export const listAilene = {
     }),
 
   quizQuestions: ailMemberProcedure
-    .input(z.object({ quiz_id: z.number().int().positive() }))
+    .input(z.object({ quiz_id: z.string().min(1) }))
     .query(async (opts) => {
       const memberId = opts.ctx.ail_member.id;
       const { quiz_id } = opts.input;

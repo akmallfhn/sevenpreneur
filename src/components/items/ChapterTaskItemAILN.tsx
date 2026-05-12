@@ -1,6 +1,7 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
 import { TaskVariant } from "@/lib/app-types";
+import { trpc } from "@/trpc/client";
 import {
   faBookOpen,
   faCircleCheck,
@@ -12,10 +13,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
-const PASSING_SCORE = 70;
-
 interface Quiz {
-  id: number;
+  id: string;
   name: string;
   attempts: number;
   best_score: number | null;
@@ -33,7 +32,7 @@ interface Video {
 }
 
 interface Material {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
   file_url: string | null;
@@ -66,33 +65,43 @@ type ChapterTaskItemAILNProps =
 
 export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
   const style = variantStyles[props.variant];
+  const utils = trpc.useUtils();
+  const invalidateProgress = () => {
+    utils.ailene.list.tasks.invalidate();
+    utils.auth.checkAilMember.invalidate();
+  };
+  const completeMaterial = trpc.ailene.completeMaterial.useMutation({
+    onSuccess: invalidateProgress,
+  });
+  const completeVideo = trpc.ailene.completeVideo.useMutation({
+    onSuccess: invalidateProgress,
+  });
 
   let title = "";
   let meta = "";
   let xpReward = 0;
-  let isDone = false;
+  let hasMark = false;
   let cta: React.ReactNode = null;
 
   if (props.variant === "Quiz") {
     const q = props.quiz;
     const hasAttempt = q.attempts > 0;
-    const passed = q.best_score !== null && q.best_score >= PASSING_SCORE;
     title = q.name;
     xpReward = q.xp_reward;
-    isDone = passed;
+    hasMark = hasAttempt;
     meta = !props.unlocked
       ? "Locked"
       : !hasAttempt
         ? "Not taken yet"
         : `Score: ${q.best_score}%`;
     cta = !props.unlocked ? (
-      <ButtonAILN size="small" disabled>
+      <ButtonAILN size="small" disabled className="w-full">
         Locked
       </ButtonAILN>
     ) : (
-      <Link href={`/student/quizzes/${props.quiz.id}`}>
-        <ButtonAILN size="small">
-          {!hasAttempt ? "Take Quiz" : "See Result"}
+      <Link href={`/student/quizzes/${props.quiz.id}`} className="block">
+        <ButtonAILN size="small" className="w-full">
+          {!hasAttempt ? "Ikut Quiz" : "Lihat Hasil"}
         </ButtonAILN>
       </Link>
     );
@@ -100,43 +109,65 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     const v = props.video;
     title = v.title;
     xpReward = v.xp_reward;
-    isDone = v.completed;
+    hasMark = v.completed;
     meta = !props.unlocked
       ? "Locked"
       : v.completed
         ? "Watched"
         : "Not watched yet";
+    const handleCompleteVideo = () => {
+      if (!v.completed) {
+        completeVideo.mutate({ video_id: v.id });
+      }
+    };
     cta = !props.unlocked ? (
-      <ButtonAILN size="small" disabled>
+      <ButtonAILN size="small" disabled className="w-full">
         Locked
       </ButtonAILN>
     ) : (
-      <ButtonAILN
-        size="small"
-        onClick={() => window.open(v.video_url, "_blank")}
+      <a
+        href={v.video_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleCompleteVideo}
       >
-        Watch Recording
-      </ButtonAILN>
+        <ButtonAILN size="small" className="w-full">
+          Lihat Recording
+        </ButtonAILN>
+      </a>
     );
   } else {
     const m = props.material;
     title = m.title;
     xpReward = m.xp_reward;
-    isDone = m.completed;
+    hasMark = m.completed;
     meta = !props.unlocked ? "Locked" : m.completed ? "Read" : "Not started";
+    const handleCompleteMaterial = () => {
+      if (!m.completed) {
+        completeMaterial.mutate({ material_id: m.id });
+      }
+    };
     cta = !props.unlocked ? (
-      <ButtonAILN size="small" disabled>
+      <ButtonAILN size="small" disabled className="w-full">
         Locked
       </ButtonAILN>
-    ) : (
-      <ButtonAILN
-        size="small"
-        onClick={() => {
-          if (m.file_url) window.open(m.file_url, "_blank");
-        }}
+    ) : m.file_url ? (
+      <a
+        href={m.file_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleCompleteMaterial}
       >
-        Read Materi
-      </ButtonAILN>
+        <ButtonAILN size="small" className="w-full">
+          Baca Materi
+        </ButtonAILN>
+      </a>
+    ) : (
+      <Link href={`/student/materials/${props.material.id}`}>
+        <ButtonAILN size="small" className="w-full">
+          Baca Materi
+        </ButtonAILN>
+      </Link>
     );
   }
 
@@ -161,18 +192,18 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
         </div>
         <div className="text-sm font-semibold">{title}</div>
         <div className="mt-1 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-warning-background text-warning-foreground px-2 py-0.5 text-xs font-semibold">
-            <FontAwesomeIcon icon={faStar} className="h-3 w-3" />
+          <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border px-2 py-0.5 text-xs font-semibold">
+            <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-warning" />
             {xpReward} XP
           </span>
           <span className="text-xs text-gray-500">{meta}</span>
         </div>
       </div>
-      <div>{cta}</div>
+      <div className="w-32 shrink-0">{cta}</div>
       <div className="w-6">
         {locked ? (
           <FontAwesomeIcon icon={faLock} className="h-4 w-4 text-gray-400" />
-        ) : isDone ? (
+        ) : hasMark ? (
           <FontAwesomeIcon
             icon={faCircleCheck}
             className="h-5 w-5 text-red-500"
