@@ -47,6 +47,15 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
+      // Log errors from WhatsApp
+      if (change.value.errors) {
+        await LogError(
+          "whatsapp.webhook",
+          "An error happened",
+          ...change.value.errors
+        );
+      }
+
       // Only accept messages to our number
       if (
         change.value.metadata.phone_number_id !==
@@ -155,6 +164,16 @@ export async function POST(req: NextRequest) {
               "Failed to update status by message ID."
             );
             return new NextResponse(undefined, { status: 500 });
+          }
+
+          // Log errors from WhatsApp
+          if (status.errors) {
+            await LogError(
+              "whatsapp.webhook",
+              "An error happened when sending a message",
+              status.id,
+              ...status.errors
+            );
           }
         }
       }

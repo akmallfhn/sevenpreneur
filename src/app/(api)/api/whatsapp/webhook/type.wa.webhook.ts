@@ -72,6 +72,15 @@ export type WhatsAppWebhookMessage = {
     display_phone_number: string;
     phone_number_id: string;
   };
+  errors?: {
+    code: number;
+    title: string;
+    message: string;
+    error_data: {
+      details: string;
+    };
+    href: string;
+  }[];
   contacts?: {
     profile: {
       name: string;
@@ -153,5 +162,14 @@ export type WhatsAppWebhookMessage = {
       pricing_model: string;
       category: string;
     };
+    errors?: {
+      code: number;
+      title: string;
+      message: string;
+      error_data: {
+        details: string;
+      };
+      href: string;
+    }[];
   }[];
 };
