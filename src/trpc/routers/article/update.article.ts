@@ -33,7 +33,7 @@ export const updateArticle = {
             id: opts.input.id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedCategory.length,
         "article category",
         "article categories"
@@ -81,7 +81,7 @@ export const updateArticle = {
           id: opts.input.id,
         },
       });
-      checkUpdateResult(updatedArticle.length, "article", "articles");
+      await checkUpdateResult(updatedArticle.length, "article", "articles");
       return {
         code: STATUS_OK,
         message: "Success",

@@ -12,7 +12,7 @@ export const deleteArticle = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedCategory.count,
         "article category",
         "articleCategory"
@@ -31,7 +31,7 @@ export const deleteArticle = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedArticle.count, "article", "article");
+      await checkDeleteResult(deletedArticle.count, "article", "article");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

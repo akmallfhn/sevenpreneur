@@ -40,7 +40,7 @@ export const updateWA = {
             id: opts.input.id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedConversation.length,
         "conversation",
         "conversations"
@@ -74,7 +74,7 @@ export const updateWA = {
             id: opts.input.id,
           },
         });
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedConversation.length,
         "conversation",
         "conversations"
@@ -105,7 +105,12 @@ export const updateWA = {
         },
         where: { id: opts.input.id },
       });
-      checkUpdateResult(updatedAssets.length, "asset", "assets", "wa.asset");
+      await checkUpdateResult(
+        updatedAssets.length,
+        "asset",
+        "assets",
+        "wa.asset"
+      );
 
       return {
         code: STATUS_OK,
@@ -126,7 +131,12 @@ export const updateWA = {
         data: { scheduled_at: opts.input.scheduled_at },
         where: { id: opts.input.id },
       });
-      checkUpdateResult(updatedAlerts.length, "alert", "alerts", "wa.alert");
+      await checkUpdateResult(
+        updatedAlerts.length,
+        "alert",
+        "alerts",
+        "wa.alert"
+      );
 
       return {
         code: STATUS_OK,

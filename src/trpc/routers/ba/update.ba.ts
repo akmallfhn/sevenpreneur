@@ -34,7 +34,11 @@ export const updateBA = {
           },
         });
 
-      checkUpdateResult(updatedCategory.length, "BA category", "BA categories");
+      await checkUpdateResult(
+        updatedCategory.length,
+        "BA category",
+        "BA categories"
+      );
 
       return {
         code: STATUS_OK,
@@ -65,7 +69,7 @@ export const updateBA = {
           },
         });
 
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedSubcategory.length,
         "BA subcategory",
         "BA subcategories"
@@ -106,7 +110,11 @@ export const updateBA = {
           },
         });
 
-      checkUpdateResult(updatedQuestion.length, "BA question", "BA questions");
+      await checkUpdateResult(
+        updatedQuestion.length,
+        "BA question",
+        "BA questions"
+      );
 
       return {
         code: STATUS_OK,
@@ -148,7 +156,7 @@ export const updateBA = {
           },
         });
 
-        checkUpdateResult(
+        await checkUpdateResult(
           updatedAnswerSheet.length,
           "BA answer sheet",
           "BA answer sheets"
@@ -165,7 +173,7 @@ export const updateBA = {
             },
           });
 
-          checkUpdateResult(
+          await checkUpdateResult(
             updatedAnswerItem.length,
             "BA answer item",
             "BA answer items"

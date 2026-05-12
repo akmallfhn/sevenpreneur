@@ -418,7 +418,7 @@ export const useAITool = {
               id: convId,
             },
           });
-        checkUpdateResult(
+        await checkUpdateResult(
           updatedConversation.length,
           "AI conversation",
           "AI conversations"

@@ -14,7 +14,7 @@ export const deleteBD = {
             user_id: opts.ctx.user.id,
           },
         });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedRevenueMTD.count,
         "BD revenue MTD",
         "bd.revenue_mtd"
@@ -34,7 +34,11 @@ export const deleteBD = {
           user_id: opts.ctx.user.id,
         },
       });
-      checkDeleteResult(deletedCostMTD.count, "BD cost MTD", "bd.cost_mtd");
+      await checkDeleteResult(
+        deletedCostMTD.count,
+        "BD cost MTD",
+        "bd.cost_mtd"
+      );
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -57,7 +61,7 @@ export const deleteBD = {
               user_id: opts.ctx.user.id,
             },
           });
-        checkDeleteResult(
+        await checkDeleteResult(
           deletedNorthStarIndicator.count,
           "BD north star indicator",
           "bd.north_star_indicator"
@@ -81,7 +85,7 @@ export const deleteBD = {
             },
           },
         });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedNorthStarMTD.count,
         "BD north star MTD",
         "bd.north_star_mtd"

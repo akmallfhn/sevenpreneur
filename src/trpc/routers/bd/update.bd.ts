@@ -43,7 +43,7 @@ export const updateBD = {
           },
         });
 
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedRevenueMTD.length,
         "BD revenue MTD",
         "BD revenue MTDs"
@@ -93,7 +93,7 @@ export const updateBD = {
           },
         });
 
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedRevenueMTD.length,
         "BD revenue MTD",
         "BD revenue MTDs"
@@ -134,7 +134,11 @@ export const updateBD = {
           },
         });
 
-      checkUpdateResult(updatedCostMTD.length, "BD cost MTD", "BD cost MTDs");
+      await checkUpdateResult(
+        updatedCostMTD.length,
+        "BD cost MTD",
+        "BD cost MTDs"
+      );
 
       return {
         code: STATUS_OK,
@@ -170,7 +174,7 @@ export const updateBD = {
           },
         });
 
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedNorthStarIndicator.length,
         "BD north star indicator",
         "BD north star indicators"
@@ -209,7 +213,7 @@ export const updateBD = {
           },
         });
 
-      checkUpdateResult(
+      await checkUpdateResult(
         updatedNorthStarMTD.length,
         "BD north star MTD",
         "BD north star MTDs"

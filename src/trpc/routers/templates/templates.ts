@@ -167,7 +167,7 @@ export const updateTemplate = {
             id: opts.input.id,
           },
         });
-      checkUpdateResult(updatedTemplate.length, "template", "templates");
+      await checkUpdateResult(updatedTemplate.length, "template", "templates");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -185,7 +185,7 @@ export const deleteTemplate = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedTemplate.count, "templates", "template");
+      await checkDeleteResult(deletedTemplate.count, "templates", "template");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

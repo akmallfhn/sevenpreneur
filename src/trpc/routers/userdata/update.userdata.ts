@@ -70,7 +70,7 @@ export const updateUserData = {
           deleted_at: null,
         },
       });
-      checkUpdateResult(updatedUser.length, "user", "users");
+      await checkUpdateResult(updatedUser.length, "user", "users");
       return {
         code: STATUS_OK,
         message: "Success",
@@ -115,7 +115,7 @@ export const updateUserData = {
           deleted_at: null,
         },
       });
-      checkUpdateResult(updatedUser.length, "user", "users");
+      await checkUpdateResult(updatedUser.length, "user", "users");
       return {
         code: STATUS_OK,
         message: "Success",

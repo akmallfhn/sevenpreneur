@@ -11,7 +11,7 @@ export const deleteUserData = {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedUserCount: number = await opts.ctx.prisma
         .$executeRaw`UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ${opts.input.id}::uuid;`;
-      checkDeleteResult(deletedUserCount, "users", "user");
+      await checkDeleteResult(deletedUserCount, "users", "user");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

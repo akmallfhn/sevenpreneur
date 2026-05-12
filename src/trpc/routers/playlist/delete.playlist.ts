@@ -15,7 +15,7 @@ export const deletePlaylist = {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
       const deletedPlaylistCount: number = await opts.ctx.prisma
         .$executeRaw`UPDATE playlists SET deleted_at = CURRENT_TIMESTAMP, deleted_by = ${opts.ctx.user.id} WHERE id = ${opts.input.id};`;
-      checkDeleteResult(deletedPlaylistCount, "playlists", "playlist");
+      await checkDeleteResult(deletedPlaylistCount, "playlists", "playlist");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",
@@ -37,7 +37,7 @@ export const deletePlaylist = {
             user_id: opts.input.user_id,
           },
         });
-      checkDeleteResult(
+      await checkDeleteResult(
         deletedEducatorPlaylist.count,
         "educator playlists",
         "educatorPlaylist"
@@ -56,7 +56,7 @@ export const deletePlaylist = {
           id: opts.input.id,
         },
       });
-      checkDeleteResult(deletedVideo.count, "videos", "video");
+      await checkDeleteResult(deletedVideo.count, "videos", "video");
       return {
         code: STATUS_NO_CONTENT,
         message: "Success",

@@ -43,7 +43,7 @@ export const updateTransaction = {
             id: opts.input.id,
           },
         });
-      checkUpdateResult(updatedDiscount.length, "discount", "discounts");
+      await checkUpdateResult(updatedDiscount.length, "discount", "discounts");
       return {
         code: STATUS_OK,
         message: "Success",
