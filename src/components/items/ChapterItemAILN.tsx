@@ -1,7 +1,5 @@
 "use client";
-import ChapterTaskItemAILN, {
-  PreAssessmentItemAILN,
-} from "@/components/items/ChapterTaskItemAILN";
+import ChapterTaskItemAILN from "@/components/items/ChapterTaskItemAILN";
 import { trpc } from "@/trpc/client";
 import type { ChapterProgress } from "@/trpc/routers/ailene/utils.ailene";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -112,7 +110,8 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
             {tasksQ.data && (
               <div className="space-y-2 border-t border-dashboard-border px-4 py-3">
                 {props.isFirst && (
-                  <PreAssessmentItemAILN
+                  <ChapterTaskItemAILN
+                    variant="PreAssessment"
                     unlocked={props.unlocked}
                     completed={!!preAssessmentQ.data?.pre_assessment}
                   />

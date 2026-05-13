@@ -1,26 +1,44 @@
 "use client";
+import ButtonAILN from "@/components/buttons/ButtonAILN";
 import { useSidebar } from "@/contexts/SidebarContext";
+import { DeleteSession } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
-  faChartLine,
-  faCircleUser,
-  faChevronLeft,
-  faRightFromBracket,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  BookOpen,
+  CalendarDays,
+  ChevronLeft,
+  CircleUser,
+  LogOut,
+  UserRoundKey,
+  type LucideIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const HUTAMA_KARYA_LOGO =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Danantara_Indonesia.svg/1280px-Danantara_Indonesia.svg.png";
+  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-hk-danantara.webp";
+const HUTAMA_KARYA_LOGO_SQUARE =
+  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-hk-square.webp";
 const DEFAULT_AVATAR =
   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png";
 
-const MENUS = [
-  { name: "Dashboard", url: "/student", icon: faChartLine, exact: true },
-  { name: "Profile", url: "/student/profile", icon: faCircleUser },
+const MENUS: {
+  name: string;
+  url: string;
+  icon: LucideIcon;
+  exact?: boolean;
+}[] = [
+  { name: "Hari Ini", url: "/student", icon: CalendarDays, exact: true },
+  {
+    name: "Modul Belajar",
+    url: "/student/modules",
+    icon: BookOpen,
+    exact: true,
+  },
+  { name: "Profile", url: "/student/profile", icon: CircleUser },
 ];
 
 export default function SidebarStudentAILN({
@@ -30,10 +48,34 @@ export default function SidebarStudentAILN({
 }) {
   const { isCollapsed, toggleSidebar } = useSidebar();
   const pathname = usePathname();
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     if (sessionToken) setSessionToken(sessionToken);
   }, [sessionToken]);
+
+  let loginDomain = "sevenpreneur.com";
+  if (process.env.NEXT_PUBLIC_DOMAIN_MODE === "local") {
+    loginDomain = "example.com:3000";
+  }
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    try {
+      const res = await DeleteSession();
+      if (res.code === "NO_CONTENT") {
+        router.push(`https://www.${loginDomain}/auth/login`);
+      } else {
+        toast.error("Gagal logout. Coba lagi.");
+        setIsLoggingOut(false);
+      }
+    } catch {
+      toast.error("Gagal logout. Coba lagi.");
+      setIsLoggingOut(false);
+    }
+  };
 
   const userQ = trpc.auth.checkSession.useQuery(undefined, {
     enabled: !!sessionToken,
@@ -66,19 +108,18 @@ export default function SidebarStudentAILN({
           onClick={toggleSidebar}
           className="absolute -right-4 top-6 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm"
         >
-          <FontAwesomeIcon
-            icon={faChevronLeft}
+          <ChevronLeft
             className={`h-3 w-3 text-gray-500 transition-transform ${isCollapsed ? "rotate-180" : ""}`}
           />
         </button>
 
         {/* Logo full width */}
-        <div className="max-w-44 mb-6 flex items-center justify-center">
+        <div className="mb-8 flex items-center justify-center">
           <Image
-            src={HUTAMA_KARYA_LOGO}
+            src={isCollapsed ? HUTAMA_KARYA_LOGO_SQUARE : HUTAMA_KARYA_LOGO}
             alt="Hutama Karya"
             width={400}
-            height={160}
+            height={400}
             className={
               isCollapsed ? "h-10 w-10 object-contain" : "h-auto w-full"
             }
@@ -86,22 +127,23 @@ export default function SidebarStudentAILN({
         </div>
 
         {/* Menu */}
-        <nav className="flex flex-col gap-1 flex-1 overflow-y-auto">
+        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto">
           {MENUS.map((m) => {
             const active = m.exact
               ? pathname === m.url
               : pathname.startsWith(m.url);
+            const Icon = m.icon;
             return (
               <Link
                 key={m.url}
                 href={m.url}
-                className={`flex items-center gap-3 rounded-lg p-2 text-sm transition ${
+                className={`flex items-center gap-3 rounded-md p-2 text-sm transition ${
                   active
                     ? "bg-black text-white"
                     : "text-gray-700 hover:bg-gray-100 hover:text-black"
                 } ${isCollapsed ? "justify-center" : ""}`}
               >
-                <FontAwesomeIcon icon={m.icon} className="h-4 w-4 shrink-0" />
+                <Icon className="h-4 w-4 shrink-0" />
                 {!isCollapsed && <span className="font-medium">{m.name}</span>}
               </Link>
             );
@@ -125,7 +167,7 @@ export default function SidebarStudentAILN({
                     {user?.full_name ?? "..."}
                   </div>
                   <div className="truncate text-xs text-gray-500">
-                    {member?.role ?? ""}
+                    {member?.job_title ?? ""}
                   </div>
                 </div>
               </div>
@@ -137,16 +179,22 @@ export default function SidebarStudentAILN({
                   {groupName}
                 </div>
               </div>
-              <Link
-                href="/logout"
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-md border border-dashboard-border py-1.5 text-xs text-gray-600 hover:bg-gray-50"
-              >
-                <FontAwesomeIcon
-                  icon={faRightFromBracket}
-                  className="h-3 w-3"
-                />
-                Logout
+              <Link href="/champion" className="mt-2 block">
+                <ButtonAILN variant="light" size="small" className="w-full">
+                  <UserRoundKey className="size-4" />
+                  Mode Champion
+                </ButtonAILN>
               </Link>
+              <ButtonAILN
+                variant="destructive"
+                size="small"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="mt-2 w-full"
+              >
+                <LogOut className="size-4" />
+                {isLoggingOut ? "Logging out..." : "Logout"}
+              </ButtonAILN>
             </div>
           ) : (
             <Image

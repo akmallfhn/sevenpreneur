@@ -2,7 +2,7 @@
 import { FeatureTrackingProps, MetaObjectProps } from "@/lib/feature-tracking";
 import React, { ButtonHTMLAttributes, ForwardedRef, forwardRef } from "react";
 
-export type VariantType = "primary";
+export type VariantType = "primary" | "destructive" | "light";
 
 export type SizeType =
   | "default"
@@ -69,6 +69,10 @@ const ButtonAILN = forwardRef<HTMLButtonElement, ButtonAILNProps>(
     const variantClasses: Record<VariantType, string> = {
       primary:
         "bg-black text-white hover:bg-gray-800 active:bg-gray-700 disabled:bg-gray-300 disabled:text-gray-500",
+      destructive:
+        "bg-destructive-background text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active disabled:bg-destructive-muted dark:disabled:text-destructive-foreground/50",
+      light:
+        "bg-light-background text-light-foreground border hover:bg-light-hover active:bg-light-active disabled:bg-light-muted disabled:text-light-foreground/30",
     };
 
     const sizeClasses: Record<SizeType, string> = {
