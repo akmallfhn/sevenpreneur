@@ -115,10 +115,21 @@ export async function scheduleQuizAutoSubmit(
   submissionId: number,
   delaySeconds: number
 ): Promise<void> {
-  const qstash = GetQStashClient();
-  await qstash.publishJSON({
-    url: "https://api.sevenpreneur.com/qstash/auto-submit-quiz",
-    body: { submission_id: submissionId },
-    delay: delaySeconds,
-  });
+  try {
+    const qstash = GetQStashClient();
+    const res = await qstash.publishJSON({
+      url: "https://api.sevenpreneur.com/qstash/auto-submit-quiz",
+      body: { submission_id: submissionId },
+      delay: delaySeconds,
+    });
+    console.log(
+      `[qstash] auto-submit-quiz scheduled: submission=${submissionId} delay=${delaySeconds}s messageId=${res.messageId}`
+    );
+  } catch (err) {
+    console.error(
+      `[qstash] auto-submit-quiz publish FAILED: submission=${submissionId}`,
+      err
+    );
+    throw err;
+  }
 }
