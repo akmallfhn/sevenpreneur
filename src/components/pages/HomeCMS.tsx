@@ -121,7 +121,7 @@ export default function HomeCMS(props: HomeCMSProps) {
     data: metaData,
     isLoading: metaLoading,
     isError: metaError,
-  } = trpc.metaAds.getDailyMetrics.useQuery(
+  } = trpc.list.analytics.metaAdsDailyMetrics.useQuery(
     { days: dateRange },
     { enabled: !!props.sessionToken }
   );
@@ -130,7 +130,7 @@ export default function HomeCMS(props: HomeCMSProps) {
     data: gaData,
     isLoading: gaLoading,
     isError: gaError,
-  } = trpc.analytics.getDailyMetrics.useQuery(
+  } = trpc.list.analytics.ga4DailyMetrics.useQuery(
     { days: dateRange },
     { enabled: !!props.sessionToken }
   );
@@ -322,7 +322,7 @@ export default function HomeCMS(props: HomeCMSProps) {
           </div>
 
           {gaError && (
-            <InlineError message="Failed to load GA4 data. Check GA4_PROPERTY_ID and GOOGLE_SERVICE_ACCOUNT_JSON." />
+            <InlineError message="Failed to load GA4 data. Check GOOGLE_ANALYTICS_PROPERTY_ID and GOOGLE_SERVICE_ACCOUNT_JSON." />
           )}
           {gaData?.error && <InlineError message={`GA4: ${gaData.error}`} />}
 

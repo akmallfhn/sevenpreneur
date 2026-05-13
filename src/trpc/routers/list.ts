@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { listAITool } from "./ai_tool/list.ai_tool";
+import { listAnalytics } from "./analytics/list.analytics";
 import { listArticle } from "./article/list.article";
 import { listBA } from "./ba/list.ba";
 import { listBD } from "./bd/list.bd";
@@ -91,6 +92,13 @@ export const listRouter = createTRPCRouter({
 
   articleCategories: listArticle.articleCategories,
   articles: listArticle.articles,
+
+  // Analytics-related //
+
+  analytics: {
+    ga4DailyMetrics: listAnalytics.ga4DailyMetrics,
+    metaAdsDailyMetrics: listAnalytics.metaAdsDailyMetrics,
+  },
 
   // WhatsApp-chat-related //
 
