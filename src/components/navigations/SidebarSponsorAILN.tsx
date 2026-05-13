@@ -30,7 +30,12 @@ const MENUS: {
   icon: LucideIcon;
   exact?: boolean;
 }[] = [
-  { name: "Dashboard", url: "/sponsor", icon: LayoutDashboard, exact: true },
+  {
+    name: "Executive Overview",
+    url: "/sponsor",
+    icon: LayoutDashboard,
+    exact: true,
+  },
 ];
 
 export default function SidebarSponsorAILN({

@@ -1,5 +1,5 @@
-import AppPageState from "@/components/states/AppPageState";
-import { setSessionToken, trpc } from "@/trpc/server";
+import DashboardSponsorAILN from "@/components/pages/DashboardSponsorAILN";
+import { setSessionToken } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 
@@ -14,10 +14,5 @@ export default async function SponsorPage() {
   if (!sessionToken) return null;
   setSessionToken(sessionToken);
 
-  const ailMember = (await trpc.auth.checkAilMember()).ail_member;
-  if (!ailMember || ailMember.role !== "SPONSOR") {
-    return <AppPageState variant="FORBIDDEN" />;
-  }
-
-  return null;
+  return <DashboardSponsorAILN sessionToken={sessionToken} />;
 }
