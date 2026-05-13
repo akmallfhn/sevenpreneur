@@ -53,6 +53,8 @@ export const readAilene = {
           file_url: material.file_url,
           xp_reward: material.xp_reward,
           chapter: material.chapter,
+          created_at: material.created_at,
+          updated_at: material.updated_at,
         },
         completed: !!completion,
         completed_at: completion?.completed_at ?? null,

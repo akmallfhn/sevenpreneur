@@ -42,7 +42,6 @@ interface Material {
   id: string;
   title: string;
   completed: boolean;
-  file_url: string | null;
   xp_reward: number;
   xp_earned: number;
 }
@@ -84,9 +83,6 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     utils.ailene.list.tasks.invalidate();
     utils.auth.checkAilMember.invalidate();
   };
-  const completeMaterial = trpc.ailene.completeMaterial.useMutation({
-    onSuccess: invalidateProgress,
-  });
   const completeVideo = trpc.ailene.completeVideo.useMutation({
     onSuccess: invalidateProgress,
   });
@@ -164,26 +160,11 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     xpReward = m.xp_reward;
     hasMark = m.completed;
     meta = !props.unlocked ? "Locked" : m.completed ? "Read" : "Not started";
-    const handleCompleteMaterial = () => {
-      if (!m.completed) {
-        completeMaterial.mutate({ material_id: m.id });
-      }
-    };
+
     cta = !props.unlocked ? (
       <ButtonAILN size="small" disabled className="w-full">
         Locked
       </ButtonAILN>
-    ) : m.file_url ? (
-      <a
-        href={m.file_url}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={handleCompleteMaterial}
-      >
-        <ButtonAILN size="small" className="w-full">
-          Baca Materi
-        </ButtonAILN>
-      </a>
     ) : (
       <Link href={`/student/materials/${props.material.id}`}>
         <ButtonAILN size="small" className="w-full">
