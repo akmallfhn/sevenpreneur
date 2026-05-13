@@ -1,7 +1,6 @@
 import "@/app/globals.css";
 import AppPageState from "@/components/states/AppPageState";
 import { SidebarProvider } from "@/contexts/SidebarContext";
-import { ThemeProvider } from "next-themes";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -47,17 +46,15 @@ export default async function AileneLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <SidebarProvider>
-          <div className="font-read min-h-screen bg-dashboard-bg">
-            {props.children}
-            <div className="lg:hidden">
-              <AppPageState variant="ONLY_MOBILE" />
-            </div>
-            <Toaster richColors position="top-center" />
+      <SidebarProvider>
+        <div className="font-read min-h-screen bg-dashboard-bg">
+          {props.children}
+          <div className="lg:hidden">
+            <AppPageState variant="ONLY_MOBILE" />
           </div>
-        </SidebarProvider>
-      </ThemeProvider>
+          <Toaster richColors position="top-center" />
+        </div>
+      </SidebarProvider>
     </TRPCProvider>
   );
 }
