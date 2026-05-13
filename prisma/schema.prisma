@@ -259,6 +259,78 @@ enum AilLearningType {
   @@map("ail_learning_type")
 }
 
+// Pre-assessment single-choice enums (one per question)
+
+enum AilPaAiUseFreq {
+  NEVER     @map("never")
+  TRIED     @map("tried")
+  WEEKLY    @map("weekly")
+  DAILY     @map("daily")
+  INTENSIVE @map("intensive")
+
+  @@map("ail_pa_ai_use_freq")
+}
+
+enum AilPaUnderstanding {
+  NONE    @map("none")
+  AWARE   @map("aware")
+  BASIC   @map("basic")
+  EXPLAIN @map("explain")
+  EXPERT  @map("expert")
+
+  @@map("ail_pa_understanding")
+}
+
+enum AilPaOutputReview {
+  NO_CHECK    @map("no_check")
+  SOMETIMES   @map("sometimes")
+  ALWAYS      @map("always")
+  CROSS_CHECK @map("cross_check")
+  NO_USE      @map("no_use")
+
+  @@map("ail_pa_output_review")
+}
+
+enum AilPaTeamAdoption {
+  NONE       @map("none")
+  PERSONAL   @map("personal")
+  PILOT      @map("pilot")
+  POLICY     @map("policy")
+  INTEGRATED @map("integrated")
+
+  @@map("ail_pa_team_adoption")
+}
+
+enum AilPaPromptSkill {
+  NONE       @map("none")
+  BASIC      @map("basic")
+  DECENT     @map("decent")
+  STRUCTURED @map("structured")
+  EXPERT     @map("expert")
+
+  @@map("ail_pa_prompt_skill")
+}
+
+enum AilPaAttitude {
+  TOO_RISKY  @map("too_risky")
+  CAUTIOUS   @map("cautious")
+  NEUTRAL    @map("neutral")
+  SUPPORTIVE @map("supportive")
+  ESSENTIAL  @map("essential")
+
+  @@map("ail_pa_attitude")
+}
+
+enum AilPaMotivation {
+  MANDATORY @map("mandatory")
+  CURIOUS   @map("curious")
+  TENTATIVE @map("tentative")
+  READY     @map("ready")
+  EAGER     @map("eager")
+
+  @@map("ail_pa_motivation")
+}
+
 ////////////
 // Models //
 ////////////
@@ -1079,6 +1151,7 @@ model AilMember {
   video_completions    AilVideoCompletion[]
   material_completions AilMaterialCompletion[]
   xp_earnings          AilXpEarning[]
+  pre_assessment       AilPreAssessment?
 
   @@map("ail_members")
 }
@@ -1313,6 +1386,30 @@ model AilXpEarning {
 
   @@unique([member_id, learning_type, learning_id])
   @@map("ail_xp_earnings")
+}
+
+model AilPreAssessment {
+  id                        Int                @id @default(autoincrement()) @db.Integer
+  member                    AilMember          @relation(fields: [member_id], references: [id])
+  member_id                 Int                @unique @db.Integer
+  q1_ai_use_frequency       AilPaAiUseFreq
+  q2_ai_tools_used          String[]           @db.Text
+  q3_job_role               String             @db.VarChar()
+  q4_ai_understanding       AilPaUnderstanding
+  q5_ai_limitations         String[]           @db.Text
+  q6_output_review          AilPaOutputReview
+  q7_use_cases              String[]           @db.Text
+  q8_team_adoption          AilPaTeamAdoption
+  q9_concrete_example       String?            @db.VarChar()
+  q10_prompt_comfort        AilPaPromptSkill
+  q11_safety_practices      String[]           @db.Text
+  q12_professional_attitude AilPaAttitude
+  q13_biggest_challenge     String             @db.Text
+  q14_training_expectation  String             @db.Text
+  q15_motivation            AilPaMotivation
+  created_at                DateTime           @default(now()) @db.Timestamptz()
+
+  @@map("ail_pre_assessments")
 }
 
 view UserTemplate {

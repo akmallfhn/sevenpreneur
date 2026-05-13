@@ -1,5 +1,7 @@
 "use client";
-import ChapterTaskItemAILN from "@/components/items/ChapterTaskItemAILN";
+import ChapterTaskItemAILN, {
+  PreAssessmentItemAILN,
+} from "@/components/items/ChapterTaskItemAILN";
 import { trpc } from "@/trpc/client";
 import type { ChapterProgress } from "@/trpc/routers/ailene/utils.ailene";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +28,7 @@ interface ChapterItemAILNProps {
   chapterNumber: number;
   unlocked: boolean;
   expanded: boolean;
+  isFirst: boolean;
   onToggle: () => void;
 }
 
@@ -34,6 +37,9 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
     { chapter_id: props.chapter.id },
     { enabled: props.expanded }
   );
+  const preAssessmentQ = trpc.ailene.read.myPreAssessment.useQuery(undefined, {
+    enabled: props.expanded && props.isFirst,
+  });
 
   return (
     <div className="relative pl-12">
@@ -105,6 +111,12 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
             )}
             {tasksQ.data && (
               <div className="space-y-2 border-t border-dashboard-border px-4 py-3">
+                {props.isFirst && (
+                  <PreAssessmentItemAILN
+                    unlocked={props.unlocked}
+                    completed={!!preAssessmentQ.data?.pre_assessment}
+                  />
+                )}
                 {tasksQ.data.quizzes.map((q) => (
                   <ChapterTaskItemAILN
                     key={`q-${q.id}`}
@@ -137,3 +149,4 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
     </div>
   );
 }
+

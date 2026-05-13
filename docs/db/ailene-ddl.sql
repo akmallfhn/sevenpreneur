@@ -24,6 +24,64 @@ CREATE TYPE ail_learning_type AS ENUM (
   'material'
 );
 
+-- Pre-assessment single-choice enums (one per question)
+
+CREATE TYPE ail_pa_ai_use_freq AS ENUM (
+  'never',
+  'tried',
+  'weekly',
+  'daily',
+  'intensive'
+);
+
+CREATE TYPE ail_pa_understanding AS ENUM (
+  'none',
+  'aware',
+  'basic',
+  'explain',
+  'expert'
+);
+
+CREATE TYPE ail_pa_output_review AS ENUM (
+  'no_check',
+  'sometimes',
+  'always',
+  'cross_check',
+  'no_use'
+);
+
+CREATE TYPE ail_pa_team_adoption AS ENUM (
+  'none',
+  'personal',
+  'pilot',
+  'policy',
+  'integrated'
+);
+
+CREATE TYPE ail_pa_prompt_skill AS ENUM (
+  'none',
+  'basic',
+  'decent',
+  'structured',
+  'expert'
+);
+
+CREATE TYPE ail_pa_attitude AS ENUM (
+  'too_risky',
+  'cautious',
+  'neutral',
+  'supportive',
+  'essential'
+);
+
+CREATE TYPE ail_pa_motivation AS ENUM (
+  'mandatory',
+  'curious',
+  'tentative',
+  'ready',
+  'eager'
+);
+
 ------------
 -- Tables --
 ------------
@@ -241,6 +299,30 @@ CREATE TABLE ail_xp_earnings (
     UNIQUE (member_id, learning_type, learning_id)
 );
 
+-- One-time pre-assessment per member (intake survey before training)
+-- Single-choice answers use semantic enums; multi-choice answers use text[]
+
+CREATE TABLE ail_pre_assessments (
+    id                        SERIAL                 PRIMARY KEY,
+    member_id                 INTEGER                NOT NULL UNIQUE,
+    q1_ai_use_frequency       ail_pa_ai_use_freq     NOT NULL,
+    q2_ai_tools_used          TEXT[]                 NOT NULL DEFAULT '{}',
+    q3_job_role               VARCHAR                NOT NULL,
+    q4_ai_understanding       ail_pa_understanding   NOT NULL,
+    q5_ai_limitations         TEXT[]                 NOT NULL DEFAULT '{}',
+    q6_output_review          ail_pa_output_review   NOT NULL,
+    q7_use_cases              TEXT[]                 NOT NULL DEFAULT '{}',
+    q8_team_adoption          ail_pa_team_adoption   NOT NULL,
+    q9_concrete_example       VARCHAR                    NULL,
+    q10_prompt_comfort        ail_pa_prompt_skill    NOT NULL,
+    q11_safety_practices      TEXT[]                 NOT NULL DEFAULT '{}',
+    q12_professional_attitude ail_pa_attitude        NOT NULL,
+    q13_biggest_challenge     TEXT                   NOT NULL,
+    q14_training_expectation  TEXT                   NOT NULL,
+    q15_motivation            ail_pa_motivation      NOT NULL,
+    created_at                TIMESTAMPTZ            NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 ----------------
 -- References --
 ----------------
@@ -287,6 +369,9 @@ ALTER TABLE ail_material_completions
   ADD FOREIGN KEY (material_id) REFERENCES ail_materials (id);
 
 ALTER TABLE ail_xp_earnings
+  ADD FOREIGN KEY (member_id) REFERENCES ail_members (id);
+
+ALTER TABLE ail_pre_assessments
   ADD FOREIGN KEY (member_id) REFERENCES ail_members (id);
 
 --------------

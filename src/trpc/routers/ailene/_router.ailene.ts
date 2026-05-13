@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { championAilene } from "./champion.ailene";
 import { listAilene } from "./list.ailene";
+import { preAssessmentAilene } from "./pre-assessment.ailene";
 import { readAilene } from "./read.ailene";
 import { updateAilene } from "./update.ailene";
 
@@ -15,6 +16,7 @@ export const aileneRouter = createTRPCRouter({
   read: createTRPCRouter({
     materialDetail: readAilene.materialDetail,
     quizResult: readAilene.quizResult,
+    myPreAssessment: preAssessmentAilene.myPreAssessment,
   }),
   champion: createTRPCRouter({
     listGroups: championAilene.listGroups,
@@ -26,4 +28,5 @@ export const aileneRouter = createTRPCRouter({
   submitQuiz: updateAilene.submitQuiz,
   completeMaterial: updateAilene.completeMaterial,
   completeVideo: updateAilene.completeVideo,
+  submitPreAssessment: preAssessmentAilene.submitPreAssessment,
 });
