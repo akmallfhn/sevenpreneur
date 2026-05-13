@@ -37,16 +37,13 @@ export default function DashboardChampionAILN({
     setSessionToken(sessionToken);
   }, [sessionToken]);
 
-  const [groupId, setGroupId] = useState<number | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<
     "" | "on_track" | "at_risk" | "behind"
   >("");
   const [search, setSearch] = useState("");
 
   const groupsQ = trpc.ailene.champion.listGroups.useQuery();
-  const membersQ = trpc.ailene.champion.listMembers.useQuery({
-    group_id: groupId,
-  });
+  const membersQ = trpc.ailene.champion.listMembers.useQuery({});
 
   if (groupsQ.isLoading || membersQ.isLoading) {
     return (
@@ -63,7 +60,6 @@ export default function DashboardChampionAILN({
     );
   }
 
-  const groups = groupsQ.data?.list ?? [];
   const stats = membersQ.data?.stats ?? {
     total: 0,
     on_track: 0,
@@ -94,7 +90,6 @@ export default function DashboardChampionAILN({
       <div className="flex w-full flex-col gap-6">
         {/* Header */}
         <div className="flex items-start gap-3">
-          <FontAwesomeIcon icon={faUsers} className="mt-1 h-7 w-7 text-blue-500" />
           <div>
             <h1 className="text-2xl font-bold">Team Overview</h1>
             <p className="text-sm text-gray-500">
@@ -107,38 +102,38 @@ export default function DashboardChampionAILN({
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatCard
             icon={faUsers}
-            iconClass="bg-blue-100 text-blue-500"
+            iconClass="bg-emerald-50 text-emerald-700"
             label="Total Members"
             value={stats.total}
             sub="Active learners"
           />
           <StatCard
             icon={faChartLine}
-            iconClass="bg-green-100 text-green-600"
+            iconClass="bg-emerald-50 text-emerald-700"
             label="On Track"
             value={stats.on_track}
             sub={`${pct(stats.on_track, stats.total)}% of team`}
           />
           <StatCard
             icon={faClock}
-            iconClass="bg-yellow-100 text-yellow-600"
+            iconClass="bg-emerald-50 text-emerald-700"
             label="At Risk"
             value={stats.at_risk}
             sub={`${pct(stats.at_risk, stats.total)}% of team`}
           />
           <StatCard
             icon={faTriangleExclamation}
-            iconClass="bg-red-100 text-red-500"
+            iconClass="bg-emerald-50 text-emerald-700"
             label="Behind"
             value={stats.behind}
             sub={`${pct(stats.behind, stats.total)}% of team`}
           />
         </div>
 
-        {/* Main + sidebar */}
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_320px]">
+        {/* Team members + coaching alerts (stacked, full width) */}
+        <div className="flex flex-col gap-4">
           {/* Table */}
-          <div className="rounded-xl border bg-white p-4 shadow-sm">
+          <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div>
                 <div className="text-base font-bold">Team Members</div>
@@ -147,34 +142,16 @@ export default function DashboardChampionAILN({
                   placeholder="Search member…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="mt-2 w-64 rounded-lg border px-3 py-1.5 text-sm"
+                  className="mt-2 w-64 rounded-lg border border-dashboard-border px-3 py-1.5 text-sm transition focus:border-emerald-500 focus:outline-none"
                 />
               </div>
               <div className="flex items-center gap-2">
-                {groups.length > 0 && (
-                  <select
-                    value={groupId ?? ""}
-                    onChange={(e) =>
-                      setGroupId(
-                        e.target.value ? Number(e.target.value) : undefined
-                      )
-                    }
-                    className="rounded-lg border px-3 py-1.5 text-sm"
-                  >
-                    <option value="">All Groups</option>
-                    {groups.map((g) => (
-                      <option key={g.id} value={g.id}>
-                        {g.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
                 <select
                   value={statusFilter}
                   onChange={(e) =>
                     setStatusFilter(e.target.value as typeof statusFilter)
                   }
-                  className="rounded-lg border px-3 py-1.5 text-sm"
+                  className="rounded-lg border border-dashboard-border px-3 py-1.5 text-sm text-emerald-700 transition focus:border-emerald-500 focus:outline-none"
                 >
                   <option value="">Filter Status</option>
                   <option value="on_track">On Track</option>
@@ -200,7 +177,10 @@ export default function DashboardChampionAILN({
                 <tbody>
                   {filtered.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-8 text-center text-gray-400">
+                      <td
+                        colSpan={7}
+                        className="py-8 text-center text-gray-400"
+                      >
                         No members found.
                       </td>
                     </tr>
@@ -208,7 +188,7 @@ export default function DashboardChampionAILN({
                     filtered.map((m) => (
                       <tr
                         key={m.member_id}
-                        className="border-t hover:bg-gray-50"
+                        className="border-t border-dashboard-border hover:bg-gray-50"
                       >
                         <td className="px-2 py-3">
                           <div className="flex items-center gap-2">
@@ -261,7 +241,7 @@ export default function DashboardChampionAILN({
                             </span>
                             <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200">
                               <div
-                                className="h-full bg-blue-500"
+                                className="h-full bg-[#107158]"
                                 style={{ width: `${m.progress_percent}%` }}
                               />
                             </div>
@@ -288,19 +268,26 @@ export default function DashboardChampionAILN({
             </div>
           </div>
 
-          {/* Coaching Alerts sidebar */}
-          <div className="rounded-xl border bg-white p-4 shadow-sm">
-            <div className="mb-3 text-base font-bold">Coaching Alerts</div>
+          {/* Coaching Alerts */}
+          <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="text-base font-bold">Coaching Alerts</div>
+              {alerts.length > 0 && (
+                <span className="rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-600">
+                  {alerts.length} perlu perhatian
+                </span>
+              )}
+            </div>
             {alerts.length === 0 ? (
               <div className="text-sm text-gray-400">
                 No alerts. Everyone&apos;s on track 🎉
               </div>
             ) : (
-              <div className="space-y-3">
-                {alerts.slice(0, 5).map((m) => (
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {alerts.map((m) => (
                   <div
                     key={m.member_id}
-                    className="rounded-lg border bg-gray-50 p-3"
+                    className="rounded-lg border border-dashboard-border bg-gray-50 p-3"
                   >
                     <div className="flex items-center gap-2">
                       {m.user.avatar ? (
@@ -313,13 +300,13 @@ export default function DashboardChampionAILN({
                       ) : (
                         <div className="h-8 w-8 rounded-full bg-gray-200" />
                       )}
-                      <div className="flex-1">
+                      <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold">
+                          <span className="truncate text-sm font-semibold">
                             {m.user.full_name}
                           </span>
                           <span
-                            className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${statusMeta[m.status].cls}`}
+                            className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium ${statusMeta[m.status].cls}`}
                           >
                             {statusMeta[m.status].label}
                           </span>
@@ -350,11 +337,11 @@ function StatCard(props: {
   sub: string;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border bg-white p-4 shadow-sm">
+    <div className="flex items-center gap-3 rounded-lg border border-dashboard-border bg-white p-4 shadow-sm">
       <div
         className={`flex h-12 w-12 items-center justify-center rounded-lg ${props.iconClass}`}
       >
-        <FontAwesomeIcon icon={props.icon} className="h-5 w-5" />
+        <FontAwesomeIcon icon={props.icon} size="lg" />
       </div>
       <div>
         <div className="text-sm text-gray-500">{props.label}</div>

@@ -33,7 +33,12 @@ const MENUS: {
   icon: LucideIcon;
   exact?: boolean;
 }[] = [
-  { name: "Team Overview", url: "/champion", icon: LayoutDashboard, exact: true },
+  {
+    name: "Team Overview",
+    url: "/champion",
+    icon: LayoutDashboard,
+    exact: true,
+  },
   { name: "Members", url: "/champion/members", icon: UsersRound },
 ];
 
@@ -114,7 +119,7 @@ export default function SidebarChampionAILN({
         </button>
 
         {/* Logo full width */}
-        <div className="mb-8 flex items-center justify-center">
+        <div className="mb-6 flex items-center justify-center">
           <Image
             src={isCollapsed ? HUTAMA_KARYA_LOGO_SQUARE : HUTAMA_KARYA_LOGO}
             alt="Hutama Karya"
@@ -124,6 +129,23 @@ export default function SidebarChampionAILN({
               isCollapsed ? "h-10 w-10 object-contain" : "h-auto w-full"
             }
           />
+        </div>
+
+        {/* Mode indicator */}
+        <div
+          className={`mb-4 flex items-center rounded-md border border-dashboard-border bg-white ${
+            isCollapsed ? "justify-center p-2" : "gap-2 px-3 py-2"
+          }`}
+        >
+          <span
+            className="size-2 shrink-0 rounded-full"
+            style={{ backgroundColor: ACCENT }}
+          />
+          {!isCollapsed && (
+            <span className="text-xs font-semibold text-gray-700">
+              Dashboard Champion
+            </span>
+          )}
         </div>
 
         {/* Menu */}
@@ -192,7 +214,7 @@ export default function SidebarChampionAILN({
                 </ButtonAILN>
               </Link>
               <ButtonAILN
-                variant="destructive"
+                variant="secondary"
                 size="small"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
