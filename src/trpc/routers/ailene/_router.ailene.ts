@@ -17,6 +17,10 @@ export const aileneRouter = createTRPCRouter({
     materialDetail: readAilene.materialDetail,
     quizResult: readAilene.quizResult,
     myPreAssessment: preAssessmentAilene.myPreAssessment,
+    todayFocus: readAilene.todayFocus,
+    levelProgress: readAilene.levelProgress,
+    streak: readAilene.streak,
+    groupLeaderboard: readAilene.groupLeaderboard,
   }),
   champion: createTRPCRouter({
     listGroups: championAilene.listGroups,

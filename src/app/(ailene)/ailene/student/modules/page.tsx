@@ -1,4 +1,4 @@
-import DashboardStudentAILN from "@/components/pages/DashboardStudentAILN";
+import ModuleListStudentAILN from "@/components/indexes/ModuleListStudentAILN";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
@@ -23,5 +23,5 @@ export default async function ModulesPage() {
     return <AppPageState variant="FORBIDDEN" />;
   }
 
-  return <DashboardStudentAILN sessionToken={sessionToken} />;
+  return <ModuleListStudentAILN sessionToken={sessionToken} />;
 }
