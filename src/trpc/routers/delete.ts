@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { deleteAITool } from "./ai_tool/delete.ai_tool";
 import { deleteWA } from "./wa/delete.wa";
 import { deleteArticle } from "./article/delete.article";
+import { deleteB2B } from "./b2b/delete.b2b";
 import { deleteBA } from "./ba/delete.ba";
 import { deleteBD } from "./bd/delete.bd";
 import { deleteEvent } from "./event/delete.event";
@@ -82,5 +83,12 @@ export const deleteRouter = createTRPCRouter({
   wa: {
     asset: deleteWA.asset,
     alert: deleteWA.alert,
+  },
+
+  // B2B Sales Pipeline //
+
+  b2b: {
+    pipeline: deleteB2B.pipeline,
+    action: deleteB2B.action,
   },
 });

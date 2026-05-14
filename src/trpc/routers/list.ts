@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { listAITool } from "./ai_tool/list.ai_tool";
 import { listAnalytics } from "./analytics/list.analytics";
 import { listArticle } from "./article/list.article";
+import { listB2B } from "./b2b/list.b2b";
 import { listBA } from "./ba/list.ba";
 import { listBD } from "./bd/list.bd";
 import { listEvent } from "./event/list.event";
@@ -107,5 +108,12 @@ export const listRouter = createTRPCRouter({
     chats: listWA.chats,
     assets: listWA.assets,
     alerts: listWA.alerts,
+  },
+
+  // B2B Sales Pipeline //
+
+  b2b: {
+    pipelines: listB2B.pipelines,
+    actions: listB2B.actions,
   },
 });

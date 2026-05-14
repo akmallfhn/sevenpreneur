@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { createArticle } from "./article/create.article";
+import { createB2B } from "./b2b/create.b2b";
 import { createWA } from "./wa/create.wa";
 import { createBA } from "./ba/create.ba";
 import { createBD } from "./bd/create.bd";
@@ -80,5 +81,12 @@ export const createRouter = createTRPCRouter({
   wa: {
     asset: createWA.asset,
     alert: createWA.alert,
+  },
+
+  // B2B Sales Pipeline //
+
+  b2b: {
+    pipeline: createB2B.pipeline,
+    action: createB2B.action,
   },
 });

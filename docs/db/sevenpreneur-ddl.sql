@@ -181,6 +181,47 @@ CREATE TYPE wa_alert_status AS ENUM (
   'bounced'
 );
 
+-- Enumeration for the b2b_pipeline table (b2b_*)
+
+CREATE TYPE b2b_product_enum AS ENUM (
+  'sponsorship',
+  'corporate_training',
+  'corporate_ai_training'
+);
+
+CREATE TYPE b2b_source_enum AS ENUM (
+  'social_media',
+  'founder_network',
+  'event_conference',
+  'referral_partner',
+  'referral_client',
+  'website'
+);
+
+CREATE TYPE b2b_stage_enum AS ENUM (
+  'lead_identified',
+  'contacted',
+  'negotiation',
+  'verbal_commit',
+  'closed_won',
+  'closed_lost',
+  'on_hold'
+);
+
+-- Enumeration for the b2b_actions table (b2ba_*)
+
+CREATE TYPE b2ba_activity_type_enum AS ENUM (
+  'chat_whatsapp',
+  'cold_email',
+  'phone_call',
+  'conference_call',
+  'offline_meeting',
+  'in_person_meeting',
+  'sent_proposal',
+  'sent_contract',
+  'follow_up'
+);
+
 ------------
 -- Tables --
 ------------
@@ -779,6 +820,34 @@ CREATE TABLE wa_alerts (
   updated_at        TIMESTAMPTZ      NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
+-- B2B Sales Pipeline
+
+CREATE TABLE b2b_pipeline (
+  id             SERIAL            PRIMARY KEY,
+  name           VARCHAR           NOT NULL,
+  pic_name       VARCHAR               NULL,
+  pic_job_title  VARCHAR               NULL,
+  pic_wa         VARCHAR               NULL,
+  pic_email      VARCHAR               NULL,
+  product        b2b_product_enum  NOT NULL,
+  source         b2b_source_enum   NOT NULL,
+  stage          b2b_stage_enum    NOT NULL,
+  probability    SMALLINT          NOT NULL  CHECK (probability BETWEEN 1 AND 100),
+  project_value  DECIMAL(15, 2)    NOT NULL,
+  owner_id       UUID              NOT NULL,
+  created_at     TIMESTAMPTZ       NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at     TIMESTAMPTZ       NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE b2b_actions (
+  id             SERIAL                   PRIMARY KEY,
+  company_id     INTEGER                  NOT NULL,
+  activity_type  b2ba_activity_type_enum  NOT NULL,
+  summary        TEXT                     NOT NULL,
+  created_at     TIMESTAMPTZ              NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at     TIMESTAMPTZ              NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Error Logs
 
 CREATE TABLE error_logs (
@@ -964,6 +1033,14 @@ ALTER TABLE wa_chats
 
 ALTER TABLE wa_alerts
   ADD FOREIGN KEY (conv_id) REFERENCES wa_conversations (id);
+
+-- B2B Sales Pipeline
+
+ALTER TABLE b2b_pipeline
+  ADD FOREIGN KEY (owner_id) REFERENCES users (id);
+
+ALTER TABLE b2b_actions
+  ADD FOREIGN KEY (company_id) REFERENCES b2b_pipeline (id) ON DELETE CASCADE;
 
 -- Relation Tables --
 
@@ -1230,6 +1307,18 @@ CREATE TRIGGER update_wa_assets_updated_at_trigger
 
 CREATE TRIGGER update_wa_alerts_updated_at_trigger
   BEFORE UPDATE ON wa_alerts
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+-- B2B Sales Pipeline
+
+CREATE TRIGGER update_b2b_pipeline_updated_at_trigger
+  BEFORE UPDATE ON b2b_pipeline
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_b2b_actions_updated_at_trigger
+  BEFORE UPDATE ON b2b_actions
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
 

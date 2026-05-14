@@ -2,6 +2,7 @@ import { createTRPCRouter } from "@/trpc/init";
 import { readAdv } from "./ads/read.ads";
 import { readAIResult } from "./ai_tool/read.ai_tool";
 import { readArticle } from "./article/read.article";
+import { readB2B } from "./b2b/read.b2b";
 import { readBA } from "./ba/read.ba";
 import { readBD } from "./bd/read.bd";
 import { readEvent } from "./event/read.event";
@@ -109,5 +110,12 @@ export const readRouter = createTRPCRouter({
     conversation: readWA.conversation,
     asset: readWA.asset,
     alert: readWA.alert,
+  },
+
+  // B2B Sales Pipeline //
+
+  b2b: {
+    pipeline: readB2B.pipeline,
+    action: readB2B.action,
   },
 });

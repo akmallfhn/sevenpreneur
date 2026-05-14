@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/trpc/init";
 import { updateAdv } from "./ads/update.ads";
 import { updateArticle } from "./article/update.article";
+import { updateB2B } from "./b2b/update.b2b";
 import { updateBA } from "./ba/update.ba";
 import { updateBD } from "./bd/update.bd";
 import { updateEvent } from "./event/update.event";
@@ -87,5 +88,12 @@ export const updateRouter = createTRPCRouter({
     conversation_as_read: updateWA.conversation_as_read,
     asset: updateWA.asset,
     alert: updateWA.alert,
+  },
+
+  // B2B Sales Pipeline //
+
+  b2b: {
+    pipeline: updateB2B.pipeline,
+    action: updateB2B.action,
   },
 });

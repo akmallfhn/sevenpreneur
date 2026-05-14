@@ -232,6 +232,53 @@ enum WAAStatus {
   @@map("wa_alert_status")
 }
 
+// Enumerations for B2B Sales Pipeline (B2B*)
+
+enum B2BProductEnum {
+  SPONSORSHIP           @map("sponsorship")
+  CORPORATE_TRAINING    @map("corporate_training")
+  CORPORATE_AI_TRAINING @map("corporate_ai_training")
+
+  @@map("b2b_product_enum")
+}
+
+enum B2BSourceEnum {
+  SOCIAL_MEDIA     @map("social_media")
+  FOUNDER_NETWORK  @map("founder_network")
+  EVENT_CONFERENCE @map("event_conference")
+  REFERRAL_PARTNER @map("referral_partner")
+  REFERRAL_CLIENT  @map("referral_client")
+  WEBSITE          @map("website")
+
+  @@map("b2b_source_enum")
+}
+
+enum B2BStageEnum {
+  LEAD_IDENTIFIED @map("lead_identified")
+  CONTACTED       @map("contacted")
+  NEGOTIATION     @map("negotiation")
+  VERBAL_COMMIT   @map("verbal_commit")
+  CLOSED_WON      @map("closed_won")
+  CLOSED_LOST     @map("closed_lost")
+  ON_HOLD         @map("on_hold")
+
+  @@map("b2b_stage_enum")
+}
+
+enum B2BActivityTypeEnum {
+  CHAT_WHATSAPP     @map("chat_whatsapp")
+  COLD_EMAIL        @map("cold_email")
+  PHONE_CALL        @map("phone_call")
+  CONFERENCE_CALL   @map("conference_call")
+  OFFLINE_MEETING   @map("offline_meeting")
+  IN_PERSON_MEETING @map("in_person_meeting")
+  SENT_PROPOSAL     @map("sent_proposal")
+  SENT_CONTRACT     @map("sent_contract")
+  FOLLOW_UP         @map("follow_up")
+
+  @@map("b2ba_activity_type_enum")
+}
+
 // Enumerations for Ailene (Ail*)
 
 enum AilRole {
@@ -437,6 +484,7 @@ model User {
   wa_conversations         WAConversation[]       @relation("wa_conversation")
   wa_handleds              WAConversation[]       @relation("wa_handle")
   ail_member               AilMember?
+  b2b_pipelines            B2BPipeline[]
 
   @@map("users")
 }
@@ -1122,6 +1170,41 @@ model WAAlert {
   updated_at       DateTime       @default(now()) @updatedAt @db.Timestamptz()
 
   @@map("wa_alerts")
+}
+
+// B2B Sales Pipeline //
+
+model B2BPipeline {
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar()
+  pic_name      String?        @db.VarChar()
+  pic_job_title String?        @db.VarChar()
+  pic_wa        String?        @db.VarChar()
+  pic_email     String?        @db.VarChar()
+  product       B2BProductEnum
+  source        B2BSourceEnum
+  stage         B2BStageEnum
+  probability   Int            @db.SmallInt
+  project_value Decimal        @db.Decimal(15, 2)
+  owner         User           @relation(fields: [owner_id], references: [id])
+  owner_id      String         @db.Uuid
+  created_at    DateTime       @default(now()) @db.Timestamptz()
+  updated_at    DateTime       @default(now()) @updatedAt @db.Timestamptz()
+  actions       B2BAction[]
+
+  @@map("b2b_pipeline")
+}
+
+model B2BAction {
+  id            Int                 @id @default(autoincrement())
+  company       B2BPipeline         @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  company_id    Int
+  activity_type B2BActivityTypeEnum
+  summary       String              @db.Text
+  created_at    DateTime            @default(now()) @db.Timestamptz()
+  updated_at    DateTime            @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("b2b_actions")
 }
 
 // Ailene //

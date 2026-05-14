@@ -4,6 +4,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   BanknoteArrowDown,
+  Building2,
   CircleUserIcon,
   FlagTriangleRight,
   Globe,
@@ -49,6 +50,7 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     "Class Manager",
   ];
   const allowedRolesMenuTransactions = ["Super Admin"];
+  const allowedRolesMenuB2BPipeline = ["Administrator", "Super Admin"];
   const allowedRolesMenuWebMarketing = [
     "Administrator",
     "Super Admin",
@@ -79,6 +81,9 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     props.sessionUserRoleName
   );
   const isAllowedMenuWhatsapp = allowedRolesMenuWhatsapp.includes(
+    props.sessionUserRoleName
+  );
+  const isAllowedMenuB2BPipeline = allowedRolesMenuB2BPipeline.includes(
     props.sessionUserRoleName
   );
 
@@ -127,7 +132,9 @@ export default function SidebarCMS(props: SidebarCMSProps) {
           )}
         </AppSidebarGroupMenu>
       )}
-      {(isAllowedMenuUsers || isAllowedMenuTransactions) && (
+      {(isAllowedMenuUsers ||
+        isAllowedMenuTransactions ||
+        isAllowedMenuB2BPipeline) && (
         <AppSidebarGroupMenu groupName="Administration">
           {isAllowedMenuUsers && (
             <AppSidebarMenuItem
@@ -141,6 +148,13 @@ export default function SidebarCMS(props: SidebarCMSProps) {
               menuName="Transactions"
               menuURL="/transactions"
               menuIcon={<BanknoteArrowDown />}
+            />
+          )}
+          {isAllowedMenuB2BPipeline && (
+            <AppSidebarMenuItem
+              menuName="B2B Pipeline"
+              menuURL="/b2b-pipeline"
+              menuIcon={<Building2 />}
             />
           )}
         </AppSidebarGroupMenu>
