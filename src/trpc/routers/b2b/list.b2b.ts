@@ -13,6 +13,7 @@ import {
   B2BProductEnum,
   B2BSourceEnum,
   B2BStageEnum,
+  Prisma,
 } from "@prisma/client";
 import z from "zod";
 
@@ -25,12 +26,13 @@ export const listB2B = {
         stage: z.enum(B2BStageEnum).optional(),
         owner_id: stringIsUUID().optional(),
         keyword: stringNotBlank().optional(),
+        year: z.number().int().min(2020).max(2100).optional(),
         page: numberIsPosInt().optional(),
         page_size: numberIsPosInt().optional(),
       })
     )
     .query(async (opts) => {
-      const whereClause = {
+      const whereClause: Prisma.B2BPipelineWhereInput = {
         product: opts.input.product,
         source: opts.input.source,
         stage: opts.input.stage,
@@ -52,6 +54,23 @@ export const listB2B = {
         ];
       }
 
+      if (opts.input.year !== undefined) {
+        const yearStart = new Date(`${opts.input.year}-01-01T00:00:00.000Z`);
+        const yearEnd = new Date(
+          `${opts.input.year + 1}-01-01T00:00:00.000Z`
+        );
+        // Match leads in this year OR leads whose project window isn't set yet
+        // (so freshly-identified leads without a start_month still show up).
+        whereClause.AND = [
+          {
+            OR: [
+              { project_start_month: { gte: yearStart, lt: yearEnd } },
+              { project_start_month: null },
+            ],
+          },
+        ];
+      }
+
       const paging = calculatePage(
         opts.input,
         await opts.ctx.prisma.b2BPipeline.aggregate({
@@ -60,15 +79,25 @@ export const listB2B = {
         })
       );
 
-      const pipelineList = await opts.ctx.prisma.b2BPipeline.findMany({
-        include: {
-          owner: { select: { id: true, full_name: true, avatar: true } },
-        },
-        orderBy: [{ created_at: "desc" }],
-        where: whereClause,
-        skip: paging.prisma.skip,
-        take: paging.prisma.take,
-      });
+      const [pipelineList, statsRows] = await Promise.all([
+        opts.ctx.prisma.b2BPipeline.findMany({
+          include: {
+            owner: { select: { id: true, full_name: true, avatar: true } },
+          },
+          orderBy: [{ project_value: "desc" }],
+          where: whereClause,
+          skip: paging.prisma.skip,
+          take: paging.prisma.take,
+        }),
+        opts.ctx.prisma.b2BPipeline.findMany({
+          select: {
+            project_value: true,
+            probability: true,
+            stage: true,
+          },
+          where: whereClause,
+        }),
+      ]);
 
       const returnedList = pipelineList.map((entry) => ({
         id: entry.id,
@@ -77,6 +106,8 @@ export const listB2B = {
         stage: entry.stage,
         probability: entry.probability,
         project_value: entry.project_value,
+        project_start_month: entry.project_start_month,
+        project_end_month: entry.project_end_month,
         owner_id: entry.owner.id,
         owner_name: entry.owner.full_name,
         owner_avatar: entry.owner.avatar,
@@ -84,13 +115,32 @@ export const listB2B = {
         updated_at: entry.updated_at,
       }));
 
+      // Scorecard aggregates (scoped to the same filter as the list)
+      let pipelineValue = 0;
+      let closedWonValue = 0;
+      let weightedValue = 0;
+      for (const row of statsRows) {
+        const value = Number(row.project_value);
+        pipelineValue += value;
+        if (row.stage === B2BStageEnum.CLOSED_WON) {
+          closedWonValue += value;
+        }
+        weightedValue += (value * row.probability) / 100;
+      }
+
       return {
         code: STATUS_OK,
         message: "Success",
         list: returnedList,
+        scorecards: {
+          pipeline_value: pipelineValue,
+          closed_won_value: closedWonValue,
+          weighted_value: Math.round(weightedValue),
+        },
         metapaging: {
           ...paging.metapaging,
           keyword: opts.input.keyword,
+          year: opts.input.year,
         },
       };
     }),

@@ -823,20 +823,22 @@ CREATE TABLE wa_alerts (
 -- B2B Sales Pipeline
 
 CREATE TABLE b2b_pipeline (
-  id             SERIAL            PRIMARY KEY,
-  name           VARCHAR           NOT NULL,
-  pic_name       VARCHAR               NULL,
-  pic_job_title  VARCHAR               NULL,
-  pic_wa         VARCHAR               NULL,
-  pic_email      VARCHAR               NULL,
-  product        b2b_product_enum  NOT NULL,
-  source         b2b_source_enum   NOT NULL,
-  stage          b2b_stage_enum    NOT NULL,
-  probability    SMALLINT          NOT NULL  CHECK (probability BETWEEN 1 AND 100),
-  project_value  DECIMAL(15, 2)    NOT NULL,
-  owner_id       UUID              NOT NULL,
-  created_at     TIMESTAMPTZ       NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-  updated_at     TIMESTAMPTZ       NOT NULL  DEFAULT CURRENT_TIMESTAMP
+  id                   SERIAL            PRIMARY KEY,
+  name                 VARCHAR           NOT NULL,
+  pic_name             VARCHAR               NULL,
+  pic_job_title        VARCHAR               NULL,
+  pic_wa               VARCHAR               NULL,
+  pic_email            VARCHAR               NULL,
+  product              b2b_product_enum  NOT NULL,
+  source               b2b_source_enum   NOT NULL,
+  stage                b2b_stage_enum    NOT NULL  DEFAULT 'lead_identified',
+  probability          SMALLINT          NOT NULL  DEFAULT 0,
+  project_value        DECIMAL(15, 2)    NOT NULL  DEFAULT 0,
+  project_start_month  DATE                  NULL,
+  project_end_month    DATE                  NULL,
+  owner_id             UUID              NOT NULL,
+  created_at           TIMESTAMPTZ       NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+  updated_at           TIMESTAMPTZ       NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE b2b_actions (

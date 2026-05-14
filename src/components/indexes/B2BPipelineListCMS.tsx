@@ -1,16 +1,19 @@
 "use client";
 import AppButton from "@/components/buttons/AppButton";
 import PageHeaderCMS from "@/components/titles/PageHeaderCMS";
-import { getRupiahCurrency } from "@/lib/currency";
+import { getRupiahCurrency, getShortRupiahCurrency } from "@/lib/currency";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import {
   Building2,
   EllipsisVertical,
   PlusCircle,
+  Scale,
   Search,
   Settings2,
   Trash2,
+  Trophy,
+  Wallet,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,6 +22,8 @@ import { toast } from "sonner";
 import AppDropdown from "../elements/AppDropdown";
 import AppDropdownItemList from "../elements/AppDropdownItemList";
 import AppInput from "../fields/AppInput";
+import AppSelect from "../fields/AppSelect";
+import AppScorecardDashboard from "../cards/AppScorecardDashboard";
 import CreateLeadsPipelineFormCMS from "../forms/CreateLeadsPipelineFormCMS";
 import EditLeadsPipelineFormCMS from "../forms/EditLeadsPipelineFormCMS";
 import B2BProductLabelCMS from "../labels/B2BProductLabelCMS";
@@ -50,6 +55,12 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
   const [debouncedKeyword, setDebouncedKeyword] = useState<string | undefined>(
     ""
   );
+  const [year, setYear] = useState<number>(2026);
+
+  const YEAR_OPTIONS = [2026, 2027, 2028, 2029, 2030].map((y) => ({
+    label: String(y),
+    value: y,
+  }));
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editTargetId, setEditTargetId] = useState<number | null>(null);
@@ -88,13 +99,36 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
   }, []);
 
   const { data, isLoading, isError } = trpc.list.b2b.pipelines.useQuery(
-    { page: currentPage, page_size: pageSize, keyword: debouncedKeyword },
+    {
+      page: currentPage,
+      page_size: pageSize,
+      keyword: debouncedKeyword,
+      year,
+    },
     { enabled: !!props.sessionToken }
   );
   const pipelineList = data?.list.map((item) => ({
     ...item,
     project_value: Number(item.project_value),
   }));
+
+  // Scorecard progress (target Rp5 miliar)
+  const SCORECARD_TARGET = 5_000_000_000;
+  const pipelineValue = data?.scorecards.pipeline_value ?? 0;
+  const closedWonValue = data?.scorecards.closed_won_value ?? 0;
+  const weightedValue = data?.scorecards.weighted_value ?? 0;
+  const pipelinePercent = Math.min(
+    100,
+    (pipelineValue / SCORECARD_TARGET) * 100
+  );
+  const closedWonPercent = Math.min(
+    100,
+    (closedWonValue / SCORECARD_TARGET) * 100
+  );
+  const weightedPercent = Math.min(
+    100,
+    (weightedValue / SCORECARD_TARGET) * 100
+  );
 
   const deletePipeline = trpc.delete.b2b.pipeline.useMutation();
   const handleDelete = () => {
@@ -128,7 +162,47 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
             </AppButton>
           </PageHeaderCMS>
 
-          <div className="filter-search flex w-full items-center">
+          {/* Scorecards */}
+          <div className="scorecards grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <AppScorecardDashboard
+              title="Pipeline Value"
+              value={getShortRupiahCurrency(pipelineValue)}
+              icon={<Wallet className="size-5 text-white" />}
+              iconClassName="bg-primary"
+            >
+              <ScorecardProgress
+                percent={pipelinePercent}
+                barColor="bg-primary"
+                target={SCORECARD_TARGET}
+              />
+            </AppScorecardDashboard>
+            <AppScorecardDashboard
+              title="Closed Won Value"
+              value={getShortRupiahCurrency(closedWonValue)}
+              icon={<Trophy className="size-5 text-white" />}
+              iconClassName="bg-success-foreground"
+            >
+              <ScorecardProgress
+                percent={closedWonPercent}
+                barColor="bg-success-foreground"
+                target={SCORECARD_TARGET}
+              />
+            </AppScorecardDashboard>
+            <AppScorecardDashboard
+              title="Weighted Value"
+              value={getShortRupiahCurrency(weightedValue)}
+              icon={<Scale className="size-5 text-white" />}
+              iconClassName="bg-warning-foreground"
+            >
+              <ScorecardProgress
+                percent={weightedPercent}
+                barColor="bg-warning-foreground"
+                target={SCORECARD_TARGET}
+              />
+            </AppScorecardDashboard>
+          </div>
+
+          <div className="filter-search flex w-full items-center gap-3">
             <div className="max-w-96 w-full">
               <AppInput
                 variant="CMS"
@@ -145,6 +219,21 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                 }}
               />
             </div>
+            <div className="w-32">
+              <AppSelect
+                variant="CMS"
+                selectId="filter-year"
+                selectPlaceholder="Year"
+                value={year}
+                onChange={(value) => {
+                  setYear(Number(value));
+                  const params = new URLSearchParams(searchParam.toString());
+                  params.set("page", "1");
+                  router.push(`?${params.toString()}`);
+                }}
+                options={YEAR_OPTIONS}
+              />
+            </div>
           </div>
 
           {isLoading && <AppLoadingComponents />}
@@ -159,9 +248,9 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                   <TableHeadCMS>{`Product`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Stage`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Probability`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Project Value`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Value`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Owner`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Created`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Start`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
                 </TableRowCMS>
               </TableHeaderCMS>
@@ -194,7 +283,7 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                     </TableCellCMS>
                     <TableCellCMS>
                       <div className="flex items-center gap-2">
-                        <div className="flex size-5 rounded-full overflow-hidden bg-card-inside-bg">
+                        <div className="flex size-5 rounded-full shrink-0 overflow-hidden bg-card-inside-bg">
                           {post.owner_avatar && (
                             <Image
                               src={post.owner_avatar}
@@ -212,7 +301,9 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                     </TableCellCMS>
                     <TableCellCMS>
                       <span className="font-bodycopy text-sm text-emphasis whitespace-nowrap">
-                        {dayjs(post.created_at).format("D MMM YYYY")}
+                        {post.project_start_month
+                          ? dayjs(post.project_start_month).format("MMM YYYY")
+                          : "-"}
                       </span>
                     </TableCellCMS>
                     <TableCellCMS>
@@ -315,5 +406,31 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
         />
       )}
     </React.Fragment>
+  );
+}
+
+interface ScorecardProgressProps {
+  percent: number;
+  barColor: string;
+  target: number;
+}
+
+function ScorecardProgress({
+  percent,
+  barColor,
+  target,
+}: ScorecardProgressProps) {
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="w-full h-1.5 rounded-full bg-card-inside-bg overflow-hidden">
+        <div
+          className={`h-full rounded-full ${barColor}`}
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+      <p className="text-[11px] font-bodycopy text-emphasis">
+        {percent.toFixed(1)}% dari target {getShortRupiahCurrency(target)}
+      </p>
+    </div>
   );
 }

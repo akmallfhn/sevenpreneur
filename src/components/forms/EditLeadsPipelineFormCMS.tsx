@@ -97,6 +97,8 @@ export default function EditLeadsPipelineFormCMS(
     stage: B2BStageEnum | "";
     probability: string;
     project_value: string;
+    project_start_month: string;
+    project_end_month: string;
   }>({
     name: initialData?.name || "",
     pic_name: initialData?.pic_name || "",
@@ -108,6 +110,12 @@ export default function EditLeadsPipelineFormCMS(
     stage: initialData?.stage || "",
     probability: initialData ? String(initialData.probability) : "",
     project_value: initialData ? String(initialData.project_value) : "",
+    project_start_month: initialData?.project_start_month
+      ? dayjs(initialData.project_start_month).format("YYYY-MM")
+      : "",
+    project_end_month: initialData?.project_end_month
+      ? dayjs(initialData.project_end_month).format("YYYY-MM")
+      : "",
   });
 
   useEffect(() => {
@@ -124,6 +132,12 @@ export default function EditLeadsPipelineFormCMS(
         stage: initialData.stage,
         probability: String(initialData.probability),
         project_value: String(initialData.project_value),
+        project_start_month: initialData.project_start_month
+          ? dayjs(initialData.project_start_month).format("YYYY-MM")
+          : "",
+        project_end_month: initialData.project_end_month
+          ? dayjs(initialData.project_end_month).format("YYYY-MM")
+          : "",
       });
     }
   }, [initialData]);
@@ -141,16 +155,25 @@ export default function EditLeadsPipelineFormCMS(
     const probability = Number(formData.probability);
     if (
       !Number.isInteger(probability) ||
-      probability < 1 ||
+      probability < 0 ||
       probability > 100
     ) {
-      toast.error("Probability must be an integer between 1 and 100.");
+      toast.error("Probability must be an integer between 0 and 100.");
       setIsSubmitting(false);
       return;
     }
     const projectValue = Number(formData.project_value);
     if (!Number.isFinite(projectValue) || projectValue < 0) {
       toast.error("Project value must be a non-negative number.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (
+      formData.project_start_month &&
+      formData.project_end_month &&
+      formData.project_end_month < formData.project_start_month
+    ) {
+      toast.error("Project end month must be on or after start month.");
       setIsSubmitting(false);
       return;
     }
@@ -173,6 +196,12 @@ export default function EditLeadsPipelineFormCMS(
         stage: formData.stage as B2BStageEnum,
         probability,
         project_value: projectValue,
+        project_start_month: formData.project_start_month
+          ? `${formData.project_start_month}-01`
+          : null,
+        project_end_month: formData.project_end_month
+          ? `${formData.project_end_month}-01`
+          : null,
       },
       {
         onSuccess: () => {
@@ -264,6 +293,28 @@ export default function EditLeadsPipelineFormCMS(
                 onInputChange={handleInputChange("project_value")}
                 required
               />
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <AppInput
+                    variant="CMS"
+                    inputId="lead-project-start-month"
+                    inputName="Project Start"
+                    inputType="month"
+                    value={formData.project_start_month}
+                    onInputChange={handleInputChange("project_start_month")}
+                  />
+                </div>
+                <div className="flex-1">
+                  <AppInput
+                    variant="CMS"
+                    inputId="lead-project-end-month"
+                    inputName="Project End"
+                    inputType="month"
+                    value={formData.project_end_month}
+                    onInputChange={handleInputChange("project_end_month")}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="group-input flex flex-col gap-4 pt-2 border-t border-dashboard-border">

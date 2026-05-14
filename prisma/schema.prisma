@@ -1175,22 +1175,24 @@ model WAAlert {
 // B2B Sales Pipeline //
 
 model B2BPipeline {
-  id            Int            @id @default(autoincrement())
-  name          String         @db.VarChar()
-  pic_name      String?        @db.VarChar()
-  pic_job_title String?        @db.VarChar()
-  pic_wa        String?        @db.VarChar()
-  pic_email     String?        @db.VarChar()
-  product       B2BProductEnum
-  source        B2BSourceEnum
-  stage         B2BStageEnum
-  probability   Int            @db.SmallInt
-  project_value Decimal        @db.Decimal(15, 2)
-  owner         User           @relation(fields: [owner_id], references: [id])
-  owner_id      String         @db.Uuid
-  created_at    DateTime       @default(now()) @db.Timestamptz()
-  updated_at    DateTime       @default(now()) @updatedAt @db.Timestamptz()
-  actions       B2BAction[]
+  id                  Int            @id @default(autoincrement())
+  name                String         @db.VarChar()
+  pic_name            String?        @db.VarChar()
+  pic_job_title       String?        @db.VarChar()
+  pic_wa              String?        @db.VarChar()
+  pic_email           String?        @db.VarChar()
+  product             B2BProductEnum
+  source              B2BSourceEnum
+  stage               B2BStageEnum   @default(LEAD_IDENTIFIED)
+  probability         Int            @default(0) @db.SmallInt
+  project_value       Decimal        @default(0) @db.Decimal(15, 2)
+  project_start_month DateTime?      @db.Date
+  project_end_month   DateTime?      @db.Date
+  owner               User           @relation(fields: [owner_id], references: [id])
+  owner_id            String         @db.Uuid
+  created_at          DateTime       @default(now()) @db.Timestamptz()
+  updated_at          DateTime       @default(now()) @updatedAt @db.Timestamptz()
+  actions             B2BAction[]
 
   @@map("b2b_pipeline")
 }

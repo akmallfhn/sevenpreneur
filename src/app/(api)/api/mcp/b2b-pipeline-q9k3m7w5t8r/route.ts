@@ -25,6 +25,19 @@ const SOURCE_ENUM = z.enum(B2BSourceEnum);
 const STAGE_ENUM = z.enum(B2BStageEnum);
 const ACTIVITY_TYPE_ENUM = z.enum(B2BActivityTypeEnum);
 
+// Month-precision input. Accepts "YYYY-MM" (e.g. "2026-06") — converts to
+// the first day of the month before persisting.
+const monthInput = z
+  .string()
+  .regex(/^\d{4}-(0[1-9]|1[0-2])$/, {
+    message: "Must be in YYYY-MM format, e.g. 2026-06",
+  })
+  .describe("Month in YYYY-MM format, e.g. 2026-06");
+
+function parseMonthToDate(month: string): Date {
+  return new Date(`${month}-01T00:00:00.000Z`);
+}
+
 const pipelineInclude = {
   owner: { select: { id: true, full_name: true, email: true, avatar: true } },
   _count: { select: { actions: true } },
@@ -47,6 +60,12 @@ function serializePipeline(p: PipelineWithRelations) {
     stage: p.stage,
     probability: p.probability,
     project_value: Number(p.project_value),
+    project_start_month: p.project_start_month
+      ? dayjs(p.project_start_month).format("YYYY-MM")
+      : null,
+    project_end_month: p.project_end_month
+      ? dayjs(p.project_end_month).format("YYYY-MM")
+      : null,
     owner: p.owner,
     actions_count: p._count.actions,
     created_at: dayjs(p.created_at).toISOString(),
@@ -199,24 +218,37 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "create_pipeline",
-      "Create a new B2B pipeline lead. Use this to log a freshly identified company into the sales pipeline. Owner must be an existing User UUID; PIC fields and stage default sensibly if not provided.",
+      "Create a new B2B pipeline lead. Use this to log a freshly identified company into the sales pipeline. Owner must be an existing User UUID. Stage defaults to 'lead_identified', probability defaults to 0, project_value defaults to 0 if omitted. Optionally set project_start_month / project_end_month in YYYY-MM format to indicate the planned project window.",
       {
         name: z.string().min(1).describe("Company name"),
         owner_id: z.uuid().describe("Owner of this lead (User UUID)"),
         product: PRODUCT_ENUM,
         source: SOURCE_ENUM,
-        stage: STAGE_ENUM.optional().default("LEAD_IDENTIFIED"),
-        probability: z.number().int().min(1).max(100).optional().default(50),
+        stage: STAGE_ENUM.optional(),
+        probability: z.number().int().min(0).max(100).optional(),
         project_value: z
           .number()
           .nonnegative()
+          .optional()
           .describe("Projected deal value in IDR (rupiah)"),
+        project_start_month: monthInput.optional(),
+        project_end_month: monthInput.optional(),
         pic_name: z.string().nullable().optional(),
         pic_job_title: z.string().nullable().optional(),
         pic_wa: z.string().nullable().optional(),
         pic_email: z.string().nullable().optional(),
       },
       async (args) => {
+        if (
+          args.project_start_month &&
+          args.project_end_month &&
+          args.project_end_month < args.project_start_month
+        ) {
+          return jsonText({
+            error:
+              "project_end_month must be on or after project_start_month.",
+          });
+        }
         const prisma = GetPrismaClient();
         const created = await prisma.b2BPipeline.create({
           data: {
@@ -227,6 +259,12 @@ const handler = createSevenpreneurMcp(
             stage: args.stage,
             probability: args.probability,
             project_value: args.project_value,
+            project_start_month: args.project_start_month
+              ? parseMonthToDate(args.project_start_month)
+              : null,
+            project_end_month: args.project_end_month
+              ? parseMonthToDate(args.project_end_month)
+              : null,
             pic_name: args.pic_name?.trim() || null,
             pic_job_title: args.pic_job_title?.trim() || null,
             pic_wa: args.pic_wa?.trim() || null,
@@ -240,7 +278,7 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "update_pipeline",
-      "Update fields on an existing B2B pipeline lead. Only the provided fields are changed. Common use: advance the stage, update probability after a meeting, revise project_value after scoping.",
+      "Update fields on an existing B2B pipeline lead. Only the provided fields are changed. Common use: advance the stage, update probability after a meeting, revise project_value after scoping, or set the project window (project_start_month / project_end_month in YYYY-MM format). Pass null to clear a project_*_month.",
       {
         id: z.number().int().describe("B2BPipeline.id"),
         name: z.string().min(1).optional(),
@@ -248,14 +286,26 @@ const handler = createSevenpreneurMcp(
         product: PRODUCT_ENUM.optional(),
         source: SOURCE_ENUM.optional(),
         stage: STAGE_ENUM.optional(),
-        probability: z.number().int().min(1).max(100).optional(),
+        probability: z.number().int().min(0).max(100).optional(),
         project_value: z.number().nonnegative().optional(),
+        project_start_month: monthInput.nullable().optional(),
+        project_end_month: monthInput.nullable().optional(),
         pic_name: z.string().nullable().optional(),
         pic_job_title: z.string().nullable().optional(),
         pic_wa: z.string().nullable().optional(),
         pic_email: z.string().nullable().optional(),
       },
       async (args) => {
+        if (
+          args.project_start_month &&
+          args.project_end_month &&
+          args.project_end_month < args.project_start_month
+        ) {
+          return jsonText({
+            error:
+              "project_end_month must be on or after project_start_month.",
+          });
+        }
         const prisma = GetPrismaClient();
         const { id, ...rest } = args;
         const data: Prisma.B2BPipelineUpdateInput = {};
@@ -268,6 +318,14 @@ const handler = createSevenpreneurMcp(
         if (rest.probability !== undefined) data.probability = rest.probability;
         if (rest.project_value !== undefined)
           data.project_value = rest.project_value;
+        if (rest.project_start_month !== undefined)
+          data.project_start_month = rest.project_start_month
+            ? parseMonthToDate(rest.project_start_month)
+            : null;
+        if (rest.project_end_month !== undefined)
+          data.project_end_month = rest.project_end_month
+            ? parseMonthToDate(rest.project_end_month)
+            : null;
         if (rest.pic_name !== undefined)
           data.pic_name = rest.pic_name?.trim() || null;
         if (rest.pic_job_title !== undefined)

@@ -66,6 +66,8 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
     stage: B2BStageEnum.LEAD_IDENTIFIED as B2BStageEnum,
     probability: "50",
     project_value: "",
+    project_start_month: "",
+    project_end_month: "",
   });
   const ownerId = sessionData?.user.id;
 
@@ -98,14 +100,23 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
       return;
     }
     const probability = Number(formData.probability);
-    if (!Number.isInteger(probability) || probability < 1 || probability > 100) {
-      toast.error("Probability must be an integer between 1 and 100.");
+    if (!Number.isInteger(probability) || probability < 0 || probability > 100) {
+      toast.error("Probability must be an integer between 0 and 100.");
       setIsSubmitting(false);
       return;
     }
     const projectValue = Number(formData.project_value);
     if (!Number.isFinite(projectValue) || projectValue < 0) {
       toast.error("Project value must be a non-negative number.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (
+      formData.project_start_month &&
+      formData.project_end_month &&
+      formData.project_end_month < formData.project_start_month
+    ) {
+      toast.error("Project end month must be on or after start month.");
       setIsSubmitting(false);
       return;
     }
@@ -127,6 +138,12 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
         stage: formData.stage,
         probability,
         project_value: projectValue,
+        project_start_month: formData.project_start_month
+          ? `${formData.project_start_month}-01`
+          : null,
+        project_end_month: formData.project_end_month
+          ? `${formData.project_end_month}-01`
+          : null,
         owner_id: ownerId,
       },
       {
@@ -217,6 +234,28 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
               onInputChange={handleInputChange("project_value")}
               required
             />
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <AppInput
+                  variant="CMS"
+                  inputId="lead-project-start-month"
+                  inputName="Project Start"
+                  inputType="month"
+                  value={formData.project_start_month}
+                  onInputChange={handleInputChange("project_start_month")}
+                />
+              </div>
+              <div className="flex-1">
+                <AppInput
+                  variant="CMS"
+                  inputId="lead-project-end-month"
+                  inputName="Project End"
+                  inputType="month"
+                  value={formData.project_end_month}
+                  onInputChange={handleInputChange("project_end_month")}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="group-input flex flex-col gap-4 pt-2 border-t border-dashboard-border">

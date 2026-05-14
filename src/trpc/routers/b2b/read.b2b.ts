@@ -31,6 +31,8 @@ export const readB2B = {
           stage: thePipeline.stage,
           probability: thePipeline.probability,
           project_value: thePipeline.project_value,
+          project_start_month: thePipeline.project_start_month,
+          project_end_month: thePipeline.project_end_month,
           owner_id: thePipeline.owner.id,
           owner_name: thePipeline.owner.full_name,
           owner_avatar: thePipeline.owner.avatar,
