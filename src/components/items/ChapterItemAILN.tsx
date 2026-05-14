@@ -35,7 +35,7 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
     { chapter_id: props.chapter.id },
     { enabled: props.expanded }
   );
-  const preAssessmentQ = trpc.ailene.read.myPreAssessment.useQuery(undefined, {
+  const preAssessmentQ = trpc.ailene.read.preAssessment.useQuery(undefined, {
     enabled: props.expanded && props.isFirst,
   });
 

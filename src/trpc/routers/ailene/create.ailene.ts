@@ -53,7 +53,7 @@ const motivationEnum = z.enum([
   "EAGER",
 ]);
 
-const submitInputSchema = z.object({
+const preAssessmentInputSchema = z.object({
   q1_ai_use_frequency: aiUseFrequencyEnum,
   q2_ai_tools_used: z.array(z.string().min(1)).min(1),
   q3_job_role: z.string().min(1).max(255),
@@ -71,21 +71,9 @@ const submitInputSchema = z.object({
   q15_motivation: motivationEnum,
 });
 
-export const preAssessmentAilene = {
-  myPreAssessment: ailMemberProcedure.query(async (opts) => {
-    const memberId = opts.ctx.ail_member.id;
-    const pa = await opts.ctx.prisma.ailPreAssessment.findUnique({
-      where: { member_id: memberId },
-    });
-    return {
-      code: STATUS_OK,
-      message: "Success",
-      pre_assessment: pa,
-    };
-  }),
-
-  submitPreAssessment: ailMemberProcedure
-    .input(submitInputSchema)
+export const createAilene = {
+  preAssessment: ailMemberProcedure
+    .input(preAssessmentInputSchema)
     .mutation(async (opts) => {
       const memberId = opts.ctx.ail_member.id;
 

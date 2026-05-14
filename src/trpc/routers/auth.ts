@@ -159,16 +159,23 @@ export const authRouter = createTRPCRouter({
         ail_member: null,
       };
     }
-    const xpAgg = await opts.ctx.prisma.ailXpEarning.aggregate({
-      _sum: { xp_earned: true },
-      where: { member_id: ailMember.id },
-    });
+    const [xpAgg, preAssessment] = await Promise.all([
+      opts.ctx.prisma.ailXpEarning.aggregate({
+        _sum: { xp_earned: true },
+        where: { member_id: ailMember.id },
+      }),
+      opts.ctx.prisma.ailPreAssessment.findUnique({
+        where: { member_id: ailMember.id },
+        select: { id: true },
+      }),
+    ]);
     return {
       code: STATUS_OK,
       message: "Success",
       ail_member: {
         ...ailMember,
         total_xp: xpAgg._sum.xp_earned ?? 0,
+        has_pre_assessment: !!preAssessment,
       },
     };
   }),

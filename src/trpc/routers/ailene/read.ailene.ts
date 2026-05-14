@@ -5,6 +5,18 @@ import dayjs from "dayjs";
 import { z } from "zod";
 
 export const readAilene = {
+  preAssessment: ailMemberProcedure.query(async (opts) => {
+    const memberId = opts.ctx.ail_member.id;
+    const pa = await opts.ctx.prisma.ailPreAssessment.findUnique({
+      where: { member_id: memberId },
+    });
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      pre_assessment: pa,
+    };
+  }),
+
   materialDetail: ailMemberProcedure
     .input(z.object({ material_id: z.string().min(1) }))
     .query(async (opts) => {
