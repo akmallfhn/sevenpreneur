@@ -14,7 +14,7 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const createEvent = {
-  event: roleBasedProcedure(["Administrator", "Class Manager"])
+  event: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         name: stringNotBlank(),
@@ -86,7 +86,7 @@ export const createEvent = {
       };
     }),
 
-  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+  eventPrice: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         event_id: numberIsID(),

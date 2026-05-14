@@ -40,7 +40,8 @@ export default async function AileneLayout(
   setSessionToken(sessionToken);
 
   const checkUser = (await trpc.auth.checkSession()).user;
-  if (!checkUser || checkUser.role_id === 3) {
+
+  if (!checkUser) {
     return <AppPageState variant="FORBIDDEN" />;
   }
 

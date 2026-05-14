@@ -20,7 +20,7 @@ dayjs.extend(localizedFormat);
 
 interface LearningSessionItemCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   learningSessionId: number;
   learningSessionName: string;
@@ -34,7 +34,7 @@ interface LearningSessionItemCMSProps {
 
 export default function LearningSessionItemCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
   learningSessionId,
   learningSessionName,
@@ -51,12 +51,20 @@ export default function LearningSessionItemCMS({
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const allowedRolesUpdateLearning = [0, 2];
-  const allowedRolesDeleteLearning = [0, 2];
+  const allowedRolesUpdateLearning = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const allowedRolesDeleteLearning = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
   const isAllowedUpdateLearning =
-    allowedRolesUpdateLearning.includes(sessionUserRole);
+    allowedRolesUpdateLearning.includes(sessionUserRoleName);
   const isAllowedDeleteLearning =
-    allowedRolesDeleteLearning.includes(sessionUserRole);
+    allowedRolesDeleteLearning.includes(sessionUserRoleName);
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {

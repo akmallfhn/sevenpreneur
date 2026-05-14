@@ -227,7 +227,7 @@ export const listTransaction = {
     )
     .query(async (opts) => {
       let selectedUserId = opts.input.user_id;
-      if (opts.ctx.user.role.name !== "Administrator") {
+      if (opts.ctx.user.role.name !== "Super Admin") {
         if (!selectedUserId) {
           selectedUserId = opts.ctx.user.id;
         }

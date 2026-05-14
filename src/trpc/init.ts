@@ -89,12 +89,31 @@ export const loggedInProcedure = t.procedure.use(async (opts) => {
   });
 });
 
+export const superAdminProcedure = t.procedure.use(async (opts) => {
+  const { ctx } = opts;
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  if (ctx.user.role.name !== "Super Admin") {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return opts.next({
+    ctx: {
+      prisma: ctx.prisma,
+      user: ctx.user, // not-null
+    },
+  });
+});
+
 export const administratorProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  if (ctx.user.role.name !== "Administrator") {
+  if (
+    ctx.user.role.name !== "Administrator" &&
+    ctx.user.role.name !== "Super Admin"
+  ) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({

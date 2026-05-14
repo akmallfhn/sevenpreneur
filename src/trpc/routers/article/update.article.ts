@@ -45,7 +45,7 @@ export const updateArticle = {
       };
     }),
 
-  article: roleBasedProcedure(["Administrator", "Marketer"])
+  article: roleBasedProcedure(["Administrator", "Super Admin", "Marketer"])
     .input(
       z.object({
         id: numberIsID(),

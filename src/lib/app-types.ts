@@ -30,6 +30,7 @@ export type ReactionVariant = "favorite" | "scout";
 
 // User related
 export type RolesUser =
+  | "superAdmin"
   | "administrator"
   | "educator"
   | "classManager"

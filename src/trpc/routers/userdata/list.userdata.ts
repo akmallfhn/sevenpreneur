@@ -10,7 +10,12 @@ import {
 import z from "zod";
 
 export const listUserData = {
-  users: roleBasedProcedure(["Administrator", "Educator", "Class Manager"])
+  users: roleBasedProcedure([
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ])
     .input(
       z.object({
         role_id: numberIsRoleID().optional(),
@@ -25,7 +30,7 @@ export const listUserData = {
         OR: undefined as Optional<
           [
             { full_name: { contains: string; mode: "insensitive" } },
-            { email: { contains: string; mode: "insensitive" } }
+            { email: { contains: string; mode: "insensitive" } },
           ]
         >,
         deleted_at: null,
@@ -56,13 +61,33 @@ export const listUserData = {
         })
       );
 
-      const userList = await opts.ctx.prisma.user.findMany({
+      const roleOrder: Record<string, number> = {
+        "Super Admin": 1,
+        Administrator: 2,
+        Marketer: 3,
+        "Class Manager": 4,
+        Educator: 5,
+        "General User": 6,
+      };
+
+      const allMatchingUsers = await opts.ctx.prisma.user.findMany({
         include: { role: true },
-        orderBy: [{ role_id: "asc" }, { full_name: "asc" }],
         where: whereClause,
-        skip: paging.prisma.skip,
-        take: paging.prisma.take,
       });
+
+      allMatchingUsers.sort((a, b) => {
+        const ra = roleOrder[a.role.name] ?? 99;
+        const rb = roleOrder[b.role.name] ?? 99;
+        if (ra !== rb) return ra - rb;
+        return a.full_name.localeCompare(b.full_name);
+      });
+
+      const skip = paging.prisma.skip ?? 0;
+      const take = paging.prisma.take;
+      const userList =
+        take === undefined
+          ? allMatchingUsers
+          : allMatchingUsers.slice(skip, skip + take);
       const returnedList = userList.map((entry) => {
         return {
           id: entry.id,

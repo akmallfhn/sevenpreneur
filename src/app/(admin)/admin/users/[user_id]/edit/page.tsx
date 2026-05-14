@@ -18,9 +18,9 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesUpdateUser = [0];
+  const allowedRolesUpdateUser = ["Administrator", "Super Admin"];
 
-  if (!allowedRolesUpdateUser.includes(userSession.user.role_id)) {
+  if (!allowedRolesUpdateUser.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

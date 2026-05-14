@@ -22,14 +22,14 @@ const PAGE_SIZE = 10;
 interface CohortMembersPerformanceCMSProps {
   sessionToken: string;
   sessionUserId: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
 }
 
 export default function CohortMembersPerformanceCMS({
   sessionToken,
   sessionUserId,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
 }: CohortMembersPerformanceCMSProps) {
   const [keyword, setKeyword] = useState("");
@@ -37,7 +37,12 @@ export default function CohortMembersPerformanceCMS({
   const [currentPage, setCurrentPage] = useState(1);
   const [openDetailsId, setOpenDetailsId] = useState<string | null>(null);
 
-  const isAllowedDetails = [0, 1, 2].includes(sessionUserRole);
+  const isAllowedDetails = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ].includes(sessionUserRoleName);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -206,7 +211,7 @@ export default function CohortMembersPerformanceCMS({
         <EditCohortMemberFormCMS
           sessionToken={sessionToken}
           sessionUserId={sessionUserId}
-          sessionUserRole={sessionUserRole}
+          sessionUserRoleName={sessionUserRoleName}
           userId={openDetailsId}
           cohortId={cohortId}
           isOpen={!!openDetailsId}

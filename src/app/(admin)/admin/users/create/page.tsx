@@ -13,9 +13,9 @@ export default async function CreateUserPage() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesCreateUser = [0];
+  const allowedRolesCreateUser = ["Administrator", "Super Admin"];
 
-  if (!allowedRolesCreateUser.includes(userSession.user.role_id)) {
+  if (!allowedRolesCreateUser.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

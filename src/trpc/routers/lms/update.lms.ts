@@ -19,7 +19,7 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const updateLMS = {
-  cohort: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohort: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -62,7 +62,7 @@ export const updateLMS = {
       };
     }),
 
-  cohortPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohortPrice: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -99,7 +99,7 @@ export const updateLMS = {
       };
     }),
 
-  cohortMember: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohortMember: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         user_id: stringIsUUID(),
@@ -133,7 +133,7 @@ export const updateLMS = {
       };
     }),
 
-  module: roleBasedProcedure(["Administrator", "Class Manager"])
+  module: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -166,7 +166,7 @@ export const updateLMS = {
       };
     }),
 
-  learning: roleBasedProcedure(["Administrator", "Class Manager"])
+  learning: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -229,7 +229,7 @@ export const updateLMS = {
       };
     }),
 
-  material: roleBasedProcedure(["Administrator", "Class Manager"])
+  material: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -325,7 +325,7 @@ export const updateLMS = {
       };
     }),
 
-  project: roleBasedProcedure(["Administrator", "Class Manager"])
+  project: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -360,7 +360,7 @@ export const updateLMS = {
       };
     }),
 
-  submission: roleBasedProcedure(["Administrator", "Educator", "General User"])
+  submission: roleBasedProcedure(["Administrator", "Super Admin", "Educator", "General User"])
     .input(
       z.object({
         id: numberIsID(),

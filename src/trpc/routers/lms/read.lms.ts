@@ -92,6 +92,7 @@ export const readLMS = {
 
   cohortMember: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])
@@ -466,6 +467,7 @@ export const readLMS = {
 
   learningStats: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])
@@ -576,6 +578,7 @@ export const readLMS = {
 
   learningFeedbackAnalysis: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])
@@ -633,6 +636,7 @@ export const readLMS = {
 
   cohortRatingStats: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])
@@ -681,6 +685,7 @@ export const readLMS = {
 
   userRating: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])

@@ -13,9 +13,9 @@ export default async function DiscountsPageCMS() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListDiscount = [0];
+  const allowedRolesListDiscount = ["Administrator", "Super Admin"];
 
-  if (!allowedRolesListDiscount.includes(userSession.user.role_id)) {
+  if (!allowedRolesListDiscount.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

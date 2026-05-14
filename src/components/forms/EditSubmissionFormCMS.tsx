@@ -19,7 +19,7 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 interface EditSubmissionFormCMSProps {
   sessionToken: string;
   sessionUserId: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   projectDeadline?: string;
   submissionId: number;
   isOpen: boolean;
@@ -41,9 +41,13 @@ export default function EditSubmissionFormCMS(
   const [commentDraft, setCommentDraft] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const allowedRolesUpdateSubmission = [0, 1];
+  const allowedRolesUpdateSubmission = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+  ];
   const isAllowedUpdateSubmission = allowedRolesUpdateSubmission.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   // Return initial data

@@ -9,21 +9,25 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface ProjectListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   onClickAdd?: () => void;
 }
 
 export default function ProjectListCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
   onClickAdd,
 }: ProjectListCMSProps) {
   const utils = trpc.useUtils();
   const { resolvedTheme } = useTheme();
 
-  const isAllowedCreate = [0, 2].includes(sessionUserRole);
+  const isAllowedCreate = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ].includes(sessionUserRoleName);
 
   const { data, isLoading } = trpc.list.projects.useQuery(
     { cohort_id: cohortId },
@@ -53,7 +57,7 @@ export default function ProjectListCMS({
           {data?.list.map((post) => (
             <ProjectItemCMS
               key={post.id}
-              sessionUserRole={sessionUserRole}
+              sessionUserRoleName={sessionUserRoleName}
               cohortId={cohortId}
               projectId={post.id}
               projectName={post.name}

@@ -23,7 +23,7 @@ export const deleteArticle = {
       };
     }),
 
-  article: roleBasedProcedure(["Administrator", "Marketer"])
+  article: roleBasedProcedure(["Administrator", "Super Admin", "Marketer"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       const deletedArticle = await opts.ctx.prisma.article.deleteMany({

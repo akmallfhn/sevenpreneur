@@ -9,21 +9,25 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface ModuleListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   onClickAdd?: () => void;
 }
 
 export default function ModuleListCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
   onClickAdd,
 }: ModuleListCMSProps) {
   const utils = trpc.useUtils();
   const { resolvedTheme } = useTheme();
 
-  const isAllowedCreate = [0, 2].includes(sessionUserRole);
+  const isAllowedCreate = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ].includes(sessionUserRoleName);
 
   const { data, isLoading } = trpc.list.modules.useQuery(
     { cohort_id: cohortId },
@@ -54,7 +58,7 @@ export default function ModuleListCMS({
             <FileItemCMS
               key={post.id}
               sessionToken={sessionToken}
-              sessionUserRole={sessionUserRole}
+              sessionUserRoleName={sessionUserRoleName}
               cohortId={cohortId}
               fileId={post.id}
               fileName={post.name}

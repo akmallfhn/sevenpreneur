@@ -13,9 +13,9 @@ export default async function EventsPageCMS() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListEvent = [0, 2];
+  const allowedRolesListEvent = ["Administrator", "Super Admin", "Class Manager"];
 
-  if (!allowedRolesListEvent.includes(userSession.user.role_id)) {
+  if (!allowedRolesListEvent.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

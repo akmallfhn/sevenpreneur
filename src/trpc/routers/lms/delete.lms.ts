@@ -17,7 +17,7 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const deleteLMS = {
-  cohort: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohort: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
@@ -30,7 +30,7 @@ export const deleteLMS = {
       };
     }),
 
-  cohortPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohortPrice: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       const deletedCohortPrice = await opts.ctx.prisma.cohortPrice.deleteMany({
@@ -74,7 +74,7 @@ export const deleteLMS = {
       };
     }),
 
-  module: roleBasedProcedure(["Administrator", "Class Manager"])
+  module: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       const deletedModule = await opts.ctx.prisma.module.deleteMany({
@@ -89,7 +89,7 @@ export const deleteLMS = {
       };
     }),
 
-  learning: roleBasedProcedure(["Administrator", "Class Manager"])
+  learning: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       const deletedLearning = await opts.ctx.prisma.learning.deleteMany({
@@ -113,7 +113,7 @@ export const deleteLMS = {
       };
     }),
 
-  material: roleBasedProcedure(["Administrator", "Class Manager"])
+  material: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       const deletedMaterial = await opts.ctx.prisma.material.deleteMany({
@@ -184,7 +184,7 @@ export const deleteLMS = {
       };
     }),
 
-  project: roleBasedProcedure(["Administrator", "Class Manager"])
+  project: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       await opts.ctx.prisma.$transaction(async (tx) => {
@@ -206,7 +206,7 @@ export const deleteLMS = {
       };
     }),
 
-  submission: roleBasedProcedure(["Administrator", "General User"])
+  submission: roleBasedProcedure(["Administrator", "Super Admin", "General User"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       let selectedUserId: Optional<string> = undefined;

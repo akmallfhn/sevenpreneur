@@ -37,7 +37,7 @@ import TableRowCMS from "../tables/TableRowCMS";
 
 interface UserListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
 }
 
 export default function UserListCMS(props: UserListCMSProps) {
@@ -72,14 +72,19 @@ export default function UserListCMS(props: UserListCMSProps) {
   };
 
   // Client-side Authorization
-  const allowedRolesMutateUser = [0];
-  const allowedRolesReadUser = [0, 1, 2];
+  const allowedRolesMutateUser = ["Administrator", "Super Admin"];
+  const allowedRolesReadUser = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
 
   const isAllowedMutateUser = allowedRolesMutateUser.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedReadUser = allowedRolesReadUser.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   // Debounce Typing for 1 second

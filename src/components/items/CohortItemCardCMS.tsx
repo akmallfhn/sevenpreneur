@@ -21,7 +21,7 @@ dayjs.extend(localizedFormat);
 
 interface CohortItemCardCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   cohortName: string;
   cohortImage: string;
@@ -32,7 +32,7 @@ interface CohortItemCardCMSProps {
 
 export default function CohortItemCardCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
   cohortName,
   cohortImage,
@@ -45,12 +45,20 @@ export default function CohortItemCardCMS({
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const allowedRolesUpdateCohort = [0, 2];
-  const allowedRolesDeleteCohort = [0, 2];
+  const allowedRolesUpdateCohort = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const allowedRolesDeleteCohort = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
   const isAllowedUpdateCohort =
-    allowedRolesUpdateCohort.includes(sessionUserRole);
+    allowedRolesUpdateCohort.includes(sessionUserRoleName);
   const isAllowedDeleteCohort =
-    allowedRolesDeleteCohort.includes(sessionUserRole);
+    allowedRolesDeleteCohort.includes(sessionUserRoleName);
 
   // Get time range
   const { dateString } = getDateTimeRange({

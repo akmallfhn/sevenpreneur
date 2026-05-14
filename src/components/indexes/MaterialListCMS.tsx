@@ -11,24 +11,34 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface MaterialListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   learningId: number;
 }
 
 export default function MaterialListCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   learningId,
 }: MaterialListCMSProps) {
   const utils = trpc.useUtils();
   const [createMaterial, setCreateMaterial] = useState(false);
 
-  const allowedRolesCreateMaterial = [0, 2];
-  const allowedRolesListMaterial = [0, 1, 2, 3];
+  const allowedRolesCreateMaterial = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const allowedRolesListMaterial = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+    "General User",
+  ];
   const isAllowedCreateMaterial =
-    allowedRolesCreateMaterial.includes(sessionUserRole);
+    allowedRolesCreateMaterial.includes(sessionUserRoleName);
   const isAllowedListMaterial =
-    allowedRolesListMaterial.includes(sessionUserRole);
+    allowedRolesListMaterial.includes(sessionUserRoleName);
 
   // Fetch tRPC data
   const {
@@ -70,7 +80,7 @@ export default function MaterialListCMS({
                   <FileItemCMS
                     key={index}
                     sessionToken={sessionToken}
-                    sessionUserRole={sessionUserRole}
+                    sessionUserRoleName={sessionUserRoleName}
                     learningId={learningId}
                     fileId={post.id}
                     fileName={post.name}

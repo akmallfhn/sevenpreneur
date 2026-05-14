@@ -13,9 +13,9 @@ export default async function TransactionsPageCMS() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListTransactions = [0];
+  const allowedRolesListTransactions = ["Super Admin"];
 
-  if (!allowedRolesListTransactions.includes(userSession.user.role_id)) {
+  if (!allowedRolesListTransactions.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />
