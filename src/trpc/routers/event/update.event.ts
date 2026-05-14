@@ -10,7 +10,7 @@ import { LearningMethodEnum, StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const updateEvent = {
-  event: roleBasedProcedure(["Administrator", "Class Manager"])
+  event: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),
@@ -57,7 +57,7 @@ export const updateEvent = {
       };
     }),
 
-  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+  eventPrice: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         id: numberIsID(),

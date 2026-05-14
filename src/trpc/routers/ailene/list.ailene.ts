@@ -1,236 +1,300 @@
-import { STATUS_OK } from "@/lib/status_code";
-import { aileneProcedure, administratorProcedure } from "@/trpc/init";
-import { numberIsID } from "@/trpc/utils/validation";
-import { AiLearnLessonStatus, StatusEnum } from "@prisma/client";
-import z from "zod";
+import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
+import { ailMemberProcedure } from "@/trpc/init";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { type ChapterProgress } from "./utils.ailene";
 
 export const listAilene = {
-  sessions: aileneProcedure.query(async (opts) => {
-    const sessions = await opts.ctx.prisma.aiLearnSession.findMany({
-      include: {
-        speaker: { select: { id: true, full_name: true, avatar: true } },
-        _count: { select: { attendances: true } },
-      },
-      orderBy: { meeting_date: "asc" },
+  myGroups: ailMemberProcedure.query(async (opts) => {
+    const groupMembers = await opts.ctx.prisma.ailGroupMember.findMany({
+      where: { member_id: opts.ctx.ail_member.id },
+      include: { group: true },
+      orderBy: { joined_at: "asc" },
     });
-    return { code: STATUS_OK, message: "Success", list: sessions };
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      list: groupMembers.map((gm) => gm.group),
+    };
   }),
 
-  journeys: administratorProcedure.query(async (opts) => {
-    const journeys = await opts.ctx.prisma.aiLearnJourney.findMany({
-      orderBy: { order_index: "asc" },
+  levels: ailMemberProcedure.query(async (opts) => {
+    const list = await opts.ctx.prisma.ailLevel.findMany({
+      where: { status: "ACTIVE" },
+      orderBy: { level_number: "asc" },
     });
-    return { code: STATUS_OK, message: "Success", list: journeys };
+    return { code: STATUS_OK, message: "Success", list };
   }),
 
-  journeysForUser: aileneProcedure.query(async (opts) => {
-    const user_id = opts.ctx.user.id;
+  chapters: ailMemberProcedure.query(async (opts) => {
+    const memberId = opts.ctx.ail_member.id;
 
-    const member = await opts.ctx.prisma.aiLearnMember.findUnique({
-      where: { user_id },
-      select: { role_name: true },
-    });
-
-    const roleFilter = member?.role_name;
-
-    const journeys = await opts.ctx.prisma.aiLearnJourney.findMany({
-      where: {
-        status: StatusEnum.ACTIVE,
-        ...(roleFilter
-          ? { OR: [{ role: roleFilter }, { role: null }] }
-          : { role: null }),
-      },
-      include: {
-        lessons: {
-          where: { status: AiLearnLessonStatus.PUBLISHED },
-          include: {
-            _count: { select: { quiz_questions: true } },
-            progress: {
-              where: { member: { user_id } },
-              select: { completed_at: true, score: true, xp_earned: true },
+    const [chapters, quizSubs, videoComps, materialComps] = await Promise.all([
+      opts.ctx.prisma.ailChapter.findMany({
+        where: { status: "ACTIVE" },
+        orderBy: { session_date: "asc" },
+        include: {
+          level: true,
+          _count: {
+            select: {
+              quizzes: { where: { status: "ACTIVE" } },
+              videos: { where: { status: "ACTIVE" } },
+              materials: { where: { status: "ACTIVE" } },
             },
           },
-          orderBy: [{ level: "asc" }, { order_index: "asc" }],
         },
-      },
-      orderBy: { order_index: "asc" },
-    });
-
-    return { code: STATUS_OK, message: "Success", list: journeys };
-  }),
-
-  members: administratorProcedure.query(async (opts) => {
-    const members = await opts.ctx.prisma.aiLearnMember.findMany({
-      include: {
-        user: { select: { id: true, full_name: true, email: true, avatar: true } },
-        _count: { select: { progress: true } },
-      },
-      orderBy: { created_at: "desc" },
-    });
-    return { code: STATUS_OK, message: "Success", list: members };
-  }),
-
-  lessons: aileneProcedure
-    .input(
-      z.object({
-        status: z.enum(AiLearnLessonStatus).optional(),
-        level: z.int().min(1).max(4).optional(),
-      })
-    )
-    .query(async (opts) => {
-      const isAdmin = opts.ctx.user.role.name === "Administrator";
-
-      const statusFilter = isAdmin
-        ? opts.input.status
-        : AiLearnLessonStatus.PUBLISHED;
-
-      const lessons = await opts.ctx.prisma.aiLearnLesson.findMany({
+      }),
+      opts.ctx.prisma.ailQuizSubmission.findMany({
         where: {
-          status: statusFilter,
-          level: opts.input.level,
+          member_id: memberId,
+          quiz: { status: "ACTIVE" },
+          is_completed: true,
         },
-        include: {
-          _count: { select: { quiz_questions: true } },
+        select: { quiz_id: true, quiz: { select: { chapter_id: true } } },
+      }),
+      opts.ctx.prisma.ailVideoCompletion.findMany({
+        where: { member_id: memberId, video: { status: "ACTIVE" } },
+        select: { video_id: true, video: { select: { chapter_id: true } } },
+      }),
+      opts.ctx.prisma.ailMaterialCompletion.findMany({
+        where: { member_id: memberId, material: { status: "ACTIVE" } },
+        select: {
+          material_id: true,
+          material: { select: { chapter_id: true } },
         },
-        orderBy: [{ level: "asc" }, { order_index: "asc" }, { created_at: "asc" }],
-      });
-      return { code: STATUS_OK, message: "Success", list: lessons };
-    }),
+      }),
+    ]);
 
-  lessonsWithProgress: aileneProcedure.query(async (opts) => {
-    const user_id = opts.ctx.user.id;
+    // Build per-chapter sets of unique completed task IDs
+    const quizDone = new Map<number, Set<string>>();
+    for (const s of quizSubs) {
+      const cid = s.quiz.chapter_id;
+      if (!quizDone.has(cid)) quizDone.set(cid, new Set());
+      quizDone.get(cid)!.add(s.quiz_id);
+    }
+    const videoDone = new Map<number, Set<number>>();
+    for (const v of videoComps) {
+      const cid = v.video.chapter_id;
+      if (!videoDone.has(cid)) videoDone.set(cid, new Set());
+      videoDone.get(cid)!.add(v.video_id);
+    }
+    const materialDone = new Map<number, Set<string>>();
+    for (const m of materialComps) {
+      const cid = m.material.chapter_id;
+      if (!materialDone.has(cid)) materialDone.set(cid, new Set());
+      materialDone.get(cid)!.add(m.material_id);
+    }
 
-    const lessons = await opts.ctx.prisma.aiLearnLesson.findMany({
-      where: { status: AiLearnLessonStatus.PUBLISHED },
-      include: {
-        _count: { select: { quiz_questions: true } },
-        progress: {
-          where: { member: { user_id } },
-          select: { completed_at: true, score: true, xp_earned: true },
-        },
-      },
-      orderBy: [{ level: "asc" }, { order_index: "asc" }],
+    const list = chapters.map((ch) => {
+      const totalTasks =
+        ch._count.quizzes + ch._count.videos + ch._count.materials;
+      const doneTasks =
+        (quizDone.get(ch.id)?.size ?? 0) +
+        (videoDone.get(ch.id)?.size ?? 0) +
+        (materialDone.get(ch.id)?.size ?? 0);
+
+      let progress: ChapterProgress;
+      if (totalTasks === 0 || doneTasks === 0) {
+        progress = "not_started";
+      } else if (doneTasks >= totalTasks) {
+        progress = "completed";
+      } else {
+        progress = "in_progress";
+      }
+
+      return {
+        ...ch,
+        progress,
+        done_tasks: doneTasks,
+        total_tasks: totalTasks,
+      };
     });
 
-    return { code: STATUS_OK, message: "Success", list: lessons };
+    return { code: STATUS_OK, message: "Success", list };
   }),
 
-  quizQuestions: administratorProcedure
-    .input(z.object({ lesson_id: numberIsID() }))
+  tasks: ailMemberProcedure
+    .input(z.object({ chapter_id: z.number().int().positive() }))
     .query(async (opts) => {
-      const questions = await opts.ctx.prisma.aiLearnQuizQuestion.findMany({
-        where: { lesson_id: opts.input.lesson_id },
-        include: { options: { orderBy: { order_index: "asc" } } },
-        orderBy: [{ order_index: "asc" }],
-      });
-      return { code: STATUS_OK, message: "Success", list: questions };
-    }),
+      const memberId = opts.ctx.ail_member.id;
+      const { chapter_id } = opts.input;
 
-  quizQuestionsForUser: aileneProcedure
-    .input(z.object({ lesson_id: numberIsID() }))
-    .query(async (opts) => {
-      const user_id = opts.ctx.user.id;
+      const [
+        quizzes,
+        videos,
+        materials,
+        submissions,
+        vidDone,
+        matDone,
+        xpRows,
+      ] = await Promise.all([
+        opts.ctx.prisma.ailQuiz.findMany({
+          where: { chapter_id, status: "ACTIVE" },
+          orderBy: { order_index: "asc" },
+          include: { questions: { select: { xp_reward: true } } },
+        }),
+        opts.ctx.prisma.ailVideo.findMany({
+          where: { chapter_id, status: "ACTIVE" },
+          orderBy: { order_index: "asc" },
+        }),
+        opts.ctx.prisma.ailMaterial.findMany({
+          where: { chapter_id, status: "ACTIVE" },
+          orderBy: { order_index: "asc" },
+        }),
+        opts.ctx.prisma.ailQuizSubmission.findMany({
+          where: {
+            member_id: memberId,
+            quiz: { chapter_id },
+            is_completed: true,
+          },
+        }),
+        opts.ctx.prisma.ailVideoCompletion.findMany({
+          where: { member_id: memberId, video: { chapter_id } },
+        }),
+        opts.ctx.prisma.ailMaterialCompletion.findMany({
+          where: { member_id: memberId, material: { chapter_id } },
+        }),
+        opts.ctx.prisma.ailXpEarning.findMany({
+          where: { member_id: memberId },
+        }),
+      ]);
 
-      const lesson = await opts.ctx.prisma.aiLearnLesson.findUnique({
-        where: { id: opts.input.lesson_id, status: AiLearnLessonStatus.PUBLISHED },
-      });
-      if (!lesson) throw new Error("Lesson not found");
+      const xpByKey = new Map<string, number>();
+      for (const x of xpRows)
+        xpByKey.set(`${x.learning_type}:${x.learning_id}`, x.xp_earned);
 
-      const member = await opts.ctx.prisma.aiLearnMember.findUnique({
-        where: { user_id },
-      });
-
-      const questions = await opts.ctx.prisma.aiLearnQuizQuestion.findMany({
-        where: { lesson_id: opts.input.lesson_id },
-        include: { options: { orderBy: { order_index: "asc" } } },
-        orderBy: [{ order_index: "asc" }],
-      });
-
-      const progress = member
-        ? await opts.ctx.prisma.aiLearnUserProgress.findUnique({
-            where: { member_id_lesson_id: { member_id: member.id, lesson_id: opts.input.lesson_id } },
-            select: { completed_at: true, score: true, xp_earned: true, answers: true },
-          })
-        : null;
+      const quizMeta = new Map<
+        string,
+        { best_score: number; attempts: number }
+      >();
+      for (const s of submissions) {
+        const existing = quizMeta.get(s.quiz_id);
+        quizMeta.set(s.quiz_id, {
+          best_score: Math.max(existing?.best_score ?? 0, s.score),
+          attempts: (existing?.attempts ?? 0) + 1,
+        });
+      }
+      const vidDoneSet = new Set(
+        vidDone.map((c: { video_id: number }) => c.video_id)
+      );
+      const matDoneSet = new Set(
+        matDone.map((c: { material_id: string }) => c.material_id)
+      );
 
       return {
         code: STATUS_OK,
         message: "Success",
-        list: questions,
-        progress,
-        is_member: !!member,
+        quizzes: quizzes.map((q: (typeof quizzes)[number]) => {
+          const meta = quizMeta.get(q.id);
+          const xp_reward = q.questions.reduce(
+            (s: number, qn: { xp_reward: number }) => s + qn.xp_reward,
+            0
+          );
+          return {
+            id: q.id,
+            name: q.name,
+            description: q.description,
+            order_index: q.order_index,
+            question_count: q.questions.length,
+            xp_reward,
+            xp_earned: xpByKey.get(`quiz:${q.id}`) ?? 0,
+            best_score: meta?.best_score ?? null,
+            attempts: meta?.attempts ?? 0,
+          };
+        }),
+        videos: videos.map((v: (typeof videos)[number]) => ({
+          id: v.id,
+          title: v.title,
+          description: v.description,
+          video_url: v.video_url,
+          xp_reward: v.xp_reward,
+          order_index: v.order_index,
+          xp_earned: xpByKey.get(`video:${v.id}`) ?? 0,
+          completed: vidDoneSet.has(v.id),
+        })),
+        materials: materials.map((m: (typeof materials)[number]) => ({
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          content: m.content,
+          file_url: m.file_url,
+          xp_reward: m.xp_reward,
+          order_index: m.order_index,
+          xp_earned: xpByKey.get(`material:${m.id}`) ?? 0,
+          completed: matDoneSet.has(m.id),
+        })),
       };
     }),
 
-  myProgress: aileneProcedure.query(async (opts) => {
-    const user_id = opts.ctx.user.id;
-    const member = await opts.ctx.prisma.aiLearnMember.findUnique({ where: { user_id } });
-    if (!member) {
-      return { code: STATUS_OK, message: "Success", list: [], total_xp: 0, completed_count: 0 };
-    }
-    const progress = await opts.ctx.prisma.aiLearnUserProgress.findMany({
-      where: { member_id: member.id },
-      include: {
-        lesson: { select: { id: true, title: true, level: true, xp_reward: true } },
-      },
-    });
-    const totalXp = progress.reduce((sum, p) => sum + p.xp_earned, 0);
-    const completed = progress.filter((p) => !!p.completed_at).length;
-    return {
-      code: STATUS_OK,
-      message: "Success",
-      list: progress,
-      total_xp: totalXp,
-      completed_count: completed,
-    };
-  }),
+  quizQuestions: ailMemberProcedure
+    .input(z.object({ quiz_id: z.string().min(1) }))
+    .query(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const { quiz_id } = opts.input;
 
-  leaderboard: aileneProcedure.query(async (opts) => {
-    const members = await opts.ctx.prisma.aiLearnMember.findMany({
-      select: {
-        user: { select: { id: true, full_name: true, avatar: true } },
-        progress: {
-          select: { xp_earned: true, completed_at: true, score: true },
+      const quiz = await opts.ctx.prisma.ailQuiz.findUnique({
+        where: { id: quiz_id },
+        include: {
+          chapter: { select: { id: true, name: true } },
+          questions: {
+            orderBy: { order_index: "asc" },
+            include: { options: { orderBy: { id: "asc" } } },
+          },
         },
-      },
-    });
+      });
+      if (!quiz) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Quiz not found.",
+        });
+      }
 
-    const ranked = members
-      .map((m) => {
-        const prog = m.progress;
-        const totalXp = prog.reduce((sum, p) => sum + p.xp_earned, 0);
-        const completedCount = prog.filter((p) => !!p.completed_at).length;
-        const scores = prog
-          .map((p) => p.score)
-          .filter((s): s is number => s != null);
-        const avgScore =
-          scores.length > 0
-            ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
-            : null;
-        return { id: m.user.id, full_name: m.user.full_name, avatar: m.user.avatar, totalXp, completedCount, avgScore };
-      })
-      .sort((a, b) => b.totalXp - a.totalXp);
+      const [latestCompleted, draft, xp] = await Promise.all([
+        opts.ctx.prisma.ailQuizSubmission.findFirst({
+          where: { member_id: memberId, quiz_id, is_completed: true },
+          orderBy: { attempt_number: "desc" },
+        }),
+        opts.ctx.prisma.ailQuizSubmission.findFirst({
+          where: { member_id: memberId, quiz_id, is_completed: false },
+        }),
+        opts.ctx.prisma.ailXpEarning.findUnique({
+          where: {
+            member_id_learning_type_learning_id: {
+              member_id: memberId,
+              learning_type: "QUIZ",
+              learning_id: quiz_id,
+            },
+          },
+        }),
+      ]);
 
-    const teamTotalXp = ranked.reduce((sum, u) => sum + u.totalXp, 0);
-    const teamTotalCompleted = ranked.reduce((sum, u) => sum + u.completedCount, 0);
-    const teamScores = ranked.flatMap((u) =>
-      u.avgScore != null ? [u.avgScore] : []
-    );
-    const teamAvgScore =
-      teamScores.length > 0
-        ? Math.round(teamScores.reduce((a, b) => a + b, 0) / teamScores.length)
-        : null;
-
-    return {
-      code: STATUS_OK,
-      message: "Success",
-      list: ranked,
-      teamInsights: {
-        memberCount: ranked.length,
-        totalXp: teamTotalXp,
-        totalCompleted: teamTotalCompleted,
-        avgScore: teamAvgScore,
-      },
-    };
-  }),
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        quiz: {
+          id: quiz.id,
+          name: quiz.name,
+          description: quiz.description,
+          chapter: quiz.chapter,
+        },
+        questions: quiz.questions,
+        progress: latestCompleted
+          ? {
+              attempt_number: latestCompleted.attempt_number,
+              score: latestCompleted.score,
+              answers: latestCompleted.answers,
+              submitted_at: latestCompleted.submitted_at,
+            }
+          : null,
+        draft: draft
+          ? {
+              attempt_number: draft.attempt_number,
+              answers: draft.answers,
+              started_at: draft.started_at,
+              updated_at: draft.submitted_at,
+            }
+          : null,
+        xp_earned: xp?.xp_earned ?? 0,
+      };
+    }),
 };

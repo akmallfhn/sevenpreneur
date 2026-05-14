@@ -13,9 +13,9 @@ export default async function WebMarketingPageCMS() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListWebMarketing = [0, 4];
+  const allowedRolesListWebMarketing = ["Administrator", "Super Admin", "Marketer"];
 
-  if (!allowedRolesListWebMarketing.includes(userSession.user.role_id)) {
+  if (!allowedRolesListWebMarketing.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

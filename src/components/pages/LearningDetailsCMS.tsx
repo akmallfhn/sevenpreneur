@@ -46,7 +46,7 @@ dayjs.extend(localizedFormat);
 
 interface LearningDetailsCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   learningId: number;
 }
@@ -56,9 +56,13 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
   const [updateRecording, setUpdateRecording] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  const allowedRolesUpdateLearning = [0, 2];
+  const allowedRolesUpdateLearning = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
   const isAllowedUpdateLearning = allowedRolesUpdateLearning.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   useEffect(() => {
@@ -344,7 +348,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                   </SectionContainerCMS>
                   <MaterialListCMS
                     sessionToken={props.sessionToken}
-                    sessionUserRole={props.sessionUserRole}
+                    sessionUserRoleName={props.sessionUserRoleName}
                     learningId={props.learningId}
                   />
                 </div>

@@ -195,6 +195,7 @@ export const readAIResult = {
 
   submissionAnalysis: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])

@@ -30,7 +30,7 @@ import TableRowCMS from "../tables/TableRowCMS";
 
 interface ArticleListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
 }
 
 export default function ArticleListCMS(props: ArticleListCMSProps) {
@@ -46,7 +46,11 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
   );
 
   // Client-side Authorization
-  const allowedRolesMutateArticle = [0, 4];
+  const allowedRolesMutateArticle = [
+    "Administrator",
+    "Super Admin",
+    "Marketer",
+  ];
 
   // Debounce Typing for 1 second
   useEffect(() => {
@@ -84,7 +88,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
             desc="SEO content management hub to create, optimize, and drive organic traffic."
             icon={Newspaper}
           >
-            {allowedRolesMutateArticle.includes(props.sessionUserRole) && (
+            {allowedRolesMutateArticle.includes(props.sessionUserRoleName) && (
               <Link href="/articles/create">
                 <AppButton variant="tertiary">
                   <PlusCircle className="size-5" />
@@ -242,7 +246,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                     <TableCellCMS>
                       <div className="flex flex-col gap-2">
                         {allowedRolesMutateArticle.includes(
-                          props.sessionUserRole
+                          props.sessionUserRoleName
                         ) && (
                           <Link href={`/articles/${post.id}/edit`}>
                             <AppButton variant="tertiary" size="small">

@@ -9,16 +9,16 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface EnrollmentScorecardListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
 }
 
 export default function EnrollmentScorecardListCMS(
   props: EnrollmentScorecardListCMSProps
 ) {
-  const allowedRolesManageUser = [0];
+  const allowedRolesManageUser = ["Administrator", "Super Admin"];
   const isAllowedManageUser = allowedRolesManageUser.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   const {

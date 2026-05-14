@@ -16,7 +16,7 @@ import AppAlertConfirmDialog from "../modals/AppAlertConfirmDialog";
 
 interface FileItemCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId?: number;
   learningId?: number;
   fileId: number;
@@ -27,7 +27,7 @@ interface FileItemCMSProps {
 
 export default function FileItemCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
   learningId,
   fileId,
@@ -45,10 +45,20 @@ export default function FileItemCMS({
   const pathname = usePathname();
   const isLearningDetailsPage = pathname.includes("/learnings/");
 
-  const allowedRolesUpdateFile = [0, 2];
-  const allowedRolesDeleteFile = [0, 2];
-  const isAllowedUpdateFile = allowedRolesUpdateFile.includes(sessionUserRole);
-  const isAllowedDeleteFile = allowedRolesDeleteFile.includes(sessionUserRole);
+  const allowedRolesUpdateFile = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const allowedRolesDeleteFile = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const isAllowedUpdateFile =
+    allowedRolesUpdateFile.includes(sessionUserRoleName);
+  const isAllowedDeleteFile =
+    allowedRolesDeleteFile.includes(sessionUserRoleName);
 
   // Open and close dropdown
   const handleActionsDropdown = (e: React.MouseEvent<HTMLButtonElement>) => {

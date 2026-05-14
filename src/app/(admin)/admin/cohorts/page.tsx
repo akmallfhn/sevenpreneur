@@ -12,9 +12,14 @@ export default async function CohortsPageCMS() {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListCohort = [0, 1, 2];
+  const allowedRolesListCohort = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
 
-  if (!allowedRolesListCohort.includes(userSession.user.role_id)) {
+  if (!allowedRolesListCohort.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />
@@ -25,7 +30,7 @@ export default async function CohortsPageCMS() {
   return (
     <CohortListCMS
       sessionToken={sessionToken}
-      sessionUserRole={userSession.user.role_id}
+      sessionUserRoleName={userSession.user.role_name}
     />
   );
 }

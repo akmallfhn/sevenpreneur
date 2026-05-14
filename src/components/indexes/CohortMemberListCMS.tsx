@@ -29,7 +29,7 @@ dayjs.extend(localizedFormat);
 interface CohortMemberListCMSProps {
   sessionToken: string;
   sessionUserId: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
 }
 

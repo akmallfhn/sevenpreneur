@@ -11,14 +11,14 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 
 interface LearningListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   onClickAdd?: () => void;
 }
 
 export default function LearningListCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
   cohortId,
   onClickAdd,
 }: LearningListCMSProps) {
@@ -26,7 +26,11 @@ export default function LearningListCMS({
   const { resolvedTheme } = useTheme();
   const [showAll, setShowAll] = useState(false);
 
-  const isAllowedCreate = [0, 2].includes(sessionUserRole);
+  const isAllowedCreate = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ].includes(sessionUserRoleName);
 
   const { data, isLoading } = trpc.list.learnings.useQuery(
     { cohort_id: cohortId },
@@ -62,7 +66,7 @@ export default function LearningListCMS({
             <LearningSessionItemCMS
               key={post.id}
               sessionToken={sessionToken}
-              sessionUserRole={sessionUserRole}
+              sessionUserRoleName={sessionUserRoleName}
               cohortId={cohortId}
               learningSessionId={post.id}
               learningSessionName={post.name}

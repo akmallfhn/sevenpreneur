@@ -16,17 +16,21 @@ dayjs.extend(isBetween);
 
 interface CohortListCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
 }
 
 export default function CohortListCMS({
   sessionToken,
-  sessionUserRole,
+  sessionUserRoleName,
 }: CohortListCMSProps) {
   const utils = trpc.useUtils();
   const [createCohort, setCreateCohort] = useState(false);
 
-  const allowedRolesCreateCohort = [0, 2];
+  const allowedRolesCreateCohort = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
 
   const {
     data: cohortListData,
@@ -43,7 +47,7 @@ export default function CohortListCMS({
             desc="View and manage all your existing cohort programs in one place"
             icon={GraduationCap}
           >
-            {allowedRolesCreateCohort.includes(sessionUserRole) && (
+            {allowedRolesCreateCohort.includes(sessionUserRoleName) && (
               <AppButton
                 onClick={() => setCreateCohort(true)}
                 variant="tertiary"
@@ -63,7 +67,7 @@ export default function CohortListCMS({
                 <CohortItemCardCMS
                   key={post.id}
                   sessionToken={sessionToken}
-                  sessionUserRole={sessionUserRole}
+                  sessionUserRoleName={sessionUserRoleName}
                   cohortId={post.id}
                   cohortName={post.name}
                   cohortImage={post.image}

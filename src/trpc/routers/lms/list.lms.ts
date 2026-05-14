@@ -784,6 +784,7 @@ GROUP BY learnings.id, member_counts.member_count`;
 
   attendance_counts: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])

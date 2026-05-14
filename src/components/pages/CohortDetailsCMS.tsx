@@ -36,7 +36,7 @@ import PageContainerCMS from "./PageContainerCMS";
 interface CohortDetailsCMSProps {
   sessionToken: string;
   sessionUserId: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
 }
 
@@ -48,9 +48,19 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
   const [createProject, setCreateProject] = useState(false);
   const [createModule, setCreateModule] = useState(false);
 
-  const isAllowedUpdate = [0, 2].includes(props.sessionUserRole);
-  const isAllowedCreate = [0, 2].includes(props.sessionUserRole);
-  const isAllowedManageUser = props.sessionUserRole === 0;
+  const isAllowedUpdate = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ].includes(props.sessionUserRoleName);
+  const isAllowedCreate = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ].includes(props.sessionUserRoleName);
+  const isAllowedManageUser = ["Administrator", "Super Admin"].includes(
+    props.sessionUserRoleName
+  );
 
   const {
     data: cohortDetailsData,
@@ -311,7 +321,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
 
                 <LearningListCMS
                   sessionToken={props.sessionToken}
-                  sessionUserRole={props.sessionUserRole}
+                  sessionUserRoleName={props.sessionUserRoleName}
                   cohortId={props.cohortId}
                   onClickAdd={() => setCreateLearning(true)}
                 />
@@ -319,7 +329,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                 <CohortMembersPerformanceCMS
                   sessionToken={props.sessionToken}
                   sessionUserId={props.sessionUserId}
-                  sessionUserRole={props.sessionUserRole}
+                  sessionUserRoleName={props.sessionUserRoleName}
                   cohortId={props.cohortId}
                 />
               </main>
@@ -494,14 +504,14 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
 
                 <ModuleListCMS
                   sessionToken={props.sessionToken}
-                  sessionUserRole={props.sessionUserRole}
+                  sessionUserRoleName={props.sessionUserRoleName}
                   cohortId={props.cohortId}
                   onClickAdd={() => setCreateModule(true)}
                 />
 
                 <ProjectListCMS
                   sessionToken={props.sessionToken}
-                  sessionUserRole={props.sessionUserRole}
+                  sessionUserRoleName={props.sessionUserRoleName}
                   cohortId={props.cohortId}
                   onClickAdd={() => setCreateProject(true)}
                 />

@@ -282,6 +282,7 @@ export const useAITool = {
 
   submissionAnalysis: roleBasedProcedure([
     "Administrator",
+    "Super Admin",
     "Educator",
     "Class Manager",
   ])

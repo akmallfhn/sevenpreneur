@@ -89,12 +89,12 @@ export const loggedInProcedure = t.procedure.use(async (opts) => {
   });
 });
 
-export const administratorProcedure = t.procedure.use(async (opts) => {
+export const superAdminProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  if (ctx.user.role.name !== "Administrator") {
+  if (ctx.user.role.name !== "Super Admin") {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({
@@ -105,12 +105,15 @@ export const administratorProcedure = t.procedure.use(async (opts) => {
   });
 });
 
-export const aileneProcedure = t.procedure.use(async (opts) => {
+export const administratorProcedure = t.procedure.use(async (opts) => {
   const { ctx } = opts;
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  if (ctx.user.role.name === "General User") {
+  if (
+    ctx.user.role.name !== "Administrator" &&
+    ctx.user.role.name !== "Super Admin"
+  ) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({
@@ -138,3 +141,44 @@ export const roleBasedProcedure = (roleList: string[]) => {
     });
   });
 };
+
+export const ailMemberProcedure = t.procedure.use(async (opts) => {
+  const { ctx } = opts;
+  if (!ctx.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  const ail_member = await ctx.prisma.ailMember.findUnique({
+    where: { user_id: ctx.user.id },
+    include: { current_level: true },
+  });
+  if (!ail_member) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Not an Ailene member.",
+    });
+  }
+  return opts.next({
+    ctx: {
+      prisma: ctx.prisma,
+      user: ctx.user, // not-null
+      ail_member, // not-null
+    },
+  });
+});
+
+export const championProcedure = ailMemberProcedure.use(async (opts) => {
+  if (opts.ctx.ail_member.role !== "CHAMPION") {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Champion access only.",
+    });
+  }
+  return opts.next(opts);
+});
+
+export const sponsorProcedure = ailMemberProcedure.use(async (opts) => {
+  if (opts.ctx.ail_member.role !== "SPONSOR") {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Sponsor access only." });
+  }
+  return opts.next(opts);
+});

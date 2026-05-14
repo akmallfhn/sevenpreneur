@@ -141,6 +141,32 @@ export const authRouter = createTRPCRouter({
     };
   }),
 
+  checkAilMember: loggedInProcedure.query(async (opts) => {
+    const ailMember = await opts.ctx.prisma.ailMember.findUnique({
+      where: { user_id: opts.ctx.user.id },
+      include: { current_level: true },
+    });
+    if (!ailMember) {
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        ail_member: null,
+      };
+    }
+    const xpAgg = await opts.ctx.prisma.ailXpEarning.aggregate({
+      _sum: { xp_earned: true },
+      where: { member_id: ailMember.id },
+    });
+    return {
+      code: STATUS_OK,
+      message: "Success",
+      ail_member: {
+        ...ailMember,
+        total_xp: xpAgg._sum.xp_earned ?? 0,
+      },
+    };
+  }),
+
   createJWT: loggedInProcedure.query((opts) => {
     const secretKey = process.env.SECRET_KEY_JWT;
     if (!secretKey || secretKey == "") {

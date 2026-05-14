@@ -22,7 +22,7 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const createLMS = {
-  cohort: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohort: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         name: stringNotBlank(),
@@ -90,7 +90,7 @@ export const createLMS = {
       };
     }),
 
-  cohortPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+  cohortPrice: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         cohort_id: numberIsID(),
@@ -170,7 +170,7 @@ export const createLMS = {
       };
     }),
 
-  module: roleBasedProcedure(["Administrator", "Class Manager"])
+  module: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         cohort_id: numberIsID(),
@@ -209,7 +209,7 @@ export const createLMS = {
       };
     }),
 
-  learning: roleBasedProcedure(["Administrator", "Class Manager"])
+  learning: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         cohort_id: numberIsID(),
@@ -277,7 +277,7 @@ export const createLMS = {
       };
     }),
 
-  material: roleBasedProcedure(["Administrator", "Class Manager"])
+  material: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         learning_id: numberIsID(),
@@ -386,7 +386,7 @@ export const createLMS = {
       };
     }),
 
-  project: roleBasedProcedure(["Administrator", "Class Manager"])
+  project: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(
       z.object({
         cohort_id: numberIsID(),
@@ -427,7 +427,7 @@ export const createLMS = {
       };
     }),
 
-  submission: roleBasedProcedure(["Administrator", "General User"])
+  submission: roleBasedProcedure(["Administrator", "Super Admin", "General User"])
     .input(
       z.object({
         project_id: numberIsID(),

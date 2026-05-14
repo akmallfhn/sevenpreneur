@@ -43,6 +43,16 @@ Semua data fetching lewat tRPC. REST API routes hanya untuk webhooks (Xendit, Wh
   - `aileneProcedure` — Ailene platform members
   - `roleBasedProcedure(roleId)` — custom role check
 
+#### Endpoint granularity
+
+**One endpoint = one service concern.** Jangan bikin "kitchen-sink" endpoint yang menggabungkan banyak query berbeda hanya karena dipakai di satu halaman. Pisahkan per kebutuhan datanya supaya:
+
+- Mudah di-cache & di-invalidate satu per satu di React Query.
+- Bisa di-reuse di halaman/komponen lain tanpa harus refactor backend.
+- Error/loading state granular — satu bagian dashboard bisa loading tanpa block bagian lain.
+
+Contoh: halaman dashboard yang butuh leaderboard, streak, level progress, dan today's focus → bikin 4 endpoint terpisah (`read.leaderboard`, `read.streak`, `read.levelProgress`, `read.todayFocus`), bukan satu endpoint `read.studentDashboard` yang query semuanya sekaligus.
+
 ### Authentication
 
 Token-based (bukan NextAuth). Session tokens disimpan di tabel `Token` DB dan dikirim sebagai `Authorization: Bearer <token>`. tRPC context (`src/trpc/init.ts`) baca header, validasi ke DB, dan attach `ctx.user`.

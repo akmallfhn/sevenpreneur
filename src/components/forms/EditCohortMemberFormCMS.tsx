@@ -16,7 +16,7 @@ import AppLoadingComponents from "../states/AppLoadingComponents";
 interface EditCohortMemberFormCMSProps {
   sessionToken: string;
   sessionUserId: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   userId: string;
   cohortId: number;
   isOpen: boolean;
@@ -32,9 +32,13 @@ export default function EditCohortMemberFormCMS(
   const [isScout, setIsScout] = useState(false);
   const [certificateURL, setCertificateURL] = useState("");
 
-  const allowedRolesUpdateCertificate = [0, 2];
+  const allowedRolesUpdateCertificate = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
   const isAllowedUpdateCertificate = allowedRolesUpdateCertificate.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   // Return initial data

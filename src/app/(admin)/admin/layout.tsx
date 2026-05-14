@@ -46,7 +46,7 @@ export default async function AdminLayout(
 
   const checkUser = (await trpc.auth.checkSession()).user;
 
-  if (!checkUser || checkUser.role_id === 3) {
+  if (!checkUser || checkUser.role_name === "General User") {
     return <AppPageState variant="FORBIDDEN" />;
   }
 
@@ -57,7 +57,7 @@ export default async function AdminLayout(
           <div className="root relative w-full min-h-screen bg-dashboard-bg">
             <SidebarCMS
               sessionToken={sessionToken}
-              sessionUserRole={checkUser.role_id}
+              sessionUserRoleName={checkUser.role_name}
             />
             {props.children}
             <div className="lg:hidden">

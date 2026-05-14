@@ -1,49 +1,36 @@
 import { createTRPCRouter } from "@/trpc/init";
-import { createAilene } from "./create.ailene";
-import { deleteAilene } from "./delete.ailene";
+import { championAilene } from "./champion.ailene";
 import { listAilene } from "./list.ailene";
+import { preAssessmentAilene } from "./pre-assessment.ailene";
 import { readAilene } from "./read.ailene";
 import { updateAilene } from "./update.ailene";
 
 export const aileneRouter = createTRPCRouter({
-  // Journeys
-  listJourneys: listAilene.journeys,
-  listJourneysForUser: listAilene.journeysForUser,
-
-  // Sessions
-  listSessions: listAilene.sessions,
-  readSession: readAilene.session,
-  createSession: createAilene.session,
-  updateSession: updateAilene.session,
-  deleteSession: deleteAilene.session,
-
-  // Members
-  listMembers: listAilene.members,
-  addMemberByEmail: createAilene.addMemberByEmail,
-  updateMemberRole: updateAilene.memberRole,
-  deleteMember: deleteAilene.member,
-
-  // Lessons
-  createLesson: createAilene.lesson,
-  listLessons: listAilene.lessons,
-  listLessonsWithProgress: listAilene.lessonsWithProgress,
-  readLesson: readAilene.lesson,
-  readLessonForUser: readAilene.lessonForUser,
-  updateLesson: updateAilene.lesson,
-  deleteLesson: deleteAilene.lesson,
-
-  // Quiz questions
-  createQuizQuestion: createAilene.quizQuestion,
-  listQuizQuestions: listAilene.quizQuestions,
-  listQuizQuestionsForUser: listAilene.quizQuestionsForUser,
-  updateQuizQuestion: updateAilene.quizQuestion,
-  deleteQuizQuestion: deleteAilene.quizQuestion,
-
-  // User progress
-  submitQuiz: createAilene.submitQuiz,
-  myProgress: listAilene.myProgress,
-  leaderboard: listAilene.leaderboard,
-
-  // Profile
-  myProfile: readAilene.myProfile,
+  list: createTRPCRouter({
+    myGroups: listAilene.myGroups,
+    levels: listAilene.levels,
+    chapters: listAilene.chapters,
+    tasks: listAilene.tasks,
+    quizQuestions: listAilene.quizQuestions,
+  }),
+  read: createTRPCRouter({
+    materialDetail: readAilene.materialDetail,
+    quizResult: readAilene.quizResult,
+    myPreAssessment: preAssessmentAilene.myPreAssessment,
+    todayFocus: readAilene.todayFocus,
+    levelProgress: readAilene.levelProgress,
+    streak: readAilene.streak,
+    groupLeaderboard: readAilene.groupLeaderboard,
+  }),
+  champion: createTRPCRouter({
+    listGroups: championAilene.listGroups,
+    listMembers: championAilene.listMembers,
+  }),
+  unlockLevel: updateAilene.unlockLevel,
+  startQuizAttempt: updateAilene.startQuizAttempt,
+  saveQuizDraft: updateAilene.saveQuizDraft,
+  submitQuiz: updateAilene.submitQuiz,
+  completeMaterial: updateAilene.completeMaterial,
+  completeVideo: updateAilene.completeVideo,
+  submitPreAssessment: preAssessmentAilene.submitPreAssessment,
 });

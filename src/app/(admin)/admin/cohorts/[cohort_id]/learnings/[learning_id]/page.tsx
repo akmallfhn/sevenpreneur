@@ -21,9 +21,14 @@ export default async function LearningDetailsPage({
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesDetailsLearning = [0, 1, 2];
+  const allowedRolesDetailsLearning = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
 
-  if (!allowedRolesDetailsLearning.includes(userSession.user.role_id)) {
+  if (!allowedRolesDetailsLearning.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />
@@ -34,7 +39,7 @@ export default async function LearningDetailsPage({
   return (
     <LearningDetailsCMS
       sessionToken={sessionToken}
-      sessionUserRole={userSession.user.role_id}
+      sessionUserRoleName={userSession.user.role_name}
       cohortId={cohortId}
       learningId={learningId}
     />

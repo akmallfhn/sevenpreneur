@@ -21,9 +21,14 @@ export default async function SubmissionsPageCMS({
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListSubmission = [0, 1, 2];
+  const allowedRolesListSubmission = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
 
-  if (!allowedRolesListSubmission.includes(userSession.user.role_id)) {
+  if (!allowedRolesListSubmission.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />
@@ -35,7 +40,7 @@ export default async function SubmissionsPageCMS({
     <SubmissionListCMS
       sessionToken={sessionToken}
       sessionUserId={userSession.user.id}
-      sessionUserRole={userSession.user.role_id}
+      sessionUserRoleName={userSession.user.role_name}
       cohortId={cohortId}
       projectId={projectId}
     />

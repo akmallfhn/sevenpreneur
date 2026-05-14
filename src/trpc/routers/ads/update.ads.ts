@@ -10,7 +10,7 @@ import { StatusEnum } from "@prisma/client";
 import z from "zod";
 
 export const updateAdv = {
-  interstitial: roleBasedProcedure(["Administrator", "Marketer"])
+  interstitial: roleBasedProcedure(["Administrator", "Super Admin", "Marketer"])
     .input(
       z.object({
         id: numberIsID(),
@@ -53,7 +53,7 @@ export const updateAdv = {
       };
     }),
 
-  ticker: roleBasedProcedure(["Administrator", "Marketer"])
+  ticker: roleBasedProcedure(["Administrator", "Super Admin", "Marketer"])
     .input(
       z.object({
         id: numberIsID(),

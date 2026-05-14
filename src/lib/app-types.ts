@@ -30,6 +30,7 @@ export type ReactionVariant = "favorite" | "scout";
 
 // User related
 export type RolesUser =
+  | "superAdmin"
   | "administrator"
   | "educator"
   | "classManager"
@@ -113,3 +114,6 @@ export type WhatsappChatType =
 
 // Article related
 export type ArticleStatus = "DRAFT" | "PUBLISHED" | "UNPUBLISHED";
+
+// AILENE related
+export type TaskVariant = "Quiz" | "Video" | "Material" | "PreAssessment";

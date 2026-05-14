@@ -13,9 +13,9 @@ export default async function ArticlesPageCMS() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesListArticle = [0, 4];
+  const allowedRolesListArticle = ["Administrator", "Super Admin", "Marketer"];
 
-  if (!allowedRolesListArticle.includes(userSession.user.role_id)) {
+  if (!allowedRolesListArticle.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />
@@ -26,7 +26,7 @@ export default async function ArticlesPageCMS() {
   return (
     <ArticleListCMS
       sessionToken={sessionToken}
-      sessionUserRole={userSession.user.role_id}
+      sessionUserRoleName={userSession.user.role_name}
     />
   );
 }

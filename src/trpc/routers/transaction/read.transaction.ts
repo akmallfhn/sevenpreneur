@@ -105,7 +105,7 @@ export const readTransaction = {
     .input(z.object({ id: stringIsNanoid() }))
     .query(async (opts) => {
       let selectedUserId: Optional<string> = opts.ctx.user.id;
-      if (opts.ctx.user.role.name === "Administrator") {
+      if (opts.ctx.user.role.name === "Super Admin") {
         selectedUserId = undefined;
       }
 

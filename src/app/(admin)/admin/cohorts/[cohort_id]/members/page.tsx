@@ -19,9 +19,9 @@ export default async function MembersPage({ params }: MembersPageProps) {
   setSessionToken(sessionToken);
 
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesMemberList = [0];
+  const allowedRolesMemberList = ["Administrator", "Super Admin"];
 
-  if (!allowedRolesMemberList.includes(userSession.user.role_id)) {
+  if (!allowedRolesMemberList.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />
@@ -33,7 +33,7 @@ export default async function MembersPage({ params }: MembersPageProps) {
     <CohortMemberListCMS
       sessionToken={sessionToken}
       sessionUserId={userSession.user.id}
-      sessionUserRole={userSession.user.role_id}
+      sessionUserRoleName={userSession.user.role_name}
       cohortId={cohortId}
     />
   );

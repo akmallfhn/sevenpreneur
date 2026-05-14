@@ -4,7 +4,7 @@ import { checkDeleteResult } from "@/trpc/utils/errors";
 import { objectHasOnlyID } from "@/trpc/utils/validation";
 
 export const deleteEvent = {
-  event: roleBasedProcedure(["Administrator", "Class Manager"])
+  event: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       // $executeRaw is used for using the correct CURRENT_TIMESTAMP.
@@ -21,7 +21,7 @@ export const deleteEvent = {
       };
     }),
 
-  eventPrice: roleBasedProcedure(["Administrator", "Class Manager"])
+  eventPrice: roleBasedProcedure(["Administrator", "Super Admin", "Class Manager"])
     .input(objectHasOnlyID())
     .mutation(async (opts) => {
       const deletedEventPrice = await opts.ctx.prisma.eventPrice.deleteMany({

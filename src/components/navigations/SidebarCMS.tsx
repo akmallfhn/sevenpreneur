@@ -19,7 +19,7 @@ import AppSidebarMenuItem from "./AppSidebarMenuItem";
 
 interface SidebarCMSProps {
   sessionToken: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
 }
 
 export default function SidebarCMS(props: SidebarCMSProps) {
@@ -30,38 +30,56 @@ export default function SidebarCMS(props: SidebarCMSProps) {
     ? "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square.svg"
     : "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-sevenpreneur-square-black.svg";
 
-  const allowedRolesMenuCohorts = [0, 1, 2];
-  const allowedRolesMenuEvents = [0, 2];
-  const allowedRolesMenuDiscounts = [0];
-  const allowedRolesMenuUsers = [0, 1, 2];
-  const allowedRolesMenuTransactions = [0];
-  const allowedRolesMenuWebMarketing = [0, 4];
-  const allowedRolesMenuArticles = [0];
-  const allowedRolesMenuWhatsapp = [0];
+  const allowedRolesMenuCohorts = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
+  const allowedRolesMenuEvents = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const allowedRolesMenuDiscounts = ["Administrator", "Super Admin"];
+  const allowedRolesMenuUsers = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
+  const allowedRolesMenuTransactions = ["Super Admin"];
+  const allowedRolesMenuWebMarketing = [
+    "Administrator",
+    "Super Admin",
+    "Marketer",
+  ];
+  const allowedRolesMenuArticles = ["Administrator", "Super Admin"];
+  const allowedRolesMenuWhatsapp = ["Administrator", "Super Admin"];
 
   const isAllowedMenuCohorts = allowedRolesMenuCohorts.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuEvents = allowedRolesMenuEvents.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuDiscounts = allowedRolesMenuDiscounts.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuUsers = allowedRolesMenuUsers.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuTransactions = allowedRolesMenuTransactions.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuWebMarketing = allowedRolesMenuWebMarketing.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuArticles = allowedRolesMenuArticles.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedMenuWhatsapp = allowedRolesMenuWhatsapp.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   useEffect(() => {

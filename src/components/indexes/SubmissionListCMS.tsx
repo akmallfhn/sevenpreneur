@@ -27,7 +27,7 @@ dayjs.extend(localizedFormat);
 interface SubmissionListCMSProps {
   sessionToken: string;
   sessionUserId: string;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   cohortId: number;
   projectId: number;
 }
@@ -39,9 +39,14 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
   const selectedId = searchParam.get("id");
   const [openDetailsId, setOpenDetailsId] = useState<string | null>(selectedId);
 
-  const allowedRolesDetailsSubmission = [0, 1, 2];
+  const allowedRolesDetailsSubmission = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
   const isAllowedDetailsSubmission = allowedRolesDetailsSubmission.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   // Push Parameter to URL
@@ -255,7 +260,7 @@ export default function SubmissionListCMS(props: SubmissionListCMSProps) {
         <EditSubmissionFormCMS
           sessionToken={props.sessionToken}
           sessionUserId={props.sessionUserId}
-          sessionUserRole={props.sessionUserRole}
+          sessionUserRoleName={props.sessionUserRoleName}
           projectDeadline={projectDetailsData?.deadline_at}
           submissionId={Number(selectedId)}
           isOpen={!!openDetailsId}

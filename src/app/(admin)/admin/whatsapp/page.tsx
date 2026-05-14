@@ -13,9 +13,9 @@ export default async function WhatsappPageCMS() {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesWhatsappChats = [0];
+  const allowedRolesWhatsappChats = ["Administrator", "Super Admin"];
 
-  if (!allowedRolesWhatsappChats.includes(userSession.user.role_id)) {
+  if (!allowedRolesWhatsappChats.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

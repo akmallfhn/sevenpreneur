@@ -18,9 +18,14 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
 
   // Client-side Authorization
   const userSession = await trpc.auth.checkSession();
-  const allowedRolesReadUser = [0, 1, 2];
+  const allowedRolesReadUser = [
+    "Administrator",
+    "Super Admin",
+    "Educator",
+    "Class Manager",
+  ];
 
-  if (!allowedRolesReadUser.includes(userSession.user.role_id)) {
+  if (!allowedRolesReadUser.includes(userSession.user.role_name)) {
     return (
       <PageContainerCMS>
         <AppPageState variant="FORBIDDEN" />

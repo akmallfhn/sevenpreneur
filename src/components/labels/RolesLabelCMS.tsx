@@ -6,6 +6,7 @@ import {
   faChalkboardUser,
   faPenNib,
   faUser,
+  faUserGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
@@ -18,10 +19,15 @@ const variantStyles: Record<
     labelIcon: ReactNode;
   }
 > = {
-  administrator: {
+  superAdmin: {
     backgroundColor: "bg-[#EFEDF9]",
     labelColor: "text-[#42359B]",
     labelIcon: <FontAwesomeIcon icon={faBuildingUser} />,
+  },
+  administrator: {
+    backgroundColor: "bg-warning-background",
+    labelColor: "text-warning-foreground",
+    labelIcon: <FontAwesomeIcon icon={faUserGear} />,
   },
   educator: {
     backgroundColor: "bg-[#E2F0FF]",

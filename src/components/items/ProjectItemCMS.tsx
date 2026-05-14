@@ -18,7 +18,7 @@ dayjs.extend(localizedFormat);
 
 interface ProjectItemCMSProps {
   cohortId: number;
-  sessionUserRole: number;
+  sessionUserRoleName: string;
   projectId: number;
   projectName: string;
   lastSubmission: string;
@@ -33,13 +33,21 @@ export default function ProjectItemCMS(props: ProjectItemCMSProps) {
     useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const allowedRolesUpdateProject = [0, 2];
-  const allowedRolesDeleteProject = [0, 2];
+  const allowedRolesUpdateProject = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
+  const allowedRolesDeleteProject = [
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+  ];
   const isAllowedUpdateProject = allowedRolesUpdateProject.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
   const isAllowedDeleteProject = allowedRolesDeleteProject.includes(
-    props.sessionUserRole
+    props.sessionUserRoleName
   );
 
   // Open and close dropdown

@@ -232,24 +232,103 @@ enum WAAStatus {
   @@map("wa_alert_status")
 }
 
-// Enumeration for the Ailene
+// Enumerations for Ailene (Ail*)
 
-enum AiLearnLessonStatus {
-  DRAFT     @map("draft")
-  PUBLISHED @map("published")
-  ARCHIVED  @map("archived")
+enum AilRole {
+  STUDENT  @map("student")
+  CHAMPION @map("champion")
+  SPONSOR  @map("sponsor")
 
-  @@map("ai_learn_lesson_status")
+  @@map("ail_role")
 }
 
-enum AiLearnRoleEnum {
-  MARKETING   @map("marketing")
-  OPERATIONAL @map("operational")
-  CEO         @map("ceo")
-  FINANCE     @map("finance")
-  HR          @map("hr")
+enum AilUseCaseFrequency {
+  DAILY        @map("daily")
+  WEEKLY       @map("weekly")
+  MONTHLY      @map("monthly")
+  OCCASIONALLY @map("occasionally")
 
-  @@map("ai_learn_role_enum")
+  @@map("ail_use_case_frequency")
+}
+
+enum AilLearningType {
+  QUIZ     @map("quiz")
+  VIDEO    @map("video")
+  MATERIAL @map("material")
+
+  @@map("ail_learning_type")
+}
+
+// Pre-assessment single-choice enums (one per question)
+
+enum AilPaAiUseFreq {
+  NEVER     @map("never")
+  TRIED     @map("tried")
+  WEEKLY    @map("weekly")
+  DAILY     @map("daily")
+  INTENSIVE @map("intensive")
+
+  @@map("ail_pa_ai_use_freq")
+}
+
+enum AilPaUnderstanding {
+  NONE    @map("none")
+  AWARE   @map("aware")
+  BASIC   @map("basic")
+  EXPLAIN @map("explain")
+  EXPERT  @map("expert")
+
+  @@map("ail_pa_understanding")
+}
+
+enum AilPaOutputReview {
+  NO_CHECK    @map("no_check")
+  SOMETIMES   @map("sometimes")
+  ALWAYS      @map("always")
+  CROSS_CHECK @map("cross_check")
+  NO_USE      @map("no_use")
+
+  @@map("ail_pa_output_review")
+}
+
+enum AilPaTeamAdoption {
+  NONE       @map("none")
+  PERSONAL   @map("personal")
+  PILOT      @map("pilot")
+  POLICY     @map("policy")
+  INTEGRATED @map("integrated")
+
+  @@map("ail_pa_team_adoption")
+}
+
+enum AilPaPromptSkill {
+  NONE       @map("none")
+  BASIC      @map("basic")
+  DECENT     @map("decent")
+  STRUCTURED @map("structured")
+  EXPERT     @map("expert")
+
+  @@map("ail_pa_prompt_skill")
+}
+
+enum AilPaAttitude {
+  TOO_RISKY  @map("too_risky")
+  CAUTIOUS   @map("cautious")
+  NEUTRAL    @map("neutral")
+  SUPPORTIVE @map("supportive")
+  ESSENTIAL  @map("essential")
+
+  @@map("ail_pa_attitude")
+}
+
+enum AilPaMotivation {
+  MANDATORY @map("mandatory")
+  CURIOUS   @map("curious")
+  TENTATIVE @map("tentative")
+  READY     @map("ready")
+  EAGER     @map("eager")
+
+  @@map("ail_pa_motivation")
 }
 
 ////////////
@@ -306,59 +385,58 @@ model PaymentChannel {
 // User data
 
 model User {
-  id                        String                 @id @default(uuid()) @db.Uuid
-  full_name                 String                 @db.VarChar()
-  email                     String                 @unique @db.VarChar()
-  phone_country             PhoneCountryCode?      @relation(fields: [phone_country_id], references: [id])
-  phone_country_id          Int?                   @db.SmallInt
-  phone_number              String?                @db.VarChar()
-  avatar                    String?                @db.VarChar()
-  role                      Role                   @relation(fields: [role_id], references: [id])
-  role_id                   Int                    @default(3) @db.SmallInt // General User
-  status                    StatusEnum             @default(ACTIVE)
-  date_of_birth             DateTime?              @db.Date
-  business_name             String?                @db.VarChar()
-  industry                  Industry?              @relation(fields: [industry_id], references: [id])
-  industry_id               Int?                   @db.SmallInt
-  business_description      String?                @db.Text
-  occupation                OccupationEnum?
-  yearly_revenue            RevenueEnum?
-  total_employees           NumEmployeeEnum?
-  company_profile_url       String?                @db.VarChar()
-  business_age_years        Int?                   @db.Integer
-  legal_entity_type         LegalEntityEnum?
-  average_selling_price     Decimal?               @db.Decimal(12, 2)
-  created_at                DateTime               @default(now()) @db.Timestamptz()
-  updated_at                DateTime               @default(now()) @updatedAt @db.Timestamptz()
-  last_login                DateTime               @default(now()) @updatedAt @db.Timestamptz()
-  deleted_at                DateTime?              @db.Timestamptz()
-  tokens                    Token[]
-  deleted_cohorts           Cohort[]
-  deleted_playlists         Playlist[]
-  speaker_at                Learning[]
-  speaker_in                EducatorPlaylist[]     @relation("host_playlist")
-  ai_learn_sessions_speaker AiLearnSession[]       @relation("ai_learn_session_speaker")
-  transactions              Transaction[]
-  cohorts                   UserCohort[]
-  discussion_starters       DiscussionStarter[]
-  discussion_replies        DiscussionReply[]
-  submissions               Submission[]
-  ba_answer_sheets          BAAnswerSheet[]
-  playlists                 UserPlaylist[]         @relation("watch_playlist")
-  Event                     Event[]
-  UserEvent                 UserEvent[]
-  ai_results                AIResult[]
-  ai_conversations          AIConversation[]
-  attendances               Attendance[]
-  learning_ratings          LearningRating[]
-  authored_articles         Article[]              @relation("author_article")
-  reviewed_articles         Article[]              @relation("reviewer_article")
-  bd_fin_revenue_mtds       BDFinRevenueMTD[]
-  bd_fin_cost_mtds          BDFinCostMTD[]
-  bd_north_star_indicators  BDNorthStarIndicator[]
-  wa_conversations          WAConversation[]       @relation("wa_conversation")
-  wa_handleds               WAConversation[]       @relation("wa_handle")
-  ai_learn_member           AiLearnMember?
+  id                       String                 @id @default(uuid()) @db.Uuid
+  full_name                String                 @db.VarChar()
+  email                    String                 @unique @db.VarChar()
+  phone_country            PhoneCountryCode?      @relation(fields: [phone_country_id], references: [id])
+  phone_country_id         Int?                   @db.SmallInt
+  phone_number             String?                @db.VarChar()
+  avatar                   String?                @db.VarChar()
+  role                     Role                   @relation(fields: [role_id], references: [id])
+  role_id                  Int                    @default(3) @db.SmallInt // General User
+  status                   StatusEnum             @default(ACTIVE)
+  date_of_birth            DateTime?              @db.Date
+  business_name            String?                @db.VarChar()
+  industry                 Industry?              @relation(fields: [industry_id], references: [id])
+  industry_id              Int?                   @db.SmallInt
+  business_description     String?                @db.Text
+  occupation               OccupationEnum?
+  yearly_revenue           RevenueEnum?
+  total_employees          NumEmployeeEnum?
+  company_profile_url      String?                @db.VarChar()
+  business_age_years       Int?                   @db.Integer
+  legal_entity_type        LegalEntityEnum?
+  average_selling_price    Decimal?               @db.Decimal(12, 2)
+  created_at               DateTime               @default(now()) @db.Timestamptz()
+  updated_at               DateTime               @default(now()) @updatedAt @db.Timestamptz()
+  last_login               DateTime               @default(now()) @updatedAt @db.Timestamptz()
+  deleted_at               DateTime?              @db.Timestamptz()
+  tokens                   Token[]
+  deleted_cohorts          Cohort[]
+  deleted_playlists        Playlist[]
+  speaker_at               Learning[]
+  speaker_in               EducatorPlaylist[]     @relation("host_playlist")
+  transactions             Transaction[]
+  cohorts                  UserCohort[]
+  discussion_starters      DiscussionStarter[]
+  discussion_replies       DiscussionReply[]
+  submissions              Submission[]
+  ba_answer_sheets         BAAnswerSheet[]
+  playlists                UserPlaylist[]         @relation("watch_playlist")
+  Event                    Event[]
+  UserEvent                UserEvent[]
+  ai_results               AIResult[]
+  ai_conversations         AIConversation[]
+  attendances              Attendance[]
+  learning_ratings         LearningRating[]
+  authored_articles        Article[]              @relation("author_article")
+  reviewed_articles        Article[]              @relation("reviewer_article")
+  bd_fin_revenue_mtds      BDFinRevenueMTD[]
+  bd_fin_cost_mtds         BDFinCostMTD[]
+  bd_north_star_indicators BDNorthStarIndicator[]
+  wa_conversations         WAConversation[]       @relation("wa_conversation")
+  wa_handleds              WAConversation[]       @relation("wa_handle")
+  ail_member               AilMember?
 
   @@map("users")
 }
@@ -1046,134 +1124,157 @@ model WAAlert {
   @@map("wa_alerts")
 }
 
-// Ailene AI Learn //
+// Ailene //
 
-model AiLearnMember {
-  id                  Int                        @id @default(autoincrement()) @db.Integer
-  user                User                       @relation(fields: [user_id], references: [id])
-  user_id             String                     @unique @db.Uuid
-  role_name           AiLearnRoleEnum
-  created_at          DateTime                   @default(now()) @db.Timestamptz()
-  progress            AiLearnUserProgress[]
-  session_attendances AiLearnSessionAttendance[]
+model AilCategory {
+  id   Int    @id @default(autoincrement()) @db.SmallInt
+  name String @unique @db.VarChar()
 
-  @@map("ai_learn_members")
+  @@map("ail_categories")
 }
 
-model AiLearnJourney {
+model AilMember {
+  id               Int       @id @default(autoincrement()) @db.Integer
+  user             User      @relation(fields: [user_id], references: [id])
+  user_id          String    @unique @db.Uuid
+  role             AilRole
+  job_title        String    @db.VarChar()
+  current_level    AilLevel  @relation("member_current_level", fields: [current_level_id], references: [id])
+  current_level_id Int       @default(0) @db.Integer
+  level_history    Json      @default("[]") @db.Json
+  last_active_at   DateTime? @db.Timestamptz()
+  created_at       DateTime  @default(now()) @db.Timestamptz()
+
+  championed_groups    AilGroup[]              @relation("group_champion")
+  groups               AilGroupMember[]
+  quiz_submissions     AilQuizSubmission[]
+  video_completions    AilVideoCompletion[]
+  material_completions AilMaterialCompletion[]
+  xp_earnings          AilXpEarning[]
+  pre_assessment       AilPreAssessment?
+
+  @@map("ail_members")
+}
+
+model AilGroup {
   id          Int              @id @default(autoincrement()) @db.Integer
   name        String           @db.VarChar()
-  slug        String           @unique @db.VarChar()
-  description String?          @db.Text
-  cover_image String?          @db.VarChar()
-  role        AiLearnRoleEnum?
-  order_index Int              @default(0) @db.SmallInt
-  status      StatusEnum       @default(ACTIVE)
+  champion    AilMember        @relation("group_champion", fields: [champion_id], references: [id])
+  champion_id Int              @db.Integer
   created_at  DateTime         @default(now()) @db.Timestamptz()
   updated_at  DateTime         @default(now()) @updatedAt @db.Timestamptz()
-  lessons     AiLearnLesson[]
+  members     AilGroupMember[]
 
-  @@map("ai_learn_journeys")
+  @@map("ail_groups")
 }
 
-model AiLearnLesson {
-  id             Int                   @id @default(autoincrement()) @db.Integer
-  title          String                @db.VarChar()
-  slug           String                @unique @db.VarChar()
-  description    String?               @db.Text
-  content        String                @default("") @db.Text
-  youtube_url    String                @default("") @db.Text
-  level          Int                   @default(1) @db.SmallInt
-  xp_reward      Int                   @default(10) @db.SmallInt
-  status         AiLearnLessonStatus   @default(DRAFT)
-  order_index    Int                   @default(0) @db.SmallInt
-  journey        AiLearnJourney        @relation(fields: [journey_id], references: [id])
-  journey_id     Int                   @db.Integer
-  created_at     DateTime              @default(now()) @db.Timestamptz()
-  updated_at     DateTime              @default(now()) @updatedAt @db.Timestamptz()
-  quiz_questions AiLearnQuizQuestion[]
-  progress       AiLearnUserProgress[]
+model AilLevel {
+  id              Int          @id @default(autoincrement()) @db.Integer
+  level_number    Int          @unique @db.SmallInt
+  name            String       @db.VarChar()
+  icon            String?      @db.VarChar()
+  min_xp          Int          @default(0) @db.Integer
+  status          StatusEnum   @default(ACTIVE)
+  created_at      DateTime     @default(now()) @db.Timestamptz()
+  updated_at      DateTime     @default(now()) @updatedAt @db.Timestamptz()
+  chapters        AilChapter[]
+  current_members AilMember[]  @relation("member_current_level")
 
-  @@map("ai_learn_lessons")
+  @@map("ail_levels")
 }
 
-model AiLearnQuizQuestion {
-  id          Int                 @id @default(autoincrement()) @db.Integer
-  lesson      AiLearnLesson       @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
-  lesson_id   Int                 @db.Integer
-  question    String              @db.Text
-  explanation String?             @db.Text
+model AilChapter {
+  id           Int           @id @default(autoincrement()) @db.Integer
+  level        AilLevel      @relation(fields: [level_id], references: [id])
+  level_id     Int           @db.Integer
+  name         String        @db.VarChar()
+  description  String?       @db.Text
+  session_date DateTime      @db.Timestamptz()
+  status       StatusEnum    @default(ACTIVE)
+  created_at   DateTime      @default(now()) @db.Timestamptz()
+  updated_at   DateTime      @default(now()) @updatedAt @db.Timestamptz()
+  quizzes      AilQuiz[]
+  videos       AilVideo[]
+  materials    AilMaterial[]
+
+  @@map("ail_chapters")
+}
+
+model AilQuiz {
+  id          String              @id @default(nanoid()) @db.VarChar()
+  chapter     AilChapter          @relation(fields: [chapter_id], references: [id])
+  chapter_id  Int                 @db.Integer
+  name        String              @db.VarChar()
+  description String?             @db.Text
   order_index Int                 @default(0) @db.SmallInt
+  status      StatusEnum          @default(ACTIVE)
   created_at  DateTime            @default(now()) @db.Timestamptz()
   updated_at  DateTime            @default(now()) @updatedAt @db.Timestamptz()
-  options     AiLearnQuizOption[]
+  questions   AilQuizQuestion[]
+  submissions AilQuizSubmission[]
 
-  @@map("ai_learn_quiz_questions")
+  @@map("ail_quizzes")
 }
 
-model AiLearnQuizOption {
-  id          Int                 @id @default(autoincrement()) @db.Integer
-  question    AiLearnQuizQuestion @relation(fields: [question_id], references: [id], onDelete: Cascade)
-  question_id Int                 @db.Integer
-  option_id   String              @db.VarChar()
-  text        String              @db.VarChar()
-  is_correct  Boolean             @default(false) @db.Boolean
-  order_index Int                 @default(0) @db.SmallInt
+model AilQuizQuestion {
+  id          Int             @id @default(autoincrement()) @db.Integer
+  quiz        AilQuiz         @relation(fields: [quiz_id], references: [id])
+  quiz_id     String          @db.VarChar()
+  question    String          @db.Text
+  explanation String?         @db.Text
+  order_index Int             @default(0) @db.SmallInt
+  xp_reward   Int             @default(0) @db.SmallInt
+  created_at  DateTime        @default(now()) @db.Timestamptz()
+  updated_at  DateTime        @default(now()) @updatedAt @db.Timestamptz()
+  options     AilQuizOption[]
 
-  @@map("ai_learn_quiz_options")
+  @@map("ail_quiz_questions")
 }
 
-model AiLearnUserProgress {
-  id           Int           @id @default(autoincrement()) @db.Integer
-  member       AiLearnMember @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  member_id    Int           @db.Integer
-  lesson       AiLearnLesson @relation(fields: [lesson_id], references: [id], onDelete: Cascade)
-  lesson_id    Int           @db.Integer
-  score        Int?          @db.SmallInt
-  xp_earned    Int           @default(0) @db.SmallInt
-  completed_at DateTime?     @db.Timestamptz()
-  answers      Json?         @db.Json
-  submitted_at DateTime      @default(now()) @db.Timestamptz()
+model AilQuizOption {
+  id          Int             @id @default(autoincrement()) @db.Integer
+  question    AilQuizQuestion @relation(fields: [question_id], references: [id])
+  question_id Int             @db.Integer
+  option_code String          @db.VarChar()
+  text        String          @db.VarChar()
+  is_correct  Boolean         @default(false) @db.Boolean
 
-  @@unique([member_id, lesson_id])
-  @@map("ai_learn_user_progress")
+  @@map("ail_quiz_options")
 }
 
-model AiLearnSession {
-  id                Int                        @id @default(autoincrement()) @db.Integer
-  name              String                     @db.VarChar()
-  description       String                     @db.VarChar()
-  method            LearningMethodEnum
-  meeting_date      DateTime                   @default(now()) @db.Timestamptz()
-  meeting_url       String?                    @db.VarChar()
-  location_name     String?                    @db.VarChar()
-  location_url      String?                    @db.VarChar()
-  speaker           User?                      @relation("ai_learn_session_speaker", fields: [speaker_id], references: [id])
-  speaker_id        String?                    @db.Uuid
-  recording_url     String?                    @db.VarChar()
-  external_video_id String?                    @db.VarChar()
-  status            StatusEnum                 @default(ACTIVE)
-  check_in          Boolean                    @default(false) @db.Boolean
-  check_out         Boolean                    @default(false) @db.Boolean
-  check_out_code    String?                    @db.VarChar()
-  feedback_form     String?                    @db.VarChar()
-  created_at        DateTime                   @default(now()) @db.Timestamptz()
-  updated_at        DateTime                   @default(now()) @updatedAt @db.Timestamptz()
-  attendances       AiLearnSessionAttendance[]
+model AilVideo {
+  id          Int                  @id @default(autoincrement()) @db.Integer
+  chapter     AilChapter           @relation(fields: [chapter_id], references: [id])
+  chapter_id  Int                  @db.Integer
+  title       String               @db.VarChar()
+  description String?              @db.Text
+  video_url   String               @db.Text
+  xp_reward   Int                  @default(0) @db.SmallInt
+  order_index Int                  @default(0) @db.SmallInt
+  status      StatusEnum           @default(ACTIVE)
+  created_at  DateTime             @default(now()) @db.Timestamptz()
+  updated_at  DateTime             @default(now()) @updatedAt @db.Timestamptz()
+  completions AilVideoCompletion[]
 
-  @@map("ai_learn_sessions")
+  @@map("ail_videos")
 }
 
-model AiLearnSessionAttendance {
-  session      AiLearnSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
-  session_id   Int            @db.Integer
-  member       AiLearnMember  @relation(fields: [member_id], references: [id], onDelete: Cascade)
-  member_id    Int            @db.Integer
-  check_in_at  DateTime?      @db.Timestamptz()
-  check_out_at DateTime?      @db.Timestamptz()
+model AilMaterial {
+  id          String                  @id @default(nanoid()) @db.VarChar()
+  chapter     AilChapter              @relation(fields: [chapter_id], references: [id])
+  chapter_id  Int                     @db.Integer
+  title       String                  @db.VarChar()
+  description String?                 @db.Text
+  content     String?                 @db.Text
+  file_url    String?                 @db.Text
+  xp_reward   Int                     @default(0) @db.SmallInt
+  order_index Int                     @default(0) @db.SmallInt
+  status      StatusEnum              @default(ACTIVE)
+  created_at  DateTime                @default(now()) @db.Timestamptz()
+  updated_at  DateTime                @default(now()) @updatedAt @db.Timestamptz()
+  completions AilMaterialCompletion[]
 
-  @@id([session_id, member_id])
-  @@map("ai_learn_session_attendances")
+  @@map("ail_materials")
 }
 
 // Relation Tables //
@@ -1222,6 +1323,93 @@ model UserEvent {
 
   @@id([user_id, event_id])
   @@map("users_events")
+}
+
+model AilGroupMember {
+  group     AilGroup  @relation(fields: [group_id], references: [id])
+  group_id  Int       @db.Integer
+  member    AilMember @relation(fields: [member_id], references: [id])
+  member_id Int       @db.Integer
+  joined_at DateTime  @default(now()) @db.Timestamptz()
+
+  @@id([group_id, member_id])
+  @@map("ail_group_members")
+}
+
+model AilQuizSubmission {
+  id             Int       @id @default(autoincrement()) @db.Integer
+  member         AilMember @relation(fields: [member_id], references: [id])
+  member_id      Int       @db.Integer
+  quiz           AilQuiz   @relation(fields: [quiz_id], references: [id])
+  quiz_id        String    @db.VarChar()
+  attempt_number Int       @db.SmallInt
+  answers        Json      @db.Json
+  score          Int       @db.SmallInt
+  is_completed   Boolean   @default(false) @db.Boolean
+  started_at     DateTime  @default(now()) @db.Timestamptz()
+  submitted_at   DateTime  @default(now()) @db.Timestamptz()
+
+  @@unique([member_id, quiz_id, attempt_number])
+  @@map("ail_quiz_submissions")
+}
+
+model AilVideoCompletion {
+  member       AilMember @relation(fields: [member_id], references: [id])
+  member_id    Int       @db.Integer
+  video        AilVideo  @relation(fields: [video_id], references: [id])
+  video_id     Int       @db.Integer
+  completed_at DateTime  @default(now()) @db.Timestamptz()
+
+  @@id([member_id, video_id])
+  @@map("ail_video_completions")
+}
+
+model AilMaterialCompletion {
+  member       AilMember   @relation(fields: [member_id], references: [id])
+  member_id    Int         @db.Integer
+  material     AilMaterial @relation(fields: [material_id], references: [id])
+  material_id  String      @db.VarChar()
+  completed_at DateTime    @default(now()) @db.Timestamptz()
+
+  @@id([member_id, material_id])
+  @@map("ail_material_completions")
+}
+
+model AilXpEarning {
+  id            Int             @id @default(autoincrement()) @db.Integer
+  member        AilMember       @relation(fields: [member_id], references: [id])
+  member_id     Int             @db.Integer
+  learning_type AilLearningType
+  learning_id   String          @db.VarChar()
+  xp_earned     Int             @db.SmallInt
+  earned_at     DateTime        @default(now()) @db.Timestamptz()
+
+  @@unique([member_id, learning_type, learning_id])
+  @@map("ail_xp_earnings")
+}
+
+model AilPreAssessment {
+  id                        Int                @id @default(autoincrement()) @db.Integer
+  member                    AilMember          @relation(fields: [member_id], references: [id])
+  member_id                 Int                @unique @db.Integer
+  q1_ai_use_frequency       AilPaAiUseFreq
+  q2_ai_tools_used          String[]           @db.Text
+  q3_job_role               String             @db.VarChar()
+  q4_ai_understanding       AilPaUnderstanding
+  q5_ai_limitations         String[]           @db.Text
+  q6_output_review          AilPaOutputReview
+  q7_use_cases              String[]           @db.Text
+  q8_team_adoption          AilPaTeamAdoption
+  q9_concrete_example       String?            @db.VarChar()
+  q10_prompt_comfort        AilPaPromptSkill
+  q11_safety_practices      String[]           @db.Text
+  q12_professional_attitude AilPaAttitude
+  q13_biggest_challenge     String             @db.Text
+  q14_training_expectation  String             @db.Text
+  q15_motivation            AilPaMotivation
+  created_at                DateTime           @default(now()) @db.Timestamptz()
+
+  @@map("ail_pre_assessments")
 }
 
 view UserTemplate {
