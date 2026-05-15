@@ -1,183 +1,19 @@
 import { STATUS_OK } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
 import z from "zod";
-import { getGoogleAccessToken } from "./util.analytics";
 import type {
-  GA4DailyMetric,
-  GA4DailyMetricsResult,
   MetaAdsDailyMetric,
   MetaAdsDailyMetricsResult,
-  TrafficSourceMetric,
 } from "./util.analytics";
 
 export const listAnalytics = {
-  ga4DailyMetrics: administratorProcedure
-    .input(
-      z.object({
-        days: z.number().int().positive().max(90).default(7),
-      })
-    )
-    .query(async (opts): Promise<GA4DailyMetricsResult> => {
-      const propertyId = process.env.GOOGLE_ANALYTICS_PROPERTY_ID;
-      const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-
-      if (!propertyId || !serviceAccountJson) {
-        return {
-          code: STATUS_OK,
-          message: "GA4 credentials not configured",
-          list: [],
-          traffic_sources: [],
-          is_configured: false,
-        };
-      }
-
-      // Parse service account and get access token via JWT
-      let serviceAccount: Record<string, string>;
-      try {
-        serviceAccount = JSON.parse(serviceAccountJson);
-      } catch {
-        return {
-          code: STATUS_OK,
-          message: "Invalid GOOGLE_SERVICE_ACCOUNT_JSON",
-          list: [],
-          traffic_sources: [],
-          is_configured: true,
-          error: "Invalid service account JSON",
-        };
-      }
-
-      // Build JWT for Google OAuth2
-      const accessToken = await getGoogleAccessToken(serviceAccount);
-      if (!accessToken) {
-        return {
-          code: STATUS_OK,
-          message: "Failed to obtain Google access token",
-          list: [],
-          traffic_sources: [],
-          is_configured: true,
-          error: "OAuth token error",
-        };
-      }
-
-      const days = opts.input.days;
-      const dateRange = { startDate: `${days}daysAgo`, endDate: "today" };
-
-      // Request 1: Daily metrics
-      const dailyPayload = {
-        dateRanges: [dateRange],
-        dimensions: [{ name: "date" }],
-        metrics: [
-          { name: "sessions" },
-          { name: "totalUsers" },
-          { name: "newUsers" },
-          { name: "bounceRate" },
-          { name: "averageSessionDuration" },
-          { name: "conversions" },
-        ],
-        orderBys: [{ dimension: { dimensionName: "date" } }],
-      };
-
-      // Request 2: Traffic source breakdown
-      const sourcePayload = {
-        dateRanges: [dateRange],
-        dimensions: [{ name: "sessionDefaultChannelGroup" }],
-        metrics: [{ name: "sessions" }],
-        orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
-      };
-
-      const [dailyRes, sourceRes] = await Promise.all([
-        fetch(
-          `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dailyPayload),
-            next: { revalidate: 300 },
-          }
-        ),
-        fetch(
-          `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(sourcePayload),
-            next: { revalidate: 300 },
-          }
-        ),
-      ]);
-
-      if (!dailyRes.ok || !sourceRes.ok) {
-        const errText = !dailyRes.ok
-          ? await dailyRes.text()
-          : await sourceRes.text();
-        console.error("[GA4] API error:", errText);
-        return {
-          code: STATUS_OK,
-          message: "GA4 API error",
-          list: [],
-          traffic_sources: [],
-          is_configured: true,
-          error: errText.slice(0, 200),
-        };
-      }
-
-      const dailyJson = await dailyRes.json();
-      const sourceJson = await sourceRes.json();
-
-      const dailyList: GA4DailyMetric[] = (dailyJson.rows ?? []).map(
-        (row: {
-          dimensionValues: { value: string }[];
-          metricValues: { value: string }[];
-        }) => {
-          const rawDate = row.dimensionValues[0].value; // YYYYMMDD
-          const date = `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`;
-          const mv = row.metricValues;
-          return {
-            date,
-            sessions: parseInt(mv[0]?.value ?? "0", 10),
-            users: parseInt(mv[1]?.value ?? "0", 10),
-            new_users: parseInt(mv[2]?.value ?? "0", 10),
-            bounce_rate: parseFloat(parseFloat(mv[3]?.value ?? "0").toFixed(4)),
-            avg_session_duration: parseFloat(
-              parseFloat(mv[4]?.value ?? "0").toFixed(1)
-            ),
-            conversions: parseInt(mv[5]?.value ?? "0", 10),
-          };
-        }
-      );
-
-      const trafficSources: TrafficSourceMetric[] = (sourceJson.rows ?? []).map(
-        (row: {
-          dimensionValues: { value: string }[];
-          metricValues: { value: string }[];
-        }) => ({
-          source: row.dimensionValues[0].value,
-          sessions: parseInt(row.metricValues[0]?.value ?? "0", 10),
-        })
-      );
-
-      return {
-        code: STATUS_OK,
-        message: "Success",
-        list: dailyList,
-        traffic_sources: trafficSources,
-        is_configured: true,
-      };
-    }),
-
   metaAdsDailyMetrics: administratorProcedure
     .input(
       z.object({
         days: z.number().int().positive().max(90).default(7),
       })
     )
-    .query(async (): Promise<MetaAdsDailyMetricsResult> => {
+    .query(async (opts): Promise<MetaAdsDailyMetricsResult> => {
       const accessToken = process.env.META_ACCESS_TOKEN;
       const adAccountId = process.env.META_AD_ACCOUNT_ID;
 
@@ -193,7 +29,7 @@ export const listAnalytics = {
       // Calculate date range
       const today = new Date();
       const since = new Date(today);
-      since.setDate(today.getDate() - 7);
+      since.setDate(today.getDate() - opts.input.days);
       const sinceStr = since.toISOString().split("T")[0];
       const untilStr = today.toISOString().split("T")[0];
 

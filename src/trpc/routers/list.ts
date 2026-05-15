@@ -97,7 +97,6 @@ export const listRouter = createTRPCRouter({
   // Analytics-related //
 
   analytics: {
-    ga4DailyMetrics: listAnalytics.ga4DailyMetrics,
     metaAdsDailyMetrics: listAnalytics.metaAdsDailyMetrics,
   },
 
