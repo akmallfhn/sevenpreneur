@@ -324,79 +324,98 @@ export const readAilene = {
     };
   }),
 
-  streak: ailMemberProcedure.query(async (opts) => {
-    const memberId = opts.ctx.ail_member.id;
+  streak: ailMemberProcedure
+    .input(
+      z
+        .object({
+          from: z.iso.date().optional(),
+          to: z.iso.date().optional(),
+        })
+        .optional()
+    )
+    .query(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const today = dayjs().startOf("day");
+      const to = opts.input?.to
+        ? dayjs(opts.input.to).startOf("day")
+        : today;
+      // Default range: last 90 days (~3 months) ending at `to`.
+      const from = opts.input?.from
+        ? dayjs(opts.input.from).startOf("day")
+        : to.subtract(89, "day");
 
-    // Current week starts on Monday. dayjs().day() returns 0=Sun..6=Sat.
-    // Distance from today back to Monday: ((dow + 6) % 7).
-    const today = dayjs().startOf("day");
-    const daysFromMonday = (today.day() + 6) % 7;
-    const weekStart = today.subtract(daysFromMonday, "day");
-    const weekEnd = weekStart.add(6, "day").endOf("day");
+      // We also need a couple extra days back to compute consecutive streak
+      // when the requested range starts after recent activity.
+      const streakLookback = today.subtract(60, "day");
+      const earliestFetch = (
+        from.isBefore(streakLookback) ? from : streakLookback
+      ).toDate();
 
-    // For the consecutive-streak counter we need history beyond just this
-    // week, but bounded — last ~60 days is plenty.
-    const consecutiveSince = today.subtract(60, "day").toDate();
+      const [quizSubs, videoComps, materialComps] = await Promise.all([
+        opts.ctx.prisma.ailQuizSubmission.findMany({
+          where: {
+            member_id: memberId,
+            is_completed: true,
+            submitted_at: { gte: earliestFetch },
+          },
+          select: { submitted_at: true },
+        }),
+        opts.ctx.prisma.ailVideoCompletion.findMany({
+          where: {
+            member_id: memberId,
+            completed_at: { gte: earliestFetch },
+          },
+          select: { completed_at: true },
+        }),
+        opts.ctx.prisma.ailMaterialCompletion.findMany({
+          where: {
+            member_id: memberId,
+            completed_at: { gte: earliestFetch },
+          },
+          select: { completed_at: true },
+        }),
+      ]);
 
-    const [quizSubs, videoComps, materialComps] = await Promise.all([
-      opts.ctx.prisma.ailQuizSubmission.findMany({
-        where: {
-          member_id: memberId,
-          is_completed: true,
-          submitted_at: { gte: consecutiveSince },
-        },
-        select: { submitted_at: true },
-      }),
-      opts.ctx.prisma.ailVideoCompletion.findMany({
-        where: { member_id: memberId, completed_at: { gte: consecutiveSince } },
-        select: { completed_at: true },
-      }),
-      opts.ctx.prisma.ailMaterialCompletion.findMany({
-        where: { member_id: memberId, completed_at: { gte: consecutiveSince } },
-        select: { completed_at: true },
-      }),
-    ]);
+      const completionDays = [
+        ...quizSubs.map((s) => dayjs(s.submitted_at).startOf("day")),
+        ...videoComps.map((v) => dayjs(v.completed_at).startOf("day")),
+        ...materialComps.map((m) => dayjs(m.completed_at).startOf("day")),
+      ];
 
-    const completionDays = [
-      ...quizSubs.map((s) => dayjs(s.submitted_at).startOf("day")),
-      ...videoComps.map((v) => dayjs(v.completed_at).startOf("day")),
-      ...materialComps.map((m) => dayjs(m.completed_at).startOf("day")),
-    ];
+      const countByDay = new Map<string, number>();
+      for (const d of completionDays) {
+        const k = d.format("YYYY-MM-DD");
+        countByDay.set(k, (countByDay.get(k) ?? 0) + 1);
+      }
 
-    const countByDay = new Map<string, number>();
-    for (const d of completionDays) {
-      const k = d.format("YYYY-MM-DD");
-      countByDay.set(k, (countByDay.get(k) ?? 0) + 1);
-    }
+      const totalDays = to.diff(from, "day") + 1;
+      const days: { date: string; count: number }[] = [];
+      for (let i = 0; i < totalDays; i++) {
+        const day = from.add(i, "day");
+        const k = day.format("YYYY-MM-DD");
+        days.push({ date: k, count: countByDay.get(k) ?? 0 });
+      }
 
-    // 7 days Mon → Sun for the current week
-    const days: { date: string; count: number }[] = [];
-    for (let i = 0; i < 7; i++) {
-      const day = weekStart.add(i, "day");
-      const k = day.format("YYYY-MM-DD");
-      days.push({ date: k, count: countByDay.get(k) ?? 0 });
-    }
+      // Consecutive streak ending today (or yesterday if today is still empty)
+      let current_streak = 0;
+      let cursor = today;
+      if ((countByDay.get(cursor.format("YYYY-MM-DD")) ?? 0) === 0) {
+        cursor = cursor.subtract(1, "day");
+      }
+      while ((countByDay.get(cursor.format("YYYY-MM-DD")) ?? 0) > 0) {
+        current_streak += 1;
+        cursor = cursor.subtract(1, "day");
+      }
 
-    // Consecutive streak ending today (or yesterday if today is still empty)
-    let current_streak = 0;
-    let cursor = today;
-    if ((countByDay.get(cursor.format("YYYY-MM-DD")) ?? 0) === 0) {
-      cursor = cursor.subtract(1, "day");
-    }
-    while ((countByDay.get(cursor.format("YYYY-MM-DD")) ?? 0) > 0) {
-      current_streak += 1;
-      cursor = cursor.subtract(1, "day");
-    }
-
-    return {
-      code: STATUS_OK,
-      message: "Success",
-      week_start: weekStart.format("YYYY-MM-DD"),
-      week_end: weekEnd.format("YYYY-MM-DD"),
-      days,
-      current_streak,
-    };
-  }),
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        from: from.format("YYYY-MM-DD"),
+        to: to.format("YYYY-MM-DD"),
+        days,
+        current_streak,
+      };
+    }),
 
   groupLeaderboard: ailMemberProcedure.query(async (opts) => {
     const memberId = opts.ctx.ail_member.id;
