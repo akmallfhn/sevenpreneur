@@ -116,4 +116,4 @@ export type WhatsappChatType =
 export type ArticleStatus = "DRAFT" | "PUBLISHED" | "UNPUBLISHED";
 
 // AILENE related
-export type TaskVariant = "Quiz" | "Video" | "Material" | "PreAssessment";
+export type TaskVariant = "Quiz" | "Video" | "Material";

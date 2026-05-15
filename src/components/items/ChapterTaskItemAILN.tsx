@@ -7,7 +7,6 @@ import {
   faBookOpen,
   faCircleCheck,
   faCirclePlay,
-  faClipboardList,
   faLock,
   faSquareCheck,
   faStar,
@@ -62,17 +61,27 @@ const variantStyles: Record<
     icon: <FontAwesomeIcon icon={faBookOpen} size="xl" />,
     badge: "Materi",
   },
-  PreAssessment: {
-    icon: <FontAwesomeIcon icon={faClipboardList} size="xl" />,
-    badge: "Pre-Assessment",
-  },
 };
 
 type ChapterTaskItemAILNProps =
-  | { variant: "Quiz"; unlocked: boolean; quiz: Quiz }
-  | { variant: "Video"; unlocked: boolean; video: Video }
-  | { variant: "Material"; unlocked: boolean; material: Material }
-  | { variant: "PreAssessment"; unlocked: boolean; completed: boolean };
+  | {
+      variant: "Quiz";
+      unlocked: boolean;
+      quiz: Quiz;
+      lockedMessage?: string;
+    }
+  | {
+      variant: "Video";
+      unlocked: boolean;
+      video: Video;
+      lockedMessage?: string;
+    }
+  | {
+      variant: "Material";
+      unlocked: boolean;
+      material: Material;
+      lockedMessage?: string;
+    };
 
 export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
   const style = variantStyles[props.variant];
@@ -87,6 +96,8 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     onSuccess: invalidateProgress,
   });
 
+  const lockedText = props.lockedMessage ?? "Locked";
+
   let title = "";
   let meta = "";
   let xpReward = 0;
@@ -100,7 +111,7 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     xpReward = q.xp_reward;
     hasMark = hasAttempt;
     meta = !props.unlocked
-      ? "Locked"
+      ? lockedText
       : !hasAttempt
         ? "Not taken yet"
         : `Score: ${q.best_score}%`;
@@ -129,7 +140,7 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     xpReward = v.xp_reward;
     hasMark = v.completed;
     meta = !props.unlocked
-      ? "Locked"
+      ? lockedText
       : v.completed
         ? "Watched"
         : "Not watched yet";
@@ -154,44 +165,25 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
         </ButtonAILN>
       </a>
     );
-  } else if (props.variant === "Material") {
+  } else {
     const m = props.material;
     title = m.title;
     xpReward = m.xp_reward;
     hasMark = m.completed;
-    meta = !props.unlocked ? "Locked" : m.completed ? "Read" : "Not started";
+    meta = !props.unlocked ? lockedText : m.completed ? "Read" : "Not started";
 
     cta = !props.unlocked ? (
       <ButtonAILN size="small" disabled className="w-full">
         Locked
       </ButtonAILN>
     ) : (
-      <Link href={`/student/materials/${props.material.id}`}>
+      <Link
+        href={`/student/materials/${props.material.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <ButtonAILN size="small" className="w-full">
           Baca Materi
-        </ButtonAILN>
-      </Link>
-    );
-  } else {
-    title = "Pre-Assessment AI Readiness";
-    hasMark = props.completed;
-    meta = !props.unlocked
-      ? "Locked"
-      : props.completed
-        ? "Sudah dikirim"
-        : "Belum diisi";
-    cta = !props.unlocked ? (
-      <ButtonAILN size="small" disabled className="w-full">
-        Locked
-      </ButtonAILN>
-    ) : props.completed ? (
-      <ButtonAILN size="small" disabled className="w-full">
-        Selesai
-      </ButtonAILN>
-    ) : (
-      <Link href="/student/pre-assessment" className="block">
-        <ButtonAILN size="small" className="w-full">
-          Mulai
         </ButtonAILN>
       </Link>
     );
@@ -221,16 +213,10 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
         </div>
         <div className="text-sm font-semibold">{title}</div>
         <div className="mt-1 flex items-center gap-2">
-          {props.variant === "PreAssessment" ? (
-            <span className="inline-flex items-center gap-1 rounded-full border bg-gray-50 px-2 py-0.5 text-xs font-semibold text-gray-600">
-              Wajib · sekali isi
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border px-2 py-0.5 text-xs font-semibold">
-              <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-warning" />
-              {xpReward} XP
-            </span>
-          )}
+          <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border px-2 py-0.5 text-xs font-semibold">
+            <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-warning" />
+            {xpReward} XP
+          </span>
           <span className="text-xs text-gray-500">{meta}</span>
         </div>
       </div>

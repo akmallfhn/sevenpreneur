@@ -5,7 +5,6 @@ import type { ChapterProgress } from "@/trpc/routers/ailene/utils.ailene";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChevronDown } from "lucide-react";
-import AppLoadingComponents from "../states/AppLoadingComponents";
 import AppErrorComponents from "../states/AppErrorComponents";
 
 interface Chapter {
@@ -26,7 +25,6 @@ interface ChapterItemAILNProps {
   chapterNumber: number;
   unlocked: boolean;
   expanded: boolean;
-  isFirst: boolean;
   onToggle: () => void;
 }
 
@@ -35,9 +33,6 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
     { chapter_id: props.chapter.id },
     { enabled: props.expanded }
   );
-  const preAssessmentQ = trpc.ailene.read.preAssessment.useQuery(undefined, {
-    enabled: props.expanded && props.isFirst,
-  });
 
   return (
     <div className="relative pl-12">
@@ -103,45 +98,56 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
           }`}
         >
           <div className="overflow-hidden">
-            {tasksQ.isLoading && <AppLoadingComponents />}
-            {(tasksQ.error || (!tasksQ.isLoading && !tasksQ.data)) && (
-              <AppErrorComponents />
-            )}
-            {tasksQ.data && (
+            {tasksQ.isLoading && (
               <div className="space-y-2 border-t border-dashboard-border px-4 py-3">
-                {props.isFirst && (
-                  <ChapterTaskItemAILN
-                    variant="PreAssessment"
-                    unlocked={props.unlocked}
-                    completed={!!preAssessmentQ.data?.pre_assessment}
-                  />
-                )}
-                {tasksQ.data.quizzes.map((q) => (
-                  <ChapterTaskItemAILN
-                    key={`q-${q.id}`}
-                    variant="Quiz"
-                    quiz={q}
-                    unlocked={props.unlocked}
-                  />
-                ))}
-                {tasksQ.data.videos.map((v) => (
-                  <ChapterTaskItemAILN
-                    key={`v-${v.id}`}
-                    variant="Video"
-                    video={v}
-                    unlocked={props.unlocked}
-                  />
-                ))}
-                {tasksQ.data.materials.map((m) => (
-                  <ChapterTaskItemAILN
-                    key={`m-${m.id}`}
-                    variant="Material"
-                    material={m}
-                    unlocked={props.unlocked}
-                  />
+                {[0, 1, 2].map((i) => (
+                  <TaskItemSkeleton key={i} />
                 ))}
               </div>
             )}
+            {(tasksQ.error || (!tasksQ.isLoading && !tasksQ.data)) && (
+              <AppErrorComponents />
+            )}
+            {tasksQ.data &&
+              (() => {
+                const allMaterialsRead = tasksQ.data.materials.every(
+                  (m) => m.completed
+                );
+                const quizUnlocked = props.unlocked && allMaterialsRead;
+                return (
+                  <div className="space-y-2 border-t border-dashboard-border px-4 py-3">
+                    {tasksQ.data.materials.map((m) => (
+                      <ChapterTaskItemAILN
+                        key={`m-${m.id}`}
+                        variant="Material"
+                        material={m}
+                        unlocked={props.unlocked}
+                      />
+                    ))}
+                    {tasksQ.data.quizzes.map((q) => (
+                      <ChapterTaskItemAILN
+                        key={`q-${q.id}`}
+                        variant="Quiz"
+                        quiz={q}
+                        unlocked={quizUnlocked}
+                        lockedMessage={
+                          props.unlocked && !allMaterialsRead
+                            ? "Baca semua materi, sebelum memulai quiz"
+                            : undefined
+                        }
+                      />
+                    ))}
+                    {tasksQ.data.videos.map((v) => (
+                      <ChapterTaskItemAILN
+                        key={`v-${v.id}`}
+                        variant="Video"
+                        video={v}
+                        unlocked={props.unlocked}
+                      />
+                    ))}
+                  </div>
+                );
+              })()}
           </div>
         </div>
       </div>
@@ -149,3 +155,20 @@ export default function ChapterItemAILN(props: ChapterItemAILNProps) {
   );
 }
 
+function TaskItemSkeleton() {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-dashboard-border bg-white p-3 animate-pulse">
+      <div className="h-10 w-10 shrink-0 rounded-md bg-gray-200" />
+      <div className="flex-1 space-y-2">
+        <div className="h-2.5 w-16 rounded bg-gray-200" />
+        <div className="h-3.5 w-48 rounded bg-gray-200" />
+        <div className="flex items-center gap-2 pt-0.5">
+          <div className="h-4 w-14 rounded-full bg-gray-200" />
+          <div className="h-3 w-20 rounded bg-gray-200" />
+        </div>
+      </div>
+      <div className="h-8 w-32 shrink-0 rounded-md bg-gray-200" />
+      <div className="h-4 w-4 shrink-0 rounded-full bg-gray-200" />
+    </div>
+  );
+}

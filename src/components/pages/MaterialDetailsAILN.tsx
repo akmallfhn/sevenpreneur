@@ -119,6 +119,7 @@ export default function MaterialDetailsAILN({
       utils.ailene.read.materialDetail.invalidate({ material_id: materialId });
       utils.ailene.list.tasks.invalidate();
       utils.auth.checkAilMember.invalidate();
+      utils.ailene.list.chapters.invalidate();
     },
   });
 
@@ -130,13 +131,12 @@ export default function MaterialDetailsAILN({
   const triggeredRef = useRef(false);
   useEffect(() => {
     if (!material) return;
-    if (fileUrl) return;
     if (completed) return;
     if (triggeredRef.current) return;
     triggeredRef.current = true;
     markMutation.mutate({ material_id: materialId });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [material, completed, fileUrl, materialId]);
+  }, [material, completed, materialId]);
 
   const { html: renderedContent, toc } = useMemo(() => {
     if (!material?.content) return { html: "", toc: [] as TocEntry[] };
@@ -273,9 +273,7 @@ export default function MaterialDetailsAILN({
                       icon={faFilePdf}
                       className="h-4 w-4 text-red-500"
                     />
-                    <span>
-                      Materi Pendukung {isPdf ? "(PDF)" : "(File)"}
-                    </span>
+                    <span>Materi Pendukung {isPdf ? "(PDF)" : "(File)"}</span>
                   </div>
                   <a
                     href={fileUrl}

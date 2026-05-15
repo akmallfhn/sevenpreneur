@@ -181,7 +181,6 @@ export default function ModuleListStudentAILN({
                   chapter={item.chapter}
                   chapterNumber={item.index}
                   unlocked={item.unlocked}
-                  isFirst={item.index === 1}
                   expanded={expanded.has(item.chapter.id)}
                   onToggle={() => toggle(item.chapter.id)}
                 />
