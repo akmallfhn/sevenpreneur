@@ -1,7 +1,7 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
 import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
-import PageContainerAILN from "@/components/pages/PageContainerAILN";
+import PageContainerSVP from "@/components/pages/PageContainerSVP";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import {
@@ -15,7 +15,6 @@ import {
   faCheckCircle,
   faChevronLeft,
   faChevronRight,
-  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
@@ -90,16 +89,16 @@ export default function PreAssessmentAILN({
 
   if (isLoading) {
     return (
-      <PageContainerAILN>
+      <PageContainerSVP className="flex min-h-screen justify-center">
         <AppLoadingComponents />
-      </PageContainerAILN>
+      </PageContainerSVP>
     );
   }
   if (isError || !data) {
     return (
-      <PageContainerAILN>
+      <PageContainerSVP className="flex min-h-screen justify-center">
         <AppErrorComponents />
-      </PageContainerAILN>
+      </PageContainerSVP>
     );
   }
 
@@ -214,7 +213,7 @@ export default function PreAssessmentAILN({
   const progressPct = Math.round((answeredCount / totalQuestions) * 100);
 
   return (
-    <PageContainerAILN>
+    <PageContainerSVP className="flex min-h-screen justify-center">
       <div className="flex w-full flex-col gap-4">
         {/* Header */}
         <div className="flex flex-col gap-3 rounded-xl border bg-white p-4">
@@ -266,11 +265,11 @@ export default function PreAssessmentAILN({
               >
                 {currentQ.category}
               </span>
-              <span className="rounded-full border border-gray-200 bg-gray-50 px-2.5 py-0.5 text-[11px] font-medium text-gray-600">
+              <span className="rounded-full border border-dashboard-border bg-gray-50 px-2.5 py-0.5 text-[11px] font-medium text-gray-600">
                 {PRE_ASSESSMENT_TYPE_LABELS[currentQ.type]}
               </span>
               {!currentQ.required && (
-                <span className="rounded-full border border-gray-200 bg-white px-2.5 py-0.5 text-[11px] font-medium text-gray-500">
+                <span className="rounded-full border border-dashboard-border bg-white px-2.5 py-0.5 text-[11px] font-medium text-gray-500">
                   Opsional
                 </span>
               )}
@@ -296,25 +295,15 @@ export default function PreAssessmentAILN({
                 type="button"
                 onClick={handlePrev}
                 disabled={currentIdx === 0}
-                className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3" />
                 Sebelumnya
               </button>
-              {isLast ? (
-                <ButtonAILN
-                  onClick={requestSubmit}
-                  disabled={submitMutation.isPending}
-                >
-                  <FontAwesomeIcon icon={faPaperPlane} className="h-3 w-3" />
-                  {submitMutation.isPending ? "Mengirim..." : "Kirim Jawaban"}
-                </ButtonAILN>
-              ) : (
-                <ButtonAILN onClick={handleNext}>
-                  Berikutnya
-                  <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3" />
-                </ButtonAILN>
-              )}
+              <ButtonAILN onClick={handleNext} disabled={isLast}>
+                Berikutnya
+                <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3" />
+              </ButtonAILN>
             </div>
           </div>
 
@@ -322,7 +311,7 @@ export default function PreAssessmentAILN({
           <div className="flex w-80 shrink-0 flex-col gap-4">
             <div className="flex flex-col gap-3 rounded-xl border bg-white p-4">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
-                NAVIGASI SOAL
+                NAVIGASI
               </span>
               <div className="grid grid-cols-5 gap-2">
                 {PRE_ASSESSMENT_QUESTIONS.map((q, idx) => {
@@ -335,7 +324,8 @@ export default function PreAssessmentAILN({
                   } else if (ans) {
                     cls = "bg-black text-white";
                   } else {
-                    cls = "border border-gray-200 bg-gray-100 text-gray-500";
+                    cls =
+                      "border border-dashboard-border bg-gray-100 text-gray-500";
                   }
 
                   return (
@@ -355,7 +345,7 @@ export default function PreAssessmentAILN({
                 <LegendItem color="bg-black" label="Terjawab" />
                 <LegendItem color="bg-red-500" label="Saat ini" />
                 <LegendItem
-                  color="bg-gray-100 border border-gray-200"
+                  color="bg-gray-100 border border-dashboard-border"
                   label="Belum"
                 />
               </div>
@@ -405,7 +395,7 @@ export default function PreAssessmentAILN({
         onClose={() => setIsSubmitDialogOpen(false)}
         onConfirm={confirmSubmit}
       />
-    </PageContainerAILN>
+    </PageContainerSVP>
   );
 }
 
@@ -439,7 +429,7 @@ function QuestionBody({
               className={`flex items-center gap-3 rounded-lg border-[1.5px] px-4 py-3 text-left text-sm transition ${
                 selected
                   ? "border-emerald-500 bg-emerald-50"
-                  : "border-gray-200 bg-white hover:border-black/30 hover:bg-gray-50"
+                  : "border-dashboard-border bg-white hover:border-black/30 hover:bg-gray-50"
               }`}
             >
               <div
@@ -476,7 +466,7 @@ function QuestionBody({
               className={`flex items-center gap-3 rounded-lg border-[1.5px] px-4 py-3 text-left text-sm transition ${
                 selected
                   ? "border-emerald-500 bg-emerald-50"
-                  : "border-gray-200 bg-white hover:border-black/30 hover:bg-gray-50"
+                  : "border-dashboard-border bg-white hover:border-black/30 hover:bg-gray-50"
               }`}
             >
               <div
@@ -506,7 +496,7 @@ function QuestionBody({
           onChange={(e) => onTextChange(e.target.value)}
           maxLength={255}
           placeholder={question.placeholder}
-          className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-dashboard-border px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none"
         />
       </div>
     );
@@ -522,7 +512,7 @@ function QuestionBody({
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={question.placeholder}
         rows={6}
-        className="w-full resize-none rounded-lg border border-gray-200 px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none"
+        className="w-full resize-none rounded-lg border border-dashboard-border px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none"
       />
     </div>
   );
@@ -537,25 +527,44 @@ function LegendItem({ color, label }: { color: string; label: string }) {
   );
 }
 
+const REDIRECT_DELAY_MS = 5000;
+
 function PreAssessmentCompletedAILN() {
   const router = useRouter();
+  const [secondsLeft, setSecondsLeft] = useState(
+    Math.ceil(REDIRECT_DELAY_MS / 1000)
+  );
+
+  useEffect(() => {
+    const tick = setInterval(() => {
+      setSecondsLeft((s) => Math.max(0, s - 1));
+    }, 1000);
+    const timeout = setTimeout(() => {
+      router.push("/student");
+    }, REDIRECT_DELAY_MS);
+    return () => {
+      clearInterval(tick);
+      clearTimeout(timeout);
+    };
+  }, [router]);
+
   return (
-    <PageContainerAILN>
+    <PageContainerSVP className="flex min-h-screen justify-center">
       <div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-xl border bg-white p-10 text-center">
         <div className="flex size-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-          <FontAwesomeIcon icon={faCheckCircle} className="h-7 w-7" />
+          <FontAwesomeIcon icon={faCheckCircle} size="xl" />
         </div>
         <h1 className="text-xl font-bold leading-tight">
           Pre-assessment sudah selesai
         </h1>
         <p className="text-sm text-gray-600">
           Terima kasih! Jawabanmu sudah tersimpan dan tidak perlu diisi ulang.
-          Sekarang kamu bisa lanjut ke modul pelatihan.
+          Mengalihkan ke dashboard dalam {secondsLeft} detik...
         </p>
         <ButtonAILN onClick={() => router.push("/student")}>
-          Kembali ke Dashboard
+          Buka Dashboard Sekarang
         </ButtonAILN>
       </div>
-    </PageContainerAILN>
+    </PageContainerSVP>
   );
 }

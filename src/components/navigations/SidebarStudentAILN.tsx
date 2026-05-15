@@ -193,12 +193,14 @@ export default function SidebarStudentAILN({
                   {groupName}
                 </div>
               </div>
-              <Link href="/champion" className="mt-2 block">
-                <ButtonAILN variant="light" size="small" className="w-full">
-                  <UserRoundKey className="size-4" />
-                  Mode Champion
-                </ButtonAILN>
-              </Link>
+              {member?.role === "CHAMPION" && (
+                <Link href="/champion" className="mt-2 block">
+                  <ButtonAILN variant="light" size="small" className="w-full">
+                    <UserRoundKey className="size-4" />
+                    Mode Champion
+                  </ButtonAILN>
+                </Link>
+              )}
               <ButtonAILN
                 size="small"
                 onClick={handleLogout}

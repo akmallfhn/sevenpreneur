@@ -1,4 +1,3 @@
-import SidebarStudentAILN from "@/components/navigations/SidebarStudentAILN";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { cookies } from "next/headers";
@@ -24,10 +23,5 @@ export default async function StudentLayout({
     return <AppPageState variant="FORBIDDEN" />;
   }
 
-  return (
-    <>
-      <SidebarStudentAILN sessionToken={sessionToken} />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
