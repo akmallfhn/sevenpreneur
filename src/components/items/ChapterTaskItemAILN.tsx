@@ -1,6 +1,5 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
-import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
 import { TaskVariant } from "@/lib/app-types";
 import { trpc } from "@/trpc/client";
 import {
@@ -15,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AlertConfirmDialogAILN from "../modals/AlertConfirmDialogAILN";
 
 const QUIZ_DURATION_MINUTES = 20;
 
@@ -90,7 +90,10 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
   const [isStartQuizDialogOpen, setIsStartQuizDialogOpen] = useState(false);
   const invalidateProgress = () => {
     utils.ailene.list.tasks.invalidate();
+    utils.ailene.list.chapters.invalidate();
+    utils.ailene.list.levels.invalidate();
     utils.auth.checkAilMember.invalidate();
+    utils.ailene.read.todayFocus.invalidate();
   };
   const completeVideo = trpc.ailene.completeVideo.useMutation({
     onSuccess: invalidateProgress,
@@ -234,7 +237,7 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
         )}
       </div>
       {props.variant === "Quiz" && (
-        <AppAlertConfirmDialog
+        <AlertConfirmDialogAILN
           isOpen={isStartQuizDialogOpen}
           alertDialogHeader="Mulai Quiz Sekarang?"
           alertDialogMessage={`Quiz ini terdiri dari ${quizQuestionCount} pertanyaan dengan total waktu ${QUIZ_DURATION_MINUTES} menit. Waktu akan terus berjalan setelah quiz dimulai dan tidak bisa di-pause walaupun kamu keluar halaman.`}

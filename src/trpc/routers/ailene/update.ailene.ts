@@ -35,17 +35,64 @@ export const updateAilene = {
           message: "Level already unlocked.",
         });
       }
-
-      const xpAgg = await opts.ctx.prisma.ailXpEarning.aggregate({
-        _sum: { xp_earned: true },
-        where: { member_id: member.id },
-      });
-      const totalXp = xpAgg._sum.xp_earned ?? 0;
-      if (totalXp < targetLevel.min_xp) {
+      if (targetLevel.level_number !== currentLevelNumber + 1) {
         throw new TRPCError({
           code: STATUS_BAD_REQUEST,
-          message: `Not enough XP. Need ${targetLevel.min_xp}, have ${totalXp}.`,
+          message: "Levels must be unlocked sequentially.",
         });
+      }
+
+      // Gate: all quizzes + materials at the current level must be completed
+      // (videos don't count).
+      const currentLevelChapters = await opts.ctx.prisma.ailChapter.findMany({
+        where: {
+          status: "ACTIVE",
+          level: { level_number: currentLevelNumber },
+        },
+        select: {
+          quizzes: { where: { status: "ACTIVE" }, select: { id: true } },
+          materials: { where: { status: "ACTIVE" }, select: { id: true } },
+        },
+      });
+      const requiredQuizIds = currentLevelChapters.flatMap((c) =>
+        c.quizzes.map((q) => q.id)
+      );
+      const requiredMaterialIds = currentLevelChapters.flatMap((c) =>
+        c.materials.map((m) => m.id)
+      );
+      const totalRequired =
+        requiredQuizIds.length + requiredMaterialIds.length;
+
+      if (totalRequired > 0) {
+        const [doneQuizzes, doneMaterials] = await Promise.all([
+          requiredQuizIds.length === 0
+            ? []
+            : opts.ctx.prisma.ailQuizSubmission.findMany({
+                where: {
+                  member_id: member.id,
+                  quiz_id: { in: requiredQuizIds },
+                  is_completed: true,
+                },
+                select: { quiz_id: true },
+                distinct: ["quiz_id"],
+              }),
+          requiredMaterialIds.length === 0
+            ? []
+            : opts.ctx.prisma.ailMaterialCompletion.findMany({
+                where: {
+                  member_id: member.id,
+                  material_id: { in: requiredMaterialIds },
+                },
+                select: { material_id: true },
+              }),
+        ]);
+        const totalDone = doneQuizzes.length + doneMaterials.length;
+        if (totalDone < totalRequired) {
+          throw new TRPCError({
+            code: STATUS_BAD_REQUEST,
+            message: `Selesaikan semua quiz dan materi di level ini dulu (${totalDone}/${totalRequired}).`,
+          });
+        }
       }
 
       const history = Array.isArray(member.level_history)

@@ -42,15 +42,26 @@ export default function ModuleListStudentAILN({
   const memberQ = trpc.auth.checkAilMember.useQuery();
   const levelsQ = trpc.ailene.list.levels.useQuery();
   const chaptersQ = trpc.ailene.list.chapters.useQuery();
+  const levelProgressQ = trpc.ailene.read.levelProgress.useQuery();
 
-  if (memberQ.isLoading || levelsQ.isLoading || chaptersQ.isLoading) {
+  if (
+    memberQ.isLoading ||
+    levelsQ.isLoading ||
+    chaptersQ.isLoading ||
+    levelProgressQ.isLoading
+  ) {
     return (
       <PageContainerAILN>
         <AppLoadingComponents />
       </PageContainerAILN>
     );
   }
-  if (memberQ.error || levelsQ.error || chaptersQ.error) {
+  if (
+    memberQ.error ||
+    levelsQ.error ||
+    chaptersQ.error ||
+    levelProgressQ.error
+  ) {
     return (
       <PageContainerAILN>
         <AppErrorComponents />
@@ -61,6 +72,8 @@ export default function ModuleListStudentAILN({
   const member = memberQ.data?.ail_member;
   const levels = levelsQ.data?.list ?? [];
   const chapters = chaptersQ.data?.list ?? [];
+  const nextLevelUnlockable =
+    levelProgressQ.data?.next_level_unlockable ?? false;
   if (!member)
     return (
       <PageContainerAILN>
@@ -106,7 +119,10 @@ export default function ModuleListStudentAILN({
           kind: "level",
           level: newLevel,
           unlocked: levelUnlocked,
-          claimable: !levelUnlocked && member.total_xp >= newLevel.min_xp,
+          claimable:
+            !levelUnlocked &&
+            newLevel.level_number === currentLevelNumber + 1 &&
+            nextLevelUnlockable,
         });
       }
     }
@@ -128,9 +144,9 @@ export default function ModuleListStudentAILN({
       <div className="flex w-full flex-col gap-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Your Progress</h1>
+            <h1 className="text-2xl font-bold">Modul Belajar AI</h1>
             <p className="text-sm text-gray-500">
-              Complete each week to advance to the next level.
+              Tuntaskan semua tugas mingguan untuk maju ke level berikutnya.
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -145,7 +161,7 @@ export default function ModuleListStudentAILN({
                 />
               )}
               <div className="flex flex-col">
-                <div className="text-xs text-gray-500">Current Level</div>
+                <div className="text-xs text-gray-500">Level Sekarang</div>
                 <div className="font-bold">
                   Level {member.current_level?.level_number ?? 0}
                 </div>
@@ -154,7 +170,7 @@ export default function ModuleListStudentAILN({
             <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
               <FontAwesomeIcon icon={faStar} className="text-warning" />
               <div className="flex flex-col">
-                <div className="text-xs text-gray-500">Total XP</div>
+                <div className="text-xs text-gray-500">Reward</div>
                 <div className="font-bold">
                   {member.total_xp.toLocaleString()} XP
                 </div>

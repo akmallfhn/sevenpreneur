@@ -116,10 +116,12 @@ export default function MaterialDetailsAILN({
 
   const markMutation = trpc.ailene.completeMaterial.useMutation({
     onSuccess: () => {
+      utils.auth.checkAilMember.invalidate();
       utils.ailene.read.materialDetail.invalidate({ material_id: materialId });
       utils.ailene.list.tasks.invalidate();
-      utils.auth.checkAilMember.invalidate();
       utils.ailene.list.chapters.invalidate();
+      utils.ailene.list.levels.invalidate();
+      utils.ailene.read.todayFocus.invalidate();
     },
   });
 

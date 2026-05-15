@@ -59,9 +59,6 @@ export default function LevelDividerAILN(props: LevelDividerAILNProps) {
                 <div className="text-xl font-bold text-gray-900">
                   {props.level.name}
                 </div>
-                <div className="text-sm text-gray-500">
-                  Minimum {props.level.min_xp.toLocaleString()} XP required
-                </div>
               </div>
             </div>
             <div className="flex items-center gap-4 border-l border-gray-200 pl-6">
@@ -99,8 +96,8 @@ export default function LevelDividerAILN(props: LevelDividerAILNProps) {
                 {props.level.name}
               </div>
               <div className="text-sm text-gray-500">
-                Minimum {props.level.min_xp.toLocaleString()} XP required to
-                unlock
+                Selesaikan semua quiz dan materi di level sebelumnya untuk
+                membuka
               </div>
             </div>
           </div>
@@ -111,7 +108,7 @@ export default function LevelDividerAILN(props: LevelDividerAILNProps) {
                   Ready to unlock!
                 </div>
                 <div className="text-sm text-gray-600">
-                  You&apos;ve earned enough XP
+                  Semua quiz dan materi sudah selesai
                 </div>
               </div>
               <ButtonAILN
@@ -132,7 +129,7 @@ export default function LevelDividerAILN(props: LevelDividerAILNProps) {
                   Keep going!
                 </div>
                 <div className="text-sm text-gray-500">
-                  Earn more XP to unlock
+                  Selesaikan semua quiz dan materi di level sebelumnya
                 </div>
               </div>
               <FontAwesomeIcon
