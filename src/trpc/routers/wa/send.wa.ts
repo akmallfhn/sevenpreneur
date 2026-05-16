@@ -45,8 +45,11 @@ async function sendWhatsappMessage(
   let messageId = "";
   try {
     const response = await caller(waConversation.phone_number);
-    if (!response.messages || response.messages.length < 1) {
-      throw Error("No message ID");
+    if (response.error) {
+      await LogError("send.whatsapp", "API error", response.error);
+      throw new Error("API error: " + response.error.message);
+    } else if (!response.messages || response.messages.length < 1) {
+      throw new Error("No message ID");
     } else if (response.messages.length > 1) {
       await LogError("send.whatsapp", "More-than-one messages are returned.");
     }

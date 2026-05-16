@@ -1,14 +1,24 @@
 import https from "https";
 
 export type WhatsappMessageResponse = {
-  messaging_product: "whatsapp";
-  contacts: {
+  messaging_product?: "whatsapp";
+  contacts?: {
     input: string;
     wa_id: string;
   }[];
-  messages: {
+  messages?: {
     id: string;
   }[];
+  error?: {
+    message: string;
+    type: string;
+    code: number;
+    error_data: {
+      messaging_product: "whatsapp";
+      details: string;
+    };
+    fbtrace_id: string;
+  };
 };
 
 type WhatsappMessageRequestType =
