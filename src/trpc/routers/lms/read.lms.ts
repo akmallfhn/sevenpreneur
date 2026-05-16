@@ -118,6 +118,7 @@ export const readLMS = {
       }
       const learningsList = await opts.ctx.prisma.learning.findMany({
         select: {
+          id: true,
           name: true,
           attendances: {
             select: { check_in_at: true, check_out_at: true },
@@ -136,6 +137,7 @@ export const readLMS = {
       const attendancesList = learningsList.map((entry) => {
         if (entry.attendances.length < 1) {
           return {
+            learning_id: entry.id,
             learning_name: entry.name,
             check_in_at: null,
             check_out_at: null,
@@ -144,10 +146,11 @@ export const readLMS = {
         }
         const attendance = entry.attendances[0];
         return {
+          learning_id: entry.id,
           learning_name: entry.name,
           check_in_at: attendance.check_in_at,
           check_out_at: attendance.check_out_at,
-          status: !!attendance.check_in_at && !!attendance.check_out_at,
+          status: !!attendance.check_in_at || !!attendance.check_out_at,
         };
       });
       const projectsList = await opts.ctx.prisma.project.findMany({

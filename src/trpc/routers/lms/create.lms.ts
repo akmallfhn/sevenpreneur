@@ -16,6 +16,7 @@ import { createSlugFromTitle } from "@/trpc/utils/slug";
 import {
   numberIsID,
   stringIsTimestampTz,
+  stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
 import { LearningMethodEnum, StatusEnum } from "@prisma/client";
@@ -586,6 +587,75 @@ export const createLMS = {
         code: STATUS_CREATED,
         message: "Success",
         attendance: theCheckOut,
+      };
+    }),
+
+  attendance: roleBasedProcedure([
+    "Administrator",
+    "Super Admin",
+    "Class Manager",
+    "Educator",
+  ])
+    .input(
+      z.object({
+        learning_id: numberIsID(),
+        user_id: stringIsUUID(),
+        check_in: z.boolean().optional(),
+        check_out: z.boolean().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const learning = await opts.ctx.prisma.learning.findFirst({
+        select: { id: true },
+        where: { id: opts.input.learning_id },
+      });
+      if (!learning) {
+        throw readFailedNotFound("learning");
+      }
+
+      const existing = await opts.ctx.prisma.attendance.findFirst({
+        where: {
+          learning_id: opts.input.learning_id,
+          user_id: opts.input.user_id,
+        },
+      });
+
+      const now = new Date();
+      const nextCheckInAt =
+        opts.input.check_in === undefined
+          ? existing?.check_in_at ?? null
+          : opts.input.check_in
+            ? now
+            : null;
+      const nextCheckOutAt =
+        opts.input.check_out === undefined
+          ? existing?.check_out_at ?? null
+          : opts.input.check_out
+            ? now
+            : null;
+
+      const theAttendance = await opts.ctx.prisma.attendance.upsert({
+        create: {
+          learning_id: opts.input.learning_id,
+          user_id: opts.input.user_id,
+          check_in_at: nextCheckInAt,
+          check_out_at: nextCheckOutAt,
+        },
+        update: {
+          check_in_at: nextCheckInAt,
+          check_out_at: nextCheckOutAt,
+        },
+        where: {
+          learning_id_user_id: {
+            learning_id: opts.input.learning_id,
+            user_id: opts.input.user_id,
+          },
+        },
+      });
+      return {
+        code: STATUS_CREATED,
+        message: "Success",
+        attendance: theAttendance,
       };
     }),
 

@@ -13,7 +13,7 @@ import {
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
-import { StatusEnum } from "@prisma/client";
+import { Prisma, StatusEnum } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import { isEnrolledCohort, isEnrolledLearning } from "./util.lms";
@@ -160,6 +160,9 @@ export const listLMS = {
     .input(
       z.object({
         cohort_id: numberIsID(),
+        page: numberIsPosInt().optional(),
+        page_size: numberIsPosInt().optional(),
+        keyword: stringNotBlank().optional(),
       })
     )
     .query(async (opts) => {
@@ -171,6 +174,27 @@ export const listLMS = {
           "You're not allowed to read members of a cohort which you aren't enrolled."
         );
       }
+
+      let whereClauseSql = Prisma.sql`WHERE users_cohorts.cohort_id = ${opts.input.cohort_id}`;
+      if (opts.input.keyword !== undefined) {
+        const ilikeKeyword = `%${opts.input.keyword}%`;
+        whereClauseSql = Prisma.sql`
+${whereClauseSql}
+AND (users.full_name ILIKE ${ilikeKeyword} OR users.email ILIKE ${ilikeKeyword})`;
+      }
+
+      const countResult = await opts.ctx.prisma.$queryRaw<{ count: bigint }[]>`
+SELECT COUNT(*)::BIGINT AS count
+FROM users_cohorts
+  LEFT JOIN users ON users_cohorts.user_id = users.id
+${whereClauseSql};`;
+      const totalCount = Number(countResult[0]?.count ?? 0);
+      const paging = calculatePage(opts.input, { _count: totalCount });
+      const limitOffsetSql =
+        paging.prisma.take !== undefined
+          ? Prisma.sql`LIMIT ${paging.prisma.take} OFFSET ${paging.prisma.skip ?? 0}`
+          : Prisma.empty;
+
       type CohortMemberItem = {
         id: string;
         full_name: string;
@@ -182,6 +206,7 @@ export const listLMS = {
         avatar: string | null;
         role_id: number;
         role_name: string;
+        price_name: string | null;
         has_completed_survey: boolean;
         certificate_url: string | null;
         is_scout: boolean;
@@ -198,6 +223,7 @@ SELECT
   phone_country_codes.emoji AS phone_country_emoji,
   users.phone_number, users.avatar, users.role_id,
   roles.name AS role_name,
+  cohort_prices.name AS price_name,
   users.occupation IS NOT NULL AS has_completed_survey,
   users_cohorts.certificate_url, users_cohorts.is_scout,
   COALESCE(learning_count, 0)::INTEGER AS learning_count,
@@ -206,6 +232,7 @@ SELECT
 FROM users_cohorts
   LEFT JOIN users ON users_cohorts.user_id = users.id
   LEFT JOIN roles ON users.role_id = roles.id
+  LEFT JOIN cohort_prices ON users_cohorts.cohort_price_id = cohort_prices.id
   LEFT JOIN phone_country_codes ON users.phone_country_id = phone_country_codes.id
   LEFT JOIN (
     SELECT cohort_prices.id AS price_id, COUNT(*) AS learning_count
@@ -216,7 +243,7 @@ FROM users_cohorts
   ) AS learnings_count ON users_cohorts.cohort_price_id = learnings_count.price_id
   LEFT JOIN (
     SELECT user_id,
-      COUNT(check_in_at IS NOT NULL AND check_out_at IS NOT NULL OR NULL) AS attendance_count
+      COUNT((check_in_at IS NOT NULL OR check_out_at IS NOT NULL) OR NULL) AS attendance_count
     FROM attendances
       LEFT JOIN learnings ON attendances.learning_id = learnings.id
     WHERE learnings.cohort_id = ${opts.input.cohort_id}
@@ -229,8 +256,19 @@ FROM users_cohorts
     WHERE projects.cohort_id = ${opts.input.cohort_id}
     GROUP BY submissions.submitter_id
   ) AS submissions_count ON users.id = submissions_count.submitter_id
-WHERE users_cohorts.cohort_id = ${opts.input.cohort_id}
-ORDER BY users.role_id ASC, users.full_name ASC;`;
+${whereClauseSql}
+ORDER BY
+  CASE users.role_id
+    WHEN 6 THEN 1
+    WHEN 0 THEN 2
+    WHEN 2 THEN 3
+    WHEN 4 THEN 4
+    WHEN 1 THEN 5
+    WHEN 3 THEN 6
+    ELSE 7
+  END ASC,
+  users.full_name ASC
+${limitOffsetSql};`;
       const projectCount = await opts.ctx.prisma.project.count({
         where: { cohort_id: opts.input.cohort_id },
       });
@@ -251,6 +289,7 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           avatar: entry.avatar,
           role_id: entry.role_id,
           role_name: entry.role_name,
+          price_name: entry.price_name,
           has_completed_survey: entry.has_completed_survey,
           certificate_url: entry.certificate_url,
           is_scout: entry.is_scout,
@@ -260,10 +299,15 @@ ORDER BY users.role_id ASC, users.full_name ASC;`;
           submitted_project_count: entry.submission_count,
         };
       });
+      const returnedMetapaging = {
+        ...paging.metapaging,
+        keyword: opts.input.keyword,
+      };
       return {
         code: STATUS_OK,
         message: "Success",
         list: returnedList,
+        metapaging: returnedMetapaging,
       };
     }),
 

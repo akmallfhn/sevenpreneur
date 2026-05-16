@@ -30,6 +30,7 @@ export const createRouter = createTRPCRouter({
   submission: createLMS.submission,
   checkIn: createLMS.checkIn,
   checkOut: createLMS.checkOut,
+  attendance: createLMS.attendance,
   submitRating: createLMS.submitRating,
 
   // Business-assessment-related //

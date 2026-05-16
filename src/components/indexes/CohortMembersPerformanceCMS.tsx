@@ -2,13 +2,13 @@
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import { Eye, Search } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
 import SectionContainerCMS from "../cards/SectionContainerCMS";
 import AppInput from "../fields/AppInput";
 import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
-import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import TableBodyCMS from "../tables/TableBodyCMS";
@@ -32,6 +32,9 @@ export default function CohortMembersPerformanceCMS({
   sessionUserRoleName,
   cohortId,
 }: CohortMembersPerformanceCMSProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
   const [keyword, setKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,10 +102,10 @@ export default function CohortMembersPerformanceCMS({
                   <TableRowCMS>
                     <TableHeadCMS>NO.</TableHeadCMS>
                     <TableHeadCMS>NAME</TableHeadCMS>
-
+                    <TableHeadCMS>TIER</TableHeadCMS>
                     <TableHeadCMS>ATTENDANCE</TableHeadCMS>
                     <TableHeadCMS>ASSIGNMENT</TableHeadCMS>
-                    <TableHeadCMS>CERTIFICATE</TableHeadCMS>
+
                     {isAllowedDetails && <TableHeadCMS>ACTION</TableHeadCMS>}
                   </TableRowCMS>
                 </TableHeaderCMS>
@@ -114,7 +117,7 @@ export default function CohortMembersPerformanceCMS({
                       </TableCellCMS>
                       <TableCellCMS>
                         <div className="flex items-center gap-3">
-                          <div className="flex size-6 rounded-full shrink-0 overflow-hidden">
+                          <div className="flex size-9 rounded-full shrink-0 overflow-hidden">
                             <Image
                               className="object-cover w-full h-full"
                               src={
@@ -126,11 +129,17 @@ export default function CohortMembersPerformanceCMS({
                               height={300}
                             />
                           </div>
-                          <p className="font-semibold font-bodycopy text-sm line-clamp-1">
-                            {post.full_name}
-                          </p>
+                          <div className="flex flex-col">
+                            <p className="font-semibold font-bodycopy text-sm line-clamp-1 dark:text-sevenpreneur-white">
+                              {post.full_name}
+                            </p>
+                            <p className="text-emphasis text-sm font-bodycopy line-clamp-1">
+                              {post.email}
+                            </p>
+                          </div>
                         </div>
                       </TableCellCMS>
+                      <TableCellCMS>{post.price_name || "-"}</TableCellCMS>
                       <TableCellCMS>
                         <div className="flex items-center gap-2 w-full min-w-[80px]">
                           <Progress
@@ -159,17 +168,10 @@ export default function CohortMembersPerformanceCMS({
                           </p>
                         </div>
                       </TableCellCMS>
-                      <TableCellCMS>
-                        {!!post.certificate_url ? (
-                          <BooleanLabelCMS label="UPLOADED" value={true} />
-                        ) : (
-                          <BooleanLabelCMS label="NOT UPLOADED" value={false} />
-                        )}
-                      </TableCellCMS>
                       {isAllowedDetails && (
                         <TableCellCMS>
                           <AppButton
-                            variant="light"
+                            variant={isDark ? "dark" : "light"}
                             size="icon"
                             onClick={() => setOpenDetailsId(post.id)}
                           >

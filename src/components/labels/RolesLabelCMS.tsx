@@ -20,8 +20,8 @@ const variantStyles: Record<
   }
 > = {
   superAdmin: {
-    backgroundColor: "bg-[#EFEDF9]",
-    labelColor: "text-[#42359B]",
+    backgroundColor: "bg-[#EFEDF9] dark:bg-tertiary/15",
+    labelColor: "text-[#42359B] dark:text-[#9088c4]",
     labelIcon: <FontAwesomeIcon icon={faBuildingUser} />,
   },
   administrator: {
@@ -30,18 +30,18 @@ const variantStyles: Record<
     labelIcon: <FontAwesomeIcon icon={faUserGear} />,
   },
   educator: {
-    backgroundColor: "bg-[#E2F0FF]",
-    labelColor: "text-[#164EA6]",
+    backgroundColor: "bg-[#E2F0FF] dark:bg-primary/15",
+    labelColor: "text-[#164EA6] dark:text-[#6f96d4]",
     labelIcon: <FontAwesomeIcon icon={faChalkboardUser} />,
   },
   classManager: {
-    backgroundColor: "bg-[#ECFDF3]",
-    labelColor: "text-[#0A4F2D]",
+    backgroundColor: "bg-[#ECFDF3] dark:bg-success/15",
+    labelColor: "text-[#0A4F2D] dark:text-success-foreground",
     labelIcon: <FontAwesomeIcon icon={faPenNib} />,
   },
   generalUser: {
-    backgroundColor: "bg-[#F3F5F9]",
-    labelColor: "text-[#41474E]",
+    backgroundColor: "bg-[#F3F5F9] dark:bg-[#2a2a2a]",
+    labelColor: "text-[#41474E] dark:text-[#bbbbbb]",
     labelIcon: <FontAwesomeIcon icon={faUser} />,
   },
   marketer: {

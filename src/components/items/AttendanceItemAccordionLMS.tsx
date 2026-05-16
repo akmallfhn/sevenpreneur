@@ -1,6 +1,7 @@
 "use client";
-import { ChevronDown, TimerIcon } from "lucide-react";
+import { ChevronDown, Loader2, LogIn, LogOut, TimerIcon } from "lucide-react";
 import { useState } from "react";
+import AppButton from "../buttons/AppButton";
 import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import dayjs from "dayjs";
 
@@ -9,6 +10,10 @@ interface AttendanceItemAccordionLMSProps {
   attendanceStatus: boolean;
   attendanceCheckInAt: string;
   attendanceCheckOutAt: string;
+  onManualCheckIn?: () => void;
+  onManualCheckOut?: () => void;
+  isCheckingIn?: boolean;
+  isCheckingOut?: boolean;
 }
 
 export default function AttendanceItemAccordionLMS(
@@ -16,6 +21,9 @@ export default function AttendanceItemAccordionLMS(
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(!isOpen);
+
+  const showManualActions =
+    props.onManualCheckIn !== undefined || props.onManualCheckOut !== undefined;
 
   return (
     <div
@@ -69,6 +77,45 @@ export default function AttendanceItemAccordionLMS(
                 : "-"}
             </p>
           </div>
+          {showManualActions && (
+            <div
+              className="manual-actions flex gap-2 pt-2 mt-1 border-t border-dashboard-border"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {props.onManualCheckIn && (
+                <AppButton
+                  variant="tertiary"
+                  size="small"
+                  className="flex-1"
+                  onClick={props.onManualCheckIn}
+                  disabled={!!props.attendanceCheckInAt || props.isCheckingIn}
+                >
+                  {props.isCheckingIn ? (
+                    <Loader2 className="animate-spin size-4" />
+                  ) : (
+                    <LogIn className="size-4" />
+                  )}
+                  {!!props.attendanceCheckInAt ? "Checked In" : "Check In"}
+                </AppButton>
+              )}
+              {props.onManualCheckOut && (
+                <AppButton
+                  variant="tertiary"
+                  size="small"
+                  className="flex-1"
+                  onClick={props.onManualCheckOut}
+                  disabled={!!props.attendanceCheckOutAt || props.isCheckingOut}
+                >
+                  {props.isCheckingOut ? (
+                    <Loader2 className="animate-spin size-4" />
+                  ) : (
+                    <LogOut className="size-4" />
+                  )}
+                  {!!props.attendanceCheckOutAt ? "Checked Out" : "Check Out"}
+                </AppButton>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

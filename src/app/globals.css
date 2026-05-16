@@ -219,6 +219,7 @@
   --color-success-background: var(--color-sevenpreneur-green-midnight);
   --color-warning-background: var(--color-sevenpreneur-yellow-midnight);
   --color-danger-background: var(--color-sevenpreneur-pink-midgnight);
+  --color-danger-foreground: #ff7a9c;
 
   /* --- Default Shadcn ---*/
   --card: oklch(0.205 0 0);

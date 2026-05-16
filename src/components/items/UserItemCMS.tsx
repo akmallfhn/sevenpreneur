@@ -32,7 +32,7 @@ export default function UserItemCMS(props: UserItemCMSProps) {
           />
         </div>
         <div className="user-attributes flex flex-col text-sm font-bodycopy leading-snug min-w-0">
-          <p className="user-name text-black font-semibold line-clamp-1 break-all">
+          <p className="user-name font-semibold line-clamp-1 break-all dark:text-sevenpreneur-white">
             {props.userName}
           </p>
           <p className="user-email text-emphasis font-medium line-clamp-1 break-all">
