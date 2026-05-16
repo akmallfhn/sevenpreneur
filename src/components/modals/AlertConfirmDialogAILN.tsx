@@ -38,17 +38,19 @@ export default function AlertConfirmDialogAILN({
       onClick={onClose}
     >
       <div
-        className="container-alert-dialog fixed flex flex-col bg-white w-full max-w-[calc(100%-2rem)] p-6 gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md dark:bg-surface-black sm:max-w-lg"
+        className="container-alert-dialog fixed flex flex-col bg-white w-full max-w-[calc(100%-2rem)] p-6 gap-4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md dark:bg-card-bg dark:border dark:border-dashboard-border dark:shadow-[0_0_24px_rgba(239,68,68,0.18)] sm:max-w-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="dialog-text flex flex-col">
-          <h2 className="text-lg font-semibold">{alertDialogHeader}</h2>
-          <p className="text-emphasis text-sm font-medium">
+          <h2 className="text-lg font-semibold dark:text-white">
+            {alertDialogHeader}
+          </h2>
+          <p className="text-emphasis text-sm font-medium dark:text-gray-400">
             {alertDialogMessage}
           </p>
         </div>
         <div className="button-action flex gap-2 justify-end">
-          <ButtonAILN variant="light" size="medium" onClick={onClose}>
+          <ButtonAILN variant="outline" size="medium" onClick={onClose}>
             {alertCancelLabel}
           </ButtonAILN>
           <ButtonAILN size="medium" onClick={onConfirm}>

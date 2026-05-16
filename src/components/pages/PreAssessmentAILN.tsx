@@ -1,6 +1,5 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
-import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
 import PageContainerSVP from "@/components/pages/PageContainerSVP";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
@@ -17,9 +16,11 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import AlertConfirmDialogAILN from "../modals/AlertConfirmDialogAILN";
 
 type AnswerValue = string | string[] | null;
 type AnswerMap = Record<string, AnswerValue>;
@@ -38,6 +39,14 @@ export default function PreAssessmentAILN({
   sessionToken,
 }: PreAssessmentAILNProps) {
   const utils = trpc.useUtils();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  const isDark = mounted && resolvedTheme === "dark";
+  const nextVariant = isDark ? "outline" : "primary";
 
   useEffect(() => {
     if (sessionToken) setSessionToken(sessionToken);
@@ -214,24 +223,24 @@ export default function PreAssessmentAILN({
 
   return (
     <PageContainerSVP className="flex min-h-screen justify-center">
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-4 my-10">
         {/* Header */}
-        <div className="flex flex-col gap-3 rounded-xl border bg-white p-4">
+        <div className="flex flex-col gap-3 rounded-xl border bg-white p-4 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex-1">
-              <h1 className="text-base font-semibold">
+              <h1 className="text-base font-semibold dark:text-white">
                 Pre-Assessment AI Readiness
               </h1>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 Bantu kami memahami posisi awalmu sebelum pelatihan. Jawaban
                 kamu hanya disimpan satu kali — tidak bisa diubah setelah
                 dikirim.
               </p>
             </div>
-            <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+            <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-dashboard-border dark:text-gray-300">
               Soal {currentIdx + 1} / {totalQuestions}
             </span>
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border dark:border-emerald-500/40">
               {answeredCount} / {totalQuestions} terjawab ({progressPct}%)
             </span>
           </div>
@@ -242,7 +251,9 @@ export default function PreAssessmentAILN({
                 <div
                   key={idx}
                   className={`h-full flex-1 ${
-                    ans ? "bg-emerald-600" : "bg-gray-200"
+                    ans
+                      ? "bg-emerald-600 dark:bg-emerald-500 dark:shadow-[0_0_6px_rgba(16,185,129,0.6)]"
+                      : "bg-gray-200 dark:bg-dashboard-border"
                   }`}
                 />
               );
@@ -253,9 +264,9 @@ export default function PreAssessmentAILN({
         {/* Main body */}
         <div className="flex flex-1 gap-4">
           {/* Left: question */}
-          <div className="flex flex-1 flex-col gap-4 rounded-xl border bg-white p-6">
+          <div className="flex flex-1 flex-col gap-4 rounded-xl border bg-white p-6 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 SOAL {currentIdx + 1}
               </span>
               <span
@@ -265,20 +276,20 @@ export default function PreAssessmentAILN({
               >
                 {currentQ.category}
               </span>
-              <span className="rounded-full border border-dashboard-border bg-gray-50 px-2.5 py-0.5 text-[11px] font-medium text-gray-600">
+              <span className="rounded-full border border-dashboard-border bg-gray-50 px-2.5 py-0.5 text-[11px] font-medium text-gray-600 dark:bg-card-bg dark:text-gray-300">
                 {PRE_ASSESSMENT_TYPE_LABELS[currentQ.type]}
               </span>
               {!currentQ.required && (
-                <span className="rounded-full border border-dashboard-border bg-white px-2.5 py-0.5 text-[11px] font-medium text-gray-500">
+                <span className="rounded-full border border-dashboard-border bg-white px-2.5 py-0.5 text-[11px] font-medium text-gray-500 dark:bg-card-bg dark:text-gray-400">
                   Opsional
                 </span>
               )}
             </div>
 
-            <p className="text-[17px] font-semibold leading-snug text-gray-900">
+            <p className="text-[17px] font-semibold leading-snug text-gray-900 dark:text-white">
               {currentQ.question}
               {currentQ.required && (
-                <span className="ml-1 text-red-500">*</span>
+                <span className="ml-1 text-red-500 dark:text-red-400">*</span>
               )}
             </p>
 
@@ -290,17 +301,20 @@ export default function PreAssessmentAILN({
               onTextChange={handleTextChange}
             />
 
-            <div className="mt-auto flex items-center justify-between border-t pt-4">
-              <button
-                type="button"
+            <div className="mt-auto flex items-center justify-between border-t pt-4 dark:border-dashboard-border">
+              <ButtonAILN
+                variant="outline"
                 onClick={handlePrev}
                 disabled={currentIdx === 0}
-                className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3" />
                 Sebelumnya
-              </button>
-              <ButtonAILN onClick={handleNext} disabled={isLast}>
+              </ButtonAILN>
+              <ButtonAILN
+                variant={nextVariant}
+                onClick={handleNext}
+                disabled={isLast}
+              >
                 Berikutnya
                 <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3" />
               </ButtonAILN>
@@ -309,8 +323,8 @@ export default function PreAssessmentAILN({
 
           {/* Right: navigation panel */}
           <div className="flex w-80 shrink-0 flex-col gap-4">
-            <div className="flex flex-col gap-3 rounded-xl border bg-white p-4">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+            <div className="flex flex-col gap-3 rounded-xl border bg-white p-4 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 NAVIGASI
               </span>
               <div className="grid grid-cols-5 gap-2">
@@ -320,12 +334,14 @@ export default function PreAssessmentAILN({
 
                   let cls = "";
                   if (isCurrent) {
-                    cls = "bg-red-500 text-white";
+                    cls =
+                      "bg-red-500 text-white dark:shadow-[0_0_10px_rgba(239,68,68,0.7)]";
                   } else if (ans) {
-                    cls = "bg-black text-white";
+                    cls =
+                      "bg-black text-white dark:bg-red-500/20 dark:text-red-100 dark:border dark:border-red-500/40";
                   } else {
                     cls =
-                      "border border-dashboard-border bg-gray-100 text-gray-500";
+                      "border border-dashboard-border bg-gray-100 text-gray-500 dark:bg-card-inside-bg dark:text-gray-400";
                   }
 
                   return (
@@ -341,33 +357,43 @@ export default function PreAssessmentAILN({
                   );
                 })}
               </div>
-              <div className="flex flex-col gap-1.5 border-t pt-3 text-xs text-gray-600">
-                <LegendItem color="bg-black" label="Terjawab" />
-                <LegendItem color="bg-red-500" label="Saat ini" />
+              <div className="flex flex-col gap-1.5 border-t pt-3 text-xs text-gray-600 dark:border-dashboard-border dark:text-gray-400">
                 <LegendItem
-                  color="bg-gray-100 border border-dashboard-border"
+                  color="bg-black dark:bg-red-500/20 dark:border dark:border-red-500/40"
+                  label="Terjawab"
+                />
+                <LegendItem
+                  color="bg-red-500 dark:shadow-[0_0_6px_rgba(239,68,68,0.6)]"
+                  label="Saat ini"
+                />
+                <LegendItem
+                  color="bg-gray-100 border border-dashboard-border dark:bg-card-inside-bg"
                   label="Belum"
                 />
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 rounded-xl border bg-white p-4">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+            <div className="flex flex-col gap-2 rounded-xl border bg-white p-4 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 STATUS
               </span>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Terjawab</span>
-                <span className="font-semibold text-gray-900">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Terjawab
+                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">
                   {answeredCount} / {totalQuestions}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Wajib belum diisi</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  Wajib belum diisi
+                </span>
                 <span
                   className={`font-semibold ${
                     missingRequired.length === 0
-                      ? "text-emerald-600"
-                      : "text-red-600"
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-red-600 dark:text-red-400"
                   }`}
                 >
                   {missingRequired.length}
@@ -376,6 +402,7 @@ export default function PreAssessmentAILN({
             </div>
 
             <ButtonAILN
+              variant={nextVariant}
               onClick={requestSubmit}
               disabled={submitMutation.isPending}
               className="w-full"
@@ -386,7 +413,7 @@ export default function PreAssessmentAILN({
         </div>
       </div>
 
-      <AppAlertConfirmDialog
+      <AlertConfirmDialogAILN
         isOpen={isSubmitDialogOpen}
         alertDialogHeader="Kirim pre-assessment sekarang?"
         alertDialogMessage="Jawaban hanya bisa dikirim satu kali dan tidak bisa diubah setelahnya. Pastikan semua jawabanmu sudah sesuai."
@@ -415,7 +442,7 @@ function QuestionBody({
   if (question.type === "single") {
     return (
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Pilih satu jawaban yang paling tepat.
         </p>
         {question.options.map((opt, idx) => {
@@ -428,15 +455,15 @@ function QuestionBody({
               onClick={() => onSelectSingle(code)}
               className={`flex items-center gap-3 rounded-lg border-[1.5px] px-4 py-3 text-left text-sm transition ${
                 selected
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-dashboard-border bg-white hover:border-black/30 hover:bg-gray-50"
+                  ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500/60 dark:bg-emerald-500/10 dark:text-white dark:shadow-[0_0_10px_rgba(16,185,129,0.25)]"
+                  : "border-dashboard-border bg-white hover:border-black/30 hover:bg-gray-50 dark:bg-card-bg dark:text-gray-200 dark:hover:border-red-500/30 dark:hover:bg-card-inside-bg"
               }`}
             >
               <div
                 className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                   selected
-                    ? "bg-emerald-500 text-white"
-                    : "bg-gray-200 text-gray-700"
+                    ? "bg-emerald-500 text-white dark:shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                    : "bg-gray-200 text-gray-700 dark:bg-dashboard-border dark:text-gray-300"
                 }`}
               >
                 {String.fromCharCode(65 + idx)}
@@ -453,7 +480,7 @@ function QuestionBody({
     const arr = (value as string[] | null) ?? [];
     return (
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Pilih semua jawaban yang sesuai (boleh lebih dari satu).
         </p>
         {question.options.map((opt) => {
@@ -465,15 +492,15 @@ function QuestionBody({
               onClick={() => onToggleMulti(opt)}
               className={`flex items-center gap-3 rounded-lg border-[1.5px] px-4 py-3 text-left text-sm transition ${
                 selected
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-dashboard-border bg-white hover:border-black/30 hover:bg-gray-50"
+                  ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500/60 dark:bg-emerald-500/10 dark:text-white dark:shadow-[0_0_10px_rgba(16,185,129,0.25)]"
+                  : "border-dashboard-border bg-white hover:border-black/30 hover:bg-gray-50 dark:bg-card-bg dark:text-gray-200 dark:hover:border-red-500/30 dark:hover:bg-card-inside-bg"
               }`}
             >
               <div
                 className={`flex size-6 shrink-0 items-center justify-center rounded-md text-xs font-bold ${
                   selected
-                    ? "bg-emerald-500 text-white"
-                    : "border border-gray-300 bg-white text-gray-700"
+                    ? "bg-emerald-500 text-white dark:shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                    : "border border-gray-300 bg-white text-gray-700 dark:border-dashboard-border dark:bg-card-bg dark:text-gray-300"
                 }`}
               >
                 {selected ? "✓" : ""}
@@ -489,14 +516,16 @@ function QuestionBody({
   if (question.type === "short") {
     return (
       <div className="flex flex-col gap-2">
-        <p className="text-sm text-gray-500">Tuliskan jawaban singkat.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Tuliskan jawaban singkat.
+        </p>
         <input
           type="text"
           value={(value as string | null) ?? ""}
           onChange={(e) => onTextChange(e.target.value)}
           maxLength={255}
           placeholder={question.placeholder}
-          className="w-full rounded-lg border border-dashboard-border px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-dashboard-border px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none dark:bg-card-bg dark:text-white dark:placeholder:text-gray-500 dark:focus:border-emerald-500/60 dark:focus:shadow-[0_0_10px_rgba(16,185,129,0.2)]"
         />
       </div>
     );
@@ -504,7 +533,7 @@ function QuestionBody({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-500 dark:text-gray-400">
         Tuliskan jawabanmu dengan lebih lengkap.
       </p>
       <textarea
@@ -512,7 +541,7 @@ function QuestionBody({
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={question.placeholder}
         rows={6}
-        className="w-full resize-none rounded-lg border border-dashboard-border px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none"
+        className="w-full resize-none rounded-lg border border-dashboard-border px-4 py-3 text-sm transition focus:border-emerald-500 focus:outline-none dark:bg-card-bg dark:text-white dark:placeholder:text-gray-500 dark:focus:border-emerald-500/60 dark:focus:shadow-[0_0_10px_rgba(16,185,129,0.2)]"
       />
     </div>
   );
@@ -550,14 +579,14 @@ function PreAssessmentCompletedAILN() {
 
   return (
     <PageContainerSVP className="flex min-h-screen justify-center">
-      <div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-xl border bg-white p-10 text-center">
-        <div className="flex size-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+      <div className="mx-auto flex max-w-xl flex-col items-center gap-4 rounded-xl border bg-white p-10 text-center dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+        <div className="flex size-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-400 dark:shadow-[0_0_16px_rgba(16,185,129,0.4)]">
           <FontAwesomeIcon icon={faCheckCircle} size="xl" />
         </div>
-        <h1 className="text-xl font-bold leading-tight">
+        <h1 className="text-xl font-bold leading-tight dark:text-white">
           Pre-assessment sudah selesai
         </h1>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Terima kasih! Jawabanmu sudah tersimpan dan tidak perlu diisi ulang.
           Mengalihkan ke dashboard dalam {secondsLeft} detik...
         </p>
