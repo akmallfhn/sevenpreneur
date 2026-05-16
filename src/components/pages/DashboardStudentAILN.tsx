@@ -70,15 +70,15 @@ export default function DashboardStudentAILN({
         {/* Greeting + Current Level + Total XP */}
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <div className="text-xs font-medium tracking-widest text-gray-500">
+            <div className="text-xs font-medium tracking-widest text-gray-500 dark:text-gray-400">
               {dateLabel}
             </div>
-            <h1 className="mt-1 text-2xl font-bold leading-tight">
+            <h1 className="mt-1 text-2xl font-bold leading-tight dark:text-white">
               Halo, {firstName}.
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
+            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm dark:border dark:border-red-500/30 dark:bg-red-500/5 dark:shadow-[0_0_16px_rgba(239,68,68,0.15)]">
               {member.current_level?.icon && (
                 <Image
                   src={member.current_level.icon}
@@ -89,17 +89,24 @@ export default function DashboardStudentAILN({
                 />
               )}
               <div className="flex flex-col">
-                <div className="text-xs text-gray-500">Current Level</div>
-                <div className="font-bold">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Current Level
+                </div>
+                <div className="font-bold dark:text-white">
                   Level {member.current_level?.level_number ?? 0}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
-              <Star className="size-5 text-amber-500" fill="currentColor" />
+            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm dark:border dark:border-red-500/30 dark:bg-red-500/5 dark:shadow-[0_0_16px_rgba(239,68,68,0.15)]">
+              <Star
+                className="size-5 text-amber-500 dark:text-amber-400 dark:drop-shadow-[0_0_6px_rgba(251,191,36,0.7)]"
+                fill="currentColor"
+              />
               <div className="flex flex-col">
-                <div className="text-xs text-gray-500">Total XP</div>
-                <div className="font-bold">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Total XP
+                </div>
+                <div className="font-bold dark:text-white">
                   {member.total_xp.toLocaleString()} XP
                 </div>
               </div>
@@ -149,10 +156,10 @@ function TickerBar() {
       href={ticker.target_url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-3 rounded-md bg-black px-4 py-2.5 text-sm text-white hover:opacity-90"
+      className="flex items-center gap-3 rounded-md bg-black px-4 py-2.5 text-sm text-white hover:opacity-90 dark:border dark:border-red-500/30 dark:bg-red-500/10 dark:shadow-[0_0_16px_rgba(239,68,68,0.18)]"
     >
       {ticker.callout && (
-        <span className="rounded-md bg-white/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide">
+        <span className="rounded-md bg-white/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide dark:bg-red-500/20 dark:text-red-100">
           {ticker.callout}
         </span>
       )}
@@ -164,7 +171,7 @@ function TickerBar() {
           e.stopPropagation();
           setClosed(true);
         }}
-        className="text-xs text-gray-400 hover:text-white"
+        className="text-xs text-gray-400 hover:text-white dark:text-red-300/70 dark:hover:text-red-100"
       >
         tutup
       </button>

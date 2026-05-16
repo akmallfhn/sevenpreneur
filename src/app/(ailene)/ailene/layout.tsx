@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/contexts/SidebarContext";
 import { TRPCProvider } from "@/trpc/client";
 import { setSessionToken, trpc } from "@/trpc/server";
 import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
 
@@ -47,15 +48,22 @@ export default async function AileneLayout(
 
   return (
     <TRPCProvider baseURL={baseURL}>
-      <SidebarProvider>
-        <div className="font-read min-h-screen bg-dashboard-bg">
-          {props.children}
-          <div className="lg:hidden">
-            <AppPageState variant="ONLY_MOBILE" />
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="light"
+        enableSystem={false}
+        storageKey="ailene-theme"
+      >
+        <SidebarProvider>
+          <div className="font-read min-h-screen bg-dashboard-bg dark:bg-black">
+            {props.children}
+            <div className="lg:hidden">
+              <AppPageState variant="ONLY_MOBILE" />
+            </div>
+            <Toaster richColors position="top-center" />
           </div>
-          <Toaster richColors position="top-center" />
-        </div>
-      </SidebarProvider>
+        </SidebarProvider>
+      </ThemeProvider>
     </TRPCProvider>
   );
 }

@@ -12,10 +12,11 @@ interface StreakCardAILNProps {
 }
 
 function tierClass(count: number): string {
-  if (count === 0) return "bg-gray-200";
-  if (count <= 2) return "bg-red-200";
-  if (count <= 4) return "bg-red-400";
-  return "bg-red-600";
+  if (count === 0) return "bg-gray-200 dark:bg-dashboard-border";
+  if (count <= 2) return "bg-red-200 dark:bg-red-500/30";
+  if (count <= 4)
+    return "bg-red-400 dark:bg-red-500/60 dark:shadow-[0_0_4px_rgba(239,68,68,0.5)]";
+  return "bg-red-600 dark:bg-red-500 dark:shadow-[0_0_6px_rgba(239,68,68,0.8)]";
 }
 
 export default function StreakCardAILN(props: StreakCardAILNProps) {
@@ -94,10 +95,12 @@ export default function StreakCardAILN(props: StreakCardAILNProps) {
   return (
     <StatShell title="STREAK 3 BULAN TERAKHIR" className={props.className}>
       <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-bold leading-none text-gray-900">
+        <span className="text-3xl font-bold leading-none text-gray-900 dark:text-white">
           {current_streak}
         </span>
-        <span className="text-xs text-gray-500">hari berturut</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400">
+          hari berturut
+        </span>
       </div>
 
       <div className="mt-4 flex flex-col gap-1.5">
@@ -106,7 +109,7 @@ export default function StreakCardAILN(props: StreakCardAILNProps) {
           {monthLabels.map((ml) => (
             <span
               key={`${ml.weekIndex}-${ml.label}`}
-              className="absolute text-[10px] font-medium text-gray-500"
+              className="absolute text-[10px] font-medium text-gray-500 dark:text-gray-400"
               style={{
                 left: `${(ml.weekIndex / weeks.length) * 100}%`,
               }}
@@ -127,12 +130,12 @@ export default function StreakCardAILN(props: StreakCardAILNProps) {
                     key={cell.date}
                     className={`group/cell relative aspect-square rounded-[2px] ${tierClass(cell.count)} ${
                       cell.inRange ? "" : "opacity-30"
-                    } ${isToday ? "ring-1 ring-red-600" : ""}`}
+                    } ${isToday ? "ring-1 ring-red-600 dark:ring-red-400" : ""}`}
                   >
-                    <div className="pointer-events-none invisible absolute bottom-full left-1/2 z-20 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-medium text-white opacity-0 shadow-md transition group-hover/cell:visible group-hover/cell:opacity-100">
+                    <div className="pointer-events-none invisible absolute bottom-full left-1/2 z-20 mb-1.5 -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-medium text-white opacity-0 shadow-md transition group-hover/cell:visible group-hover/cell:opacity-100 dark:bg-black dark:ring-1 dark:ring-red-500/40">
                       {dayjs(cell.date).format("D MMM YYYY")} · {cell.count}{" "}
                       task
-                      <div className="absolute left-1/2 top-full size-0 -translate-x-1/2 border-[4px] border-transparent border-t-gray-900" />
+                      <div className="absolute left-1/2 top-full size-0 -translate-x-1/2 border-[4px] border-transparent border-t-gray-900 dark:border-t-black" />
                     </div>
                   </div>
                 );
@@ -156,9 +159,9 @@ function StatShell({
 }) {
   return (
     <div
-      className={`flex h-full flex-col gap-1 rounded-xl border bg-white p-6 ${className}`}
+      className={`flex h-full flex-col gap-1 rounded-xl border bg-white p-6 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)] ${className}`}
     >
-      <div className="text-xs font-medium uppercase tracking-widest text-gray-500">
+      <div className="text-xs font-medium uppercase tracking-widest text-gray-500 dark:text-gray-400">
         {title}
       </div>
       {children}
@@ -169,14 +172,14 @@ function StatShell({
 function CardLoading() {
   return (
     <div className="flex flex-col gap-3 animate-pulse">
-      <div className="h-8 w-24 rounded bg-gray-200" />
+      <div className="h-8 w-24 rounded bg-gray-200 dark:bg-dashboard-border" />
       <div className="mt-2 flex w-full gap-1">
         {Array.from({ length: 13 }).map((_, i) => (
           <div key={i} className="flex flex-1 flex-col gap-1">
             {Array.from({ length: 7 }).map((__, j) => (
               <div
                 key={j}
-                className="aspect-square rounded-[2px] bg-gray-200"
+                className="aspect-square rounded-[2px] bg-gray-200 dark:bg-dashboard-border"
               />
             ))}
           </div>
@@ -189,7 +192,9 @@ function CardLoading() {
 function CardError() {
   return (
     <div className="flex h-20 items-center justify-center">
-      <span className="text-xs text-red-500">Gagal memuat data.</span>
+      <span className="text-xs text-red-500 dark:text-red-400">
+        Gagal memuat data.
+      </span>
     </div>
   );
 }

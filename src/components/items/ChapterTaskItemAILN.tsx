@@ -200,40 +200,52 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
   return (
     <div
       className={`flex items-center gap-3 rounded-lg border border-dashboard-border p-3 ${
-        locked ? "bg-gray-50" : "bg-white"
+        locked
+          ? "bg-gray-50 dark:bg-red-500/[0.03]"
+          : "bg-white dark:bg-red-500/5 dark:shadow-[0_0_10px_rgba(239,68,68,0.1)]"
       }`}
     >
       <div
         className={`flex h-10 w-10 items-center justify-center rounded-md ${
-          locked ? "bg-gray-100 text-gray-400" : "bg-red-100 text-red-500"
+          locked
+            ? "bg-gray-100 text-gray-400 dark:bg-red-500/5 dark:text-red-500/40"
+            : "bg-red-100 text-red-500 dark:bg-red-500/15 dark:text-red-400 dark:shadow-[0_0_10px_rgba(239,68,68,0.4)]"
         }`}
       >
         {style.icon}
       </div>
       <div className="flex-1">
-        <div className="text-[10px] uppercase tracking-wide text-gray-500">
+        <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
           {style.badge}
         </div>
-        <div className="text-sm font-semibold">{title}</div>
+        <div className="text-sm font-semibold dark:text-white">{title}</div>
         <div className="mt-1 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border px-2 py-0.5 text-xs font-semibold">
-            <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-warning" />
+          <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border px-2 py-0.5 text-xs font-semibold dark:border-amber-400/40 dark:bg-amber-400/10 dark:text-amber-200">
+            <FontAwesomeIcon
+              icon={faStar}
+              className="h-3 w-3 text-warning dark:text-amber-400 dark:drop-shadow-[0_0_4px_rgba(251,191,36,0.7)]"
+            />
             {xpReward} XP
           </span>
-          <span className="text-xs text-gray-500">{meta}</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {meta}
+          </span>
         </div>
       </div>
       <div className="w-32 shrink-0">{cta}</div>
       <div className="w-6">
         {locked ? (
-          <FontAwesomeIcon icon={faLock} className="h-4 w-4 text-gray-400" />
+          <FontAwesomeIcon
+            icon={faLock}
+            className="h-4 w-4 text-gray-400 dark:text-red-500/40"
+          />
         ) : hasMark ? (
           <FontAwesomeIcon
             icon={faCircleCheck}
-            className="h-5 w-5 text-red-500"
+            className="h-5 w-5 text-red-500 dark:text-red-400 dark:drop-shadow-[0_0_6px_rgba(239,68,68,0.8)]"
           />
         ) : (
-          <span className="block h-4 w-4 rounded-full border-2 border-gray-300" />
+          <span className="block h-4 w-4 rounded-full border-2 border-gray-300 dark:border-red-500/40" />
         )}
       </div>
       {props.variant === "Quiz" && (

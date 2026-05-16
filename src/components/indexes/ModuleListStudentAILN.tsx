@@ -1,9 +1,10 @@
 "use client";
-import ChapterItemAILN from "@/components/items/ChapterItemAILN";
+import ChapterItemAILN, {
+  ChapterItemSkeleton,
+} from "@/components/items/ChapterItemAILN";
 import LevelDividerAILN from "@/components/items/LevelDividerAILN";
 import PageContainerAILN from "@/components/pages/PageContainerAILN";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
-import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { setSessionToken, trpc } from "@/trpc/client";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -52,7 +53,26 @@ export default function ModuleListStudentAILN({
   ) {
     return (
       <PageContainerAILN>
-        <AppLoadingComponents />
+        <div className="flex w-full flex-col gap-6">
+          <div className="flex items-center justify-between gap-4">
+            <div className="space-y-2">
+              <div className="h-7 w-48 rounded bg-gray-200 dark:bg-dashboard-border animate-pulse" />
+              <div className="h-3 w-72 rounded bg-gray-200 dark:bg-dashboard-border animate-pulse" />
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-14 w-44 rounded-md bg-gray-200 dark:bg-dashboard-border animate-pulse" />
+              <div className="h-14 w-32 rounded-md bg-gray-200 dark:bg-dashboard-border animate-pulse" />
+            </div>
+          </div>
+          <div className="relative">
+            <div className="absolute top-0 bottom-0 left-4 w-0.5 bg-red-200 dark:bg-red-500/40 dark:shadow-[0_0_6px_rgba(239,68,68,0.6)]" />
+            <div className="space-y-4">
+              {[0, 1, 2, 3].map((i) => (
+                <ChapterItemSkeleton key={i} />
+              ))}
+            </div>
+          </div>
+        </div>
       </PageContainerAILN>
     );
   }
@@ -144,13 +164,15 @@ export default function ModuleListStudentAILN({
       <div className="flex w-full flex-col gap-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Modul Belajar AI</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-2xl font-bold dark:text-white">
+              Modul Belajar AI
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Tuntaskan semua tugas mingguan untuk maju ke level berikutnya.
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
+            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm dark:border dark:border-red-500/30 dark:bg-red-500/5 dark:shadow-[0_0_16px_rgba(239,68,68,0.15)]">
               {member.current_level?.icon && (
                 <Image
                   src={member.current_level.icon}
@@ -161,17 +183,24 @@ export default function ModuleListStudentAILN({
                 />
               )}
               <div className="flex flex-col">
-                <div className="text-xs text-gray-500">Level Sekarang</div>
-                <div className="font-bold">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Level Sekarang
+                </div>
+                <div className="font-bold dark:text-white">
                   Level {member.current_level?.level_number ?? 0}
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm">
-              <FontAwesomeIcon icon={faStar} className="text-warning" />
+            <div className="flex items-center gap-2 rounded-md bg-white p-3 shadow-sm dark:border dark:border-red-500/30 dark:bg-red-500/5 dark:shadow-[0_0_16px_rgba(239,68,68,0.15)]">
+              <FontAwesomeIcon
+                icon={faStar}
+                className="text-warning dark:text-amber-400 dark:drop-shadow-[0_0_6px_rgba(251,191,36,0.7)]"
+              />
               <div className="flex flex-col">
-                <div className="text-xs text-gray-500">Reward</div>
-                <div className="font-bold">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  Reward
+                </div>
+                <div className="font-bold dark:text-white">
                   {member.total_xp.toLocaleString()} XP
                 </div>
               </div>
@@ -181,7 +210,7 @@ export default function ModuleListStudentAILN({
 
         {/* Timeline */}
         <div className="relative">
-          <div className="absolute top-0 bottom-0 left-4 w-0.5 bg-red-200" />
+          <div className="absolute top-0 bottom-0 left-4 w-0.5 bg-red-200 dark:bg-red-500/40 dark:shadow-[0_0_6px_rgba(239,68,68,0.6)]" />
           <div className="space-y-4">
             {items.map((item, i) =>
               item.kind === "level" ? (
