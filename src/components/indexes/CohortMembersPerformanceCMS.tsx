@@ -9,6 +9,7 @@ import AppButton from "../buttons/AppButton";
 import SectionContainerCMS from "../cards/SectionContainerCMS";
 import AppInput from "../fields/AppInput";
 import EditCohortMemberFormCMS from "../forms/EditCohortMemberFormCMS";
+import BooleanLabelCMS from "../labels/BooleanLabelCMS";
 import AppNumberPagination from "../navigations/AppNumberPagination";
 import AppLoadingComponents from "../states/AppLoadingComponents";
 import TableBodyCMS from "../tables/TableBodyCMS";
@@ -104,7 +105,7 @@ export default function CohortMembersPerformanceCMS({
                     <TableHeadCMS>NAME</TableHeadCMS>
                     <TableHeadCMS>TIER</TableHeadCMS>
                     <TableHeadCMS>ATTENDANCE</TableHeadCMS>
-                    <TableHeadCMS>ASSIGNMENT</TableHeadCMS>
+                    <TableHeadCMS>SURVEY</TableHeadCMS>
 
                     {isAllowedDetails && <TableHeadCMS>ACTION</TableHeadCMS>}
                   </TableRowCMS>
@@ -155,18 +156,12 @@ export default function CohortMembersPerformanceCMS({
                         </div>
                       </TableCellCMS>
                       <TableCellCMS>
-                        <div className="flex items-center gap-2 w-full min-w-[80px]">
-                          <Progress
-                            value={Math.round(
-                              (post.submitted_project_count /
-                                post.project_count) *
-                                100
-                            )}
-                          />
-                          <p className="text-xs shrink-0">
-                            {post.submitted_project_count}/{post.project_count}
-                          </p>
-                        </div>
+                        <BooleanLabelCMS
+                          label={
+                            post.has_completed_survey ? "COMPLETED" : "NOT YET"
+                          }
+                          value={post.has_completed_survey}
+                        />
                       </TableCellCMS>
                       {isAllowedDetails && (
                         <TableCellCMS>
