@@ -1,6 +1,6 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
-import AppAlertConfirmDialog from "@/components/modals/AppAlertConfirmDialog";
+import AlertConfirmDialogAILN from "@/components/modals/AlertConfirmDialogAILN";
 import PageContainerAILN from "@/components/pages/PageContainerAILN";
 import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { getDurationFromSeconds } from "@/lib/date-time-manipulation";
@@ -12,6 +12,7 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -69,6 +70,16 @@ export default function QuizAttemptAILN({
   const router = useRouter();
   const utils = trpc.useUtils();
   const { quiz, questions } = data;
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === "dark";
+  const nextVariant = isDark ? "outline" : "primary";
 
   // Jawaban user, key = question id (string), value = option_code yang dipilih
   const [answers, setAnswers] = useState<Record<string, string | null>>({});
@@ -218,32 +229,34 @@ export default function QuizAttemptAILN({
     <PageContainerAILN>
       <div className="flex w-full flex-col gap-4">
         {/* Header */}
-        <div className="flex flex-col gap-3 rounded-xl border bg-white p-4">
+        <div className="flex flex-col gap-3 rounded-xl border bg-white p-4 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="flex-1 text-base font-semibold">{quiz.name}</h1>
-            <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+            <h1 className="flex-1 text-base font-semibold dark:text-white">
+              {quiz.name}
+            </h1>
+            <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-dashboard-border dark:text-gray-300">
               Soal {currentIdx + 1} / {totalQuestions}
             </span>
             <span
               className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
                 secondsLeft <= 60
-                  ? "bg-red-50 text-red-600"
+                  ? "bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-300 dark:border dark:border-red-500/40 dark:shadow-[0_0_10px_rgba(239,68,68,0.4)]"
                   : secondsLeft <= 300
-                    ? "bg-amber-50 text-amber-700"
-                    : "bg-gray-50 text-gray-700"
+                    ? "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300 dark:border dark:border-amber-500/40"
+                    : "bg-gray-50 text-gray-700 dark:bg-dashboard-border dark:text-gray-300"
               }`}
             >
               <FontAwesomeIcon icon={faClock} className="h-3.5 w-3.5" />
               {getDurationFromSeconds(Math.max(0, secondsLeft))} tersisa
             </span>
-            <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
-              <span className="size-1.5 rounded-full bg-emerald-500" />
+            <span className="flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="size-1.5 rounded-full bg-emerald-500 dark:shadow-[0_0_6px_rgba(16,185,129,0.7)]" />
               Auto-save aktif
             </span>
             <button
               type="button"
               onClick={handleExit}
-              className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50"
+              className="flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 transition hover:bg-gray-50 dark:border-dashboard-border dark:text-gray-300 dark:hover:bg-card-inside-bg"
             >
               <FontAwesomeIcon
                 icon={faRightFromBracket}
@@ -260,7 +273,9 @@ export default function QuizAttemptAILN({
                 <div
                   key={idx}
                   className={`h-full flex-1 ${
-                    isAnswered ? "bg-emerald-600" : "bg-gray-200"
+                    isAnswered
+                      ? "bg-emerald-600 dark:bg-emerald-500 dark:shadow-[0_0_6px_rgba(16,185,129,0.6)]"
+                      : "bg-gray-200 dark:bg-dashboard-border"
                   }`}
                 />
               );
@@ -271,18 +286,18 @@ export default function QuizAttemptAILN({
         {/* Main body */}
         <div className="flex flex-1 gap-4">
           {/* Left panel: question */}
-          <div className="flex flex-1 flex-col gap-4 rounded-xl border bg-white p-6">
+          <div className="flex flex-1 flex-col gap-4 rounded-xl border bg-white p-6 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 SOAL {currentIdx + 1}
               </span>
             </div>
             {currentQ ? (
               <>
-                <p className="text-[17px] font-semibold leading-snug text-gray-900">
+                <p className="text-[17px] font-semibold leading-snug text-gray-900 dark:text-white">
                   {currentQ.question}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Pilih satu jawaban yang paling tepat.
                 </p>
 
@@ -297,15 +312,15 @@ export default function QuizAttemptAILN({
                         onClick={() => handleSelect(opt.option_code)}
                         className={`flex items-center gap-3 rounded-lg border-[1.5px] px-4 py-3 text-left text-sm transition ${
                           isSelected
-                            ? "border-emerald-500 bg-emerald-50"
-                            : "border-gray-200 bg-white hover:border-black/30 hover:bg-gray-50"
+                            ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500/60 dark:bg-emerald-500/10 dark:text-white dark:shadow-[0_0_10px_rgba(16,185,129,0.25)]"
+                            : "border-gray-200 bg-white hover:border-black/30 hover:bg-gray-50 dark:border-dashboard-border dark:bg-card-bg dark:text-gray-200 dark:hover:border-red-500/30 dark:hover:bg-card-inside-bg"
                         }`}
                       >
                         <div
                           className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                             isSelected
-                              ? "bg-emerald-500 text-white"
-                              : "bg-gray-200 text-gray-700"
+                              ? "bg-emerald-500 text-white dark:shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                              : "bg-gray-200 text-gray-700 dark:bg-dashboard-border dark:text-gray-300"
                           }`}
                         >
                           {opt.option_code.toUpperCase()}
@@ -317,22 +332,25 @@ export default function QuizAttemptAILN({
                 </div>
               </>
             ) : (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Belum ada pertanyaan pada quiz ini.
               </p>
             )}
 
-            <div className="mt-auto flex items-center justify-between border-t pt-4">
-              <button
-                type="button"
+            <div className="mt-auto flex items-center justify-between border-t pt-4 dark:border-dashboard-border">
+              <ButtonAILN
+                variant="outline"
                 onClick={handlePrev}
                 disabled={currentIdx === 0}
-                className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3" />
                 Sebelumnya
-              </button>
-              <ButtonAILN onClick={handleNext} disabled={isLast}>
+              </ButtonAILN>
+              <ButtonAILN
+                variant={nextVariant}
+                onClick={handleNext}
+                disabled={isLast}
+              >
                 Berikutnya
                 <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3" />
               </ButtonAILN>
@@ -341,8 +359,8 @@ export default function QuizAttemptAILN({
 
           {/* Right panel: navigation */}
           <div className="flex w-72 shrink-0 flex-col gap-4">
-            <div className="flex flex-col gap-3 rounded-xl border bg-white p-4">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+            <div className="flex flex-col gap-3 rounded-xl border bg-white p-4 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 NAVIGASI SOAL
               </span>
               <div className="grid grid-cols-5 gap-2">
@@ -353,11 +371,14 @@ export default function QuizAttemptAILN({
 
                   let cls = "";
                   if (isCurrent) {
-                    cls = "bg-red-500 text-white";
+                    cls =
+                      "bg-red-500 text-white dark:shadow-[0_0_10px_rgba(239,68,68,0.7)]";
                   } else if (isAnswered) {
-                    cls = "bg-black text-white";
+                    cls =
+                      "bg-black text-white dark:bg-red-500/20 dark:text-red-100 dark:border dark:border-red-500/40";
                   } else {
-                    cls = "border border-gray-200 bg-gray-100 text-gray-500";
+                    cls =
+                      "border border-gray-200 bg-gray-100 text-gray-500 dark:border-dashboard-border dark:bg-card-inside-bg dark:text-gray-400";
                   }
 
                   return (
@@ -372,17 +393,24 @@ export default function QuizAttemptAILN({
                   );
                 })}
               </div>
-              <div className="flex flex-col gap-1.5 border-t pt-3 text-xs text-gray-600">
-                <LegendItem color="bg-black" label="Terjawab" />
-                <LegendItem color="bg-red-500" label="Saat ini" />
+              <div className="flex flex-col gap-1.5 border-t pt-3 text-xs text-gray-600 dark:border-dashboard-border dark:text-gray-400">
                 <LegendItem
-                  color="bg-gray-100 border border-gray-200"
+                  color="bg-black dark:bg-red-500/20 dark:border dark:border-red-500/40"
+                  label="Terjawab"
+                />
+                <LegendItem
+                  color="bg-red-500 dark:shadow-[0_0_6px_rgba(239,68,68,0.6)]"
+                  label="Saat ini"
+                />
+                <LegendItem
+                  color="bg-gray-100 border border-gray-200 dark:bg-card-inside-bg dark:border-dashboard-border"
                   label="Belum"
                 />
               </div>
             </div>
 
             <ButtonAILN
+              variant={nextVariant}
               onClick={handleSubmit}
               disabled={submitMutation.isPending}
               className="w-full"
@@ -392,7 +420,7 @@ export default function QuizAttemptAILN({
           </div>
         </div>
       </div>
-      <AppAlertConfirmDialog
+      <AlertConfirmDialogAILN
         isOpen={isExitDialogOpen}
         alertDialogHeader="Keluar dari quiz?"
         alertDialogMessage="Waktu quiz tetap berjalan walau kamu keluar halaman. Jawaban yang sudah dipilih tersimpan otomatis, tapi quiz akan otomatis disubmit ketika waktu habis."

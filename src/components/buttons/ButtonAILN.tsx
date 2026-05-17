@@ -74,7 +74,7 @@ const ButtonAILN = forwardRef<HTMLButtonElement, ButtonAILNProps>(
 
     const variantClasses: Record<VariantType, string> = {
       primary:
-        "bg-black text-white hover:bg-[#140303] active:bg-[#140303] disabled:bg-gray-300 disabled:text-gray-500 dark:bg-[#2a0a0a] dark:hover:bg-[#1a0606] dark:border dark:border-red-700/30 dark:active:bg-[#3a0e0e] dark:disabled:bg-[#1a0606]/40 dark:disabled:text-red-100/40 ",
+        "bg-black text-white hover:bg-[#140303] active:bg-[#140303] disabled:bg-gray-300 disabled:text-gray-500 dark:border dark:border-dashboard-border dark:bg-dashboard-bg dark:text-white dark:hover:bg-card-bg dark:active:bg-card-bg dark:disabled:bg-card-bg/40 dark:disabled:text-red-100/40",
       secondary:
         "bg-[#107158] text-white hover:bg-[#0d5d48] active:bg-[#0a4a39] disabled:bg-emerald-200 disabled:text-emerald-50",
       tertiary:

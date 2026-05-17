@@ -94,7 +94,7 @@ function StatShell({
 }) {
   return (
     <div
-      className={`flex flex-col gap-2 rounded-xl border bg-white p-5 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)] ${className}`}
+      className={`flex flex-col gap-2 rounded-xl border bg-white p-5 border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)] ${className}`}
     >
       <div className="text-xs font-medium uppercase tracking-widest text-gray-500 dark:text-gray-400">
         {title}

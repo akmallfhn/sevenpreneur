@@ -70,7 +70,7 @@ export default function TodayFocusCardAILN() {
         : BookOpen;
 
   return (
-    <div className="flex h-full flex-col gap-3 rounded-xl border bg-white p-6 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+    <div className="flex h-full flex-col gap-3 rounded-xl border bg-white p-6 border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
       <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-gray-500 dark:text-gray-400">
         <span className="size-2 rounded-full bg-red-500 dark:shadow-[0_0_8px_rgba(239,68,68,0.9)]" />
         FOKUS HARI INI
@@ -153,7 +153,7 @@ function CardShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-full flex-col gap-3 rounded-xl border bg-white p-6 dark:border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+    <div className="flex h-full flex-col gap-3 rounded-xl border bg-white p-6 border-dashboard-border dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
       <div className="text-xs font-medium uppercase tracking-widest text-gray-500 dark:text-gray-400">
         {title}
       </div>

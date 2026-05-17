@@ -402,7 +402,7 @@ export default function PreAssessmentAILN({
             </div>
 
             <ButtonAILN
-              variant={nextVariant}
+              variant="primary"
               onClick={requestSubmit}
               disabled={submitMutation.isPending}
               className="w-full"
@@ -560,6 +560,17 @@ const REDIRECT_DELAY_MS = 5000;
 
 function PreAssessmentCompletedAILN() {
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === "dark";
+  const nextVariant = isDark ? "outline" : "primary";
+
   const [secondsLeft, setSecondsLeft] = useState(
     Math.ceil(REDIRECT_DELAY_MS / 1000)
   );
@@ -590,7 +601,10 @@ function PreAssessmentCompletedAILN() {
           Terima kasih! Jawabanmu sudah tersimpan dan tidak perlu diisi ulang.
           Mengalihkan ke dashboard dalam {secondsLeft} detik...
         </p>
-        <ButtonAILN onClick={() => router.push("/student")}>
+        <ButtonAILN
+          variant={nextVariant}
+          onClick={() => router.push("/student")}
+        >
           Buka Dashboard Sekarang
         </ButtonAILN>
       </div>
