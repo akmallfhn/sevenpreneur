@@ -198,27 +198,29 @@ export default function MaterialDetailsAILN({
       <div className="flex w-full flex-col gap-6 py-4">
         {/* Header */}
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-bold leading-tight text-sevenpreneur-coal">
+          <h1 className="text-3xl font-bold leading-tight text-sevenpreneur-coal dark:text-white">
             {material.title}
           </h1>
           {material.description && (
-            <p className="text-base text-gray-600">{material.description}</p>
+            <p className="text-base text-gray-600 dark:text-gray-400">
+              {material.description}
+            </p>
           )}
 
-          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1">
+          <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300">
               <FontAwesomeIcon
                 icon={faPenRuler}
-                className="h-3 w-3 text-primary"
+                className="h-3 w-3 text-red-500"
               />
               <span className="font-medium">Materi</span>
             </span>
 
             {readTime && (
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300">
                 <FontAwesomeIcon
                   icon={faClock}
-                  className="h-3 w-3 text-gray-500"
+                  className="h-3 w-3 text-gray-500 dark:text-gray-400"
                 />
                 <span className="font-medium">
                   {readTime.min}–{readTime.max} menit baca
@@ -227,26 +229,26 @@ export default function MaterialDetailsAILN({
             )}
 
             {publishedAt && (
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300">
                 <FontAwesomeIcon
                   icon={faCalendarDay}
-                  className="h-3 w-3 text-gray-500"
+                  className="h-3 w-3 text-gray-500 dark:text-gray-400"
                 />
                 <span className="font-medium">Terbit: {publishedAt}</span>
               </span>
             )}
 
             {material.chapter?.name && (
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300">
                 <FontAwesomeIcon
                   icon={faTag}
-                  className="h-3 w-3 text-gray-500"
+                  className="h-3 w-3 text-gray-500 dark:text-gray-400"
                 />
                 <span className="font-medium">{material.chapter.name}</span>
               </span>
             )}
 
-            <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300">
               <FontAwesomeIcon
                 icon={faStar}
                 className="h-3 w-3 text-yellow-500"
@@ -255,7 +257,7 @@ export default function MaterialDetailsAILN({
             </span>
 
             {completed && (
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-green-300 bg-green-50 px-2 py-1 text-green-700">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-green-300 bg-green-50 px-2 py-1 text-green-700 dark:border-green-500/30 dark:bg-green-500/10 dark:text-green-400">
                 <FontAwesomeIcon icon={faCircleCheck} className="h-3 w-3" />
                 <span className="font-semibold">Selesai</span>
               </span>
@@ -268,9 +270,9 @@ export default function MaterialDetailsAILN({
           {/* Main content */}
           <div className="flex flex-col gap-6 min-w-0">
             {fileUrl && (
-              <div className="overflow-hidden rounded-xl border border-dashboard-border bg-white">
+              <div className="overflow-hidden rounded-xl border border-dashboard-border bg-white dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
                 <div className="flex items-center justify-between gap-3 border-b border-dashboard-border px-4 py-3">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-sevenpreneur-coal">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-sevenpreneur-coal dark:text-white">
                     <FontAwesomeIcon
                       icon={faFilePdf}
                       className="h-4 w-4 text-red-500"
@@ -281,7 +283,7 @@ export default function MaterialDetailsAILN({
                     href={fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-red-500 hover:underline"
                   >
                     <FontAwesomeIcon
                       icon={faArrowUpRightFromSquare}
@@ -292,13 +294,13 @@ export default function MaterialDetailsAILN({
                 </div>
                 {isPdf ? (
                   <iframe
-                    src={`${fileUrl}#view=FitH`}
+                    src={`${fileUrl}#view=FitH&toolbar=0&navpanes=0`}
                     title={material.title}
                     className="h-[640px] w-full bg-[#1e1f24]"
                   />
                 ) : (
                   <div className="px-4 py-6">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Materi ini berupa file. Buka di tab baru untuk melihat.
                     </p>
                     <a
@@ -311,7 +313,7 @@ export default function MaterialDetailsAILN({
                     </a>
                   </div>
                 )}
-                <div className="border-t border-dashboard-border bg-gray-50 px-4 py-2 text-[11px] text-gray-500">
+                <div className="border-t border-dashboard-border bg-gray-50 px-4 py-2 text-sm text-gray-500 dark:bg-card-inside-bg dark:text-gray-400">
                   Tips: Gunakan tombol di atas viewer untuk memperbesar,
                   mengunduh, atau membuka PDF di tab baru.
                 </div>
@@ -325,7 +327,7 @@ export default function MaterialDetailsAILN({
               />
             ) : (
               !fileUrl && (
-                <div className="rounded-xl border border-dashed border-dashboard-border bg-white px-4 py-8 text-center text-sm text-gray-500">
+                <div className="rounded-xl border border-dashed border-dashboard-border bg-white px-4 py-8 text-center text-sm text-gray-500 dark:bg-card-bg dark:text-gray-400">
                   Materi ini belum memiliki konten artikel.
                 </div>
               )
@@ -336,11 +338,11 @@ export default function MaterialDetailsAILN({
           <aside className="hidden lg:block">
             <div className="sticky top-6 flex flex-col gap-4">
               {toc.length > 0 && (
-                <div className="rounded-xl border border-dashboard-border bg-white p-4">
-                  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-sevenpreneur-coal">
+                <div className="rounded-xl border border-dashboard-border bg-white p-4 dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+                  <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-sevenpreneur-coal dark:text-white">
                     <FontAwesomeIcon
                       icon={faListUl}
-                      className="h-3.5 w-3.5 text-primary"
+                      className="h-3.5 w-3.5 text-red-500"
                     />
                     <span>Daftar Isi</span>
                   </div>
@@ -352,7 +354,7 @@ export default function MaterialDetailsAILN({
                           key={entry.id}
                           href={`#${entry.id}`}
                           className={[
-                            "block rounded-md border-l-2 px-2.5 py-1.5 text-xs leading-relaxed transition-colors",
+                            "block rounded-md px-2.5 py-1.5 text-sm leading-relaxed transition-colors",
                             entry.level === 1
                               ? "font-semibold"
                               : entry.level === 2
@@ -360,8 +362,8 @@ export default function MaterialDetailsAILN({
                                 : "font-normal",
                             entry.level === 3 ? "pl-5" : "pl-2.5",
                             isActive
-                              ? "border-primary bg-primary/5 text-primary"
-                              : "border-transparent text-gray-600 hover:bg-gray-50 hover:text-sevenpreneur-coal",
+                              ? "bg-red-500/10 text-red-500 dark:bg-red-500/15 dark:text-red-400"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-sevenpreneur-coal dark:text-gray-400 dark:hover:bg-card-inside-bg dark:hover:text-white",
                           ].join(" ")}
                         >
                           {entry.text}
@@ -373,14 +375,14 @@ export default function MaterialDetailsAILN({
               )}
 
               {updatedAt && (
-                <div className="rounded-xl border border-dashboard-border bg-white p-4">
-                  <div className="mb-2 text-sm font-semibold text-sevenpreneur-coal">
+                <div className="rounded-xl border border-dashboard-border bg-white p-4 dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
+                  <div className="mb-2 text-sm font-semibold text-sevenpreneur-coal dark:text-white">
                     Di halaman ini
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <FontAwesomeIcon
                       icon={faCalendarDay}
-                      className="h-3 w-3 text-gray-500"
+                      className="h-3 w-3 text-gray-500 dark:text-gray-400"
                     />
                     <span>Terakhir diperbarui: {updatedAt}</span>
                   </div>
