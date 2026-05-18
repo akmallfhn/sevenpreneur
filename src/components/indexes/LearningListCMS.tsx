@@ -2,7 +2,6 @@
 import { trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import { ChevronDown, ChevronUp, Plus } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useState } from "react";
 import AppButton from "../buttons/AppButton";
 import SectionContainerCMS from "../cards/SectionContainerCMS";
@@ -23,7 +22,6 @@ export default function LearningListCMS({
   onClickAdd,
 }: LearningListCMSProps) {
   const utils = trpc.useUtils();
-  const { resolvedTheme } = useTheme();
   const [showAll, setShowAll] = useState(false);
 
   const isAllowedCreate = [
@@ -48,7 +46,7 @@ export default function LearningListCMS({
       headerAction={
         isAllowedCreate && onClickAdd ? (
           <AppButton
-            variant={resolvedTheme === "dark" ? "dark" : "light"}
+            variant="neutral"
             size="small"
             onClick={onClickAdd}
           >

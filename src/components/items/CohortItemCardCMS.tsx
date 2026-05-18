@@ -144,7 +144,7 @@ export default function CohortItemCardCMS({
               ref={wrapperRef}
             >
               <AppButton
-                variant="light"
+                variant="neutral"
                 size="small"
                 type="button"
                 onClick={handleActionsDropdown}

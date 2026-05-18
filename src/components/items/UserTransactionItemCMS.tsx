@@ -1,6 +1,7 @@
 "use client";
 import { ProductCategory, TransactionStatus } from "@/lib/app-types";
 import { getRupiahCurrency } from "@/lib/currency";
+import dayjs from "dayjs";
 import { Check, Clock7, Landmark, X } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -14,28 +15,32 @@ const statusAttributes: Record<
   }
 > = {
   PAID: {
-    main_icon_color: "text-tertiary bg-section-background",
+    main_icon_color:
+      "text-tertiary bg-section-background dark:text-sevenpreneur-purple-lavender dark:bg-dashboard-border",
     status_icon: <Check className="size-3" />,
     status_icon_color: "bg-green-700 text-white",
-    amount_color: "text-green-600",
+    amount_color: "text-green-600 dark:text-green-400",
   },
   PENDING: {
-    main_icon_color: "text-emphasis bg-section-background",
+    main_icon_color:
+      "text-emphasis bg-section-background dark:bg-dashboard-border",
     status_icon: <Clock7 className="size-3" />,
     status_icon_color: "bg-[#F8AC4B] text-white",
-    amount_color: "text-[#333333]",
+    amount_color: "text-[#333333] dark:text-sevenpreneur-white",
   },
   FAILED: {
-    main_icon_color: "text-emphasis bg-section-background",
+    main_icon_color:
+      "text-emphasis bg-section-background dark:bg-dashboard-border",
     status_icon: <X className="size-3" />,
     status_icon_color: "bg-destructive text-white",
-    amount_color: "text-[#333333]",
+    amount_color: "text-[#333333] dark:text-sevenpreneur-white",
   },
 };
 
 interface UserTransactionItemCMSProps {
   transactionId: string;
   transactionStatus: TransactionStatus;
+  transactionCreatedAt: string | Date;
   netTransactionAmount: string;
   productCategory: ProductCategory;
   playlistName?: string;
@@ -48,6 +53,7 @@ interface UserTransactionItemCMSProps {
 export default function UserTransactionItemCMS({
   // transactionId,
   transactionStatus,
+  transactionCreatedAt,
   netTransactionAmount,
   productCategory,
   playlistName,
@@ -95,7 +101,7 @@ export default function UserTransactionItemCMS({
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="font-bodycopy font-medium text-[15px] text-[#333333] line-clamp-1">
+          <p className="font-bodycopy font-medium text-[15px] text-[#333333] dark:text-sevenpreneur-white line-clamp-1">
             {productName}
           </p>
           <p className="font-bodycopy font-medium text-sm text-emphasis line-clamp-1">
@@ -103,10 +109,15 @@ export default function UserTransactionItemCMS({
           </p>
         </div>
       </div>
-      <div
-        className={`net-transaction-amount font-bodycopy font-semibold text-sm shrink-0 ${statusIcon.amount_color}`}
-      >
-        +{getRupiahCurrency(Math.round(Number(netTransactionAmount)))}
+      <div className="flex flex-col items-end shrink-0">
+        <div
+          className={`net-transaction-amount font-bodycopy font-semibold text-sm ${statusIcon.amount_color}`}
+        >
+          +{getRupiahCurrency(Math.round(Number(netTransactionAmount)))}
+        </div>
+        <p className="font-bodycopy text-xs text-emphasis">
+          {dayjs(transactionCreatedAt).format("D MMM YYYY")}
+        </p>
       </div>
     </div>
   );

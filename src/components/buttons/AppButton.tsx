@@ -12,6 +12,7 @@ export type VariantType =
   | "destructiveSoft"
   | "light"
   | "dark"
+  | "neutral"
   | "quarternary"
   | "ghost"
   | "whatsapp"
@@ -105,6 +106,8 @@ const AppButton = forwardRef<HTMLButtonElement, AppButtonProps>(
       light:
         "bg-light-background text-light-foreground border hover:bg-light-hover active:bg-light-active disabled:bg-light-muted disabled:text-light-foreground/30",
       dark: "bg-dark-background text-dark-foreground hover:bg-dark-hover active:bg-dark-active disabled:bg-dark-muted disabled:text-dark-foreground/30",
+      neutral:
+        "bg-light-background text-light-foreground border hover:bg-light-hover active:bg-light-active disabled:bg-light-muted disabled:text-light-foreground/30 dark:bg-card-bg dark:text-foreground dark:border-dashboard-border dark:hover:bg-card-inside-bg dark:active:bg-dashboard-border dark:disabled:bg-card-inside-bg/50 dark:disabled:text-foreground/30",
 
       // Todo
       ghost:

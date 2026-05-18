@@ -521,7 +521,7 @@ function ActionsSection({ pipelineId }: ActionsSectionProps) {
           }
         />
         <AppButton
-          variant="light"
+          variant="neutral"
           size="small"
           onClick={handleCreate}
           disabled={createAction.isPending}

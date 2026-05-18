@@ -22,7 +22,7 @@ export default function ReceiptLineItemCMS({
   }
 
   if (isGrandTotal) {
-    nameClass = "font-bold text-black";
+    nameClass = "font-bold dark:text-sevenpreneur-white";
     valueClass = "font-bold";
   }
 
@@ -30,7 +30,7 @@ export default function ReceiptLineItemCMS({
     <div className="line-item flex items-center justify-between">
       <p className={`font-bodycopy text-sm ${nameClass}`}>{receiptName}</p>
       <p
-        className={`font-bodycopy text-sm text-right dark:text-emphasis ${valueClass}`}
+        className={`font-bodycopy text-sm text-right dark:text-sevenpreneur-white ${valueClass}`}
       >
         {receiptValue}
       </p>

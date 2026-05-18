@@ -211,7 +211,7 @@ export default function CreateUserForm(props: CreateUserFormProps) {
         >
           <div className="page-actions flex items-center gap-4">
             <Link href="/users">
-              <AppButton onClick={() => router.back()} variant="light" type="button">
+              <AppButton onClick={() => router.back()} variant="neutral" type="button">
                 Cancel
               </AppButton>
             </Link>

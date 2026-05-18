@@ -48,7 +48,7 @@ export default function AppSidebar({
         >
           <AppButton
             size="mediumIcon"
-            variant={isDark ? "dark" : "light"}
+            variant="neutral"
             onClick={toggleSidebar}
           >
             <PanelLeftClose
@@ -117,14 +117,9 @@ export default function AppSidebar({
               >
                 {/* sliding indicator */}
                 <div
-                  className="absolute size-7 rounded-full transition-all duration-300 ease-in-out"
-                  style={{
-                    left: isDark ? "calc(100% - 32px)" : "4px",
-                    backgroundColor: isDark
-                      ? "rgba(255,255,255,0.12)"
-                      : "#ffffff",
-                    boxShadow: isDark ? "none" : "0 1px 4px rgba(0,0,0,0.12)",
-                  }}
+                  className="absolute size-7 left-1 rounded-full transition-all duration-300 ease-in-out
+                    bg-white shadow-[0_1px_4px_rgba(0,0,0,0.12)]
+                    dark:translate-x-[28px] dark:bg-white/10 dark:shadow-none"
                 />
                 <span className="relative flex items-center justify-center size-7">
                   <Sun className="size-3.5 text-sb-text" />

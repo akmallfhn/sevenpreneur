@@ -152,7 +152,7 @@ export default function EditLeadStatusFormCMS(
             </div>
           )}
           <div className="flex gap-2 justify-end">
-            <AppButton variant="light" onClick={props.onClose}>
+            <AppButton variant="neutral" onClick={props.onClose}>
               Cancel
             </AppButton>
             <AppButton

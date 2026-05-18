@@ -1,7 +1,6 @@
 "use client";
 import { trpc } from "@/trpc/client";
 import { Plus } from "lucide-react";
-import { useTheme } from "next-themes";
 import AppButton from "../buttons/AppButton";
 import SectionContainerCMS from "../cards/SectionContainerCMS";
 import ProjectItemCMS from "../items/ProjectItemCMS";
@@ -21,7 +20,6 @@ export default function ProjectListCMS({
   onClickAdd,
 }: ProjectListCMSProps) {
   const utils = trpc.useUtils();
-  const { resolvedTheme } = useTheme();
 
   const isAllowedCreate = [
     "Administrator",
@@ -40,7 +38,7 @@ export default function ProjectListCMS({
       headerAction={
         isAllowedCreate && onClickAdd ? (
           <AppButton
-            variant={resolvedTheme === "dark" ? "dark" : "light"}
+            variant="neutral"
             size="small"
             onClick={onClickAdd}
           >

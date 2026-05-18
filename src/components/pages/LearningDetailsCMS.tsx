@@ -293,7 +293,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                   headerAction={
                     learningVideoKey && isAllowedUpdateLearning ? (
                       <AppButton
-                        variant="light"
+                        variant="neutral"
                         size="small"
                         onClick={() => setUpdateRecording(true)}
                       >
@@ -461,7 +461,7 @@ export default function LearningDetailsCMS(props: LearningDetailsCMSProps) {
                             <TableCellCMS className="px-3 py-2.5 text-center">
                               {a.rating ? (
                                 <AppButton
-                                  variant="light"
+                                  variant="neutral"
                                   size="icon"
                                   onClick={() => setSelectedUserId(a.user_id)}
                                 >

@@ -328,7 +328,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
             <AppButton
               onClick={(e) => handleSubmit(e, "DRAFT")}
               type="submit"
-              variant="light"
+              variant="neutral"
               disabled={isSubmittingDraft}
             >
               {isSubmittingDraft && <Loader2 className="animate-spin size-5" />}

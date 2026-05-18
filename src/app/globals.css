@@ -214,6 +214,10 @@
   --color-tertiary-muted: var(--color-sevenpreneur-purple-midnight);
   --color-destructive-muted: var(--color-sevenpreneur-red-midnight);
   /* soft */
+  --color-primary-soft-background: var(--color-sevenpreneur-blue-midnight);
+  --color-primary-soft-foreground: #6f96d4;
+  --color-secondary-soft-background: var(--color-sevenpreneur-pink-midgnight);
+  --color-secondary-soft-foreground: #d490a5;
   --color-destructive-soft-background: var(--color-sevenpreneur-red-midnight);
   /* state */
   --color-success-background: var(--color-sevenpreneur-green-midnight);

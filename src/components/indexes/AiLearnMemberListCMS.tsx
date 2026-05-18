@@ -355,7 +355,7 @@
 //             </div>
 //             <div className="flex gap-2 justify-end">
 //               <AppButton
-//                 variant="light"
+//                 variant="neutral"
 //                 size="medium"
 //                 onClick={() => setIsAddOpen(false)}
 //               >
@@ -413,7 +413,7 @@
 //             />
 //             <div className="flex gap-2 justify-end">
 //               <AppButton
-//                 variant="light"
+//                 variant="neutral"
 //                 size="medium"
 //                 onClick={() => setIsEditOpen(false)}
 //               >

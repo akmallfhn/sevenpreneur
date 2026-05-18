@@ -39,7 +39,7 @@ export default function AppSheet({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="sheet-header relative flex flex-col p-4 px-6">
-          <h2 className="text-foreground text-lg font-brand font-bold">
+          <h2 className="text-foreground text-lg font-bodycopy font-bold dark:text-sevenpreneur-white">
             {sheetName}
           </h2>
           <p className="sheet-description text-emphasis text-sm font-bodycopy font-medium">

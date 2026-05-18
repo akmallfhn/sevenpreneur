@@ -2,7 +2,6 @@
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/trpc/client";
 import { Eye, Search } from "lucide-react";
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import AppButton from "../buttons/AppButton";
@@ -33,9 +32,6 @@ export default function CohortMembersPerformanceCMS({
   sessionUserRoleName,
   cohortId,
 }: CohortMembersPerformanceCMSProps) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
-
   const [keyword, setKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -166,7 +162,7 @@ export default function CohortMembersPerformanceCMS({
                       {isAllowedDetails && (
                         <TableCellCMS>
                           <AppButton
-                            variant={isDark ? "dark" : "light"}
+                            variant="neutral"
                             size="icon"
                             onClick={() => setOpenDetailsId(post.id)}
                           >

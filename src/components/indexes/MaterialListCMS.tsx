@@ -59,7 +59,7 @@ export default function MaterialListCMS({
         headerAction={
           isAllowedCreateMaterial ? (
             <AppButton
-              variant="light"
+              variant="neutral"
               size="small"
               onClick={() => setCreateMaterial(true)}
             >

@@ -205,7 +205,7 @@ export default function CohortDetailsCMS(props: CohortDetailsCMSProps) {
                   {isAllowedUpdate && (
                     <div className="absolute top-4 right-4 z-[3]">
                       <AppButton
-                        variant="dark"
+                        variant="neutral"
                         size="small"
                         onClick={() => setEditCohort(true)}
                       >

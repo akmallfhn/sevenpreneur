@@ -253,12 +253,13 @@ export default function UserDetailsCMS(props: UserDetailsCMSProps) {
               </SectionContainerCMS>
               <SectionContainerCMS title="Transaction History">
                 {(transactionsData?.list ?? []).length > 0 ? (
-                  <div className="transaction-list flex flex-col w-full max-h-[230px] p-1 gap-1 bg-white rounded-lg border overflow-y-auto">
+                  <div className="transaction-list flex flex-col w-full max-h-[230px] p-1 gap-1 bg-white dark:bg-card-inside-bg rounded-lg border border-dashboard-border overflow-y-auto">
                     {transactionsData?.list.map((post) => (
                       <UserTransactionItemCMS
                         key={post.id}
                         transactionId={post.id}
                         transactionStatus={post.status}
+                        transactionCreatedAt={post.created_at}
                         netTransactionAmount={post.net_amount}
                         productCategory={post.category}
                         playlistName={post.playlist_name}

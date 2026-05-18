@@ -20,7 +20,8 @@ const variantStyles: Record<
   }
 > = {
   LEAD_IDENTIFIED: {
-    labelColor: "text-primary-soft-foreground bg-primary-soft-background",
+    labelColor:
+      "text-[#475569] bg-[#F1F5F9] dark:text-[#94a3b8] dark:bg-[#1e293b]",
     labelIcon: <Target className="size-3" />,
     labelName: "Lead Identified",
   },
