@@ -419,30 +419,9 @@ export const readAilene = {
 
   groupLeaderboard: ailMemberProcedure.query(async (opts) => {
     const memberId = opts.ctx.ail_member.id;
+    const groupId = opts.ctx.ail_member.group_id;
 
-    const primary = await opts.ctx.prisma.ailGroupMember.findFirst({
-      where: { member_id: memberId },
-      orderBy: { joined_at: "asc" },
-      include: {
-        group: {
-          include: {
-            members: {
-              include: {
-                member: {
-                  include: {
-                    user: {
-                      select: { id: true, full_name: true, avatar: true },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!primary) {
+    if (!groupId) {
       return {
         code: STATUS_OK,
         message: "Success",
@@ -453,7 +432,29 @@ export const readAilene = {
       };
     }
 
-    const memberIds = primary.group.members.map((gm) => gm.member.id);
+    const group = await opts.ctx.prisma.ailGroup.findUnique({
+      where: { id: groupId },
+      include: {
+        members: {
+          include: {
+            user: { select: { id: true, full_name: true, avatar: true } },
+          },
+        },
+      },
+    });
+
+    if (!group) {
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        group: null,
+        my_rank: 0,
+        total: 0,
+        leaderboard: [],
+      };
+    }
+
+    const memberIds = group.members.map((m) => m.id);
     const xpAgg = await opts.ctx.prisma.ailXpEarning.groupBy({
       by: ["member_id"],
       _sum: { xp_earned: true },
@@ -463,13 +464,13 @@ export const readAilene = {
       xpAgg.map((x) => [x.member_id, x._sum.xp_earned ?? 0])
     );
 
-    const leaderboard = primary.group.members
-      .map((gm) => ({
-        member_id: gm.member.id,
-        full_name: gm.member.user.full_name,
-        avatar: gm.member.user.avatar,
-        total_xp: xpByMember.get(gm.member.id) ?? 0,
-        is_me: gm.member.id === memberId,
+    const leaderboard = group.members
+      .map((m) => ({
+        member_id: m.id,
+        full_name: m.user.full_name,
+        avatar: m.user.avatar,
+        total_xp: xpByMember.get(m.id) ?? 0,
+        is_me: m.id === memberId,
       }))
       .sort((a, b) => b.total_xp - a.total_xp)
       .map((r, i) => ({ rank: i + 1, ...r }));
@@ -479,7 +480,7 @@ export const readAilene = {
     return {
       code: STATUS_OK,
       message: "Success",
-      group: { id: primary.group.id, name: primary.group.name },
+      group: { id: group.id, name: group.name },
       my_rank: myEntry?.rank ?? leaderboard.length,
       total: leaderboard.length,
       leaderboard,

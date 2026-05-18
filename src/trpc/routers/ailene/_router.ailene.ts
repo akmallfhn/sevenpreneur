@@ -6,7 +6,6 @@ import { updateAilene } from "./update.ailene";
 
 export const aileneRouter = createTRPCRouter({
   list: createTRPCRouter({
-    myGroups: listAilene.myGroups,
     levels: listAilene.levels,
     chapters: listAilene.chapters,
     tasks: listAilene.tasks,
@@ -25,7 +24,6 @@ export const aileneRouter = createTRPCRouter({
     preAssessment: createAilene.preAssessment,
   }),
   champion: createTRPCRouter({
-    listGroups: listAilene.championGroups,
     listMembers: listAilene.championMembers,
   }),
   unlockLevel: updateAilene.unlockLevel,

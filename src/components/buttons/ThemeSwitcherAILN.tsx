@@ -20,11 +20,11 @@ export default function ThemeSwitcherAILN() {
       type="button"
       onClick={toggle}
       aria-label="Toggle dark mode"
-      className="relative flex h-7 w-12 items-center rounded-full bg-gray-200 transition-colors duration-300 dark:bg-red-500/20 dark:shadow-[0_0_8px_rgba(239,68,68,0.4)]"
+      className="relative flex h-7 w-12 items-center rounded-full bg-gray-200 transition-colors duration-300 dark:bg-white/10"
       suppressHydrationWarning
     >
       <span
-        className="absolute size-5 rounded-full bg-white shadow-sm transition-all duration-300 dark:bg-red-500 dark:shadow-[0_0_10px_rgba(239,68,68,0.8)]"
+        className="absolute size-5 rounded-full bg-white shadow-sm transition-all duration-300 dark:bg-gray-100"
         style={{ left: isDark ? "calc(100% - 22px)" : "2px" }}
       />
       <span className="relative z-10 flex w-1/2 items-center justify-center">
@@ -34,7 +34,7 @@ export default function ThemeSwitcherAILN() {
       </span>
       <span className="relative z-10 flex w-1/2 items-center justify-center">
         <Moon
-          className={`size-3 transition-opacity ${isDark ? "opacity-100 text-white" : "opacity-40 text-gray-400"}`}
+          className={`size-3 transition-opacity ${isDark ? "opacity-100 text-gray-700" : "opacity-40 text-gray-400"}`}
         />
       </span>
     </button>

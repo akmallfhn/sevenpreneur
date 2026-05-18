@@ -5,19 +5,6 @@ import { z } from "zod";
 import { type ChapterProgress } from "./utils.ailene";
 
 export const listAilene = {
-  myGroups: ailMemberProcedure.query(async (opts) => {
-    const groupMembers = await opts.ctx.prisma.ailGroupMember.findMany({
-      where: { member_id: opts.ctx.ail_member.id },
-      include: { group: true },
-      orderBy: { joined_at: "asc" },
-    });
-    return {
-      code: STATUS_OK,
-      message: "Success",
-      list: groupMembers.map((gm) => gm.group),
-    };
-  }),
-
   levels: ailMemberProcedure.query(async (opts) => {
     const list = await opts.ctx.prisma.ailLevel.findMany({
       where: { status: "ACTIVE" },
@@ -298,16 +285,6 @@ export const listAilene = {
       };
     }),
 
-  championGroups: championProcedure.query(async (opts) => {
-    const champion = opts.ctx.ail_member;
-    const list = await opts.ctx.prisma.ailGroup.findMany({
-      where: { champion_id: champion.id },
-      include: { _count: { select: { members: true } } },
-      orderBy: { created_at: "asc" },
-    });
-    return { code: STATUS_OK, message: "Success", list };
-  }),
-
   championMembers: championProcedure
     .input(
       z.object({
@@ -317,32 +294,23 @@ export const listAilene = {
     .query(async (opts) => {
       const champion = opts.ctx.ail_member;
 
-      const groupMembers = await opts.ctx.prisma.ailGroupMember.findMany({
+      const members = await opts.ctx.prisma.ailMember.findMany({
         where: {
           group: { champion_id: champion.id },
           ...(opts.input.group_id ? { group_id: opts.input.group_id } : {}),
         },
         include: {
-          member: {
-            include: {
-              user: {
-                select: {
-                  id: true,
-                  full_name: true,
-                  email: true,
-                  avatar: true,
-                },
-              },
-              current_level: true,
+          user: {
+            select: {
+              id: true,
+              full_name: true,
+              email: true,
+              avatar: true,
             },
           },
+          current_level: true,
         },
       });
-
-      // Dedupe (member could appear in multiple groups)
-      const memberMap = new Map<number, (typeof groupMembers)[number]["member"]>();
-      for (const gm of groupMembers) memberMap.set(gm.member.id, gm.member);
-      const members = Array.from(memberMap.values());
 
       if (members.length === 0) {
         return {

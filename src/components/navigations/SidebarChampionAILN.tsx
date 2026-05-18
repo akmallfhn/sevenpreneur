@@ -1,5 +1,6 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
+import ThemeSwitcherAILN from "@/components/buttons/ThemeSwitcherAILN";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { DeleteSession } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
@@ -12,6 +13,7 @@ import {
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -22,6 +24,10 @@ const HUTAMA_KARYA_LOGO =
   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-hk-danantara.webp";
 const HUTAMA_KARYA_LOGO_SQUARE =
   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-hk-square.webp";
+const HUTAMA_KARYA_LOGO_DARK =
+  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-hk-danantara-white.webp";
+const HUTAMA_KARYA_LOGO_SQUARE_DARK =
+  "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur/logo-hk-white-square.webp";
 const DEFAULT_AVATAR =
   "https://tskubmriuclmbcfmaiur.supabase.co/storage/v1/object/public/sevenpreneur//default-avatar.svg.png";
 
@@ -48,6 +54,20 @@ export default function SidebarChampionAILN({
   sessionToken: string;
 }) {
   const { isCollapsed, toggleSidebar } = useSidebar();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  const isDark = mounted && resolvedTheme === "dark";
+  const logoUrl = isCollapsed
+    ? isDark
+      ? HUTAMA_KARYA_LOGO_SQUARE_DARK
+      : HUTAMA_KARYA_LOGO_SQUARE
+    : isDark
+      ? HUTAMA_KARYA_LOGO_DARK
+      : HUTAMA_KARYA_LOGO;
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -84,13 +104,9 @@ export default function SidebarChampionAILN({
   const memberQ = trpc.auth.checkAilMember.useQuery(undefined, {
     enabled: !!sessionToken,
   });
-  const groupsQ = trpc.ailene.champion.listGroups.useQuery(undefined, {
-    enabled: !!sessionToken,
-  });
-
   const user = userQ.data?.user;
   const member = memberQ.data?.ail_member;
-  const groups = groupsQ.data?.list ?? [];
+  const groups = member?.championed_groups ?? [];
   const groupName =
     groups.length > 0 ? groups.map((g) => g.name).join(", ") : "—";
   const totalMembers = groups.reduce(
@@ -100,7 +116,7 @@ export default function SidebarChampionAILN({
 
   return (
     <div
-      className={`hidden fixed w-full h-full left-0 z-50 lg:flex lg:flex-col bg-white ${
+      className={`hidden fixed w-full h-full left-0 z-50 lg:flex lg:flex-col bg-white dark:bg-black dark:border-r dark:border-emerald-500/20 dark:shadow-[2px_0_24px_rgba(16,185,129,0.08)] ${
         isCollapsed ? "max-w-16" : "max-w-64"
       }`}
       style={{ borderRight: "1px solid var(--dashboard-border)" }}
@@ -111,17 +127,17 @@ export default function SidebarChampionAILN({
         {/* Collapse toggle */}
         <button
           onClick={toggleSidebar}
-          className="absolute -right-4 top-6 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm"
+          className="absolute -right-4 top-6 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm dark:border-emerald-500/40 dark:bg-black dark:shadow-[0_0_8px_rgba(16,185,129,0.4)]"
         >
           <ChevronLeft
-            className={`h-3 w-3 text-gray-500 transition-transform ${isCollapsed ? "rotate-180" : ""}`}
+            className={`h-3 w-3 text-gray-500 transition-transform dark:text-emerald-400 ${isCollapsed ? "rotate-180" : ""}`}
           />
         </button>
 
         {/* Logo full width */}
         <div className="mb-6 flex items-center justify-center">
           <Image
-            src={isCollapsed ? HUTAMA_KARYA_LOGO_SQUARE : HUTAMA_KARYA_LOGO}
+            src={logoUrl}
             alt="Hutama Karya"
             width={400}
             height={400}
@@ -133,16 +149,16 @@ export default function SidebarChampionAILN({
 
         {/* Mode indicator */}
         <div
-          className={`mb-4 flex items-center rounded-md border border-dashboard-border bg-white ${
+          className={`mb-4 flex items-center rounded-md border border-dashboard-border bg-white dark:border-emerald-500/30 dark:bg-emerald-500/5 dark:shadow-[0_0_12px_rgba(16,185,129,0.15)] ${
             isCollapsed ? "justify-center p-2" : "gap-2 px-3 py-2"
           }`}
         >
           <span
-            className="size-2 shrink-0 rounded-full"
+            className="size-2 shrink-0 rounded-full dark:shadow-[0_0_8px_rgba(16,185,129,0.9)]"
             style={{ backgroundColor: ACCENT }}
           />
           {!isCollapsed && (
-            <span className="text-xs font-semibold text-gray-700">
+            <span className="text-xs font-semibold text-gray-700 dark:text-emerald-100">
               Dashboard Champion
             </span>
           )}
@@ -159,11 +175,11 @@ export default function SidebarChampionAILN({
               <Link
                 key={m.url}
                 href={m.url}
-                style={active ? { backgroundColor: ACCENT } : undefined}
+                style={active && !isDark ? { backgroundColor: ACCENT } : undefined}
                 className={`flex items-center gap-3 rounded-md p-2 text-sm transition ${
                   active
-                    ? "text-white"
-                    : "text-gray-700 hover:bg-gray-100 hover:text-black"
+                    ? "text-white dark:bg-emerald-500/15 dark:text-emerald-100 dark:shadow-[inset_0_0_0_1px_rgba(16,185,129,0.4),0_0_12px_rgba(16,185,129,0.25)]"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-100"
                 } ${isCollapsed ? "justify-center" : ""}`}
               >
                 <Icon className="h-4 w-4 shrink-0" />
@@ -176,39 +192,46 @@ export default function SidebarChampionAILN({
         {/* User card */}
         <div className="mt-3 shrink-0">
           {!isCollapsed ? (
-            <div className="rounded-lg border border-dashboard-border p-3">
+            <div className="rounded-lg border border-dashboard-border p-3 dark:border-emerald-500/25 dark:bg-emerald-500/5 dark:shadow-[0_0_20px_rgba(16,185,129,0.08)]">
               <div className="flex items-center gap-3">
                 <Image
                   src={user?.avatar || DEFAULT_AVATAR}
                   alt={user?.full_name ?? ""}
                   width={36}
                   height={36}
-                  className="h-9 w-9 rounded-full object-cover"
+                  className="h-9 w-9 rounded-full object-cover dark:ring-1 dark:ring-emerald-500/40"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="truncate text-sm font-semibold">
+                  <div className="truncate text-sm font-semibold dark:text-white">
                     {user?.full_name ?? "..."}
                   </div>
-                  <div className="truncate text-xs text-gray-500">
+                  <div className="truncate text-xs text-gray-500 dark:text-gray-400">
                     {member?.job_title ?? ""}
                   </div>
                 </div>
               </div>
-              <div className="mt-2 border-t border-dashboard-border pt-2">
-                <div className="text-[10px] uppercase tracking-wide text-gray-500">
-                  Group
+              <div className="mt-2 border-t border-dashboard-border pt-2 dark:border-emerald-500/20">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                      Group
+                    </div>
+                    <div className="truncate text-xs font-medium text-gray-700 dark:text-emerald-100">
+                      {groupName}
+                    </div>
+                  </div>
+                  <ThemeSwitcherAILN />
                 </div>
-                <div className="truncate text-xs font-medium text-gray-700">
-                  {groupName}
-                </div>
-                <div className="mt-1 flex items-center gap-1.5 text-xs text-gray-600">
+                <div className="mt-1 flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300">
                   <Users className="h-3 w-3" style={{ color: ACCENT }} />
                   <span className="font-semibold">{totalMembers}</span>
-                  <span className="text-gray-500">members led</span>
+                  <span className="text-gray-500 dark:text-gray-400">
+                    members led
+                  </span>
                 </div>
               </div>
               <Link href="/student" className="mt-2 block">
-                <ButtonAILN variant="light" size="small" className="w-full">
+                <ButtonAILN variant="outline" size="small" className="w-full">
                   <UserRound className="size-4" />
                   Mode Student
                 </ButtonAILN>

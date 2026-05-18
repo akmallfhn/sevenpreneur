@@ -100,6 +100,7 @@ CREATE TABLE ail_members (
     user_id          UUID                NOT NULL UNIQUE,
     role             ail_role            NOT NULL,
     job_title        VARCHAR             NOT NULL,
+    group_id         INTEGER                 NULL,
     current_level_id INTEGER             NOT NULL DEFAULT 0,
     level_history    JSON                NOT NULL DEFAULT '[]',
     last_active_at   TIMESTAMPTZ             NULL,
@@ -255,13 +256,6 @@ CREATE TABLE ail_materials (
 
 -- Relation Tables --
 
-CREATE TABLE ail_group_members (
-    group_id  INTEGER      NOT NULL,
-    member_id INTEGER      NOT NULL,
-    joined_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (group_id, member_id)
-);
-
 CREATE TABLE ail_quiz_submissions (
     id             SERIAL       PRIMARY KEY,
     member_id      INTEGER      NOT NULL,
@@ -329,14 +323,11 @@ CREATE TABLE ail_pre_assessments (
 
 ALTER TABLE ail_members
   ADD FOREIGN KEY (user_id)          REFERENCES users (id),
+  ADD FOREIGN KEY (group_id)         REFERENCES ail_groups (id),
   ADD FOREIGN KEY (current_level_id) REFERENCES ail_levels (id);
 
 ALTER TABLE ail_groups
   ADD FOREIGN KEY (champion_id) REFERENCES ail_members (id);
-
-ALTER TABLE ail_group_members
-  ADD FOREIGN KEY (group_id)  REFERENCES ail_groups (id),
-  ADD FOREIGN KEY (member_id) REFERENCES ail_members (id);
 
 ALTER TABLE ail_chapters
   ADD FOREIGN KEY (level_id) REFERENCES ail_levels (id);

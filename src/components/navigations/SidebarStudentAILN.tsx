@@ -103,15 +103,9 @@ export default function SidebarStudentAILN({
   const memberQ = trpc.auth.checkAilMember.useQuery(undefined, {
     enabled: !!sessionToken,
   });
-  const groupsQ = trpc.ailene.list.myGroups.useQuery(undefined, {
-    enabled: !!sessionToken,
-  });
-
   const user = userQ.data?.user;
   const member = memberQ.data?.ail_member;
-  const groups = groupsQ.data?.list ?? [];
-  const groupName =
-    groups.length > 0 ? groups.map((g) => g.name).join(", ") : "—";
+  const groupName = member?.group?.name ?? "—";
 
   return (
     <div

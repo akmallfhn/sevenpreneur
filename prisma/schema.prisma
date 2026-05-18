@@ -1224,6 +1224,8 @@ model AilMember {
   user_id          String    @unique @db.Uuid
   role             AilRole
   job_title        String    @db.VarChar()
+  group            AilGroup? @relation("group_members", fields: [group_id], references: [id])
+  group_id         Int?      @db.Integer
   current_level    AilLevel  @relation("member_current_level", fields: [current_level_id], references: [id])
   current_level_id Int       @default(0) @db.Integer
   level_history    Json      @default("[]") @db.Json
@@ -1231,7 +1233,6 @@ model AilMember {
   created_at       DateTime  @default(now()) @db.Timestamptz()
 
   championed_groups    AilGroup[]              @relation("group_champion")
-  groups               AilGroupMember[]
   quiz_submissions     AilQuizSubmission[]
   video_completions    AilVideoCompletion[]
   material_completions AilMaterialCompletion[]
@@ -1242,13 +1243,13 @@ model AilMember {
 }
 
 model AilGroup {
-  id          Int              @id @default(autoincrement()) @db.Integer
-  name        String           @db.VarChar()
-  champion    AilMember        @relation("group_champion", fields: [champion_id], references: [id])
-  champion_id Int              @db.Integer
-  created_at  DateTime         @default(now()) @db.Timestamptz()
-  updated_at  DateTime         @default(now()) @updatedAt @db.Timestamptz()
-  members     AilGroupMember[]
+  id          Int         @id @default(autoincrement()) @db.Integer
+  name        String      @db.VarChar()
+  champion    AilMember   @relation("group_champion", fields: [champion_id], references: [id])
+  champion_id Int         @db.Integer
+  created_at  DateTime    @default(now()) @db.Timestamptz()
+  updated_at  DateTime    @default(now()) @updatedAt @db.Timestamptz()
+  members     AilMember[] @relation("group_members")
 
   @@map("ail_groups")
 }
@@ -1419,17 +1420,6 @@ model UserEvent {
 
   @@id([user_id, event_id])
   @@map("users_events")
-}
-
-model AilGroupMember {
-  group     AilGroup  @relation(fields: [group_id], references: [id])
-  group_id  Int       @db.Integer
-  member    AilMember @relation(fields: [member_id], references: [id])
-  member_id Int       @db.Integer
-  joined_at DateTime  @default(now()) @db.Timestamptz()
-
-  @@id([group_id, member_id])
-  @@map("ail_group_members")
 }
 
 model AilQuizSubmission {

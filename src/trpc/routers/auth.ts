@@ -150,7 +150,14 @@ export const authRouter = createTRPCRouter({
   checkAilMember: loggedInProcedure.query(async (opts) => {
     const ailMember = await opts.ctx.prisma.ailMember.findUnique({
       where: { user_id: opts.ctx.user.id },
-      include: { current_level: true },
+      include: {
+        current_level: true,
+        group: true,
+        championed_groups: {
+          include: { _count: { select: { members: true } } },
+          orderBy: { created_at: "asc" },
+        },
+      },
     });
     if (!ailMember) {
       return {

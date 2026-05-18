@@ -1,7 +1,7 @@
 "use client";
+import AppScorecardDashboard from "@/components/cards/AppScorecardDashboard";
 import PageContainerAILN from "@/components/pages/PageContainerAILN";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
-import AppLoadingComponents from "@/components/states/AppLoadingComponents";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
   faChartLine,
@@ -22,10 +22,16 @@ const statusMeta: Record<
 > = {
   on_track: {
     label: "On Track",
-    cls: "bg-green-100 text-green-700",
+    cls: "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-300 dark:border dark:border-green-500/30",
   },
-  at_risk: { label: "At Risk", cls: "bg-yellow-100 text-yellow-700" },
-  behind: { label: "Behind", cls: "bg-red-100 text-red-700" },
+  at_risk: {
+    label: "At Risk",
+    cls: "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-300 dark:border dark:border-yellow-500/30",
+  },
+  behind: {
+    label: "Behind",
+    cls: "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-300 dark:border dark:border-red-500/30",
+  },
 };
 
 export default function DashboardChampionAILN({
@@ -42,17 +48,16 @@ export default function DashboardChampionAILN({
   >("");
   const [search, setSearch] = useState("");
 
-  const groupsQ = trpc.ailene.champion.listGroups.useQuery();
   const membersQ = trpc.ailene.champion.listMembers.useQuery({});
 
-  if (groupsQ.isLoading || membersQ.isLoading) {
+  if (membersQ.isLoading) {
     return (
       <PageContainerAILN>
-        <AppLoadingComponents />
+        <DashboardChampionSkeleton />
       </PageContainerAILN>
     );
   }
-  if (groupsQ.error || membersQ.error) {
+  if (membersQ.error) {
     return (
       <PageContainerAILN>
         <AppErrorComponents />
@@ -91,8 +96,10 @@ export default function DashboardChampionAILN({
         {/* Header */}
         <div className="flex items-start gap-3">
           <div>
-            <h1 className="text-2xl font-bold">Team Overview</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-2xl font-bold dark:text-white">
+              Team Overview
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               Monitor your team&apos;s learning progress and performance.
             </p>
           </div>
@@ -100,49 +107,83 @@ export default function DashboardChampionAILN({
 
         {/* Stat cards */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <StatCard
-            icon={faUsers}
-            iconClass="bg-emerald-50 text-emerald-700"
-            label="Total Members"
+          <AppScorecardDashboard
+            title="Total Members"
             value={stats.total}
-            sub="Active learners"
-          />
-          <StatCard
-            icon={faChartLine}
-            iconClass="bg-emerald-50 text-emerald-700"
-            label="On Track"
+            icon={
+              <FontAwesomeIcon
+                icon={faUsers}
+                className="size-5 text-emerald-700 dark:text-emerald-300"
+              />
+            }
+            iconClassName="bg-emerald-50 dark:bg-emerald-500/15"
+          >
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Active learners
+            </p>
+          </AppScorecardDashboard>
+          <AppScorecardDashboard
+            title="On Track"
             value={stats.on_track}
-            sub={`${pct(stats.on_track, stats.total)}% of team`}
-          />
-          <StatCard
-            icon={faClock}
-            iconClass="bg-emerald-50 text-emerald-700"
-            label="At Risk"
+            icon={
+              <FontAwesomeIcon
+                icon={faChartLine}
+                className="size-5 text-emerald-700 dark:text-emerald-300"
+              />
+            }
+            iconClassName="bg-emerald-50 dark:bg-emerald-500/15"
+          >
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {pct(stats.on_track, stats.total)}% of team
+            </p>
+          </AppScorecardDashboard>
+          <AppScorecardDashboard
+            title="At Risk"
             value={stats.at_risk}
-            sub={`${pct(stats.at_risk, stats.total)}% of team`}
-          />
-          <StatCard
-            icon={faTriangleExclamation}
-            iconClass="bg-emerald-50 text-emerald-700"
-            label="Behind"
+            icon={
+              <FontAwesomeIcon
+                icon={faClock}
+                className="size-5 text-emerald-700 dark:text-emerald-300"
+              />
+            }
+            iconClassName="bg-emerald-50 dark:bg-emerald-500/15"
+          >
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {pct(stats.at_risk, stats.total)}% of team
+            </p>
+          </AppScorecardDashboard>
+          <AppScorecardDashboard
+            title="Behind"
             value={stats.behind}
-            sub={`${pct(stats.behind, stats.total)}% of team`}
-          />
+            icon={
+              <FontAwesomeIcon
+                icon={faTriangleExclamation}
+                className="size-5 text-emerald-700 dark:text-emerald-300"
+              />
+            }
+            iconClassName="bg-emerald-50 dark:bg-emerald-500/15"
+          >
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {pct(stats.behind, stats.total)}% of team
+            </p>
+          </AppScorecardDashboard>
         </div>
 
         {/* Team members + coaching alerts (stacked, full width) */}
         <div className="flex flex-col gap-4">
           {/* Table */}
-          <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm">
+          <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div>
-                <div className="text-base font-bold">Team Members</div>
+                <div className="text-base font-bold dark:text-white">
+                  Team Members
+                </div>
                 <input
                   type="text"
                   placeholder="Search member…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="mt-2 w-64 rounded-lg border border-dashboard-border px-3 py-1.5 text-sm transition focus:border-emerald-500 focus:outline-none"
+                  className="mt-2 w-64 rounded-lg border border-dashboard-border px-3 py-1.5 text-sm transition focus:border-emerald-500 focus:outline-none dark:bg-card-inside-bg dark:text-gray-200 dark:placeholder:text-gray-500 dark:focus:border-emerald-400"
                 />
               </div>
               <div className="flex items-center gap-2">
@@ -151,7 +192,7 @@ export default function DashboardChampionAILN({
                   onChange={(e) =>
                     setStatusFilter(e.target.value as typeof statusFilter)
                   }
-                  className="rounded-lg border border-dashboard-border px-3 py-1.5 text-sm text-emerald-700 transition focus:border-emerald-500 focus:outline-none"
+                  className="rounded-lg border border-dashboard-border px-3 py-1.5 text-sm text-emerald-700 transition focus:border-emerald-500 focus:outline-none dark:bg-card-inside-bg dark:text-emerald-300 dark:focus:border-emerald-400"
                 >
                   <option value="">Filter Status</option>
                   <option value="on_track">On Track</option>
@@ -164,7 +205,7 @@ export default function DashboardChampionAILN({
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-xs text-gray-500">
+                  <tr className="text-left text-xs text-gray-500 dark:text-gray-400">
                     <th className="px-2 py-2 font-medium">Member</th>
                     <th className="px-2 py-2 font-medium">Status</th>
                     <th className="px-2 py-2 font-medium">Level</th>
@@ -179,7 +220,7 @@ export default function DashboardChampionAILN({
                     <tr>
                       <td
                         colSpan={7}
-                        className="py-8 text-center text-gray-400"
+                        className="py-8 text-center text-gray-400 dark:text-gray-500"
                       >
                         No members found.
                       </td>
@@ -188,7 +229,7 @@ export default function DashboardChampionAILN({
                     filtered.map((m) => (
                       <tr
                         key={m.member_id}
-                        className="border-t border-dashboard-border hover:bg-gray-50"
+                        className="border-t border-dashboard-border hover:bg-gray-50 dark:hover:bg-card-inside-bg"
                       >
                         <td className="px-2 py-3">
                           <div className="flex items-center gap-2">
@@ -200,13 +241,13 @@ export default function DashboardChampionAILN({
                                 className="h-8 w-8 rounded-full object-cover"
                               />
                             ) : (
-                              <div className="h-8 w-8 rounded-full bg-gray-200" />
+                              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-dashboard-border" />
                             )}
                             <div>
-                              <div className="font-semibold">
+                              <div className="font-semibold dark:text-white">
                                 {m.user.full_name}
                               </div>
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
                                 {m.user.email}
                               </div>
                             </div>
@@ -229,33 +270,35 @@ export default function DashboardChampionAILN({
                                 className="h-5 w-5"
                               />
                             )}
-                            <span className="text-xs font-medium">
+                            <span className="text-xs font-medium dark:text-gray-200">
                               Level {m.current_level.level_number}
                             </span>
                           </div>
                         </td>
                         <td className="px-2 py-3">
                           <div className="flex items-center gap-2">
-                            <span className="w-9 text-xs">
+                            <span className="w-9 text-xs dark:text-gray-300">
                               {m.progress_percent}%
                             </span>
-                            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200">
+                            <div className="h-1.5 w-24 overflow-hidden rounded-full bg-gray-200 dark:bg-dashboard-border">
                               <div
-                                className="h-full bg-[#107158]"
+                                className="h-full bg-[#107158] dark:bg-emerald-500 dark:shadow-[0_0_6px_rgba(16,185,129,0.6)]"
                                 style={{ width: `${m.progress_percent}%` }}
                               />
                             </div>
                           </div>
                         </td>
-                        <td className="px-2 py-3 text-xs">
+                        <td className="px-2 py-3 text-xs dark:text-gray-300">
                           {m.current_chapter?.name ?? (
-                            <span className="text-gray-400">—</span>
+                            <span className="text-gray-400 dark:text-gray-500">
+                              —
+                            </span>
                           )}
                         </td>
-                        <td className="px-2 py-3 font-semibold">
+                        <td className="px-2 py-3 font-semibold dark:text-white">
                           {m.total_xp.toLocaleString()} XP
                         </td>
-                        <td className="px-2 py-3 text-xs text-gray-500">
+                        <td className="px-2 py-3 text-xs text-gray-500 dark:text-gray-400">
                           {m.last_active_at
                             ? dayjs(m.last_active_at).fromNow()
                             : "Never"}
@@ -269,17 +312,19 @@ export default function DashboardChampionAILN({
           </div>
 
           {/* Coaching Alerts */}
-          <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm">
+          <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm dark:bg-card-bg dark:shadow-[0_0_18px_rgba(239,68,68,0.08)]">
             <div className="mb-3 flex items-center justify-between gap-3">
-              <div className="text-base font-bold">Coaching Alerts</div>
+              <div className="text-base font-bold dark:text-white">
+                Coaching Alerts
+              </div>
               {alerts.length > 0 && (
-                <span className="rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-600">
+                <span className="rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-600 dark:bg-red-500/15 dark:text-red-300 dark:border dark:border-red-500/30">
                   {alerts.length} perlu perhatian
                 </span>
               )}
             </div>
             {alerts.length === 0 ? (
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-gray-400 dark:text-gray-500">
                 No alerts. Everyone&apos;s on track 🎉
               </div>
             ) : (
@@ -287,7 +332,7 @@ export default function DashboardChampionAILN({
                 {alerts.map((m) => (
                   <div
                     key={m.member_id}
-                    className="rounded-lg border border-dashboard-border bg-gray-50 p-3"
+                    className="rounded-lg border border-dashboard-border bg-gray-50 p-3 dark:bg-card-inside-bg"
                   >
                     <div className="flex items-center gap-2">
                       {m.user.avatar ? (
@@ -298,11 +343,11 @@ export default function DashboardChampionAILN({
                           className="h-8 w-8 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="h-8 w-8 rounded-full bg-gray-200" />
+                        <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-dashboard-border" />
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="truncate text-sm font-semibold">
+                          <span className="truncate text-sm font-semibold dark:text-white">
                             {m.user.full_name}
                           </span>
                           <span
@@ -311,7 +356,7 @@ export default function DashboardChampionAILN({
                             {statusMeta[m.status].label}
                           </span>
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
                           {m.last_active_at
                             ? `Last active ${dayjs(m.last_active_at).fromNow()}`
                             : "Never active"}
@@ -329,24 +374,79 @@ export default function DashboardChampionAILN({
   );
 }
 
-function StatCard(props: {
-  icon: typeof faUsers;
-  iconClass: string;
-  label: string;
-  value: number;
-  sub: string;
-}) {
+function DashboardChampionSkeleton() {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-dashboard-border bg-white p-4 shadow-sm">
-      <div
-        className={`flex h-12 w-12 items-center justify-center rounded-lg ${props.iconClass}`}
-      >
-        <FontAwesomeIcon icon={props.icon} size="lg" />
+    <div className="flex w-full flex-col gap-6 animate-pulse">
+      {/* Header */}
+      <div className="space-y-2">
+        <div className="h-7 w-48 rounded bg-gray-200 dark:bg-dashboard-border" />
+        <div className="h-3.5 w-72 rounded bg-gray-200 dark:bg-dashboard-border" />
       </div>
-      <div>
-        <div className="text-sm text-gray-500">{props.label}</div>
-        <div className="text-2xl font-bold">{props.value}</div>
-        <div className="text-xs text-gray-500">{props.sub}</div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex flex-col gap-2 rounded-lg border border-dashboard-border bg-white p-3 shadow-sm dark:bg-card-bg"
+          >
+            <div className="flex items-start gap-3">
+              <div className="size-10 rounded-md bg-gray-200 dark:bg-dashboard-border" />
+              <div className="flex flex-col gap-1.5">
+                <div className="h-3 w-24 rounded bg-gray-200 dark:bg-dashboard-border" />
+                <div className="h-4 w-12 rounded bg-gray-200 dark:bg-dashboard-border" />
+              </div>
+            </div>
+            <div className="h-3 w-20 rounded bg-gray-200 dark:bg-dashboard-border" />
+          </div>
+        ))}
+      </div>
+
+      {/* Table card */}
+      <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm dark:bg-card-bg">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="space-y-2">
+            <div className="h-4 w-32 rounded bg-gray-200 dark:bg-dashboard-border" />
+            <div className="h-8 w-64 rounded-lg bg-gray-200 dark:bg-dashboard-border" />
+          </div>
+          <div className="h-8 w-32 rounded-lg bg-gray-200 dark:bg-dashboard-border" />
+        </div>
+        <div className="space-y-3">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3 border-t border-dashboard-border pt-3"
+            >
+              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-dashboard-border" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 w-40 rounded bg-gray-200 dark:bg-dashboard-border" />
+                <div className="h-2.5 w-56 rounded bg-gray-200 dark:bg-dashboard-border" />
+              </div>
+              <div className="h-5 w-16 rounded bg-gray-200 dark:bg-dashboard-border" />
+              <div className="h-5 w-20 rounded bg-gray-200 dark:bg-dashboard-border" />
+              <div className="h-5 w-12 rounded bg-gray-200 dark:bg-dashboard-border" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Coaching alerts card */}
+      <div className="rounded-lg border border-dashboard-border bg-white p-4 shadow-sm dark:bg-card-bg">
+        <div className="mb-3 h-4 w-36 rounded bg-gray-200 dark:bg-dashboard-border" />
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="flex items-center gap-2 rounded-lg border border-dashboard-border bg-gray-50 p-3 dark:bg-card-inside-bg"
+            >
+              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-dashboard-border" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 w-32 rounded bg-gray-200 dark:bg-dashboard-border" />
+                <div className="h-2.5 w-40 rounded bg-gray-200 dark:bg-dashboard-border" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
