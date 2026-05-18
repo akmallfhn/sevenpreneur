@@ -1213,8 +1213,10 @@ model B2BAction {
 // Ailene //
 
 model AilCategory {
-  id   Int    @id @default(autoincrement()) @db.SmallInt
-  name String @unique @db.VarChar()
+  id        Int          @id @default(autoincrement()) @db.SmallInt
+  name      String       @unique @db.VarChar()
+  prompts   AilPrompt[]
+  use_cases AilUseCase[]
 
   @@map("ail_categories")
 }
@@ -1239,6 +1241,8 @@ model AilMember {
   material_completions AilMaterialCompletion[]
   xp_earnings          AilXpEarning[]
   pre_assessment       AilPreAssessment?
+  prompt_submissions   AilPromptSubmission[]
+  use_case_submissions AilUseCaseSubmission[]
 
   @@map("ail_members")
 }
@@ -1266,6 +1270,8 @@ model AilLevel {
   updated_at      DateTime     @default(now()) @updatedAt @db.Timestamptz()
   chapters        AilChapter[]
   current_members AilMember[]  @relation("member_current_level")
+  prompts         AilPrompt[]
+  use_cases       AilUseCase[]
 
   @@map("ail_levels")
 }
@@ -1362,6 +1368,39 @@ model AilMaterial {
   completions AilMaterialCompletion[]
 
   @@map("ail_materials")
+}
+
+model AilPrompt {
+  id              Int                   @id @default(autoincrement()) @db.Integer
+  level           AilLevel              @relation(fields: [level_id], references: [id])
+  level_id        Int                   @db.Integer
+  name            String                @db.VarChar()
+  scenario        String                @db.Text
+  expected_output String                @db.Text
+  category        AilCategory           @relation(fields: [category_id], references: [id])
+  category_id     Int                   @db.SmallInt
+  status          StatusEnum            @default(ACTIVE)
+  created_at      DateTime              @default(now()) @db.Timestamptz()
+  updated_at      DateTime              @default(now()) @updatedAt @db.Timestamptz()
+  submissions     AilPromptSubmission[]
+
+  @@map("ail_prompts")
+}
+
+model AilUseCase {
+  id          Int                    @id @default(autoincrement()) @db.Integer
+  level       AilLevel               @relation(fields: [level_id], references: [id])
+  level_id    Int                    @db.Integer
+  name        String                 @db.VarChar()
+  category    AilCategory            @relation(fields: [category_id], references: [id])
+  category_id Int                    @db.SmallInt
+  description String                 @db.Text
+  status      StatusEnum             @default(ACTIVE)
+  created_at  DateTime               @default(now()) @db.Timestamptz()
+  updated_at  DateTime               @default(now()) @updatedAt @db.Timestamptz()
+  submissions AilUseCaseSubmission[]
+
+  @@map("ail_use_cases")
 }
 
 // Error Logs
@@ -1497,6 +1536,42 @@ model AilPreAssessment {
   created_at                DateTime           @default(now()) @db.Timestamptz()
 
   @@map("ail_pre_assessments")
+}
+
+model AilPromptSubmission {
+  id                  Int       @id @default(autoincrement()) @db.Integer
+  member              AilMember @relation(fields: [member_id], references: [id])
+  member_id           Int       @db.Integer
+  prompt              AilPrompt @relation(fields: [prompt_id], references: [id])
+  prompt_id           Int       @db.Integer
+  input               String    @db.Text
+  output              String    @db.Text
+  clarity_specificity Int       @db.SmallInt
+  context_relevancy   Int       @db.SmallInt
+  instruction_quality Int       @db.SmallInt
+  output_expectation  Int       @db.SmallInt
+  best_practices      Int       @db.SmallInt
+  created_at          DateTime  @default(now()) @db.Timestamptz()
+  updated_at          DateTime  @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("ail_prompt_submissions")
+}
+
+model AilUseCaseSubmission {
+  id            Int                 @id @default(autoincrement()) @db.Integer
+  member        AilMember           @relation(fields: [member_id], references: [id])
+  member_id     Int                 @db.Integer
+  use_case      AilUseCase          @relation(fields: [use_case_id], references: [id])
+  use_case_id   Int                 @db.Integer
+  outcome_proof String              @db.VarChar()
+  hours_saved   Decimal             @db.Decimal(6, 2)
+  description   String              @db.Text
+  ai_tool       String              @db.VarChar()
+  frequency     AilUseCaseFrequency
+  created_at    DateTime            @default(now()) @db.Timestamptz()
+  updated_at    DateTime            @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("ail_use_case_submissions")
 }
 
 view UserTemplate {

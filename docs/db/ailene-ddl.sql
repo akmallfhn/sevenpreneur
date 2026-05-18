@@ -197,62 +197,56 @@ CREATE TABLE ail_materials (
     CHECK (content IS NOT NULL OR file_url IS NOT NULL)
 );
 
--------- NEED CONFIRMATION PRODUCT MANAGER -----------
+CREATE TABLE ail_prompts (
+    id              SERIAL       PRIMARY KEY,
+    level_id        INTEGER      NOT NULL,
+    name            VARCHAR      NOT NULL,
+    scenario        TEXT         NOT NULL,
+    expected_output TEXT         NOT NULL,
+    category_id     SMALLINT     NOT NULL,
+    status          status_enum  NOT NULL DEFAULT 'active',
+    created_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
--- Catalog of prompt templates members can practice against
--- scenario: business situation the prompt is meant for
--- expected_output: what a good response should look like
+CREATE TABLE ail_prompt_submissions (
+    id                  SERIAL       PRIMARY KEY,
+    member_id           INTEGER      NOT NULL,
+    prompt_id           INTEGER      NOT NULL,
+    input               TEXT         NOT NULL,
+    output              TEXT         NOT NULL,
+    clarity_specificity SMALLINT     NOT NULL,
+    context_relevancy   SMALLINT     NOT NULL,
+    instruction_quality SMALLINT     NOT NULL,
+    output_expectation  SMALLINT     NOT NULL,
+    best_practices      SMALLINT     NOT NULL,
+    created_at          TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at          TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
--- CREATE TABLE ail_prompts (
---     id              SERIAL       PRIMARY KEY,
---     name            VARCHAR      NOT NULL,
---     scenario        TEXT         NOT NULL,
---     expected_output TEXT         NOT NULL,
---     category_id     SMALLINT     NOT NULL,
---     status          status_enum  NOT NULL DEFAULT 'active',
---     created_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     updated_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
--- );
+CREATE TABLE ail_use_cases (
+    id          SERIAL       PRIMARY KEY,
+    level_id    INTEGER      NOT NULL,
+    name        VARCHAR      NOT NULL,
+    category_id SMALLINT     NOT NULL,
+    description TEXT         NOT NULL,
+    status      status_enum  NOT NULL DEFAULT 'active',
+    created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
--- CREATE TABLE ail_prompt_submissions (
---     id                  SERIAL       PRIMARY KEY,
---     member_id           INTEGER      NOT NULL,
---     prompt_id           INTEGER      NOT NULL,
---     input               TEXT         NOT NULL,
---     output              TEXT         NOT NULL,
---     clarity_specificity SMALLINT     NOT NULL,
---     context_relevancy   SMALLINT     NOT NULL,
---     instruction_quality SMALLINT     NOT NULL,
---     output_expectation  SMALLINT     NOT NULL,
---     best_practices      SMALLINT     NOT NULL,
---     created_at          TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     updated_at          TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
--- );
-
--- CREATE TABLE ail_use_cases (
---     id          SERIAL       PRIMARY KEY,
---     name        VARCHAR      NOT NULL,
---     category_id SMALLINT     NOT NULL,
---     description TEXT         NOT NULL,
---     status      status_enum  NOT NULL DEFAULT 'active',
---     created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     updated_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
--- );
-
--- CREATE TABLE ail_use_case_submissions (
---     id            SERIAL                       PRIMARY KEY,
---     member_id     INTEGER                      NOT NULL,
---     use_case_id   INTEGER                      NOT NULL,
---     outcome_proof VARCHAR                      NOT NULL,
---     hours_saved   DECIMAL(6, 2)                NOT NULL,
---     description   TEXT                         NOT NULL,
---     ai_tool       VARCHAR                      NOT NULL,
---     frequency     ail_use_case_frequency       NOT NULL,
---     created_at    TIMESTAMPTZ                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
---     updated_at    TIMESTAMPTZ                  NOT NULL DEFAULT CURRENT_TIMESTAMP
--- );
-
-------------------------------------------------------------------------
+CREATE TABLE ail_use_case_submissions (
+    id            SERIAL                       PRIMARY KEY,
+    member_id     INTEGER                      NOT NULL,
+    use_case_id   INTEGER                      NOT NULL,
+    outcome_proof VARCHAR                      NOT NULL,
+    hours_saved   DECIMAL(6, 2)                NOT NULL,
+    description   TEXT                         NOT NULL,
+    ai_tool       VARCHAR                      NOT NULL,
+    frequency     ail_use_case_frequency       NOT NULL,
+    created_at    TIMESTAMPTZ                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMPTZ                  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Relation Tables --
 
@@ -292,9 +286,6 @@ CREATE TABLE ail_xp_earnings (
     earned_at     TIMESTAMPTZ         NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (member_id, learning_type, learning_id)
 );
-
--- One-time pre-assessment per member (intake survey before training)
--- Single-choice answers use semantic enums; multi-choice answers use text[]
 
 CREATE TABLE ail_pre_assessments (
     id                        SERIAL                 PRIMARY KEY,
@@ -365,6 +356,22 @@ ALTER TABLE ail_xp_earnings
 ALTER TABLE ail_pre_assessments
   ADD FOREIGN KEY (member_id) REFERENCES ail_members (id);
 
+ALTER TABLE ail_prompts
+  ADD FOREIGN KEY (level_id)    REFERENCES ail_levels (id),
+  ADD FOREIGN KEY (category_id) REFERENCES ail_categories (id);
+
+ALTER TABLE ail_prompt_submissions
+  ADD FOREIGN KEY (member_id) REFERENCES ail_members (id),
+  ADD FOREIGN KEY (prompt_id) REFERENCES ail_prompts (id);
+
+ALTER TABLE ail_use_cases
+  ADD FOREIGN KEY (level_id)    REFERENCES ail_levels (id),
+  ADD FOREIGN KEY (category_id) REFERENCES ail_categories (id);
+
+ALTER TABLE ail_use_case_submissions
+  ADD FOREIGN KEY (member_id)   REFERENCES ail_members (id),
+  ADD FOREIGN KEY (use_case_id) REFERENCES ail_use_cases (id);
+
 --------------
 -- Triggers --
 --------------
@@ -401,5 +408,15 @@ CREATE TRIGGER update_ail_materials_updated_at_trigger
 
 CREATE TRIGGER update_ail_quiz_questions_updated_at_trigger
   BEFORE UPDATE ON ail_quiz_questions
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_ail_prompts_updated_at_trigger
+  BEFORE UPDATE ON ail_prompts
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_ail_use_cases_updated_at_trigger
+  BEFORE UPDATE ON ail_use_cases
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
