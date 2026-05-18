@@ -1235,14 +1235,18 @@ model AilMember {
   last_active_at   DateTime? @db.Timestamptz()
   created_at       DateTime  @default(now()) @db.Timestamptz()
 
-  championed_groups    AilGroup[]              @relation("group_champion")
-  quiz_submissions     AilQuizSubmission[]
-  video_completions    AilVideoCompletion[]
-  material_completions AilMaterialCompletion[]
-  xp_earnings          AilXpEarning[]
-  pre_assessment       AilPreAssessment?
-  prompt_submissions   AilPromptSubmission[]
-  use_case_submissions AilUseCaseSubmission[]
+  championed_groups          AilGroup[]              @relation("group_champion")
+  quiz_submissions           AilQuizSubmission[]
+  video_completions          AilVideoCompletion[]
+  material_completions       AilMaterialCompletion[]
+  xp_earnings                AilXpEarning[]
+  pre_assessment             AilPreAssessment?
+  prompt_submissions         AilPromptSubmission[]   @relation("prompt_submission_member")
+  prompt_assignments_given   AilPromptSubmission[]   @relation("prompt_submission_assigned_by")
+  prompt_reviews_given       AilPromptSubmission[]   @relation("prompt_submission_reviewed_by")
+  use_case_submissions       AilUseCaseSubmission[]  @relation("use_case_submission_member")
+  use_case_assignments_given AilUseCaseSubmission[]  @relation("use_case_submission_assigned_by")
+  use_case_reviews_given     AilUseCaseSubmission[]  @relation("use_case_submission_reviewed_by")
 
   @@map("ail_members")
 }
@@ -1539,38 +1543,55 @@ model AilPreAssessment {
 }
 
 model AilPromptSubmission {
-  id                  Int       @id @default(autoincrement()) @db.Integer
-  member              AilMember @relation(fields: [member_id], references: [id])
-  member_id           Int       @db.Integer
-  prompt              AilPrompt @relation(fields: [prompt_id], references: [id])
-  prompt_id           Int       @db.Integer
-  input               String    @db.Text
-  output              String    @db.Text
-  clarity_specificity Int       @db.SmallInt
-  context_relevancy   Int       @db.SmallInt
-  instruction_quality Int       @db.SmallInt
-  output_expectation  Int       @db.SmallInt
-  best_practices      Int       @db.SmallInt
-  created_at          DateTime  @default(now()) @db.Timestamptz()
-  updated_at          DateTime  @default(now()) @updatedAt @db.Timestamptz()
+  id             Int        @id @default(autoincrement()) @db.Integer
+  member         AilMember  @relation("prompt_submission_member", fields: [member_id], references: [id])
+  member_id      Int        @db.Integer
+  prompt         AilPrompt  @relation(fields: [prompt_id], references: [id])
+  prompt_id      Int        @db.Integer
+  assigned_by    AilMember? @relation("prompt_submission_assigned_by", fields: [assigned_by_id], references: [id])
+  assigned_by_id Int?       @db.Integer
+  deadline       DateTime?  @db.Timestamptz()
+  message        String?    @db.Text
+  input          String?    @db.Text
+  output         String?    @db.Text
+  submitted_at   DateTime?  @db.Timestamptz()
+  reviewed_by    AilMember? @relation("prompt_submission_reviewed_by", fields: [reviewed_by_id], references: [id])
+  reviewed_by_id Int?       @db.Integer
+  reviewed_at    DateTime?  @db.Timestamptz()
+  comment        String?    @db.Text
+  is_accepted    Boolean    @default(false) @db.Boolean
+  created_at     DateTime   @default(now()) @db.Timestamptz()
+  updated_at     DateTime   @default(now()) @updatedAt @db.Timestamptz()
 
+  @@unique([member_id, prompt_id])
   @@map("ail_prompt_submissions")
 }
 
 model AilUseCaseSubmission {
-  id            Int                 @id @default(autoincrement()) @db.Integer
-  member        AilMember           @relation(fields: [member_id], references: [id])
-  member_id     Int                 @db.Integer
-  use_case      AilUseCase          @relation(fields: [use_case_id], references: [id])
-  use_case_id   Int                 @db.Integer
-  outcome_proof String              @db.VarChar()
-  hours_saved   Decimal             @db.Decimal(6, 2)
-  description   String              @db.Text
-  ai_tool       String              @db.VarChar()
-  frequency     AilUseCaseFrequency
-  created_at    DateTime            @default(now()) @db.Timestamptz()
-  updated_at    DateTime            @default(now()) @updatedAt @db.Timestamptz()
+  id             Int                  @id @default(autoincrement()) @db.Integer
+  member         AilMember            @relation("use_case_submission_member", fields: [member_id], references: [id])
+  member_id      Int                  @db.Integer
+  use_case       AilUseCase           @relation(fields: [use_case_id], references: [id])
+  use_case_id    Int                  @db.Integer
+  assigned_by    AilMember?           @relation("use_case_submission_assigned_by", fields: [assigned_by_id], references: [id])
+  assigned_by_id Int?                 @db.Integer
+  deadline       DateTime?            @db.Timestamptz()
+  message        String?              @db.Text
+  outcome_proof  String?              @db.VarChar()
+  hours_saved    Decimal?             @db.Decimal(6, 2)
+  description    String?              @db.Text
+  ai_tool        String?              @db.VarChar()
+  frequency      AilUseCaseFrequency?
+  submitted_at   DateTime?            @db.Timestamptz()
+  reviewed_by    AilMember?           @relation("use_case_submission_reviewed_by", fields: [reviewed_by_id], references: [id])
+  reviewed_by_id Int?                 @db.Integer
+  reviewed_at    DateTime?            @db.Timestamptz()
+  comment        String?              @db.Text
+  is_accepted    Boolean              @default(false) @db.Boolean
+  created_at     DateTime             @default(now()) @db.Timestamptz()
+  updated_at     DateTime             @default(now()) @updatedAt @db.Timestamptz()
 
+  @@unique([member_id, use_case_id])
   @@map("ail_use_case_submissions")
 }
 

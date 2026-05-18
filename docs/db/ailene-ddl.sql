@@ -210,18 +210,22 @@ CREATE TABLE ail_prompts (
 );
 
 CREATE TABLE ail_prompt_submissions (
-    id                  SERIAL       PRIMARY KEY,
-    member_id           INTEGER      NOT NULL,
-    prompt_id           INTEGER      NOT NULL,
-    input               TEXT         NOT NULL,
-    output              TEXT         NOT NULL,
-    clarity_specificity SMALLINT     NOT NULL,
-    context_relevancy   SMALLINT     NOT NULL,
-    instruction_quality SMALLINT     NOT NULL,
-    output_expectation  SMALLINT     NOT NULL,
-    best_practices      SMALLINT     NOT NULL,
-    created_at          TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at          TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id             SERIAL       PRIMARY KEY,
+    member_id      INTEGER      NOT NULL,
+    prompt_id      INTEGER      NOT NULL,
+    assigned_by_id INTEGER          NULL,                        -- champion who assigned; NULL = self-driven
+    deadline       TIMESTAMPTZ      NULL,
+    message        TEXT             NULL,                        -- champion's assignment note
+    input          TEXT             NULL,                        -- filled by student
+    output         TEXT             NULL,
+    submitted_at   TIMESTAMPTZ      NULL,                        -- NULL = not yet submitted
+    reviewed_by_id INTEGER          NULL,                        -- champion who reviewed
+    reviewed_at    TIMESTAMPTZ      NULL,
+    comment        TEXT             NULL,                        -- champion's review feedback
+    is_accepted    BOOLEAN      NOT NULL DEFAULT FALSE,
+    created_at     TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (member_id, prompt_id)
 );
 
 CREATE TABLE ail_use_cases (
@@ -236,16 +240,25 @@ CREATE TABLE ail_use_cases (
 );
 
 CREATE TABLE ail_use_case_submissions (
-    id            SERIAL                       PRIMARY KEY,
-    member_id     INTEGER                      NOT NULL,
-    use_case_id   INTEGER                      NOT NULL,
-    outcome_proof VARCHAR                      NOT NULL,
-    hours_saved   DECIMAL(6, 2)                NOT NULL,
-    description   TEXT                         NOT NULL,
-    ai_tool       VARCHAR                      NOT NULL,
-    frequency     ail_use_case_frequency       NOT NULL,
-    created_at    TIMESTAMPTZ                  NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TIMESTAMPTZ                  NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id             SERIAL                 PRIMARY KEY,
+    member_id      INTEGER                NOT NULL,
+    use_case_id    INTEGER                NOT NULL,
+    assigned_by_id INTEGER                    NULL,
+    deadline       TIMESTAMPTZ                NULL,
+    message        TEXT                       NULL,
+    outcome_proof  VARCHAR                    NULL,
+    hours_saved    DECIMAL(6, 2)              NULL,
+    description    TEXT                       NULL,
+    ai_tool        VARCHAR                    NULL,
+    frequency      ail_use_case_frequency     NULL,
+    submitted_at   TIMESTAMPTZ                NULL,
+    reviewed_by_id INTEGER                    NULL,
+    reviewed_at    TIMESTAMPTZ                NULL,
+    comment        TEXT                       NULL,
+    is_accepted    BOOLEAN                NOT NULL DEFAULT FALSE,
+    created_at     TIMESTAMPTZ            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMPTZ            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (member_id, use_case_id)
 );
 
 -- Relation Tables --
@@ -361,16 +374,20 @@ ALTER TABLE ail_prompts
   ADD FOREIGN KEY (category_id) REFERENCES ail_categories (id);
 
 ALTER TABLE ail_prompt_submissions
-  ADD FOREIGN KEY (member_id) REFERENCES ail_members (id),
-  ADD FOREIGN KEY (prompt_id) REFERENCES ail_prompts (id);
+  ADD FOREIGN KEY (member_id)      REFERENCES ail_members (id),
+  ADD FOREIGN KEY (prompt_id)      REFERENCES ail_prompts (id),
+  ADD FOREIGN KEY (assigned_by_id) REFERENCES ail_members (id),
+  ADD FOREIGN KEY (reviewed_by_id) REFERENCES ail_members (id);
 
 ALTER TABLE ail_use_cases
   ADD FOREIGN KEY (level_id)    REFERENCES ail_levels (id),
   ADD FOREIGN KEY (category_id) REFERENCES ail_categories (id);
 
 ALTER TABLE ail_use_case_submissions
-  ADD FOREIGN KEY (member_id)   REFERENCES ail_members (id),
-  ADD FOREIGN KEY (use_case_id) REFERENCES ail_use_cases (id);
+  ADD FOREIGN KEY (member_id)      REFERENCES ail_members (id),
+  ADD FOREIGN KEY (use_case_id)    REFERENCES ail_use_cases (id),
+  ADD FOREIGN KEY (assigned_by_id) REFERENCES ail_members (id),
+  ADD FOREIGN KEY (reviewed_by_id) REFERENCES ail_members (id);
 
 --------------
 -- Triggers --
@@ -418,5 +435,15 @@ CREATE TRIGGER update_ail_prompts_updated_at_trigger
 
 CREATE TRIGGER update_ail_use_cases_updated_at_trigger
   BEFORE UPDATE ON ail_use_cases
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_ail_prompt_submissions_updated_at_trigger
+  BEFORE UPDATE ON ail_prompt_submissions
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_ail_use_case_submissions_updated_at_trigger
+  BEFORE UPDATE ON ail_use_case_submissions
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
