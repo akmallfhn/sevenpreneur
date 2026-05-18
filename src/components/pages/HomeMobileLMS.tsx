@@ -161,12 +161,6 @@ export default function HomeMobileLMS(props: HomeMobileLMSProps) {
         <div className="section flex flex-col gap-3">
           <div className="section-header flex items-center justify-between">
             <h2 className="text-base font-bodycopy font-bold">My Learning</h2>
-            <Link
-              href="/library"
-              className="text-sm text-tertiary font-bodycopy font-semibold"
-            >
-              See all
-            </Link>
           </div>
           {props.courses.length > 0 ? (
             <div className="course-list flex flex-col gap-2">

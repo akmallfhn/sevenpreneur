@@ -24,12 +24,8 @@ export default async function DashboardPageLMS() {
 
   const now = new Date();
 
-  // Active cohorts that haven't expired
   const activeCohorts = enrolledCourseList.filter(
-    (c) =>
-      c.status === "ACTIVE" &&
-      c.category === "COHORT" &&
-      (!c.cohort_end_date || new Date(c.cohort_end_date) > now)
+    (c) => c.status === "ACTIVE" && c.category === "COHORT"
   );
 
   // Fetch learnings for each active cohort in parallel
