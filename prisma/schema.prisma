@@ -1213,10 +1213,10 @@ model B2BAction {
 // Ailene //
 
 model AilCategory {
-  id        Int          @id @default(autoincrement()) @db.SmallInt
-  name      String       @unique @db.VarChar()
-  prompts   AilPrompt[]
-  use_cases AilUseCase[]
+  id        Int                  @id @default(autoincrement()) @db.SmallInt
+  name      String               @unique @db.VarChar()
+  prompts   AilPromptCategory[]
+  use_cases AilUseCaseCategory[]
 
   @@map("ail_categories")
 }
@@ -1381,11 +1381,10 @@ model AilPrompt {
   name            String                @db.VarChar()
   scenario        String                @db.Text
   expected_output String                @db.Text
-  category        AilCategory           @relation(fields: [category_id], references: [id])
-  category_id     Int                   @db.SmallInt
   status          StatusEnum            @default(ACTIVE)
   created_at      DateTime              @default(now()) @db.Timestamptz()
   updated_at      DateTime              @default(now()) @updatedAt @db.Timestamptz()
+  categories      AilPromptCategory[]
   submissions     AilPromptSubmission[]
 
   @@map("ail_prompts")
@@ -1396,12 +1395,11 @@ model AilUseCase {
   level       AilLevel               @relation(fields: [level_id], references: [id])
   level_id    Int                    @db.Integer
   name        String                 @db.VarChar()
-  category    AilCategory            @relation(fields: [category_id], references: [id])
-  category_id Int                    @db.SmallInt
   description String                 @db.Text
   status      StatusEnum             @default(ACTIVE)
   created_at  DateTime               @default(now()) @db.Timestamptz()
   updated_at  DateTime               @default(now()) @updatedAt @db.Timestamptz()
+  categories  AilUseCaseCategory[]
   submissions AilUseCaseSubmission[]
 
   @@map("ail_use_cases")
@@ -1464,6 +1462,26 @@ model UserEvent {
 
   @@id([user_id, event_id])
   @@map("users_events")
+}
+
+model AilPromptCategory {
+  prompt      AilPrompt   @relation(fields: [prompt_id], references: [id])
+  prompt_id   Int         @db.Integer
+  category    AilCategory @relation(fields: [category_id], references: [id])
+  category_id Int         @db.SmallInt
+
+  @@id([prompt_id, category_id])
+  @@map("ail_prompt_categories")
+}
+
+model AilUseCaseCategory {
+  use_case    AilUseCase  @relation(fields: [use_case_id], references: [id])
+  use_case_id Int         @db.Integer
+  category    AilCategory @relation(fields: [category_id], references: [id])
+  category_id Int         @db.SmallInt
+
+  @@id([use_case_id, category_id])
+  @@map("ail_use_case_categories")
 }
 
 model AilQuizSubmission {

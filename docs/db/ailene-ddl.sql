@@ -203,7 +203,6 @@ CREATE TABLE ail_prompts (
     name            VARCHAR      NOT NULL,
     scenario        TEXT         NOT NULL,
     expected_output TEXT         NOT NULL,
-    category_id     SMALLINT     NOT NULL,
     status          status_enum  NOT NULL DEFAULT 'active',
     created_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -232,7 +231,6 @@ CREATE TABLE ail_use_cases (
     id          SERIAL       PRIMARY KEY,
     level_id    INTEGER      NOT NULL,
     name        VARCHAR      NOT NULL,
-    category_id SMALLINT     NOT NULL,
     description TEXT         NOT NULL,
     status      status_enum  NOT NULL DEFAULT 'active',
     created_at  TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -262,6 +260,18 @@ CREATE TABLE ail_use_case_submissions (
 );
 
 -- Relation Tables --
+
+CREATE TABLE ail_prompt_categories (
+    prompt_id   INTEGER   NOT NULL,
+    category_id SMALLINT  NOT NULL,
+    PRIMARY KEY (prompt_id, category_id)
+);
+
+CREATE TABLE ail_use_case_categories (
+    use_case_id INTEGER   NOT NULL,
+    category_id SMALLINT  NOT NULL,
+    PRIMARY KEY (use_case_id, category_id)
+);
 
 CREATE TABLE ail_quiz_submissions (
     id             SERIAL       PRIMARY KEY,
@@ -370,7 +380,10 @@ ALTER TABLE ail_pre_assessments
   ADD FOREIGN KEY (member_id) REFERENCES ail_members (id);
 
 ALTER TABLE ail_prompts
-  ADD FOREIGN KEY (level_id)    REFERENCES ail_levels (id),
+  ADD FOREIGN KEY (level_id) REFERENCES ail_levels (id);
+
+ALTER TABLE ail_prompt_categories
+  ADD FOREIGN KEY (prompt_id)   REFERENCES ail_prompts (id),
   ADD FOREIGN KEY (category_id) REFERENCES ail_categories (id);
 
 ALTER TABLE ail_prompt_submissions
@@ -380,7 +393,10 @@ ALTER TABLE ail_prompt_submissions
   ADD FOREIGN KEY (reviewed_by_id) REFERENCES ail_members (id);
 
 ALTER TABLE ail_use_cases
-  ADD FOREIGN KEY (level_id)    REFERENCES ail_levels (id),
+  ADD FOREIGN KEY (level_id) REFERENCES ail_levels (id);
+
+ALTER TABLE ail_use_case_categories
+  ADD FOREIGN KEY (use_case_id) REFERENCES ail_use_cases (id),
   ADD FOREIGN KEY (category_id) REFERENCES ail_categories (id);
 
 ALTER TABLE ail_use_case_submissions
