@@ -5,7 +5,8 @@ export type WhatsappAttachmentAllTypes =
   | WhatsappAttachmentImage
   | WhatsappAttachmentSticker
   | WhatsappAttachmentVideo
-  | WhatsappAttachmentText;
+  | WhatsappAttachmentText
+  | WhatsappAttachmentTemplate;
 
 export type WhatsappAttachmentAudio = {
   mime_type: string;
@@ -102,6 +103,12 @@ export type WhatsappAttachmentVideo = {
 
 export type WhatsappAttachmentText = undefined; // will be NULL in database
 
+export type WhatsappAttachmentTemplate = {
+  name: string;
+  lang_code: string;
+  parameters: object;
+};
+
 export type WhatsAppTypeAttachmentPairUnion =
   | { type: "AUDIO"; attachment: WhatsappAttachmentAudio }
   | { type: "CONTACTS"; attachment: WhatsappAttachmentContacts }
@@ -110,6 +117,7 @@ export type WhatsAppTypeAttachmentPairUnion =
   | { type: "STICKER"; attachment: WhatsappAttachmentSticker }
   | { type: "TEXT"; attachment: WhatsappAttachmentText }
   | { type: "VIDEO"; attachment: WhatsappAttachmentVideo }
+  | { type: "TEMPLATE"; attachment: WhatsappAttachmentTemplate }
   | {
       type:
         | "BUTTON"
