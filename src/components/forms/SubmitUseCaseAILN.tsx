@@ -1,9 +1,14 @@
 "use client";
 import ButtonAILN from "@/components/buttons/ButtonAILN";
+import AppInput from "@/components/fields/AppInput";
+import AppNumberInput from "@/components/fields/AppNumberInput";
+import AppSelect from "@/components/fields/AppSelect";
+import AppTextArea from "@/components/fields/AppTextArea";
 import PageContainerAILN from "@/components/pages/PageContainerAILN";
 import AppErrorComponents from "@/components/states/AppErrorComponents";
 import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/client";
+import { AilUseCaseFrequency } from "@prisma/client";
 import dayjs from "dayjs";
 import {
   ArrowLeft,
@@ -52,12 +57,19 @@ const statusMeta: Record<
   },
 };
 
-export default function SubmitPromptPracticeStudentAILN({
+const FREQUENCY_OPTIONS: { value: AilUseCaseFrequency; label: string }[] = [
+  { value: "DAILY", label: "Harian" },
+  { value: "WEEKLY", label: "Mingguan" },
+  { value: "MONTHLY", label: "Bulanan" },
+  { value: "OCCASIONALLY", label: "Sesekali" },
+];
+
+export default function SubmitUseCaseAILN({
   sessionToken,
-  promptId,
+  useCaseId,
 }: {
   sessionToken: string;
-  promptId: number;
+  useCaseId: number;
 }) {
   useEffect(() => {
     setSessionToken(sessionToken);
@@ -65,20 +77,30 @@ export default function SubmitPromptPracticeStudentAILN({
 
   const router = useRouter();
   const utils = trpc.useUtils();
-  const assignmentQ = trpc.ailene.read.promptAssignment.useQuery({
-    prompt_id: promptId,
+  const assignmentQ = trpc.ailene.read.useCaseAssignment.useQuery({
+    use_case_id: useCaseId,
   });
-  const submitM = trpc.ailene.update.submitPromptAssignment.useMutation();
+  const submitM = trpc.ailene.update.submitUseCaseAssignment.useMutation();
 
   const a = assignmentQ.data?.assignment;
 
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
+  const [outcomeProof, setOutcomeProof] = useState("");
+  const [hoursSaved, setHoursSaved] = useState("");
+  const [description, setDescription] = useState("");
+  const [aiTool, setAiTool] = useState("");
+  const [frequency, setFrequency] = useState<AilUseCaseFrequency | "">("");
 
   useEffect(() => {
     if (a) {
-      setInput(a.input ?? "");
-      setOutput(a.output ?? "");
+      setOutcomeProof(a.outcome_proof ?? "");
+      setHoursSaved(
+        a.hours_saved !== null && a.hours_saved !== undefined
+          ? String(a.hours_saved)
+          : ""
+      );
+      setDescription(a.description ?? "");
+      setAiTool(a.ai_tool ?? "");
+      setFrequency(a.frequency ?? "");
     }
   }, [a]);
 
@@ -137,27 +159,44 @@ export default function SubmitPromptPracticeStudentAILN({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) {
-      toast.error("Input prompt tidak boleh kosong.");
+    if (!outcomeProof.trim()) {
+      toast.error("Outcome / bukti hasil wajib diisi.");
       return;
     }
-    if (!output.trim()) {
-      toast.error("Output tidak boleh kosong.");
+    const hoursNum = Number(hoursSaved);
+    if (!Number.isFinite(hoursNum) || hoursNum < 0) {
+      toast.error("Hours saved harus angka non-negatif.");
       return;
     }
+    if (!description.trim()) {
+      toast.error("Deskripsi wajib diisi.");
+      return;
+    }
+    if (!aiTool.trim()) {
+      toast.error("AI tool wajib diisi.");
+      return;
+    }
+    if (!frequency) {
+      toast.error("Pilih frekuensi pemakaian.");
+      return;
+    }
+
     submitM.mutate(
       {
-        prompt_id: promptId,
-        input: input.trim(),
-        output: output.trim(),
+        use_case_id: useCaseId,
+        outcome_proof: outcomeProof.trim(),
+        hours_saved: hoursNum,
+        description: description.trim(),
+        ai_tool: aiTool.trim(),
+        frequency: frequency as AilUseCaseFrequency,
       },
       {
         onSuccess: () => {
           toast.success("Tugas berhasil dikirim.");
-          utils.ailene.read.promptAssignment.invalidate({
-            prompt_id: promptId,
+          utils.ailene.read.useCaseAssignment.invalidate({
+            use_case_id: useCaseId,
           });
-          utils.ailene.list.assignedPrompts.invalidate();
+          utils.ailene.list.assignedUseCases.invalidate();
         },
         onError: (err) => {
           toast.error("Gagal kirim", { description: err.message });
@@ -169,7 +208,6 @@ export default function SubmitPromptPracticeStudentAILN({
   return (
     <PageContainerAILN>
       <div className="flex w-full flex-col gap-6">
-        {/* Back nav */}
         <button
           type="button"
           onClick={() => router.push("/student/practice")}
@@ -179,13 +217,12 @@ export default function SubmitPromptPracticeStudentAILN({
           Kembali ke Tugas
         </button>
 
-        {/* Header */}
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 text-xs">
             <span className="rounded-md bg-red-50 px-2 py-0.5 font-bold text-red-600 dark:bg-red-500/10 dark:text-red-300">
-              L{a.prompt.level.level_number}
+              L{a.use_case.level.level_number}
             </span>
-            {a.prompt.categories.map((c) => (
+            {a.use_case.categories.map((c) => (
               <span
                 key={c.id}
                 className="rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"
@@ -200,7 +237,9 @@ export default function SubmitPromptPracticeStudentAILN({
               {meta.label}
             </span>
           </div>
-          <h1 className="text-2xl font-bold dark:text-white">{a.prompt.name}</h1>
+          <h1 className="text-2xl font-bold dark:text-white">
+            {a.use_case.name}
+          </h1>
           <div className="flex flex-col gap-1 text-xs text-gray-600 dark:text-gray-300">
             <div className="flex items-center gap-2">
               <CalendarClock className="size-3.5 shrink-0" />
@@ -215,9 +254,7 @@ export default function SubmitPromptPracticeStudentAILN({
                 {deadlineOverdue ? " (lewat)" : ""}
               </span>
             </div>
-            {a.assigned_by && (
-              <div>Dari: {a.assigned_by.full_name}</div>
-            )}
+            {a.assigned_by && <div>Dari: {a.assigned_by.full_name}</div>}
             {a.message && (
               <div className="flex items-start gap-2">
                 <MessageSquare className="size-3.5 shrink-0 mt-0.5" />
@@ -227,27 +264,15 @@ export default function SubmitPromptPracticeStudentAILN({
           </div>
         </div>
 
-        {/* Prompt context */}
-        <div className="flex flex-col gap-4 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg">
-          <div className="flex flex-col gap-1">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Skenario
-            </div>
-            <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-200">
-              {a.prompt.scenario}
-            </p>
+        <div className="flex flex-col gap-2 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg">
+          <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            Deskripsi Use Case
           </div>
-          <div className="flex flex-col gap-1 border-t border-dashboard-border pt-4">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Expected Output
-            </div>
-            <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-200">
-              {a.prompt.expected_output}
-            </p>
-          </div>
+          <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-200">
+            {a.use_case.description}
+          </p>
         </div>
 
-        {/* Champion review */}
         {status === "NEEDS_REVISION" && a.comment && (
           <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-500/30 dark:bg-red-500/10">
             <div className="text-[11px] font-semibold uppercase tracking-wide text-red-700 dark:text-red-300">
@@ -271,56 +296,85 @@ export default function SubmitPromptPracticeStudentAILN({
           </div>
         )}
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col gap-4 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg"
         >
           <h2 className="text-base font-bold dark:text-white">
-            {isLocked ? "Submission kamu" : "Kirim tugasmu"}
+            {isLocked ? "Submission kamu" : "Laporkan use case-mu"}
           </h2>
 
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="prompt-input"
-              className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
-            >
-              Prompt yang kamu pakai
-            </label>
-            <textarea
-              id="prompt-input"
-              value={input}
-              onChange={(e) => setInput(e.target.value.slice(0, 5000))}
+          <AppInput
+            inputId="uc-outcome"
+            inputName="Outcome / bukti hasil"
+            inputType="text"
+            inputPlaceholder="URL Google Drive, link screenshot, atau ringkasan singkat hasilnya"
+            value={outcomeProof}
+            onInputChange={setOutcomeProof}
+            characterLength={500}
+            variant="AILN"
+            disabled={isLocked}
+            required
+          />
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <AppNumberInput
+              inputId="uc-hours"
+              inputName="Hours saved (jam)"
+              inputConfig="decimal"
+              inputPlaceholder="e.g. 3.5"
+              value={hoursSaved}
+              onInputChange={setHoursSaved}
+              variant="AILN"
               disabled={isLocked}
-              rows={6}
-              placeholder="Tulis prompt yang kamu kirim ke AI…"
-              className="rounded-md border border-dashboard-border bg-card-inside-bg px-3 py-2 text-sm focus:border-red-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 dark:text-gray-200 dark:placeholder:text-gray-500"
               required
             />
-            <div className="self-end text-xs text-gray-400">
-              {input.length}/5000
-            </div>
+            <AppInput
+              inputId="uc-tool"
+              inputName="AI tool yang dipakai"
+              inputType="text"
+              inputPlaceholder="e.g. ChatGPT, Claude, Gemini, NotebookLM"
+              value={aiTool}
+              onInputChange={setAiTool}
+              characterLength={255}
+              variant="AILN"
+              disabled={isLocked}
+              required
+            />
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="prompt-output"
-              className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
-            >
-              Output dari AI
-            </label>
-            <textarea
-              id="prompt-output"
-              value={output}
-              onChange={(e) => setOutput(e.target.value.slice(0, 10000))}
+          <AppSelect
+            selectId="uc-frequency"
+            selectName="Frekuensi pemakaian"
+            selectPlaceholder="Pilih frekuensi…"
+            value={frequency || null}
+            onChange={(v) =>
+              setFrequency((v as AilUseCaseFrequency | null) ?? "")
+            }
+            variant="AILN"
+            disabled={isLocked}
+            required
+            options={FREQUENCY_OPTIONS.map((o) => ({
+              label: o.label,
+              value: o.value,
+            }))}
+          />
+
+          <div className="flex flex-col gap-1">
+            <AppTextArea
+              textAreaId="uc-description"
+              textAreaName="Deskripsi penerapan"
+              textAreaPlaceholder="Ceritakan gimana kamu pakai AI di pekerjaanmu, langkah-langkahnya, dan dampak konkret yang kamu rasakan."
+              value={description}
+              onTextAreaChange={setDescription}
+              characterLength={5000}
+              textAreaHeight="min-h-[160px]"
+              variant="AILN"
               disabled={isLocked}
-              rows={8}
-              placeholder="Tempel hasil dari AI…"
-              className="rounded-md border border-dashboard-border bg-card-inside-bg px-3 py-2 text-sm focus:border-red-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 dark:text-gray-200 dark:placeholder:text-gray-500"
               required
             />
             <div className="self-end text-xs text-gray-400">
-              {output.length}/10000
+              {description.length}/5000
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import SubmitUseCasePracticeStudentAILN from "@/components/pages/SubmitUseCasePracticeStudentAILN";
+import SubmitUseCaseAILN from "@/components/forms/SubmitUseCaseAILN";
 import { setSessionToken } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -21,7 +21,7 @@ export default async function StudentUseCasePracticePage({
   const useCaseIdNum = Number(use_case_id);
 
   return (
-    <SubmitUseCasePracticeStudentAILN
+    <SubmitUseCaseAILN
       sessionToken={sessionToken}
       useCaseId={useCaseIdNum}
     />

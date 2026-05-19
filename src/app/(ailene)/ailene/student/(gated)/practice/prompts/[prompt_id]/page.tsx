@@ -1,4 +1,4 @@
-import SubmitPromptPracticeStudentAILN from "@/components/pages/SubmitPromptPracticeStudentAILN";
+import SubmitPromptAILN from "@/components/forms/SubmitPromptAILN";
 import { setSessionToken } from "@/trpc/server";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -21,7 +21,7 @@ export default async function StudentPromptPracticePage({
   const promptIdNum = Number(prompt_id);
 
   return (
-    <SubmitPromptPracticeStudentAILN
+    <SubmitPromptAILN
       sessionToken={sessionToken}
       promptId={promptIdNum}
     />

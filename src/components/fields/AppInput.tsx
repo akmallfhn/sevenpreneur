@@ -9,6 +9,7 @@ const variantStyles: Record<
     border: string;
     background: string;
     disabled: string;
+    font: string;
   }
 > = {
   SVP: {
@@ -17,24 +18,28 @@ const variantStyles: Record<
     background: "bg-transparent",
     disabled:
       "bg-gray-100 text-gray-500  dark:bg-[#1F1F1F] dark:text-[#555555]",
+    font: "font-bodycopy",
   },
   LMS: {
     focus: "focus:outline-tertiary/15 focus:border-tertiary",
     border: "border border-dashboard-border",
     background: "bg-card-inside-bg",
     disabled: "bg-card-inside-bg text-muted-foreground dark:text-foreground/30",
+    font: "font-bodycopy",
   },
   CMS: {
     focus: "focus:outline-tertiary/15 focus:border-tertiary",
     border: "border border-dashboard-border",
     background: "bg-background",
     disabled: "bg-card-inside-bg text-muted-foreground dark:text-foreground/30",
+    font: "font-bodycopy",
   },
-  AILENE: {
-    focus: "focus:outline-tertiary/15 focus:border-tertiary",
+  AILN: {
+    focus: "focus:outline-black/10 focus:border-black",
     border: "border border-dashboard-border",
     background: "bg-card-inside-bg",
     disabled: "bg-card-inside-bg text-muted-foreground dark:text-foreground/30",
+    font: "font-read",
   },
 };
 
@@ -103,7 +108,7 @@ export default function AppInput({
       {inputName && (
         <label
           htmlFor={inputId}
-          className="label-input flex pl-1 gap-0.5 text-sm text-sb-text-strong font-bodycopy font-semibold"
+          className={`label-input flex pl-1 gap-0.5 text-sm text-sb-text-strong ${styles.font} font-semibold`}
         >
           {inputName}
           {required && (
@@ -123,7 +128,7 @@ export default function AppInput({
           type={inputType}
           placeholder={inputPlaceholder}
           {...rest}
-          className={`input-placeholder flex w-full p-2 font-medium font-bodycopy text-sm rounded-md transform transition-all placeholder:text-emphasis/60 placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${styles.border} ${
+          className={`input-placeholder flex w-full p-2 font-medium ${styles.font} text-sm rounded-md transform transition-all placeholder:text-emphasis/60 placeholder:font-medium placeholder:text-sm focus:outline-4 invalid:border-destructive required:border-destructive ${styles.border} ${
             computedError
               ? "border-destructive focus:outline-semi-destructive"
               : styles.focus

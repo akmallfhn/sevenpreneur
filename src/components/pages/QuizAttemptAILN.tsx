@@ -74,8 +74,7 @@ export default function QuizAttemptAILN({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
+    queueMicrotask(() => setMounted(true));
   }, []);
 
   const isDark = mounted && resolvedTheme === "dark";
@@ -88,6 +87,8 @@ export default function QuizAttemptAILN({
   // Sisa waktu dalam detik. null = belum selesai inisialisasi dari server
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
   const [isExitDialogOpen, setIsExitDialogOpen] = useState(false);
+  const [isConfirmSubmitDialogOpen, setIsConfirmSubmitDialogOpen] =
+    useState(false);
 
   // Tandain quiz udah disubmit. Dipakai buat block autosave + submit dobel
   const submittedRef = useRef(false);
@@ -200,8 +201,10 @@ export default function QuizAttemptAILN({
   const handleNext = () =>
     setCurrentIdx((i) => Math.min(totalQuestions - 1, i + 1));
 
-  // Submit manual via tombol "Submit jawaban".
-  const handleSubmit = () => {
+  // Submit manual via tombol "Submit jawaban". Buka dialog konfirmasi dulu.
+  const handleSubmit = () => setIsConfirmSubmitDialogOpen(true);
+  const handleConfirmSubmit = () => {
+    setIsConfirmSubmitDialogOpen(false);
     if (submittedRef.current) return;
     submittedRef.current = true;
     submitMutation.mutate({ quiz_id: quizId, answers });
@@ -428,6 +431,15 @@ export default function QuizAttemptAILN({
         alertConfirmLabel="Tetap keluar"
         onClose={() => setIsExitDialogOpen(false)}
         onConfirm={handleConfirmExit}
+      />
+      <AlertConfirmDialogAILN
+        isOpen={isConfirmSubmitDialogOpen}
+        alertDialogHeader="Yakin submit jawaban?"
+        alertDialogMessage="Quiz tidak bisa diulang setelah disubmit. Pastikan semua jawaban kamu sudah benar sebelum lanjut."
+        alertCancelLabel="Periksa lagi"
+        alertConfirmLabel="Ya, submit"
+        onClose={() => setIsConfirmSubmitDialogOpen(false)}
+        onConfirm={handleConfirmSubmit}
       />
     </PageContainerAILN>
   );

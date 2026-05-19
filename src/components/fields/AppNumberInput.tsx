@@ -19,6 +19,7 @@ const variantStyles: Record<
     border: string;
     background: string;
     disabled: string;
+    font: string;
   }
 > = {
   SVP: {
@@ -28,6 +29,7 @@ const variantStyles: Record<
     background: "bg-transparent",
     disabled:
       "bg-gray-100 text-gray-500  dark:bg-[#1F1F1F] dark:text-[#555555]",
+    font: "font-bodycopy",
   },
   LMS: {
     focus: "focus:outline-tertiary/15 focus:border-tertiary",
@@ -36,6 +38,7 @@ const variantStyles: Record<
     border: "border border-dashboard-border",
     background: "bg-card-inside-bg",
     disabled: "bg-card-inside-bg text-muted-foreground dark:text-foreground/30",
+    font: "font-bodycopy",
   },
   CMS: {
     focus: "focus:outline-tertiary/15 focus:border-tertiary",
@@ -44,14 +47,15 @@ const variantStyles: Record<
     border: "border border-dashboard-border",
     background: "bg-background",
     disabled: "bg-card-inside-bg text-muted-foreground dark:text-foreground/30",
+    font: "font-bodycopy",
   },
-  AILENE: {
-    focus: "focus:outline-tertiary/15 focus:border-tertiary",
-    focusWithin:
-      "focus-within:outline-tertiary/15 focus-within:border-tertiary",
+  AILN: {
+    focus: "focus:outline-black/10 focus:border-black",
+    focusWithin: "focus-within:outline-black/10 focus-within:border-black",
     border: "border border-dashboard-border",
     background: "bg-card-inside-bg",
     disabled: "bg-card-inside-bg text-muted-foreground dark:text-foreground/30",
+    font: "font-read",
   },
 };
 
@@ -187,7 +191,7 @@ export default function AppNumberInputSVP({
       {inputName && (
         <label
           htmlFor={inputId}
-          className="label-input flex pl-1 gap-0.5 text-sm text-sb-text-strong font-bodycopy font-semibold"
+          className={`label-input flex pl-1 gap-0.5 text-sm text-sb-text-strong ${styles.font} font-semibold`}
         >
           {inputName}
           {required && (
@@ -214,7 +218,7 @@ export default function AppNumberInputSVP({
               type="button"
               disabled={disabled as boolean}
               onClick={() => setCountryOpen((p) => !p)}
-              className="flex items-center gap-1.5 h-full px-3 border-r border-dashboard-border text-sm font-medium font-bodycopy rounded-l-md transition hover:bg-card-inside-bg hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`flex items-center gap-1.5 h-full px-3 border-r border-dashboard-border text-sm font-medium ${styles.font} rounded-l-md transition hover:bg-card-inside-bg hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {selectedCountry?.icon ? (
                 <Image
@@ -246,7 +250,7 @@ export default function AppNumberInputSVP({
                       onCountryChange?.(c.id, c.phone_code);
                       setCountryOpen(false);
                     }}
-                    className={`flex items-center gap-2 w-full px-3 py-2 text-sm text-left font-bodycopy transition hover:bg-card-inside-bg ${
+                    className={`flex items-center gap-2 w-full px-3 py-2 text-sm text-left ${styles.font} transition hover:bg-card-inside-bg ${
                       selectedCountry?.id === c.id
                         ? "bg-primary/5 text-primary"
                         : ""
@@ -289,7 +293,7 @@ export default function AppNumberInputSVP({
           inputMode={mode}
           pattern={pattern}
           placeholder={inputPlaceholder}
-          className={`input-placeholder flex w-full p-2 font-medium font-bodycopy text-sm transform transition-all placeholder:text-emphasis/60 placeholder:font-medium placeholder:text-sm ${
+          className={`input-placeholder flex w-full p-2 font-medium ${styles.font} text-sm transform transition-all placeholder:text-emphasis/60 placeholder:font-medium placeholder:text-sm ${
             isPhone
               ? "flex-1 rounded-r-md border-0 focus:outline-none bg-transparent"
               : `rounded-md focus:outline-4 invalid:border-destructive required:border-destructive ${styles.border} ${
@@ -309,7 +313,9 @@ export default function AppNumberInputSVP({
         />
 
         {computedError && (
-          <p className="input-error-message absolute -bottom-5 left-0 inline-flex text-red-600 text-xs font-bodycopy">
+          <p
+            className={`input-error-message absolute -bottom-5 left-0 inline-flex text-red-600 text-xs ${styles.font}`}
+          >
             {computedError}
           </p>
         )}
