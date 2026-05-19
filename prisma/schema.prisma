@@ -1049,6 +1049,18 @@ model Ticker {
   @@map("ads_ticker")
 }
 
+model AileneAnnouncement {
+  id         Int        @id @default(1)
+  title      String     @db.VarChar()
+  callout    String?    @db.VarChar()
+  status     StatusEnum
+  start_date DateTime   @db.Timestamptz()
+  end_date   DateTime   @db.Timestamptz()
+  updated_at DateTime   @default(now()) @updatedAt @db.Timestamptz()
+
+  @@map("ail_announcement")
+}
+
 // Article-related
 
 model ArticleCategory {

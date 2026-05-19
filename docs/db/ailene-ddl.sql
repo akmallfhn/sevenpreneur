@@ -331,6 +331,18 @@ CREATE TABLE ail_pre_assessments (
     created_at                TIMESTAMPTZ            NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Announcement
+
+CREATE TABLE ail_announcement (
+    id         INTEGER      PRIMARY KEY  DEFAULT 1,
+    title      VARCHAR      NOT NULL,
+    callout    VARCHAR          NULL,
+    status     status_enum  NOT NULL,
+    start_date TIMESTAMPTZ  NOT NULL,
+    end_date   TIMESTAMPTZ  NOT NULL,
+    updated_at TIMESTAMPTZ  NOT NULL     DEFAULT CURRENT_TIMESTAMP
+);
+
 ----------------
 -- References --
 ----------------
@@ -463,3 +475,16 @@ CREATE TRIGGER update_ail_use_case_submissions_updated_at_trigger
   BEFORE UPDATE ON ail_use_case_submissions
   FOR EACH ROW
     EXECUTE FUNCTION update_updated_at();
+
+CREATE TRIGGER update_ail_announcement_updated_at_trigger
+  BEFORE UPDATE ON ail_announcement
+  FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at();
+
+--------------------
+-- Unique Indices --
+--------------------
+
+-- Announcement
+
+CREATE UNIQUE INDEX ail_announcement_one_row_only ON ail_announcement ((TRUE));
