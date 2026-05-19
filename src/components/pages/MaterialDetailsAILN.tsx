@@ -114,7 +114,7 @@ export default function MaterialDetailsAILN({
     }
   );
 
-  const markMutation = trpc.ailene.completeMaterial.useMutation({
+  const markMutation = trpc.ailene.create.completeMaterial.useMutation({
     onSuccess: () => {
       utils.auth.checkAilMember.invalidate();
       utils.ailene.read.materialDetail.invalidate({ material_id: materialId });

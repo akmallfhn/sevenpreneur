@@ -52,10 +52,10 @@ export default function LibraryChampionAILN({
   );
   const [assignOpen, setAssignOpen] = useState(false);
 
-  const promptQ = trpc.ailene.champion.promptLibrary.useQuery(undefined, {
+  const promptQ = trpc.ailene.list.promptLibrary.useQuery(undefined, {
     enabled: tab === "PROMPT",
   });
-  const useCaseQ = trpc.ailene.champion.useCaseLibrary.useQuery(undefined, {
+  const useCaseQ = trpc.ailene.list.useCaseLibrary.useQuery(undefined, {
     enabled: tab === "USE_CASE",
   });
 

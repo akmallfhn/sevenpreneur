@@ -75,10 +75,10 @@ export default function ReviewUseCaseSubmissionChampionAILN({
 
   const router = useRouter();
   const utils = trpc.useUtils();
-  const detailQ = trpc.ailene.champion.useCaseSubmissionDetail.useQuery({
+  const detailQ = trpc.ailene.read.useCaseSubmissionDetail.useQuery({
     submission_id: submissionId,
   });
-  const reviewM = trpc.ailene.champion.reviewUseCaseSubmission.useMutation();
+  const reviewM = trpc.ailene.update.reviewUseCaseSubmission.useMutation();
 
   const s = detailQ.data?.submission;
 
@@ -156,10 +156,10 @@ export default function ReviewUseCaseSubmissionChampionAILN({
           toast.success(
             isAccepted ? "Submisi diterima." : "Revisi diminta ke student."
           );
-          utils.ailene.champion.useCaseSubmissionDetail.invalidate({
+          utils.ailene.read.useCaseSubmissionDetail.invalidate({
             submission_id: submissionId,
           });
-          utils.ailene.champion.useCaseSubmissions.invalidate();
+          utils.ailene.list.useCaseSubmissions.invalidate();
         },
         onError: (err) => {
           toast.error("Gagal menyimpan review", { description: err.message });

@@ -98,7 +98,7 @@ export default function QuizAttemptAILN({
   const userInteractedRef = useRef(false);
 
   // Dipanggil pas component mount. Server-lah yang nentuin sisa waktu
-  const startAttempt = trpc.ailene.startQuizAttempt.useMutation({
+  const startAttempt = trpc.ailene.update.startQuizAttempt.useMutation({
     onSuccess: (res) => {
       if (res.status === "finalized") {
         submittedRef.current = true;
@@ -135,7 +135,7 @@ export default function QuizAttemptAILN({
   }, [secondsLeft]);
 
   // Simpan jawaban ke DB (is_completed=false). Server juga nge-check kalo draft
-  const saveDraft = trpc.ailene.saveQuizDraft.useMutation({
+  const saveDraft = trpc.ailene.update.saveQuizDraft.useMutation({
     onSuccess: (res) => {
       if (res.status === "finalized") {
         submittedRef.current = true;
@@ -149,7 +149,7 @@ export default function QuizAttemptAILN({
   });
 
   // Finalize quiz: hitung score, set is_completed=true, award XP.
-  const submitMutation = trpc.ailene.submitQuiz.useMutation({
+  const submitMutation = trpc.ailene.update.submitQuiz.useMutation({
     onError: () => toast.error("Gagal menyimpan jawaban quiz."),
     onSuccess: () => {
       utils.ailene.list.quizQuestions.invalidate({ quiz_id: quizId });

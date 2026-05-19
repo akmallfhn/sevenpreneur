@@ -48,7 +48,7 @@ export default function DashboardChampionAILN({
   >("");
   const [search, setSearch] = useState("");
 
-  const membersQ = trpc.ailene.champion.listMembers.useQuery({});
+  const membersQ = trpc.ailene.list.members.useQuery({});
 
   if (membersQ.isLoading) {
     return (

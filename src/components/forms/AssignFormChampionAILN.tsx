@@ -28,13 +28,13 @@ export default function AssignFormChampionAILN({
   const memberQ = trpc.auth.checkAilMember.useQuery(undefined, {
     enabled: isOpen,
   });
-  const membersQ = trpc.ailene.champion.listMembers.useQuery(
+  const membersQ = trpc.ailene.list.members.useQuery(
     {},
     { enabled: isOpen }
   );
 
-  const assignPromptM = trpc.ailene.champion.assignPrompt.useMutation();
-  const assignUseCaseM = trpc.ailene.champion.assignUseCase.useMutation();
+  const assignPromptM = trpc.ailene.create.assignPrompt.useMutation();
+  const assignUseCaseM = trpc.ailene.create.assignUseCase.useMutation();
   const assignMutation = kind === "PROMPT" ? assignPromptM : assignUseCaseM;
 
   const groups = memberQ.data?.ail_member?.championed_groups ?? [];
@@ -100,8 +100,8 @@ export default function AssignFormChampionAILN({
               `${label} berhasil di-assign ke ${data.assigned_count} anggota.`
             );
           }
-          utils.ailene.student.assignedPrompts.invalidate();
-          utils.ailene.student.assignedUseCases.invalidate();
+          utils.ailene.list.assignedPrompts.invalidate();
+          utils.ailene.list.assignedUseCases.invalidate();
           setSelectedMemberIds([]);
           setSelectedGroupIds([]);
           setMessage("");

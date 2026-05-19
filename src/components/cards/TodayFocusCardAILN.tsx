@@ -19,7 +19,7 @@ export default function TodayFocusCardAILN() {
   const [isQuizDialogOpen, setIsQuizDialogOpen] = useState(false);
   const q = trpc.ailene.read.todayFocus.useQuery();
 
-  const completeVideo = trpc.ailene.completeVideo.useMutation({
+  const completeVideo = trpc.ailene.create.completeVideo.useMutation({
     onSuccess: () => {
       utils.ailene.read.todayFocus.invalidate();
       utils.ailene.list.tasks.invalidate();

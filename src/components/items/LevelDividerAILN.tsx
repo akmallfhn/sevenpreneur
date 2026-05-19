@@ -25,7 +25,7 @@ interface LevelDividerAILNProps {
 
 export default function LevelDividerAILN(props: LevelDividerAILNProps) {
   const utils = trpc.useUtils();
-  const unlockMutation = trpc.ailene.unlockLevel.useMutation({
+  const unlockMutation = trpc.ailene.update.unlockLevel.useMutation({
     onSuccess: () => {
       toast.success(`Level ${props.level.level_number} unlocked!`);
       utils.auth.checkAilMember.invalidate();

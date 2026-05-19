@@ -73,10 +73,10 @@ export default function SubmitUseCasePracticeStudentAILN({
 
   const router = useRouter();
   const utils = trpc.useUtils();
-  const assignmentQ = trpc.ailene.student.useCaseAssignment.useQuery({
+  const assignmentQ = trpc.ailene.read.useCaseAssignment.useQuery({
     use_case_id: useCaseId,
   });
-  const submitM = trpc.ailene.student.submitUseCaseAssignment.useMutation();
+  const submitM = trpc.ailene.update.submitUseCaseAssignment.useMutation();
 
   const a = assignmentQ.data?.assignment;
 
@@ -189,10 +189,10 @@ export default function SubmitUseCasePracticeStudentAILN({
       {
         onSuccess: () => {
           toast.success("Tugas berhasil dikirim.");
-          utils.ailene.student.useCaseAssignment.invalidate({
+          utils.ailene.read.useCaseAssignment.invalidate({
             use_case_id: useCaseId,
           });
-          utils.ailene.student.assignedUseCases.invalidate();
+          utils.ailene.list.assignedUseCases.invalidate();
         },
         onError: (err) => {
           toast.error("Gagal kirim", { description: err.message });

@@ -1,7 +1,58 @@
-import { STATUS_BAD_REQUEST, STATUS_OK } from "@/lib/status_code";
-import { ailMemberProcedure } from "@/trpc/init";
+import {
+  STATUS_BAD_REQUEST,
+  STATUS_FORBIDDEN,
+  STATUS_NOT_FOUND,
+  STATUS_OK,
+} from "@/lib/status_code";
+import { ailMemberProcedure, championProcedure } from "@/trpc/init";
+import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+
+const assignInputSchema = z.object({
+  library_id: z.number().int().positive(),
+  target_type: z.enum(["MEMBER", "GROUP"]),
+  target_ids: z.array(z.number().int().positive()).min(1),
+  deadline: z.string().datetime(),
+  message: z.string().max(500).nullable().optional(),
+});
+
+async function resolveAssignmentTargets(
+  prisma: PrismaClient,
+  championId: number,
+  targetType: "MEMBER" | "GROUP",
+  targetIds: number[]
+): Promise<number[]> {
+  if (targetType === "GROUP") {
+    const groups = await prisma.ailGroup.findMany({
+      where: { id: { in: targetIds }, champion_id: championId },
+      include: { members: { select: { id: true } } },
+    });
+    if (groups.length !== targetIds.length) {
+      throw new TRPCError({
+        code: STATUS_FORBIDDEN,
+        message: "Some groups are not yours.",
+      });
+    }
+    return Array.from(
+      new Set(groups.flatMap((g) => g.members.map((m) => m.id)))
+    );
+  }
+  const members = await prisma.ailMember.findMany({
+    where: {
+      id: { in: targetIds },
+      group: { champion_id: championId },
+    },
+    select: { id: true },
+  });
+  if (members.length !== targetIds.length) {
+    throw new TRPCError({
+      code: STATUS_FORBIDDEN,
+      message: "Some members are not in your team.",
+    });
+  }
+  return members.map((m) => m.id);
+}
 
 const aiUseFrequencyEnum = z.enum([
   "NEVER",
@@ -114,6 +165,241 @@ export const createAilene = {
         code: STATUS_OK,
         message: "Pre-assessment submitted",
         id: created.id,
+      };
+    }),
+
+  completeMaterial: ailMemberProcedure
+    .input(z.object({ material_id: z.string().min(1) }))
+    .mutation(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const materialId = opts.input.material_id;
+
+      const material = await opts.ctx.prisma.ailMaterial.findUnique({
+        where: { id: materialId },
+      });
+      if (!material) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Material not found.",
+        });
+      }
+
+      // Idempotent: composite PK prevents duplicate completion
+      await opts.ctx.prisma.ailMaterialCompletion.upsert({
+        where: {
+          member_id_material_id: {
+            member_id: memberId,
+            material_id: materialId,
+          },
+        },
+        create: { member_id: memberId, material_id: materialId },
+        update: {},
+      });
+
+      // Award XP only on first completion
+      const existingXp = await opts.ctx.prisma.ailXpEarning.findUnique({
+        where: {
+          member_id_learning_type_learning_id: {
+            member_id: memberId,
+            learning_type: "MATERIAL",
+            learning_id: materialId,
+          },
+        },
+      });
+      let xpAwarded = 0;
+      if (!existingXp) {
+        await opts.ctx.prisma.ailXpEarning.create({
+          data: {
+            member_id: memberId,
+            learning_type: "MATERIAL",
+            learning_id: materialId,
+            xp_earned: material.xp_reward,
+          },
+        });
+        xpAwarded = material.xp_reward;
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        xp_awarded: xpAwarded,
+      };
+    }),
+
+  completeVideo: ailMemberProcedure
+    .input(z.object({ video_id: z.number().int().positive() }))
+    .mutation(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const videoId = opts.input.video_id;
+
+      const video = await opts.ctx.prisma.ailVideo.findUnique({
+        where: { id: videoId },
+      });
+      if (!video) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Video not found.",
+        });
+      }
+
+      // Idempotent: composite PK prevents duplicate completion
+      await opts.ctx.prisma.ailVideoCompletion.upsert({
+        where: {
+          member_id_video_id: {
+            member_id: memberId,
+            video_id: videoId,
+          },
+        },
+        create: { member_id: memberId, video_id: videoId },
+        update: {},
+      });
+
+      // Award XP only on first completion (learning_id stored as string)
+      const learningIdStr = String(videoId);
+      const existingXp = await opts.ctx.prisma.ailXpEarning.findUnique({
+        where: {
+          member_id_learning_type_learning_id: {
+            member_id: memberId,
+            learning_type: "VIDEO",
+            learning_id: learningIdStr,
+          },
+        },
+      });
+      let xpAwarded = 0;
+      if (!existingXp) {
+        await opts.ctx.prisma.ailXpEarning.create({
+          data: {
+            member_id: memberId,
+            learning_type: "VIDEO",
+            learning_id: learningIdStr,
+            xp_earned: video.xp_reward,
+          },
+        });
+        xpAwarded = video.xp_reward;
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        xp_awarded: xpAwarded,
+      };
+    }),
+
+  assignPrompt: championProcedure
+    .input(assignInputSchema)
+    .mutation(async (opts) => {
+      const championId = opts.ctx.ail_member.id;
+      const { library_id, target_type, target_ids, deadline, message } =
+        opts.input;
+
+      const deadlineDate = new Date(deadline);
+      if (deadlineDate.getTime() <= Date.now()) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Deadline must be in the future.",
+        });
+      }
+
+      const prompt = await opts.ctx.prisma.ailPrompt.findFirst({
+        where: { id: library_id, status: "ACTIVE" },
+        select: { id: true },
+      });
+      if (!prompt) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Prompt not found.",
+        });
+      }
+
+      const memberIds = await resolveAssignmentTargets(
+        opts.ctx.prisma,
+        championId,
+        target_type,
+        target_ids
+      );
+      if (memberIds.length === 0) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "No target members.",
+        });
+      }
+
+      const result = await opts.ctx.prisma.ailPromptSubmission.createMany({
+        data: memberIds.map((mid) => ({
+          member_id: mid,
+          prompt_id: library_id,
+          assigned_by_id: championId,
+          deadline: deadlineDate,
+          message: message ?? null,
+        })),
+        skipDuplicates: true,
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Assignments created",
+        assigned_count: result.count,
+        target_total: memberIds.length,
+        skipped: memberIds.length - result.count,
+      };
+    }),
+
+  assignUseCase: championProcedure
+    .input(assignInputSchema)
+    .mutation(async (opts) => {
+      const championId = opts.ctx.ail_member.id;
+      const { library_id, target_type, target_ids, deadline, message } =
+        opts.input;
+
+      const deadlineDate = new Date(deadline);
+      if (deadlineDate.getTime() <= Date.now()) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Deadline must be in the future.",
+        });
+      }
+
+      const useCase = await opts.ctx.prisma.ailUseCase.findFirst({
+        where: { id: library_id, status: "ACTIVE" },
+        select: { id: true },
+      });
+      if (!useCase) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Use case not found.",
+        });
+      }
+
+      const memberIds = await resolveAssignmentTargets(
+        opts.ctx.prisma,
+        championId,
+        target_type,
+        target_ids
+      );
+      if (memberIds.length === 0) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "No target members.",
+        });
+      }
+
+      const result = await opts.ctx.prisma.ailUseCaseSubmission.createMany({
+        data: memberIds.map((mid) => ({
+          member_id: mid,
+          use_case_id: library_id,
+          assigned_by_id: championId,
+          deadline: deadlineDate,
+          message: message ?? null,
+        })),
+        skipDuplicates: true,
+      });
+
+      return {
+        code: STATUS_OK,
+        message: "Assignments created",
+        assigned_count: result.count,
+        target_total: memberIds.length,
+        skipped: memberIds.length - result.count,
       };
     }),
 };

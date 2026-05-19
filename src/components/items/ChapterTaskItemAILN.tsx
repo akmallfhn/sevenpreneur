@@ -95,7 +95,7 @@ export default function ChapterTaskItemAILN(props: ChapterTaskItemAILNProps) {
     utils.auth.checkAilMember.invalidate();
     utils.ailene.read.todayFocus.invalidate();
   };
-  const completeVideo = trpc.ailene.completeVideo.useMutation({
+  const completeVideo = trpc.ailene.create.completeVideo.useMutation({
     onSuccess: invalidateProgress,
   });
 

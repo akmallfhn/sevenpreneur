@@ -65,10 +65,10 @@ export default function SubmitPromptPracticeStudentAILN({
 
   const router = useRouter();
   const utils = trpc.useUtils();
-  const assignmentQ = trpc.ailene.student.promptAssignment.useQuery({
+  const assignmentQ = trpc.ailene.read.promptAssignment.useQuery({
     prompt_id: promptId,
   });
-  const submitM = trpc.ailene.student.submitPromptAssignment.useMutation();
+  const submitM = trpc.ailene.update.submitPromptAssignment.useMutation();
 
   const a = assignmentQ.data?.assignment;
 
@@ -154,10 +154,10 @@ export default function SubmitPromptPracticeStudentAILN({
       {
         onSuccess: () => {
           toast.success("Tugas berhasil dikirim.");
-          utils.ailene.student.promptAssignment.invalidate({
+          utils.ailene.read.promptAssignment.invalidate({
             prompt_id: promptId,
           });
-          utils.ailene.student.assignedPrompts.invalidate();
+          utils.ailene.list.assignedPrompts.invalidate();
         },
         onError: (err) => {
           toast.error("Gagal kirim", { description: err.message });

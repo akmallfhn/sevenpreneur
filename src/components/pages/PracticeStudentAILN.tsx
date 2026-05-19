@@ -86,10 +86,10 @@ export default function PracticeStudentAILN({
 
   const [tab, setTab] = useState<PracticeTab>("PROMPT");
 
-  const promptsQ = trpc.ailene.student.assignedPrompts.useQuery(undefined, {
+  const promptsQ = trpc.ailene.list.assignedPrompts.useQuery(undefined, {
     enabled: tab === "PROMPT",
   });
-  const useCasesQ = trpc.ailene.student.assignedUseCases.useQuery(undefined, {
+  const useCasesQ = trpc.ailene.list.assignedUseCases.useQuery(undefined, {
     enabled: tab === "USE_CASE",
   });
 
