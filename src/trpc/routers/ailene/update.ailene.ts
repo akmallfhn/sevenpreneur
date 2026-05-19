@@ -628,6 +628,122 @@ export const updateAilene = {
       return { code: STATUS_OK, message: "Submitted" };
     }),
 
+  reviewPromptSubmission: championProcedure
+    .input(
+      z.object({
+        submission_id: z.number().int().positive(),
+        is_accepted: z.boolean(),
+        comment: z.string().max(2000).nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const championId = opts.ctx.ail_member.id;
+      const { submission_id, is_accepted, comment } = opts.input;
+
+      const existing = await opts.ctx.prisma.ailPromptSubmission.findUnique({
+        where: { id: submission_id },
+        select: {
+          assigned_by_id: true,
+          submitted_at: true,
+          is_accepted: true,
+        },
+      });
+      if (!existing || existing.assigned_by_id !== championId) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Submission not found.",
+        });
+      }
+      if (!existing.submitted_at) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Student has not submitted yet.",
+        });
+      }
+      if (existing.is_accepted) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Submission already accepted.",
+        });
+      }
+      if (!is_accepted && !comment?.trim()) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Comment required when sending back for revision.",
+        });
+      }
+
+      await opts.ctx.prisma.ailPromptSubmission.update({
+        where: { id: submission_id },
+        data: {
+          reviewed_by_id: championId,
+          reviewed_at: new Date(),
+          comment: comment?.trim() ?? null,
+          is_accepted,
+        },
+      });
+
+      return { code: STATUS_OK, message: "Review saved" };
+    }),
+
+  reviewUseCaseSubmission: championProcedure
+    .input(
+      z.object({
+        submission_id: z.number().int().positive(),
+        is_accepted: z.boolean(),
+        comment: z.string().max(2000).nullable().optional(),
+      })
+    )
+    .mutation(async (opts) => {
+      const championId = opts.ctx.ail_member.id;
+      const { submission_id, is_accepted, comment } = opts.input;
+
+      const existing = await opts.ctx.prisma.ailUseCaseSubmission.findUnique({
+        where: { id: submission_id },
+        select: {
+          assigned_by_id: true,
+          submitted_at: true,
+          is_accepted: true,
+        },
+      });
+      if (!existing || existing.assigned_by_id !== championId) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Submission not found.",
+        });
+      }
+      if (!existing.submitted_at) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Student has not submitted yet.",
+        });
+      }
+      if (existing.is_accepted) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Submission already accepted.",
+        });
+      }
+      if (!is_accepted && !comment?.trim()) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Comment required when sending back for revision.",
+        });
+      }
+
+      await opts.ctx.prisma.ailUseCaseSubmission.update({
+        where: { id: submission_id },
+        data: {
+          reviewed_by_id: championId,
+          reviewed_at: new Date(),
+          comment: comment?.trim() ?? null,
+          is_accepted,
+        },
+      });
+
+      return { code: STATUS_OK, message: "Review saved" };
+    }),
+
   submitUseCaseAssignment: ailMemberProcedure
     .input(
       z.object({

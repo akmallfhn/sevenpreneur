@@ -575,6 +575,84 @@ export const listAilene = {
     return { code: STATUS_OK, message: "Success", list };
   }),
 
+  championPromptSubmissions: championProcedure.query(async (opts) => {
+    const championId = opts.ctx.ail_member.id;
+    const rows = await opts.ctx.prisma.ailPromptSubmission.findMany({
+      where: { assigned_by_id: championId },
+      orderBy: [{ is_accepted: "asc" }, { submitted_at: "desc" }],
+      include: {
+        prompt: {
+          select: {
+            id: true,
+            name: true,
+            level: { select: { id: true, level_number: true, name: true } },
+          },
+        },
+        member: {
+          select: {
+            id: true,
+            user: { select: { full_name: true, avatar: true } },
+          },
+        },
+      },
+    });
+
+    const list = rows.map((r) => ({
+      id: r.id,
+      prompt: r.prompt,
+      member: {
+        id: r.member.id,
+        full_name: r.member.user.full_name,
+        avatar: r.member.user.avatar,
+      },
+      deadline: r.deadline,
+      submitted_at: r.submitted_at,
+      reviewed_at: r.reviewed_at,
+      is_accepted: r.is_accepted,
+    }));
+
+    return { code: STATUS_OK, message: "Success", list };
+  }),
+
+  championUseCaseSubmissions: championProcedure.query(async (opts) => {
+    const championId = opts.ctx.ail_member.id;
+    const rows = await opts.ctx.prisma.ailUseCaseSubmission.findMany({
+      where: { assigned_by_id: championId },
+      orderBy: [{ is_accepted: "asc" }, { submitted_at: "desc" }],
+      include: {
+        use_case: {
+          select: {
+            id: true,
+            name: true,
+            level: { select: { id: true, level_number: true, name: true } },
+          },
+        },
+        member: {
+          select: {
+            id: true,
+            user: { select: { full_name: true, avatar: true } },
+          },
+        },
+      },
+    });
+
+    const list = rows.map((r) => ({
+      id: r.id,
+      use_case: r.use_case,
+      member: {
+        id: r.member.id,
+        full_name: r.member.user.full_name,
+        avatar: r.member.user.avatar,
+      },
+      deadline: r.deadline,
+      submitted_at: r.submitted_at,
+      reviewed_at: r.reviewed_at,
+      is_accepted: r.is_accepted,
+    }));
+
+    return { code: STATUS_OK, message: "Success", list };
+  }),
+
   myAssignedUseCases: ailMemberProcedure.query(async (opts) => {
     const memberId = opts.ctx.ail_member.id;
     const rows = await opts.ctx.prisma.ailUseCaseSubmission.findMany({

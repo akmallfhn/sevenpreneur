@@ -7,6 +7,7 @@ import { setSessionToken, trpc } from "@/trpc/client";
 import {
   BookMarked,
   ChevronLeft,
+  ClipboardCheck,
   LayoutDashboard,
   LogOut,
   UserRound,
@@ -46,6 +47,7 @@ const MENUS: {
     exact: true,
   },
   { name: "Library", url: "/champion/library", icon: BookMarked },
+  { name: "Submissions", url: "/champion/submissions", icon: ClipboardCheck },
 ];
 
 export default function SidebarChampionAILN({

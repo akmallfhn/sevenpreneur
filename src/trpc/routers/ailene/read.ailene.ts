@@ -1,5 +1,5 @@
 import { STATUS_NOT_FOUND, STATUS_OK } from "@/lib/status_code";
-import { ailMemberProcedure } from "@/trpc/init";
+import { ailMemberProcedure, championProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import dayjs from "dayjs";
 import { z } from "zod";
@@ -631,6 +631,166 @@ export const readAilene = {
                 avatar: row.assigned_by.user.avatar,
               }
             : null,
+          reviewed_by: row.reviewed_by
+            ? {
+                id: row.reviewed_by.id,
+                full_name: row.reviewed_by.user.full_name,
+                avatar: row.reviewed_by.user.avatar,
+              }
+            : null,
+          deadline: row.deadline,
+          message: row.message,
+          outcome_proof: row.outcome_proof,
+          hours_saved: row.hours_saved,
+          description: row.description,
+          ai_tool: row.ai_tool,
+          frequency: row.frequency,
+          submitted_at: row.submitted_at,
+          reviewed_at: row.reviewed_at,
+          comment: row.comment,
+          is_accepted: row.is_accepted,
+        },
+      };
+    }),
+
+  championPromptSubmissionDetail: championProcedure
+    .input(z.object({ submission_id: z.number().int().positive() }))
+    .query(async (opts) => {
+      const championId = opts.ctx.ail_member.id;
+      const { submission_id } = opts.input;
+
+      const row = await opts.ctx.prisma.ailPromptSubmission.findUnique({
+        where: { id: submission_id },
+        include: {
+          prompt: {
+            include: {
+              level: {
+                select: { id: true, level_number: true, name: true },
+              },
+              categories: {
+                include: { category: { select: { id: true, name: true } } },
+              },
+            },
+          },
+          member: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true, email: true } },
+            },
+          },
+          reviewed_by: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true } },
+            },
+          },
+        },
+      });
+
+      if (!row || row.assigned_by_id !== championId) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Submission not found.",
+        });
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        submission: {
+          id: row.id,
+          prompt: {
+            id: row.prompt.id,
+            name: row.prompt.name,
+            scenario: row.prompt.scenario,
+            expected_output: row.prompt.expected_output,
+            level: row.prompt.level,
+            categories: row.prompt.categories.map((c) => c.category),
+          },
+          member: {
+            id: row.member.id,
+            full_name: row.member.user.full_name,
+            email: row.member.user.email,
+            avatar: row.member.user.avatar,
+          },
+          reviewed_by: row.reviewed_by
+            ? {
+                id: row.reviewed_by.id,
+                full_name: row.reviewed_by.user.full_name,
+                avatar: row.reviewed_by.user.avatar,
+              }
+            : null,
+          deadline: row.deadline,
+          message: row.message,
+          input: row.input,
+          output: row.output,
+          submitted_at: row.submitted_at,
+          reviewed_at: row.reviewed_at,
+          comment: row.comment,
+          is_accepted: row.is_accepted,
+        },
+      };
+    }),
+
+  championUseCaseSubmissionDetail: championProcedure
+    .input(z.object({ submission_id: z.number().int().positive() }))
+    .query(async (opts) => {
+      const championId = opts.ctx.ail_member.id;
+      const { submission_id } = opts.input;
+
+      const row = await opts.ctx.prisma.ailUseCaseSubmission.findUnique({
+        where: { id: submission_id },
+        include: {
+          use_case: {
+            include: {
+              level: {
+                select: { id: true, level_number: true, name: true },
+              },
+              categories: {
+                include: { category: { select: { id: true, name: true } } },
+              },
+            },
+          },
+          member: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true, email: true } },
+            },
+          },
+          reviewed_by: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true } },
+            },
+          },
+        },
+      });
+
+      if (!row || row.assigned_by_id !== championId) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Submission not found.",
+        });
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        submission: {
+          id: row.id,
+          use_case: {
+            id: row.use_case.id,
+            name: row.use_case.name,
+            description: row.use_case.description,
+            level: row.use_case.level,
+            categories: row.use_case.categories.map((c) => c.category),
+          },
+          member: {
+            id: row.member.id,
+            full_name: row.member.user.full_name,
+            email: row.member.user.email,
+            avatar: row.member.user.avatar,
+          },
           reviewed_by: row.reviewed_by
             ? {
                 id: row.reviewed_by.id,
