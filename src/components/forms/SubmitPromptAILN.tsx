@@ -7,18 +7,21 @@ import AppPageState from "@/components/states/AppPageState";
 import { setSessionToken, trpc } from "@/trpc/client";
 import dayjs from "dayjs";
 import {
-  ArrowLeft,
   CalendarClock,
   CheckCircle2,
   CircleAlert,
   Clock,
+  FileText,
+  Layers,
   Loader2,
   MessageSquare,
   Send,
+  Sparkles,
+  SquarePen,
+  Tag,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 type Status =
@@ -53,6 +56,40 @@ const statusMeta: Record<
   },
 };
 
+function FieldRow({
+  icon,
+  label,
+  helper,
+  required,
+  children,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  helper?: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex gap-3">
+      <div className="size-9 shrink-0 rounded-md border border-dashboard-border bg-card-inside-bg flex items-center justify-center text-foreground dark:text-gray-300">
+        {icon}
+      </div>
+      <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+        <label className="flex items-center gap-0.5 text-sm font-semibold font-read text-foreground dark:text-white">
+          {label}
+          {required && <span className="text-destructive">*</span>}
+        </label>
+        {children}
+        {helper && (
+          <p className="text-xs font-read text-gray-500 dark:text-gray-400">
+            {helper}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function SubmitPromptAILN({
   sessionToken,
   promptId,
@@ -64,7 +101,6 @@ export default function SubmitPromptAILN({
     setSessionToken(sessionToken);
   }, [sessionToken]);
 
-  const router = useRouter();
   const utils = trpc.useUtils();
   const assignmentQ = trpc.ailene.read.promptAssignment.useQuery({
     prompt_id: promptId,
@@ -73,14 +109,20 @@ export default function SubmitPromptAILN({
 
   const a = assignmentQ.data?.assignment;
 
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
+  const [formData, setFormData] = useState<{
+    input: string;
+    output: string;
+  }>({
+    input: "",
+    output: "",
+  });
 
   useEffect(() => {
-    if (a) {
-      setInput(a.input ?? "");
-      setOutput(a.output ?? "");
-    }
+    if (!a) return;
+    setFormData({
+      input: a.input ?? "",
+      output: a.output ?? "",
+    });
   }, [a]);
 
   const status: Status = useMemo(() => {
@@ -138,19 +180,19 @@ export default function SubmitPromptAILN({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) {
+    if (!formData.input.trim()) {
       toast.error("Input prompt tidak boleh kosong.");
       return;
     }
-    if (!output.trim()) {
+    if (!formData.output.trim()) {
       toast.error("Output tidak boleh kosong.");
       return;
     }
     submitM.mutate(
       {
         prompt_id: promptId,
-        input: input.trim(),
-        output: output.trim(),
+        input: formData.input.trim(),
+        output: formData.output.trim(),
       },
       {
         onSuccess: () => {
@@ -169,180 +211,216 @@ export default function SubmitPromptAILN({
 
   return (
     <PageContainerAILN>
-      <div className="flex w-full flex-col gap-6">
-        <button
-          type="button"
-          onClick={() => router.push("/student/practice")}
-          className="flex w-fit items-center gap-1.5 text-sm text-gray-500 transition hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-        >
-          <ArrowLeft className="size-4" />
-          Kembali ke Tugas
-        </button>
-
+      <div className="flex w-full flex-col gap-6 py-4">
+        {/* Header — MaterialDetailsAILN-style: big title + badge row */}
         <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 text-xs">
-            <span className="rounded-md bg-red-50 px-2 py-0.5 font-bold text-red-600 dark:bg-red-500/10 dark:text-red-300">
-              L{a.prompt.level.level_number}
+          <h1 className="text-3xl font-bold leading-tight font-read text-sevenpreneur-coal dark:text-white">
+            {a.prompt.name}
+          </h1>
+
+          <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
+            <span className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300">
+              <Layers className="h-3 w-3 text-red-500" />
+              <span className="font-medium">
+                Level {a.prompt.level.level_number}
+              </span>
             </span>
+
             {a.prompt.categories.map((c) => (
               <span
                 key={c.id}
-                className="rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"
+                className="inline-flex items-center gap-1.5 rounded-md border border-dashboard-border bg-white px-2 py-1 dark:bg-card-bg dark:text-gray-300"
               >
-                {c.name}
+                <Tag className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+                <span className="font-medium">{c.name}</span>
               </span>
             ))}
+
             <span
-              className={`ml-auto flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${meta.cls}`}
+              className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 font-semibold ${meta.cls}`}
             >
-              <StatusIcon className="size-3" />
+              <StatusIcon className="h-3 w-3" />
               {meta.label}
             </span>
           </div>
-          <h1 className="text-2xl font-bold dark:text-white">{a.prompt.name}</h1>
-          <div className="flex flex-col gap-1 text-xs text-gray-600 dark:text-gray-300">
-            <div className="flex items-center gap-2">
-              <CalendarClock className="size-3.5 shrink-0" />
-              <span
-                className={
-                  deadlineOverdue
-                    ? "font-semibold text-red-600 dark:text-red-400"
-                    : ""
-                }
-              >
-                Deadline: {deadlineDate.format("ddd, D MMM YYYY · HH:mm")}
-                {deadlineOverdue ? " (lewat)" : ""}
-              </span>
+
+          {a.message && (
+            <div className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <MessageSquare className="size-3.5 shrink-0 mt-0.5" />
+              <span className="italic">&ldquo;{a.message}&rdquo;</span>
             </div>
-            {a.assigned_by && <div>Dari: {a.assigned_by.full_name}</div>}
-            {a.message && (
-              <div className="flex items-start gap-2">
-                <MessageSquare className="size-3.5 shrink-0 mt-0.5" />
-                <span className="italic">&ldquo;{a.message}&rdquo;</span>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.8fr] lg:items-start">
+          {/* LEFT: Detail prompt + champion review notes */}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 rounded-lg border border-dashboard-border bg-white p-5 dark:bg-card-bg">
+              <div className="size-10 rounded-full bg-black flex items-center justify-center text-white dark:bg-white dark:text-black">
+                <FileText className="size-5" />
+              </div>
+              <h2 className="text-lg font-bold font-read text-foreground dark:text-white">
+                Detail Prompt
+              </h2>
+
+              <div className="flex flex-col gap-1">
+                <div className="text-[11px] font-semibold uppercase tracking-wide font-read text-gray-500 dark:text-gray-400">
+                  Skenario
+                </div>
+                <p className="text-sm whitespace-pre-wrap font-read text-gray-700 dark:text-gray-200">
+                  {a.prompt.scenario}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-1 border-t border-dashboard-border pt-4">
+                <div className="text-[11px] font-semibold uppercase tracking-wide font-read text-gray-500 dark:text-gray-400">
+                  Expected Output
+                </div>
+                <p className="text-sm whitespace-pre-wrap font-read text-gray-700 dark:text-gray-200">
+                  {a.prompt.expected_output}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 border-t border-dashboard-border pt-3 text-xs font-read">
+                <CalendarClock
+                  className={`size-3.5 shrink-0 ${
+                    deadlineOverdue
+                      ? "text-red-500"
+                      : "text-gray-500 dark:text-gray-400"
+                  }`}
+                />
+                <span
+                  className={
+                    deadlineOverdue
+                      ? "font-semibold text-red-600 dark:text-red-400"
+                      : "text-gray-600 dark:text-gray-300"
+                  }
+                >
+                  Deadline: {deadlineDate.format("ddd, D MMM YYYY · HH:mm")}
+                  {deadlineOverdue ? " (lewat)" : ""}
+                </span>
+              </div>
+            </div>
+
+            {status === "NEEDS_REVISION" && a.comment && (
+              <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-500/30 dark:bg-red-500/10">
+                <div className="text-[11px] font-semibold uppercase tracking-wide text-red-700 dark:text-red-300">
+                  Catatan champion · perlu revisi
+                </div>
+                <p className="mt-1 text-sm text-red-700 dark:text-red-200">
+                  {a.comment}
+                </p>
+              </div>
+            )}
+            {status === "ACCEPTED" && (
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-500/30 dark:bg-emerald-500/10">
+                <div className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
+                  Diterima oleh champion
+                </div>
+                {a.comment && (
+                  <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
+                    {a.comment}
+                  </p>
+                )}
               </div>
             )}
           </div>
-        </div>
 
-        <div className="flex flex-col gap-4 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg">
-          <div className="flex flex-col gap-1">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Skenario
-            </div>
-            <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-200">
-              {a.prompt.scenario}
-            </p>
-          </div>
-          <div className="flex flex-col gap-1 border-t border-dashboard-border pt-4">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-              Expected Output
-            </div>
-            <p className="text-sm whitespace-pre-wrap text-gray-700 dark:text-gray-200">
-              {a.prompt.expected_output}
-            </p>
-          </div>
-        </div>
+          {/* RIGHT: Form */}
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg"
+          >
+            <h2 className="text-base font-bold font-read text-foreground dark:text-white">
+              {isLocked ? "Submission kamu" : "Kirim tugasmu"}
+            </h2>
 
-        {status === "NEEDS_REVISION" && a.comment && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-500/30 dark:bg-red-500/10">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-red-700 dark:text-red-300">
-              Catatan champion · perlu revisi
-            </div>
-            <p className="mt-1 text-sm text-red-700 dark:text-red-200">
-              {a.comment}
-            </p>
-          </div>
-        )}
-        {status === "ACCEPTED" && (
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-500/30 dark:bg-emerald-500/10">
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300">
-              Diterima oleh champion
-            </div>
-            {a.comment && (
-              <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-200">
-                {a.comment}
-              </p>
+            <FieldRow
+              icon={<SquarePen className="size-4" />}
+              label="Prompt yang kamu pakai"
+              helper="Tulis prompt persis seperti yang kamu kirim ke AI."
+              required
+            >
+              <div className="flex flex-col gap-1">
+                <AppTextArea
+                  textAreaId="prompt-input"
+                  textAreaPlaceholder="Tulis prompt yang kamu kirim ke AI…"
+                  value={formData.input}
+                  onTextAreaChange={(v) =>
+                    setFormData((prev) => ({ ...prev, input: v }))
+                  }
+                  characterLength={5000}
+                  textAreaHeight="min-h-[160px]"
+                  variant="AILN"
+                  disabled={isLocked}
+                  required
+                />
+                <div className="self-end text-xs font-read text-gray-400">
+                  {formData.input.length}/5000 karakter
+                </div>
+              </div>
+            </FieldRow>
+
+            <FieldRow
+              icon={<Sparkles className="size-4" />}
+              label="Output dari AI"
+              helper="Tempel hasil dari AI apa adanya, tanpa diedit."
+              required
+            >
+              <div className="flex flex-col gap-1">
+                <AppTextArea
+                  textAreaId="prompt-output"
+                  textAreaPlaceholder="Tempel hasil dari AI…"
+                  value={formData.output}
+                  onTextAreaChange={(v) =>
+                    setFormData((prev) => ({ ...prev, output: v }))
+                  }
+                  characterLength={10000}
+                  textAreaHeight="min-h-[200px]"
+                  variant="AILN"
+                  disabled={isLocked}
+                  required
+                />
+                <div className="self-end text-xs font-read text-gray-400">
+                  {formData.output.length}/10000 karakter
+                </div>
+              </div>
+            </FieldRow>
+
+            {!isLocked && (
+              <ButtonAILN
+                type="submit"
+                variant="primary"
+                disabled={submitM.isPending}
+                className="w-fit self-end"
+              >
+                {submitM.isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Mengirim…
+                  </>
+                ) : (
+                  <>
+                    <Send className="size-4" />
+                    {status === "NEEDS_REVISION"
+                      ? "Kirim Revisi"
+                      : a.submitted_at
+                        ? "Update Submission"
+                        : "Kirim Tugas"}
+                  </>
+                )}
+              </ButtonAILN>
             )}
-          </div>
-        )}
-
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-4 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg"
-        >
-          <h2 className="text-base font-bold dark:text-white">
-            {isLocked ? "Submission kamu" : "Kirim tugasmu"}
-          </h2>
-
-          <div className="flex flex-col gap-1">
-            <AppTextArea
-              textAreaId="prompt-input"
-              textAreaName="Prompt yang kamu pakai"
-              textAreaPlaceholder="Tulis prompt yang kamu kirim ke AI…"
-              value={input}
-              onTextAreaChange={setInput}
-              characterLength={5000}
-              textAreaHeight="min-h-[160px]"
-              variant="AILN"
-              disabled={isLocked}
-              required
-            />
-            <div className="self-end text-xs text-gray-400">
-              {input.length}/5000
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <AppTextArea
-              textAreaId="prompt-output"
-              textAreaName="Output dari AI"
-              textAreaPlaceholder="Tempel hasil dari AI…"
-              value={output}
-              onTextAreaChange={setOutput}
-              characterLength={10000}
-              textAreaHeight="min-h-[200px]"
-              variant="AILN"
-              disabled={isLocked}
-              required
-            />
-            <div className="self-end text-xs text-gray-400">
-              {output.length}/10000
-            </div>
-          </div>
-
-          {!isLocked && (
-            <ButtonAILN
-              type="submit"
-              variant="primary"
-              disabled={submitM.isPending}
-              className="w-full"
-            >
-              {submitM.isPending ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" />
-                  Mengirim…
-                </>
-              ) : (
-                <>
-                  <Send className="size-4" />
-                  {status === "NEEDS_REVISION"
-                    ? "Kirim Revisi"
-                    : a.submitted_at
-                      ? "Update Submission"
-                      : "Kirim Tugas"}
-                </>
-              )}
-            </ButtonAILN>
-          )}
-          {isLocked && (
-            <Link
-              href="/student/practice"
-              className="self-center text-sm text-gray-500 underline dark:text-gray-400"
-            >
-              Kembali ke daftar tugas
-            </Link>
-          )}
-        </form>
+            {isLocked && (
+              <Link
+                href="/student/practice"
+                className="self-center text-sm text-gray-500 underline dark:text-gray-400"
+              >
+                Kembali ke daftar tugas
+              </Link>
+            )}
+          </form>
+        </div>
       </div>
     </PageContainerAILN>
   );
