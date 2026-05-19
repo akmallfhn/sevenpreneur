@@ -5,12 +5,12 @@ import { useSidebar } from "@/contexts/SidebarContext";
 import { DeleteSession } from "@/lib/actions";
 import { setSessionToken, trpc } from "@/trpc/client";
 import {
+  BookMarked,
   ChevronLeft,
   LayoutDashboard,
   LogOut,
   UserRound,
   Users,
-  UsersRound,
   type LucideIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -45,7 +45,7 @@ const MENUS: {
     icon: LayoutDashboard,
     exact: true,
   },
-  { name: "Members", url: "/champion/members", icon: UsersRound },
+  { name: "Library", url: "/champion/library", icon: BookMarked },
 ];
 
 export default function SidebarChampionAILN({

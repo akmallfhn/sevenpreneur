@@ -9,6 +9,7 @@ import {
   CalendarDays,
   ChevronLeft,
   CircleUser,
+  ClipboardList,
   LogOut,
   UserRoundKey,
   type LucideIcon,
@@ -44,6 +45,7 @@ const MENUS: {
     icon: BookOpen,
     exact: true,
   },
+  { name: "Tugas", url: "/student/assignments", icon: ClipboardList },
   { name: "Profile", url: "/student/profile", icon: CircleUser },
 ];
 

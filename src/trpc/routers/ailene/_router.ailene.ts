@@ -25,6 +25,14 @@ export const aileneRouter = createTRPCRouter({
   }),
   champion: createTRPCRouter({
     listMembers: listAilene.championMembers,
+    promptLibrary: listAilene.promptLibrary,
+    useCaseLibrary: listAilene.useCaseLibrary,
+    assignPrompt: updateAilene.assignPrompt,
+    assignUseCase: updateAilene.assignUseCase,
+  }),
+  student: createTRPCRouter({
+    assignedPrompts: listAilene.myAssignedPrompts,
+    assignedUseCases: listAilene.myAssignedUseCases,
   }),
   unlockLevel: updateAilene.unlockLevel,
   startQuizAttempt: updateAilene.startQuizAttempt,

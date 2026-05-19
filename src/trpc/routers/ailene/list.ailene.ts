@@ -459,4 +459,175 @@ export const listAilene = {
 
       return { code: STATUS_OK, message: "Success", stats, list };
     }),
+
+  promptLibrary: championProcedure.query(async (opts) => {
+    const prompts = await opts.ctx.prisma.ailPrompt.findMany({
+      where: { status: "ACTIVE" },
+      orderBy: [{ level: { level_number: "asc" } }, { name: "asc" }],
+      include: {
+        level: {
+          select: { id: true, level_number: true, name: true },
+        },
+        categories: {
+          include: {
+            category: { select: { id: true, name: true } },
+          },
+        },
+      },
+    });
+
+    const list = prompts.map((p) => ({
+      id: p.id,
+      name: p.name,
+      scenario: p.scenario,
+      expected_output: p.expected_output,
+      level: p.level,
+      categories: p.categories.map((c) => c.category),
+      created_at: p.created_at,
+    }));
+
+    return { code: STATUS_OK, message: "Success", list };
+  }),
+
+  useCaseLibrary: championProcedure.query(async (opts) => {
+    const useCases = await opts.ctx.prisma.ailUseCase.findMany({
+      where: { status: "ACTIVE" },
+      orderBy: [{ level: { level_number: "asc" } }, { name: "asc" }],
+      include: {
+        level: {
+          select: { id: true, level_number: true, name: true },
+        },
+        categories: {
+          include: {
+            category: { select: { id: true, name: true } },
+          },
+        },
+      },
+    });
+
+    const list = useCases.map((u) => ({
+      id: u.id,
+      name: u.name,
+      description: u.description,
+      level: u.level,
+      categories: u.categories.map((c) => c.category),
+      created_at: u.created_at,
+    }));
+
+    return { code: STATUS_OK, message: "Success", list };
+  }),
+
+  myAssignedPrompts: ailMemberProcedure.query(async (opts) => {
+    const memberId = opts.ctx.ail_member.id;
+    const rows = await opts.ctx.prisma.ailPromptSubmission.findMany({
+      where: {
+        member_id: memberId,
+        assigned_by_id: { not: null },
+      },
+      orderBy: [{ is_accepted: "asc" }, { deadline: "asc" }],
+      include: {
+        prompt: {
+          select: {
+            id: true,
+            name: true,
+            scenario: true,
+            expected_output: true,
+            level: { select: { id: true, level_number: true, name: true } },
+            categories: {
+              include: { category: { select: { id: true, name: true } } },
+            },
+          },
+        },
+        assigned_by: {
+          select: {
+            id: true,
+            user: { select: { full_name: true, avatar: true } },
+          },
+        },
+      },
+    });
+
+    const list = rows.map((r) => ({
+      id: r.id,
+      prompt: {
+        id: r.prompt.id,
+        name: r.prompt.name,
+        scenario: r.prompt.scenario,
+        expected_output: r.prompt.expected_output,
+        level: r.prompt.level,
+        categories: r.prompt.categories.map((c) => c.category),
+      },
+      assigned_by: r.assigned_by
+        ? {
+            id: r.assigned_by.id,
+            full_name: r.assigned_by.user.full_name,
+            avatar: r.assigned_by.user.avatar,
+          }
+        : null,
+      deadline: r.deadline,
+      message: r.message,
+      submitted_at: r.submitted_at,
+      reviewed_at: r.reviewed_at,
+      comment: r.comment,
+      is_accepted: r.is_accepted,
+    }));
+
+    return { code: STATUS_OK, message: "Success", list };
+  }),
+
+  myAssignedUseCases: ailMemberProcedure.query(async (opts) => {
+    const memberId = opts.ctx.ail_member.id;
+    const rows = await opts.ctx.prisma.ailUseCaseSubmission.findMany({
+      where: {
+        member_id: memberId,
+        assigned_by_id: { not: null },
+      },
+      orderBy: [{ is_accepted: "asc" }, { deadline: "asc" }],
+      include: {
+        use_case: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            level: { select: { id: true, level_number: true, name: true } },
+            categories: {
+              include: { category: { select: { id: true, name: true } } },
+            },
+          },
+        },
+        assigned_by: {
+          select: {
+            id: true,
+            user: { select: { full_name: true, avatar: true } },
+          },
+        },
+      },
+    });
+
+    const list = rows.map((r) => ({
+      id: r.id,
+      use_case: {
+        id: r.use_case.id,
+        name: r.use_case.name,
+        description: r.use_case.description,
+        level: r.use_case.level,
+        categories: r.use_case.categories.map((c) => c.category),
+      },
+      assigned_by: r.assigned_by
+        ? {
+            id: r.assigned_by.id,
+            full_name: r.assigned_by.user.full_name,
+            avatar: r.assigned_by.user.avatar,
+          }
+        : null,
+      deadline: r.deadline,
+      message: r.message,
+      submitted_at: r.submitted_at,
+      reviewed_at: r.reviewed_at,
+      comment: r.comment,
+      is_accepted: r.is_accepted,
+    }));
+
+    return { code: STATUS_OK, message: "Success", list };
+  }),
 };
