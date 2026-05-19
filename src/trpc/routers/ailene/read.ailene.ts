@@ -486,4 +486,170 @@ export const readAilene = {
       leaderboard,
     };
   }),
+
+  promptAssignment: ailMemberProcedure
+    .input(z.object({ prompt_id: z.number().int().positive() }))
+    .query(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const { prompt_id } = opts.input;
+
+      const row = await opts.ctx.prisma.ailPromptSubmission.findUnique({
+        where: {
+          member_id_prompt_id: { member_id: memberId, prompt_id },
+        },
+        include: {
+          prompt: {
+            include: {
+              level: {
+                select: { id: true, level_number: true, name: true },
+              },
+              categories: {
+                include: { category: { select: { id: true, name: true } } },
+              },
+            },
+          },
+          assigned_by: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true } },
+            },
+          },
+          reviewed_by: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true } },
+            },
+          },
+        },
+      });
+
+      if (!row || !row.assigned_by_id) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Assignment not found.",
+        });
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        assignment: {
+          id: row.id,
+          prompt: {
+            id: row.prompt.id,
+            name: row.prompt.name,
+            scenario: row.prompt.scenario,
+            expected_output: row.prompt.expected_output,
+            level: row.prompt.level,
+            categories: row.prompt.categories.map((c) => c.category),
+          },
+          assigned_by: row.assigned_by
+            ? {
+                id: row.assigned_by.id,
+                full_name: row.assigned_by.user.full_name,
+                avatar: row.assigned_by.user.avatar,
+              }
+            : null,
+          reviewed_by: row.reviewed_by
+            ? {
+                id: row.reviewed_by.id,
+                full_name: row.reviewed_by.user.full_name,
+                avatar: row.reviewed_by.user.avatar,
+              }
+            : null,
+          deadline: row.deadline,
+          message: row.message,
+          input: row.input,
+          output: row.output,
+          submitted_at: row.submitted_at,
+          reviewed_at: row.reviewed_at,
+          comment: row.comment,
+          is_accepted: row.is_accepted,
+        },
+      };
+    }),
+
+  useCaseAssignment: ailMemberProcedure
+    .input(z.object({ use_case_id: z.number().int().positive() }))
+    .query(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const { use_case_id } = opts.input;
+
+      const row = await opts.ctx.prisma.ailUseCaseSubmission.findUnique({
+        where: {
+          member_id_use_case_id: { member_id: memberId, use_case_id },
+        },
+        include: {
+          use_case: {
+            include: {
+              level: {
+                select: { id: true, level_number: true, name: true },
+              },
+              categories: {
+                include: { category: { select: { id: true, name: true } } },
+              },
+            },
+          },
+          assigned_by: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true } },
+            },
+          },
+          reviewed_by: {
+            select: {
+              id: true,
+              user: { select: { full_name: true, avatar: true } },
+            },
+          },
+        },
+      });
+
+      if (!row || !row.assigned_by_id) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Assignment not found.",
+        });
+      }
+
+      return {
+        code: STATUS_OK,
+        message: "Success",
+        assignment: {
+          id: row.id,
+          use_case: {
+            id: row.use_case.id,
+            name: row.use_case.name,
+            description: row.use_case.description,
+            level: row.use_case.level,
+            categories: row.use_case.categories.map((c) => c.category),
+          },
+          assigned_by: row.assigned_by
+            ? {
+                id: row.assigned_by.id,
+                full_name: row.assigned_by.user.full_name,
+                avatar: row.assigned_by.user.avatar,
+              }
+            : null,
+          reviewed_by: row.reviewed_by
+            ? {
+                id: row.reviewed_by.id,
+                full_name: row.reviewed_by.user.full_name,
+                avatar: row.reviewed_by.user.avatar,
+              }
+            : null,
+          deadline: row.deadline,
+          message: row.message,
+          outcome_proof: row.outcome_proof,
+          hours_saved: row.hours_saved,
+          description: row.description,
+          ai_tool: row.ai_tool,
+          frequency: row.frequency,
+          submitted_at: row.submitted_at,
+          reviewed_at: row.reviewed_at,
+          comment: row.comment,
+          is_accepted: row.is_accepted,
+        },
+      };
+    }),
 };

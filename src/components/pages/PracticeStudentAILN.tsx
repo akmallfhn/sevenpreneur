@@ -12,20 +12,22 @@ import {
   Clock,
   MessageSquare,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 dayjs.extend(relativeTime);
 
-type AssignmentTab = "PROMPT" | "USE_CASE";
+type PracticeTab = "PROMPT" | "USE_CASE";
 
-type AssignmentStatus =
+type PracticeStatus =
   | "PENDING_SUBMIT"
   | "AWAITING_REVIEW"
   | "NEEDS_REVISION"
   | "ACCEPTED";
 
-interface Assignment {
+interface PracticeItem {
   id: number;
+  href: string;
   title: string;
   body: string;
   level_number: number;
@@ -39,19 +41,16 @@ interface Assignment {
   is_accepted: boolean;
 }
 
-function deriveStatus(a: Assignment): AssignmentStatus {
+function deriveStatus(a: PracticeItem): PracticeStatus {
   if (a.is_accepted) return "ACCEPTED";
   if (!a.submitted_at) return "PENDING_SUBMIT";
-  if (
-    a.reviewed_at &&
-    dayjs(a.reviewed_at).isAfter(dayjs(a.submitted_at))
-  )
+  if (a.reviewed_at && dayjs(a.reviewed_at).isAfter(dayjs(a.submitted_at)))
     return "NEEDS_REVISION";
   return "AWAITING_REVIEW";
 }
 
 const statusMeta: Record<
-  AssignmentStatus,
+  PracticeStatus,
   { label: string; cls: string; icon: typeof CheckCircle2 }
 > = {
   PENDING_SUBMIT: {
@@ -76,7 +75,7 @@ const statusMeta: Record<
   },
 };
 
-export default function AssignmentsStudentAILN({
+export default function PracticeStudentAILN({
   sessionToken,
 }: {
   sessionToken: string;
@@ -85,7 +84,7 @@ export default function AssignmentsStudentAILN({
     setSessionToken(sessionToken);
   }, [sessionToken]);
 
-  const [tab, setTab] = useState<AssignmentTab>("PROMPT");
+  const [tab, setTab] = useState<PracticeTab>("PROMPT");
 
   const promptsQ = trpc.ailene.student.assignedPrompts.useQuery(undefined, {
     enabled: tab === "PROMPT",
@@ -94,10 +93,11 @@ export default function AssignmentsStudentAILN({
     enabled: tab === "USE_CASE",
   });
 
-  const assignments: Assignment[] =
+  const practices: PracticeItem[] =
     tab === "PROMPT"
       ? (promptsQ.data?.list ?? []).map((r) => ({
           id: r.id,
+          href: `/student/practice/prompts/${r.prompt.id}`,
           title: r.prompt.name,
           body: r.prompt.scenario,
           level_number: r.prompt.level.level_number,
@@ -112,6 +112,7 @@ export default function AssignmentsStudentAILN({
         }))
       : (useCasesQ.data?.list ?? []).map((r) => ({
           id: r.id,
+          href: `/student/practice/use-cases/${r.use_case.id}`,
           title: r.use_case.name,
           body: r.use_case.description,
           level_number: r.use_case.level.level_number,
@@ -128,7 +129,7 @@ export default function AssignmentsStudentAILN({
   const isLoading = tab === "PROMPT" ? promptsQ.isLoading : useCasesQ.isLoading;
   const error = tab === "PROMPT" ? promptsQ.error : useCasesQ.error;
 
-  const pendingCount = assignments.filter(
+  const pendingCount = practices.filter(
     (a) => deriveStatus(a) === "PENDING_SUBMIT"
   ).length;
 
@@ -174,8 +175,8 @@ export default function AssignmentsStudentAILN({
         {error ? (
           <AppErrorComponents />
         ) : isLoading ? (
-          <AssignmentSkeleton />
-        ) : assignments.length === 0 ? (
+          <PracticeSkeleton />
+        ) : practices.length === 0 ? (
           <EmptyState
             label={`Belum ada ${tab === "PROMPT" ? "prompt" : "use case"} yang di-assign.`}
           />
@@ -188,8 +189,8 @@ export default function AssignmentsStudentAILN({
               </div>
             )}
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {assignments.map((a) => (
-                <AssignmentCard key={a.id} assignment={a} />
+              {practices.map((a) => (
+                <PracticeCard key={a.id} practice={a} />
               ))}
             </div>
           </>
@@ -199,23 +200,26 @@ export default function AssignmentsStudentAILN({
   );
 }
 
-function AssignmentCard({ assignment }: { assignment: Assignment }) {
-  const status = deriveStatus(assignment);
+function PracticeCard({ practice }: { practice: PracticeItem }) {
+  const status = deriveStatus(practice);
   const meta = statusMeta[status];
   const StatusIcon = meta.icon;
   const deadlineOverdue =
-    !assignment.is_accepted &&
-    !assignment.submitted_at &&
-    dayjs(assignment.deadline).isBefore(dayjs());
+    !practice.is_accepted &&
+    !practice.submitted_at &&
+    dayjs(practice.deadline).isBefore(dayjs());
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-dashboard-border bg-white p-4 dark:bg-card-bg">
+    <Link
+      href={practice.href}
+      className="flex flex-col gap-3 rounded-lg border border-dashboard-border bg-white p-4 transition hover:border-red-400 hover:shadow-sm active:scale-[0.99] dark:bg-card-bg"
+    >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2 text-xs">
           <span className="rounded-md bg-red-50 px-2 py-0.5 font-bold text-red-600 dark:bg-red-500/10 dark:text-red-300">
-            L{assignment.level_number}
+            L{practice.level_number}
           </span>
-          {assignment.categories.slice(0, 2).map((c) => (
+          {practice.categories.slice(0, 2).map((c) => (
             <span
               key={c.id}
               className="rounded bg-gray-100 px-2 py-0.5 font-medium text-gray-700 dark:bg-white/5 dark:text-gray-300"
@@ -231,9 +235,9 @@ function AssignmentCard({ assignment }: { assignment: Assignment }) {
           {meta.label}
         </span>
       </div>
-      <h3 className="text-sm font-bold dark:text-white">{assignment.title}</h3>
+      <h3 className="text-sm font-bold dark:text-white">{practice.title}</h3>
       <p className="text-xs text-gray-500 line-clamp-2 dark:text-gray-400">
-        {assignment.body}
+        {practice.body}
       </p>
 
       <div className="flex flex-col gap-1 border-t border-dashboard-border pt-3 text-xs text-gray-600 dark:text-gray-300">
@@ -241,36 +245,38 @@ function AssignmentCard({ assignment }: { assignment: Assignment }) {
           <CalendarClock className="size-3.5 shrink-0" />
           <span
             className={
-              deadlineOverdue ? "font-semibold text-red-600 dark:text-red-400" : ""
+              deadlineOverdue
+                ? "font-semibold text-red-600 dark:text-red-400"
+                : ""
             }
           >
             Deadline:{" "}
-            {dayjs(assignment.deadline).format("ddd, D MMM YYYY · HH:mm")}
+            {dayjs(practice.deadline).format("ddd, D MMM YYYY · HH:mm")}
             {deadlineOverdue ? " (lewat)" : ""}
           </span>
         </div>
-        {assignment.champion_name && (
+        {practice.champion_name && (
           <div className="flex items-center gap-2">
             <BookOpen className="size-3.5 shrink-0" />
-            <span>Dari: {assignment.champion_name}</span>
+            <span>Dari: {practice.champion_name}</span>
           </div>
         )}
-        {assignment.message && (
+        {practice.message && (
           <div className="flex items-start gap-2">
             <MessageSquare className="size-3.5 shrink-0 mt-0.5" />
-            <span className="italic">&ldquo;{assignment.message}&rdquo;</span>
+            <span className="italic">&ldquo;{practice.message}&rdquo;</span>
           </div>
         )}
-        {status === "NEEDS_REVISION" && assignment.comment && (
+        {status === "NEEDS_REVISION" && practice.comment && (
           <div className="mt-1 rounded border border-red-200 bg-red-50 p-2 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200">
             <div className="text-[10px] font-bold uppercase tracking-wide">
               Catatan champion
             </div>
-            <div className="mt-0.5">{assignment.comment}</div>
+            <div className="mt-0.5">{practice.comment}</div>
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -283,7 +289,7 @@ function EmptyState({ label }: { label: string }) {
   );
 }
 
-function AssignmentSkeleton() {
+function PracticeSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
       {Array.from({ length: 4 }).map((_, i) => (

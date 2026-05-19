@@ -583,4 +583,105 @@ export const updateAilene = {
         skipped: memberIds.length - result.count,
       };
     }),
+
+  submitPromptAssignment: ailMemberProcedure
+    .input(
+      z.object({
+        prompt_id: z.number().int().positive(),
+        input: z.string().min(1).max(5000),
+        output: z.string().min(1).max(10000),
+      })
+    )
+    .mutation(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const { prompt_id, input, output } = opts.input;
+
+      const existing = await opts.ctx.prisma.ailPromptSubmission.findUnique({
+        where: {
+          member_id_prompt_id: { member_id: memberId, prompt_id },
+        },
+        select: { id: true, assigned_by_id: true, is_accepted: true },
+      });
+
+      if (!existing || !existing.assigned_by_id) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Assignment not found.",
+        });
+      }
+      if (existing.is_accepted) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Assignment already accepted, cannot resubmit.",
+        });
+      }
+
+      await opts.ctx.prisma.ailPromptSubmission.update({
+        where: { id: existing.id },
+        data: {
+          input,
+          output,
+          submitted_at: new Date(),
+        },
+      });
+
+      return { code: STATUS_OK, message: "Submitted" };
+    }),
+
+  submitUseCaseAssignment: ailMemberProcedure
+    .input(
+      z.object({
+        use_case_id: z.number().int().positive(),
+        outcome_proof: z.string().min(1).max(500),
+        hours_saved: z.number().min(0).max(9999.99),
+        description: z.string().min(1).max(5000),
+        ai_tool: z.string().min(1).max(255),
+        frequency: z.enum(["DAILY", "WEEKLY", "MONTHLY", "OCCASIONALLY"]),
+      })
+    )
+    .mutation(async (opts) => {
+      const memberId = opts.ctx.ail_member.id;
+      const {
+        use_case_id,
+        outcome_proof,
+        hours_saved,
+        description,
+        ai_tool,
+        frequency,
+      } = opts.input;
+
+      const existing = await opts.ctx.prisma.ailUseCaseSubmission.findUnique({
+        where: {
+          member_id_use_case_id: { member_id: memberId, use_case_id },
+        },
+        select: { id: true, assigned_by_id: true, is_accepted: true },
+      });
+
+      if (!existing || !existing.assigned_by_id) {
+        throw new TRPCError({
+          code: STATUS_NOT_FOUND,
+          message: "Assignment not found.",
+        });
+      }
+      if (existing.is_accepted) {
+        throw new TRPCError({
+          code: STATUS_BAD_REQUEST,
+          message: "Assignment already accepted, cannot resubmit.",
+        });
+      }
+
+      await opts.ctx.prisma.ailUseCaseSubmission.update({
+        where: { id: existing.id },
+        data: {
+          outcome_proof,
+          hours_saved,
+          description,
+          ai_tool,
+          frequency,
+          submitted_at: new Date(),
+        },
+      });
+
+      return { code: STATUS_OK, message: "Submitted" };
+    }),
 };

@@ -45,7 +45,7 @@ const MENUS: {
     icon: BookOpen,
     exact: true,
   },
-  { name: "Tugas", url: "/student/assignments", icon: ClipboardList },
+  { name: "Skill Practice", url: "/student/practice", icon: ClipboardList },
   { name: "Profile", url: "/student/profile", icon: CircleUser },
 ];
 
