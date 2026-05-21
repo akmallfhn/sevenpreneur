@@ -3,6 +3,7 @@ import { administratorProcedure } from "@/trpc/init";
 import { checkUpdateResult } from "@/trpc/utils/errors";
 import {
   numberIsID,
+  numberIsPosInt,
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -24,6 +25,7 @@ export const updateB2B = {
       z.object({
         id: numberIsID(),
         name: stringNotBlank().optional(),
+        industry_id: numberIsPosInt().optional(),
         pic_name: stringNotBlank().nullable().optional(),
         pic_job_title: stringNotBlank().nullable().optional(),
         pic_wa: stringNotBlank().nullable().optional(),

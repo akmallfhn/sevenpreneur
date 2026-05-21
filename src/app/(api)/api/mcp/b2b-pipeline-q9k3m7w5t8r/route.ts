@@ -40,6 +40,7 @@ function parseMonthToDate(month: string): Date {
 
 const pipelineInclude = {
   owner: { select: { id: true, full_name: true, email: true, avatar: true } },
+  industry: { select: { id: true, industry_name: true } },
   _count: { select: { actions: true } },
 } satisfies Prisma.B2BPipelineInclude;
 
@@ -51,6 +52,7 @@ function serializePipeline(p: PipelineWithRelations) {
   return {
     id: p.id,
     name: p.name,
+    industry: p.industry,
     pic_name: p.pic_name,
     pic_job_title: p.pic_job_title,
     pic_wa: p.pic_wa,
@@ -96,6 +98,7 @@ function buildPipelineWhere(args: {
   source?: B2BSourceEnum;
   stage?: B2BStageEnum;
   owner_id?: string;
+  industry_id?: number;
   keyword?: string;
   from?: string;
   to?: string;
@@ -105,6 +108,7 @@ function buildPipelineWhere(args: {
   if (args.source) where.source = args.source;
   if (args.stage) where.stage = args.stage;
   if (args.owner_id) where.owner_id = args.owner_id;
+  if (args.industry_id) where.industry_id = args.industry_id;
   if (args.from || args.to) {
     where.created_at = {};
     if (args.from) where.created_at.gte = dayjs(args.from).toDate();
@@ -130,7 +134,7 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "list_pipelines",
-      "List B2B sales pipeline leads (companies). Each lead includes company name, PIC contact, product type (sponsorship / corporate_training / corporate_ai_training), source channel, current pipeline stage (lead_identified → contacted → negotiation → verbal_commit → closed_won/closed_lost/on_hold), probability (1–100), project_value in IDR, owner badge, and total related actions count. Filter by product, source, stage, owner, keyword (matches company name / PIC name / PIC email / job title), or created_at date range.",
+      "List B2B sales pipeline leads (companies). Each lead includes company name, industry, PIC contact, product type (sponsorship / corporate_training / corporate_ai_training), source channel, current pipeline stage (lead_identified → contacted → negotiation → verbal_commit → closed_won/closed_lost/on_hold), probability (1–100), project_value in IDR, owner badge, and total related actions count. Filter by product, source, stage, owner, industry, keyword (matches company name / PIC name / PIC email / job title), or created_at date range.",
       {
         product: PRODUCT_ENUM.optional(),
         source: SOURCE_ENUM.optional(),
@@ -139,6 +143,12 @@ const handler = createSevenpreneurMcp(
           .uuid()
           .optional()
           .describe("Filter to pipelines owned by this user (UUID)"),
+        industry_id: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe("Filter to pipelines in this industry (industries.id)"),
         keyword: z
           .string()
           .optional()
@@ -218,9 +228,14 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "create_pipeline",
-      "Create a new B2B pipeline lead. Use this to log a freshly identified company into the sales pipeline. Owner must be an existing User UUID. Stage defaults to 'lead_identified', probability defaults to 0, project_value defaults to 0 if omitted. Optionally set project_start_month / project_end_month in YYYY-MM format to indicate the planned project window.",
+      "Create a new B2B pipeline lead. Use this to log a freshly identified company into the sales pipeline. Owner must be an existing User UUID. Industry is required (industries.id, SMALLINT). Stage defaults to 'lead_identified', probability defaults to 0, project_value defaults to 0 if omitted. Optionally set project_start_month / project_end_month in YYYY-MM format to indicate the planned project window.",
       {
         name: z.string().min(1).describe("Company name"),
+        industry_id: z
+          .number()
+          .int()
+          .positive()
+          .describe("Industry classification (industries.id)"),
         owner_id: z.uuid().describe("Owner of this lead (User UUID)"),
         product: PRODUCT_ENUM,
         source: SOURCE_ENUM,
@@ -253,6 +268,7 @@ const handler = createSevenpreneurMcp(
         const created = await prisma.b2BPipeline.create({
           data: {
             name: args.name.trim(),
+            industry_id: args.industry_id,
             owner_id: args.owner_id,
             product: args.product,
             source: args.source,
@@ -278,10 +294,16 @@ const handler = createSevenpreneurMcp(
 
     server.tool(
       "update_pipeline",
-      "Update fields on an existing B2B pipeline lead. Only the provided fields are changed. Common use: advance the stage, update probability after a meeting, revise project_value after scoping, or set the project window (project_start_month / project_end_month in YYYY-MM format). Pass null to clear a project_*_month.",
+      "Update fields on an existing B2B pipeline lead. Only the provided fields are changed. Common use: advance the stage, update probability after a meeting, revise project_value after scoping, change industry classification, or set the project window (project_start_month / project_end_month in YYYY-MM format). Pass null to clear a project_*_month.",
       {
         id: z.number().int().describe("B2BPipeline.id"),
         name: z.string().min(1).optional(),
+        industry_id: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe("Industry classification (industries.id)"),
         owner_id: z.uuid().optional(),
         product: PRODUCT_ENUM.optional(),
         source: SOURCE_ENUM.optional(),
@@ -310,6 +332,8 @@ const handler = createSevenpreneurMcp(
         const { id, ...rest } = args;
         const data: Prisma.B2BPipelineUpdateInput = {};
         if (rest.name !== undefined) data.name = rest.name.trim();
+        if (rest.industry_id !== undefined)
+          data.industry = { connect: { id: rest.industry_id } };
         if (rest.owner_id !== undefined)
           data.owner = { connect: { id: rest.owner_id } };
         if (rest.product !== undefined) data.product = rest.product;

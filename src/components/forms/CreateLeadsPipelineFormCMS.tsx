@@ -53,10 +53,19 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
   const { data: sessionData } = trpc.auth.checkSession.useQuery(undefined, {
     enabled: !!props.sessionToken,
   });
+  const { data: industriesData } = trpc.list.industries.useQuery(undefined, {
+    enabled: !!props.sessionToken,
+  });
+  const industryOptions =
+    industriesData?.list.map((entry) => ({
+      label: entry.name,
+      value: entry.id,
+    })) ?? [];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    industry_id: "" as number | "",
     pic_name: "",
     pic_job_title: "",
     pic_wa: "",
@@ -81,6 +90,11 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
 
     if (!formData.name.trim()) {
       toast.error("Company name is required.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (!formData.industry_id) {
+      toast.error("Pick an industry.");
       setIsSubmitting(false);
       return;
     }
@@ -129,6 +143,7 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
     createPipeline.mutate(
       {
         name: formData.name.trim(),
+        industry_id: Number(formData.industry_id),
         pic_name: formData.pic_name.trim() || null,
         pic_job_title: formData.pic_job_title.trim() || null,
         pic_wa: formData.pic_wa.trim() || null,
@@ -182,6 +197,16 @@ export default function CreateLeadsPipelineFormCMS(props: CreateLeadsPipelineFor
               inputPlaceholder="e.g. PT Maju Bersama"
               value={formData.name}
               onInputChange={handleInputChange("name")}
+              required
+            />
+            <AppSelect
+              variant="CMS"
+              selectId="lead-industry"
+              selectName="Industry"
+              selectPlaceholder="Pick an industry"
+              value={formData.industry_id}
+              onChange={handleInputChange("industry_id")}
+              options={industryOptions}
               required
             />
             <AppSelect

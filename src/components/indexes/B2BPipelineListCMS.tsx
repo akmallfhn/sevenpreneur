@@ -245,12 +245,12 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                 <TableRowCMS>
                   <TableHeadCMS>{`No.`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Company`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Industry`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Product`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Stage`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Probability`.toUpperCase()}</TableHeadCMS>
+                  <TableHeadCMS>{`Prob%`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Value`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Owner`.toUpperCase()}</TableHeadCMS>
-                  <TableHeadCMS>{`Start`.toUpperCase()}</TableHeadCMS>
                   <TableHeadCMS>{`Action`.toUpperCase()}</TableHeadCMS>
                 </TableRowCMS>
               </TableHeaderCMS>
@@ -261,9 +261,14 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                       {(currentPage - 1) * pageSize + index + 1}
                     </TableCellCMS>
                     <TableCellCMS>
-                      <p className="font-bodycopy font-semibold text-[15px] line-clamp-1 max-w-64">
+                      <p className="font-bodycopy font-semibold text-sm line-clamp-2 max-w-64 dark:text-sevenpreneur-white">
                         {post.name}
                       </p>
+                    </TableCellCMS>
+                    <TableCellCMS>
+                      <span className="font-bodycopy text-sm text-emphasis line-clamp-2 max-w-40">
+                        {post.industry_name}
+                      </span>
                     </TableCellCMS>
                     <TableCellCMS>
                       <B2BProductLabelCMS variants={post.product} />
@@ -298,13 +303,6 @@ export default function B2BPipelineListCMS(props: B2BPipelineListCMSProps) {
                           {post.owner_name}
                         </p>
                       </div>
-                    </TableCellCMS>
-                    <TableCellCMS>
-                      <span className="font-bodycopy text-sm text-emphasis whitespace-nowrap">
-                        {post.project_start_month
-                          ? dayjs(post.project_start_month).format("MMM YYYY")
-                          : "-"}
-                      </span>
                     </TableCellCMS>
                     <TableCellCMS>
                       <div

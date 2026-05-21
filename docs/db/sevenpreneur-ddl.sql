@@ -826,6 +826,7 @@ CREATE TABLE wa_alerts (
 CREATE TABLE b2b_pipeline (
   id                   SERIAL            PRIMARY KEY,
   name                 VARCHAR           NOT NULL,
+  industry_id          SMALLINT          NOT NULL,
   pic_name             VARCHAR               NULL,
   pic_job_title        VARCHAR               NULL,
   pic_wa               VARCHAR               NULL,
@@ -1040,7 +1041,8 @@ ALTER TABLE wa_alerts
 -- B2B Sales Pipeline
 
 ALTER TABLE b2b_pipeline
-  ADD FOREIGN KEY (owner_id) REFERENCES users (id);
+  ADD FOREIGN KEY (owner_id)    REFERENCES users (id),
+  ADD FOREIGN KEY (industry_id) REFERENCES industries (id);
 
 ALTER TABLE b2b_actions
   ADD FOREIGN KEY (company_id) REFERENCES b2b_pipeline (id) ON DELETE CASCADE;

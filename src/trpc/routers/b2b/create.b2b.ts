@@ -2,6 +2,7 @@ import { STATUS_BAD_REQUEST, STATUS_CREATED } from "@/lib/status_code";
 import { administratorProcedure } from "@/trpc/init";
 import {
   numberIsID,
+  numberIsPosInt,
   stringIsUUID,
   stringNotBlank,
 } from "@/trpc/utils/validation";
@@ -22,6 +23,7 @@ export const createB2B = {
     .input(
       z.object({
         name: stringNotBlank(),
+        industry_id: numberIsPosInt(),
         pic_name: stringNotBlank().nullable().optional(),
         pic_job_title: stringNotBlank().nullable().optional(),
         pic_wa: stringNotBlank().nullable().optional(),
@@ -52,6 +54,7 @@ export const createB2B = {
       const created = await opts.ctx.prisma.b2BPipeline.create({
         data: {
           name: opts.input.name,
+          industry_id: opts.input.industry_id,
           pic_name: opts.input.pic_name ?? null,
           pic_job_title: opts.input.pic_job_title ?? null,
           pic_wa: opts.input.pic_wa ?? null,

@@ -83,6 +83,7 @@ export const listB2B = {
         opts.ctx.prisma.b2BPipeline.findMany({
           include: {
             owner: { select: { id: true, full_name: true, avatar: true } },
+            industry: { select: { id: true, industry_name: true } },
           },
           orderBy: [{ project_value: "desc" }],
           where: whereClause,
@@ -102,6 +103,8 @@ export const listB2B = {
       const returnedList = pipelineList.map((entry) => ({
         id: entry.id,
         name: entry.name,
+        industry_id: entry.industry.id,
+        industry_name: entry.industry.industry_name,
         product: entry.product,
         stage: entry.stage,
         probability: entry.probability,

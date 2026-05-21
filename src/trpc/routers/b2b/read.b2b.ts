@@ -10,6 +10,7 @@ export const readB2B = {
       const thePipeline = await opts.ctx.prisma.b2BPipeline.findFirst({
         include: {
           owner: { select: { id: true, full_name: true, avatar: true } },
+          industry: { select: { id: true, industry_name: true } },
         },
         where: { id: opts.input.id },
       });
@@ -22,6 +23,8 @@ export const readB2B = {
         pipeline: {
           id: thePipeline.id,
           name: thePipeline.name,
+          industry_id: thePipeline.industry.id,
+          industry_name: thePipeline.industry.industry_name,
           pic_name: thePipeline.pic_name,
           pic_job_title: thePipeline.pic_job_title,
           pic_wa: thePipeline.pic_wa,

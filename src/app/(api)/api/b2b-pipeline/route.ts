@@ -26,6 +26,9 @@ export async function POST(req: NextRequest) {
         owner: {
           select: { id: true, full_name: true, email: true, avatar: true },
         },
+        industry: {
+          select: { id: true, industry_name: true },
+        },
         actions: {
           orderBy: { created_at: "desc" },
         },
@@ -37,6 +40,7 @@ export async function POST(req: NextRequest) {
   const list = pipelines.map((p) => ({
     id: p.id,
     name: p.name,
+    industry: p.industry,
     pic_name: p.pic_name,
     pic_job_title: p.pic_job_title,
     pic_wa: p.pic_wa,

@@ -85,9 +85,19 @@ export default function EditLeadsPipelineFormCMS(
   );
   const initialData = pipelineData?.pipeline;
 
+  const { data: industriesData } = trpc.list.industries.useQuery(undefined, {
+    enabled: !!props.sessionToken,
+  });
+  const industryOptions =
+    industriesData?.list.map((entry) => ({
+      label: entry.name,
+      value: entry.id,
+    })) ?? [];
+
   // Beginning State
   const [formData, setFormData] = useState<{
     name: string;
+    industry_id: number | "";
     pic_name: string;
     pic_job_title: string;
     pic_wa: string;
@@ -101,6 +111,7 @@ export default function EditLeadsPipelineFormCMS(
     project_end_month: string;
   }>({
     name: initialData?.name || "",
+    industry_id: initialData?.industry_id ?? "",
     pic_name: initialData?.pic_name || "",
     pic_job_title: initialData?.pic_job_title || "",
     pic_wa: initialData?.pic_wa || "",
@@ -123,6 +134,7 @@ export default function EditLeadsPipelineFormCMS(
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
         name: initialData.name || "",
+        industry_id: initialData.industry_id,
         pic_name: initialData.pic_name || "",
         pic_job_title: initialData.pic_job_title || "",
         pic_wa: initialData.pic_wa || "",
@@ -182,11 +194,17 @@ export default function EditLeadsPipelineFormCMS(
       setIsSubmitting(false);
       return;
     }
+    if (!formData.industry_id) {
+      toast.error("Pick an industry.");
+      setIsSubmitting(false);
+      return;
+    }
 
     updatePipeline.mutate(
       {
         id: props.pipelineId,
         name: formData.name.trim(),
+        industry_id: Number(formData.industry_id),
         pic_name: formData.pic_name.trim() || null,
         pic_job_title: formData.pic_job_title.trim() || null,
         pic_wa: formData.pic_wa.trim() || null,
@@ -243,6 +261,16 @@ export default function EditLeadsPipelineFormCMS(
                 inputType="text"
                 value={formData.name}
                 onInputChange={handleInputChange("name")}
+                required
+              />
+              <AppSelect
+                variant="CMS"
+                selectId="lead-industry"
+                selectName="Industry"
+                selectPlaceholder="Pick an industry"
+                value={formData.industry_id}
+                onChange={handleInputChange("industry_id")}
+                options={industryOptions}
                 required
               />
               <AppSelect
