@@ -95,13 +95,13 @@ export default function UploadImageCMS(props: UploadImageCMSProps) {
   return (
     <div className="upload-file-container flex flex-col gap-1">
       <div
-        className={`upload-photo-container flex relative bg-white w-full h-full border border-dashed cursor-pointer rounded-md overflow-hidden`}
+        className={`upload-photo-container flex relative bg-background w-full h-full border border-dashed border-dashboard-border cursor-pointer rounded-md overflow-hidden`}
         style={{ aspectRatio: props.imageRatio }}
         onClick={handleUploadClick}
       >
         {/* Upload message */}
         {!props.fileValue && (
-          <div className="upload-helper flex flex-col w-full font-bodycopy items-center text-center justify-center text-black z-10">
+          <div className="upload-helper flex flex-col w-full font-bodycopy items-center text-center justify-center text-sb-text-strong z-10">
             <div className="flex max-w-[86px] aspect-square">
               <Image
                 className="object-cover w-full h-full"
@@ -117,7 +117,7 @@ export default function UploadImageCMS(props: UploadImageCMSProps) {
               <p className="text-sm font-bold">
                 Upload Image <span className="text-destructive">*</span>
               </p>
-              <p className="text-sm font-medium text-black/50">
+              <p className="text-sm font-medium text-emphasis">
                 Images should be {props.imageRatio} ratio and under{" "}
                 {props.fileSize}
               </p>

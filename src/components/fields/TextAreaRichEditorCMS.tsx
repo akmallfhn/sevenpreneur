@@ -48,7 +48,7 @@ export default function TextAreaRichEditorCMS(
     // Styling Text Area
     editorProps: {
       attributes: {
-        class: `font-bodycopy font-medium text-sm h-52 overflow-y-auto focus:outline-none`,
+        class: `font-bodycopy font-medium text-sm h-52 overflow-y-auto focus:outline-none text-foreground`,
       },
     },
 
@@ -88,7 +88,7 @@ export default function TextAreaRichEditorCMS(
       Blockquote.configure({
         HTMLAttributes: {
           class:
-            "border-l-4 border-l-black/30 pl-3 my-2 italic text-lg font-quotes",
+            "border-l-4 border-l-foreground/30 pl-3 my-2 italic text-lg font-quotes",
         },
       }),
       Text,
@@ -209,7 +209,7 @@ export default function TextAreaRichEditorCMS(
       {props.textAreaName && (
         <label
           htmlFor={props.textAreaId}
-          className="label-input flex pl-1 gap-0.5 text-sm text-black font-bodycopy font-semibold"
+          className="label-input flex pl-1 gap-0.5 text-sm text-sb-text-strong font-bodycopy font-semibold"
         >
           {props.textAreaName}
           {props.required && (
@@ -217,8 +217,8 @@ export default function TextAreaRichEditorCMS(
           )}
         </label>
       )}
-      <div className="text-area-container relative w-full bg-white border rounded-md overflow-hidden">
-        <div className="text-area-toolbar absolute flex top-0 inset-x-0 p-1 gap-1 w-full h-fit border-b z-10">
+      <div className="text-area-container relative w-full bg-background border border-dashboard-border rounded-md overflow-hidden">
+        <div className="text-area-toolbar absolute flex top-0 inset-x-0 p-1 gap-1 w-full h-fit border-b border-dashboard-border bg-background z-10">
           <ToggleGroup type="multiple" size="sm">
             {editor &&
               historyActions(editor).map((post) => (
@@ -226,7 +226,6 @@ export default function TextAreaRichEditorCMS(
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <ToggleGroupItem
-                        className="hover:bg-black/5"
                         value={post.value}
                         aria-label={`Toggle ${post.label}`}
                         disabled={post.disabled}

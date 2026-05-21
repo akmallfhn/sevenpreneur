@@ -99,7 +99,8 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
           </PageHeaderCMS>
           <div className="filter-search flex w-full items-center">
             <div className="max-w-96 w-full">
-              <AppInput variant="CMS"
+              <AppInput
+                variant="CMS"
                 inputId="search-article"
                 inputType="search"
                 inputIcon={<Search className="size-5" />}
@@ -160,7 +161,7 @@ export default function ArticleListCMS(props: ArticleListCMSProps) {
                     </TableCellCMS>
                     <TableCellCMS>
                       <div className="metadata flex flex-col max-w-72 gap-1.5 xl:max-w-96 2xl:max-w-[502px]">
-                        <h2 className="article-title font-bold font-bodycopy text-[15px] line-clamp-2 leading-snug">
+                        <h2 className="article-title font-bold font-bodycopy text-[15px] line-clamp-2 leading-snug dark:text-sevenpreneur-white">
                           {post.title}
                         </h2>
                         <div className="flex items-center gap-2">

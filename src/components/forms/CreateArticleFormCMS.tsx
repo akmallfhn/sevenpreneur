@@ -61,7 +61,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
     isLoading: isLoadingUsers,
     isError: isErrorUsers,
   } = trpc.list.users.useQuery(
-    { role_id: 0 },
+    { role_id: 6 },
     { enabled: !!props.sessionToken }
   );
 
@@ -275,7 +275,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
           image_url: formData.articleImage,
           body_content: formData.articleBodyContent.map(
             (item: BodyContentArticle, index) => ({
-              index_order: Number(item.index_order),
+              index_order: index + 1,
               sub_heading:
                 index === 0 ? null : item.sub_heading?.trim() || null,
               image_path: null,
@@ -380,11 +380,12 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               <div className="body-content flex flex-col gap-4 bg-transparent rounded-md">
                 {formData.articleBodyContent.map((post, index) => (
                   <div
-                    className="flex flex-col p-4 gap-4 bg-card-inside-bg rounded-md border"
+                    className="flex flex-col p-4 gap-4 bg-card-inside-bg rounded-md border border-dashboard-border"
                     key={post.id}
                   >
                     {index !== 0 && (
-                      <AppInput variant="CMS"
+                      <AppInput
+                        variant="CMS"
                         inputId="publish-date"
                         inputName="Sub-Heading"
                         inputPlaceholder="Write section sub-title…"
@@ -435,7 +436,7 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
               </div>
             </main>
             <aside className="aside-content flex flex-1 flex-col gap-5">
-              <div className="flex flex-col w-full gap-4 border rounded-lg">
+              <div className="flex flex-col w-full gap-4 border border-dashboard-border rounded-lg">
                 <div className="section-title flex gap-3 px-6 py-3 items-center bg-card-inside-bg text-foreground border-b border-dashboard-border rounded-t-lg">
                   <ListMinus />
                   <h2 className="font-bodycopy font-semibold text-sm">
@@ -443,7 +444,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                   </h2>
                 </div>
                 <div className="flex flex-col gap-5 p-4 pt-0">
-                  <AppTextArea variant="CMS"
+                  <AppTextArea
+                    variant="CMS"
                     textAreaId="insight"
                     textAreaName="Content Summary"
                     textAreaPlaceholder="Write a 3-sentence summary that captures the article’s main topic and overall takeaway"
@@ -452,7 +454,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     onTextAreaChange={handleInputChange("articleInsight")}
                     required
                   />
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId="publish-date"
                     inputName="Publish Date"
                     inputType="datetime-local"
@@ -460,7 +463,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     onInputChange={handleInputChange("articlePublishDate")}
                     required
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId="category"
                     selectName="Category"
                     selectPlaceholder="Choose topic category"
@@ -474,7 +478,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     }
                     required
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId="author"
                     selectName="Author"
                     selectPlaceholder="Select Author"
@@ -489,7 +494,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     }
                     required
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId="reviewer"
                     selectName="Reviewer"
                     selectPlaceholder="Select Reviewer"
@@ -504,7 +510,8 @@ export default function CreateArticleForm(props: CreateArticleFormProps) {
                     }
                     required
                   />
-                  <AppTextArea variant="CMS"
+                  <AppTextArea
+                    variant="CMS"
                     textAreaId="keywords"
                     textAreaName="Keywords"
                     textAreaPlaceholder="e.g. Bisnis 2 Milyar, Kerugian Perusahaan, etc"

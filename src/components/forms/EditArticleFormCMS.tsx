@@ -63,7 +63,7 @@ export default function EditArticleForm(props: EditArticleFormProps) {
     isLoading: isLoadingUsers,
     isError: isErrorUsers,
   } = trpc.list.users.useQuery(
-    { role_id: 0 },
+    { role_id: 6 },
     { enabled: !!props.sessionToken }
   );
   const {
@@ -317,7 +317,7 @@ export default function EditArticleForm(props: EditArticleFormProps) {
           image_url: formData.articleImage,
           body_content: formData.articleBodyContent.map(
             (item: BodyContentArticle, index) => ({
-              index_order: Number(item.index_order),
+              index_order: index + 1,
               sub_heading:
                 index === 0 ? null : item.sub_heading?.trim() || null,
               image_path: null,
@@ -374,8 +374,10 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                 variant="neutral"
                 disabled={isSubmittingDraft}
               >
-                {isSubmittingDraft && <Loader2 className="animate-spin size-5" />}
-                Save as Draft
+                {isSubmittingDraft && (
+                  <Loader2 className="animate-spin size-5" />
+                )}
+                Save Changes
               </AppButton>
             )}
             <AppButton
@@ -389,7 +391,9 @@ export default function EditArticleForm(props: EditArticleFormProps) {
               ) : (
                 <Save className="size-5" />
               )}
-              Save Changes
+              {initialData?.status === "DRAFT"
+                ? "Publish Article"
+                : "Save Changes"}
             </AppButton>
           </div>
         </PageHeaderCMS>
@@ -428,7 +432,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                     key={post.id}
                   >
                     {index !== 0 && (
-                      <AppInput variant="CMS"
+                      <AppInput
+                        variant="CMS"
                         inputId="publish-date"
                         inputName="Sub-Heading"
                         inputPlaceholder="Write section sub-title…"
@@ -487,7 +492,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                   </h2>
                 </div>
                 <div className="flex flex-col gap-5 p-4 pt-0">
-                  <AppTextArea variant="CMS"
+                  <AppTextArea
+                    variant="CMS"
                     textAreaId="insight"
                     textAreaName="Content Summary"
                     textAreaPlaceholder="Write a 3-sentence summary that captures the article’s main topic and overall takeaway"
@@ -496,7 +502,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                     onTextAreaChange={handleInputChange("articleInsight")}
                     required
                   />
-                  <AppInput variant="CMS"
+                  <AppInput
+                    variant="CMS"
                     inputId="publish-date"
                     inputName="Publish Date"
                     inputType="datetime-local"
@@ -504,7 +511,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                     onInputChange={handleInputChange("articlePublishDate")}
                     required
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId="category"
                     selectName="Category"
                     selectPlaceholder="Choose topic category"
@@ -518,7 +526,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                     }
                     required
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId="author"
                     selectName="Author"
                     selectPlaceholder="Select Author"
@@ -533,7 +542,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                     }
                     required
                   />
-                  <AppSelect variant="CMS"
+                  <AppSelect
+                    variant="CMS"
                     selectId="reviewer"
                     selectName="Reviewer"
                     selectPlaceholder="Select Reviewer"
@@ -548,7 +558,8 @@ export default function EditArticleForm(props: EditArticleFormProps) {
                     }
                     required
                   />
-                  <AppTextArea variant="CMS"
+                  <AppTextArea
+                    variant="CMS"
                     textAreaId="keywords"
                     textAreaName="Keywords"
                     textAreaPlaceholder="e.g. Bisnis 2 Milyar, Kerugian Perusahaan, etc"

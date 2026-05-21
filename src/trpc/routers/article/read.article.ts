@@ -16,7 +16,9 @@ export const readArticle = {
 
     if (
       opts.ctx.user &&
-      ["Administrator", "Marketer"].includes(opts.ctx.user.role.name)
+      ["Administrator", "Super Admin", "Marketer"].includes(
+        opts.ctx.user.role.name
+      )
     ) {
       articleStatus = undefined;
     }
